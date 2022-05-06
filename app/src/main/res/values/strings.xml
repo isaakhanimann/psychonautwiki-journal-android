@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Health Assistant</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="stats">Stats</string>
+    <string name="settings">Settings</string>
 </resources>
