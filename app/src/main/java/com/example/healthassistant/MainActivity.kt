@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +24,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.healthassistant.home.Home
+import com.example.healthassistant.search.Search
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 
 class MainActivity : ComponentActivity() {
@@ -84,21 +88,11 @@ fun MainScreen() {
     ) { innerPadding ->
         NavHost(navController, startDestination = Screen.Home.route, Modifier.padding(innerPadding)) {
             composable(Screen.Home.route) { Home() }
-            composable(Screen.Search.route) { Search() }
+            composable(Screen.Search.route) { Search(navController) }
             composable(Screen.Stats.route) { Stats() }
             composable(Screen.Settings.route) { Settings() }
         }
     }
-}
-
-@Composable
-fun Home() {
-    Text(text = "Home")
-}
-
-@Composable
-fun Search() {
-    Text(text = "Search")
 }
 
 @Composable
@@ -115,7 +109,7 @@ fun Settings() {
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
     object Home : Screen("home", R.string.home, Icons.Filled.Home)
     object Search : Screen("search", R.string.search, Icons.Filled.Search)
-    object Stats : Screen("stats", R.string.stats, Icons.Filled.Menu)
+    object Stats : Screen("stats", R.string.stats, Icons.Filled.Info)
     object Settings : Screen("settings", R.string.settings, Icons.Filled.Settings)
 }
 
