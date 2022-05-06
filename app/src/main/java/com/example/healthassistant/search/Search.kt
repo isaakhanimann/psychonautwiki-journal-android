@@ -1,5 +1,6 @@
 package com.example.healthassistant.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.healthassistant.Screen
 
 data class Substance(val name: String, val alternativeNames: List<String>)
 
@@ -90,7 +92,9 @@ fun SubstanceList(navController: NavController, state: MutableState<TextFieldVal
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(filteredSubstances) { substance ->
-            SubstanceRow(substance = substance)
+            SubstanceRow(substance = substance, onTap = { substanceName ->
+                navController.navigate(Screen.Search.route + "/" + substanceName)
+            })
         }
     }
 }
@@ -98,7 +102,6 @@ fun SubstanceList(navController: NavController, state: MutableState<TextFieldVal
 @Composable
 fun SearchField(state: MutableState<TextFieldValue>) {
     val focusManager = LocalFocusManager.current
-
     TextField(
         value = state.value,
         onValueChange = { value ->
@@ -152,8 +155,13 @@ fun SearchField(state: MutableState<TextFieldValue>) {
 }
 
 @Composable
-fun SubstanceRow(substance: Substance) {
-    Card(modifier = Modifier.fillMaxWidth(),elevation = 4.dp) {
+fun SubstanceRow(substance: Substance, onTap: (String) -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable {
+            onTap(substance.name)
+        },
+        elevation = 4.dp
+    ) {
         Row(modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp), verticalAlignment = Alignment.Bottom) {
             Text(text = substance.name, modifier = Modifier.padding(end = 10.dp), style = MaterialTheme.typography.body1)
             val altNamesString = substance.alternativeNames.fold("") { acc, string -> "$acc, $string" }.removePrefix(", ")

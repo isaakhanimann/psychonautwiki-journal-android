@@ -20,12 +20,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.healthassistant.home.Home
 import com.example.healthassistant.search.Search
+import com.example.healthassistant.search.SubstanceScreen
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 
 class MainActivity : ComponentActivity() {
@@ -68,17 +71,7 @@ fun MainScreen() {
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
                             navController.navigate(screen.route) {
-                                // Pop up to the start destination of the graph to
-                                // avoid building up a large stack of destinations
-                                // on the back stack as users select items
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                // Avoid multiple copies of the same destination when
-                                // reselecting the same item
-                                launchSingleTop = true
-                                // Restore state when reselecting a previously selected item
-                                restoreState = true
+                                popUpTo(navController.graph.findStartDestination().id)
                             }
                         }
                     )
@@ -89,6 +82,14 @@ fun MainScreen() {
         NavHost(navController, startDestination = Screen.Home.route, Modifier.padding(innerPadding)) {
             composable(Screen.Home.route) { Home() }
             composable(Screen.Search.route) { Search(navController) }
+            composable(
+                Screen.Search.route + "/" + "{substanceName}",
+                arguments = listOf(navArgument("substanceName") { type = NavType.StringType })
+            ) { backStackEntry ->
+                backStackEntry.arguments?.getString("substanceName")?.let { countryName ->
+                    SubstanceScreen(navHostController = navController, substanceName = countryName)
+                }
+            }
             composable(Screen.Stats.route) { Stats() }
             composable(Screen.Settings.route) { Settings() }
         }
