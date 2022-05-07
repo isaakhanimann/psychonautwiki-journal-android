@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -24,8 +26,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.healthassistant.home.NoteViewModel
 import com.example.healthassistant.home.NoteScreenWithModel
+import com.example.healthassistant.home.NoteViewModel
 import com.example.healthassistant.search.Search
 import com.example.healthassistant.search.SubstanceScreen
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
@@ -33,7 +35,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -57,7 +58,6 @@ val items = listOf(
     Screen.Settings
 )
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
@@ -82,7 +82,11 @@ fun MainScreen() {
         }
     ) { innerPadding ->
         val noteViewModel = viewModel<NoteViewModel>()
-        NavHost(navController, startDestination = Screen.Home.route, Modifier.padding(innerPadding)) {
+        NavHost(
+            navController,
+            startDestination = Screen.Home.route,
+            Modifier.padding(innerPadding)
+        ) {
             composable(Screen.Home.route) { NoteScreenWithModel(noteViewModel = noteViewModel) }
             composable(Screen.Search.route) { Search(navController) }
             composable(

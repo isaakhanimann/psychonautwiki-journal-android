@@ -1,4 +1,4 @@
-package com.example.healthassistant.dependencyinjection
+package com.example.healthassistant
 
 import android.content.Context
 import androidx.room.Room
@@ -18,16 +18,16 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNotesDao(noteDatabase: NoteDatabase): NoteDatabaseDao
-            = noteDatabase.noteDao()
+    fun provideNotesDao(noteDatabase: NoteDatabase): NoteDatabaseDao = noteDatabase.noteDao()
 
     @Singleton
     @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context): NoteDatabase
-            = Room.databaseBuilder(
-        context,
-        NoteDatabase::class.java,
-        "notes_db")
-        .fallbackToDestructiveMigration()
-        .build()
+    fun provideAppDatabase(@ApplicationContext context: Context): NoteDatabase =
+        Room.databaseBuilder(
+            context,
+            NoteDatabase::class.java,
+            "notes_db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
 }
