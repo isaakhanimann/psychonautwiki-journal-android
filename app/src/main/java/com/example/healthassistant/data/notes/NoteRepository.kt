@@ -1,4 +1,4 @@
-package com.example.healthassistant.data
+package com.example.healthassistant.data.notes
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

@@ -1,4 +1,4 @@
-package com.example.healthassistant.data
+package com.example.healthassistant.data.notes
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

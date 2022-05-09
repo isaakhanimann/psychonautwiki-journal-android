@@ -1,4 +1,4 @@
-package com.example.healthassistant.data
+package com.example.healthassistant.data.notes
 
 class NotesDataSource {
     fun loadNotes(): List<Note> {

@@ -1,4 +1,4 @@
-package com.example.healthassistant.home
+package com.example.healthassistant.presentation.home
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -19,8 +19,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.healthassistant.data.Note
-import com.example.healthassistant.data.NotesDataSource
+import com.example.healthassistant.data.notes.Note
+import com.example.healthassistant.data.notes.NotesDataSource
 
 @Composable
 fun NoteScreenWithModel(noteViewModel: NoteViewModel) {

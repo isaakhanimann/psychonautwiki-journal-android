@@ -1,9 +1,9 @@
-package com.example.healthassistant
+package com.example.healthassistant.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.healthassistant.data.NoteDatabase
-import com.example.healthassistant.data.NoteDatabaseDao
+import com.example.healthassistant.data.notes.NoteDatabase
+import com.example.healthassistant.data.notes.NoteDatabaseDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
