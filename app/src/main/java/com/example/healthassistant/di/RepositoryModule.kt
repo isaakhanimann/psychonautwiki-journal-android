@@ -2,7 +2,7 @@ package com.example.healthassistant.di
 
 import com.example.healthassistant.data.substances.JSONParser
 import com.example.healthassistant.data.substances.SubstanceParser
-import com.example.healthassistant.model.SubstanceModel
+import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.repository.SubstanceRepository
 import com.example.healthassistant.repository.SubstanceRepositoryImpl
 import dagger.Binds
@@ -19,7 +19,7 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindSubstanceParser(
         substanceParser: SubstanceParser
-    ): JSONParser<SubstanceModel>
+    ): JSONParser<Substance>
 
     @Binds
     @Singleton

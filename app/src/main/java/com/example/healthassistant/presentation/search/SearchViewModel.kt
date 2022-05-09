@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.healthassistant.model.SubstanceModel
+import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.repository.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,8 +17,8 @@ class SearchViewModel @Inject constructor(
 ): ViewModel() {
 
     var searchText by mutableStateOf("")
-    var filteredSubstances: MutableList<SubstanceModel>  = mutableListOf()
-    private var substances: List<SubstanceModel> = emptyList()
+    var filteredSubstances: MutableList<Substance>  = mutableListOf()
+    private var substances: List<Substance> = emptyList()
 
     init {
         viewModelScope.launch {
@@ -31,7 +31,7 @@ class SearchViewModel @Inject constructor(
         filteredSubstances = if (searchText.isEmpty()) {
             substances.toMutableList()
         } else {
-            val resultList = ArrayList<SubstanceModel>()
+            val resultList = ArrayList<Substance>()
             for (substance in substances) {
                 if (substance.name.lowercase()
                         .contains(searchText.lowercase())

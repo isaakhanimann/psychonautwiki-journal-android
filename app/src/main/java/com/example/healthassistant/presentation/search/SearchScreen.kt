@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.healthassistant.Screen
-import com.example.healthassistant.model.SubstanceModel
+import com.example.healthassistant.data.substances.Substance
 
 @Composable
 fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel) {
@@ -82,7 +82,7 @@ fun SearchField(
 }
 
 @Composable
-fun SubstanceList(navController: NavController, substances: List<SubstanceModel>) {
+fun SubstanceList(navController: NavController, substances: List<Substance>) {
     LazyColumn {
         items(substances.size) { i ->
             val substance = substances[i]
@@ -97,7 +97,7 @@ fun SubstanceList(navController: NavController, substances: List<SubstanceModel>
 }
 
 @Composable
-fun SubstanceRow(substance: SubstanceModel, onTap: (String) -> Unit) {
+fun SubstanceRow(substance: Substance, onTap: (String) -> Unit) {
     Text(
         text = substance.name,
         style = MaterialTheme.typography.body1,
