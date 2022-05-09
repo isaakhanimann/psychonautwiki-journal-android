@@ -14,13 +14,8 @@ class SubstanceRepositoryImpl @Inject constructor(
     private val substanceParser: JSONParser<SubstanceModel>
 ): SubstanceRepository {
 
-    override suspend fun getSubstances(): Resource<List<SubstanceModel>> {
+    override suspend fun getSubstances(): List<SubstanceModel> {
         val fileContent = getSubstanceFileContent(appContext)
-        val substances = substanceParser.parse(string = fileContent)
-        if (substances.isEmpty()) {
-            return Resource.Error("No substances found")
-        } else {
-            return Resource.Success(data = substances)
-        }
+        return substanceParser.parse(string = fileContent)
     }
 }

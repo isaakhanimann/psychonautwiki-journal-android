@@ -10,50 +10,27 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.healthassistant.Screen
-
-data class Substance(val name: String, val alternativeNames: List<String>)
-
-val previewSubstances = arrayListOf(
-    Substance("MDMA", alternativeNames = listOf("Molly", "Ecstasy")),
-    Substance("LSD", alternativeNames = listOf("Lucy", "Acid", "Tabs")),
-    Substance("Cocaine", alternativeNames = listOf("Coke", "Crack", "Blow")),
-    Substance("Ketamine", alternativeNames = listOf("K", "Ket", "Special K")),
-    Substance("Heroin", alternativeNames = listOf("H", "Smack", "Brown")),
-    Substance("Cannabis", alternativeNames = listOf("Weed", "Marijuana", "Pot")),
-    Substance("2C-B", alternativeNames = listOf("Nexus", "Tusi")),
-    Substance("Amphetamine", alternativeNames = listOf("Speed", "Adderall", "Pep")),
-    Substance("GHB", alternativeNames = listOf("G")),
-    Substance("Caffeine", alternativeNames = listOf()),
-    Substance("Mescaline", alternativeNames = listOf()),
-    Substance("Nicotine", alternativeNames = listOf())
-)
-
-@Preview(showBackground = true)
-@Composable
-fun SearchPreview() {
-    val navController = rememberNavController()
-    Search(navController = navController)
-}
+import com.example.healthassistant.model.SubstanceModel
 
 @Composable
-fun Search(navController: NavController) {
+fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        var searchText by remember { mutableStateOf("") }
-        SearchField(searchText = searchText, onChange = { searchText = it })
-        SubstanceList(navController = navController, searchText = searchText)
+        SearchField(searchText = searchViewModel.searchText, onChange = {
+            searchViewModel.searchText = it
+            searchViewModel.filterSubstances()
+        })
+        SubstanceList(navController = navController, substances = searchViewModel.filteredSubstances)
     }
 }
 
@@ -104,25 +81,11 @@ fun SearchField(
 }
 
 @Composable
-fun SubstanceList(navController: NavController, searchText: String) {
-    val substances: ArrayList<Substance> = previewSubstances
-    val filteredSubstances = if (searchText.isEmpty()) {
-        substances
-    } else {
-        val resultList = ArrayList<Substance>()
-        for (substance in substances) {
-            if (substance.name.lowercase()
-                    .contains(searchText.lowercase())
-            ) {
-                resultList.add(substance)
-            }
-        }
-        resultList
-    }
+fun SubstanceList(navController: NavController, substances: List<SubstanceModel>) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(filteredSubstances) { substance ->
+        items(substances) { substance ->
             SubstanceRow(substance = substance, onTap = { substanceName ->
                 navController.navigate(Screen.Search.route + "/" + substanceName)
             })
@@ -131,7 +94,7 @@ fun SubstanceList(navController: NavController, searchText: String) {
 }
 
 @Composable
-fun SubstanceRow(substance: Substance, onTap: (String) -> Unit) {
+fun SubstanceRow(substance: SubstanceModel, onTap: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -142,10 +105,6 @@ fun SubstanceRow(substance: Substance, onTap: (String) -> Unit) {
     ) {
         Row(modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp), verticalAlignment = Alignment.Bottom) {
             Text(text = substance.name, modifier = Modifier.padding(end = 10.dp), style = MaterialTheme.typography.body1)
-            val altNamesString = substance.alternativeNames.fold("") { acc, string -> "$acc, $string" }.removePrefix(", ")
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                Text(text = altNamesString, style = MaterialTheme.typography.body2)
-            }
         }
     }
 }
