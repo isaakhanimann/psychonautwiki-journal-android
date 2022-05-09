@@ -1,9 +1,11 @@
 package com.example.healthassistant.presentation.search
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -11,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -22,15 +23,15 @@ import com.example.healthassistant.model.SubstanceModel
 
 @Composable
 fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel) {
-    Column(
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
+    Column {
         SearchField(searchText = searchViewModel.searchText, onChange = {
             searchViewModel.searchText = it
             searchViewModel.filterSubstances()
         })
-        SubstanceList(navController = navController, substances = searchViewModel.filteredSubstances)
+        SubstanceList(
+            navController = navController,
+            substances = searchViewModel.filteredSubstances
+        )
     }
 }
 
@@ -47,7 +48,7 @@ fun SearchField(
         },
         modifier = Modifier
             .fillMaxWidth(),
-        placeholder = { Text(text = "Search Substances")},
+        placeholder = { Text(text = "Search Substances") },
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
@@ -82,29 +83,29 @@ fun SearchField(
 
 @Composable
 fun SubstanceList(navController: NavController, substances: List<SubstanceModel>) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(substances) { substance ->
+    LazyColumn {
+        items(substances.size) { i ->
+            val substance = substances[i]
             SubstanceRow(substance = substance, onTap = { substanceName ->
                 navController.navigate(Screen.Search.route + "/" + substanceName)
             })
+            if(i < substances.size) {
+                Divider()
+            }
         }
     }
 }
 
 @Composable
 fun SubstanceRow(substance: SubstanceModel, onTap: (String) -> Unit) {
-    Card(
+    Text(
+        text = substance.name,
+        style = MaterialTheme.typography.body1,
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
                 onTap(substance.name)
-            },
-        elevation = 4.dp
-    ) {
-        Row(modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp), verticalAlignment = Alignment.Bottom) {
-            Text(text = substance.name, modifier = Modifier.padding(end = 10.dp), style = MaterialTheme.typography.body1)
-        }
-    }
+            }
+            .padding(horizontal = 16.dp, vertical = 10.dp)
+    )
 }
