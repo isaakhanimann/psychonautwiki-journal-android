@@ -10,7 +10,52 @@ class SampleSubstanceProvider : PreviewParameterProvider<Substance> {
         Substance(
             name = "Example Substance",
             url = "https://psychonautwiki.org/wiki/Lsd",
-            effects = listOf(),
+            effects = listOf(
+                Effect(
+                    name = "Auditory enhancement",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+                Effect(
+                    name = "Auditory distortion",
+                    url = "https://psychonautwiki.org/wiki/Auditory_distortion"
+                ),
+                Effect(
+                    name = "Geometry",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+                Effect(
+                    name = "Pattern recognition enhancement",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+                Effect(
+                    name = "Acuity enhancement",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+                Effect(
+                    name = "Colour enhancement",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+                Effect(
+                    name = "Diffraction",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+                Effect(
+                    name = "Dehydration",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+                Effect(
+                    name = "Nausea",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+                Effect(
+                    name = "Physical euphoria",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+                Effect(
+                    name = "Watery eyes",
+                    url = "https://psychonautwiki.org/wiki/Auditory_enhancement"
+                ),
+            ),
             chemicalClasses = listOf("Amphetamines"),
             psychoactiveClasses = listOf("Entactogens"),
             tolerance = Tolerance(

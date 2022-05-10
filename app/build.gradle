@@ -72,4 +72,5 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+    implementation "com.google.accompanist:accompanist-flowlayout:0.23.1"
 }
