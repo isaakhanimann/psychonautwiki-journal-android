@@ -16,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.healthassistant.presentation.home.NoteScreen
 import com.example.healthassistant.presentation.search.SearchScreen
-import com.example.healthassistant.presentation.search.SubstanceScreen
+import com.example.healthassistant.presentation.search.substance.SubstanceScreen
 
 @Composable
 fun MainScreen() {

@@ -1,4 +1,4 @@
-package com.example.healthassistant.presentation.search
+package com.example.healthassistant.presentation.search.substance
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
