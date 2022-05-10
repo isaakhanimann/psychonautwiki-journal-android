@@ -25,7 +25,7 @@ class SubstanceRepository @Inject constructor(
         return allSubstances
     }
 
-    override suspend fun getSubstance(substanceName: String): Substance? {
+    override fun getSubstance(substanceName: String): Substance? {
         return allSubstances.firstOrNull { it.name==substanceName }
     }
 

@@ -1,22 +1,25 @@
 package com.example.healthassistant.presentation.search
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun SubstanceScreen(navHostController: NavHostController,substanceName: String) {
+fun SubstanceScreen(navHostController: NavHostController, substanceName: String) {
+    val viewModel: SubstanceViewModel = hiltViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {Text(substanceName)},
+                title = { Text(substanceName) },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navHostController.popBackStack()}
+                        onClick = { navHostController.popBackStack() }
                     ) {
                         Icon(Icons.Default.ArrowBack, "backIcon")
                     }
@@ -24,7 +27,12 @@ fun SubstanceScreen(navHostController: NavHostController,substanceName: String) 
             )
         }
     ) {
-        Text("Hello")
+        viewModel.substance?.let { sub ->
+            Column {
+                Text(sub.name)
+                Text(sub.addictionPotential ?: "-")
+            }
+        }
     }
 }
 
@@ -32,5 +40,5 @@ fun SubstanceScreen(navHostController: NavHostController,substanceName: String) 
 @Composable
 fun DetailsScreenPreview() {
     val navController = rememberNavController()
-    SubstanceScreen(navHostController = navController,"MDMA")
+    SubstanceScreen(navHostController = navController, "MDMA")
 }

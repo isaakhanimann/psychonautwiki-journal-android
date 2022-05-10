@@ -4,6 +4,6 @@ import com.example.healthassistant.data.substances.Substance
 
 interface SubstanceRepositoryInterface {
     fun getAllSubstances(): List<Substance>
-    suspend fun getSubstance(substanceName: String): Substance?
+    fun getSubstance(substanceName: String): Substance?
     suspend fun getSubstances(searchText: String): List<Substance>
 }
