@@ -11,12 +11,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun SubstanceScreen(navHostController: NavHostController, substanceName: String) {
+fun SubstanceScreen(navHostController: NavHostController) {
     val viewModel: SubstanceViewModel = hiltViewModel()
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(substanceName) },
+                title = { Text("hello") },
                 navigationIcon = {
                     IconButton(
                         onClick = { navHostController.popBackStack() }
@@ -40,5 +40,5 @@ fun SubstanceScreen(navHostController: NavHostController, substanceName: String)
 @Composable
 fun DetailsScreenPreview() {
     val navController = rememberNavController()
-    SubstanceScreen(navHostController = navController, "MDMA")
+    SubstanceScreen(navHostController = navController)
 }

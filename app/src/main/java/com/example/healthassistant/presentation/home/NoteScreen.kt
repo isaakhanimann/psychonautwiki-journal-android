@@ -17,25 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.notes.Note
-import com.example.healthassistant.data.notes.NotesDataSource
 
 @Composable
-fun NoteScreenWithModel(noteViewModel: NoteViewModel) {
-    val notesList = noteViewModel.noteList.collectAsState().value
-    NoteScreen(
-        notes = notesList,
-        onAddNote = { noteViewModel.addNote(it) }
-    )
-}
-
-@Composable
-fun NoteScreen(
-    notes: List<Note>,
-    onAddNote: (Note) -> Unit
-) {
+fun NoteScreen(noteViewModel: NoteViewModel = hiltViewModel()) {
+    val notes = noteViewModel.noteList.collectAsState().value
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -44,7 +32,7 @@ fun NoteScreen(
         )
     }) {
         Column(modifier = Modifier.padding(6.dp)) {
-            Input(onAddNote = onAddNote)
+            Input(onAddNote = noteViewModel::addNote)
             Divider(modifier = Modifier.padding(10.dp))
             LazyColumn {
                 items(notes) { note ->
@@ -100,13 +88,4 @@ fun Input(onAddNote: (Note) -> Unit) {
 
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NotesScreenPreview() {
-    NoteScreen(
-        notes = NotesDataSource().loadNotes(),
-        onAddNote = {}
-    )
 }
