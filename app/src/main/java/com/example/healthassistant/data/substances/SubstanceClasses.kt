@@ -1,10 +1,8 @@
 package com.example.healthassistant.data.substances
 
-import java.net.URL
-
 data class Substance(
     val name: String,
-    val url: URL,
+    val url: String,
     val effects: List<Effect>,
     val chemicalClasses: List<String>,
     val psychoactiveClasses: List<String>,
@@ -20,7 +18,7 @@ data class Substance(
 
 data class Effect(
     val name: String,
-    val url: URL
+    val url: String
 )
 
 data class Tolerance(

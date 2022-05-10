@@ -3,7 +3,6 @@ package com.example.healthassistant.data.substances
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
-import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,8 +22,7 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
 
     private fun parseSubstance(jsonSubstance: JSONObject): Substance {
         val name = jsonSubstance.getString("name")
-        val urlString = jsonSubstance.getString("url")
-        val url = URL(urlString)
+        val url = jsonSubstance.getString("url")
         val jsonEffects = jsonSubstance.getJSONArray("effects")
         val effects = parseEffects(jsonEffects)
         val jsonClass = jsonSubstance.getOptionalJSONObject("class")
@@ -66,8 +64,7 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         for (i in 0 until jsonEffects.length()) {
             val effectJson = jsonEffects.getJSONObject(i)
             val name = effectJson.getString("name")
-            val urlString = effectJson.getString("url")
-            val url = URL(urlString)
+            val url = effectJson.getString("url")
             val newEffect = Effect(name, url)
             effects.add(newEffect)
         }
