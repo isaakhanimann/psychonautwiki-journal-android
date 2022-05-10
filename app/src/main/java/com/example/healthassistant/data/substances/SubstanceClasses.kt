@@ -1,5 +1,7 @@
 package com.example.healthassistant.data.substances
 
+import kotlin.time.Duration
+
 data class Substance(
     val name: String,
     val url: String,
@@ -58,10 +60,11 @@ data class RoaDuration(
 )
 
 data class DurationRange(
-    val min: Double?,
-    val max: Double?,
-    val units: String?
-)
+    val min: Duration?,
+    val max: Duration?
+) {
+    val text get() = "${min.toString()}-${max.toString()}"
+}
 
 data class Bioavailability(
     val min: Double?,

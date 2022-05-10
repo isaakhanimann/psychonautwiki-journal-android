@@ -5,6 +5,8 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @Singleton
 class SubstanceParser @Inject constructor() : SubstanceParserInterface {
@@ -202,10 +204,27 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val units = jsonDurationRange.getOptionalString("units")
         val min = jsonDurationRange.getOptionalDouble("min")
         val max = jsonDurationRange.getOptionalDouble("max")
-        return if (units == null && min == null && max == null) {
-            null
-        } else {
-            DurationRange(min = min, max = max, units = units)
+        if (min == null && max == null) {
+            return null
+        }
+        when (units) {
+            "seconds" -> return DurationRange(
+                min = min?.toDuration(DurationUnit.SECONDS),
+                max = max?.toDuration(DurationUnit.SECONDS)
+            )
+            "minutes" -> return DurationRange(
+                min = min?.toDuration(DurationUnit.MINUTES),
+                max = max?.toDuration(DurationUnit.MINUTES)
+            )
+            "hours" -> return DurationRange(
+                min = min?.toDuration(DurationUnit.HOURS),
+                max = max?.toDuration(DurationUnit.HOURS)
+            )
+            "days" -> return DurationRange(
+                min = min?.toDuration(DurationUnit.DAYS),
+                max = max?.toDuration(DurationUnit.DAYS)
+            )
+            else -> return null
         }
     }
 

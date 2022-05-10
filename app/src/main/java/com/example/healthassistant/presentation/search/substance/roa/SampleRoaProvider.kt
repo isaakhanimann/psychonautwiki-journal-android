@@ -2,6 +2,8 @@ package com.example.healthassistant.presentation.search.substance.roa
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.substances.*
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class SampleRoaProvider : PreviewParameterProvider<Roa> {
     override val values: Sequence<Roa> = sequenceOf(
@@ -26,34 +28,28 @@ class SampleRoaProvider : PreviewParameterProvider<Roa> {
             ),
             roaDuration = RoaDuration(
                 onset = DurationRange(
-                    min = 20.0,
-                    max = 40.0,
-                    units = "minutes"
+                    min = 20.0.toDuration(DurationUnit.MINUTES),
+                    max = 40.0.toDuration(DurationUnit.MINUTES),
                 ),
                 comeup = DurationRange(
-                    min = 15.0,
-                    max = 30.0,
-                    units = "minutes"
+                    min = 15.0.toDuration(DurationUnit.MINUTES),
+                    max = 30.0.toDuration(DurationUnit.MINUTES),
                 ),
                 peak = DurationRange(
-                    min = 1.5,
-                    max = 2.5,
-                    units = "hours"
+                    min = 1.5.toDuration(DurationUnit.HOURS),
+                    max = 2.5.toDuration(DurationUnit.HOURS),
                 ),
                 offset = DurationRange(
-                    min = 1.0,
-                    max = 1.5,
-                    units = "hours"
+                    min = 1.0.toDuration(DurationUnit.HOURS),
+                    max = 1.5.toDuration(DurationUnit.HOURS),
                 ),
                 total = DurationRange(
-                    min = 3.0,
-                    max = 5.0,
-                    units = "hours"
+                    min = 3.0.toDuration(DurationUnit.HOURS),
+                    max = 5.0.toDuration(DurationUnit.HOURS),
                 ),
                 afterglow = DurationRange(
-                    min = 12.0,
-                    max = 48.0,
-                    units = "hours"
+                    min = 12.0.toDuration(DurationUnit.HOURS),
+                    max = 48.0.toDuration(DurationUnit.HOURS),
                 )
             ),
             bioavailability = Bioavailability(
