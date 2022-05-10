@@ -17,29 +17,11 @@ class SearchViewModel @Inject constructor(
 ): ViewModel() {
 
     var searchText by mutableStateOf("")
-    var filteredSubstances: MutableList<Substance>  = mutableListOf()
-    private var substances: List<Substance> = emptyList()
-
-    init {
-        viewModelScope.launch {
-            substances = repository.getSubstances()
-            filterSubstances()
-        }
-    }
+    var substancesToShow: List<Substance> = repository.getAllSubstances()
 
     fun filterSubstances() {
-        filteredSubstances = if (searchText.isEmpty()) {
-            substances.toMutableList()
-        } else {
-            val resultList = ArrayList<Substance>()
-            for (substance in substances) {
-                if (substance.name.lowercase()
-                        .contains(searchText.lowercase())
-                ) {
-                    resultList.add(substance)
-                }
-            }
-            resultList
+        viewModelScope.launch {
+            substancesToShow = repository.getSubstances(searchText = searchText)
         }
     }
 }

@@ -3,7 +3,7 @@ package com.example.healthassistant.di
 import com.example.healthassistant.data.substances.SubstanceParser
 import com.example.healthassistant.data.substances.SubstanceParserInterface
 import com.example.healthassistant.repository.SubstanceRepository
-import com.example.healthassistant.repository.SubstanceRepositoryImpl
+import com.example.healthassistant.repository.SubstanceRepositoryInterface
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -23,6 +23,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindSubstanceRepository(
-        substanceRepositoryImpl: SubstanceRepositoryImpl
-    ): SubstanceRepository
+        substanceRepository: SubstanceRepository
+    ): SubstanceRepositoryInterface
 }

@@ -30,7 +30,7 @@ fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel)
         })
         SubstanceList(
             navController = navController,
-            substances = searchViewModel.filteredSubstances
+            substances = searchViewModel.substancesToShow
         )
     }
 }
