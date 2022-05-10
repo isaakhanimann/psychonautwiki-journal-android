@@ -8,9 +8,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SubstanceParser @Inject constructor() : JSONParser<Substance> {
+class SubstanceParser @Inject constructor() : SubstanceParserInterface {
 
-    override suspend fun parse(string: String): List<Substance> {
+    override suspend fun parseAllSubstances(string: String): List<Substance> {
         val jsonArray = JSONTokener(string).nextValue() as JSONArray
         val substances: MutableList<Substance> = mutableListOf()
         for (i in 0 until jsonArray.length()) {
