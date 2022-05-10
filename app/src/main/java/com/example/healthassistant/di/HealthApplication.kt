@@ -1,4 +1,4 @@
-package com.example.healthassistant
+package com.example.healthassistant.di
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
