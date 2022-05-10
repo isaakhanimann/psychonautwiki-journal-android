@@ -29,7 +29,6 @@ import androidx.navigation.navArgument
 import com.example.healthassistant.presentation.home.NoteScreenWithModel
 import com.example.healthassistant.presentation.home.NoteViewModel
 import com.example.healthassistant.presentation.search.SearchScreen
-import com.example.healthassistant.presentation.search.SearchViewModel
 import com.example.healthassistant.presentation.search.SubstanceScreen
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,14 +82,13 @@ fun MainScreen() {
         }
     ) { innerPadding ->
         val noteViewModel = viewModel<NoteViewModel>()
-        val searchViewModel = viewModel<SearchViewModel>()
         NavHost(
             navController,
             startDestination = Screen.Home.route,
             Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) { NoteScreenWithModel(noteViewModel = noteViewModel) }
-            composable(Screen.Search.route) { SearchScreen(navController, searchViewModel = searchViewModel) }
+            composable(Screen.Search.route) { SearchScreen(navController) }
             composable(
                 Screen.Search.route + "/" + "{substanceName}",
                 arguments = listOf(navArgument("substanceName") { type = NavType.StringType })

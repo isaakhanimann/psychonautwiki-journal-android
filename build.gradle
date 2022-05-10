@@ -1,9 +1,10 @@
 buildscript {
     ext {
         compose_version = '1.1.1'
-        hilt_version = '2.39'
+        hilt_version = '2.40.5'
         room_version = '2.4.2'
-        coroutines_version = '1.5.2'
+        coroutines_version = '1.6.0'
+        nav_version = "2.4.2"
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"

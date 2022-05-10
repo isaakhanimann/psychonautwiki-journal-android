@@ -17,12 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthassistant.Screen
 import com.example.healthassistant.data.substances.Substance
 
 @Composable
-fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel) {
+fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel = hiltViewModel()) {
     Column {
         SearchField(searchText = searchViewModel.searchText, onChange = {
             searchViewModel.searchText = it
