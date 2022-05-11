@@ -1,7 +1,9 @@
 package com.example.healthassistant.presentation.search.substance.roa
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -14,18 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.substances.Roa
 import com.example.healthassistant.data.substances.RoaDose
 import com.example.healthassistant.data.substances.RoaDuration
+import com.example.healthassistant.presentation.search.substance.SubstanceInfoCard
 
 @Preview
 @Composable
 fun RoaView(@PreviewParameter(SampleRoaProvider::class) roa: Roa) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.padding(8.dp)
-        ) {
-            Text(text = roa.name, style = MaterialTheme.typography.h6)
+    SubstanceInfoCard(title = roa.name) {
+        Column {
             roa.roaDose?.let {
                 DoseView(roaDose = it)
                 Divider()
