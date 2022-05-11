@@ -11,7 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,19 +21,18 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val repository: ExperienceRepository) :
     ViewModel() {
 
-    private val _experiences = MutableStateFlow<List<Experience>>(emptyList())
-    val experiences = _experiences.asStateFlow()
+    private val _experiencesGrouped = MutableStateFlow<Map<String, List<Experience>>>(emptyMap())
+    val experiencesGrouped = _experiencesGrouped.asStateFlow()
     var isShowingDialog by mutableStateOf(false)
     var enteredTitle by mutableStateOf("")
     val isEnteredTitleOk get() = enteredTitle.isNotEmpty()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getAllExperiences().distinctUntilChanged()
+            repository.getAllExperiences()
                 .collect { es ->
-                    if (es.isNotEmpty()) {
-                        _experiences.value = es
-                    }
+                    val cal = Calendar.getInstance(TimeZone.getDefault())
+                    _experiencesGrouped.value = es.groupBy { cal.get(Calendar.YEAR).toString() ?: "Unknown Year" }
                 }
 
         }
@@ -42,7 +40,7 @@ class HomeViewModel @Inject constructor(private val repository: ExperienceReposi
 
     fun addButtonTapped() {
         val formatter  = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-        enteredTitle = formatter.format(Date())
+        enteredTitle = formatter.format(Date()) ?: ""
         isShowingDialog = true
     }
 
