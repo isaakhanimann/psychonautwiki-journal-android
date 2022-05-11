@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
 
@@ -20,17 +19,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
     val experiences = homeViewModel.experiences.collectAsState().value
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = "Experiences")
-                }
-            )
-        },
+        topBar = { TopAppBar(title = { Text(text = "Experiences") }) },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { homeViewModel.isShowingDialog = true }
-            ) {
+            FloatingActionButton(onClick = homeViewModel::addButtonTapped) {
                 Icon(Icons.Default.Add, "Add New Experience")
             }
         }
@@ -48,6 +39,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
 
 @Composable
 fun AddExperienceDialog(homeViewModel: HomeViewModel) {
+    val context = LocalContext.current
     AlertDialog(
         onDismissRequest = {
             homeViewModel.isShowingDialog = false
@@ -56,7 +48,6 @@ fun AddExperienceDialog(homeViewModel: HomeViewModel) {
             Text(text = "Add Experience")
         },
         text = {
-            val focusManager = LocalFocusManager.current
             TextField(
                 value = homeViewModel.enteredTitle,
                 onValueChange = {
@@ -68,14 +59,22 @@ fun AddExperienceDialog(homeViewModel: HomeViewModel) {
                 maxLines = 1,
                 label = { Text(text = "Enter Title") },
                 isError = !homeViewModel.isEnteredTitleOk,
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                keyboardActions = KeyboardActions(onDone = {
+                    homeViewModel.dialogConfirmTapped(
+                        onSuccess = {
+                            Toast.makeText(
+                                context, "Experience Added",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
+                }),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
             )
 
         },
         confirmButton = {
             if (homeViewModel.isEnteredTitleOk) {
-                val context = LocalContext.current
                 TextButton(
                     onClick = {
                         homeViewModel.dialogConfirmTapped(
