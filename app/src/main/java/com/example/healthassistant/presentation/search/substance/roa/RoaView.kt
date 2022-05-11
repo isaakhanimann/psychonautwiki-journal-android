@@ -18,13 +18,14 @@ import com.example.healthassistant.data.substances.RoaDuration
 @Preview
 @Composable
 fun RoaView(@PreviewParameter(SampleRoaProvider::class) roa: Roa) {
-    Card(modifier = Modifier
-        .fillMaxWidth()
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            Text(text = roa.name, style = MaterialTheme.typography.h5)
+            Text(text = roa.name, style = MaterialTheme.typography.h6)
             roa.roaDose?.let {
                 DoseView(roaDose = it)
                 Divider()
@@ -41,29 +42,33 @@ fun DoseView(roaDose: RoaDose) {
     val lightMaxOrCommonMin = roaDose.light?.max ?: roaDose.common?.min
     val commonMaxOrStrongMin = roaDose.common?.max ?: roaDose.strong?.min
     val strongMaxOrHeavy = roaDose.strong?.max ?: roaDose.heavy
-    Row(verticalAlignment = Alignment.Top) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = roaDose.threshold.toString())
-            Text("thresh  ")
+            Text(text = roaDose.threshold?.toReadableString() ?: "..")
+            Text("thresh  ", style = MaterialTheme.typography.caption)
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("-")
-            Text("light")
+            Text("light", style = MaterialTheme.typography.caption)
         }
-        Text(text = lightMaxOrCommonMin.toString())
+        Text(text = lightMaxOrCommonMin?.toReadableString() ?: "..")
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("-")
-            Text("common")
+            Text("common", style = MaterialTheme.typography.caption)
         }
-        Text(text = commonMaxOrStrongMin.toString())
+        Text(text = commonMaxOrStrongMin?.toReadableString() ?: "..")
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("-")
-            Text("strong")
+            Text("strong", style = MaterialTheme.typography.caption)
         }
-        Text(text = strongMaxOrHeavy.toString())
+        Text(text = strongMaxOrHeavy?.toReadableString() ?: "..")
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("-")
-            Text("heavy")
+            Text("heavy", style = MaterialTheme.typography.caption)
         }
         Text(text = roaDose.units ?: "")
     }
@@ -97,7 +102,7 @@ fun DurationView(roaDuration: RoaDuration) {
 
 @Composable
 fun LineLow() {
-Text(text = "onset")
+    Text(text = "onset")
 }
 
 @Composable

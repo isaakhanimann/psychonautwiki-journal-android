@@ -1,5 +1,6 @@
 package com.example.healthassistant.presentation.search.substance
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.navigation.NavHostController
 import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.presentation.search.substance.roa.RoaView
+import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -42,10 +44,21 @@ fun SubstanceScreen(navHostController: NavHostController) {
     }
 }
 
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Preview
 @Composable
-fun SubstanceScreenContent(
+fun SubstanceScreenPreview(
     @PreviewParameter(SampleSubstanceProvider::class) substance: Substance,
+    navigateBack: () -> Unit = {}
+) {
+    HealthAssistantTheme {
+        SubstanceScreenContent(substance = substance, navigateBack = {})
+    }
+}
+
+@Composable
+fun SubstanceScreenContent(
+    substance: Substance,
     navigateBack: () -> Unit = {}
 ) {
     Scaffold(
