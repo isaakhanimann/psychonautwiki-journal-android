@@ -1,5 +1,8 @@
 package com.example.healthassistant.presentation.home
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.experiences.ExperienceRepository
@@ -14,10 +17,14 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: ExperienceRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val repository: ExperienceRepository) :
+    ViewModel() {
 
     private val _experiences = MutableStateFlow<List<Experience>>(emptyList())
     val experiences = _experiences.asStateFlow()
+    var isShowingDialog by mutableStateOf(false)
+    var enteredTitle by mutableStateOf("")
+    val isEnteredTitleOk get() = enteredTitle.isNotEmpty()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -31,6 +38,14 @@ class HomeViewModel @Inject constructor(private val repository: ExperienceReposi
         }
     }
 
-    fun addExperience(experience: Experience) = viewModelScope.launch { repository.addExperience(experience) }
+    fun dialogConfirmTapped(onSuccess: () -> Unit) {
+        if (enteredTitle.isNotEmpty()) {
+            val newExperience = Experience(title = enteredTitle)
+            enteredTitle = ""
+            viewModelScope.launch { repository.addExperience(newExperience) }
+            isShowingDialog = false
+            onSuccess()
+        }
+    }
 
 }
