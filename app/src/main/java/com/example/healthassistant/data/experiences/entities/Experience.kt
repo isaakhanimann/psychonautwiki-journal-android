@@ -1,11 +1,11 @@
-package com.example.healthassistant.data.notes
+package com.example.healthassistant.data.experiences.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity
-data class Note(
+data class Experience(
     @PrimaryKey
     val id: UUID = UUID.randomUUID(),
 

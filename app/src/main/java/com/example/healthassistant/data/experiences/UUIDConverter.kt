@@ -1,4 +1,4 @@
-package com.example.healthassistant.data.notes
+package com.example.healthassistant.data.experiences
 
 import androidx.room.TypeConverter
 import java.util.*

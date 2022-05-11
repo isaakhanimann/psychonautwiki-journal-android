@@ -19,11 +19,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.notes.Note
+import com.example.healthassistant.data.experiences.entities.Experience
 
 @Composable
-fun NoteScreen(noteViewModel: NoteViewModel = hiltViewModel()) {
-    val notes = noteViewModel.noteList.collectAsState().value
+fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
+    val experiences = homeViewModel.experiences.collectAsState().value
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -32,11 +32,11 @@ fun NoteScreen(noteViewModel: NoteViewModel = hiltViewModel()) {
         )
     }) {
         Column(modifier = Modifier.padding(6.dp)) {
-            Input(onAddNote = noteViewModel::addNote)
+            Input(onAddExperience = homeViewModel::addExperience)
             Divider(modifier = Modifier.padding(10.dp))
             LazyColumn {
-                items(notes) { note ->
-                    Text(text = note.title)
+                items(experiences) { experience ->
+                    Text(text = experience.title)
                 }
             }
         }
@@ -44,7 +44,7 @@ fun NoteScreen(noteViewModel: NoteViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun Input(onAddNote: (Note) -> Unit) {
+fun Input(onAddExperience: (Experience) -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -72,19 +72,19 @@ fun Input(onAddNote: (Note) -> Unit) {
         Button(
             onClick = {
                 if (title.isNotEmpty()) {
-                    onAddNote(
-                        Note(title = title)
+                    onAddExperience(
+                        Experience(title = title)
                     )
                     title = ""
                     Toast.makeText(
-                        context, "Note Added",
+                        context, "Experience Added",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             },
             shape = CircleShape,
         ) {
-            Text("Add Note")
+            Text("Add Experience")
 
         }
     }

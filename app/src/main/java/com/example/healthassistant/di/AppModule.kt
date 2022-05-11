@@ -2,8 +2,8 @@ package com.example.healthassistant.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.healthassistant.data.notes.NoteDatabase
-import com.example.healthassistant.data.notes.NoteDatabaseDao
+import com.example.healthassistant.data.experiences.ExperienceDao
+import com.example.healthassistant.data.experiences.ExperienceDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,16 +18,15 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNotesDao(noteDatabase: NoteDatabase): NoteDatabaseDao = noteDatabase.noteDao()
+    fun provideExperiencesDao(experienceDatabase: ExperienceDatabase): ExperienceDao =
+        experienceDatabase.experienceDao()
 
     @Singleton
     @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context): NoteDatabase =
+    fun provideAppDatabase(@ApplicationContext context: Context): ExperienceDatabase =
         Room.databaseBuilder(
             context,
-            NoteDatabase::class.java,
-            "notes_db"
-        )
-            .fallbackToDestructiveMigration()
-            .build()
+            ExperienceDatabase::class.java,
+            "experiences_db"
+        ).build()
 }

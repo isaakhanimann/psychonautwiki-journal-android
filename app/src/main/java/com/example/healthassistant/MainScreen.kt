@@ -14,7 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.healthassistant.presentation.home.NoteScreen
+import com.example.healthassistant.presentation.home.HomeScreen
 import com.example.healthassistant.presentation.search.SearchScreen
 import com.example.healthassistant.presentation.search.substance.SubstanceScreen
 
@@ -43,7 +43,7 @@ fun MainScreen() {
             startDestination = Screen.Home.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Home.route) { NoteScreen() }
+            composable(Screen.Home.route) { HomeScreen() }
             composable(Screen.Search.route) { SearchScreen(navController) }
             composable(
                 Screen.Search.route + "/" + "{$SUBSTANCE_NAME}",
