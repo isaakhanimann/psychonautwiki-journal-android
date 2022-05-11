@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.healthassistant.SUBSTANCE_NAME
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.repository.SubstanceRepository
+import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

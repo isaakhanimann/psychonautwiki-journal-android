@@ -2,8 +2,8 @@ package com.example.healthassistant.di
 
 import com.example.healthassistant.data.substances.SubstanceParser
 import com.example.healthassistant.data.substances.SubstanceParserInterface
-import com.example.healthassistant.repository.SubstanceRepository
-import com.example.healthassistant.repository.SubstanceRepositoryInterface
+import com.example.healthassistant.data.substances.repositories.SubstanceRepository
+import com.example.healthassistant.data.substances.repositories.SubstanceRepositoryInterface
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

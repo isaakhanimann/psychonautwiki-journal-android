@@ -1,4 +1,4 @@
-package com.example.healthassistant.repository
+package com.example.healthassistant.data.substances.repositories
 
 import com.example.healthassistant.data.substances.Substance
 

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.healthassistant.data.experiences.ExperienceRepository
+import com.example.healthassistant.data.experiences.repositories.ExperienceRepository
 import com.example.healthassistant.data.experiences.entities.Experience
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
