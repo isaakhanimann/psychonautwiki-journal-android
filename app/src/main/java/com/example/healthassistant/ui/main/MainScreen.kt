@@ -1,4 +1,4 @@
-package com.example.healthassistant
+package com.example.healthassistant.ui.main
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -14,9 +14,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.healthassistant.presentation.home.HomeScreen
-import com.example.healthassistant.presentation.search.SearchScreen
-import com.example.healthassistant.presentation.search.substance.SubstanceScreen
+import com.example.healthassistant.SUBSTANCE_NAME
+import com.example.healthassistant.ui.home.HomeScreen
+import com.example.healthassistant.ui.search.SearchScreen
+import com.example.healthassistant.ui.search.substance.SubstanceScreen
 
 @Composable
 fun MainScreen() {

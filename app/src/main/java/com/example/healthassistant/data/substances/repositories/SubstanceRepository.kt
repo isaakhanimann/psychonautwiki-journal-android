@@ -3,7 +3,6 @@ package com.example.healthassistant.data.substances.repositories
 import android.content.Context
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.SubstanceParserInterface
-import com.example.healthassistant.util.getSubstanceFileContent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,8 +16,12 @@ class SubstanceRepository @Inject constructor(
     private val allSubstances: List<Substance>
 
     init {
-        val fileContent = getSubstanceFileContent(appContext)
+        val fileContent = getSubstanceFileContent()
         allSubstances = substanceParser.parseAllSubstances(string = fileContent)
+    }
+
+    private fun getSubstanceFileContent(): String {
+        return appContext.assets.open("Substances-Date8May2022-Time15h12m.json").bufferedReader().use { it.readText() }
     }
 
     override fun getAllSubstances(): List<Substance> {

@@ -1,4 +1,4 @@
-package com.example.healthassistant.presentation.search
+package com.example.healthassistant.ui.search
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.healthassistant.Screen
+import com.example.healthassistant.ui.main.Screen
 import com.example.healthassistant.data.substances.Substance
 
 @Composable

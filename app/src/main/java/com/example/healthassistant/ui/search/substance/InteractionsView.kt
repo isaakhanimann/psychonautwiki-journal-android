@@ -1,4 +1,4 @@
-package com.example.healthassistant.presentation.search.substance
+package com.example.healthassistant.ui.search.substance
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape

@@ -1,4 +1,4 @@
-package com.example.healthassistant.presentation.home
+package com.example.healthassistant.ui.home
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

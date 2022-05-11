@@ -1,4 +1,4 @@
-package com.example.healthassistant.presentation.home
+package com.example.healthassistant.ui.home
 
 import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyColumn

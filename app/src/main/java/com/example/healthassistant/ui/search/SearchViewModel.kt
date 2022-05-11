@@ -1,4 +1,4 @@
-package com.example.healthassistant.presentation.search
+package com.example.healthassistant.ui.search
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

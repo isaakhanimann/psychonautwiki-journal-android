@@ -1,4 +1,4 @@
-package com.example.healthassistant.presentation.search.substance
+package com.example.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.presentation.search.substance.roa.RoaView
+import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import com.google.accompanist.flowlayout.FlowRow
 

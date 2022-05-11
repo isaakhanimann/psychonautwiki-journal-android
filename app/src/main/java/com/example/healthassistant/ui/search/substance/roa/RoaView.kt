@@ -1,4 +1,4 @@
-package com.example.healthassistant.presentation.search.substance.roa
+package com.example.healthassistant.ui.search.substance.roa
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.substances.Roa
 import com.example.healthassistant.data.substances.RoaDose
 import com.example.healthassistant.data.substances.RoaDuration
-import com.example.healthassistant.presentation.search.substance.SubstanceInfoCard
+import com.example.healthassistant.ui.search.substance.SubstanceInfoCard
 
 @Preview
 @Composable

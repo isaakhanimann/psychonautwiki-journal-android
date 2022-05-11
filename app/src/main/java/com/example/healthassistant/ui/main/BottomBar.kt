@@ -1,4 +1,4 @@
-package com.example.healthassistant
+package com.example.healthassistant.ui.main
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically

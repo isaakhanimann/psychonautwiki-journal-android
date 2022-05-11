@@ -1,4 +1,4 @@
-package com.example.healthassistant.presentation.search.substance
+package com.example.healthassistant.ui.search.substance
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
