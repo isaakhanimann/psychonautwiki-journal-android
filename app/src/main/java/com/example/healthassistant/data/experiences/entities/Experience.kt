@@ -6,8 +6,8 @@ import java.util.*
 
 @Entity
 data class Experience(
-    @PrimaryKey
-    val id: UUID = UUID.randomUUID(),
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val title: String,
     val creationDate: Date,
     val text: String

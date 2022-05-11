@@ -87,7 +87,7 @@ fun ExperienceRow(@PreviewParameter(SampleExperienceProvider::class) experience:
             .padding(horizontal = 8.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = experience.title)
+        Text(text = experience.id.toString())
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
             val creationDateText = formatter.format(experience.creationDate) ?: ""

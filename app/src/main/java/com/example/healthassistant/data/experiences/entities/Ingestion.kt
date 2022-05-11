@@ -6,13 +6,13 @@ import java.util.*
 
 @Entity
 data class Ingestion(
-    @PrimaryKey
-    val id: UUID = UUID.randomUUID(),
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val substanceName: String,
     val time: Date,
     val administrationRoute: String,
     val dose: Double,
     val units: String,
     val color: String,
-    val experienceId: UUID
+    val experienceId: Int
 )
