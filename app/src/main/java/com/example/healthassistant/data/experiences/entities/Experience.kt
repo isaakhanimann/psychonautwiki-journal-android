@@ -8,6 +8,7 @@ import java.util.*
 data class Experience(
     @PrimaryKey
     val id: UUID = UUID.randomUUID(),
-
-    val title: String
+    val title: String,
+    val creationDate: Date,
+    val text: String
     )

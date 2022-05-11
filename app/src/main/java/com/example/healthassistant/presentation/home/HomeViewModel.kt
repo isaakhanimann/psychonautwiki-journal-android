@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 
@@ -40,7 +41,7 @@ class HomeViewModel @Inject constructor(private val repository: ExperienceReposi
 
     fun dialogConfirmTapped(onSuccess: () -> Unit) {
         if (enteredTitle.isNotEmpty()) {
-            val newExperience = Experience(title = enteredTitle)
+            val newExperience = Experience(title = enteredTitle, creationDate = Date(), text = "")
             enteredTitle = ""
             viewModelScope.launch { repository.addExperience(newExperience) }
             isShowingDialog = false
