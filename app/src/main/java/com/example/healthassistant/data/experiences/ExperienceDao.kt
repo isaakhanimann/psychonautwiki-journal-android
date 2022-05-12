@@ -11,7 +11,7 @@ import java.util.*
 @Dao
 interface ExperienceDao {
 
-    @Query("SELECT * FROM experience")
+    @Query("SELECT * FROM experience ORDER BY creationDate DESC")
     fun getExperiences():
             Flow<List<Experience>>
 
