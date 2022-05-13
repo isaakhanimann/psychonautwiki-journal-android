@@ -1,14 +1,14 @@
-package com.example.healthassistant.ui.search.substance.roa
+package com.example.healthassistant.ui.previewproviders
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.substances.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class SampleRoaProvider : PreviewParameterProvider<Roa> {
+class RoaPreviewProvider : PreviewParameterProvider<Roa> {
     override val values: Sequence<Roa> = sequenceOf(
         Roa(
-            name = "oral",
+            route = AdministrationRoute.ORAL,
             roaDose = RoaDose(
                 "mg",
                 threshold = 20.0,

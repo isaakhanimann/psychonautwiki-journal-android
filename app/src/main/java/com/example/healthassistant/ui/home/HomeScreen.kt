@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.ui.main.navigateToExperienceScreen
+import com.example.healthassistant.ui.previewproviders.ExperiencePreviewProvider
 import java.text.SimpleDateFormat
 import java.util.*
 

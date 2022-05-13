@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
+import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import com.google.accompanist.flowlayout.FlowRow
@@ -45,8 +46,7 @@ fun SubstanceScreen(navController: NavController, viewModel: SubstanceViewModel 
 @Preview
 @Composable
 fun SubstanceScreenPreview(
-    @PreviewParameter(SubstancePreviewProvider::class) substance: Substance,
-    navigateBack: () -> Unit = {}
+    @PreviewParameter(SubstancePreviewProvider::class) substance: Substance
 ) {
     HealthAssistantTheme {
         SubstanceScreenContent(substance = substance, navigateBack = {})

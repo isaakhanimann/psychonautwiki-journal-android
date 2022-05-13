@@ -16,12 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.substances.Roa
 import com.example.healthassistant.data.substances.RoaDose
 import com.example.healthassistant.data.substances.RoaDuration
+import com.example.healthassistant.ui.previewproviders.RoaPreviewProvider
 import com.example.healthassistant.ui.search.substance.SubstanceInfoCard
 
 @Preview
 @Composable
-fun RoaView(@PreviewParameter(SampleRoaProvider::class) roa: Roa) {
-    SubstanceInfoCard(title = roa.name) {
+fun RoaView(@PreviewParameter(RoaPreviewProvider::class) roa: Roa) {
+    SubstanceInfoCard(title = roa.route.displayText) {
         Column {
             roa.roaDose?.let {
                 DoseView(roaDose = it)

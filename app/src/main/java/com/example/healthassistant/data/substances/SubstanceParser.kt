@@ -135,7 +135,8 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
     }
 
     private fun parseRoa(oneJsonRoa: JSONObject): Roa {
-        val name = oneJsonRoa.getString("name")
+        val name = oneJsonRoa.getString("name").uppercase()
+        val route = AdministrationRoute.valueOf(name)
         val jsonRoaDose = oneJsonRoa.getOptionalJSONObject("dose")
         val roaDose = parseRoaDose(jsonRoaDose)
         val jsonRoaDuration = oneJsonRoa.getOptionalJSONObject("duration")
@@ -143,7 +144,7 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val jsonBio = oneJsonRoa.getOptionalJSONObject("bioavailability")
         val bioavailability = parseBioavailability(jsonBio)
         return Roa(
-            name = name,
+            route = route,
             roaDose = roaDose,
             roaDuration = roaDuration,
             bioavailability = bioavailability
