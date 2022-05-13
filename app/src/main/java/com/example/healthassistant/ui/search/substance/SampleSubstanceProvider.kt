@@ -9,6 +9,7 @@ class SampleSubstanceProvider : PreviewParameterProvider<Substance> {
     override val values: Sequence<Substance> = sequenceOf(
         Substance(
             name = "Example Substance",
+            commonNames = listOf("Hat", "Boot", "Hoodie", "Shirt", "Blouse"),
             url = "https://psychonautwiki.org/wiki/Lsd",
             effects = listOf(
                 Effect(

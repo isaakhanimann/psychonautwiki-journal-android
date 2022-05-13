@@ -4,6 +4,7 @@ import kotlin.time.Duration
 
 data class Substance(
     val name: String,
+    val commonNames: List<String>,
     val url: String,
     val effects: List<Effect>,
     val chemicalClasses: List<String>,
