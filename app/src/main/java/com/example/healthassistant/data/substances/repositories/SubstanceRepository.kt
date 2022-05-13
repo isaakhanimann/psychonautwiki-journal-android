@@ -37,7 +37,10 @@ class SubstanceRepository @Inject constructor(
             allSubstances
         } else {
             allSubstances.filter {
-                it.name.lowercase().contains(searchText.lowercase())
+                it.name.startsWith(prefix = searchText, ignoreCase = true) ||
+                        it.commonNames.any { commonName ->
+                            commonName.startsWith(prefix = searchText, ignoreCase = true)
+                        }
             }
         }
     }
