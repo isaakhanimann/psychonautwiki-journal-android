@@ -28,12 +28,12 @@ class ChooseTimeViewModel @Inject constructor(
         } catch (e: Exception) {
             null
         }
-        dose = state.get<Double>(DOSE_KEY)
+        val doseText = state.get<String>(DOSE_KEY)
+        dose = doseText?.toDouble()
         units = state.get<String>(UNITS_KEY)
         isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)
         assert(substance != null)
         assert(administrationRoute != null)
-        assert(dose != null)
         assert(units != null)
         assert(isEstimate != null)
     }
