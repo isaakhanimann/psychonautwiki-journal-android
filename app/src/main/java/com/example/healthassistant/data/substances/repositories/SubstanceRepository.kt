@@ -21,7 +21,7 @@ class SubstanceRepository @Inject constructor(
     }
 
     private fun getSubstanceFileContent(): String {
-        return appContext.assets.open("Substances-Date8May2022-Time15h12m.json").bufferedReader().use { it.readText() }
+        return appContext.assets.open("Substances.json").bufferedReader().use { it.readText() }
     }
 
     override fun getAllSubstances(): List<Substance> {
