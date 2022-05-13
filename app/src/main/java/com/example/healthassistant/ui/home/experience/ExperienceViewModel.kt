@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.EXPERIENCE_ID
-import com.example.healthassistant.data.experiences.entities.Experience
+import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.experiences.repositories.ExperienceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,13 +16,13 @@ class ExperienceViewModel @Inject constructor(
     state: SavedStateHandle
 ): ViewModel() {
 
-    var experience: Experience? = null
+    var experienceWithIngestions: ExperienceWithIngestions? = null
 
     init {
         val id = state.get<Int>(EXPERIENCE_ID)
         id?.let {
             viewModelScope.launch {
-                experience = repository.getExperience(id = it)
+                experienceWithIngestions = repository.getExperienceWithIngestions(experienceId = it)
             }
         }
     }

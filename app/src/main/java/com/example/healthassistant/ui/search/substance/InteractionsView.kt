@@ -15,7 +15,7 @@ import com.google.accompanist.flowlayout.FlowRow
 
 @Preview
 @Composable
-fun InteractionsView(@PreviewParameter(SampleSubstanceProvider::class) substance: Substance) {
+fun InteractionsView(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
     if (substance.dangerousInteractions.isNotEmpty() || substance.unsafeInteractions.isNotEmpty() || substance.uncertainInteractions.isNotEmpty()) {
         SubstanceInfoCard(title = "Interactions") {
             FlowRow {

@@ -5,7 +5,7 @@ import com.example.healthassistant.data.substances.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class SampleSubstanceProvider : PreviewParameterProvider<Substance> {
+class SubstancePreviewProvider : PreviewParameterProvider<Substance> {
     override val values: Sequence<Substance> = sequenceOf(
         Substance(
             name = "Example Substance",

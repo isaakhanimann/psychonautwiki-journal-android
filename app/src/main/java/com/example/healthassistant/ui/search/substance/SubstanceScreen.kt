@@ -45,7 +45,7 @@ fun SubstanceScreen(navController: NavController, viewModel: SubstanceViewModel 
 @Preview
 @Composable
 fun SubstanceScreenPreview(
-    @PreviewParameter(SampleSubstanceProvider::class) substance: Substance,
+    @PreviewParameter(SubstancePreviewProvider::class) substance: Substance,
     navigateBack: () -> Unit = {}
 ) {
     HealthAssistantTheme {

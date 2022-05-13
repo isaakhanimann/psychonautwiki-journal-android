@@ -14,16 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.healthassistant.data.experiences.entities.Experience
+import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 
 @Composable
 fun ExperienceScreen(
     navController: NavHostController,
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
-    viewModel.experience?.let { exp ->
+    viewModel.experienceWithIngestions?.let { exp ->
         ExperienceScreenContent(
-            experience = exp,
+            expAndIng = exp,
             navigateBack = navController::popBackStack
         )
     } ?: run {
@@ -36,13 +36,13 @@ fun ExperienceScreen(
 
 @Composable
 fun ExperienceScreenContent(
-    experience: Experience,
+    expAndIng: ExperienceWithIngestions,
     navigateBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(experience.title) },
+                title = { Text(expAndIng.experience.title) },
                 navigationIcon = {
                     IconButton(
                         onClick = navigateBack
@@ -64,7 +64,10 @@ fun ExperienceScreenContent(
                 .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Text("Put ingestions here")
+            Text("Ingestions")
+            expAndIng.ingestions.forEach {
+                IngestionRow(ingestion = it)
+            }
         }
     }
 }

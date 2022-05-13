@@ -5,7 +5,6 @@ import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import kotlinx.coroutines.flow.Flow
-import java.util.*
 
 
 @Dao
@@ -35,5 +34,5 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM experience WHERE id = :experienceId")
-    suspend fun getExperienceWithIngestions(experienceId: UUID): List<ExperienceWithIngestions>
+    suspend fun getExperienceWithIngestions(experienceId: Int): ExperienceWithIngestions?
 }

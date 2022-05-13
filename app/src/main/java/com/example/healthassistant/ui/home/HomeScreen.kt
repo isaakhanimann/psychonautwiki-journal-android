@@ -89,7 +89,7 @@ fun YearRow(year: String = "2022") {
 @Preview
 @Composable
 fun ExperienceRow(
-    @PreviewParameter(SampleExperienceProvider::class) experience: Experience,
+    @PreviewParameter(ExperiencePreviewProvider::class) experience: Experience,
     navigateToExperienceScreen: () -> Unit = {}
 ) {
     Row(
