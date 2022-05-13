@@ -14,14 +14,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.healthassistant.ui.main.routers.TabRouter
 
 @Composable
 fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean>) {
     val items = listOf(
-        Screen.Home,
-        Screen.Search,
-        Screen.Stats,
-        Screen.Settings
+        TabRouter.Home,
+        TabRouter.Search,
+        TabRouter.Stats,
+        TabRouter.Settings
     )
     AnimatedVisibility(
         visible = bottomBarState.value,

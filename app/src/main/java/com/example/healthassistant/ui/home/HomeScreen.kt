@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthassistant.data.experiences.entities.Experience
-import com.example.healthassistant.ui.main.navigateToExperienceScreen
+import com.example.healthassistant.ui.main.routers.navigateToExperience
 import com.example.healthassistant.ui.previewproviders.ExperiencePreviewProvider
 import java.text.SimpleDateFormat
 import java.util.*
@@ -61,7 +61,7 @@ fun ExperiencesList(homeViewModel: HomeViewModel, navController: NavController) 
             items(experiencesInYear.size) { i ->
                 val experience = experiencesInYear[i]
                 ExperienceRow(experience, navigateToExperienceScreen = {
-                    navController.navigateToExperienceScreen(experienceId = experience.id)
+                    navController.navigateToExperience(experienceId = experience.id)
                 })
                 if (i < experiencesInYear.size) {
                     Divider()

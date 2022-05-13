@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.main.navigateToSubstanceScreen
+import com.example.healthassistant.ui.main.routers.navigateToSubstanceScreen
 
 @Composable
 fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel = hiltViewModel()) {

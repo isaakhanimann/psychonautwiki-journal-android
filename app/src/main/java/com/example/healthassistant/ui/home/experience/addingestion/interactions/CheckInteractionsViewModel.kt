@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.search.substance
+package com.example.healthassistant.ui.home.experience.addingestion.interactions
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SubstanceViewModel @Inject constructor(
+class CheckInteractionsViewModel @Inject constructor(
     repository: SubstanceRepository,
     state: SavedStateHandle
 ): ViewModel() {

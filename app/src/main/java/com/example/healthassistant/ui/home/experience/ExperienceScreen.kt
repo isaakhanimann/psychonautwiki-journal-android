@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
+import com.example.healthassistant.ui.main.routers.navigateToAddIngestion
 
 @Composable
 fun ExperienceScreen(
@@ -24,7 +25,10 @@ fun ExperienceScreen(
     viewModel.experienceWithIngestions?.let { exp ->
         ExperienceScreenContent(
             expAndIng = exp,
-            navigateBack = navController::popBackStack
+            navigateBack = navController::popBackStack,
+            addIngestion = {
+                navController.navigateToAddIngestion(substanceName = "MDMA")
+            }
         )
     } ?: run {
         Button(onClick = navController::popBackStack) {
@@ -37,7 +41,8 @@ fun ExperienceScreen(
 @Composable
 fun ExperienceScreenContent(
     expAndIng: ExperienceWithIngestions,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    addIngestion: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -53,7 +58,7 @@ fun ExperienceScreenContent(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = addIngestion) {
                 Icon(Icons.Default.Add, "Add Ingestion")
             }
         }
