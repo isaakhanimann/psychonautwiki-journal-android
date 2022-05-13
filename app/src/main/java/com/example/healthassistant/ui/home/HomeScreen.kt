@@ -1,6 +1,7 @@
 package com.example.healthassistant.ui.home
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,12 +23,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.healthassistant.data.experiences.entities.Experience
+import com.example.healthassistant.ui.main.navigateToExperienceScreen
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navController: NavController,
+    homeViewModel: HomeViewModel = hiltViewModel()
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Experiences") }) },
         floatingActionButton = {
@@ -39,12 +45,12 @@ fun HomeScreen(homeViewModel: HomeViewModel = hiltViewModel()) {
         if (homeViewModel.isShowingDialog) {
             AddExperienceDialog(homeViewModel = homeViewModel)
         }
-        ExperiencesList(homeViewModel = homeViewModel)
+        ExperiencesList(homeViewModel = homeViewModel, navController = navController)
     }
 }
 
 @Composable
-fun ExperiencesList(homeViewModel: HomeViewModel) {
+fun ExperiencesList(homeViewModel: HomeViewModel, navController: NavController) {
     val groupedExperiences = homeViewModel.experiencesGrouped.collectAsState().value
     LazyColumn {
         groupedExperiences.forEach { (year, experiencesInYear) ->
@@ -53,7 +59,9 @@ fun ExperiencesList(homeViewModel: HomeViewModel) {
             }
             items(experiencesInYear.size) { i ->
                 val experience = experiencesInYear[i]
-                ExperienceRow(experience)
+                ExperienceRow(experience, navigateToExperienceScreen = {
+                    navController.navigateToExperienceScreen(experienceId = experience.id)
+                })
                 if (i < experiencesInYear.size) {
                     Divider()
                 }
@@ -80,11 +88,18 @@ fun YearRow(year: String = "2022") {
 
 @Preview
 @Composable
-fun ExperienceRow(@PreviewParameter(SampleExperienceProvider::class) experience: Experience) {
+fun ExperienceRow(
+    @PreviewParameter(SampleExperienceProvider::class) experience: Experience,
+    navigateToExperienceScreen: () -> Unit = {}
+) {
     Row(
         modifier = Modifier
+            .clickable {
+                navigateToExperienceScreen()
+            }
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 8.dp),
+
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = experience.title)

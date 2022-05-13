@@ -8,14 +8,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.healthassistant.EXPERIENCE_ID
 import com.example.healthassistant.SUBSTANCE_NAME
 import com.example.healthassistant.ui.home.HomeScreen
+import com.example.healthassistant.ui.home.experience.ExperienceScreen
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
 
@@ -44,18 +47,32 @@ fun MainScreen() {
             startDestination = Screen.Home.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Home.route) { HomeScreen() }
+            composable(Screen.Home.route) { HomeScreen(navController = navController) }
+            composable(
+                Screen.Home.route + "/" + "{$EXPERIENCE_ID}",
+                arguments = listOf(navArgument(EXPERIENCE_ID) { type = NavType.IntType })
+            ) {
+                ExperienceScreen(navController = navController)
+            }
             composable(Screen.Search.route) { SearchScreen(navController) }
             composable(
                 Screen.Search.route + "/" + "{$SUBSTANCE_NAME}",
                 arguments = listOf(navArgument(SUBSTANCE_NAME) { type = NavType.StringType })
             ) {
-                SubstanceScreen(navHostController = navController)
+                SubstanceScreen(navController = navController)
             }
             composable(Screen.Stats.route) { Stats() }
             composable(Screen.Settings.route) { Settings() }
         }
     }
+}
+
+fun NavController.navigateToExperienceScreen(experienceId: Int) {
+    navigate(Screen.Home.route + "/" + experienceId)
+}
+
+fun NavController.navigateToSubstanceScreen(substanceName: String) {
+    navigate(Screen.Search.route + "/" + substanceName)
 }
 
 @Composable

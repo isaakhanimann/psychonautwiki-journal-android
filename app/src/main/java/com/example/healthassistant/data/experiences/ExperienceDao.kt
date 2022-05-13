@@ -16,7 +16,7 @@ interface ExperienceDao {
             Flow<List<Experience>>
 
     @Query("SELECT * FROM experience WHERE id =:id")
-    suspend fun getExperienceByID(id: String): Experience
+    suspend fun getExperienceByID(id: Int): Experience?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(experience: Experience)

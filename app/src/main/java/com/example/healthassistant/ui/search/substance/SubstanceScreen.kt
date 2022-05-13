@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.ui.search.substance.roa.RoaView
@@ -28,15 +28,14 @@ import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-fun SubstanceScreen(navHostController: NavHostController) {
-    val viewModel: SubstanceViewModel = hiltViewModel()
+fun SubstanceScreen(navController: NavController, viewModel: SubstanceViewModel = hiltViewModel()) {
     if (viewModel.substance != null) {
         SubstanceScreenContent(
             substance = viewModel.substance,
-            navigateBack = navHostController::popBackStack
+            navigateBack = navController::popBackStack
         )
     } else {
-        Button(onClick = navHostController::popBackStack) {
+        Button(onClick = navController::popBackStack) {
             Text("There was an error. Go back.")
         }
     }

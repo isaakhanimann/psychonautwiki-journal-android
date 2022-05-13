@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.main.Screen
+import com.example.healthassistant.ui.main.navigateToSubstanceScreen
 
 @Composable
 fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel = hiltViewModel()) {
@@ -87,7 +87,7 @@ fun SubstanceList(navController: NavController, substances: List<Substance>) {
         items(substances.size) { i ->
             val substance = substances[i]
             SubstanceRow(substance = substance, onTap = { substanceName ->
-                navController.navigate(Screen.Search.route + "/" + substanceName)
+                navController.navigateToSubstanceScreen(substanceName)
             })
             if (i < substances.size) {
                 Divider()
