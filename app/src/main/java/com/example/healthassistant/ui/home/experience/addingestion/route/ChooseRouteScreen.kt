@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -72,7 +73,7 @@ fun ChooseRouteScreenContent(
                                     .fillMaxHeight()
                                     .weight(1f)
                             ) {
-                                RouteBox(route = route)
+                                RouteBox(route = route, titleStyle = MaterialTheme.typography.h6)
                             }
                         }
                     }
@@ -91,7 +92,7 @@ fun ChooseRouteScreenContent(
                             .fillMaxWidth()
                             .weight(5f)
                     ) {
-                        RouteBox(route = roa.route)
+                        RouteBox(route = roa.route, titleStyle = MaterialTheme.typography.h4)
                     }
                 }
             }
@@ -100,10 +101,10 @@ fun ChooseRouteScreenContent(
 }
 
 @Composable
-fun RouteBox(route: AdministrationRoute) {
+fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
     Box(contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = route.displayText, style = MaterialTheme.typography.h5)
+            Text(text = route.displayText, style = titleStyle)
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Text(
                     text = route.description,
