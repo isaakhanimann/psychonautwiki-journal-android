@@ -27,7 +27,7 @@ fun ExperienceScreen(
             expAndIng = exp,
             navigateBack = navController::popBackStack,
             addIngestion = {
-                navController.navigateToAddIngestion(substanceName = "MDMA")
+                navController.navigateToAddIngestion(substanceName = "MDMA", experienceId = exp.experience.id)
             }
         )
     } ?: run {

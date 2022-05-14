@@ -27,7 +27,8 @@ fun ChooseRouteScreen(
         ChooseRouteScreenContent(substance = sub, navigateToNext = { route ->
             navController.navigateToChooseDose(
                 substanceName = sub.name,
-                administrationRoute = route
+                administrationRoute = route,
+                experienceId = 1
             )
         })
     }

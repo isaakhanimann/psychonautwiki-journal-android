@@ -24,7 +24,7 @@ fun CheckInteractionsScreen(
         CheckInteractionsScreenContent(
             substance = it,
             navigateToNext = {
-                navController.navigateToChooseRoute(substanceName = it.name)
+                navController.navigateToChooseRoute(substanceName = it.name, experienceId = 1)
             }
         )
     }

@@ -26,7 +26,8 @@ fun ChooseDoseScreen(
                 administrationRoute = AdministrationRoute.ORAL,
                 units = "mg",
                 isEstimate = false,
-                dose = 5.0
+                dose = 5.0,
+                experienceId = 1
             )
         })
     }
