@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
-import com.example.healthassistant.ui.main.routers.navigateToAddIngestion
+import com.example.healthassistant.ui.main.routers.navigateToAddIngestionSearch
 
 @Composable
 fun ExperienceScreen(
@@ -27,7 +27,7 @@ fun ExperienceScreen(
             expAndIng = exp,
             navigateBack = navController::popBackStack,
             addIngestion = {
-                navController.navigateToAddIngestion(substanceName = "MDMA", experienceId = exp.experience.id)
+                navController.navigateToAddIngestionSearch(experienceId = exp.experience.id)
             }
         )
     } ?: run {

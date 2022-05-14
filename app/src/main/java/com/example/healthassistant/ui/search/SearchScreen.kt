@@ -17,20 +17,21 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.main.routers.navigateToSubstanceScreen
 
 @Composable
-fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel = hiltViewModel()) {
+fun SearchScreen(
+    searchViewModel: SearchViewModel = hiltViewModel(),
+    onSubstanceTap: (Substance) -> Unit
+) {
     Column {
         SearchField(searchText = searchViewModel.searchText, onChange = {
             searchViewModel.searchText = it
             searchViewModel.filterSubstances()
         })
         SubstanceList(
-            navController = navController,
-            substances = searchViewModel.substancesToShow
+            substances = searchViewModel.substancesToShow,
+            onSubstanceTap = onSubstanceTap
         )
     }
 }
@@ -82,13 +83,13 @@ fun SearchField(
 }
 
 @Composable
-fun SubstanceList(navController: NavController, substances: List<Substance>) {
+fun SubstanceList(
+    substances: List<Substance>, onSubstanceTap: (Substance) -> Unit
+) {
     LazyColumn {
         items(substances.size) { i ->
             val substance = substances[i]
-            SubstanceRow(substance = substance, onTap = { substanceName ->
-                navController.navigateToSubstanceScreen(substanceName)
-            })
+            SubstanceRow(substance = substance, onTap = onSubstanceTap)
             if (i < substances.size) {
                 Divider()
             }
@@ -97,12 +98,12 @@ fun SubstanceList(navController: NavController, substances: List<Substance>) {
 }
 
 @Composable
-fun SubstanceRow(substance: Substance, onTap: (String) -> Unit) {
+fun SubstanceRow(substance: Substance, onTap: (Substance) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onTap(substance.name)
+                onTap(substance)
             }
             .padding(horizontal = 16.dp, vertical = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween

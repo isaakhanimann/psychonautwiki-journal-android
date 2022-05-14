@@ -16,6 +16,7 @@ const val UNITS_KEY = "units"
 
 // route starts
 const val ROUTE_START_EXPERIENCES = "experiences/"
+const val ROUTE_START_ADD_INGESTION_SEARCH = "addIngestionSearch/"
 const val ROUTE_START_SUBSTANCES = "substances/"
 const val ROUTE_START_CHECK_INTERACTIONS = "checkInteractions/"
 const val ROUTE_START_CHOOSE_ROUTE = "chooseRoute/"
@@ -25,6 +26,11 @@ const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
 sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>) {
     object ExperienceRouter : ArgumentRouter(
         route = "$ROUTE_START_EXPERIENCES{$EXPERIENCE_ID_KEY}",
+        args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
+    )
+
+    object SearchRouter : ArgumentRouter(
+        route = "$ROUTE_START_ADD_INGESTION_SEARCH{$EXPERIENCE_ID_KEY}",
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
     )
 
@@ -77,6 +83,10 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
 
 fun NavController.navigateToExperience(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId)
+}
+
+fun NavController.navigateToAddIngestionSearch(experienceId: Int) {
+    navigate(ROUTE_START_ADD_INGESTION_SEARCH + experienceId)
 }
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {
