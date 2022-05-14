@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.Flow
 interface ExperienceDao {
 
     @Query("SELECT * FROM experience ORDER BY creationDate DESC")
-    fun getExperiences():
-            Flow<List<Experience>>
+    fun getExperiences(): Flow<List<Experience>>
+
+    @Query("SELECT * FROM experience ORDER BY creationDate DESC LIMIT :limit")
+    fun getLastExperiences(limit: Int): List<Experience>
 
     @Query("SELECT * FROM experience WHERE id =:id")
     suspend fun getExperienceByID(id: Int): Experience?

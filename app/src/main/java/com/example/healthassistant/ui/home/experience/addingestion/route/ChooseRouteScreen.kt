@@ -29,7 +29,7 @@ fun ChooseRouteScreen(
             navController.navigateToChooseDose(
                 substanceName = sub.name,
                 administrationRoute = route,
-                experienceId = 1
+                experienceId = viewModel.experienceId
             )
         })
     }
