@@ -3,17 +3,13 @@ package com.example.healthassistant.ui.home.experience.addingestion.time
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,9 +61,15 @@ fun ChooseTimeScreenContent(
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxHeight().padding(10.dp)
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .padding(10.dp)
         ) {
-            Row(modifier = Modifier.background(Color.Red)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 DatePickerButton(
                     day = dateAndTime.day,
                     month = dateAndTime.month,
@@ -80,7 +82,6 @@ fun ChooseTimeScreenContent(
                     onSubmitTime = onSubmitTime
                 )
             }
-            Text("Current datetime: ${dateAndTime.day}.${dateAndTime.month}.${dateAndTime.year} at ${dateAndTime.hour}:${dateAndTime.minute}")
             AddIngestionButtons(
                 addIngestionAndNavigate = addIngestionAndNavigate,
                 addIngestionToNewExperienceAndNavigate = addIngestionToNewExperienceAndNavigate,
@@ -100,21 +101,43 @@ fun AddIngestionButtons(
 ) {
     if (experienceIdToAddTo != null) {
         Button(onClick = { addIngestionAndNavigate(experienceIdToAddTo) }) {
-            Text(text = "Add Ingestion")
+            Text(
+                text = "Add Ingestion",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.padding(vertical = 20.dp)
+            )
         }
     } else {
         if (latestExperienceId != null) {
-            Column {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Button(onClick = { addIngestionAndNavigate(latestExperienceId) }) {
-                    Text(text = "Add Ingestion To Latest Experience")
+                    Text(
+                        text = "Add Ingestion To Latest Experience",
+                        style = MaterialTheme.typography.h4,
+                        modifier = Modifier.padding(vertical = 20.dp),
+                        textAlign = TextAlign.Center
+                    )
                 }
                 Button(onClick = addIngestionToNewExperienceAndNavigate) {
-                    Text(text = "Add Ingestion To New Experience")
+                    Text(
+                        text = "Add Ingestion To New Experience",
+                        style = MaterialTheme.typography.h4,
+                        modifier = Modifier.padding(vertical = 20.dp),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         } else {
             Button(onClick = addIngestionToNewExperienceAndNavigate) {
-                Text(text = "Add Ingestion To New Experience")
+                Text(
+                    text = "Add Ingestion To New Experience",
+                    style = MaterialTheme.typography.h4,
+                    modifier = Modifier.padding(vertical = 20.dp),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
@@ -134,7 +157,7 @@ fun TimePickerButton(
         }, hour, minute, true
     )
     Button(onClick = timePickerDialog::show) {
-        Text(text = "Change Time")
+        Text("${hour}:${minute}", style = MaterialTheme.typography.h2)
     }
 }
 
@@ -153,6 +176,6 @@ fun DatePickerButton(
         }, year, month, day
     )
     Button(onClick = datePickerDialog::show) {
-        Text(text = "Change Date")
+        Text("${day}.${month}.${year}", style = MaterialTheme.typography.h2)
     }
 }
