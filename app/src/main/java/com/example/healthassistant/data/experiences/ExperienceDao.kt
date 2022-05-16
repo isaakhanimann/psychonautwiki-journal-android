@@ -37,4 +37,7 @@ interface ExperienceDao {
     @Transaction
     @Query("SELECT * FROM experience WHERE id = :experienceId")
     suspend fun getExperienceWithIngestions(experienceId: Int): ExperienceWithIngestions?
+
+    @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC LIMIT 1")
+    suspend fun getLastIngestion(substanceName: String): Ingestion?
 }

@@ -11,7 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.main.routers.navigateToChooseTime
+import com.example.healthassistant.ui.main.routers.navigateToChooseColor
 import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 
 @Composable
@@ -21,7 +21,7 @@ fun ChooseDoseScreen(
 ) {
     viewModel.substance?.let {
         ChooseDoseScreenContent(substance = it, navigateToNext = {
-            navController.navigateToChooseTime(
+            navController.navigateToChooseColor(
                 substanceName = it.name,
                 administrationRoute = AdministrationRoute.ORAL,
                 units = "mg",

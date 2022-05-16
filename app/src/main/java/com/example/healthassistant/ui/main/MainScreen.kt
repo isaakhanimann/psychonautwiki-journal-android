@@ -13,6 +13,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.example.healthassistant.ui.home.HomeScreen
 import com.example.healthassistant.ui.home.experience.ExperienceScreen
+import com.example.healthassistant.ui.home.experience.addingestion.color.ChooseColorScreen
 import com.example.healthassistant.ui.home.experience.addingestion.dose.ChooseDoseScreen
 import com.example.healthassistant.ui.home.experience.addingestion.interactions.CheckInteractionsScreen
 import com.example.healthassistant.ui.home.experience.addingestion.route.ChooseRouteScreen
@@ -103,6 +104,10 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             ArgumentRouter.ChooseDoseRouter.route,
             arguments = ArgumentRouter.ChooseDoseRouter.args
         ) { ChooseDoseScreen(navController) }
+        composable(
+            ArgumentRouter.ChooseColorRouter.route,
+            arguments = ArgumentRouter.ChooseColorRouter.args
+        ) { ChooseColorScreen(navController) }
         composable(
             ArgumentRouter.ChooseTimeRouter.route,
             arguments = ArgumentRouter.ChooseTimeRouter.args

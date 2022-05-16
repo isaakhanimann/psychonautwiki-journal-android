@@ -20,5 +20,6 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     fun getLastExperiences(limit: Int) = experienceDao.getLastExperiences(limit)
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperienceByID(id)
     suspend fun getExperienceWithIngestions(experienceId: Int) = experienceDao.getExperienceWithIngestions(experienceId)
+    suspend fun getLastIngestion(substanceName: String) = experienceDao.getLastIngestion(substanceName)
 
 }
