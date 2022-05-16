@@ -1,9 +1,8 @@
 package com.example.healthassistant.ui.previewproviders
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.experiences.entities.Ingestion
+import com.example.healthassistant.data.experiences.entities.IngestionColor
 import java.util.*
 
 class IngestionPreviewProvider : PreviewParameterProvider<Ingestion> {
@@ -15,7 +14,7 @@ class IngestionPreviewProvider : PreviewParameterProvider<Ingestion> {
             dose = 90.0,
             isDoseAnEstimate = false,
             units = "mg",
-            colorArgb = Color.Blue.toArgb(),
+            color = IngestionColor.INDIGO,
             experienceId = 0
         )
     )

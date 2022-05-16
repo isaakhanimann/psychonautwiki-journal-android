@@ -1,9 +1,9 @@
 package com.example.healthassistant.ui.home.experience.addingestion.color
 
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.healthassistant.data.experiences.entities.IngestionColor
 import com.example.healthassistant.data.experiences.repositories.ExperienceRepository
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.ui.main.routers.*
@@ -22,7 +22,7 @@ class ChooseColorViewModel @Inject constructor(
     val units = state.get<String>(UNITS_KEY)!!
     val dose = state.get<String>(DOSE_KEY)?.toDouble()
     val experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toInt()
-    var lastUsedColorForSubstance: Color? = null
+    var lastUsedColorForSubstance: IngestionColor? = null
 
     init {
         viewModelScope.launch {

@@ -1,11 +1,10 @@
 package com.example.healthassistant.ui.main.routers
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.healthassistant.data.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.AdministrationRoute
 
 // argument keys
@@ -91,7 +90,7 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
             navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType },
             navArgument(IS_ESTIMATE_KEY) { type = NavType.BoolType },
             navArgument(UNITS_KEY) { type = NavType.StringType },
-            navArgument(COLOR_KEY) { type = NavType.IntType },
+            navArgument(COLOR_KEY) { type = NavType.StringType },
             navArgument(DOSE_KEY) { nullable = true },
             navArgument(EXPERIENCE_ID_KEY) { nullable = true }
         )
@@ -142,9 +141,9 @@ fun NavController.navigateToChooseTime(
     administrationRoute: AdministrationRoute,
     units: String,
     isEstimate: Boolean,
-    color: Color,
+    color: IngestionColor,
     dose: Double?,
     experienceId: Int?
 ) {
-    navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/$units/${color.toArgb()}/?$DOSE_KEY=$dose/?$EXPERIENCE_ID_KEY=$experienceId")
+    navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/$units/${color.name}/?$DOSE_KEY=$dose/?$EXPERIENCE_ID_KEY=$experienceId")
 }

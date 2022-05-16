@@ -1,6 +1,5 @@
 package com.example.healthassistant.data.experiences.entities
 
-import androidx.compose.ui.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
@@ -15,8 +14,6 @@ data class Ingestion(
     val dose: Double?,
     val isDoseAnEstimate: Boolean,
     val units: String,
-    val colorArgb: Int,
+    val color: IngestionColor,
     val experienceId: Int
-) {
-    val color: Color get() = Color(colorArgb)
-}
+)
