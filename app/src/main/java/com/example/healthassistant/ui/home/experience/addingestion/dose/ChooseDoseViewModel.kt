@@ -9,6 +9,8 @@ import com.example.healthassistant.data.substances.repositories.SubstanceReposit
 import com.example.healthassistant.ui.main.routers.ADMINISTRATION_ROUTE_KEY
 import com.example.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY
 import com.example.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
+import com.example.healthassistant.ui.search.substance.roa.dose.DoseColor
+import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -25,7 +27,41 @@ class ChooseDoseViewModel @Inject constructor(
     var doseText = ""
     val dose: Double? get() = doseText.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
-
+    val currentRoaRangeTextAndColor: Pair<String, DoseColor?>
+        get() {
+            dose?.let { nonNullDose ->
+                if (roaDose?.threshold != null && nonNullDose < roaDose.threshold) {
+                    return Pair(
+                        "threshold: ${roaDose.threshold.toReadableString()}${roaDose.units ?: ""}",
+                        DoseColor.THRESH
+                    )
+                } else if (roaDose?.light?.isValueInRange(nonNullDose) == true) {
+                    return Pair(
+                        "light: ${roaDose.light.min?.toReadableString()}-${roaDose.light.max?.toReadableString()}${roaDose.units ?: ""}",
+                        DoseColor.LIGHT
+                    )
+                } else if (roaDose?.common?.isValueInRange(nonNullDose) == true) {
+                    return Pair(
+                        "common: ${roaDose.common.min?.toReadableString()}-${roaDose.common.max?.toReadableString()}${roaDose.units ?: ""}",
+                        DoseColor.COMMON
+                    )
+                } else if (roaDose?.strong?.isValueInRange(nonNullDose) == true) {
+                    return Pair(
+                        "strong: ${roaDose.strong.min?.toReadableString()}-${roaDose.strong.max?.toReadableString()}${roaDose.units ?: ""}",
+                        DoseColor.STRONG
+                    )
+                } else if (roaDose?.heavy != null && nonNullDose < roaDose.heavy) {
+                    return Pair(
+                        "heavy: ${roaDose.heavy.toReadableString()}${roaDose.units ?: ""}<",
+                        DoseColor.HEAVY
+                    )
+                } else {
+                    return Pair("", null)
+                }
+            } ?: run {
+                return Pair("", null)
+            }
+        }
 
     init {
         substance = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY) ?: "LSD")

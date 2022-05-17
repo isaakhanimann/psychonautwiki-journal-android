@@ -1,5 +1,6 @@
 package com.example.healthassistant.ui.home.experience.addingestion.dose
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -18,6 +19,8 @@ import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.RoaDose
 import com.example.healthassistant.ui.main.routers.navigateToChooseColor
 import com.example.healthassistant.ui.previewproviders.RoaDosePreviewProvider
+import com.example.healthassistant.ui.search.substance.roa.RoaDoseView
+import com.example.healthassistant.ui.search.substance.roa.dose.DoseColor
 
 @Composable
 fun ChooseDoseScreen(
@@ -45,7 +48,9 @@ fun ChooseDoseScreen(
                     dose = viewModel.dose,
                     experienceId = viewModel.experienceId
                 )
-            })
+            },
+            currentRoaRangeTextAndColor = viewModel.currentRoaRangeTextAndColor
+        )
     }
 }
 
@@ -59,6 +64,7 @@ fun ChooseDoseScreenContent(
     isEstimate: Boolean = false,
     onChangeIsEstimate: (Boolean) -> Unit = {},
     navigateToNext: () -> Unit = {},
+    currentRoaRangeTextAndColor: Pair<String, DoseColor?> = Pair("threshold: 8mg", DoseColor.THRESH)
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Choose Dose") }) }
@@ -69,9 +75,18 @@ fun ChooseDoseScreenContent(
                 .padding(10.dp)
                 .fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
+                if (roaDose != null) {
+                    RoaDoseView(roaDose = roaDose)
+                }
+                val isDarkTheme = isSystemInDarkTheme()
+                Text(
+                    text = currentRoaRangeTextAndColor.first,
+                    color = currentRoaRangeTextAndColor.second?.getComposeColor(isDarkTheme)
+                        ?: MaterialTheme.colors.primary
+                )
                 OutlinedTextField(
                     value = doseText,
                     onValueChange = onChangeDoseText,
@@ -93,7 +108,6 @@ fun ChooseDoseScreenContent(
                 onClick = navigateToNext,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 20.dp)
             ) {
                 Text("Next", style = MaterialTheme.typography.h3)
             }
