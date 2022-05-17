@@ -1,5 +1,6 @@
 package com.example.healthassistant.ui.home.experience.addingestion.dose
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.healthassistant.data.substances.AdministrationRoute
@@ -24,8 +25,8 @@ class ChooseDoseViewModel @Inject constructor(
     val experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toInt()
     val roaDose: RoaDose?
     var isEstimate: Boolean = false
-    var doseText = ""
-    val dose: Double? get() = doseText.toDoubleOrNull()
+    var doseText = mutableStateOf("")
+    val dose: Double? get() = doseText.value.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
     val currentRoaRangeTextAndColor: Pair<String, DoseColor?>
         get() {
@@ -50,9 +51,9 @@ class ChooseDoseViewModel @Inject constructor(
                         "strong: ${roaDose.strong.min?.toReadableString()}-${roaDose.strong.max?.toReadableString()}${roaDose.units ?: ""}",
                         DoseColor.STRONG
                     )
-                } else if (roaDose?.heavy != null && nonNullDose < roaDose.heavy) {
+                } else if (roaDose?.heavy != null && nonNullDose > roaDose.heavy) {
                     return Pair(
-                        "heavy: ${roaDose.heavy.toReadableString()}${roaDose.units ?: ""}<",
+                        "heavy: ${roaDose.heavy.toReadableString()}${roaDose.units ?: ""}-..",
                         DoseColor.HEAVY
                     )
                 } else {
@@ -62,6 +63,10 @@ class ChooseDoseViewModel @Inject constructor(
                 return Pair("", null)
             }
         }
+
+    fun onDoseTextChange(newDoseText: String) {
+        doseText.value = newDoseText.replace(oldChar = ',', newChar = '.')
+    }
 
     init {
         substance = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY) ?: "LSD")

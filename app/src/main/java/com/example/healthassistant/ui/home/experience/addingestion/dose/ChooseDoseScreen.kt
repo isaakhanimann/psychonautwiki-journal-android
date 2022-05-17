@@ -30,10 +30,8 @@ fun ChooseDoseScreen(
     viewModel.substance?.let { sub ->
         ChooseDoseScreenContent(
             roaDose = viewModel.roaDose,
-            doseText = viewModel.doseText,
-            onChangeDoseText = {
-                viewModel.doseText = it
-            },
+            doseText = viewModel.doseText.value,
+            onChangeDoseText = viewModel::onDoseTextChange,
             isValidDose = viewModel.isValidDose,
             isEstimate = viewModel.isEstimate,
             onChangeIsEstimate = {
@@ -87,17 +85,23 @@ fun ChooseDoseScreenContent(
                     color = currentRoaRangeTextAndColor.second?.getComposeColor(isDarkTheme)
                         ?: MaterialTheme.colors.primary
                 )
+                Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
                     value = doseText,
                     onValueChange = onChangeDoseText,
                     textStyle = MaterialTheme.typography.h3,
-                    label = { Text("Enter Dose") },
+                    label = { Text("Enter Dose", style = MaterialTheme.typography.h4) },
                     isError = !isValidDose,
                     trailingIcon = {
-                        Text(text = roaDose?.units ?: "", style = MaterialTheme.typography.h3)
+                        Text(
+                            text = roaDose?.units ?: "",
+                            style = MaterialTheme.typography.h4,
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        )
                     },
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
