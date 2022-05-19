@@ -3,6 +3,7 @@ package com.example.healthassistant.ui.previewproviders
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.data.experiences.entities.IngestionColor
+import com.example.healthassistant.data.substances.AdministrationRoute
 import java.util.*
 
 class IngestionPreviewProvider : PreviewParameterProvider<Ingestion> {
@@ -10,7 +11,7 @@ class IngestionPreviewProvider : PreviewParameterProvider<Ingestion> {
         Ingestion(
             substanceName = "MDMA",
             time = Date(),
-            administrationRoute = "oral",
+            administrationRoute = AdministrationRoute.ORAL,
             dose = 90.0,
             isDoseAnEstimate = false,
             units = "mg",

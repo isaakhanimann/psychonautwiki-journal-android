@@ -3,6 +3,7 @@ package com.example.healthassistant.ui.home.experience.addingestion.time
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -22,10 +23,15 @@ fun ChooseTimeScreen(
     navController: NavController,
     viewModel: ChooseTimeViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     ChooseTimeScreenContent(
         addIngestionAndNavigate = {
             viewModel.addIngestion(experienceIdToAddTo = it)
             navController.navigateToExperience(experienceId = it)
+            Toast.makeText(
+                context, "Ingestion Added",
+                Toast.LENGTH_SHORT
+            ).show()
         },
         addIngestionToNewExperienceAndNavigate = viewModel::addIngestionToNewExperience,
         experienceIdToAddTo = viewModel.experienceId,

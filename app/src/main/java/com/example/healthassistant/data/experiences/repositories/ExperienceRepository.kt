@@ -2,6 +2,7 @@ package com.example.healthassistant.data.experiences.repositories
 
 import com.example.healthassistant.data.experiences.ExperienceDao
 import com.example.healthassistant.data.experiences.entities.Experience
+import com.example.healthassistant.data.experiences.entities.Ingestion
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
@@ -12,6 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class ExperienceRepository @Inject constructor(private val experienceDao: ExperienceDao) {
     suspend fun addExperience(experience: Experience) = experienceDao.insert(experience)
+    suspend fun addIngestion(ingestion: Ingestion) = experienceDao.insert(ingestion)
     suspend fun updateExperience(experience: Experience) = experienceDao.update(experience)
     suspend fun deleteExperience(experience: Experience) = experienceDao.deleteExperience(experience)
     suspend fun deleteAllExperiences() = experienceDao.deleteAll()
