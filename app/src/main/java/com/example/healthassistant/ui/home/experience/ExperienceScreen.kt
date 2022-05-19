@@ -1,6 +1,5 @@
 package com.example.healthassistant.ui.home.experience
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -68,14 +67,13 @@ fun ExperienceScreenContent(
         }
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
-                .padding(horizontal = 10.dp)
+                .padding(10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Text("Ingestions")
+            Text("Ingestions", style = MaterialTheme.typography.h5)
             expAndIng.ingestions.forEach {
-                IngestionRow(ingestion = it)
+                IngestionRow(ingestion = it, modifier = Modifier.padding(vertical = 3.dp))
             }
         }
     }
