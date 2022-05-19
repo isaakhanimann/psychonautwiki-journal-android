@@ -30,7 +30,7 @@ fun ChooseDoseScreen(
     viewModel.substance?.let { sub ->
         ChooseDoseScreenContent(
             roaDose = viewModel.roaDose,
-            doseText = viewModel.doseText.value,
+            doseText = viewModel.doseText,
             onChangeDoseText = viewModel::onDoseTextChange,
             isValidDose = viewModel.isValidDose,
             isEstimate = viewModel.isEstimate,
@@ -44,6 +44,16 @@ fun ChooseDoseScreen(
                     units = viewModel.roaDose?.units ?: "",
                     isEstimate = viewModel.isEstimate,
                     dose = viewModel.dose,
+                    experienceId = viewModel.experienceId
+                )
+            },
+            useUnknownDoseAndNavigate = {
+                navController.navigateToChooseColor(
+                    substanceName = sub.name,
+                    administrationRoute = AdministrationRoute.ORAL,
+                    units = viewModel.roaDose?.units ?: "",
+                    isEstimate = false,
+                    dose = null,
                     experienceId = viewModel.experienceId
                 )
             },
@@ -62,6 +72,7 @@ fun ChooseDoseScreenContent(
     isEstimate: Boolean = false,
     onChangeIsEstimate: (Boolean) -> Unit = {},
     navigateToNext: () -> Unit = {},
+    useUnknownDoseAndNavigate: () -> Unit = {},
     currentRoaRangeTextAndColor: Pair<String, DoseColor?> = Pair("threshold: 8mg", DoseColor.THRESH)
 ) {
     Scaffold(
@@ -99,7 +110,12 @@ fun ChooseDoseScreenContent(
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
                     },
-                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusManager.clearFocus()
+                        if (isValidDose) {
+                            navigateToNext()
+                        }
+                    }),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true
                 )
@@ -108,12 +124,23 @@ fun ChooseDoseScreenContent(
                     Text("Is Estimate")
                 }
             }
-            Button(
-                onClick = navigateToNext,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text("Next", style = MaterialTheme.typography.h3)
+            Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                if (isValidDose) {
+                    Button(
+                        onClick = navigateToNext,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text("Next", style = MaterialTheme.typography.h3)
+                    }
+                }
+                Button(
+                    onClick = useUnknownDoseAndNavigate,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text("Use Unknown Dose", style = MaterialTheme.typography.h6)
+                }
             }
         }
     }

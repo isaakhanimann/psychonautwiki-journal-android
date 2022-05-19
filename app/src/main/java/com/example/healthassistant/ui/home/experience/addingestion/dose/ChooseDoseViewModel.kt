@@ -1,6 +1,8 @@
 package com.example.healthassistant.ui.home.experience.addingestion.dose
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.healthassistant.data.substances.AdministrationRoute
@@ -24,9 +26,9 @@ class ChooseDoseViewModel @Inject constructor(
     val administrationRoute: AdministrationRoute?
     val experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toInt()
     val roaDose: RoaDose?
-    var isEstimate: Boolean = false
-    var doseText = mutableStateOf("")
-    val dose: Double? get() = doseText.value.toDoubleOrNull()
+    var isEstimate by mutableStateOf(false)
+    var doseText by mutableStateOf("")
+    val dose: Double? get() = doseText.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
     val currentRoaRangeTextAndColor: Pair<String, DoseColor?>
         get() {
@@ -65,7 +67,7 @@ class ChooseDoseViewModel @Inject constructor(
         }
 
     fun onDoseTextChange(newDoseText: String) {
-        doseText.value = newDoseText.replace(oldChar = ',', newChar = '.')
+        doseText = newDoseText.replace(oldChar = ',', newChar = '.')
     }
 
     init {
