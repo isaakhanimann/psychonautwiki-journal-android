@@ -38,10 +38,9 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     )
 
     object SubstanceRouter : ArgumentRouter(
-        route = "$ROUTE_START_SUBSTANCES{$SUBSTANCE_NAME_KEY}/?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
+        route = "$ROUTE_START_SUBSTANCES{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
-            navArgument(EXPERIENCE_ID_KEY) { nullable = true }
         )
     )
 
