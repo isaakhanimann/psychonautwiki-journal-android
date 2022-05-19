@@ -11,11 +11,14 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.ui.main.routers.navigateToAddIngestionSearch
+import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 
 @Composable
 fun ExperienceScreen(
@@ -38,11 +41,12 @@ fun ExperienceScreen(
 }
 
 
+@Preview
 @Composable
 fun ExperienceScreenContent(
-    expAndIng: ExperienceWithIngestions,
-    navigateBack: () -> Unit,
-    addIngestion: () -> Unit
+    @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) expAndIng: ExperienceWithIngestions,
+    navigateBack: () -> Unit = {},
+    addIngestion: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
