@@ -131,7 +131,8 @@ fun NavController.navigateToChooseColor(
     administrationRoute: AdministrationRoute,
     units: String,
     isEstimate: Boolean,
-    dose: Double?, experienceId: Int?
+    dose: Double?,
+    experienceId: Int?
 ) {
     navigate("$ROUTE_START_CHOOSE_COLOR$substanceName/${administrationRoute.name}/$isEstimate/$units/?$DOSE_KEY=$dose/?$EXPERIENCE_ID_KEY=$experienceId")
 }

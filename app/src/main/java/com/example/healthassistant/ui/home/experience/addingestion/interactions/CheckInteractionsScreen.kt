@@ -1,11 +1,7 @@
 package com.example.healthassistant.ui.home.experience.addingestion.interactions
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,10 +42,19 @@ fun CheckInteractionsScreenContent(
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Check Interactions") }) }
     ) {
-        Column(modifier = Modifier.padding(10.dp)) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxHeight()
+        ) {
             InteractionsView(substance = substance)
-            Button(onClick = navigateToNext) {
-                Text("Next")
+            Button(
+                onClick = navigateToNext,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text("Next", style = MaterialTheme.typography.h3)
             }
         }
     }

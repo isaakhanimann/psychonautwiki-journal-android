@@ -20,8 +20,8 @@ class ChooseColorViewModel @Inject constructor(
     val administrationRoute = AdministrationRoute.valueOf(state.get<String>(ADMINISTRATION_ROUTE_KEY)!!)
     val isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)!!
     val units = state.get<String>(UNITS_KEY)!!
-    val dose = state.get<String>(DOSE_KEY)?.toDouble()
-    val experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toInt()
+    val dose = state.get<String>(DOSE_KEY)?.toDoubleOrNull()
+    val experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toIntOrNull()
     var lastUsedColorForSubstance: IngestionColor? = null
 
     init {

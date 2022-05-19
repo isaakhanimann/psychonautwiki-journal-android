@@ -36,7 +36,7 @@ class ChooseTimeViewModel @Inject constructor(
 
     init {
         substance = substanceRepo.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY) ?: "LSD")
-        experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toInt()
+        experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toIntOrNull()
         latestExperience = if (experienceId==null) {
             experienceRepo.getLastExperiences(limit = 1).firstOrNull()
         } else {
@@ -49,7 +49,7 @@ class ChooseTimeViewModel @Inject constructor(
             null
         }
         val doseText = state.get<String>(DOSE_KEY)
-        dose = doseText?.toDouble()
+        dose = doseText?.toDoubleOrNull()
         units = state.get<String>(UNITS_KEY)
         isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)
         assert(substance != null)
