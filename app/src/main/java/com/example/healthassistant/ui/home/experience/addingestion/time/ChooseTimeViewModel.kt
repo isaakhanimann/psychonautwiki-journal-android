@@ -25,7 +25,7 @@ class ChooseTimeViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     val experienceId: Int?
-    val latestExperience: Experience?
+    var latestExperience: Experience? = null
     val substance: Substance?
     private val calendar: Calendar = Calendar.getInstance()
     val year = mutableStateOf(calendar.get(Calendar.YEAR))
@@ -45,10 +45,10 @@ class ChooseTimeViewModel @Inject constructor(
         substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
         substance = substanceRepo.getSubstance(substanceName)
         experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toIntOrNull()
-        latestExperience = if (experienceId == null) {
-            experienceRepo.getLastExperiences(limit = 1).firstOrNull()
-        } else {
-            null
+        if (experienceId == null) {
+            viewModelScope.launch {
+                latestExperience = experienceRepo.getLastExperiences(limit = 1).firstOrNull()
+            }
         }
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
@@ -71,14 +71,14 @@ class ChooseTimeViewModel @Inject constructor(
         minute.value = newMinute
     }
 
-    fun addIngestion(experienceIdToAddTo: Int) {
+    fun createAndSaveIngestion(experienceIdToAddTo: Int) {
         viewModelScope.launch {
-            val newIngestion = createNewIngestion(experienceIdToAddTo)
+            val newIngestion = createIngestion(experienceIdToAddTo)
             experienceRepo.addIngestion(newIngestion)
         }
     }
 
-    private fun createNewIngestion(experienceId: Int): Ingestion {
+    private fun createIngestion(experienceIdToAddTo: Int): Ingestion {
         calendar.set(year.value, month.value, day.value, hour.value, minute.value)
         val ingestionDate = calendar.time
         return Ingestion(
@@ -89,17 +89,19 @@ class ChooseTimeViewModel @Inject constructor(
             isDoseAnEstimate = isEstimate,
             units = units,
             color = color,
-            experienceId = experienceId
+            experienceId = experienceIdToAddTo
         )
     }
 
-    fun addIngestionToNewExperience() {
+    fun addIngestionToNewExperience(showToastAndNavigateToExperience: (Int) -> Unit) {
         viewModelScope.launch {
-            val newExperience = createNewExperience()
-            val newIngestion = createNewIngestion(experienceId = newExperience.id)
-            experienceRepo.addExperience(newExperience)
-            experienceRepo.addIngestion(newIngestion)
+            val newExp = createNewExperience()
+            val experienceId = experienceRepo.addExperience(newExp)
+            val ingestion = createIngestion(experienceIdToAddTo = experienceId.toInt())
+            experienceRepo.addIngestion(ingestion)
+            showToastAndNavigateToExperience(experienceId.toInt())
         }
+
     }
 
     private fun createNewExperience(): Experience {

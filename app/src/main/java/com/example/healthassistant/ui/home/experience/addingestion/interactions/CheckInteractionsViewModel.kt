@@ -14,6 +14,6 @@ class CheckInteractionsViewModel @Inject constructor(
     repository: SubstanceRepository,
     state: SavedStateHandle
 ): ViewModel() {
-    val substance: Substance? = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY) ?: "LSD")
-    val experienceId: Int? = state.get<String>(EXPERIENCE_ID_KEY)?.toInt()
+    val substance: Substance? = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY) ?: "")
+    val experienceId: Int? = state.get<String>(EXPERIENCE_ID_KEY)?.toIntOrNull()
 }

@@ -19,7 +19,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun deleteAllExperiences() = experienceDao.deleteAll()
     fun getAllExperiences(): Flow<List<Experience>> = experienceDao.getExperiences().flowOn(Dispatchers.IO)
         .conflate()
-    fun getLastExperiences(limit: Int) = experienceDao.getLastExperiences(limit)
+    suspend fun getLastExperiences(limit: Int) = experienceDao.getLastExperiences(limit)
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperienceByID(id)
     suspend fun getExperienceWithIngestions(experienceId: Int) = experienceDao.getExperienceWithIngestions(experienceId)
     suspend fun getLastIngestion(substanceName: String) = experienceDao.getLastIngestion(substanceName)

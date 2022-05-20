@@ -14,13 +14,13 @@ interface ExperienceDao {
     fun getExperiences(): Flow<List<Experience>>
 
     @Query("SELECT * FROM experience ORDER BY creationDate DESC LIMIT :limit")
-    fun getLastExperiences(limit: Int): List<Experience>
+    suspend fun getLastExperiences(limit: Int): List<Experience>
 
     @Query("SELECT * FROM experience WHERE id =:id")
     suspend fun getExperienceByID(id: Int): Experience?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(experience: Experience)
+    suspend fun insert(experience: Experience): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(experience: Experience)

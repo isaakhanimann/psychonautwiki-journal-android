@@ -24,7 +24,7 @@ class ChooseDoseViewModel @Inject constructor(
 ) : ViewModel() {
     val substance: Substance?
     val administrationRoute: AdministrationRoute?
-    val experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toInt()
+    val experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toIntOrNull()
     val roaDose: RoaDose?
     var isEstimate by mutableStateOf(false)
     var doseText by mutableStateOf("")

@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
+import com.example.healthassistant.ui.main.routers.navigateToAddIngestion
 import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
@@ -33,7 +34,13 @@ fun SubstanceScreen(navController: NavController, viewModel: SubstanceViewModel 
     if (viewModel.substance != null) {
         SubstanceScreenContent(
             substance = viewModel.substance,
-            navigateBack = navController::popBackStack
+            navigateBack = navController::popBackStack,
+            onIngestTapped = {
+                navController.navigateToAddIngestion(
+                    substanceName = viewModel.substance.name,
+                    experienceId = null
+                )
+            }
         )
     } else {
         Button(onClick = navController::popBackStack) {
@@ -49,14 +56,15 @@ fun SubstanceScreenPreview(
     @PreviewParameter(SubstancePreviewProvider::class) substance: Substance
 ) {
     HealthAssistantTheme {
-        SubstanceScreenContent(substance = substance, navigateBack = {})
+        SubstanceScreenContent(substance = substance, navigateBack = {}, onIngestTapped = {})
     }
 }
 
 @Composable
 fun SubstanceScreenContent(
     substance: Substance,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    onIngestTapped: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -72,7 +80,7 @@ fun SubstanceScreenContent(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = onIngestTapped) {
                 Icon(Icons.Default.Add, "Ingest ${substance.name}")
             }
         }

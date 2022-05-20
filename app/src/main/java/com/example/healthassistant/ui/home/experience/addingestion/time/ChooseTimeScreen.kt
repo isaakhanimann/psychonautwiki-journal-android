@@ -26,14 +26,22 @@ fun ChooseTimeScreen(
     val context = LocalContext.current
     ChooseTimeScreenContent(
         addIngestionAndNavigate = {
-            viewModel.addIngestion(experienceIdToAddTo = it)
+            viewModel.createAndSaveIngestion(experienceIdToAddTo = it)
             navController.navigateToExperience(experienceId = it)
             Toast.makeText(
                 context, "Ingestion Added",
                 Toast.LENGTH_SHORT
             ).show()
         },
-        addIngestionToNewExperienceAndNavigate = viewModel::addIngestionToNewExperience,
+        addIngestionToNewExperienceAndNavigate = {
+            viewModel.addIngestionToNewExperience {
+                Toast.makeText(
+                    context, "Ingestion Added",
+                    Toast.LENGTH_SHORT
+                ).show()
+                navController.navigateToExperience(experienceId = it)
+            }
+        },
         experienceIdToAddTo = viewModel.experienceId,
         latestExperienceId = viewModel.latestExperience?.id,
         onSubmitDate = viewModel::onSubmitDate,

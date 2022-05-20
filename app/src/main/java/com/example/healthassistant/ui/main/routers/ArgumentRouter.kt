@@ -99,6 +99,7 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
 fun NavController.navigateToExperience(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId) {
         popUpTo(ArgumentRouter.ExperienceRouter.route) { inclusive = true }
+        popUpTo(ArgumentRouter.SubstanceRouter.route)
     }
 }
 
