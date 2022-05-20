@@ -13,6 +13,10 @@ interface ExperienceDao {
     @Query("SELECT * FROM experience ORDER BY date DESC")
     fun getExperiences(): Flow<List<Experience>>
 
+    @Transaction
+    @Query("SELECT * FROM experience ORDER BY date DESC")
+    fun getExperiencesWithIngestions(): Flow<List<ExperienceWithIngestions>>
+
     @Query("SELECT * FROM experience ORDER BY date DESC LIMIT :limit")
     suspend fun getLastExperiences(limit: Int): List<Experience>
 

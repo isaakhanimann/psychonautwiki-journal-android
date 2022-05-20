@@ -1,10 +1,7 @@
 package com.example.healthassistant.ui.home
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -18,10 +15,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.healthassistant.data.experiences.entities.Experience
+import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.ui.main.routers.navigateToAddExperience
 import com.example.healthassistant.ui.main.routers.navigateToExperience
-import com.example.healthassistant.ui.previewproviders.ExperiencePreviewProvider
+import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,9 +50,9 @@ fun ExperiencesList(homeViewModel: HomeViewModel, navController: NavController) 
                 YearRow(year = year)
             }
             items(experiencesInYear.size) { i ->
-                val experience = experiencesInYear[i]
-                ExperienceRow(experience, navigateToExperienceScreen = {
-                    navController.navigateToExperience(experienceId = experience.id)
+                val expAndIngs = experiencesInYear[i]
+                ExperienceRow(expAndIngs, navigateToExperienceScreen = {
+                    navController.navigateToExperience(experienceId = expAndIngs.experience.id)
                 })
                 if (i < experiencesInYear.size) {
                     Divider()
@@ -81,10 +78,10 @@ fun YearRow(year: String = "2022") {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun ExperienceRow(
-    @PreviewParameter(ExperiencePreviewProvider::class) experience: Experience,
+    @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngs: ExperienceWithIngestions,
     navigateToExperienceScreen: () -> Unit = {}
 ) {
     Row(
@@ -97,10 +94,19 @@ fun ExperienceRow(
 
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = experience.title)
+        Column() {
+            Text(text = experienceWithIngs.experience.title, style = MaterialTheme.typography.h5)
+            val substanceNames = experienceWithIngs.ingestions.map { it.substanceName }.distinct()
+                .joinToString(separator = ", ")
+            if (substanceNames.isNotEmpty()) {
+                Text(text = substanceNames)
+            } else {
+                Text(text = "No substance yet")
+            }
+        }
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
-            val creationDateText = formatter.format(experience.date) ?: ""
+            val creationDateText = formatter.format(experienceWithIngs.experience.date) ?: ""
             Text(creationDateText)
         }
     }
