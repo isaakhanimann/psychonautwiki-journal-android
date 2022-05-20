@@ -52,7 +52,9 @@ fun ChooseTimeScreen(
             year = viewModel.year.value,
             hour = viewModel.hour.value,
             minute = viewModel.minute.value
-        )
+        ),
+        dateString = viewModel.dateString,
+        timeString = viewModel.timeString
     )
 }
 
@@ -67,7 +69,9 @@ fun ChooseTimeScreenContent(
     latestExperienceId: Int? = null,
     onSubmitDate: (Int, Int, Int) -> Unit = { _: Int, _: Int, _: Int -> },
     onSubmitTime: (Int, Int) -> Unit = { _: Int, _: Int -> },
-    dateAndTime: DateAndTime = DateAndTime(day = 3, month = 4, year = 2022, hour = 13, minute = 52)
+    dateAndTime: DateAndTime = DateAndTime(day = 3, month = 4, year = 2022, hour = 13, minute = 52),
+    dateString: String = "Wed 9 Jul 2022",
+    timeString: String = "13:52"
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) }
@@ -88,12 +92,14 @@ fun ChooseTimeScreenContent(
                     day = dateAndTime.day,
                     month = dateAndTime.month,
                     year = dateAndTime.year,
-                    onSubmitDate = onSubmitDate
+                    onSubmitDate = onSubmitDate,
+                    dateString = dateString
                 )
                 TimePickerButton(
                     hour = dateAndTime.hour,
                     minute = dateAndTime.minute,
-                    onSubmitTime = onSubmitTime
+                    onSubmitTime = onSubmitTime,
+                    timeString = timeString
                 )
             }
             AddIngestionButtons(
@@ -113,12 +119,15 @@ fun AddIngestionButtons(
     experienceIdToAddTo: Int?,
     latestExperienceId: Int?,
 ) {
+    val buttonTextStyle = MaterialTheme.typography.h5
     if (experienceIdToAddTo != null) {
         Button(onClick = { addIngestionAndNavigate(experienceIdToAddTo) }) {
             Text(
                 text = "Add Ingestion",
-                style = MaterialTheme.typography.h4,
-                modifier = Modifier.padding(vertical = 20.dp)
+                style = buttonTextStyle,
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
+                    .fillMaxWidth()
             )
         }
     } else {
@@ -129,17 +138,21 @@ fun AddIngestionButtons(
             ) {
                 Button(onClick = { addIngestionAndNavigate(latestExperienceId) }) {
                     Text(
-                        text = "Add Ingestion To Latest Experience",
-                        style = MaterialTheme.typography.h4,
-                        modifier = Modifier.padding(vertical = 20.dp),
+                        text = "Add To Latest Experience",
+                        style = buttonTextStyle,
+                        modifier = Modifier
+                            .padding(vertical = 20.dp)
+                            .fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
                 }
                 Button(onClick = addIngestionToNewExperienceAndNavigate) {
                     Text(
-                        text = "Add Ingestion To New Experience",
-                        style = MaterialTheme.typography.h4,
-                        modifier = Modifier.padding(vertical = 20.dp),
+                        text = "Add To New Experience",
+                        style = buttonTextStyle,
+                        modifier = Modifier
+                            .padding(vertical = 20.dp)
+                            .fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -147,9 +160,11 @@ fun AddIngestionButtons(
         } else {
             Button(onClick = addIngestionToNewExperienceAndNavigate) {
                 Text(
-                    text = "Add Ingestion To New Experience",
-                    style = MaterialTheme.typography.h4,
-                    modifier = Modifier.padding(vertical = 20.dp),
+                    text = "Add To New Experience",
+                    style = buttonTextStyle,
+                    modifier = Modifier
+                        .padding(vertical = 20.dp)
+                        .fillMaxWidth(),
                     textAlign = TextAlign.Center
                 )
             }
@@ -161,7 +176,8 @@ fun AddIngestionButtons(
 fun TimePickerButton(
     hour: Int,
     minute: Int,
-    onSubmitTime: (Int, Int) -> Unit
+    onSubmitTime: (Int, Int) -> Unit,
+    timeString: String
 ) {
     val context = LocalContext.current
     val timePickerDialog = TimePickerDialog(
@@ -171,7 +187,7 @@ fun TimePickerButton(
         }, hour, minute, true
     )
     Button(onClick = timePickerDialog::show) {
-        Text("${hour}:${minute}", style = MaterialTheme.typography.h2)
+        Text(timeString, style = MaterialTheme.typography.h2)
     }
 }
 
@@ -180,7 +196,8 @@ fun DatePickerButton(
     day: Int,
     month: Int,
     year: Int,
-    onSubmitDate: (Int, Int, Int) -> Unit
+    onSubmitDate: (Int, Int, Int) -> Unit,
+    dateString: String
 ) {
     val context = LocalContext.current
     val datePickerDialog = DatePickerDialog(
@@ -190,6 +207,6 @@ fun DatePickerButton(
         }, year, month, day
     )
     Button(onClick = datePickerDialog::show) {
-        Text("${day}.${month}.${year}", style = MaterialTheme.typography.h2)
+        Text(dateString, style = MaterialTheme.typography.h4)
     }
 }

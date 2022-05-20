@@ -33,6 +33,18 @@ class ChooseTimeViewModel @Inject constructor(
     val day = mutableStateOf(calendar.get(Calendar.DAY_OF_MONTH))
     val hour = mutableStateOf(calendar.get(Calendar.HOUR_OF_DAY))
     val minute = mutableStateOf(calendar.get(Calendar.MINUTE))
+    private val currentlySelectedDate: Date get() {
+        calendar.set(year.value, month.value, day.value, hour.value, minute.value)
+        return calendar.time
+    }
+    val dateString: String get() {
+        val formatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
+        return formatter.format(currentlySelectedDate) ?: "Unknown"
+    }
+    val timeString: String get() {
+        val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return formatter.format(currentlySelectedDate) ?: "Unknown"
+    }
 
     private val substanceName: String
     private val administrationRoute: AdministrationRoute
@@ -79,11 +91,9 @@ class ChooseTimeViewModel @Inject constructor(
     }
 
     private fun createIngestion(experienceIdToAddTo: Int): Ingestion {
-        calendar.set(year.value, month.value, day.value, hour.value, minute.value)
-        val ingestionDate = calendar.time
         return Ingestion(
             substanceName = substanceName,
-            time = ingestionDate,
+            time = currentlySelectedDate,
             administrationRoute = administrationRoute,
             dose = dose,
             isDoseAnEstimate = isEstimate,
@@ -105,10 +115,8 @@ class ChooseTimeViewModel @Inject constructor(
     }
 
     private fun createNewExperience(): Experience {
-        calendar.set(year.value, month.value, day.value, hour.value, minute.value)
-        val experienceDate = calendar.time
         val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-        val title = formatter.format(experienceDate) ?: "Title"
-        return Experience(title = title, creationDate = experienceDate, text = "")
+        val title = formatter.format(currentlySelectedDate) ?: "Title"
+        return Experience(title = title, creationDate = currentlySelectedDate, text = "")
     }
 }
