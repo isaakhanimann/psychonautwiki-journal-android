@@ -26,27 +26,45 @@ class HomeViewModel @Inject constructor(private val repository: ExperienceReposi
     var isShowingDialog by mutableStateOf(false)
     var enteredTitle by mutableStateOf("")
     val isEnteredTitleOk get() = enteredTitle.isNotEmpty()
+    private val calendar: Calendar = Calendar.getInstance()
+    var year by mutableStateOf(calendar.get(Calendar.YEAR))
+    var month by mutableStateOf(calendar.get(Calendar.MONTH))
+    var day by mutableStateOf(calendar.get(Calendar.DAY_OF_MONTH))
+    private val currentlySelectedDate: Date get() {
+        calendar.set(year, month, day)
+        return calendar.time
+    }
+    val dateString: String get() {
+        val formatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
+        return formatter.format(currentlySelectedDate) ?: "Unknown"
+    }
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getAllExperiences()
-                .collect { es ->
+                .collect { experiences ->
                     val cal = Calendar.getInstance(TimeZone.getDefault())
-                    _experiencesGrouped.value = es.groupBy { cal.get(Calendar.YEAR).toString() ?: "Unknown Year" }
+                    _experiencesGrouped.value = experiences.groupBy { cal.get(Calendar.YEAR).toString() }
                 }
 
         }
     }
 
+    fun onSubmitDate(newDay: Int, newMonth: Int, newYear: Int) {
+        day = newDay
+        month = newMonth
+        year = newYear
+        enteredTitle = dateString
+    }
+
     fun addButtonTapped() {
-        val formatter  = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-        enteredTitle = formatter.format(Date()) ?: ""
+        enteredTitle = dateString
         isShowingDialog = true
     }
 
     fun dialogConfirmTapped(onSuccess: () -> Unit) {
         if (enteredTitle.isNotEmpty()) {
-            val newExperience = Experience(title = enteredTitle, creationDate = Date(), text = "")
+            val newExperience = Experience(title = enteredTitle, creationDate = currentlySelectedDate, text = "")
             viewModelScope.launch { repository.addExperience(newExperience) }
             isShowingDialog = false
             onSuccess()

@@ -1,8 +1,6 @@
 package com.example.healthassistant.ui.home.experience.addingestion.time
 
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -188,25 +186,5 @@ fun TimePickerButton(
     )
     Button(onClick = timePickerDialog::show) {
         Text(timeString, style = MaterialTheme.typography.h2)
-    }
-}
-
-@Composable
-fun DatePickerButton(
-    day: Int,
-    month: Int,
-    year: Int,
-    onSubmitDate: (Int, Int, Int) -> Unit,
-    dateString: String
-) {
-    val context = LocalContext.current
-    val datePickerDialog = DatePickerDialog(
-        context,
-        { _: DatePicker, newYear: Int, newMonth: Int, newDay: Int ->
-            onSubmitDate(newDay, newMonth, newYear)
-        }, year, month, day
-    )
-    Button(onClick = datePickerDialog::show) {
-        Text(dateString, style = MaterialTheme.typography.h4)
     }
 }
