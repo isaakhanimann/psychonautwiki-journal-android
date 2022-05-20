@@ -6,6 +6,6 @@ import java.util.*
 
 class ExperiencePreviewProvider : PreviewParameterProvider<Experience> {
     override val values: Sequence<Experience> = sequenceOf(
-        Experience(title = "Day at Lake Geneva", creationDate = Date(), text = "Some notes")
+        Experience(title = "Day at Lake Geneva", date = Date(), text = "Some notes")
     )
 }

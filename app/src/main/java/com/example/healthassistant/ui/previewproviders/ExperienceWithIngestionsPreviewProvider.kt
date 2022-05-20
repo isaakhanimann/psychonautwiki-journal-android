@@ -11,7 +11,7 @@ import java.util.*
 class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<ExperienceWithIngestions> {
     override val values: Sequence<ExperienceWithIngestions> = sequenceOf(
         ExperienceWithIngestions(
-            experience = Experience(id = 0, title = "Day at Lake Geneva", creationDate = Date(), text = "Some notes"),
+            experience = Experience(id = 0, title = "Day at Lake Geneva", date = Date(), text = "Some notes"),
             ingestions = listOf(
                 Ingestion(
                     substanceName = "MDMA",

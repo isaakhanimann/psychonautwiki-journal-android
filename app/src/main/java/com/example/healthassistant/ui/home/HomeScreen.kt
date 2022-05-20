@@ -100,7 +100,7 @@ fun ExperienceRow(
         Text(text = experience.title)
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
-            val creationDateText = formatter.format(experience.creationDate) ?: ""
+            val creationDateText = formatter.format(experience.date) ?: ""
             Text(creationDateText)
         }
     }

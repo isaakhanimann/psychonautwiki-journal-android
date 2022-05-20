@@ -35,6 +35,10 @@ class AddExperienceViewModel @Inject constructor(private val repository: Experie
             return formatter.format(currentlySelectedDate) ?: "Unknown"
         }
 
+    init {
+        enteredTitle = dateString
+    }
+
     fun onSubmitDate(newDay: Int, newMonth: Int, newYear: Int) {
         day = newDay
         month = newMonth
@@ -48,7 +52,7 @@ class AddExperienceViewModel @Inject constructor(private val repository: Experie
                 val newExperience =
                     Experience(
                         title = enteredTitle,
-                        creationDate = currentlySelectedDate,
+                        date = currentlySelectedDate,
                         text = ""
                     )
                 val experienceId = repository.addExperience(newExperience)

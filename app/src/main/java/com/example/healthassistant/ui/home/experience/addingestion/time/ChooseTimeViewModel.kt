@@ -117,6 +117,6 @@ class ChooseTimeViewModel @Inject constructor(
     private fun createNewExperience(): Experience {
         val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         val title = formatter.format(currentlySelectedDate) ?: "Title"
-        return Experience(title = title, creationDate = currentlySelectedDate, text = "")
+        return Experience(title = title, date = currentlySelectedDate, text = "")
     }
 }

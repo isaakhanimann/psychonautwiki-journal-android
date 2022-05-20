@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ExperienceDao {
 
-    @Query("SELECT * FROM experience ORDER BY creationDate DESC")
+    @Query("SELECT * FROM experience ORDER BY date DESC")
     fun getExperiences(): Flow<List<Experience>>
 
-    @Query("SELECT * FROM experience ORDER BY creationDate DESC LIMIT :limit")
+    @Query("SELECT * FROM experience ORDER BY date DESC LIMIT :limit")
     suspend fun getLastExperiences(limit: Int): List<Experience>
 
     @Query("SELECT * FROM experience WHERE id =:id")
