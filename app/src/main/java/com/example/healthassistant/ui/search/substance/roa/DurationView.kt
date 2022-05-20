@@ -11,8 +11,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -115,12 +115,37 @@ fun LineUp(
     Canvas(modifier = modifier.fillMaxSize()) {
         val canvasWidth = size.width
         val canvasHeight = size.height
-        drawLine(
-            start = Offset(x = 0f, y = canvasHeight),
-            end = Offset(x = canvasWidth, y = 0f),
+        val strokePath = Path().apply {
+            val control1X = canvasWidth / 10f
+            val control2X = canvasWidth * 9f/10f
+            val control2Y = 0f
+            moveTo(0f, canvasHeight)
+            cubicTo(control1X, canvasHeight, control2X, control2Y, canvasWidth, 0f)
+        }
+        val fillPath = android.graphics.Path(strokePath.asAndroidPath())
+            .asComposePath()
+            .apply {
+                lineTo(canvasWidth, canvasHeight)
+                lineTo(0f, canvasHeight)
+                close()
+            }
+        drawPath(
+            path = fillPath,
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    color,
+                    Color.Transparent
+                ),
+                endY = canvasHeight
+            )
+        )
+        drawPath(
+            path = strokePath,
             color = color,
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round
+            style = Stroke(
+                width = strokeWidth,
+                cap = StrokeCap.Round
+            )
         )
     }
 }
@@ -133,12 +158,35 @@ fun LineHigh(
 ) {
     Canvas(modifier = modifier.fillMaxSize()) {
         val canvasWidth = size.width
-        drawLine(
-            start = Offset(x = 0f, y = 0f),
-            end = Offset(x = canvasWidth, y = 0f),
+        val canvasHeight = size.height
+        val strokePath = Path().apply {
+            moveTo(0f, 0f)
+            lineTo(canvasWidth, 0f)
+        }
+        val fillPath = android.graphics.Path(strokePath.asAndroidPath())
+            .asComposePath()
+            .apply {
+                lineTo(canvasWidth, canvasHeight)
+                lineTo(0f, canvasHeight)
+                close()
+            }
+        drawPath(
+            path = fillPath,
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    color,
+                    Color.Transparent
+                ),
+                endY = canvasHeight
+            )
+        )
+        drawPath(
+            path = strokePath,
             color = color,
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round
+            style = Stroke(
+                width = strokeWidth,
+                cap = StrokeCap.Round
+            )
         )
     }
 }
@@ -152,12 +200,36 @@ fun LineDown(
     Canvas(modifier = modifier.fillMaxSize()) {
         val canvasWidth = size.width
         val canvasHeight = size.height
-        drawLine(
-            start = Offset(x = 0f, y = 0f),
-            end = Offset(x = canvasWidth, y = canvasHeight),
+        val strokePath = Path().apply {
+            val control1X = canvasWidth / 10f
+            val control2X = canvasWidth * 9f/10f
+            moveTo(0f, 0f)
+            cubicTo(control1X, 0f, control2X, canvasHeight, canvasWidth, canvasHeight)
+        }
+        val fillPath = android.graphics.Path(strokePath.asAndroidPath())
+            .asComposePath()
+            .apply {
+                lineTo(canvasWidth, canvasHeight)
+                lineTo(0f, canvasHeight)
+                close()
+            }
+        drawPath(
+            path = fillPath,
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    color,
+                    Color.Transparent
+                ),
+                endY = canvasHeight
+            )
+        )
+        drawPath(
+            path = strokePath,
             color = color,
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round
+            style = Stroke(
+                width = strokeWidth,
+                cap = StrokeCap.Round
+            )
         )
     }
 }
