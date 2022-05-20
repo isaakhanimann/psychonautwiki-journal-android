@@ -69,7 +69,10 @@ data class DurationRange(
     val min: Duration?,
     val max: Duration?
 ) {
-    val text get() = "${min.toString()}-${max.toString()}"
+    val text
+        get() = "${min.toString().filterNot { it.isWhitespace() }}-${
+            max.toString().filterNot { it.isWhitespace() }
+        }"
 }
 
 data class Bioavailability(

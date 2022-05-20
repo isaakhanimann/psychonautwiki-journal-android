@@ -14,12 +14,17 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SubstanceInfoCard(
     title: String = "Example Info",
+    isContentFaded: Boolean = true,
     content: @Composable () -> Unit = { Text("Some Content Here") }
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(8.dp)) {
             Text(text = title, style = MaterialTheme.typography.h6)
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            if (isContentFaded) {
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    content()
+                }
+            } else {
                 content()
             }
         }
