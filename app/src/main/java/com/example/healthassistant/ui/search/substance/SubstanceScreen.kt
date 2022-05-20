@@ -9,7 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -71,11 +70,7 @@ fun SubstanceScreenContent(
             TopAppBar(
                 title = { Text(substance.name) },
                 navigationIcon = {
-                    IconButton(
-                        onClick = navigateBack
-                    ) {
-                        Icon(Icons.Default.ArrowBack, "backIcon")
-                    }
+                    NavigateBackIcon(navigateBack)
                 }
             )
         },

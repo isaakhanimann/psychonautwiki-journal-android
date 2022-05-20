@@ -125,14 +125,13 @@ fun ChooseDoseScreenContent(
                 }
             }
             Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                if (isValidDose) {
-                    Button(
-                        onClick = navigateToNext,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Text("Next", style = MaterialTheme.typography.h3)
-                    }
+                Button(
+                    onClick = navigateToNext,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    enabled = isValidDose
+                ) {
+                    Text("Next", style = MaterialTheme.typography.h3)
                 }
                 Button(
                     onClick = useUnknownDoseAndNavigate,

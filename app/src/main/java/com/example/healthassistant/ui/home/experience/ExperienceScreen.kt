@@ -7,7 +7,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,6 +17,7 @@ import androidx.navigation.NavHostController
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.ui.main.routers.navigateToAddIngestionSearch
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
+import com.example.healthassistant.ui.search.substance.NavigateBackIcon
 
 @Composable
 fun ExperienceScreen(
@@ -52,11 +52,7 @@ fun ExperienceScreenContent(
             TopAppBar(
                 title = { Text(expAndIng.experience.title) },
                 navigationIcon = {
-                    IconButton(
-                        onClick = navigateBack
-                    ) {
-                        Icon(Icons.Default.ArrowBack, "backIcon")
-                    }
+                    NavigateBackIcon(navigateBack)
                 }
             )
         },

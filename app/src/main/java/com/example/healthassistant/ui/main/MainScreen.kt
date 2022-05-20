@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
+import com.example.healthassistant.ui.home.AddExperienceScreen
 import com.example.healthassistant.ui.home.HomeScreen
 import com.example.healthassistant.ui.home.experience.ExperienceScreen
 import com.example.healthassistant.ui.home.experience.addingestion.color.ChooseColorScreen
@@ -19,10 +20,7 @@ import com.example.healthassistant.ui.home.experience.addingestion.interactions.
 import com.example.healthassistant.ui.home.experience.addingestion.route.ChooseRouteScreen
 import com.example.healthassistant.ui.home.experience.addingestion.search.AddIngestionSearchScreen
 import com.example.healthassistant.ui.home.experience.addingestion.time.ChooseTimeScreen
-import com.example.healthassistant.ui.main.routers.ArgumentRouter
-import com.example.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY
-import com.example.healthassistant.ui.main.routers.TabRouter
-import com.example.healthassistant.ui.main.routers.navigateToSubstanceScreen
+import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
 
@@ -52,6 +50,11 @@ fun MainScreen() {
             Modifier.padding(innerPadding)
         ) {
             composable(TabRouter.Home.route) { HomeScreen(navController = navController) }
+            composable(NoArgumentRouter.AddExperienceRouter.route) {
+                AddExperienceScreen(
+                    navController = navController
+                )
+            }
             composable(
                 ArgumentRouter.ExperienceRouter.route,
                 arguments = ArgumentRouter.ExperienceRouter.args
