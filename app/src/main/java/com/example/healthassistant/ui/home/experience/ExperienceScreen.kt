@@ -27,13 +27,13 @@ fun ExperienceScreen(
     navController: NavHostController,
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
-    viewModel.experience?.let { exp ->
+    viewModel.experienceWithIngestions.collectAsState().value?.let { expWithIngs ->
         ExperienceScreenContent(
-            experience = exp,
-            ingestions = viewModel.ingestions.collectAsState().value,
+            experience = expWithIngs.experience,
+            ingestions = expWithIngs.ingestions,
             navigateBack = navController::popBackStack,
             addIngestion = {
-                navController.navigateToAddIngestionSearch(experienceId = exp.id)
+                navController.navigateToAddIngestionSearch(experienceId = expWithIngs.experience.id)
             },
             deleteIngestion = viewModel::deleteIngestion,
             isShowingMenu = viewModel.isMenuExpanded,

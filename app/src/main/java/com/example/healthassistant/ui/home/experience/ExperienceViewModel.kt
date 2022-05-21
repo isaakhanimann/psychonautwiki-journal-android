@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.healthassistant.data.experiences.entities.Experience
+import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.data.experiences.repositories.ExperienceRepository
 import com.example.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY
@@ -22,17 +22,15 @@ class ExperienceViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    var experience: Experience? = null
-    private val _ingestions = MutableStateFlow<List<Ingestion>>(emptyList())
-    val ingestions = _ingestions.asStateFlow()
+    private val _experienceWithIngestions = MutableStateFlow<ExperienceWithIngestions?>(null)
+    val experienceWithIngestions = _experienceWithIngestions.asStateFlow()
     var isMenuExpanded by mutableStateOf(false)
 
     init {
         val id = state.get<Int>(EXPERIENCE_ID_KEY)!!
         viewModelScope.launch {
-            experience = repo.getExperience(id)
-            repo.getIngestions(experienceId = id).collect {
-                _ingestions.value = it
+            repo.getExperienceWithIngestions(experienceId = id).collect {
+                _experienceWithIngestions.value = it
             }
         }
     }
