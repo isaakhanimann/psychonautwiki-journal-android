@@ -32,8 +32,14 @@ interface ExperienceDao {
     @Query("DELETE FROM experience")
     suspend fun deleteAll()
 
+    @Query("DELETE FROM ingestion WHERE experienceId = :experienceId")
+    suspend fun deleteAllIngestionsFromExperience(experienceId: Int)
+
     @Delete
     suspend fun deleteExperience(experience: Experience)
+
+    @Delete
+    suspend fun deleteIngestion(ingestion: Ingestion)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(ingestion: Ingestion)

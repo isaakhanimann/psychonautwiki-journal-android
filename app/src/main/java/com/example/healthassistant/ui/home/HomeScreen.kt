@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -59,9 +60,17 @@ fun ExperiencesList(homeViewModel: HomeViewModel, navController: NavController) 
             }
             items(experiencesInYear.size) { i ->
                 val expAndIngs = experiencesInYear[i]
-                ExperienceRow(expAndIngs, navigateToExperienceScreen = {
-                    navController.navigateToExperience(experienceId = expAndIngs.experience.id)
-                })
+                ExperienceRow(
+                    expAndIngs,
+                    navigateToExperienceScreen = {
+                        navController.navigateToExperience(experienceId = expAndIngs.experience.id)
+                    },
+                    deleteExperienceWithIngestions = homeViewModel::deleteExperienceWithIngestions,
+                    isMenuExpanded = homeViewModel.isMenuExpanded,
+                    onChangeIsExpanded = {
+                        homeViewModel.isMenuExpanded = it
+                    }
+                )
                 if (i < experiencesInYear.size) {
                     Divider()
                 }
@@ -90,7 +99,10 @@ fun YearRow(year: String = "2022") {
 @Composable
 fun ExperienceRow(
     @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngs: ExperienceWithIngestions,
-    navigateToExperienceScreen: () -> Unit = {}
+    navigateToExperienceScreen: () -> Unit = {},
+    deleteExperienceWithIngestions: (ExperienceWithIngestions) -> Unit = {},
+    isMenuExpanded: Boolean = false,
+    onChangeIsExpanded: (Boolean) -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -110,7 +122,8 @@ fun ExperienceRow(
             val circleSize = 45.dp
             if (experienceWithIngs.ingestions.size >= 2) {
                 val brush = remember(experienceWithIngs.ingestions) {
-                    val colors = experienceWithIngs.ingestions.map { it.color.getComposeColor(isDarkTheme) }
+                    val colors =
+                        experienceWithIngs.ingestions.map { it.color.getComposeColor(isDarkTheme) }
                     Brush.radialGradient(colors)
                 }
                 Box(
@@ -124,7 +137,11 @@ fun ExperienceRow(
                     modifier = Modifier
                         .size(circleSize)
                         .clip(CircleShape)
-                        .background(experienceWithIngs.ingestions.first().color.getComposeColor(isDarkTheme))
+                        .background(
+                            experienceWithIngs.ingestions.first().color.getComposeColor(
+                                isDarkTheme
+                            )
+                        )
                 )
             } else {
                 Box(
@@ -154,6 +171,21 @@ fun ExperienceRow(
             val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
             val creationDateText = formatter.format(experienceWithIngs.experience.date) ?: ""
             Text(creationDateText)
+        }
+        Box(modifier = Modifier
+            .wrapContentSize(Alignment.TopStart)
+        ) {
+            IconButton(onClick = { onChangeIsExpanded(true) }) {
+                Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
+            }
+            DropdownMenu(
+                expanded = isMenuExpanded,
+                onDismissRequest = { onChangeIsExpanded(false) }
+            ) {
+                DropdownMenuItem(onClick = { deleteExperienceWithIngestions(experienceWithIngs) }) {
+                    Text("Delete")
+                }
+            }
         }
     }
 }
