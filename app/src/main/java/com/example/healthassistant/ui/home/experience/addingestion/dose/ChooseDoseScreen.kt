@@ -27,7 +27,7 @@ fun ChooseDoseScreen(
     navController: NavController,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
-    viewModel.substance?.let { sub ->
+    viewModel.substance?.also { sub ->
         ChooseDoseScreenContent(
             roaDose = viewModel.roaDose,
             doseText = viewModel.doseText,

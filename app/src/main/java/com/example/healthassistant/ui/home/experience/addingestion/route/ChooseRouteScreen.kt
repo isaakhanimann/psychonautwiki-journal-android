@@ -24,7 +24,7 @@ fun ChooseRouteScreen(
     navController: NavController,
     viewModel: ChooseRouteViewModel = hiltViewModel()
 ) {
-    viewModel.substance?.let { sub ->
+    viewModel.substance?.also { sub ->
         ChooseRouteScreenContent(substance = sub, navigateToNext = { route ->
             navController.navigateToChooseDose(
                 substanceName = sub.name,

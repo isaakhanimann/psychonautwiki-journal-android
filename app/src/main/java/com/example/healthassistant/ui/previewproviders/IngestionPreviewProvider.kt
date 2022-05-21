@@ -17,6 +17,16 @@ class IngestionPreviewProvider : PreviewParameterProvider<Ingestion> {
             units = "mg",
             color = IngestionColor.INDIGO,
             experienceId = 0
+        ),
+        Ingestion(
+            substanceName = "LSD",
+            time = Date(),
+            administrationRoute = AdministrationRoute.ORAL,
+            dose = null,
+            isDoseAnEstimate = false,
+            units = "mg",
+            color = IngestionColor.BLUE,
+            experienceId = 0
         )
     )
 }

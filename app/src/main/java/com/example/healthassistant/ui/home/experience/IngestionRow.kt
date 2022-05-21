@@ -58,8 +58,11 @@ fun IngestionRow(
                 Column {
                     Text(text = ingestion.substanceName, style = MaterialTheme.typography.h6)
                     CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                        ingestion.dose?.let {
-                            Text(text = "${if (ingestion.isDoseAnEstimate) "~" else ""}${it.toReadableString()} ${ingestion.units} ${ingestion.administrationRoute.displayText}")
+                        ingestion.dose?.also {
+                            Text(
+                                text = "${if (ingestion.isDoseAnEstimate) "~" else ""}${it.toReadableString()} ${ingestion.units} ${ingestion.administrationRoute.displayText}",
+                                style = MaterialTheme.typography.subtitle1
+                            )
                         } ?: run {
                             Text(
                                 text = "Unknown Dose ${ingestion.administrationRoute.displayText}",

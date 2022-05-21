@@ -88,7 +88,7 @@ fun ChooseColorScreenContent(
                     }
                 }
             }
-            lastUsedColor?.let { color ->
+            lastUsedColor?.also { color ->
                 Card(
                     modifier = Modifier
                         .clickable {

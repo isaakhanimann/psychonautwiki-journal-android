@@ -17,11 +17,11 @@ import com.example.healthassistant.ui.search.substance.SubstanceInfoCard
 fun RoaView(@PreviewParameter(RoaPreviewProvider::class) roa: Roa) {
     SubstanceInfoCard(title = roa.route.displayText, isContentFaded = false) {
         Column {
-            roa.roaDose?.let {
+            roa.roaDose?.also {
                 RoaDoseView(roaDose = it)
                 Spacer(modifier = Modifier.height(5.dp))
             }
-            roa.roaDuration?.let {
+            roa.roaDuration?.also {
                 DurationView(roaDuration = it)
             }
         }

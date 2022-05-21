@@ -20,7 +20,7 @@ fun CheckInteractionsScreen(
     navController: NavController,
     viewModel: CheckInteractionsViewModel = hiltViewModel()
 ) {
-    viewModel.substance?.let {
+    viewModel.substance?.also {
         CheckInteractionsScreenContent(
             substance = it,
             navigateToNext = {

@@ -27,7 +27,7 @@ fun ExperienceScreen(
     navController: NavHostController,
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
-    viewModel.experienceWithIngestions.collectAsState().value?.let { expWithIngs ->
+    viewModel.experienceWithIngestions.collectAsState().value?.also { expWithIngs ->
         ExperienceScreenContent(
             experience = expWithIngs.experience,
             ingestions = expWithIngs.ingestions,
