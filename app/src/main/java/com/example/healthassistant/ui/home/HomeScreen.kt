@@ -1,15 +1,23 @@
 package com.example.healthassistant.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -91,17 +99,55 @@ fun ExperienceRow(
             }
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 8.dp),
-
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Column() {
-            Text(text = experienceWithIngs.experience.title, style = MaterialTheme.typography.h5)
-            val substanceNames = experienceWithIngs.ingestions.map { it.substanceName }.distinct()
-                .joinToString(separator = ", ")
-            if (substanceNames.isNotEmpty()) {
-                Text(text = substanceNames)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val isDarkTheme = isSystemInDarkTheme()
+            val circleSize = 45.dp
+            if (experienceWithIngs.ingestions.size >= 2) {
+                val brush = remember(experienceWithIngs.ingestions) {
+                    val colors = experienceWithIngs.ingestions.map { it.color.getComposeColor(isDarkTheme) }
+                    Brush.radialGradient(colors)
+                }
+                Box(
+                    modifier = Modifier
+                        .size(circleSize)
+                        .clip(CircleShape)
+                        .background(brush)
+                )
+            } else if (experienceWithIngs.ingestions.size == 1) {
+                Box(
+                    modifier = Modifier
+                        .size(circleSize)
+                        .clip(CircleShape)
+                        .background(experienceWithIngs.ingestions.first().color.getComposeColor(isDarkTheme))
+                )
             } else {
-                Text(text = "No substance yet")
+                Box(
+                    modifier = Modifier
+                        .size(circleSize)
+                        .clip(CircleShape)
+                        .background(Color.LightGray.copy(0.1f))
+                )
+            }
+            Column() {
+                Text(
+                    text = experienceWithIngs.experience.title,
+                    style = MaterialTheme.typography.h5
+                )
+                val substanceNames = remember(experienceWithIngs.ingestions) {
+                    experienceWithIngs.ingestions.map { it.substanceName }.distinct()
+                        .joinToString(separator = ", ")
+                }
+                if (substanceNames.isNotEmpty()) {
+                    Text(text = substanceNames)
+                } else {
+                    Text(text = "No substance yet")
+                }
             }
         }
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
