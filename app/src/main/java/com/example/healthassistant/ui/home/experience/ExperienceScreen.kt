@@ -8,13 +8,16 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
+import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.ui.main.routers.navigateToAddIngestionSearch
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import com.example.healthassistant.ui.search.substance.NavigateBackIcon
@@ -24,12 +27,18 @@ fun ExperienceScreen(
     navController: NavHostController,
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
-    viewModel.experienceWithIngestions?.let { exp ->
+    viewModel.experience?.let { exp ->
         ExperienceScreenContent(
-            expAndIng = exp,
+            experience = exp,
+            ingestions = viewModel.ingestions.collectAsState().value,
             navigateBack = navController::popBackStack,
             addIngestion = {
-                navController.navigateToAddIngestionSearch(experienceId = exp.experience.id)
+                navController.navigateToAddIngestionSearch(experienceId = exp.id)
+            },
+            deleteIngestion = viewModel::deleteIngestion,
+            isShowingMenu = viewModel.isMenuExpanded,
+            onIsShowingMenuChange = {
+                viewModel.isMenuExpanded = it
             }
         )
     } ?: run {
@@ -39,18 +48,36 @@ fun ExperienceScreen(
     }
 }
 
-
 @Preview
 @Composable
+fun ExperienceScreenContentPreview(
+    @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) expAndIng: ExperienceWithIngestions
+) {
+    ExperienceScreenContent(
+        experience = expAndIng.experience,
+        ingestions = expAndIng.ingestions,
+        navigateBack = {},
+        addIngestion = {},
+        deleteIngestion = {},
+        isShowingMenu = false,
+        onIsShowingMenuChange = {}
+    )
+}
+
+@Composable
 fun ExperienceScreenContent(
-    @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) expAndIng: ExperienceWithIngestions,
-    navigateBack: () -> Unit = {},
-    addIngestion: () -> Unit = {}
+    experience: Experience,
+    ingestions: List<Ingestion>,
+    navigateBack: () -> Unit,
+    addIngestion: () -> Unit,
+    deleteIngestion: (Ingestion) -> Unit,
+    isShowingMenu: Boolean,
+    onIsShowingMenuChange: (Boolean) -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(expAndIng.experience.title) },
+                title = { Text(experience.title) },
                 navigationIcon = {
                     NavigateBackIcon(navigateBack)
                 }
@@ -68,8 +95,16 @@ fun ExperienceScreenContent(
                 .verticalScroll(rememberScrollState())
         ) {
             Text("Ingestions", style = MaterialTheme.typography.h5)
-            expAndIng.ingestions.forEach {
-                IngestionRow(ingestion = it, modifier = Modifier.padding(vertical = 3.dp))
+            ingestions.forEach {
+                IngestionRow(
+                    ingestion = it,
+                    deleteIngestion = {
+                        deleteIngestion(it)
+                    },
+                    isMenuExpanded = isShowingMenu,
+                    onChangeIsExpanded = onIsShowingMenuChange,
+                    modifier = Modifier.padding(vertical = 3.dp)
+                )
             }
         }
     }

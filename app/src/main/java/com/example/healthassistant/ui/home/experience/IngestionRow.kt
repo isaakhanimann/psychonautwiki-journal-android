@@ -4,6 +4,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -19,9 +21,23 @@ import java.util.*
 
 @Preview
 @Composable
+fun IngestionRowPreview(@PreviewParameter(IngestionPreviewProvider::class) ingestion: Ingestion) {
+    IngestionRow(
+        ingestion = ingestion,
+        deleteIngestion = {},
+        isMenuExpanded = false,
+        onChangeIsExpanded = {}
+    )
+}
+
+
+@Composable
 fun IngestionRow(
-    @PreviewParameter(IngestionPreviewProvider::class) ingestion: Ingestion,
-    modifier: Modifier = Modifier
+    ingestion: Ingestion,
+    deleteIngestion: () -> Unit,
+    isMenuExpanded: Boolean,
+    onChangeIsExpanded: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val isDarkTheme = isSystemInDarkTheme()
     Card(modifier = modifier.fillMaxWidth()) {
@@ -40,19 +56,43 @@ fun IngestionRow(
                     modifier = Modifier.size(25.dp)
                 ) {}
                 Column {
-                    Text(text = ingestion.substanceName, style = MaterialTheme.typography.subtitle1)
+                    Text(text = ingestion.substanceName, style = MaterialTheme.typography.h6)
                     CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                         ingestion.dose?.let {
                             Text(text = "${if (ingestion.isDoseAnEstimate) "~" else ""}${it.toReadableString()} ${ingestion.units} ${ingestion.administrationRoute.displayText}")
                         } ?: run {
-                            Text(text = "Unknown Dose ${ingestion.administrationRoute.displayText}")
+                            Text(
+                                text = "Unknown Dose ${ingestion.administrationRoute.displayText}",
+                                style = MaterialTheme.typography.subtitle1
+                            )
                         }
                     }
                 }
             }
-            val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
-            val timeString = formatter.format(ingestion.time) ?: "Unknown Time"
-            Text(text = timeString)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(3.dp)
+            ) {
+                val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+                val timeString = formatter.format(ingestion.time) ?: "Unknown Time"
+                Text(text = timeString)
+                Box(
+                    modifier = Modifier
+                        .wrapContentSize(Alignment.TopStart)
+                ) {
+                    IconButton(onClick = { onChangeIsExpanded(true) }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
+                    }
+                    DropdownMenu(
+                        expanded = isMenuExpanded,
+                        onDismissRequest = { onChangeIsExpanded(false) }
+                    ) {
+                        DropdownMenuItem(onClick = deleteIngestion) {
+                            Text("Delete")
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -125,7 +125,8 @@ fun AddIngestionButtons(
                 style = buttonTextStyle,
                 modifier = Modifier
                     .padding(vertical = 20.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
             )
         }
     } else {

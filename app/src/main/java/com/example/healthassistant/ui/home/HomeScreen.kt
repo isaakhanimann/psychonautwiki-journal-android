@@ -65,7 +65,9 @@ fun ExperiencesList(homeViewModel: HomeViewModel, navController: NavController) 
                     navigateToExperienceScreen = {
                         navController.navigateToExperience(experienceId = expAndIngs.experience.id)
                     },
-                    deleteExperienceWithIngestions = homeViewModel::deleteExperienceWithIngestions,
+                    deleteExperienceWithIngestions = {
+                        homeViewModel.deleteExperienceWithIngestions(expAndIngs)
+                    },
                     isMenuExpanded = homeViewModel.isMenuExpanded,
                     onChangeIsExpanded = {
                         homeViewModel.isMenuExpanded = it
@@ -100,7 +102,7 @@ fun YearRow(year: String = "2022") {
 fun ExperienceRow(
     @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngs: ExperienceWithIngestions,
     navigateToExperienceScreen: () -> Unit = {},
-    deleteExperienceWithIngestions: (ExperienceWithIngestions) -> Unit = {},
+    deleteExperienceWithIngestions: () -> Unit = {},
     isMenuExpanded: Boolean = false,
     onChangeIsExpanded: (Boolean) -> Unit = {}
 ) {
@@ -172,8 +174,9 @@ fun ExperienceRow(
             val creationDateText = formatter.format(experienceWithIngs.experience.date) ?: ""
             Text(creationDateText)
         }
-        Box(modifier = Modifier
-            .wrapContentSize(Alignment.TopStart)
+        Box(
+            modifier = Modifier
+                .wrapContentSize(Alignment.TopStart)
         ) {
             IconButton(onClick = { onChangeIsExpanded(true) }) {
                 Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
@@ -182,7 +185,7 @@ fun ExperienceRow(
                 expanded = isMenuExpanded,
                 onDismissRequest = { onChangeIsExpanded(false) }
             ) {
-                DropdownMenuItem(onClick = { deleteExperienceWithIngestions(experienceWithIngs) }) {
+                DropdownMenuItem(onClick = deleteExperienceWithIngestions) {
                     Text("Delete")
                 }
             }
