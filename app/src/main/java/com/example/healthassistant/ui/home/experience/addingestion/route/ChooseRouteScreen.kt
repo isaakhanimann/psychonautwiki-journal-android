@@ -13,25 +13,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.main.routers.navigateToChooseDose
 import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 
 @Composable
 fun ChooseRouteScreen(
-    navController: NavController,
+    navigateToChooseDose: (substanceName: String, administrationRoute: AdministrationRoute, experienceId: Int?) -> Unit,
     viewModel: ChooseRouteViewModel = hiltViewModel()
 ) {
     viewModel.substance?.also { sub ->
-        ChooseRouteScreenContent(substance = sub, navigateToNext = { route ->
-            navController.navigateToChooseDose(
-                substanceName = sub.name,
-                administrationRoute = route,
-                experienceId = viewModel.experienceId
-            )
-        })
+        ChooseRouteScreenContent(
+            substance = sub,
+            navigateToNext = { route ->
+                navigateToChooseDose(sub.name, route, viewModel.experienceId)
+            }
+        )
     }
 }
 

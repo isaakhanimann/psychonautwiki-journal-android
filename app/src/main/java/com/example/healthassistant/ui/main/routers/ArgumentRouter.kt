@@ -106,7 +106,7 @@ fun NavController.navigateToExperiencePopupToExperienceScreen(experienceId: Int)
     }
 }
 
-fun NavController.navigateToExperiencePupupToSubstanceScreen(experienceId: Int) {
+fun NavController.navigateToExperiencePopupToSubstanceScreen(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId) {
         popUpTo(ArgumentRouter.SubstanceRouter.route)
     }

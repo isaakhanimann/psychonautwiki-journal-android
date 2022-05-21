@@ -19,30 +19,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.main.routers.navigateToAddIngestion
 import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-fun SubstanceScreen(navController: NavController, viewModel: SubstanceViewModel = hiltViewModel()) {
+fun SubstanceScreen(
+    navigateBack: () -> Unit,
+    navigateToAddIngestion: (substanceName: String) -> Unit,
+    viewModel: SubstanceViewModel = hiltViewModel()
+) {
     if (viewModel.substance != null) {
         SubstanceScreenContent(
             substance = viewModel.substance,
-            navigateBack = navController::popBackStack,
+            navigateBack = navigateBack,
             onIngestTapped = {
-                navController.navigateToAddIngestion(
-                    substanceName = viewModel.substance.name,
-                    experienceId = null
-                )
+                navigateToAddIngestion(viewModel.substance.name)
             }
         )
     } else {
-        Button(onClick = navController::popBackStack) {
+        Button(onClick = navigateBack) {
             Text("There was an error. Go back.")
         }
     }

@@ -23,35 +23,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
-import com.example.healthassistant.ui.main.routers.navigateToAddExperience
-import com.example.healthassistant.ui.main.routers.navigateToExperiencePopNothing
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
+    navigateToAddExperience: () -> Unit,
+    navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Experiences") }) },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigateToAddExperience()
-            }) {
+            FloatingActionButton(onClick = navigateToAddExperience) {
                 Icon(Icons.Default.Add, "Add New Experience")
             }
         }
     ) {
-        ExperiencesList(homeViewModel = homeViewModel, navController = navController)
+        ExperiencesList(
+            homeViewModel = homeViewModel,
+            navigateToExperiencePopNothing = navigateToExperiencePopNothing
+        )
     }
 }
 
 @Composable
-fun ExperiencesList(homeViewModel: HomeViewModel, navController: NavController) {
+fun ExperiencesList(
+    homeViewModel: HomeViewModel,
+    navigateToExperiencePopNothing: (experienceId: Int) -> Unit
+) {
     val groupedExperiences = homeViewModel.experiencesGrouped.collectAsState().value
     LazyColumn {
         groupedExperiences.forEach { (year, experiencesInYear) ->
@@ -63,7 +65,7 @@ fun ExperiencesList(homeViewModel: HomeViewModel, navController: NavController) 
                 ExperienceRow(
                     expAndIngs,
                     navigateToExperienceScreen = {
-                        navController.navigateToExperiencePopNothing(experienceId = expAndIngs.experience.id)
+                        navigateToExperiencePopNothing(expAndIngs.experience.id)
                     },
                     deleteExperienceWithIngestions = {
                         homeViewModel.deleteExperienceWithIngestions(expAndIngs)

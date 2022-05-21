@@ -14,26 +14,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.experiences.entities.Ingestion
-import com.example.healthassistant.ui.main.routers.navigateToAddIngestionSearch
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import com.example.healthassistant.ui.search.substance.NavigateBackIcon
 
 @Composable
 fun ExperienceScreen(
-    navController: NavHostController,
+    navigateBack: () -> Unit,
+    navigateToAddIngestionSearch: (experienceId: Int) -> Unit,
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
     viewModel.experienceWithIngestions.collectAsState().value?.also { expWithIngs ->
         ExperienceScreenContent(
             experience = expWithIngs.experience,
             ingestions = expWithIngs.ingestions,
-            navigateBack = navController::popBackStack,
+            navigateBack = navigateBack,
             addIngestion = {
-                navController.navigateToAddIngestionSearch(experienceId = expWithIngs.experience.id)
+                navigateToAddIngestionSearch(expWithIngs.experience.id)
             },
             deleteIngestion = viewModel::deleteIngestion,
             isShowingMenu = viewModel.isMenuExpanded,
@@ -42,7 +41,7 @@ fun ExperienceScreen(
             }
         )
     } ?: run {
-        Button(onClick = navController::popBackStack) {
+        Button(onClick = navigateBack) {
             Text("There was an error. Go back.")
         }
     }

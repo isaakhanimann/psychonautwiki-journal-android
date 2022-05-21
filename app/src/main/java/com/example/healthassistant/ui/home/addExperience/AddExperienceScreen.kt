@@ -14,20 +14,19 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.healthassistant.ui.home.addExperience.AddExperienceViewModel
 import com.example.healthassistant.ui.home.experience.addingestion.time.DatePickerButton
-import com.example.healthassistant.ui.main.routers.navigateToExperienceFromAddExperience
 import com.example.healthassistant.ui.search.substance.NavigateBackIcon
 
 @Composable
 fun AddExperienceScreen(
-    navController: NavController,
+    navigateBack: () -> Unit,
+    navigateToExperienceFromAddExperience: (experienceId: Int) -> Unit,
     viewModel: AddExperienceViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     AddExperienceContent(
-        onBackTap = navController::popBackStack,
+        onBackTap = navigateBack,
         day = viewModel.day,
         month = viewModel.month,
         year = viewModel.year,
@@ -41,7 +40,7 @@ fun AddExperienceScreen(
                     context, "Experience Added",
                     Toast.LENGTH_SHORT
                 ).show()
-                navController.navigateToExperienceFromAddExperience(experienceId = it)
+                navigateToExperienceFromAddExperience(it)
             }
         },
         dateString = viewModel.dateString

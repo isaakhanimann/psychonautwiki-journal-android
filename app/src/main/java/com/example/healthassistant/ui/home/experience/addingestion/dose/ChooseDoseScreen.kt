@@ -14,17 +14,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.RoaDose
-import com.example.healthassistant.ui.main.routers.navigateToChooseColor
 import com.example.healthassistant.ui.previewproviders.RoaDosePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.RoaDoseView
 import com.example.healthassistant.ui.search.substance.roa.dose.DoseColor
 
 @Composable
 fun ChooseDoseScreen(
-    navController: NavController,
+    navigateToChooseColor: (substanceName: String, administrationRoute: AdministrationRoute, units: String, isEstimate: Boolean, dose: Double?, experienceId: Int?) -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
     viewModel.substance?.also { sub ->
@@ -38,23 +36,23 @@ fun ChooseDoseScreen(
                 viewModel.isEstimate = it
             },
             navigateToNext = {
-                navController.navigateToChooseColor(
-                    substanceName = sub.name,
-                    administrationRoute = AdministrationRoute.ORAL,
-                    units = viewModel.roaDose?.units ?: "",
-                    isEstimate = viewModel.isEstimate,
-                    dose = viewModel.dose,
-                    experienceId = viewModel.experienceId
+                navigateToChooseColor(
+                    sub.name,
+                    viewModel.administrationRoute,
+                    viewModel.roaDose?.units ?: "",
+                    viewModel.isEstimate,
+                    viewModel.dose,
+                    viewModel.experienceId
                 )
             },
             useUnknownDoseAndNavigate = {
-                navController.navigateToChooseColor(
-                    substanceName = sub.name,
-                    administrationRoute = AdministrationRoute.ORAL,
-                    units = viewModel.roaDose?.units ?: "",
-                    isEstimate = false,
-                    dose = null,
-                    experienceId = viewModel.experienceId
+                navigateToChooseColor(
+                    sub.name,
+                    viewModel.administrationRoute,
+                    viewModel.roaDose?.units ?: "",
+                    false,
+                    null,
+                    viewModel.experienceId
                 )
             },
             currentRoaRangeTextAndColor = viewModel.currentRoaRangeTextAndColor

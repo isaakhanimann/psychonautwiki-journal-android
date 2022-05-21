@@ -12,14 +12,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.example.healthassistant.ui.main.routers.navigateToExperiencePopupToExperienceScreen
-import com.example.healthassistant.ui.main.routers.navigateToExperiencePupupToSubstanceScreen
 
 
 @Composable
 fun ChooseTimeScreen(
-    navController: NavController,
+    navigateToExperiencePopupToSubstanceScreen: (experienceId: Int) -> Unit,
+    navigateToExperiencePopupToExperienceScreen: (experienceId: Int) -> Unit,
     viewModel: ChooseTimeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -33,7 +31,7 @@ fun ChooseTimeScreen(
                     context, "Ingestion Added",
                     Toast.LENGTH_SHORT
                 ).show()
-                navController.navigateToExperiencePupupToSubstanceScreen(it)
+                navigateToExperiencePopupToSubstanceScreen(it)
             }
         },
         experienceIdToAddTo = viewModel.experienceId,
@@ -49,12 +47,8 @@ fun ChooseTimeScreen(
         ),
         dateString = viewModel.dateString,
         timeString = viewModel.timeString,
-        navigateToExperiencePopUpToExperienceScreen = {
-            navController.navigateToExperiencePopupToExperienceScreen(it)
-        },
-        navigateToExperiencePopUpToSubstanceScreen = {
-            navController.navigateToExperiencePupupToSubstanceScreen(it)
-        }
+        navigateToExperiencePopUpToExperienceScreen = navigateToExperiencePopupToExperienceScreen,
+        navigateToExperiencePopUpToSubstanceScreen = navigateToExperiencePopupToSubstanceScreen
     )
 }
 

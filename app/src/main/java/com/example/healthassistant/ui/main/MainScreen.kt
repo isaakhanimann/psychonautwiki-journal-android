@@ -49,17 +49,32 @@ fun MainScreen() {
             startDestination = TabRouter.Home.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(TabRouter.Home.route) { HomeScreen(navController = navController) }
+            composable(TabRouter.Home.route) {
+                HomeScreen(
+                    navigateToAddExperience = navController::navigateToAddExperience,
+                    navigateToExperiencePopNothing = {
+                        navController.navigateToExperiencePopNothing(experienceId = it)
+                    }
+                )
+            }
             composable(NoArgumentRouter.AddExperienceRouter.route) {
                 AddExperienceScreen(
-                    navController = navController
+                    navigateBack = navController::popBackStack,
+                    navigateToExperienceFromAddExperience = {
+                        navController.navigateToExperienceFromAddExperience(it)
+                    }
                 )
             }
             composable(
                 ArgumentRouter.ExperienceRouter.route,
                 arguments = ArgumentRouter.ExperienceRouter.args
             ) {
-                ExperienceScreen(navController = navController)
+                ExperienceScreen(
+                    navigateBack = navController::popBackStack,
+                    navigateToAddIngestionSearch = {
+                        navController.navigateToAddIngestionSearch(experienceId = it)
+                    }
+                )
             }
             addIngestionGraph(navController = navController)
             composable(TabRouter.Search.route) {
@@ -71,7 +86,15 @@ fun MainScreen() {
                 ArgumentRouter.SubstanceRouter.route,
                 arguments = ArgumentRouter.SubstanceRouter.args
             ) {
-                SubstanceScreen(navController = navController)
+                SubstanceScreen(
+                    navigateBack = navController::popBackStack,
+                    navigateToAddIngestion = {
+                        navController.navigateToAddIngestion(
+                            substanceName = it,
+                            experienceId = null
+                        )
+                    }
+                )
             }
             composable(TabRouter.Stats.route) { Stats() }
             composable(TabRouter.Settings.route) { Settings() }
@@ -89,32 +112,86 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             arguments = ArgumentRouter.SearchRouter.args
         ) { backStackEntry ->
             AddIngestionSearchScreen(
-                navController = navController,
-                experienceId = backStackEntry.arguments?.getInt(
-                    EXPERIENCE_ID_KEY
-                )
+                navigateToAddIngestionScreens = {
+                    val experienceId = backStackEntry.arguments?.getInt(EXPERIENCE_ID_KEY)
+                    navController.navigateToAddIngestion(
+                        substanceName = it,
+                        experienceId = experienceId
+                    )
+                }
             )
         }
         composable(
             ArgumentRouter.CheckInteractionsRouter.route,
             arguments = ArgumentRouter.CheckInteractionsRouter.args
-        ) { CheckInteractionsScreen(navController) }
+        ) {
+            CheckInteractionsScreen(
+                navigateToChooseRouteScreen = { substanceName, experienceId ->
+                    navController.navigateToChooseRoute(
+                        substanceName = substanceName,
+                        experienceId = experienceId
+                    )
+                }
+            )
+        }
         composable(
             ArgumentRouter.ChooseRouteRouter.route,
             arguments = ArgumentRouter.ChooseRouteRouter.args
-        ) { ChooseRouteScreen(navController) }
+        ) {
+            ChooseRouteScreen(
+                navigateToChooseDose = { substanceName, administrationRoute, experienceId ->
+                    navController.navigateToChooseDose(
+                        substanceName = substanceName,
+                        administrationRoute = administrationRoute,
+                        experienceId = experienceId
+                    )
+                }
+            )
+        }
         composable(
             ArgumentRouter.ChooseDoseRouter.route,
             arguments = ArgumentRouter.ChooseDoseRouter.args
-        ) { ChooseDoseScreen(navController) }
+        ) {
+            ChooseDoseScreen(
+                navigateToChooseColor = { substanceName, administrationRoute, units, isEstimate, dose, experienceId ->
+                    navController.navigateToChooseColor(
+                        substanceName = substanceName,
+                        administrationRoute = administrationRoute,
+                        units = units,
+                        isEstimate = isEstimate,
+                        dose = dose,
+                        experienceId = experienceId
+                    )
+                }
+            )
+        }
         composable(
             ArgumentRouter.ChooseColorRouter.route,
             arguments = ArgumentRouter.ChooseColorRouter.args
-        ) { ChooseColorScreen(navController) }
+        ) {
+            ChooseColorScreen(
+                navigateToChooseTime = { substanceName, administrationRoute, units, isEstimate, color, dose, experienceId ->
+                    navController.navigateToChooseTime(
+                        substanceName = substanceName,
+                        administrationRoute = administrationRoute,
+                        units = units,
+                        isEstimate = isEstimate,
+                        color = color,
+                        dose = dose,
+                        experienceId = experienceId
+                    )
+                }
+            )
+        }
         composable(
             ArgumentRouter.ChooseTimeRouter.route,
             arguments = ArgumentRouter.ChooseTimeRouter.args
-        ) { ChooseTimeScreen(navController) }
+        ) {
+            ChooseTimeScreen(
+                navigateToExperiencePopupToExperienceScreen = navController::navigateToExperiencePopupToExperienceScreen,
+                navigateToExperiencePopupToSubstanceScreen = navController::navigateToExperiencePopupToSubstanceScreen
+            )
+        }
     }
 }
 

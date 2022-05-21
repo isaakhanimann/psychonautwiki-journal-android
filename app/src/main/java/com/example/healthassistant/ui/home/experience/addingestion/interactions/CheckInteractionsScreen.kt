@@ -8,26 +8,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.main.routers.navigateToChooseRoute
 import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 import com.example.healthassistant.ui.search.substance.InteractionsView
 
 
 @Composable
 fun CheckInteractionsScreen(
-    navController: NavController,
+    navigateToChooseRouteScreen: (substanceName: String, experienceId: Int?) -> Unit,
     viewModel: CheckInteractionsViewModel = hiltViewModel()
 ) {
     viewModel.substance?.also {
         CheckInteractionsScreenContent(
             substance = it,
             navigateToNext = {
-                navController.navigateToChooseRoute(
-                    substanceName = it.name,
-                    experienceId = viewModel.experienceId
-                )
+                navigateToChooseRouteScreen(it.name, viewModel.experienceId)
             }
         )
     }
