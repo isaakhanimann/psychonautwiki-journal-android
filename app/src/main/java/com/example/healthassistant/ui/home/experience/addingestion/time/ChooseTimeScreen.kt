@@ -13,7 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.healthassistant.ui.main.routers.navigateToExperience
+import com.example.healthassistant.ui.main.routers.navigateToExperiencePopupToExperienceScreen
+import com.example.healthassistant.ui.main.routers.navigateToExperiencePupupToSubstanceScreen
 
 
 @Composable
@@ -23,21 +24,16 @@ fun ChooseTimeScreen(
 ) {
     val context = LocalContext.current
     ChooseTimeScreenContent(
-        addIngestionAndNavigate = {
+        addIngestionToExperience = {
             viewModel.createAndSaveIngestion(experienceIdToAddTo = it)
-            navController.navigateToExperience(experienceId = it)
-            Toast.makeText(
-                context, "Ingestion Added",
-                Toast.LENGTH_SHORT
-            ).show()
         },
-        addIngestionToNewExperienceAndNavigate = {
+        addIngestionToNewExperience = {
             viewModel.addIngestionToNewExperience {
                 Toast.makeText(
                     context, "Ingestion Added",
                     Toast.LENGTH_SHORT
                 ).show()
-                navController.navigateToExperience(experienceId = it)
+                navController.navigateToExperiencePupupToSubstanceScreen(it)
             }
         },
         experienceIdToAddTo = viewModel.experienceId,
@@ -52,7 +48,13 @@ fun ChooseTimeScreen(
             minute = viewModel.minute.value
         ),
         dateString = viewModel.dateString,
-        timeString = viewModel.timeString
+        timeString = viewModel.timeString,
+        navigateToExperiencePopUpToExperienceScreen = {
+            navController.navigateToExperiencePopupToExperienceScreen(it)
+        },
+        navigateToExperiencePopUpToSubstanceScreen = {
+            navController.navigateToExperiencePupupToSubstanceScreen(it)
+        }
     )
 }
 
@@ -61,15 +63,17 @@ data class DateAndTime(val day: Int, val month: Int, val year: Int, val hour: In
 @Preview
 @Composable
 fun ChooseTimeScreenContent(
-    addIngestionAndNavigate: (Int) -> Unit = {},
-    addIngestionToNewExperienceAndNavigate: () -> Unit = {},
+    addIngestionToExperience: (Int) -> Unit = {},
+    addIngestionToNewExperience: () -> Unit = {},
     experienceIdToAddTo: Int? = null,
     latestExperienceId: Int? = null,
     onSubmitDate: (Int, Int, Int) -> Unit = { _: Int, _: Int, _: Int -> },
     onSubmitTime: (Int, Int) -> Unit = { _: Int, _: Int -> },
     dateAndTime: DateAndTime = DateAndTime(day = 3, month = 4, year = 2022, hour = 13, minute = 52),
     dateString: String = "Wed 9 Jul 2022",
-    timeString: String = "13:52"
+    timeString: String = "13:52",
+    navigateToExperiencePopUpToSubstanceScreen: (Int) -> Unit = {},
+    navigateToExperiencePopUpToExperienceScreen: (Int) -> Unit = {},
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) }
@@ -101,10 +105,12 @@ fun ChooseTimeScreenContent(
                 )
             }
             AddIngestionButtons(
-                addIngestionAndNavigate = addIngestionAndNavigate,
-                addIngestionToNewExperienceAndNavigate = addIngestionToNewExperienceAndNavigate,
+                addIngestionToExperience = addIngestionToExperience,
+                addIngestionToNewExperience = addIngestionToNewExperience,
                 experienceIdToAddTo = experienceIdToAddTo,
-                latestExperienceId = latestExperienceId
+                latestExperienceId = latestExperienceId,
+                navigateToExperiencePopUpToExperienceScreen = navigateToExperiencePopUpToExperienceScreen,
+                navigateToExperiencePopUpToSubstanceScreen = navigateToExperiencePopUpToSubstanceScreen
             )
         }
     }
@@ -112,14 +118,26 @@ fun ChooseTimeScreenContent(
 
 @Composable
 fun AddIngestionButtons(
-    addIngestionAndNavigate: (Int) -> Unit,
-    addIngestionToNewExperienceAndNavigate: () -> Unit,
+    addIngestionToExperience: (Int) -> Unit,
+    addIngestionToNewExperience: () -> Unit,
     experienceIdToAddTo: Int?,
     latestExperienceId: Int?,
+    navigateToExperiencePopUpToSubstanceScreen: (Int) -> Unit,
+    navigateToExperiencePopUpToExperienceScreen: (Int) -> Unit,
 ) {
     val buttonTextStyle = MaterialTheme.typography.h5
+    val context = LocalContext.current
     if (experienceIdToAddTo != null) {
-        Button(onClick = { addIngestionAndNavigate(experienceIdToAddTo) }) {
+        Button(
+            onClick = {
+                addIngestionToExperience(experienceIdToAddTo)
+                Toast.makeText(
+                    context, "Ingestion Added",
+                    Toast.LENGTH_SHORT
+                ).show()
+                navigateToExperiencePopUpToExperienceScreen(experienceIdToAddTo)
+            }
+        ) {
             Text(
                 text = "Add Ingestion",
                 style = buttonTextStyle,
@@ -130,12 +148,21 @@ fun AddIngestionButtons(
             )
         }
     } else {
-        if (latestExperienceId != null) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Button(onClick = { addIngestionAndNavigate(latestExperienceId) }) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (latestExperienceId != null) {
+                Button(
+                    onClick = {
+                        addIngestionToExperience(latestExperienceId)
+                        Toast.makeText(
+                            context, "Ingestion Added",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navigateToExperiencePopUpToSubstanceScreen(latestExperienceId)
+                    }
+                ) {
                     Text(
                         text = "Add To Latest Experience",
                         style = buttonTextStyle,
@@ -145,19 +172,8 @@ fun AddIngestionButtons(
                         textAlign = TextAlign.Center
                     )
                 }
-                Button(onClick = addIngestionToNewExperienceAndNavigate) {
-                    Text(
-                        text = "Add To New Experience",
-                        style = buttonTextStyle,
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                }
             }
-        } else {
-            Button(onClick = addIngestionToNewExperienceAndNavigate) {
+            Button(onClick = addIngestionToNewExperience) {
                 Text(
                     text = "Add To New Experience",
                     style = buttonTextStyle,

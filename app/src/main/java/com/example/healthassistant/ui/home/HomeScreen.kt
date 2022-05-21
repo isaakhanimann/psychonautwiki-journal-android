@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.ui.main.routers.navigateToAddExperience
-import com.example.healthassistant.ui.main.routers.navigateToExperience
+import com.example.healthassistant.ui.main.routers.navigateToExperiencePopNothing
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,7 +63,7 @@ fun ExperiencesList(homeViewModel: HomeViewModel, navController: NavController) 
                 ExperienceRow(
                     expAndIngs,
                     navigateToExperienceScreen = {
-                        navController.navigateToExperience(experienceId = expAndIngs.experience.id)
+                        navController.navigateToExperiencePopNothing(experienceId = expAndIngs.experience.id)
                     },
                     deleteExperienceWithIngestions = {
                         homeViewModel.deleteExperienceWithIngestions(expAndIngs)
