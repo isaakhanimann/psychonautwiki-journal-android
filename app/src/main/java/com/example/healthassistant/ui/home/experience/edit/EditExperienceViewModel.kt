@@ -59,7 +59,6 @@ class EditExperienceViewModel @Inject constructor(
         day = newDay
         month = newMonth
         year = newYear
-        enteredTitle = dateString
     }
 
     fun onDoneTap() {
