@@ -15,15 +15,13 @@ import com.example.healthassistant.ui.search.substance.InteractionsView
 
 @Composable
 fun CheckInteractionsScreen(
-    navigateToChooseRouteScreen: (substanceName: String, experienceId: Int?) -> Unit,
+    navigateToChooseRouteScreen: () -> Unit,
     viewModel: CheckInteractionsViewModel = hiltViewModel()
 ) {
     viewModel.substance?.also {
         CheckInteractionsScreenContent(
             substance = it,
-            navigateToNext = {
-                navigateToChooseRouteScreen(it.name, viewModel.experienceId)
-            }
+            navigateToNext = navigateToChooseRouteScreen
         )
     }
 }

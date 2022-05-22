@@ -42,7 +42,7 @@ fun SubstanceScreen(
         )
     } else {
         Button(onClick = navigateBack) {
-            Text("There was an error. Go back.")
+            Text("There was an error. Go back. This one")
         }
     }
 }

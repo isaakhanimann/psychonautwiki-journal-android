@@ -1,6 +1,8 @@
 package com.example.healthassistant.ui.home.experience.addingestion.time
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,7 +27,7 @@ class ChooseTimeViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     val experienceId: Int?
-    var latestExperience: Experience? = null
+    var latestExperience by mutableStateOf<Experience?>(null)
     val substance: Substance?
     private val calendar: Calendar = Calendar.getInstance()
     val year = mutableStateOf(calendar.get(Calendar.YEAR))

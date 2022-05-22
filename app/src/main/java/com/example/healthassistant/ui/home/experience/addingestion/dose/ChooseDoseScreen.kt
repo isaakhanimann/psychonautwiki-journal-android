@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.RoaDose
 import com.example.healthassistant.ui.previewproviders.RoaDosePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.RoaDoseView
@@ -22,42 +21,34 @@ import com.example.healthassistant.ui.search.substance.roa.dose.DoseColor
 
 @Composable
 fun ChooseDoseScreen(
-    navigateToChooseColor: (substanceName: String, administrationRoute: AdministrationRoute, units: String, isEstimate: Boolean, dose: Double?, experienceId: Int?) -> Unit,
+    navigateToChooseColor: (units: String, isEstimate: Boolean, dose: Double?) -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
-    viewModel.substance?.also { sub ->
-        ChooseDoseScreenContent(
-            roaDose = viewModel.roaDose,
-            doseText = viewModel.doseText,
-            onChangeDoseText = viewModel::onDoseTextChange,
-            isValidDose = viewModel.isValidDose,
-            isEstimate = viewModel.isEstimate,
-            onChangeIsEstimate = {
-                viewModel.isEstimate = it
-            },
-            navigateToNext = {
-                navigateToChooseColor(
-                    sub.name,
-                    viewModel.administrationRoute,
-                    viewModel.roaDose?.units ?: "",
-                    viewModel.isEstimate,
-                    viewModel.dose,
-                    viewModel.experienceId
-                )
-            },
-            useUnknownDoseAndNavigate = {
-                navigateToChooseColor(
-                    sub.name,
-                    viewModel.administrationRoute,
-                    viewModel.roaDose?.units ?: "",
-                    false,
-                    null,
-                    viewModel.experienceId
-                )
-            },
-            currentRoaRangeTextAndColor = viewModel.currentRoaRangeTextAndColor
-        )
-    }
+    ChooseDoseScreenContent(
+        roaDose = viewModel.roaDose,
+        doseText = viewModel.doseText,
+        onChangeDoseText = viewModel::onDoseTextChange,
+        isValidDose = viewModel.isValidDose,
+        isEstimate = viewModel.isEstimate,
+        onChangeIsEstimate = {
+            viewModel.isEstimate = it
+        },
+        navigateToNext = {
+            navigateToChooseColor(
+                viewModel.roaDose?.units ?: "",
+                viewModel.isEstimate,
+                viewModel.dose
+            )
+        },
+        useUnknownDoseAndNavigate = {
+            navigateToChooseColor(
+                viewModel.roaDose?.units ?: "",
+                false,
+                null
+            )
+        },
+        currentRoaRangeTextAndColor = viewModel.currentRoaRangeTextAndColor
+    )
 }
 
 @Preview

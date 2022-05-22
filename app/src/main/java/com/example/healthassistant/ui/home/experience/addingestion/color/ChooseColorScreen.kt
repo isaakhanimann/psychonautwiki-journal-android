@@ -13,26 +13,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.experiences.entities.IngestionColor
-import com.example.healthassistant.data.substances.AdministrationRoute
 
 
 @Composable
 fun ChooseColorScreen(
-    navigateToChooseTime: (substanceName: String, administrationRoute: AdministrationRoute, units: String, isEstimate: Boolean, color: IngestionColor, dose: Double?, experienceId: Int?) -> Unit,
+    navigateToChooseTime: (color: IngestionColor) -> Unit,
     viewModel: ChooseColorViewModel = hiltViewModel()
 ) {
     ChooseColorScreenContent(
         lastUsedColor = viewModel.lastUsedColorForSubstance,
         navigateToNext = {
-            navigateToChooseTime(
-                viewModel.substanceName,
-                viewModel.administrationRoute,
-                viewModel.units,
-                viewModel.isEstimate,
-                it,
-                viewModel.dose,
-                viewModel.experienceId
-            )
+            navigateToChooseTime(it)
         }
     )
 }

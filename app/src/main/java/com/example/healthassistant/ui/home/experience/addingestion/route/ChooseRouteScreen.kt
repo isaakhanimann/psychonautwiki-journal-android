@@ -19,14 +19,14 @@ import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 
 @Composable
 fun ChooseRouteScreen(
-    navigateToChooseDose: (substanceName: String, administrationRoute: AdministrationRoute, experienceId: Int?) -> Unit,
+    navigateToChooseDose: (administrationRoute: AdministrationRoute) -> Unit,
     viewModel: ChooseRouteViewModel = hiltViewModel()
 ) {
     viewModel.substance?.also { sub ->
         ChooseRouteScreenContent(
             substance = sub,
             navigateToNext = { route ->
-                navigateToChooseDose(sub.name, route, viewModel.experienceId)
+                navigateToChooseDose(route)
             }
         )
     }

@@ -75,7 +75,6 @@ class ChooseDoseViewModel @Inject constructor(
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         assert(substance != null)
-        assert(administrationRoute != null)
         roaDose = substance?.roas?.firstOrNull { it.route == administrationRoute }?.roaDose
     }
 
