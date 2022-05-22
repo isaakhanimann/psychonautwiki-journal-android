@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -20,13 +21,13 @@ import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
-import com.example.healthassistant.ui.search.substance.SubstanceInfoCard
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun ExperienceScreen(
     navigateToAddIngestionSearch: (experienceId: Int) -> Unit,
+    navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
     viewModel.experienceWithIngestions.collectAsState().value?.also { expWithIngs ->
@@ -36,7 +37,10 @@ fun ExperienceScreen(
             addIngestion = {
                 navigateToAddIngestionSearch(expWithIngs.experience.id)
             },
-            deleteIngestion = viewModel::deleteIngestion
+            deleteIngestion = viewModel::deleteIngestion,
+            navigateToEditExperienceScreen = {
+                navigateToEditExperienceScreen(expWithIngs.experience.id)
+            }
         )
     }
 }
@@ -50,7 +54,8 @@ fun ExperienceScreenContentPreview(
         experience = expAndIng.experience,
         ingestions = expAndIng.ingestions,
         addIngestion = {},
-        deleteIngestion = {}
+        deleteIngestion = {},
+        navigateToEditExperienceScreen = {}
     )
 }
 
@@ -59,14 +64,15 @@ fun ExperienceScreenContent(
     experience: Experience,
     ingestions: List<Ingestion>,
     addIngestion: () -> Unit,
-    deleteIngestion: (Ingestion) -> Unit
+    deleteIngestion: (Ingestion) -> Unit,
+    navigateToEditExperienceScreen: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(experience.title) },
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = navigateToEditExperienceScreen) {
                         Icon(Icons.Default.Edit, contentDescription = "Edit Experience")
                     }
                 }
@@ -109,8 +115,18 @@ fun ExperienceScreenContent(
                     modifier = Modifier.padding(vertical = 3.dp)
                 )
             }
-            SubstanceInfoCard(title = "Notes") {
-                Text(text = experience.text)
+            Spacer(modifier = Modifier.height(10.dp))
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(10.dp)) {
+                    Text(text = "Notes", style = MaterialTheme.typography.h6)
+                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                        if (experience.text.isEmpty()) {
+                            Text(text = "-")
+                        } else {
+                            Text(text = experience.text)
+                        }
+                    }
+                }
             }
         }
     }

@@ -21,6 +21,7 @@ import com.example.healthassistant.ui.home.experience.addingestion.interactions.
 import com.example.healthassistant.ui.home.experience.addingestion.route.ChooseRouteScreen
 import com.example.healthassistant.ui.home.experience.addingestion.search.AddIngestionSearchScreen
 import com.example.healthassistant.ui.home.experience.addingestion.time.ChooseTimeScreen
+import com.example.healthassistant.ui.home.experience.edit.EditExperienceScreen
 import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
@@ -66,12 +67,21 @@ fun MainScreen() {
                 )
             }
             composable(
+                ArgumentRouter.EditExperienceRouter.route,
+                arguments = ArgumentRouter.EditExperienceRouter.args
+            ) {
+                EditExperienceScreen()
+            }
+            composable(
                 ArgumentRouter.ExperienceRouter.route,
                 arguments = ArgumentRouter.ExperienceRouter.args
             ) {
                 ExperienceScreen(
                     navigateToAddIngestionSearch = {
                         navController.navigateToAddIngestionSearch(experienceId = it)
+                    },
+                    navigateToEditExperienceScreen = {
+                        navController.navigateToEditExperience(experienceId = it)
                     }
                 )
             }

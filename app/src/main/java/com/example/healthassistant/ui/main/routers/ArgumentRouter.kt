@@ -19,6 +19,7 @@ const val COLOR_KEY = "color"
 // route starts
 const val ROUTE_START_EXPERIENCES = "experiences/"
 const val ROUTE_START_ADD_INGESTION_SEARCH = "addIngestionSearch/"
+const val ROUTE_START_EDIT_EXPERIENCE = "editExperience/"
 const val ROUTE_START_SUBSTANCES = "substances/"
 const val ROUTE_START_CHECK_INTERACTIONS = "checkInteractions/"
 const val ROUTE_START_CHOOSE_ROUTE = "chooseRoute/"
@@ -29,6 +30,11 @@ const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
 sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>) {
     object ExperienceRouter : ArgumentRouter(
         route = "$ROUTE_START_EXPERIENCES{$EXPERIENCE_ID_KEY}",
+        args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
+    )
+
+    object EditExperienceRouter : ArgumentRouter(
+        route = "$ROUTE_START_EDIT_EXPERIENCE{$EXPERIENCE_ID_KEY}",
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
     )
 
@@ -114,6 +120,10 @@ fun NavController.navigateToExperiencePopupToSubstanceScreen(experienceId: Int) 
 
 fun NavController.navigateToAddIngestionSearch(experienceId: Int) {
     navigate(ROUTE_START_ADD_INGESTION_SEARCH + experienceId)
+}
+
+fun NavController.navigateToEditExperience(experienceId: Int) {
+    navigate(ROUTE_START_EDIT_EXPERIENCE + experienceId)
 }
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {
