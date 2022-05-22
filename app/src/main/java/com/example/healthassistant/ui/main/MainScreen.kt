@@ -161,7 +161,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     val args = backStackEntry.arguments!!
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
                     val experienceId = args.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
-                    val route = AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+                    val route =
+                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
                     navController.navigateToChooseColor(
                         substanceName = substanceName,
                         administrationRoute = route,
@@ -182,8 +183,15 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     val args = backStackEntry.arguments!!
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
                     val experienceId = args.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
-                    val route = AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
-                    val units = args.getString(UNITS_KEY)!!
+                    val route =
+                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+                    val units = args.getString(UNITS_KEY)?.let {
+                        if (it == "null") {
+                            null
+                        } else {
+                            it
+                        }
+                    }
                     val isEstimate = args.getBoolean(IS_ESTIMATE_KEY)
                     val dose = args.getString(DOSE_KEY)?.toDoubleOrNull()
                     navController.navigateToChooseTime(

@@ -14,7 +14,7 @@ data class Ingestion(
     val administrationRoute: AdministrationRoute,
     val dose: Double?,
     val isDoseAnEstimate: Boolean,
-    val units: String,
+    val units: String?,
     val color: IngestionColor,
     val experienceId: Int
 )

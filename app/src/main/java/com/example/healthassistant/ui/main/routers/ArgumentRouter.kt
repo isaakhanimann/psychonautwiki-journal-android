@@ -71,25 +71,25 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     )
 
     object ChooseColorRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_COLOR{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/{$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
+        route = "$ROUTE_START_CHOOSE_COLOR{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
             navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType },
             navArgument(IS_ESTIMATE_KEY) { type = NavType.BoolType },
-            navArgument(UNITS_KEY) { type = NavType.StringType },
+            navArgument(UNITS_KEY) { nullable = true },
             navArgument(DOSE_KEY) { nullable = true },
             navArgument(EXPERIENCE_ID_KEY) { nullable = true }
         )
     )
 
     object ChooseTimeRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_TIME{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/{$UNITS_KEY}/{$COLOR_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
+        route = "$ROUTE_START_CHOOSE_TIME{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/{$COLOR_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
             navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType },
             navArgument(IS_ESTIMATE_KEY) { type = NavType.BoolType },
-            navArgument(UNITS_KEY) { type = NavType.StringType },
             navArgument(COLOR_KEY) { type = NavType.StringType },
+            navArgument(UNITS_KEY) { nullable = true },
             navArgument(DOSE_KEY) { nullable = true },
             navArgument(EXPERIENCE_ID_KEY) { nullable = true }
         )
@@ -138,22 +138,22 @@ fun NavController.navigateToChooseDose(
 fun NavController.navigateToChooseColor(
     substanceName: String,
     administrationRoute: AdministrationRoute,
-    units: String,
+    units: String?,
     isEstimate: Boolean,
     dose: Double?,
     experienceId: Int?
 ) {
-    navigate("$ROUTE_START_CHOOSE_COLOR$substanceName/${administrationRoute.name}/$isEstimate/$units/?$DOSE_KEY=$dose/?$EXPERIENCE_ID_KEY=$experienceId")
+    navigate("$ROUTE_START_CHOOSE_COLOR$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose/?$EXPERIENCE_ID_KEY=$experienceId")
 }
 
 fun NavController.navigateToChooseTime(
     substanceName: String,
     administrationRoute: AdministrationRoute,
-    units: String,
+    units: String?,
     isEstimate: Boolean,
     color: IngestionColor,
     dose: Double?,
     experienceId: Int?
 ) {
-    navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/$units/${color.name}/?$DOSE_KEY=$dose/?$EXPERIENCE_ID_KEY=$experienceId")
+    navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/${color.name}/?$UNITS_KEY=$units/?$DOSE_KEY=$dose/?$EXPERIENCE_ID_KEY=$experienceId")
 }

@@ -51,7 +51,7 @@ class ChooseTimeViewModel @Inject constructor(
     private val substanceName: String
     private val administrationRoute: AdministrationRoute
     private val dose: Double?
-    private val units: String
+    private val units: String?
     private val isEstimate: Boolean
     private val color: IngestionColor
 
@@ -67,7 +67,13 @@ class ChooseTimeViewModel @Inject constructor(
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         dose = state.get<String>(DOSE_KEY)?.toDoubleOrNull()
-        units = state.get<String>(UNITS_KEY)!!
+        units = state.get<String>(UNITS_KEY)?.let {
+            if (it == "null") {
+                null
+            } else {
+                it
+            }
+        }
         isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)!!
         val colorName = state.get<String>(COLOR_KEY)!!
         color = IngestionColor.valueOf(colorName)
