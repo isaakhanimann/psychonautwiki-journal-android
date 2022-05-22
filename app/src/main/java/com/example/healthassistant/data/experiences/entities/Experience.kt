@@ -8,7 +8,7 @@ import java.util.*
 data class Experience(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val title: String,
-    val date: Date,
-    val text: String
+    var title: String,
+    var date: Date,
+    var text: String
     )

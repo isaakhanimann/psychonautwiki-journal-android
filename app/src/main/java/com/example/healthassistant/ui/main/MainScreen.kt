@@ -70,7 +70,7 @@ fun MainScreen() {
                 ArgumentRouter.EditExperienceRouter.route,
                 arguments = ArgumentRouter.EditExperienceRouter.args
             ) {
-                EditExperienceScreen()
+                EditExperienceScreen(navigateBack = navController::popBackStack)
             }
             composable(
                 ArgumentRouter.ExperienceRouter.route,
