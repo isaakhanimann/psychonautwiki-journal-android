@@ -50,7 +50,7 @@ class EditExperienceViewModel @Inject constructor(
             year = calendar.get(Calendar.YEAR)
             month = calendar.get(Calendar.MONTH)
             day = calendar.get(Calendar.DAY_OF_MONTH)
-            enteredTitle = dateString
+            enteredTitle = experience!!.title
             enteredText = experience!!.text
         }
     }

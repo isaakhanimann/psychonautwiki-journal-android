@@ -7,7 +7,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -83,7 +82,7 @@ fun EditExperienceScreenContent(
                 .padding(10.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             DatePickerButton(
                 day = day,
@@ -93,25 +92,24 @@ fun EditExperienceScreenContent(
                 dateString = dateString
             )
             val focusManager = LocalFocusManager.current
-            TextField(
+            OutlinedTextField(
                 value = enteredTitle,
                 onValueChange = onChangeOfEnteredTitle,
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent
-                ),
-                textStyle = MaterialTheme.typography.h4,
-                maxLines = 1,
+                textStyle = MaterialTheme.typography.h5,
+                maxLines = 2,
                 label = { Text(text = "Title", style = MaterialTheme.typography.subtitle1) },
                 isError = !isEnteredTitleOk,
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                modifier = Modifier.fillMaxWidth()
             )
-            TextField(
+            OutlinedTextField(
                 value = text,
                 onValueChange = onTextChange,
                 label = { Text(text = "Notes", style = MaterialTheme.typography.subtitle1) },
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                modifier = Modifier.weight(1f).fillMaxWidth()
             )
             Button(
                 onClick = onDoneTap,
