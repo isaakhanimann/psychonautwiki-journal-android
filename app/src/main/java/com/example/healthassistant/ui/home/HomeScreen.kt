@@ -10,10 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,10 +66,6 @@ fun ExperiencesList(
                     },
                     deleteExperienceWithIngestions = {
                         homeViewModel.deleteExperienceWithIngestions(expAndIngs)
-                    },
-                    isMenuExpanded = homeViewModel.isMenuExpanded,
-                    onChangeIsExpanded = {
-                        homeViewModel.isMenuExpanded = it
                     }
                 )
                 if (i < experiencesInYear.size) {
@@ -104,9 +97,7 @@ fun YearRow(year: String = "2022") {
 fun ExperienceRow(
     @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngs: ExperienceWithIngestions,
     navigateToExperienceScreen: () -> Unit = {},
-    deleteExperienceWithIngestions: () -> Unit = {},
-    isMenuExpanded: Boolean = false,
-    onChangeIsExpanded: (Boolean) -> Unit = {}
+    deleteExperienceWithIngestions: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -171,24 +162,35 @@ fun ExperienceRow(
                 }
             }
         }
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
-            val creationDateText = formatter.format(experienceWithIngs.experience.date) ?: ""
-            Text(creationDateText)
-        }
-        Box(
-            modifier = Modifier
-                .wrapContentSize(Alignment.TopStart)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(3.dp)
         ) {
-            IconButton(onClick = { onChangeIsExpanded(true) }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
+                val creationDateText = formatter.format(experienceWithIngs.experience.date) ?: ""
+                Text(creationDateText)
             }
-            DropdownMenu(
-                expanded = isMenuExpanded,
-                onDismissRequest = { onChangeIsExpanded(false) }
+            var isExpanded by remember { mutableStateOf(false) }
+            Box(
+                modifier = Modifier
+                    .wrapContentSize(Alignment.TopStart)
             ) {
-                DropdownMenuItem(onClick = deleteExperienceWithIngestions) {
-                    Text("Delete")
+                IconButton(onClick = { isExpanded = true }) {
+                    Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
+                }
+                DropdownMenu(
+                    expanded = isExpanded,
+                    onDismissRequest = { isExpanded = false }
+                ) {
+                    DropdownMenuItem(
+                        onClick = {
+                            deleteExperienceWithIngestions()
+                            isExpanded = false
+                        }
+                    ) {
+                        Text("Delete")
+                    }
                 }
             }
         }

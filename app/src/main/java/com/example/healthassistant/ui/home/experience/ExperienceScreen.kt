@@ -34,11 +34,7 @@ fun ExperienceScreen(
             addIngestion = {
                 navigateToAddIngestionSearch(expWithIngs.experience.id)
             },
-            deleteIngestion = viewModel::deleteIngestion,
-            isShowingMenu = viewModel.isMenuExpanded,
-            onIsShowingMenuChange = {
-                viewModel.isMenuExpanded = it
-            }
+            deleteIngestion = viewModel::deleteIngestion
         )
     } ?: run {
         Button(onClick = navigateBack) {
@@ -57,9 +53,7 @@ fun ExperienceScreenContentPreview(
         ingestions = expAndIng.ingestions,
         navigateBack = {},
         addIngestion = {},
-        deleteIngestion = {},
-        isShowingMenu = false,
-        onIsShowingMenuChange = {}
+        deleteIngestion = {}
     )
 }
 
@@ -69,9 +63,7 @@ fun ExperienceScreenContent(
     ingestions: List<Ingestion>,
     navigateBack: () -> Unit,
     addIngestion: () -> Unit,
-    deleteIngestion: (Ingestion) -> Unit,
-    isShowingMenu: Boolean,
-    onIsShowingMenuChange: (Boolean) -> Unit
+    deleteIngestion: (Ingestion) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -100,8 +92,6 @@ fun ExperienceScreenContent(
                     deleteIngestion = {
                         deleteIngestion(it)
                     },
-                    isMenuExpanded = isShowingMenu,
-                    onChangeIsExpanded = onIsShowingMenuChange,
                     modifier = Modifier.padding(vertical = 3.dp)
                 )
             }

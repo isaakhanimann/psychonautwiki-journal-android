@@ -1,8 +1,5 @@
 package com.example.healthassistant.ui.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
@@ -22,7 +19,6 @@ class HomeViewModel @Inject constructor(private val repo: ExperienceRepository) 
 
     private val _experiencesGrouped = MutableStateFlow<Map<String, List<ExperienceWithIngestions>>>(emptyMap())
     val experiencesGrouped = _experiencesGrouped.asStateFlow()
-    var isMenuExpanded by mutableStateOf(false)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
