@@ -27,6 +27,7 @@ import java.util.*
 fun ExperienceRow(
     @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngs: ExperienceWithIngestions,
     navigateToExperienceScreen: () -> Unit = {},
+    navigateToEditExperienceScreen: () -> Unit = {},
     deleteExperienceWithIngestions: () -> Unit = {}
 ) {
     Row(
@@ -89,14 +90,15 @@ fun ExperienceRow(
                 }
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                     if (substanceNames.isNotEmpty()) {
-                        Text(text = substanceNames)
+                        Text(text = substanceNames, style = MaterialTheme.typography.subtitle1)
                     } else {
-                        Text(text = "No substance yet")
+                        Text(text = "No substance yet", style = MaterialTheme.typography.subtitle1)
                     }
                 }
             }
         }
         Column(
+            horizontalAlignment = Alignment.End,
             modifier = Modifier.fillMaxHeight()
         ) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
@@ -104,12 +106,13 @@ fun ExperienceRow(
                     val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
                     formatter.format(experienceWithIngs.experience.date) ?: ""
                 }
-                Text(dateText)
+                Text(text = dateText)
             }
             var isExpanded by remember { mutableStateOf(false) }
             Box(
                 modifier = Modifier
-                    .wrapContentSize(Alignment.TopStart).fillMaxHeight(),
+                    .wrapContentSize(Alignment.TopStart)
+                    .fillMaxHeight(),
                 contentAlignment = Alignment.Center
             ) {
                 IconButton(
@@ -128,6 +131,14 @@ fun ExperienceRow(
                         }
                     ) {
                         Text("Delete")
+                    }
+                    DropdownMenuItem(
+                        onClick = {
+                            navigateToEditExperienceScreen()
+                            isExpanded = false
+                        }
+                    ) {
+                        Text("Edit")
                     }
                 }
             }

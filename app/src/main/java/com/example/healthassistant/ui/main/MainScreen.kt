@@ -56,6 +56,9 @@ fun MainScreen() {
                     navigateToAddExperience = navController::navigateToAddExperience,
                     navigateToExperiencePopNothing = {
                         navController.navigateToExperiencePopNothing(experienceId = it)
+                    },
+                    navigateToEditExperienceScreen = {
+                        navController.navigateToEditExperience(experienceId = it)
                     }
                 )
             }
