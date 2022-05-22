@@ -1,14 +1,16 @@
 package com.example.healthassistant.ui.home.experience
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -18,6 +20,9 @@ import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
+import com.example.healthassistant.ui.search.substance.SubstanceInfoCard
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun ExperienceScreen(
@@ -59,7 +64,12 @@ fun ExperienceScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(experience.title) }
+                title = { Text(experience.title) },
+                actions = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Default.Edit, contentDescription = "Edit Experience")
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -73,7 +83,18 @@ fun ExperienceScreenContent(
                 .padding(10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Text("Ingestions", style = MaterialTheme.typography.h5)
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Ingestions", style = MaterialTheme.typography.h5)
+                val dateText = remember(experience.date) {
+                    val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+                    formatter.format(experience.date) ?: ""
+                }
+                Text(text = dateText, style = MaterialTheme.typography.subtitle1)
+            }
             if (ingestions.isEmpty()) {
                 Button(onClick = addIngestion) {
                     Text(text = "Add an Ingestion", style = MaterialTheme.typography.subtitle1)
@@ -87,6 +108,9 @@ fun ExperienceScreenContent(
                     },
                     modifier = Modifier.padding(vertical = 3.dp)
                 )
+            }
+            SubstanceInfoCard(title = "Notes") {
+                Text(text = experience.text)
             }
         }
     }

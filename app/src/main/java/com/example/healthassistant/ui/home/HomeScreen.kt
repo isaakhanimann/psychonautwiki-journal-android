@@ -167,9 +167,11 @@ fun ExperienceRow(
             horizontalArrangement = Arrangement.spacedBy(3.dp)
         ) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
-                val creationDateText = formatter.format(experienceWithIngs.experience.date) ?: ""
-                Text(creationDateText)
+                val dateText = remember(experienceWithIngs.experience.date) {
+                    val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
+                    formatter.format(experienceWithIngs.experience.date) ?: ""
+                }
+                Text(dateText)
             }
             var isExpanded by remember { mutableStateOf(false) }
             Box(
