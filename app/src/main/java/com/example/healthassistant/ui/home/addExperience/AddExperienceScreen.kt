@@ -16,17 +16,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.ui.home.addExperience.AddExperienceViewModel
 import com.example.healthassistant.ui.home.experience.addingestion.time.DatePickerButton
-import com.example.healthassistant.ui.search.substance.NavigateBackIcon
 
 @Composable
 fun AddExperienceScreen(
-    navigateBack: () -> Unit,
     navigateToExperienceFromAddExperience: (experienceId: Int) -> Unit,
     viewModel: AddExperienceViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     AddExperienceContent(
-        onBackTap = navigateBack,
         day = viewModel.day,
         month = viewModel.month,
         year = viewModel.year,
@@ -51,7 +48,6 @@ fun AddExperienceScreen(
 @Composable
 fun AddExperienceContentPreview() {
     AddExperienceContent(
-        onBackTap = {},
         day = 5,
         month = 3,
         year = 2022,
@@ -66,7 +62,6 @@ fun AddExperienceContentPreview() {
 
 @Composable
 fun AddExperienceContent(
-    onBackTap: () -> Unit,
     day: Int,
     month: Int,
     year: Int,
@@ -81,7 +76,6 @@ fun AddExperienceContent(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Add Experience") },
-                navigationIcon = { NavigateBackIcon(navigateBack = onBackTap) }
             )
         }
     ) {

@@ -28,23 +28,15 @@ import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun SubstanceScreen(
-    navigateBack: () -> Unit,
     navigateToAddIngestion: (substanceName: String) -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
-    if (viewModel.substance != null) {
-        SubstanceScreenContent(
-            substance = viewModel.substance,
-            navigateBack = navigateBack,
-            onIngestTapped = {
-                navigateToAddIngestion(viewModel.substance.name)
-            }
-        )
-    } else {
-        Button(onClick = navigateBack) {
-            Text("There was an error. Go back. This one")
+    SubstanceScreenContent(
+        substance = viewModel.substance,
+        onIngestTapped = {
+            navigateToAddIngestion(viewModel.substance.name)
         }
-    }
+    )
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES)
@@ -54,23 +46,19 @@ fun SubstanceScreenPreview(
     @PreviewParameter(SubstancePreviewProvider::class) substance: Substance
 ) {
     HealthAssistantTheme {
-        SubstanceScreenContent(substance = substance, navigateBack = {}, onIngestTapped = {})
+        SubstanceScreenContent(substance = substance, onIngestTapped = {})
     }
 }
 
 @Composable
 fun SubstanceScreenContent(
     substance: Substance,
-    navigateBack: () -> Unit,
     onIngestTapped: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(substance.name) },
-                navigationIcon = {
-                    NavigateBackIcon(navigateBack)
-                }
+                title = { Text(substance.name) }
             )
         },
         floatingActionButton = {

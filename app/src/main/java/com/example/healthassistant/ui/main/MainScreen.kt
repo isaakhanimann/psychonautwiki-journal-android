@@ -60,7 +60,6 @@ fun MainScreen() {
             }
             composable(NoArgumentRouter.AddExperienceRouter.route) {
                 AddExperienceScreen(
-                    navigateBack = navController::popBackStack,
                     navigateToExperienceFromAddExperience = {
                         navController.navigateToExperienceFromAddExperience(it)
                     }
@@ -71,7 +70,6 @@ fun MainScreen() {
                 arguments = ArgumentRouter.ExperienceRouter.args
             ) {
                 ExperienceScreen(
-                    navigateBack = navController::popBackStack,
                     navigateToAddIngestionSearch = {
                         navController.navigateToAddIngestionSearch(experienceId = it)
                     }
@@ -88,7 +86,6 @@ fun MainScreen() {
                 arguments = ArgumentRouter.SubstanceRouter.args
             ) {
                 SubstanceScreen(
-                    navigateBack = navController::popBackStack,
                     navigateToAddIngestion = {
                         navController.navigateToAddIngestion(
                             substanceName = it,

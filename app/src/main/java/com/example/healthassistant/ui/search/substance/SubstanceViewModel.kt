@@ -13,5 +13,5 @@ class SubstanceViewModel @Inject constructor(
     repository: SubstanceRepository,
     state: SavedStateHandle
 ): ViewModel() {
-    val substance: Substance? = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY) ?: "LSD")
+    val substance: Substance = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY) ?: "")!!
 }

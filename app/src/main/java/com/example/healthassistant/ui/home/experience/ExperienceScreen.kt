@@ -18,11 +18,9 @@ import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
-import com.example.healthassistant.ui.search.substance.NavigateBackIcon
 
 @Composable
 fun ExperienceScreen(
-    navigateBack: () -> Unit,
     navigateToAddIngestionSearch: (experienceId: Int) -> Unit,
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
@@ -30,16 +28,11 @@ fun ExperienceScreen(
         ExperienceScreenContent(
             experience = expWithIngs.experience,
             ingestions = expWithIngs.ingestions,
-            navigateBack = navigateBack,
             addIngestion = {
                 navigateToAddIngestionSearch(expWithIngs.experience.id)
             },
             deleteIngestion = viewModel::deleteIngestion
         )
-    } ?: run {
-        Button(onClick = navigateBack) {
-            Text("There was an error. Go back.")
-        }
     }
 }
 
@@ -51,7 +44,6 @@ fun ExperienceScreenContentPreview(
     ExperienceScreenContent(
         experience = expAndIng.experience,
         ingestions = expAndIng.ingestions,
-        navigateBack = {},
         addIngestion = {},
         deleteIngestion = {}
     )
@@ -61,17 +53,13 @@ fun ExperienceScreenContentPreview(
 fun ExperienceScreenContent(
     experience: Experience,
     ingestions: List<Ingestion>,
-    navigateBack: () -> Unit,
     addIngestion: () -> Unit,
     deleteIngestion: (Ingestion) -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(experience.title) },
-                navigationIcon = {
-                    NavigateBackIcon(navigateBack)
-                }
+                title = { Text(experience.title) }
             )
         },
         floatingActionButton = {
