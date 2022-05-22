@@ -86,6 +86,11 @@ fun ExperienceScreenContent(
                 .verticalScroll(rememberScrollState())
         ) {
             Text("Ingestions", style = MaterialTheme.typography.h5)
+            if (ingestions.isEmpty()) {
+                Button(onClick = addIngestion) {
+                    Text(text = "Add an Ingestion", style = MaterialTheme.typography.subtitle1)
+                }
+            }
             ingestions.forEach {
                 IngestionRow(
                     ingestion = it,
