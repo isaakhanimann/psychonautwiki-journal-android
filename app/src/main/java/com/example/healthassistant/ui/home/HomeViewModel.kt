@@ -33,8 +33,7 @@ class HomeViewModel @Inject constructor(private val repo: ExperienceRepository) 
 
     fun deleteExperienceWithIngestions(experienceWithIngs: ExperienceWithIngestions) {
         viewModelScope.launch {
-            repo.deleteAllIngestionsFromExperience(experienceId = experienceWithIngs.experience.id)
-            repo.deleteExperience(experienceWithIngs.experience)
+            repo.deleteExperienceWithIngestions(experience = experienceWithIngs.experience)
         }
     }
 }

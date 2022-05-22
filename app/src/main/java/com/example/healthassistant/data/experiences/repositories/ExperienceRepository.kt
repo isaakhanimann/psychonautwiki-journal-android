@@ -22,17 +22,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun deleteIngestion(ingestion: Ingestion) =
         experienceDao.deleteIngestion(ingestion)
 
-    suspend fun deleteAllIngestionsFromExperience(experienceId: Int) =
-        experienceDao.deleteAllIngestionsFromExperience(experienceId)
-
-    suspend fun deleteAllExperiences() = experienceDao.deleteAll()
-    fun getAllExperiences(): Flow<List<Experience>> =
-        experienceDao.getExperiences().flowOn(Dispatchers.IO)
-            .conflate()
-
-    fun getIngestions(experienceId: Int): Flow<List<Ingestion>> =
-        experienceDao.getIngestions().flowOn(Dispatchers.IO)
-            .conflate()
+    suspend fun deleteExperienceWithIngestions(experience: Experience) =
+        experienceDao.deleteExperienceWithIngestions(experience)
 
     fun getAllExperiencesWithIngestions(): Flow<List<ExperienceWithIngestions>> =
         experienceDao.getExperiencesWithIngestions().flowOn(Dispatchers.IO)
