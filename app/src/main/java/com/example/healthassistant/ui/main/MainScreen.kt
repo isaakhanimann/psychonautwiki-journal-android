@@ -76,12 +76,13 @@ fun MainScreen() {
                 ArgumentRouter.ExperienceRouter.route,
                 arguments = ArgumentRouter.ExperienceRouter.args
             ) {
+                val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
                 ExperienceScreen(
                     navigateToAddIngestionSearch = {
-                        navController.navigateToAddIngestionSearch(experienceId = it)
+                        navController.navigateToAddIngestionSearch(experienceId)
                     },
                     navigateToEditExperienceScreen = {
-                        navController.navigateToEditExperience(experienceId = it)
+                        navController.navigateToEditExperience(experienceId)
                     }
                 )
             }

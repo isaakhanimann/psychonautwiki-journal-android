@@ -26,21 +26,17 @@ import java.util.*
 
 @Composable
 fun ExperienceScreen(
-    navigateToAddIngestionSearch: (experienceId: Int) -> Unit,
-    navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
+    navigateToAddIngestionSearch: () -> Unit,
+    navigateToEditExperienceScreen: () -> Unit,
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
     viewModel.experienceWithIngestions.collectAsState().value?.also { expWithIngs ->
         ExperienceScreenContent(
             experience = expWithIngs.experience,
             ingestions = expWithIngs.ingestions,
-            addIngestion = {
-                navigateToAddIngestionSearch(expWithIngs.experience.id)
-            },
+            addIngestion = navigateToAddIngestionSearch,
             deleteIngestion = viewModel::deleteIngestion,
-            navigateToEditExperienceScreen = {
-                navigateToEditExperienceScreen(expWithIngs.experience.id)
-            }
+            navigateToEditExperienceScreen = navigateToEditExperienceScreen
         )
     }
 }
