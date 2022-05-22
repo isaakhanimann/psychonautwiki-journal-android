@@ -76,20 +76,22 @@ fun ChooseRouteScreenContent(
                     }
                 }
             }
-            Column(
-                Modifier.weight(3f),
-                verticalArrangement = Arrangement.spacedBy(spacing.dp)
-            ) {
-                substance.roas.forEach { roa ->
-                    Card(
-                        modifier = Modifier
-                            .clickable {
-                                navigateToNext(roa.route)
-                            }
-                            .fillMaxWidth()
-                            .weight(5f)
-                    ) {
-                        RouteBox(route = roa.route, titleStyle = MaterialTheme.typography.h4)
+            if (substance.roas.isNotEmpty()) {
+                Column(
+                    Modifier.weight(3f),
+                    verticalArrangement = Arrangement.spacedBy(spacing.dp)
+                ) {
+                    substance.roas.forEach { roa ->
+                        Card(
+                            modifier = Modifier
+                                .clickable {
+                                    navigateToNext(roa.route)
+                                }
+                                .fillMaxWidth()
+                                .weight(5f)
+                        ) {
+                            RouteBox(route = roa.route, titleStyle = MaterialTheme.typography.h4)
+                        }
                     }
                 }
             }
