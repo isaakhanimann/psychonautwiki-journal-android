@@ -34,6 +34,31 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
                     experienceId = 0
                 )
             )
+        ),
+        ExperienceWithIngestions(
+            experience = Experience(id = 0, title = "This one has a very very very long title in case somebody wants to be creative with the naming.", date = Date(), text = "Some notes"),
+            ingestions = listOf(
+                Ingestion(
+                    substanceName = "MDMA",
+                    time = Date(),
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = 90.0,
+                    isDoseAnEstimate = false,
+                    units = "mg",
+                    color = IngestionColor.INDIGO,
+                    experienceId = 0
+                ),
+                Ingestion(
+                    substanceName = "Cocaine",
+                    time = Date(),
+                    administrationRoute = AdministrationRoute.INSUFFLATED,
+                    dose = 20.0,
+                    isDoseAnEstimate = false,
+                    units = "mg",
+                    color = IngestionColor.ORANGE,
+                    experienceId = 0
+                )
+            )
         )
 
     )
