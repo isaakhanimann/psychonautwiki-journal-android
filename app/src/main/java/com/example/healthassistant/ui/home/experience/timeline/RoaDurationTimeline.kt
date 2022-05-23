@@ -121,11 +121,48 @@ fun RoaDurationTimeline(
     }
 }
 
+fun Path.bothSidesSmoothLineTo(
+    percentSmoothness: Float,
+    startX: Float,
+    startY: Float,
+    endX: Float,
+    endY: Float
+) {
+    val diff = endX - startX
+    val c1x = startX + (diff * percentSmoothness)
+    val c2x = endX - (diff * percentSmoothness)
+    cubicTo(c1x, startY, c2x, endY, endX, endY)
+}
+
+fun Path.startSmoothLineTo(
+    percentSmoothness: Float,
+    startX: Float,
+    startY: Float,
+    endX: Float,
+    endY: Float
+) {
+    val diff = endX - startX
+    val controlX = startX + (diff * percentSmoothness)
+    quadraticBezierTo(controlX, startY, endX, endY)
+}
+
+fun Path.endSmoothLineTo(
+    percentSmoothness: Float,
+    startX: Float,
+    endX: Float,
+    endY: Float
+) {
+    val diff = endX - startX
+    val controlX = endX - (diff * percentSmoothness)
+    quadraticBezierTo(controlX, endY, endX, endY)
+}
+
 @Composable
 fun RoaDurationFullTimeline(
     fullTimeline: FullTimeline,
     color: Color,
     strokeWidth: Float = 5f,
+    percentSmoothness: Float = 0.1f,
     modifier: Modifier
 ) {
     Canvas(modifier = modifier.fillMaxSize()) {
@@ -199,6 +236,7 @@ fun RoaDurationTotalTimeline(
     totalTimeline: TotalTimeline,
     color: Color = Color.Blue,
     strokeWidth: Float = 5f,
+    percentSmoothness: Float = 0.5f,
     modifier: Modifier
 ) {
     Canvas(modifier = modifier.fillMaxSize()) {
@@ -212,8 +250,19 @@ fun RoaDurationTotalTimeline(
                 val totalMinX = (totalTimeline.total.min.inWholeSeconds) * pixelsPerSec
                 val totalX = totalTimeline.total.interpolateAt(weight).inWholeSeconds * pixelsPerSec
                 moveTo(0f, canvasHeightInner)
-                lineTo(x = totalMinX/2, y = 0f)
-                lineTo(x = totalX, y = canvasHeightInner)
+                endSmoothLineTo(
+                    percentSmoothness = percentSmoothness,
+                    startX = 0f,
+                    endX = totalMinX / 2,
+                    endY = 0f
+                )
+                startSmoothLineTo(
+                    percentSmoothness = percentSmoothness,
+                    startX = totalMinX / 2,
+                    startY = 0f,
+                    endX = totalX,
+                    endY = canvasHeightInner
+                )
             }
             drawPath(
                 path = strokePath,
@@ -221,7 +270,7 @@ fun RoaDurationTotalTimeline(
                 style = Stroke(
                     width = strokeWidth,
                     cap = StrokeCap.Round,
-                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f,15f))
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 15f))
                 )
             )
         }
@@ -229,11 +278,18 @@ fun RoaDurationTotalTimeline(
             // path over top
             val totalMinX = (totalTimeline.total.min.inWholeSeconds) * pixelsPerSec
             val totalMaxX = (totalTimeline.total.max.inWholeSeconds) * pixelsPerSec
-            moveTo(x = totalMinX/2, y = 0f)
+            moveTo(x = totalMinX / 2, y = 0f)
+            startSmoothLineTo(
+                percentSmoothness = percentSmoothness,
+                startX = totalMinX / 2,
+                startY = 0f,
+                endX = totalMaxX,
+                endY = canvasHeightOuter
+            )
             lineTo(x = totalMaxX, y = canvasHeightOuter)
             // path bottom back
             lineTo(x = totalMinX, y = canvasHeightOuter)
-            lineTo(x = totalMinX/2, y = 0f)
+            endSmoothLineTo(percentSmoothness = percentSmoothness, startX = totalMinX,totalMinX/2, endY = 0f)
             close()
         }
         drawPath(
