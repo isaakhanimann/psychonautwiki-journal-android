@@ -37,6 +37,7 @@ fun RoaDurationTimelinePreview(
 fun RoaDurationTimeline(
     roaDuration: RoaDuration,
     color: Color,
+    strokeWidth: Float = 5f,
     modifier: Modifier
 ) {
     val timelineDrawable: TimelineDrawable? = remember(roaDuration) {
@@ -45,43 +46,34 @@ fun RoaDurationTimeline(
         full ?: total
     }
     if (timelineDrawable != null) {
-        RoaDurationTimeline(timelineDrawable = timelineDrawable, color = color, modifier = modifier)
+        Canvas(modifier = modifier.fillMaxSize()) {
+            val canvasHeightOuter = size.height
+            val canvasWidth = size.width
+            val pixelsPerSec = canvasWidth / timelineDrawable.width.inWholeSeconds
+            inset(vertical = strokeWidth / 2) {
+                val canvasHeightInner = size.height
+                drawPath(
+                    path = timelineDrawable.getStrokePath(pixelsPerSec, canvasHeightInner),
+                    color = color,
+                    style = Stroke(
+                        width = strokeWidth,
+                        cap = StrokeCap.Round,
+                        pathEffect = if (timelineDrawable.isDotted) PathEffect.dashPathEffect(
+                            floatArrayOf(10f, 15f)
+                        ) else null
+                    )
+                )
+            }
+            drawPath(
+                path = timelineDrawable.getFillPath(
+                    pixelsPerSec = pixelsPerSec,
+                    height = canvasHeightOuter
+                ),
+                color = color.copy(alpha = 0.1f)
+            )
+        }
     } else {
         Text(text = "There can be no timeline drawn")
     }
 }
 
-@Composable
-fun RoaDurationTimeline(
-    timelineDrawable: TimelineDrawable,
-    color: Color,
-    strokeWidth: Float = 5f,
-    modifier: Modifier
-) {
-    Canvas(modifier = modifier.fillMaxSize()) {
-        val canvasHeightOuter = size.height
-        val canvasWidth = size.width
-        val pixelsPerSec = canvasWidth / timelineDrawable.width.inWholeSeconds
-        inset(vertical = strokeWidth / 2) {
-            val canvasHeightInner = size.height
-            drawPath(
-                path = timelineDrawable.getStrokePath(pixelsPerSec, canvasHeightInner),
-                color = color,
-                style = Stroke(
-                    width = strokeWidth,
-                    cap = StrokeCap.Round,
-                    pathEffect = if (timelineDrawable.isDotted) PathEffect.dashPathEffect(
-                        floatArrayOf(10f, 15f)
-                    ) else null
-                )
-            )
-        }
-        drawPath(
-            path = timelineDrawable.getFillPath(
-                pixelsPerSec = pixelsPerSec,
-                height = canvasHeightOuter
-            ),
-            color = color.copy(alpha = 0.1f)
-        )
-    }
-}
