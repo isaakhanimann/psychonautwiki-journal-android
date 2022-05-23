@@ -172,7 +172,6 @@ fun RoaDurationFullTimeline(
         inset(vertical = strokeWidth / 2) {
             val canvasHeightInner = size.height
             val strokePath = Path().apply {
-                moveTo(0f, canvasHeightInner)
                 val weight = 0.5
                 val onsetEndX =
                     fullTimeline.onset.interpolateAt(weight).inWholeSeconds * pixelsPerSec
@@ -182,10 +181,11 @@ fun RoaDurationFullTimeline(
                     comeupEndX + (fullTimeline.peak.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
                 val offsetEndX =
                     peakEndX + (fullTimeline.offset.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
-                lineTo(x = onsetEndX, y = canvasHeightInner)
-                lineTo(x = comeupEndX, y = 0f)
-                lineTo(x = peakEndX, y = 0f)
-                lineTo(x = offsetEndX, y = canvasHeightInner)
+                moveTo(0f, canvasHeightInner)
+                bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = 0f, startY = canvasHeightInner, endX = onsetEndX, endY = canvasHeightInner)
+                bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = onsetEndX, startY = canvasHeightInner, endX = comeupEndX, endY = 0f)
+                bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = comeupEndX, startY = 0f, endX = peakEndX, endY = 0f)
+                bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = peakEndX, startY = 0f, endX = offsetEndX, endY = canvasHeightInner)
             }
             drawPath(
                 path = strokePath,
@@ -206,9 +206,9 @@ fun RoaDurationFullTimeline(
             val offsetEndMaxX =
                 peakEndMaxX + (fullTimeline.offset.max.inWholeSeconds * pixelsPerSec)
             moveTo(onsetStartMinX, canvasHeightOuter)
-            lineTo(x = comeupEndMinX, y = 0f)
-            lineTo(x = peakEndMaxX, y = 0f)
-            lineTo(x = offsetEndMaxX, y = canvasHeightOuter)
+            bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = onsetStartMinX, startY = canvasHeightOuter, endX = comeupEndMinX, endY = 0f)
+            bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = comeupEndMinX, startY = 0f, endX = peakEndMaxX, endY = 0f)
+            bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = peakEndMaxX, startY = 0f, endX = offsetEndMaxX, endY = canvasHeightOuter)
             // path bottom back
             val offsetEndMinX =
                 (fullTimeline.onset.min + fullTimeline.comeup.min + fullTimeline.peak.min + fullTimeline.offset.min).inWholeSeconds * pixelsPerSec
@@ -217,10 +217,10 @@ fun RoaDurationFullTimeline(
             val comeupEndMaxX =
                 (fullTimeline.onset.max + fullTimeline.comeup.max).inWholeSeconds * pixelsPerSec
             val onsetStartMaxX = fullTimeline.onset.max.inWholeSeconds * pixelsPerSec
-            lineTo(x = offsetEndMinX, y = canvasHeightOuter)
-            lineTo(x = peakEndMinX, y = 0f)
-            lineTo(x = comeupEndMaxX, y = 0f)
-            lineTo(x = onsetStartMaxX, y = canvasHeightOuter)
+            bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = offsetEndMaxX, startY = canvasHeightOuter, endX = offsetEndMinX, endY = canvasHeightOuter)
+            bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = offsetEndMinX, startY = canvasHeightOuter, endX = peakEndMinX, endY = 0f)
+            bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = peakEndMinX, startY = 0f, endX = comeupEndMaxX, endY = 0f)
+            bothSidesSmoothLineTo(percentSmoothness = percentSmoothness, startX = comeupEndMaxX, startY = 0f, endX = onsetStartMaxX, endY = canvasHeightOuter)
             close()
         }
         drawPath(
