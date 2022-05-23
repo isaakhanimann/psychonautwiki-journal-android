@@ -8,6 +8,8 @@ import kotlin.time.Duration
 interface TimelineDrawable {
     fun getStrokePath(pixelsPerSec: Float, height: Float): Path
     fun getFillPath(pixelsPerSec: Float, height: Float): Path
+    val width: Duration
+    val isDotted: Boolean
 }
 
 data class FullTimeline(
@@ -16,8 +18,12 @@ data class FullTimeline(
     val peak: FullDurationRange,
     val offset: FullDurationRange,
 ) : TimelineDrawable {
-    val totalMax
+
+    override val width: Duration
         get() = onset.max + comeup.max + peak.max + offset.max
+
+    override val isDotted: Boolean
+        get() = false
 
     override fun getStrokePath(pixelsPerSec: Float, height: Float): Path {
         return Path().apply {
@@ -83,6 +89,13 @@ data class TotalTimeline(
     val weight: Double = 0.5,
     val percentSmoothness: Float = 0.5f,
 ) : TimelineDrawable {
+
+    override val width: Duration
+        get() = total.max
+
+    override val isDotted: Boolean
+        get() = true
+
     override fun getStrokePath(pixelsPerSec: Float, height: Float): Path {
         return Path().apply {
             val totalMinX = (total.min.inWholeSeconds) * pixelsPerSec
