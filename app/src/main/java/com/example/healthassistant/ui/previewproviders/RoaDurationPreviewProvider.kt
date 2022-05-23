@@ -33,6 +33,23 @@ class RoaDurationPreviewProvider : PreviewParameterProvider<RoaDuration> {
                 min = 12.0.toDuration(DurationUnit.HOURS),
                 max = 48.0.toDuration(DurationUnit.HOURS),
             )
+        ),
+        RoaDuration(
+            onset = DurationRange(
+                min = 20.0.toDuration(DurationUnit.MINUTES),
+                max = 40.0.toDuration(DurationUnit.MINUTES),
+            ),
+            comeup = null,
+            peak = DurationRange(
+                min = 1.5.toDuration(DurationUnit.HOURS),
+                max = 2.5.toDuration(DurationUnit.HOURS),
+            ),
+            offset = null,
+            total = DurationRange(
+                min = 3.0.toDuration(DurationUnit.HOURS),
+                max = 5.0.toDuration(DurationUnit.HOURS),
+            ),
+            afterglow = null
         )
     )
 }

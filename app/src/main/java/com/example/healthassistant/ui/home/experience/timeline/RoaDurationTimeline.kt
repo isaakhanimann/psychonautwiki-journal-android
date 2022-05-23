@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.inset
@@ -24,7 +25,7 @@ import kotlin.time.Duration
 @Preview
 @Composable
 fun RoaDurationTimelinePreview(
-    @PreviewParameter(RoaDurationPreviewProvider::class, limit = 1) roaDuration: RoaDuration,
+    @PreviewParameter(RoaDurationPreviewProvider::class) roaDuration: RoaDuration,
 ) {
     RoaDurationTimeline(
         roaDuration = roaDuration,
@@ -103,13 +104,17 @@ fun RoaDurationTimeline(
         roaDuration.toFullTimeline()
     }
     if (fullTimeline != null) {
-        RoaDurationFullTimeline(fullTimeline = fullTimeline, modifier = modifier)
+        RoaDurationFullTimeline(fullTimeline = fullTimeline, color = color, modifier = modifier)
     } else {
         val totalTimeline = remember(roaDuration) {
             roaDuration.toTotalTimeline()
         }
         if (totalTimeline != null) {
-            RoaDurationTotalTimeline(totalTimeline = totalTimeline, modifier = modifier)
+            RoaDurationTotalTimeline(
+                totalTimeline = totalTimeline,
+                color = color,
+                modifier = modifier
+            )
         } else {
             Text(text = "There can be no timeline drawn")
         }
@@ -119,10 +124,10 @@ fun RoaDurationTimeline(
 @Composable
 fun RoaDurationFullTimeline(
     fullTimeline: FullTimeline,
-    color: Color = Color.Blue,
+    color: Color,
+    strokeWidth: Float = 5f,
     modifier: Modifier
 ) {
-    val strokeWidth = 5f
     Canvas(modifier = modifier.fillMaxSize()) {
         val canvasHeightOuter = size.height
         val canvasWidth = size.width
@@ -157,17 +162,23 @@ fun RoaDurationFullTimeline(
         val fillPath = Path().apply {
             // path over top
             val onsetStartMinX = fullTimeline.onset.min.inWholeSeconds * pixelsPerSec
-            val comeupEndMinX = onsetStartMinX + (fullTimeline.comeup.min.inWholeSeconds * pixelsPerSec)
-            val peakEndMaxX = (fullTimeline.onset.max + fullTimeline.comeup.max + fullTimeline.peak.max).inWholeSeconds * pixelsPerSec
-            val offsetEndMaxX = peakEndMaxX + (fullTimeline.offset.max.inWholeSeconds * pixelsPerSec)
+            val comeupEndMinX =
+                onsetStartMinX + (fullTimeline.comeup.min.inWholeSeconds * pixelsPerSec)
+            val peakEndMaxX =
+                (fullTimeline.onset.max + fullTimeline.comeup.max + fullTimeline.peak.max).inWholeSeconds * pixelsPerSec
+            val offsetEndMaxX =
+                peakEndMaxX + (fullTimeline.offset.max.inWholeSeconds * pixelsPerSec)
             moveTo(onsetStartMinX, canvasHeightOuter)
             lineTo(x = comeupEndMinX, y = 0f)
             lineTo(x = peakEndMaxX, y = 0f)
             lineTo(x = offsetEndMaxX, y = canvasHeightOuter)
             // path bottom back
-            val offsetEndMinX = (fullTimeline.onset.min + fullTimeline.comeup.min + fullTimeline.peak.min + fullTimeline.offset.min).inWholeSeconds * pixelsPerSec
-            val peakEndMinX = (fullTimeline.onset.min + fullTimeline.comeup.min + fullTimeline.peak.min).inWholeSeconds * pixelsPerSec
-            val comeupEndMaxX = (fullTimeline.onset.max + fullTimeline.comeup.max).inWholeSeconds * pixelsPerSec
+            val offsetEndMinX =
+                (fullTimeline.onset.min + fullTimeline.comeup.min + fullTimeline.peak.min + fullTimeline.offset.min).inWholeSeconds * pixelsPerSec
+            val peakEndMinX =
+                (fullTimeline.onset.min + fullTimeline.comeup.min + fullTimeline.peak.min).inWholeSeconds * pixelsPerSec
+            val comeupEndMaxX =
+                (fullTimeline.onset.max + fullTimeline.comeup.max).inWholeSeconds * pixelsPerSec
             val onsetStartMaxX = fullTimeline.onset.max.inWholeSeconds * pixelsPerSec
             lineTo(x = offsetEndMinX, y = canvasHeightOuter)
             lineTo(x = peakEndMinX, y = 0f)
@@ -186,8 +197,49 @@ fun RoaDurationFullTimeline(
 @Composable
 fun RoaDurationTotalTimeline(
     totalTimeline: TotalTimeline,
+    color: Color = Color.Blue,
+    strokeWidth: Float = 5f,
     modifier: Modifier
 ) {
-
+    Canvas(modifier = modifier.fillMaxSize()) {
+        val canvasHeightOuter = size.height
+        val canvasWidth = size.width
+        val pixelsPerSec = canvasWidth / totalTimeline.total.max.inWholeSeconds
+        val weight = 0.5
+        inset(vertical = strokeWidth / 2) {
+            val canvasHeightInner = size.height
+            val strokePath = Path().apply {
+                val totalMinX = (totalTimeline.total.min.inWholeSeconds) * pixelsPerSec
+                val totalX = totalTimeline.total.interpolateAt(weight).inWholeSeconds * pixelsPerSec
+                moveTo(0f, canvasHeightInner)
+                lineTo(x = totalMinX/2, y = 0f)
+                lineTo(x = totalX, y = canvasHeightInner)
+            }
+            drawPath(
+                path = strokePath,
+                color = color,
+                style = Stroke(
+                    width = strokeWidth,
+                    cap = StrokeCap.Round,
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f,15f))
+                )
+            )
+        }
+        val fillPath = Path().apply {
+            // path over top
+            val totalMinX = (totalTimeline.total.min.inWholeSeconds) * pixelsPerSec
+            val totalMaxX = (totalTimeline.total.max.inWholeSeconds) * pixelsPerSec
+            moveTo(x = totalMinX/2, y = 0f)
+            lineTo(x = totalMaxX, y = canvasHeightOuter)
+            // path bottom back
+            lineTo(x = totalMinX, y = canvasHeightOuter)
+            lineTo(x = totalMinX/2, y = 0f)
+            close()
+        }
+        drawPath(
+            path = fillPath,
+            color = color.copy(alpha = 0.1f)
+        )
+    }
 }
 
