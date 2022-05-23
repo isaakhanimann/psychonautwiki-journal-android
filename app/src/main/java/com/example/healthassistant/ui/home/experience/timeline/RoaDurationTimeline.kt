@@ -124,21 +124,26 @@ fun RoaDurationFullTimeline(
 ) {
     val strokeWidth = 5f
     Canvas(modifier = modifier.fillMaxSize()) {
-        inset(vertical = strokeWidth/2) {
-            val canvasWidth = size.width
-            val canvasHeight = size.height
-            val pixelsPerSec = canvasWidth / fullTimeline.totalMax.inWholeSeconds
+        val canvasHeightOuter = size.height
+        val canvasWidth = size.width
+        val pixelsPerSec = canvasWidth / fullTimeline.totalMax.inWholeSeconds
+        inset(vertical = strokeWidth / 2) {
+            val canvasHeightInner = size.height
             val strokePath = Path().apply {
-                moveTo(0f, canvasHeight)
+                moveTo(0f, canvasHeightInner)
                 val weight = 0.5
-                val onsetEndX = fullTimeline.onset.interpolateAt(weight).inWholeSeconds * pixelsPerSec
-                val comeupEndX = onsetEndX + (fullTimeline.comeup.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
-                val peakEndX = comeupEndX + (fullTimeline.peak.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
-                val offsetEndX = peakEndX + (fullTimeline.offset.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
-                lineTo(x = onsetEndX, y = canvasHeight)
+                val onsetEndX =
+                    fullTimeline.onset.interpolateAt(weight).inWholeSeconds * pixelsPerSec
+                val comeupEndX =
+                    onsetEndX + (fullTimeline.comeup.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
+                val peakEndX =
+                    comeupEndX + (fullTimeline.peak.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
+                val offsetEndX =
+                    peakEndX + (fullTimeline.offset.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
+                lineTo(x = onsetEndX, y = canvasHeightInner)
                 lineTo(x = comeupEndX, y = 0f)
                 lineTo(x = peakEndX, y = 0f)
-                lineTo(x = offsetEndX, y = canvasHeight)
+                lineTo(x = offsetEndX, y = canvasHeightInner)
             }
             drawPath(
                 path = strokePath,
@@ -148,23 +153,32 @@ fun RoaDurationFullTimeline(
                     cap = StrokeCap.Round
                 )
             )
-//        val fillPath = Path().apply {
-//            lineTo(canvasWidth, canvasHeight)
-//            lineTo(0f, canvasHeight)
-//            close()
-//        }
-//        drawPath(
-//            path = fillPath,
-//            brush = Brush.verticalGradient(
-//                colors = listOf(
-//                    color,
-//                    Color.Transparent
-//                ),
-//                endY = canvasHeight
-//            )
-//        )
         }
-
+        val fillPath = Path().apply {
+            // path over top
+            val onsetStartMinX = fullTimeline.onset.min.inWholeSeconds * pixelsPerSec
+            val comeupEndMinX = onsetStartMinX + (fullTimeline.comeup.min.inWholeSeconds * pixelsPerSec)
+            val peakEndMaxX = (fullTimeline.onset.max + fullTimeline.comeup.max + fullTimeline.peak.max).inWholeSeconds * pixelsPerSec
+            val offsetEndMaxX = peakEndMaxX + (fullTimeline.offset.max.inWholeSeconds * pixelsPerSec)
+            moveTo(onsetStartMinX, canvasHeightOuter)
+            lineTo(x = comeupEndMinX, y = 0f)
+            lineTo(x = peakEndMaxX, y = 0f)
+            lineTo(x = offsetEndMaxX, y = canvasHeightOuter)
+            // path bottom back
+            val offsetEndMinX = (fullTimeline.onset.min + fullTimeline.comeup.min + fullTimeline.peak.min + fullTimeline.offset.min).inWholeSeconds * pixelsPerSec
+            val peakEndMinX = (fullTimeline.onset.min + fullTimeline.comeup.min + fullTimeline.peak.min).inWholeSeconds * pixelsPerSec
+            val comeupEndMaxX = (fullTimeline.onset.max + fullTimeline.comeup.max).inWholeSeconds * pixelsPerSec
+            val onsetStartMaxX = fullTimeline.onset.max.inWholeSeconds * pixelsPerSec
+            lineTo(x = offsetEndMinX, y = canvasHeightOuter)
+            lineTo(x = peakEndMinX, y = 0f)
+            lineTo(x = comeupEndMaxX, y = 0f)
+            lineTo(x = onsetStartMaxX, y = canvasHeightOuter)
+            close()
+        }
+        drawPath(
+            path = fillPath,
+            color = color.copy(alpha = 0.1f)
+        )
     }
 }
 
