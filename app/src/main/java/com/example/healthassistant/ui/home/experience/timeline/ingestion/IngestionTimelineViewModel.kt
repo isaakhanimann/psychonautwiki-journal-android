@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.home.experience.timeline
+package com.example.healthassistant.ui.home.experience.timeline.ingestion
 
 import androidx.lifecycle.ViewModel
 import com.example.healthassistant.data.experiences.entities.Ingestion

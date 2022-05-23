@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.data.experiences.entities.IngestionColor
-import com.example.healthassistant.data.experiences.repositories.ExperienceRepository
+import com.example.healthassistant.data.experiences.ExperienceRepository
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository

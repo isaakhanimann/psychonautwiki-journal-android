@@ -3,7 +3,7 @@ package com.example.healthassistant.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
-import com.example.healthassistant.data.experiences.repositories.ExperienceRepository
+import com.example.healthassistant.data.experiences.ExperienceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

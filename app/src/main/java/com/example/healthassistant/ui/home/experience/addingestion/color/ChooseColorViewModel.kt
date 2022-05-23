@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.experiences.entities.IngestionColor
-import com.example.healthassistant.data.experiences.repositories.ExperienceRepository
+import com.example.healthassistant.data.experiences.ExperienceRepository
 import com.example.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

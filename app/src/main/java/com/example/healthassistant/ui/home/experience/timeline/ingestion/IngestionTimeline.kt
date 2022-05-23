@@ -1,25 +1,18 @@
-package com.example.healthassistant.ui.home.experience.timeline
+package com.example.healthassistant.ui.home.experience.timeline.ingestion
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.RoaDuration
-import com.example.healthassistant.ui.previewproviders.RoaDurationPreviewProvider
+import com.example.healthassistant.ui.previewproviders.IngestionTimelineProvider
 
 
 @Composable
@@ -35,22 +28,22 @@ fun IngestionTimeline(
     )
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun IngestionTimelineContentPreview(
-//    @PreviewParameter(
-//        IngestionTimelineProvider::class,
-//        limit = 1
-//    ) ingestionAndDuration: Pair<Ingestion, RoaDuration>,
-//) {
-//    IngestionTimelineContent(
-//        ingestion = ingestionAndDuration.first,
-//        roaDuration = ingestionAndDuration.second,
-//        modifier = Modifier
-//            .width(400.dp)
-//            .height(200.dp)
-//    )
-//}
+@Preview(showBackground = true)
+@Composable
+fun IngestionTimelineContentPreview(
+    @PreviewParameter(
+        IngestionTimelineProvider::class,
+        limit = 1
+    ) ingestionAndDuration: Pair<Ingestion, RoaDuration>,
+) {
+    IngestionTimelineContent(
+        ingestion = ingestionAndDuration.first,
+        roaDuration = ingestionAndDuration.second,
+        modifier = Modifier
+            .width(400.dp)
+            .height(200.dp)
+    )
+}
 
 @Composable
 fun IngestionTimelineContent(

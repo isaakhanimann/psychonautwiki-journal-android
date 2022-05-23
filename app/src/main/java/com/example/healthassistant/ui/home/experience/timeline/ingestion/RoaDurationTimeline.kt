@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.home.experience.timeline
+package com.example.healthassistant.ui.home.experience.timeline.ingestion
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
@@ -149,7 +149,6 @@ fun RoaDurationFullTimeline(
     fullTimeline: FullTimeline,
     color: Color,
     strokeWidth: Float = 5f,
-    percentSmoothness: Float = 0.1f,
     modifier: Modifier
 ) {
     Canvas(modifier = modifier.fillMaxSize()) {

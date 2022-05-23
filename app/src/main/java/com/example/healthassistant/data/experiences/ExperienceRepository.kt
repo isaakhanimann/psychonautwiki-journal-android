@@ -1,6 +1,5 @@
-package com.example.healthassistant.data.experiences.repositories
+package com.example.healthassistant.data.experiences
 
-import com.example.healthassistant.data.experiences.ExperienceDao
 import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.experiences.entities.Ingestion
