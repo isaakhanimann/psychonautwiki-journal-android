@@ -15,7 +15,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class AllTimelinesModel(
-    ingestionDurationPairs: List<Pair<Ingestion, RoaDuration>>
+    ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>
 ) {
     val startTime: Date
     val width: Duration
@@ -98,7 +98,7 @@ data class FullHour(
 class IngestionDrawable(
     startTime: Date,
     ingestion: Ingestion,
-    roaDuration: RoaDuration
+    roaDuration: RoaDuration?
 ) {
     val color: IngestionColor
     val ingestionPointDistanceFromStart: Duration
@@ -107,8 +107,8 @@ class IngestionDrawable(
     init {
         ingestionPointDistanceFromStart =
             (ingestion.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS)
-        val full = roaDuration.toFullTimeline()
-        val total = roaDuration.toTotalTimeline()
+        val full = roaDuration?.toFullTimeline()
+        val total = roaDuration?.toTotalTimeline()
         timelineDrawable = full ?: total
         color = ingestion.color
     }

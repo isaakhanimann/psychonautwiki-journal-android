@@ -3,7 +3,8 @@ package com.example.healthassistant.ui.home.experience.timeline
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,21 +17,23 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.previewproviders.TimelinesPreviewProvider
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun AllTimelines(
     @PreviewParameter(
         TimelinesPreviewProvider::class,
         limit = 1
-    ) ingestionDurationPairs: List<Pair<Ingestion, RoaDuration>>,
+    ) ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>,
     strokeWidth: Float = 5f,
+    modifier: Modifier = Modifier.fillMaxWidth().height(200.dp)
 ) {
     if (ingestionDurationPairs.isEmpty()) {
-        Text(text = "There can be no timeline drawn")
+        Text(text = "Insufficient Data for Timeline")
     } else {
         val model: AllTimelinesModel = remember(ingestionDurationPairs) {
             AllTimelinesModel(ingestionDurationPairs)
@@ -39,12 +42,12 @@ fun AllTimelines(
         val density = LocalDensity.current
         val textPaint = remember(density) {
             Paint().apply {
-                color = android.graphics.Color.RED
+                color = if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
                 textAlign = Paint.Align.CENTER
                 textSize = density.run { 40f }
             }
         }
-        Canvas(modifier = Modifier.fillMaxSize()) {
+        Canvas(modifier = modifier) {
             val canvasWithLabelsHeight = size.height
             val canvasWidth = size.width
             val pixelsPerSec = canvasWidth / model.width.inWholeSeconds

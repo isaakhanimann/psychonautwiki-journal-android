@@ -20,6 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.experiences.entities.Ingestion
+import com.example.healthassistant.data.substances.RoaDuration
+import com.example.healthassistant.ui.home.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,6 +36,7 @@ fun ExperienceScreen(
         ExperienceScreenContent(
             experience = expWithIngs.experience,
             ingestions = expWithIngs.ingestions,
+            ingestionDurationPairs = viewModel.ingestionDurationPairs.collectAsState().value,
             addIngestion = navigateToAddIngestionSearch,
             deleteIngestion = viewModel::deleteIngestion,
             navigateToEditExperienceScreen = navigateToEditExperienceScreen
@@ -49,6 +52,7 @@ fun ExperienceScreenContentPreview(
     ExperienceScreenContent(
         experience = expAndIng.experience,
         ingestions = expAndIng.ingestions,
+        ingestionDurationPairs = listOf(),
         addIngestion = {},
         deleteIngestion = {},
         navigateToEditExperienceScreen = {}
@@ -59,6 +63,7 @@ fun ExperienceScreenContentPreview(
 fun ExperienceScreenContent(
     experience: Experience,
     ingestions: List<Ingestion>,
+    ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>,
     addIngestion: () -> Unit,
     deleteIngestion: (Ingestion) -> Unit,
     navigateToEditExperienceScreen: () -> Unit
@@ -112,6 +117,9 @@ fun ExperienceScreenContent(
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
+            Text(text = "Timeline", style = MaterialTheme.typography.h5)
+            AllTimelines(ingestionDurationPairs = ingestionDurationPairs)
+            Spacer(modifier = Modifier.height(20.dp))
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(10.dp)) {
                     Text(text = "Notes", style = MaterialTheme.typography.h6)

@@ -17,7 +17,11 @@ data class Substance(
     val uncertainInteractions: List<String>,
     val unsafeInteractions: List<String>,
     val dangerousInteractions: List<String>
-)
+) {
+    fun getRoa(route: AdministrationRoute): Roa? {
+        return roas.firstOrNull { it.route == route }
+    }
+}
 
 data class Effect(
     val name: String,
