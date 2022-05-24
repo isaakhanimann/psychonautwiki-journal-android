@@ -48,7 +48,7 @@ data class FullTimeline(
         return Path().apply {
             // path over top
             val onsetStartMinX = startX + (onset.min.inWholeSeconds * pixelsPerSec)
-            val comeupEndMinX = startX + onsetStartMinX + (comeup.min.inWholeSeconds * pixelsPerSec)
+            val comeupEndMinX = onsetStartMinX + (comeup.min.inWholeSeconds * pixelsPerSec)
             val peakEndMaxX =
                 startX + ((onset.max + comeup.max + peak.max).inWholeSeconds * pixelsPerSec)
             val offsetEndMaxX =
@@ -58,13 +58,13 @@ data class FullTimeline(
             lineTo(x = peakEndMaxX, y = 0f)
             lineTo(x = offsetEndMaxX, y = height)
             // path bottom back
-            val offsetEndMinX =
-                startX + ((onset.min + comeup.min + peak.min + offset.min).inWholeSeconds * pixelsPerSec)
+            val onsetStartMaxX = startX + (onset.max.inWholeSeconds * pixelsPerSec)
+            val comeupEndMaxX =
+                onsetStartMaxX + (comeup.max.inWholeSeconds * pixelsPerSec)
             val peakEndMinX =
                 startX + ((onset.min + comeup.min + peak.min).inWholeSeconds * pixelsPerSec)
-            val comeupEndMaxX =
-                startX + ((onset.max + comeup.max).inWholeSeconds * pixelsPerSec)
-            val onsetStartMaxX = startX + (onset.max.inWholeSeconds * pixelsPerSec)
+            val offsetEndMinX =
+                peakEndMinX + (offset.min.inWholeSeconds * pixelsPerSec)
             lineTo(x = offsetEndMinX, y = height)
             lineTo(x = peakEndMinX, y = 0f)
             lineTo(x = comeupEndMaxX, y = 0f)
@@ -100,7 +100,7 @@ data class TotalTimeline(
         return Path().apply {
             val totalMinX = (total.min.inWholeSeconds) * pixelsPerSec
             val totalX = total.interpolateAt(weight).inWholeSeconds * pixelsPerSec
-            moveTo(0f, height)
+            moveTo(startX, height)
             endSmoothLineTo(
                 percentSmoothness = percentSmoothness,
                 startX = startX,
@@ -122,7 +122,7 @@ data class TotalTimeline(
             // path over top
             val totalMinX = (total.min.inWholeSeconds) * pixelsPerSec
             val totalMaxX = (total.max.inWholeSeconds) * pixelsPerSec
-            moveTo(x = totalMinX / 2, y = 0f)
+            moveTo(x = startX + (totalMinX / 2), y = 0f)
             startSmoothLineTo(
                 percentSmoothness = percentSmoothness,
                 startX = startX + (totalMinX / 2),

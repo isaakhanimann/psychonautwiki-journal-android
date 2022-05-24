@@ -16,80 +16,102 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
             Pair(
                 Ingestion(
                     substanceName = "Example Substance 1",
-                    time = Date(Date().time - 2*60*60),
+                    time = Date(Date().time - 4*60*60*1000),
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.INDIGO,
+                    color = IngestionColor.BLUE,
                     experienceId = 0
                 ),
                 RoaDuration(
                     onset = DurationRange(
-                        min = 20.0.toDuration(DurationUnit.MINUTES),
-                        max = 40.0.toDuration(DurationUnit.MINUTES),
+                        min = 20.toDuration(DurationUnit.MINUTES),
+                        max = 40.toDuration(DurationUnit.MINUTES),
                     ),
                     comeup = DurationRange(
-                        min = 15.0.toDuration(DurationUnit.MINUTES),
-                        max = 30.0.toDuration(DurationUnit.MINUTES),
+                        min = 15.toDuration(DurationUnit.MINUTES),
+                        max = 30.toDuration(DurationUnit.MINUTES),
                     ),
                     peak = DurationRange(
                         min = 1.5.toDuration(DurationUnit.HOURS),
                         max = 2.5.toDuration(DurationUnit.HOURS),
                     ),
                     offset = DurationRange(
-                        min = 1.0.toDuration(DurationUnit.HOURS),
-                        max = 1.5.toDuration(DurationUnit.HOURS),
+                        min = 1.toDuration(DurationUnit.HOURS),
+                        max = 1.toDuration(DurationUnit.HOURS),
                     ),
                     total = DurationRange(
-                        min = 3.0.toDuration(DurationUnit.HOURS),
-                        max = 5.0.toDuration(DurationUnit.HOURS),
+                        min = 3.toDuration(DurationUnit.HOURS),
+                        max = 5.toDuration(DurationUnit.HOURS),
                     ),
                     afterglow = DurationRange(
-                        min = 12.0.toDuration(DurationUnit.HOURS),
-                        max = 48.0.toDuration(DurationUnit.HOURS),
+                        min = 12.toDuration(DurationUnit.HOURS),
+                        max = 48.toDuration(DurationUnit.HOURS),
                     )
                 )
             ),
             Pair(
                 Ingestion(
                     substanceName = "Example Substance 2",
-                    time = Date(Date().time - 60*60),
+                    time = Date(Date().time - 60*60*1000),
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.INDIGO,
+                    color = IngestionColor.RED,
                     experienceId = 0
                 ),
                 RoaDuration(
                     onset = DurationRange(
-                        min = 20.0.toDuration(DurationUnit.MINUTES),
-                        max = 40.0.toDuration(DurationUnit.MINUTES),
+                        min = 20.toDuration(DurationUnit.MINUTES),
+                        max = 40.toDuration(DurationUnit.MINUTES),
                     ),
                     comeup = DurationRange(
-                        min = 15.0.toDuration(DurationUnit.MINUTES),
-                        max = 30.0.toDuration(DurationUnit.MINUTES),
+                        min = 15.toDuration(DurationUnit.MINUTES),
+                        max = 30.toDuration(DurationUnit.MINUTES),
                     ),
                     peak = DurationRange(
-                        min = 1.5.toDuration(DurationUnit.HOURS),
-                        max = 2.5.toDuration(DurationUnit.HOURS),
+                        min = 4.toDuration(DurationUnit.HOURS),
+                        max = 6.toDuration(DurationUnit.HOURS),
                     ),
                     offset = DurationRange(
-                        min = 1.0.toDuration(DurationUnit.HOURS),
-                        max = 1.5.toDuration(DurationUnit.HOURS),
+                        min = 2.toDuration(DurationUnit.HOURS),
+                        max = 3.toDuration(DurationUnit.HOURS),
                     ),
                     total = DurationRange(
-                        min = 3.0.toDuration(DurationUnit.HOURS),
-                        max = 5.0.toDuration(DurationUnit.HOURS),
+                        min = 6.toDuration(DurationUnit.HOURS),
+                        max = 11.toDuration(DurationUnit.HOURS),
                     ),
                     afterglow = DurationRange(
-                        min = 12.0.toDuration(DurationUnit.HOURS),
-                        max = 48.0.toDuration(DurationUnit.HOURS),
+                        min = 12.toDuration(DurationUnit.HOURS),
+                        max = 48.toDuration(DurationUnit.HOURS),
                     )
                 )
+            ),
+            Pair(
+                Ingestion(
+                    substanceName = "Example Substance 2",
+                    time = Date(),
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = 90.0,
+                    isDoseAnEstimate = false,
+                    units = "mg",
+                    color = IngestionColor.GREEN,
+                    experienceId = 0
+                ),
+                RoaDuration(
+                    onset = null,
+                    comeup = null,
+                    peak = null,
+                    offset = null,
+                    total = DurationRange(
+                        min = 3.toDuration(DurationUnit.HOURS),
+                        max = 5.toDuration(DurationUnit.HOURS),
+                    ),
+                    afterglow = null
+                )
             )
-
         )
     )
 }
