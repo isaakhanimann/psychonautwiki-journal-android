@@ -48,38 +48,37 @@ fun AllTimelines(
     ) ingestionDurationPairs: List<Pair<Ingestion, RoaDuration>>,
     strokeWidth: Float = 5f,
 ) {
-    val model: AllTimelinesModel? = remember(ingestionDurationPairs) {
-        if (ingestionDurationPairs.isEmpty()) {
-            null
-        }
-        val startTime = ingestionDurationPairs.map { it.first.time }
-            .reduce { acc, date -> if (acc.before(date)) acc else date }
-        val ingestionDrawables: List<IngestionDrawable> = ingestionDurationPairs.map {
-            val full = it.second.toFullTimeline()
-            val total = it.second.toTotalTimeline()
-            val timelineDrawable = full ?: total
-            val ingestionPointDistanceFromStart: Duration =
-                (it.first.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS)
-            IngestionDrawable(
-                color = it.first.color,
-                ingestionPointDistanceFromStart = ingestionPointDistanceFromStart,
-                timelineDrawable = timelineDrawable
+    if (ingestionDurationPairs.isEmpty()) {
+        Text(text = "There can be no timeline drawn")
+    } else {
+        val model: AllTimelinesModel = remember(ingestionDurationPairs) {
+            val startTime = ingestionDurationPairs.map { it.first.time }
+                .reduce { acc, date -> if (acc.before(date)) acc else date }
+            val ingestionDrawables: List<IngestionDrawable> = ingestionDurationPairs.map {
+                val full = it.second.toFullTimeline()
+                val total = it.second.toTotalTimeline()
+                val timelineDrawable = full ?: total
+                val ingestionPointDistanceFromStart: Duration =
+                    (it.first.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS)
+                IngestionDrawable(
+                    color = it.first.color,
+                    ingestionPointDistanceFromStart = ingestionPointDistanceFromStart,
+                    timelineDrawable = timelineDrawable
+                )
+            }
+            val width = ingestionDrawables.map {
+                if (it.timelineDrawable != null) {
+                    it.timelineDrawable.width + it.ingestionPointDistanceFromStart
+                } else {
+                    it.ingestionPointDistanceFromStart
+                }
+            }.maxOrNull()
+            AllTimelinesModel(
+                startTime = startTime,
+                width = width ?: 5.0.hours,
+                ingestionDrawables = ingestionDrawables
             )
         }
-        val width = ingestionDrawables.map {
-            if (it.timelineDrawable != null) {
-                it.timelineDrawable.width + it.ingestionPointDistanceFromStart
-            } else {
-                it.ingestionPointDistanceFromStart
-            }
-        }.maxOrNull()
-        AllTimelinesModel(
-            startTime = startTime,
-            width = width ?: 5.0.hours,
-            ingestionDrawables = ingestionDrawables
-        )
-    }
-    if (model != null) {
         val isDarkTheme = isSystemInDarkTheme()
         Canvas(modifier = Modifier.fillMaxSize()) {
             val canvasHeightOuter = size.height
@@ -118,7 +117,5 @@ fun AllTimelines(
                 }
             }
         }
-    } else {
-        Text(text = "There can be no timeline drawn")
     }
 }
