@@ -14,30 +14,8 @@ import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.example.healthassistant.data.experiences.entities.Ingestion
-import com.example.healthassistant.data.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.RoaDuration
-import com.example.healthassistant.ui.home.experience.timeline.ingestion.TimelineDrawable
-import com.example.healthassistant.ui.home.experience.timeline.ingestion.toFullTimeline
-import com.example.healthassistant.ui.home.experience.timeline.ingestion.toTotalTimeline
 import com.example.healthassistant.ui.previewproviders.TimelinesPreviewProvider
-import java.util.*
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
-
-
-data class AllTimelinesModel(
-    val startTime: Date,
-    val width: Duration,
-    val ingestionDrawables: List<IngestionDrawable>
-)
-
-data class IngestionDrawable(
-    val color: IngestionColor,
-    val ingestionPointDistanceFromStart: Duration,
-    val timelineDrawable: TimelineDrawable?
-)
 
 @Preview
 @Composable
@@ -52,32 +30,7 @@ fun AllTimelines(
         Text(text = "There can be no timeline drawn")
     } else {
         val model: AllTimelinesModel = remember(ingestionDurationPairs) {
-            val startTime = ingestionDurationPairs.map { it.first.time }
-                .reduce { acc, date -> if (acc.before(date)) acc else date }
-            val ingestionDrawables: List<IngestionDrawable> = ingestionDurationPairs.map {
-                val full = it.second.toFullTimeline()
-                val total = it.second.toTotalTimeline()
-                val timelineDrawable = full ?: total
-                val ingestionPointDistanceFromStart: Duration =
-                    (it.first.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS)
-                IngestionDrawable(
-                    color = it.first.color,
-                    ingestionPointDistanceFromStart = ingestionPointDistanceFromStart,
-                    timelineDrawable = timelineDrawable
-                )
-            }
-            val width = ingestionDrawables.map {
-                if (it.timelineDrawable != null) {
-                    it.timelineDrawable.width + it.ingestionPointDistanceFromStart
-                } else {
-                    it.ingestionPointDistanceFromStart
-                }
-            }.maxOrNull()
-            AllTimelinesModel(
-                startTime = startTime,
-                width = width ?: 5.0.hours,
-                ingestionDrawables = ingestionDrawables
-            )
+            AllTimelinesModel(ingestionDurationPairs)
         }
         val isDarkTheme = isSystemInDarkTheme()
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -86,7 +39,8 @@ fun AllTimelines(
             val pixelsPerSec = canvasWidth / model.width.inWholeSeconds
             model.ingestionDrawables.forEach { ingestionDrawable ->
                 val color = ingestionDrawable.color.getComposeColor(isDarkTheme)
-                val startX = ingestionDrawable.ingestionPointDistanceFromStart.inWholeSeconds * pixelsPerSec
+                val startX =
+                    ingestionDrawable.ingestionPointDistanceFromStart.inWholeSeconds * pixelsPerSec
                 ingestionDrawable.timelineDrawable?.let { timelineDrawable ->
                     inset(vertical = strokeWidth / 2) {
                         val canvasHeightInner = size.height
