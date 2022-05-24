@@ -38,8 +38,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                         max = 2.5.toDuration(DurationUnit.HOURS),
                     ),
                     offset = DurationRange(
-                        min = 1.toDuration(DurationUnit.HOURS),
-                        max = 1.toDuration(DurationUnit.HOURS),
+                        min = 2.toDuration(DurationUnit.HOURS),
+                        max = 4.toDuration(DurationUnit.HOURS),
                     ),
                     total = DurationRange(
                         min = 3.toDuration(DurationUnit.HOURS),

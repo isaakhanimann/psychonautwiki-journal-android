@@ -6,6 +6,7 @@ import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.home.experience.timeline.ingestion.TimelineDrawable
 import com.example.healthassistant.ui.home.experience.timeline.ingestion.toFullTimeline
 import com.example.healthassistant.ui.home.experience.timeline.ingestion.toTotalTimeline
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.time.Duration
@@ -46,32 +47,28 @@ data class AxisDrawable(
         val widthPerHour = widthInPixels / width.inWholeHours
         val minWidthPerHour = 40.0
         val stepSize = (minWidthPerHour / widthPerHour).roundToInt()
-        return listOf(
-            FullHour(distanceFromStart = 0f, label = "01"),
-            FullHour(distanceFromStart = 100f, label = "02")
+        val dates = getDatesBetween(
+            startTime = startTime,
+            endTime = Date(startTime.time + width.inWholeMilliseconds),
+            stepSizeInHours = stepSize
         )
-//        val dates = getDatesBetween(
-//            startTime = startTime,
-//            endTime = Date(startTime.time + width.inWholeMilliseconds),
-//            stepSize = stepSize
-//        )
-//        val formatter = SimpleDateFormat("HH", Locale.getDefault())
-//        return dates.map {
-//            val distanceInSec = (it.time - startTime.time) / 1000
-//            FullHour(
-//                distanceFromStart = distanceInSec * pixelsPerSec,
-//                label = formatter.format(it) ?: "??"
-//            )
-//        }
+        val formatter = SimpleDateFormat("HH", Locale.getDefault())
+        return dates.map {
+            val distanceInSec = (it.time - startTime.time) / 1000
+            FullHour(
+                distanceFromStart = distanceInSec * pixelsPerSec,
+                label = formatter.format(it) ?: "??"
+            )
+        }
     }
 
     companion object {
-        fun getDatesBetween(startTime: Date, endTime: Date, stepSize: Int): List<Date> {
+        fun getDatesBetween(startTime: Date, endTime: Date, stepSizeInHours: Int): List<Date> {
             val firstDate = startTime.nearestFullHourInTheFuture()
-            val stepInMilliseconds = stepSize * 60 * 60 * 1000
+            val stepInMilliseconds = stepSizeInHours * 60 * 60 * 1000
             val fullHours: MutableList<Date> = mutableListOf()
             var checkTime = firstDate
-            while (checkTime < endTime) {
+            while (checkTime.before(endTime)) {
                 fullHours.add(checkTime)
                 checkTime = Date(checkTime.time + stepInMilliseconds)
             }
@@ -82,8 +79,10 @@ data class AxisDrawable(
 
 fun Date.nearestFullHourInTheFuture(): Date {
     val cal = Calendar.getInstance(TimeZone.getDefault())
+    cal.time = this
     cal.add(Calendar.HOUR_OF_DAY, 1)
     cal.set(Calendar.MINUTE, 0)
+    cal.set(Calendar.SECOND, 0)
     return cal.time
 }
 
