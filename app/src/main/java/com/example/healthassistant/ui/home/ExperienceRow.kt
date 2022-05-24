@@ -52,7 +52,8 @@ fun ExperienceRow(
                 val brush = remember(experienceWithIngs.ingestions) {
                     val colors =
                         experienceWithIngs.ingestions.map { it.color.getComposeColor(isDarkTheme) }
-                    Brush.radialGradient(colors)
+                    val twiceColors = colors.flatMap { listOf(it, it) } + colors.first()
+                    Brush.sweepGradient(twiceColors)
                 }
                 Box(
                     modifier = Modifier
