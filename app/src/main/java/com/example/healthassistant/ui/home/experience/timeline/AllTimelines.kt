@@ -89,12 +89,6 @@ fun AllTimelines(
                     pixelsPerSec = pixelsPerSec,
                     widthInPixels = canvasWidth
                 )
-                drawText(
-                    fullHours.size.toString(),
-                    50f,
-                    canvasWithLabelsHeight,
-                    textPaint
-                )
                 fullHours.forEach { fullHour ->
                     drawText(
                         fullHour.label,
