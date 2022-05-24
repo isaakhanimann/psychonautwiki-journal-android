@@ -53,7 +53,11 @@ fun RoaDurationTimeline(
             inset(vertical = strokeWidth / 2) {
                 val canvasHeightInner = size.height
                 drawPath(
-                    path = timelineDrawable.getStrokePath(pixelsPerSec, canvasHeightInner),
+                    path = timelineDrawable.getStrokePath(
+                        pixelsPerSec = pixelsPerSec,
+                        height = canvasHeightInner,
+                        startX = 0f
+                    ),
                     color = color,
                     style = Stroke(
                         width = strokeWidth,
@@ -67,7 +71,8 @@ fun RoaDurationTimeline(
             drawPath(
                 path = timelineDrawable.getFillPath(
                     pixelsPerSec = pixelsPerSec,
-                    height = canvasHeightOuter
+                    height = canvasHeightOuter,
+                    startX = 0f
                 ),
                 color = color.copy(alpha = 0.1f)
             )

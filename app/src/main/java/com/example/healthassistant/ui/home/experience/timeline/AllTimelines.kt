@@ -23,7 +23,8 @@ import com.example.healthassistant.ui.previewproviders.TimelinesPreviewProvider
 import java.util.*
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 
 data class AllTimelinesModel(
@@ -58,7 +59,7 @@ fun AllTimelines(
             val total = it.second.toTotalTimeline()
             val timelineDrawable = full ?: total
             val ingestionPointDistanceFromStart: Duration =
-                (it.first.time.time - startTime.time).milliseconds
+                (it.first.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS)
             IngestionDrawable(
                 color = it.first.color,
                 ingestionPointDistanceFromStart = ingestionPointDistanceFromStart,
@@ -86,11 +87,16 @@ fun AllTimelines(
             val pixelsPerSec = canvasWidth / model.width.inWholeSeconds
             model.ingestionDrawables.forEach { ingestionDrawable ->
                 val color = ingestionDrawable.color.getComposeColor(isDarkTheme)
+                val startX = ingestionDrawable.ingestionPointDistanceFromStart.inWholeSeconds * pixelsPerSec
                 ingestionDrawable.timelineDrawable?.let { timelineDrawable ->
                     inset(vertical = strokeWidth / 2) {
                         val canvasHeightInner = size.height
                         drawPath(
-                            path = timelineDrawable.getStrokePath(pixelsPerSec, canvasHeightInner),
+                            path = timelineDrawable.getStrokePath(
+                                pixelsPerSec = pixelsPerSec,
+                                height = canvasHeightInner,
+                                startX = startX
+                            ),
                             color = color,
                             style = Stroke(
                                 width = strokeWidth,
@@ -104,7 +110,8 @@ fun AllTimelines(
                     drawPath(
                         path = timelineDrawable.getFillPath(
                             pixelsPerSec = pixelsPerSec,
-                            height = canvasHeightOuter
+                            height = canvasHeightOuter,
+                            startX = startX
                         ),
                         color = color.copy(alpha = 0.1f)
                     )
