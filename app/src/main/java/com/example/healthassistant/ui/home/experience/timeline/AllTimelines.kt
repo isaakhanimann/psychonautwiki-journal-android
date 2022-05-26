@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -72,8 +73,13 @@ fun AllTimelines(
                     val color = ingestionDrawable.color.getComposeColor(isDarkTheme)
                     val startX =
                         ingestionDrawable.ingestionPointDistanceFromStart.inWholeSeconds * pixelsPerSec
+                    val verticalInsetForLine = strokeWidth / 2
+                    inset(vertical = verticalInsetForLine) {
+                        val canvasHeightInner = size.height
+                        drawCircle(color = color, radius = 10f, center = Offset(x = startX, y = canvasHeightInner))
+                    }
                     ingestionDrawable.timelineDrawable?.let { timelineDrawable ->
-                        inset(vertical = strokeWidth / 2) {
+                        inset(vertical = verticalInsetForLine) {
                             val canvasHeightInner = size.height
                             drawPath(
                                 path = timelineDrawable.getStrokePath(
