@@ -6,10 +6,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.previewproviders.TimelinesPreviewProvider
+import kotlinx.coroutines.delay
+import java.util.*
 
 
 @Preview(showBackground = true)
@@ -63,6 +65,14 @@ fun AllTimelines(
                 textSize = density.run { 40f }
             }
         }
+        var currentTime by remember {
+            mutableStateOf(Date())
+        }
+        LaunchedEffect(key1 = currentTime) {
+            val oneSec = 1000L
+            delay(oneSec)
+            currentTime = Date()
+        }
         Canvas(modifier = modifier) {
             val canvasWithLabelsHeight = size.height
             val canvasWidth = size.width
@@ -76,7 +86,11 @@ fun AllTimelines(
                     val verticalInsetForLine = strokeWidth / 2
                     inset(vertical = verticalInsetForLine) {
                         val canvasHeightInner = size.height
-                        drawCircle(color = color, radius = 10f, center = Offset(x = startX, y = canvasHeightInner))
+                        drawCircle(
+                            color = color,
+                            radius = 10f,
+                            center = Offset(x = startX, y = canvasHeightInner)
+                        )
                     }
                     ingestionDrawable.timelineDrawable?.let { timelineDrawable ->
                         inset(vertical = verticalInsetForLine) {
@@ -92,7 +106,7 @@ fun AllTimelines(
                                     width = strokeWidth,
                                     cap = StrokeCap.Round,
                                     pathEffect = if (timelineDrawable.isDotted) PathEffect.dashPathEffect(
-                                        floatArrayOf(10f, 15f)
+                                        floatArrayOf(20f, 30f)
                                     ) else null
                                 )
                             )
@@ -106,6 +120,20 @@ fun AllTimelines(
                             color = color.copy(alpha = 0.1f)
                         )
                     }
+                }
+                val endTime = Date(model.startTime.time + model.width.inWholeMilliseconds)
+                if (model.startTime.before(currentTime) && endTime.after(currentTime)) {
+                    val timeStartInSec = (currentTime.time - model.startTime.time) / 1000
+                    val timeStartX = timeStartInSec * pixelsPerSec
+                    drawLine(
+                        color = if (isDarkTheme) Color.White else Color.Black,
+                        start = Offset(x = timeStartX, y = 0f),
+                        end = Offset(x = timeStartX, y = canvasHeightOuter),
+                        strokeWidth = 5f,
+                        pathEffect = PathEffect.dashPathEffect(
+                            floatArrayOf(20f, 10f)
+                        )
+                    )
                 }
             }
             drawContext.canvas.nativeCanvas.apply {
