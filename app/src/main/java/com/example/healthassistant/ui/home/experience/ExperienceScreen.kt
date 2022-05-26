@@ -118,7 +118,12 @@ fun ExperienceScreenContent(
             }
             Spacer(modifier = Modifier.height(10.dp))
             Text(text = "Timeline", style = MaterialTheme.typography.h5)
-            AllTimelines(ingestionDurationPairs = ingestionDurationPairs)
+            AllTimelines(
+                ingestionDurationPairs = ingestionDurationPairs,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            )
             Spacer(modifier = Modifier.height(20.dp))
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(10.dp)) {

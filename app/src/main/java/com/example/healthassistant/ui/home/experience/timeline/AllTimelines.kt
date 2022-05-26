@@ -22,15 +22,29 @@ import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.previewproviders.TimelinesPreviewProvider
 
+
 @Preview(showBackground = true)
 @Composable
-fun AllTimelines(
+fun AllTimelinesPreview(
     @PreviewParameter(
         TimelinesPreviewProvider::class,
         limit = 1
-    ) ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>,
+    ) ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>
+) {
+    AllTimelines(
+        ingestionDurationPairs = ingestionDurationPairs,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    )
+}
+
+
+@Composable
+fun AllTimelines(
+    ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>,
+    modifier: Modifier = Modifier,
     strokeWidth: Float = 5f,
-    modifier: Modifier = Modifier.fillMaxWidth().height(200.dp)
 ) {
     if (ingestionDurationPairs.isEmpty()) {
         Text(text = "Insufficient Data for Timeline")
@@ -42,7 +56,8 @@ fun AllTimelines(
         val density = LocalDensity.current
         val textPaint = remember(density) {
             Paint().apply {
-                color = if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+                color =
+                    if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
                 textAlign = Paint.Align.CENTER
                 textSize = density.run { 40f }
             }
