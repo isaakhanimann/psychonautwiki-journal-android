@@ -89,7 +89,8 @@ fun EditExperienceScreenContent(
                 month = month,
                 year = year,
                 onSubmitDate = onSubmitDate,
-                dateString = dateString
+                dateString = dateString,
+                modifier = Modifier.fillMaxWidth()
             )
             val focusManager = LocalFocusManager.current
             OutlinedTextField(
@@ -117,7 +118,7 @@ fun EditExperienceScreenContent(
                     .fillMaxWidth(),
                 enabled = isEnteredTitleOk
             ) {
-                Text("Save Changes", style = MaterialTheme.typography.h4)
+                Text("Save Changes")
             }
         }
     }

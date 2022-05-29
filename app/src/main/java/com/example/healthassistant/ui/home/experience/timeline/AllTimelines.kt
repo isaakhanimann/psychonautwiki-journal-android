@@ -127,8 +127,8 @@ fun AllTimelines(
                     val timeStartX = timeStartInSec * pixelsPerSec
                     drawLine(
                         color = if (isDarkTheme) Color.White else Color.Black,
-                        start = Offset(x = timeStartX, y = 0f),
-                        end = Offset(x = timeStartX, y = canvasHeightOuter),
+                        start = Offset(x = timeStartX, y = canvasHeightOuter),
+                        end = Offset(x = timeStartX, y = 0f),
                         strokeWidth = 5f,
                         pathEffect = PathEffect.dashPathEffect(
                             floatArrayOf(20f, 10f)

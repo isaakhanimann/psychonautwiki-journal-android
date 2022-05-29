@@ -12,7 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.ui.home.AddExperienceScreen
+import com.example.healthassistant.ui.home.addExperience.AddExperienceScreen
 import com.example.healthassistant.ui.home.HomeScreen
 import com.example.healthassistant.ui.home.experience.ExperienceScreen
 import com.example.healthassistant.ui.home.experience.addingestion.color.ChooseColorScreen

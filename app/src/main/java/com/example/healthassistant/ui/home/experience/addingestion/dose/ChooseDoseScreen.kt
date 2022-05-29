@@ -120,14 +120,13 @@ fun ChooseDoseScreenContent(
                         .fillMaxWidth(),
                     enabled = isValidDose
                 ) {
-                    Text("Next", style = MaterialTheme.typography.h3)
+                    Text("Next")
                 }
-                Button(
+                TextButton(
                     onClick = useUnknownDoseAndNavigate,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Use Unknown Dose", style = MaterialTheme.typography.h6)
+                    Text("Use Unknown Dose")
                 }
             }
         }

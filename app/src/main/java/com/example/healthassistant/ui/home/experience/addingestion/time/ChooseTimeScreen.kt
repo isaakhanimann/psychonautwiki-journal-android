@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,8 +44,7 @@ fun ChooseTimeScreen(
             hour = viewModel.hour.value,
             minute = viewModel.minute.value
         ),
-        dateString = viewModel.dateString,
-        timeString = viewModel.timeString,
+        dateAndTimeStrings = Pair(viewModel.dateString, viewModel.timeString),
         navigateToExperiencePopUpToExperienceScreen = navigateToExperiencePopupToExperienceScreen,
         navigateToExperiencePopUpToSubstanceScreen = navigateToExperiencePopupToSubstanceScreen
     )
@@ -64,8 +62,7 @@ fun ChooseTimeScreenContent(
     onSubmitDate: (Int, Int, Int) -> Unit = { _: Int, _: Int, _: Int -> },
     onSubmitTime: (Int, Int) -> Unit = { _: Int, _: Int -> },
     dateAndTime: DateAndTime = DateAndTime(day = 3, month = 4, year = 2022, hour = 13, minute = 52),
-    dateString: String = "Wed 9 Jul 2022",
-    timeString: String = "13:52",
+    dateAndTimeStrings: Pair<String, String> = Pair("Wed 9 Jul 2022", "13:52"),
     navigateToExperiencePopUpToSubstanceScreen: (Int) -> Unit = {},
     navigateToExperiencePopUpToExperienceScreen: (Int) -> Unit = {},
 ) {
@@ -81,21 +78,24 @@ fun ChooseTimeScreenContent(
                 .padding(10.dp)
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.weight(1f)
             ) {
                 DatePickerButton(
                     day = dateAndTime.day,
                     month = dateAndTime.month,
                     year = dateAndTime.year,
                     onSubmitDate = onSubmitDate,
-                    dateString = dateString
+                    dateString = dateAndTimeStrings.first,
+                    modifier = Modifier.fillMaxWidth()
                 )
                 TimePickerButton(
                     hour = dateAndTime.hour,
                     minute = dateAndTime.minute,
                     onSubmitTime = onSubmitTime,
-                    timeString = timeString
+                    timeString = dateAndTimeStrings.second,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
             AddIngestionButtons(
@@ -119,7 +119,6 @@ fun AddIngestionButtons(
     navigateToExperiencePopUpToSubstanceScreen: (Int) -> Unit,
     navigateToExperiencePopUpToExperienceScreen: (Int) -> Unit,
 ) {
-    val buttonTextStyle = MaterialTheme.typography.h5
     val context = LocalContext.current
     if (experienceIdToAddTo != null) {
         Button(
@@ -130,16 +129,10 @@ fun AddIngestionButtons(
                     Toast.LENGTH_SHORT
                 ).show()
                 navigateToExperiencePopUpToExperienceScreen(experienceIdToAddTo)
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "Add Ingestion",
-                style = buttonTextStyle,
-                modifier = Modifier
-                    .padding(vertical = 20.dp)
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Center,
-            )
+            Text(text = "Add Ingestion")
         }
     } else {
         Column(
@@ -155,27 +148,14 @@ fun AddIngestionButtons(
                             Toast.LENGTH_SHORT
                         ).show()
                         navigateToExperiencePopUpToSubstanceScreen(latestExperienceId)
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(
-                        text = "Add To Latest Experience",
-                        style = buttonTextStyle,
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
+                    Text(text = "Add To Latest Experience")
                 }
             }
-            Button(onClick = addIngestionToNewExperience) {
-                Text(
-                    text = "Add To New Experience",
-                    style = buttonTextStyle,
-                    modifier = Modifier
-                        .padding(vertical = 20.dp)
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
+            Button(onClick = addIngestionToNewExperience, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Add To New Experience")
             }
         }
     }
@@ -186,7 +166,8 @@ fun TimePickerButton(
     hour: Int,
     minute: Int,
     onSubmitTime: (Int, Int) -> Unit,
-    timeString: String
+    timeString: String,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val timePickerDialog = TimePickerDialog(
@@ -195,7 +176,7 @@ fun TimePickerButton(
             onSubmitTime(newHour, newMinute)
         }, hour, minute, true
     )
-    Button(onClick = timePickerDialog::show) {
-        Text(timeString, style = MaterialTheme.typography.h2)
+    OutlinedButton(onClick = timePickerDialog::show, modifier = modifier) {
+        Text(timeString)
     }
 }

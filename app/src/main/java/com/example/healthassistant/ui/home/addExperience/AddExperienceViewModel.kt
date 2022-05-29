@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.healthassistant.data.experiences.entities.Experience
 import com.example.healthassistant.data.experiences.ExperienceRepository
+import com.example.healthassistant.data.experiences.entities.Experience
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -18,8 +18,9 @@ import javax.inject.Inject
 class AddExperienceViewModel @Inject constructor(private val repository: ExperienceRepository) :
     ViewModel() {
 
-    var enteredTitle by mutableStateOf("")
-    val isEnteredTitleOk get() = enteredTitle.isNotEmpty()
+    var title by mutableStateOf("")
+    var notes by mutableStateOf("")
+    val isTitleOk get() = title.isNotEmpty()
     private val calendar: Calendar = Calendar.getInstance()
     var year by mutableStateOf(calendar.get(Calendar.YEAR))
     var month by mutableStateOf(calendar.get(Calendar.MONTH))
@@ -36,24 +37,24 @@ class AddExperienceViewModel @Inject constructor(private val repository: Experie
         }
 
     init {
-        enteredTitle = dateString
+        title = dateString
     }
 
     fun onSubmitDate(newDay: Int, newMonth: Int, newYear: Int) {
         day = newDay
         month = newMonth
         year = newYear
-        enteredTitle = dateString
+        title = dateString
     }
 
     fun onConfirmTap(onSuccess: (Int) -> Unit) {
-        if (enteredTitle.isNotEmpty()) {
+        if (title.isNotEmpty()) {
             viewModelScope.launch {
                 val newExperience =
                     Experience(
-                        title = enteredTitle,
+                        title = title,
                         date = currentlySelectedDate,
-                        text = ""
+                        text = notes
                     )
                 val experienceId = repository.addExperience(newExperience)
                 onSuccess(experienceId.toInt())
