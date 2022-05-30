@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class SubstanceRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
     substanceParser: SubstanceParserInterface
-): SubstanceRepositoryInterface {
+) : SubstanceRepositoryInterface {
 
     private val allSubstances: List<Substance>
 
@@ -29,7 +29,7 @@ class SubstanceRepository @Inject constructor(
     }
 
     override fun getSubstance(substanceName: String): Substance? {
-        return allSubstances.firstOrNull { it.name==substanceName }
+        return allSubstances.firstOrNull { it.name == substanceName }
     }
 
     override suspend fun getSubstances(searchText: String): List<Substance> {
@@ -43,5 +43,26 @@ class SubstanceRepository @Inject constructor(
                         }
             }
         }
+    }
+
+    override suspend fun getOtherDangerousInteractions(
+        substanceName: String,
+        interactionsToFilterOut: List<String>,
+        psychoactiveClassNames: List<String>
+    ): List<String> {
+        return allSubstances.filter { sub ->
+            val isDirectMatch = sub.dangerousInteractions.contains(substanceName)
+            val isWildCardMatch = sub.dangerousInteractions.map { dangName ->
+                Regex(
+                    pattern = dangName.replace(oldValue = "x", newValue = "[\\S]*", ignoreCase = true),
+                    option = RegexOption.IGNORE_CASE
+                ).matches(substanceName)
+            }.any { it }
+            val isClassMatch = psychoactiveClassNames.any {
+                sub.dangerousInteractions.contains(it)
+            }
+            val needsToBeFilteredOut = interactionsToFilterOut.contains(sub.name) || sub.psychoactiveClasses.any { interactionsToFilterOut.contains(it) }
+            (isDirectMatch || isWildCardMatch || isClassMatch) && !needsToBeFilteredOut
+        }.map { it.name }
     }
 }

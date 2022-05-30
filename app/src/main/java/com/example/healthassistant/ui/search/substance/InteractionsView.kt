@@ -16,17 +16,30 @@ import com.google.accompanist.flowlayout.FlowRow
 
 @Preview
 @Composable
-fun InteractionsView(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
-    if (substance.dangerousInteractions.isNotEmpty() || substance.unsafeInteractions.isNotEmpty() || substance.uncertainInteractions.isNotEmpty()) {
+fun InteractionsPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
+    InteractionsView(
+        dangerousInteractions = substance.dangerousInteractions,
+        unsafeInteractions = substance.unsafeInteractions,
+        uncertainInteractions = substance.uncertainInteractions
+    )
+}
+
+@Composable
+fun InteractionsView(
+    dangerousInteractions: List<String>,
+    unsafeInteractions: List<String>,
+    uncertainInteractions: List<String>,
+) {
+    if (dangerousInteractions.isNotEmpty() || unsafeInteractions.isNotEmpty() || uncertainInteractions.isNotEmpty()) {
         SubstanceInfoCard(title = "Interactions") {
             FlowRow {
-                substance.dangerousInteractions.forEach {
+                dangerousInteractions.forEach {
                     InteractionChip(text = it, color = Color.Red)
                 }
-                substance.unsafeInteractions.forEach {
+                unsafeInteractions.forEach {
                     InteractionChip(text = it, color = Color(0xFFFF9800))
                 }
-                substance.uncertainInteractions.forEach {
+                uncertainInteractions.forEach {
                     InteractionChip(text = it, color = Color.Yellow)
                 }
             }

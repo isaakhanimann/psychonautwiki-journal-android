@@ -41,7 +41,11 @@ fun CheckInteractionsScreenContent(
                 .padding(10.dp)
                 .fillMaxHeight()
         ) {
-            InteractionsView(substance = substance)
+            InteractionsView(
+                dangerousInteractions = substance.dangerousInteractions,
+                unsafeInteractions = substance.unsafeInteractions,
+                uncertainInteractions = substance.uncertainInteractions
+            )
             Button(
                 onClick = navigateToNext,
                 modifier = Modifier

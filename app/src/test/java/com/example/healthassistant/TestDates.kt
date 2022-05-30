@@ -10,7 +10,7 @@ import java.util.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class TestDates {
     @Test
     fun datesBetweenAreCorrect() {
         val cal = Calendar.getInstance(TimeZone.getDefault())

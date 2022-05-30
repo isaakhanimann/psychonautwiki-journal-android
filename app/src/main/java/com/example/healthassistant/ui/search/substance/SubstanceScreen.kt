@@ -33,6 +33,7 @@ fun SubstanceScreen(
 ) {
     SubstanceScreenContent(
         substance = viewModel.substance,
+        dangerousInteractions = viewModel.dangerousInteractions,
         onIngestTapped = {
             navigateToAddIngestion(viewModel.substance.name)
         }
@@ -46,13 +47,14 @@ fun SubstanceScreenPreview(
     @PreviewParameter(SubstancePreviewProvider::class) substance: Substance
 ) {
     HealthAssistantTheme {
-        SubstanceScreenContent(substance = substance, onIngestTapped = {})
+        SubstanceScreenContent(substance = substance, dangerousInteractions = substance.dangerousInteractions ,onIngestTapped = {})
     }
 }
 
 @Composable
 fun SubstanceScreenContent(
     substance: Substance,
+    dangerousInteractions: List<String>,
     onIngestTapped: () -> Unit
 ) {
     Scaffold(
@@ -82,7 +84,11 @@ fun SubstanceScreenContent(
             substance.roas.forEach { roa ->
                 RoaView(roa)
             }
-            InteractionsView(substance = substance)
+            InteractionsView(
+                dangerousInteractions = dangerousInteractions,
+                unsafeInteractions = substance.unsafeInteractions,
+                uncertainInteractions = substance.uncertainInteractions
+            )
             val tolerance = substance.tolerance
             if (tolerance != null) {
                 SubstanceInfoCard(title = "Tolerance") {
