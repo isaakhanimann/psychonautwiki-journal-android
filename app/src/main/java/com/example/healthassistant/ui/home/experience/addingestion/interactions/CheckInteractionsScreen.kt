@@ -18,12 +18,10 @@ fun CheckInteractionsScreen(
     navigateToChooseRouteScreen: () -> Unit,
     viewModel: CheckInteractionsViewModel = hiltViewModel()
 ) {
-    viewModel.substance?.also {
-        CheckInteractionsScreenContent(
-            substance = it,
-            navigateToNext = navigateToChooseRouteScreen
-        )
-    }
+    CheckInteractionsScreenContent(
+        substance = viewModel.substance,
+        navigateToNext = navigateToChooseRouteScreen
+    )
 }
 
 @Preview

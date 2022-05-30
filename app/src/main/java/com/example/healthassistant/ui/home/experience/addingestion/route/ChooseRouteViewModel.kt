@@ -13,5 +13,5 @@ class ChooseRouteViewModel @Inject constructor(
     repository: SubstanceRepository,
     state: SavedStateHandle
 ): ViewModel() {
-    val substance: Substance? = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY) ?: "")
+    val substance: Substance = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY)!!)!!
 }

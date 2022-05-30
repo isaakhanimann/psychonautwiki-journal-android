@@ -22,7 +22,7 @@ class ChooseDoseViewModel @Inject constructor(
     repository: SubstanceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    val substance: Substance?
+    val substance: Substance
     val administrationRoute: AdministrationRoute
     val experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toIntOrNull()
     val roaDose: RoaDose?
@@ -71,11 +71,10 @@ class ChooseDoseViewModel @Inject constructor(
     }
 
     init {
-        substance = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY) ?: "LSD")
+        substance = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY)!!)!!
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
-        assert(substance != null)
-        roaDose = substance?.getRoa(administrationRoute)?.roaDose
+        roaDose = substance.getRoa(administrationRoute)?.roaDose
     }
 
 }

@@ -22,14 +22,12 @@ fun ChooseRouteScreen(
     navigateToChooseDose: (administrationRoute: AdministrationRoute) -> Unit,
     viewModel: ChooseRouteViewModel = hiltViewModel()
 ) {
-    viewModel.substance?.also { sub ->
-        ChooseRouteScreenContent(
-            substance = sub,
-            navigateToNext = { route ->
-                navigateToChooseDose(route)
-            }
-        )
-    }
+    ChooseRouteScreenContent(
+        substance = viewModel.substance,
+        navigateToNext = { route ->
+            navigateToChooseDose(route)
+        }
+    )
 }
 
 @Preview
