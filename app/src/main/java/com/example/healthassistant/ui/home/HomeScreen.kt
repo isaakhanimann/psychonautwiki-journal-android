@@ -26,7 +26,8 @@ fun HomeScreen(
         ExperiencesList(
             homeViewModel = homeViewModel,
             navigateToExperiencePopNothing = navigateToExperiencePopNothing,
-            navigateToEditExperienceScreen = navigateToEditExperienceScreen
+            navigateToEditExperienceScreen = navigateToEditExperienceScreen,
+            navigateToAddExperience = navigateToAddExperience
         )
     }
 }
@@ -36,29 +37,36 @@ fun ExperiencesList(
     homeViewModel: HomeViewModel,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
+    navigateToAddExperience: () -> Unit,
 ) {
     val groupedExperiences = homeViewModel.experiencesGrouped.collectAsState().value
-    LazyColumn {
-        groupedExperiences.forEach { (year, experiencesInYear) ->
-            item {
-                SectionTitle(title = year)
-            }
-            items(experiencesInYear.size) { i ->
-                val expAndIngs = experiencesInYear[i]
-                ExperienceRow(
-                    expAndIngs,
-                    navigateToExperienceScreen = {
-                        navigateToExperiencePopNothing(expAndIngs.experience.id)
-                    },
-                    navigateToEditExperienceScreen = {
-                        navigateToEditExperienceScreen(expAndIngs.experience.id)
-                    },
-                    deleteExperienceWithIngestions = {
-                        homeViewModel.deleteExperienceWithIngestions(expAndIngs)
+    if (groupedExperiences.isEmpty()) {
+        Button(onClick = navigateToAddExperience) {
+            Text("Add Your First Experience")
+        }
+    } else {
+        LazyColumn {
+            groupedExperiences.forEach { (year, experiencesInYear) ->
+                item {
+                    SectionTitle(title = year)
+                }
+                items(experiencesInYear.size) { i ->
+                    val expAndIngs = experiencesInYear[i]
+                    ExperienceRow(
+                        expAndIngs,
+                        navigateToExperienceScreen = {
+                            navigateToExperiencePopNothing(expAndIngs.experience.id)
+                        },
+                        navigateToEditExperienceScreen = {
+                            navigateToEditExperienceScreen(expAndIngs.experience.id)
+                        },
+                        deleteExperienceWithIngestions = {
+                            homeViewModel.deleteExperienceWithIngestions(expAndIngs)
+                        }
+                    )
+                    if (i < experiencesInYear.size) {
+                        Divider()
                     }
-                )
-                if (i < experiencesInYear.size) {
-                    Divider()
                 }
             }
         }

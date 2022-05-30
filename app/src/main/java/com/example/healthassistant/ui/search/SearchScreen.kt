@@ -34,7 +34,7 @@ fun SearchScreen(
         })
         val recents = recentlyUsedSubstancesViewModel.recentlyUsedSubstances.collectAsState().value
         LazyColumn {
-            if (searchViewModel.searchText.isEmpty()) {
+            if (searchViewModel.searchText.isEmpty() && recents.isNotEmpty()) {
                 item {
                     SectionTitle(title = "Recently Used")
                 }
