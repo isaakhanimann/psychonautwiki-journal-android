@@ -2,6 +2,10 @@ package com.example.healthassistant.data.substances
 
 import kotlin.time.Duration
 
+enum class InteractionType {
+    DANGEROUS, UNSAFE, UNCERTAIN
+}
+
 data class Substance(
     val name: String,
     val commonNames: List<String>,
@@ -20,6 +24,14 @@ data class Substance(
 ) {
     fun getRoa(route: AdministrationRoute): Roa? {
         return roas.firstOrNull { it.route == route }
+    }
+
+    fun getInteractions(interactionType: InteractionType): List<String> {
+        return when (interactionType) {
+            InteractionType.DANGEROUS -> dangerousInteractions
+            InteractionType.UNSAFE -> unsafeInteractions
+            InteractionType.UNCERTAIN -> uncertainInteractions
+        }
     }
 }
 

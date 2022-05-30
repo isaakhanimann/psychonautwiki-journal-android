@@ -1,6 +1,7 @@
 package com.example.healthassistant.data.substances.repositories
 
 import android.content.Context
+import com.example.healthassistant.data.substances.InteractionType
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.SubstanceParserInterface
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -45,23 +46,32 @@ class SubstanceRepository @Inject constructor(
         }
     }
 
-    override suspend fun getOtherDangerousInteractions(
+    override suspend fun getOtherInteractions(
+        type: InteractionType,
         substanceName: String,
         interactionsToFilterOut: List<String>,
         psychoactiveClassNames: List<String>
     ): List<String> {
         return allSubstances.filter { sub ->
-            val isDirectMatch = sub.dangerousInteractions.contains(substanceName)
-            val isWildCardMatch = sub.dangerousInteractions.map { dangName ->
+            val interactions = sub.getInteractions(interactionType = type)
+            val isDirectMatch = interactions.contains(substanceName)
+            val isWildCardMatch = interactions.map { dangName ->
                 Regex(
-                    pattern = dangName.replace(oldValue = "x", newValue = "[\\S]*", ignoreCase = true),
+                    pattern = dangName.replace(
+                        oldValue = "x",
+                        newValue = "[\\S]*",
+                        ignoreCase = true
+                    ),
                     option = RegexOption.IGNORE_CASE
                 ).matches(substanceName)
             }.any { it }
             val isClassMatch = psychoactiveClassNames.any {
-                sub.dangerousInteractions.contains(it)
+                interactions.contains(it)
             }
-            val needsToBeFilteredOut = interactionsToFilterOut.contains(sub.name) || sub.psychoactiveClasses.any { interactionsToFilterOut.contains(it) }
+            val needsToBeFilteredOut =
+                interactionsToFilterOut.contains(sub.name) || sub.psychoactiveClasses.any {
+                    interactionsToFilterOut.contains(it)
+                }
             (isDirectMatch || isWildCardMatch || isClassMatch) && !needsToBeFilteredOut
         }.map { it.name }
     }
