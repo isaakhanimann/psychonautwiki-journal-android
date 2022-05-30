@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -22,6 +23,7 @@ import com.example.healthassistant.data.substances.Substance
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel(),
+    recentlyUsedSubstancesViewModel: RecentlyUsedSubstancesViewModel = hiltViewModel(),
     onSubstanceTap: (Substance) -> Unit
 ) {
     Column {
@@ -29,6 +31,16 @@ fun SearchScreen(
             searchViewModel.searchText = it
             searchViewModel.filterSubstances()
         })
+        val recents = recentlyUsedSubstancesViewModel.recentlyUsedSubstances.collectAsState().value
+        LazyColumn {
+            items(recents.size) { i ->
+                val substance = recents[i]
+                SubstanceRow(substance = substance, onTap = onSubstanceTap)
+                if (i < recents.size) {
+                    Divider()
+                }
+            }
+        }
         SubstanceList(
             substances = searchViewModel.substancesToShow,
             onSubstanceTap = onSubstanceTap
@@ -84,7 +96,8 @@ fun SearchField(
 
 @Composable
 fun SubstanceList(
-    substances: List<Substance>, onSubstanceTap: (Substance) -> Unit
+    substances: List<Substance>,
+    onSubstanceTap: (Substance) -> Unit
 ) {
     LazyColumn {
         items(substances.size) { i ->

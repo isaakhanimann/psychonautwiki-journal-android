@@ -16,6 +16,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion ORDER BY time ASC")
     fun getIngestions(): Flow<List<Ingestion>>
 
+    @Query("SELECT DISTINCT substanceName FROM ingestion ORDER BY time DESC LIMIT :limit")
+    fun getLastUsedSubstanceNames(limit: Int): Flow<List<String>>
+
     @Transaction
     @Query("SELECT * FROM experience ORDER BY date DESC")
     fun getExperiencesWithIngestions(): Flow<List<ExperienceWithIngestions>>
