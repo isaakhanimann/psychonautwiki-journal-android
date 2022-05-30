@@ -32,27 +32,27 @@ class SubstanceViewModel @Inject constructor(
         unsafeInteractions = substance.unsafeInteractions
         uncertainInteractions = substance.uncertainInteractions
         viewModelScope.launch {
-            val otherDanger = substanceRepo.getOtherInteractions(
+            dangerousInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.DANGEROUS,
                 substanceName = substanceName,
-                interactionsToFilterOut = substance.dangerousInteractions,
+                originalInteractions = substance.dangerousInteractions,
+                interactionsToFilterOut = emptyList(),
                 psychoactiveClassNames = substance.psychoactiveClasses
             )
-            dangerousInteractions = substance.dangerousInteractions + otherDanger
-            val otherUnsafe = substanceRepo.getOtherInteractions(
+            unsafeInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.UNSAFE,
                 substanceName = substanceName,
-                interactionsToFilterOut = dangerousInteractions + substance.unsafeInteractions,
+                originalInteractions = substance.unsafeInteractions,
+                interactionsToFilterOut = dangerousInteractions,
                 psychoactiveClassNames = substance.psychoactiveClasses
             )
-            unsafeInteractions = substance.unsafeInteractions + otherUnsafe
-            val otherUncertain = substanceRepo.getOtherInteractions(
+            uncertainInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.UNCERTAIN,
                 substanceName = substanceName,
-                interactionsToFilterOut = dangerousInteractions + unsafeInteractions + substance.uncertainInteractions,
+                originalInteractions = substance.uncertainInteractions,
+                interactionsToFilterOut = dangerousInteractions + unsafeInteractions,
                 psychoactiveClassNames = substance.psychoactiveClasses
             )
-            uncertainInteractions = substance.uncertainInteractions + otherUncertain
             isSearchingForInteractions = false
         }
 

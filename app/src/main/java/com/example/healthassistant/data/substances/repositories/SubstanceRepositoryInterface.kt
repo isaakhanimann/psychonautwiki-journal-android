@@ -7,9 +7,10 @@ interface SubstanceRepositoryInterface {
     fun getAllSubstances(): List<Substance>
     fun getSubstance(substanceName: String): Substance?
     suspend fun getSubstances(searchText: String): List<Substance>
-    suspend fun getOtherInteractions(
+    suspend fun getAllInteractions(
         type: InteractionType,
         substanceName: String,
+        originalInteractions: List<String>,
         interactionsToFilterOut: List<String>,
         psychoactiveClassNames: List<String>
     ): List<String>

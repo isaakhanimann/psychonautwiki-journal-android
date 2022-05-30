@@ -46,13 +46,14 @@ class SubstanceRepository @Inject constructor(
         }
     }
 
-    override suspend fun getOtherInteractions(
+    override suspend fun getAllInteractions(
         type: InteractionType,
         substanceName: String,
+        originalInteractions: List<String>,
         interactionsToFilterOut: List<String>,
         psychoactiveClassNames: List<String>
     ): List<String> {
-        return allSubstances.filter { sub ->
+        val otherInteractions = allSubstances.filter { sub ->
             val interactions = sub.getInteractions(interactionType = type)
             val isDirectMatch = interactions.contains(substanceName)
             val isWildCardMatch = interactions.map { dangName ->
@@ -68,11 +69,11 @@ class SubstanceRepository @Inject constructor(
             val isClassMatch = psychoactiveClassNames.any {
                 interactions.contains(it)
             }
-            val needsToBeFilteredOut =
-                interactionsToFilterOut.contains(sub.name) || sub.psychoactiveClasses.any {
-                    interactionsToFilterOut.contains(it)
-                }
-            (isDirectMatch || isWildCardMatch || isClassMatch) && !needsToBeFilteredOut
+            isDirectMatch || isWildCardMatch || isClassMatch
         }.map { it.name }
+        val tooManyInteractions = originalInteractions + otherInteractions
+        return tooManyInteractions.filter {
+            !interactionsToFilterOut.contains(it)
+        }
     }
 }
