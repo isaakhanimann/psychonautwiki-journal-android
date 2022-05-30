@@ -1,16 +1,11 @@
 package com.example.healthassistant.ui.home
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
@@ -46,7 +41,7 @@ fun ExperiencesList(
     LazyColumn {
         groupedExperiences.forEach { (year, experiencesInYear) ->
             item {
-                YearRow(year = year)
+                SectionTitle(title = year)
             }
             items(experiencesInYear.size) { i ->
                 val expAndIngs = experiencesInYear[i]
@@ -67,21 +62,5 @@ fun ExperiencesList(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun YearRow(year: String = "2022") {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colors.primary.copy(alpha = 0.2f)
-    ) {
-        Text(
-            color = MaterialTheme.colors.primary,
-            text = year,
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-        )
     }
 }

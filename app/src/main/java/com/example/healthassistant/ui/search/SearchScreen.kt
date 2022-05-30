@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.substances.Substance
+import com.example.healthassistant.ui.home.SectionTitle
 
 @Composable
 fun SearchScreen(
@@ -33,18 +34,29 @@ fun SearchScreen(
         })
         val recents = recentlyUsedSubstancesViewModel.recentlyUsedSubstances.collectAsState().value
         LazyColumn {
-            items(recents.size) { i ->
-                val substance = recents[i]
+            if (searchViewModel.searchText.isEmpty()) {
+                item {
+                    SectionTitle(title = "Recently Used")
+                }
+                items(recents.size) { i ->
+                    val substance = recents[i]
+                    SubstanceRow(substance = substance, onTap = onSubstanceTap)
+                    if (i < recents.size) {
+                        Divider()
+                    }
+                }
+                item {
+                    SectionTitle(title = "Other")
+                }
+            }
+            items(searchViewModel.substancesToShow.size) { i ->
+                val substance = searchViewModel.substancesToShow[i]
                 SubstanceRow(substance = substance, onTap = onSubstanceTap)
-                if (i < recents.size) {
+                if (i < searchViewModel.substancesToShow.size) {
                     Divider()
                 }
             }
         }
-        SubstanceList(
-            substances = searchViewModel.substancesToShow,
-            onSubstanceTap = onSubstanceTap
-        )
     }
 }
 
@@ -92,22 +104,6 @@ fun SearchField(
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
         singleLine = true
     )
-}
-
-@Composable
-fun SubstanceList(
-    substances: List<Substance>,
-    onSubstanceTap: (Substance) -> Unit
-) {
-    LazyColumn {
-        items(substances.size) { i ->
-            val substance = substances[i]
-            SubstanceRow(substance = substance, onTap = onSubstanceTap)
-            if (i < substances.size) {
-                Divider()
-            }
-        }
-    }
 }
 
 @Composable
