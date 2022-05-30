@@ -32,56 +32,62 @@ fun DurationView(@PreviewParameter(RoaDurationPreviewProvider::class) roaDuratio
                 textAlign = TextAlign.Center
             )
         }
-        Text("total: ${roaDuration.total?.text}")
-        Text("after effects: ${roaDuration.afterglow?.text}")
-        Row(
-            modifier = Modifier.height(80.dp)
-        ) {
-            val strokeWidth = 6f
-            val color = MaterialTheme.colors.secondary
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+        roaDuration.total?.let {
+            Text("total: ${it.text}")
+        }
+        roaDuration.afterglow?.let {
+            Text("after effects: ${it.text}")
+        }
+        if (roaDuration.onset != null || roaDuration.comeup != null || roaDuration.peak != null || roaDuration.offset != null) {
+            Row(
+                modifier = Modifier.height(80.dp)
             ) {
-                LineLow(
+                val strokeWidth = 6f
+                val color = MaterialTheme.colors.secondary
+                Column(
                     modifier = Modifier.weight(1f),
-                    strokeWidth = strokeWidth,
-                    color = color
-                )
-                Text(roaDuration.onset?.text ?: "")
-            }
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                LineUp(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    LineLow(
+                        modifier = Modifier.weight(1f),
+                        strokeWidth = strokeWidth,
+                        color = color
+                    )
+                    Text(roaDuration.onset?.text ?: "")
+                }
+                Column(
                     modifier = Modifier.weight(1f),
-                    strokeWidth = strokeWidth,
-                    color = color
-                )
-                Text(roaDuration.comeup?.text ?: "")
-            }
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                LineHigh(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    LineUp(
+                        modifier = Modifier.weight(1f),
+                        strokeWidth = strokeWidth,
+                        color = color
+                    )
+                    Text(roaDuration.comeup?.text ?: "")
+                }
+                Column(
                     modifier = Modifier.weight(1f),
-                    strokeWidth = strokeWidth,
-                    color = color
-                )
-                Text(roaDuration.peak?.text ?: "")
-            }
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                LineDown(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    LineHigh(
+                        modifier = Modifier.weight(1f),
+                        strokeWidth = strokeWidth,
+                        color = color
+                    )
+                    Text(roaDuration.peak?.text ?: "")
+                }
+                Column(
                     modifier = Modifier.weight(1f),
-                    strokeWidth = strokeWidth,
-                    color = color
-                )
-                Text(roaDuration.offset?.text ?: "")
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    LineDown(
+                        modifier = Modifier.weight(1f),
+                        strokeWidth = strokeWidth,
+                        color = color
+                    )
+                    Text(roaDuration.offset?.text ?: "")
+                }
             }
         }
     }
@@ -117,7 +123,7 @@ fun LineUp(
         val canvasHeight = size.height
         val strokePath = Path().apply {
             val control1X = canvasWidth / 10f
-            val control2X = canvasWidth * 9f/10f
+            val control2X = canvasWidth * 9f / 10f
             val control2Y = 0f
             moveTo(0f, canvasHeight)
             cubicTo(control1X, canvasHeight, control2X, control2Y, canvasWidth, 0f)
@@ -202,7 +208,7 @@ fun LineDown(
         val canvasHeight = size.height
         val strokePath = Path().apply {
             val control1X = canvasWidth / 10f
-            val control2X = canvasWidth * 9f/10f
+            val control2X = canvasWidth * 9f / 10f
             moveTo(0f, 0f)
             cubicTo(control1X, 0f, control2X, canvasHeight, canvasWidth, canvasHeight)
         }
