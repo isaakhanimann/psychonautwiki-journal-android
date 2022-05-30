@@ -22,7 +22,7 @@ import com.example.healthassistant.ui.previewproviders.RoaDurationPreviewProvide
 
 @Preview(showBackground = true)
 @Composable
-fun DurationView(@PreviewParameter(RoaDurationPreviewProvider::class) roaDuration: RoaDuration) {
+fun DurationView(@PreviewParameter(RoaDurationPreviewProvider::class, limit = 1) roaDuration: RoaDuration) {
     Column {
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
