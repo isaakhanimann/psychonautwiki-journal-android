@@ -28,6 +28,9 @@ fun CheckInteractionsScreen(
         unsafeInteractions = viewModel.unsafeInteractions,
         uncertainInteractions = viewModel.uncertainInteractions,
         navigateToNext = navigateToChooseRouteScreen,
+        dismissAlert = {
+            viewModel.isShowingAlert = false
+        },
         isShowingAlert = viewModel.isShowingAlert,
         alertTitle = viewModel.alertTitle,
         alertText = viewModel.alertText
@@ -43,6 +46,7 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::c
         unsafeInteractions = substance.unsafeInteractions,
         uncertainInteractions = substance.uncertainInteractions,
         navigateToNext = {},
+        dismissAlert = {},
         isShowingAlert = true,
         alertTitle = "Dangerous Interaction Detected!",
         alertText = "Dangerous Interaction with Heroin taken 4h 10m ago"
@@ -53,6 +57,7 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::c
 fun CheckInteractionsScreen(
     isSearchingForInteractions: Boolean,
     isShowingAlert: Boolean,
+    dismissAlert: () -> Unit,
     alertTitle: String,
     alertText: String,
     dangerousInteractions: List<String>,
@@ -102,9 +107,7 @@ fun CheckInteractionsScreen(
             }
             if (isShowingAlert) {
                 AlertDialog(
-                    onDismissRequest = {
-                        TODO("Close or navigate")
-                    },
+                    onDismissRequest = dismissAlert,
                     title = {
                         Text(text = alertTitle)
                     },
@@ -118,7 +121,7 @@ fun CheckInteractionsScreen(
                         ) {
                             Button(
                                 modifier = Modifier.fillMaxWidth(),
-                                onClick = { TODO("Close or navigate") }
+                                onClick = dismissAlert
                             ) {
                                 Text("Dismiss")
                             }

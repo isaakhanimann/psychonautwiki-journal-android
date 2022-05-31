@@ -24,16 +24,16 @@ class CheckInteractionsViewModel @Inject constructor(
     private val substanceRepo: SubstanceRepository,
     experienceRepo: ExperienceRepository,
     state: SavedStateHandle,
-): ViewModel() {
+) : ViewModel() {
     val substanceName: String
     var isSearchingForInteractions by mutableStateOf(true)
     var dangerousInteractions: List<String> by mutableStateOf(listOf())
     var unsafeInteractions: List<String> by mutableStateOf(listOf())
     var uncertainInteractions: List<String> by mutableStateOf(listOf())
-    var latestIngestions: List<Ingestion> by mutableStateOf(listOf())
-    val dangerousIngestions: List<Ingestion> get() = getIngestionsWithInteraction(interactionType = InteractionType.DANGEROUS)
-    val unsafeIngestions: List<Ingestion> get() = getIngestionsWithInteraction(interactionType = InteractionType.UNSAFE)
-    val uncertainIngestions: List<Ingestion> get() = getIngestionsWithInteraction(interactionType = InteractionType.UNCERTAIN)
+    private var latestIngestions: List<Ingestion> by mutableStateOf(listOf())
+    private val dangerousIngestions: List<Ingestion> get() = getIngestionsWithInteraction(interactionType = InteractionType.DANGEROUS)
+    private val unsafeIngestions: List<Ingestion> get() = getIngestionsWithInteraction(interactionType = InteractionType.UNSAFE)
+    private val uncertainIngestions: List<Ingestion> get() = getIngestionsWithInteraction(interactionType = InteractionType.UNCERTAIN)
     var isShowingAlert by mutableStateOf(false)
     var alertTitle by mutableStateOf("")
     var alertText by mutableStateOf("")
@@ -66,15 +66,15 @@ class CheckInteractionsViewModel @Inject constructor(
                 interactionsToFilterOut = dangerousInteractions + unsafeInteractions,
                 psychoactiveClassNames = substance.psychoactiveClasses
             )
-            isSearchingForInteractions = false
             val twoDaysInMs = 2.toDuration(DurationUnit.DAYS).inWholeMilliseconds
             val twoDaysAgo = Date(System.currentTimeMillis() - twoDaysInMs)
             latestIngestions = experienceRepo.getIngestionAfterDate(twoDaysAgo)
             maybeShowAlert()
+            isSearchingForInteractions = false
         }
     }
 
-    fun maybeShowAlert() {
+    private fun maybeShowAlert() {
         alertTitle = if (dangerousIngestions.isNotEmpty()) {
             "Dangerous Interaction Detected!"
         } else if (unsafeIngestions.isNotEmpty()) {
@@ -84,22 +84,22 @@ class CheckInteractionsViewModel @Inject constructor(
         } else {
             return
         }
-        alertText = dangerousIngestions.map { ingestion ->
-            val diffInMs: Long = Date().time - ingestion.time.time
-            val howLongAgo = diffInMs.toDuration(DurationUnit.MILLISECONDS)
-            "Dangerous Interaction with ${ingestion.substanceName} taken $howLongAgo ago"
-        }.joinToString(separator = "\n")
-        alertText += unsafeIngestions.map { ingestion ->
-            val diffInMs: Long = Date().time - ingestion.time.time
-            val howLongAgo = diffInMs.toDuration(DurationUnit.MILLISECONDS)
-            "Unsafe Interaction with ${ingestion.substanceName} taken $howLongAgo ago"
-        }.joinToString(separator = "\n")
-        alertText += uncertainIngestions.map { ingestion ->
-            val diffInMs: Long = Date().time - ingestion.time.time
-            val howLongAgo = diffInMs.toDuration(DurationUnit.MILLISECONDS)
-            "Uncertain Interaction with ${ingestion.substanceName} taken $howLongAgo ago"
-        }.joinToString(separator = "\n")
+        alertText = dangerousIngestions.joinToString(separator = "\n") { ingestion ->
+            "Dangerous Interaction with ${ingestion.substanceName} (taken ${getHowLongAgo(ingestion.time)} ago)."
+        }
+        alertText += unsafeIngestions.joinToString(separator = "\n") { ingestion ->
+            "Unsafe Interaction with ${ingestion.substanceName} (taken ${getHowLongAgo(ingestion.time)} ago)."
+        }
+        alertText += uncertainIngestions.joinToString(separator = "\n") { ingestion ->
+            "Uncertain Interaction with ${ingestion.substanceName} (taken ${getHowLongAgo(ingestion.time)} ago)."
+        }
         isShowingAlert = true
+    }
+
+    private fun getHowLongAgo(date: Date): String {
+        val diffInMs: Long = Date().time - date.time
+        val howLongAgo = diffInMs.toDuration(DurationUnit.MILLISECONDS)
+        return howLongAgo.inWholeMinutes.toDuration(DurationUnit.MINUTES).toString()
     }
 
     private fun getIngestionsWithInteraction(interactionType: InteractionType): List<Ingestion> {
@@ -110,7 +110,8 @@ class CheckInteractionsViewModel @Inject constructor(
         }
         return latestIngestions.filter { ingestion ->
             val substance = substanceRepo.getSubstance(ingestion.substanceName)
-            val isSubstanceInDangerClass = substance?.psychoactiveClasses?.any { interactions.contains(it) } ?: false
+            val isSubstanceInDangerClass =
+                substance?.psychoactiveClasses?.any { interactions.contains(it) } ?: false
             interactions.contains(ingestion.substanceName) || isSubstanceInDangerClass
         }
     }
