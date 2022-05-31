@@ -113,20 +113,23 @@ fun ChooseDoseScreenContent(
                     Text("Is Estimate")
                 }
             }
-            Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                Button(
-                    onClick = navigateToNext,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    enabled = isValidDose
-                ) {
-                    Text("Next")
-                }
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 TextButton(
                     onClick = useUnknownDoseAndNavigate,
-                modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.weight(1f)
                 ) {
                     Text("Use Unknown Dose")
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Button(
+                    onClick = navigateToNext,
+                    enabled = isValidDose,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Next")
                 }
             }
         }
