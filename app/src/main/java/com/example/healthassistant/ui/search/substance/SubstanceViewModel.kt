@@ -56,6 +56,5 @@ class SubstanceViewModel @Inject constructor(
             )
             isSearchingForInteractions = false
         }
-
     }
 }

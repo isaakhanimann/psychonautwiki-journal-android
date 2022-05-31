@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,4 +39,5 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getLastIngestion(substanceName: String) =
         experienceDao.getLastIngestion(substanceName)
 
+    suspend fun getIngestionAfterDate(date: Date): List<Ingestion> = experienceDao.getIngestionAfterDate(date)
 }
