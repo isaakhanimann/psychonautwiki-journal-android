@@ -40,6 +40,7 @@ fun CheckInteractionsScreenContent(
                 .fillMaxHeight()
         ) {
             InteractionsView(
+                isSearchingForInteractions = false,
                 dangerousInteractions = substance.dangerousInteractions,
                 unsafeInteractions = substance.unsafeInteractions,
                 uncertainInteractions = substance.uncertainInteractions

@@ -1,7 +1,10 @@
 package com.example.healthassistant.ui.search.substance
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +21,7 @@ import com.google.accompanist.flowlayout.FlowRow
 @Composable
 fun InteractionsPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
     InteractionsView(
+        isSearchingForInteractions = true,
         dangerousInteractions = substance.dangerousInteractions,
         unsafeInteractions = substance.unsafeInteractions,
         uncertainInteractions = substance.uncertainInteractions
@@ -26,21 +30,27 @@ fun InteractionsPreview(@PreviewParameter(SubstancePreviewProvider::class) subst
 
 @Composable
 fun InteractionsView(
+    isSearchingForInteractions: Boolean,
     dangerousInteractions: List<String>,
     unsafeInteractions: List<String>,
     uncertainInteractions: List<String>,
 ) {
     if (dangerousInteractions.isNotEmpty() || unsafeInteractions.isNotEmpty() || uncertainInteractions.isNotEmpty()) {
-        SubstanceInfoCard(title = "Interactions") {
-            FlowRow {
-                dangerousInteractions.forEach {
-                    InteractionChip(text = it, color = Color.Red)
-                }
-                unsafeInteractions.forEach {
-                    InteractionChip(text = it, color = Color(0xFFFF9800))
-                }
-                uncertainInteractions.forEach {
-                    InteractionChip(text = it, color = Color.Yellow)
+        Column {
+            if (isSearchingForInteractions) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+            SubstanceInfoCard(title = "Interactions") {
+                FlowRow {
+                    dangerousInteractions.forEach {
+                        InteractionChip(text = it, color = Color.Red)
+                    }
+                    unsafeInteractions.forEach {
+                        InteractionChip(text = it, color = Color(0xFFFF9800))
+                    }
+                    uncertainInteractions.forEach {
+                        InteractionChip(text = it, color = Color.Yellow)
+                    }
                 }
             }
         }

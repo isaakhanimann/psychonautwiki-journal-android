@@ -33,6 +33,7 @@ fun SubstanceScreen(
 ) {
     SubstanceScreenContent(
         substance = viewModel.substance,
+        isSearchingForInteractions = viewModel.isSearchingForInteractions,
         dangerousInteractions = viewModel.dangerousInteractions,
         unsafeInteractions = viewModel.unsafeInteractions,
         uncertainInteractions = viewModel.uncertainInteractions,
@@ -51,6 +52,7 @@ fun SubstanceScreenPreview(
     HealthAssistantTheme {
         SubstanceScreenContent(
             substance = substance,
+            isSearchingForInteractions = true,
             dangerousInteractions = substance.dangerousInteractions,
             unsafeInteractions = substance.unsafeInteractions,
             uncertainInteractions = substance.uncertainInteractions,
@@ -62,6 +64,7 @@ fun SubstanceScreenPreview(
 @Composable
 fun SubstanceScreenContent(
     substance: Substance,
+    isSearchingForInteractions: Boolean,
     dangerousInteractions: List<String>,
     unsafeInteractions: List<String>,
     uncertainInteractions: List<String>,
@@ -95,6 +98,7 @@ fun SubstanceScreenContent(
                 RoaView(roa)
             }
             InteractionsView(
+                isSearchingForInteractions = isSearchingForInteractions,
                 dangerousInteractions = dangerousInteractions,
                 unsafeInteractions = unsafeInteractions,
                 uncertainInteractions = uncertainInteractions

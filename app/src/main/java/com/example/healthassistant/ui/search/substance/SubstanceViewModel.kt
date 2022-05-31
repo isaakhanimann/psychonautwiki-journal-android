@@ -11,6 +11,7 @@ import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,9 +22,9 @@ class SubstanceViewModel @Inject constructor(
 ) : ViewModel() {
     val substance: Substance
     var isSearchingForInteractions by mutableStateOf(true)
-    var dangerousInteractions: List<String>
-    var unsafeInteractions: List<String>
-    var uncertainInteractions: List<String>
+    var dangerousInteractions: List<String> by mutableStateOf(listOf())
+    var unsafeInteractions: List<String> by mutableStateOf(listOf())
+    var uncertainInteractions: List<String> by mutableStateOf(listOf())
 
     init {
         val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
@@ -31,7 +32,7 @@ class SubstanceViewModel @Inject constructor(
         dangerousInteractions = substance.dangerousInteractions
         unsafeInteractions = substance.unsafeInteractions
         uncertainInteractions = substance.uncertainInteractions
-        viewModelScope.launch {
+        viewModelScope.launch(context = Dispatchers.Default) {
             dangerousInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.DANGEROUS,
                 substanceName = substanceName,
