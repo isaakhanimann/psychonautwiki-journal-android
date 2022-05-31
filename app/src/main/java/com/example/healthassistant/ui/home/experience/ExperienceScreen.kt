@@ -32,10 +32,10 @@ fun ExperienceScreen(
     navigateToEditExperienceScreen: () -> Unit,
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
-    viewModel.experienceWithIngestions.collectAsState().value?.also { expWithIngs ->
+    viewModel.experienceWithIngestions.collectAsState().value?.also { experienceWithIngestions ->
         ExperienceScreenContent(
-            experience = expWithIngs.experience,
-            ingestions = expWithIngs.ingestions,
+            experience = experienceWithIngestions.experience,
+            ingestions = experienceWithIngestions.ingestions,
             ingestionDurationPairs = viewModel.ingestionDurationPairs.collectAsState().value,
             addIngestion = navigateToAddIngestionSearch,
             deleteIngestion = viewModel::deleteIngestion,
@@ -125,13 +125,21 @@ fun ExperienceScreenContent(
                     .height(200.dp)
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(10.dp)) {
-                    Text(text = "Notes", style = MaterialTheme.typography.h6)
-                    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                        if (experience.text.isEmpty()) {
-                            Text(text = "-")
-                        } else {
+            if (experience.text.isEmpty()) {
+                Button(onClick = navigateToEditExperienceScreen) {
+                    Icon(
+                        Icons.Filled.Edit,
+                        contentDescription = "Edit",
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Add Notes")
+                }
+            } else {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(10.dp)) {
+                        Text(text = "Notes", style = MaterialTheme.typography.h6)
+                        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                             Text(text = experience.text)
                         }
                     }
