@@ -1,8 +1,13 @@
 package com.example.healthassistant.ui.home.experience.addingestion.route
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -22,8 +27,13 @@ fun ChooseRouteScreen(
     navigateToChooseDose: (administrationRoute: AdministrationRoute) -> Unit,
     viewModel: ChooseRouteViewModel = hiltViewModel()
 ) {
-    ChooseRouteScreenContent(
-        substance = viewModel.substance,
+    ChooseRouteScreen(
+        shouldShowOther = viewModel.shouldShowOtherRoutes,
+        onChangeShowOther = {
+            viewModel.shouldShowOtherRoutes = it
+        },
+        pwRoutes = viewModel.pwRoutes,
+        otherRoutesChunked = viewModel.otherRoutesChunked,
         navigateToNext = { route ->
             navigateToChooseDose(route)
         }
@@ -32,63 +42,116 @@ fun ChooseRouteScreen(
 
 @Preview
 @Composable
-fun ChooseRouteScreenContent(
-    @PreviewParameter(SubstancePreviewProvider::class) substance: Substance,
-    navigateToNext: (AdministrationRoute) -> Unit = {}
+fun ChooseRouteScreenPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
+    val pwRoutes = listOf(AdministrationRoute.INSUFFLATED, AdministrationRoute.ORAL)
+    val otherRoutes = AdministrationRoute.values().filter { route ->
+        !pwRoutes.contains(route)
+    }
+    val otherRoutesChunked = otherRoutes.chunked(2)
+    ChooseRouteScreen(
+        shouldShowOther = false,
+        onChangeShowOther = {},
+        pwRoutes = pwRoutes,
+        otherRoutesChunked = otherRoutesChunked,
+        navigateToNext = {}
+    )
+}
+
+@Composable
+fun ChooseRouteScreen(
+    shouldShowOther: Boolean,
+    onChangeShowOther: (Boolean) -> Unit,
+    pwRoutes: List<AdministrationRoute>,
+    otherRoutesChunked: List<List<AdministrationRoute>>,
+    navigateToNext: (AdministrationRoute) -> Unit
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Choose Route") }) }
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Choose Route") },
+                navigationIcon = if (shouldShowOther && pwRoutes.isNotEmpty()) {
+                    {
+                        IconButton(onClick = { onChangeShowOther(false) }) {
+                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                        }
+                    }
+                } else null
+            )
+        }
     ) {
         val spacing = 6
         Column(
             modifier = Modifier.padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(spacing.dp)
         ) {
-            Column(
-                Modifier.weight(2f),
-                verticalArrangement = Arrangement.spacedBy(spacing.dp)
+            val isShowingOther = shouldShowOther || pwRoutes.isEmpty()
+            AnimatedVisibility(
+                visible = isShowingOther,
+                enter = fadeIn(),
+                exit = fadeOut()
             ) {
-                val otherRoutes = AdministrationRoute.values().filter { route ->
-                    !substance.roas.map { it.route }.contains(route)
-                }
-                val otherRoutesChunked = otherRoutes.chunked(2)
-                otherRoutesChunked.forEach { otherRouteChunk ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        horizontalArrangement = Arrangement.spacedBy(spacing.dp)
-                    ) {
-                        otherRouteChunk.forEach { route ->
-                            Card(
-                                modifier = Modifier
-                                    .clickable {
-                                        navigateToNext(route)
-                                    }
-                                    .fillMaxHeight()
-                                    .weight(1f)
-                            ) {
-                                RouteBox(route = route, titleStyle = MaterialTheme.typography.h6)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(spacing.dp)
+                ) {
+                    otherRoutesChunked.forEach { otherRouteChunk ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            horizontalArrangement = Arrangement.spacedBy(spacing.dp)
+                        ) {
+                            otherRouteChunk.forEach { route ->
+                                Card(
+                                    modifier = Modifier
+                                        .clickable {
+                                            navigateToNext(route)
+                                        }
+                                        .fillMaxHeight()
+                                        .weight(1f)
+                                ) {
+                                    RouteBox(
+                                        route = route,
+                                        titleStyle = MaterialTheme.typography.h6
+                                    )
+                                }
+                            }
+                            if (otherRouteChunk.size == 1) {
+                                Box(modifier = Modifier.weight(1f))
                             }
                         }
                     }
                 }
             }
-            if (substance.roas.isNotEmpty()) {
+            AnimatedVisibility(
+                visible = !isShowingOther,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 Column(
-                    Modifier.weight(3f),
                     verticalArrangement = Arrangement.spacedBy(spacing.dp)
                 ) {
-                    substance.roas.forEach { roa ->
+                    pwRoutes.forEach { route ->
                         Card(
                             modifier = Modifier
                                 .clickable {
-                                    navigateToNext(roa.route)
+                                    navigateToNext(route)
                                 }
                                 .fillMaxWidth()
                                 .weight(5f)
                         ) {
-                            RouteBox(route = roa.route, titleStyle = MaterialTheme.typography.h4)
+                            RouteBox(route = route, titleStyle = MaterialTheme.typography.h4)
+                        }
+                    }
+                    Card(
+                        modifier = Modifier
+                            .clickable {
+                                onChangeShowOther(true)
+                            }
+                            .fillMaxWidth()
+                            .weight(5f)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(text = "Other Routes", style = MaterialTheme.typography.h4)
                         }
                     }
                 }
