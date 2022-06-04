@@ -3,6 +3,7 @@ package com.example.healthassistant.ui.home.experience.timeline
 import com.example.healthassistant.data.experiences.entities.Ingestion
 import com.example.healthassistant.data.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.RoaDuration
+import com.example.healthassistant.ui.home.experience.timeline.ingestion.FullTimeline
 import com.example.healthassistant.ui.home.experience.timeline.ingestion.TimelineDrawable
 import com.example.healthassistant.ui.home.experience.timeline.ingestion.toFullTimeline
 import com.example.healthassistant.ui.home.experience.timeline.ingestion.toTotalTimeline
@@ -25,7 +26,7 @@ class AllTimelinesModel(
     init {
         startTime = ingestionDurationPairs.map { it.first.time }
             .reduce { acc, date -> if (acc.before(date)) acc else date }
-        ingestionDrawables = ingestionDurationPairs.map { pair ->
+        val ingestionDrawablesWithoutInsets = ingestionDurationPairs.map { pair ->
             val verticalHeightInPercent = getVerticalHeightInPercent(
                 ingestion = pair.first,
                 allIngestions = ingestionDurationPairs.map { it.first })
@@ -36,6 +37,7 @@ class AllTimelinesModel(
                 verticalHeightInPercent = verticalHeightInPercent
             )
         }
+        ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)
         width = ingestionDrawables.map {
             if (it.timelineDrawable != null) {
                 it.timelineDrawable.width + it.ingestionPointDistanceFromStart
@@ -62,6 +64,45 @@ class AllTimelinesModel(
                     doseSnap.div(max).toFloat()
                 }
             }
+        }
+
+        fun updateInsets(ingestionDrawables: List<IngestionDrawable>): List<IngestionDrawable> {
+            val results = mutableListOf<IngestionDrawable>()
+            for (i in ingestionDrawables.indices) {
+                val currentDrawable = ingestionDrawables[i]
+                val otherDrawables = ingestionDrawables.take(i)
+                val insetTimes = getInsetTimes(
+                    ingestionDrawable = currentDrawable,
+                    otherDrawables = otherDrawables
+                )
+                currentDrawable.insetTimes = insetTimes
+                results.add(currentDrawable)
+            }
+            return results
+        }
+
+        private fun getInsetTimes(
+            ingestionDrawable: IngestionDrawable,
+            otherDrawables: List<IngestionDrawable>
+        ): Int {
+            val currentFullTimeline =
+                ingestionDrawable.timelineDrawable as? FullTimeline ?: return 0
+            val otherFullTimelinePeakRangesWithSameHeight: List<ClosedRange<Duration>> =
+                otherDrawables
+                    .filter { it.verticalHeightInPercent == ingestionDrawable.verticalHeightInPercent }
+                    .mapNotNull {
+                        val full = it.timelineDrawable as? FullTimeline ?: return@mapNotNull null
+                        return@mapNotNull full.getPeakDurationRange(startDuration = it.ingestionPointDistanceFromStart)
+                    }
+            val currentRange =
+                currentFullTimeline.getPeakDurationRange(startDuration = ingestionDrawable.ingestionPointDistanceFromStart)
+            var insetTimes = 0
+            for (otherRange in otherFullTimelinePeakRangesWithSameHeight) {
+                val isOverlap =
+                    currentRange.start <= otherRange.endInclusive && otherRange.start <= currentRange.endInclusive
+                if (isOverlap) insetTimes++
+            }
+            return insetTimes
         }
     }
 }
@@ -131,6 +172,7 @@ class IngestionDrawable(
     val color: IngestionColor
     val ingestionPointDistanceFromStart: Duration
     val timelineDrawable: TimelineDrawable?
+    var insetTimes = 0
 
     init {
         ingestionPointDistanceFromStart =

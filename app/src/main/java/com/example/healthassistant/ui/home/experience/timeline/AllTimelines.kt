@@ -33,7 +33,6 @@ import kotlin.time.Duration
 fun AllTimelinesPreview(
     @PreviewParameter(
         TimelinesPreviewProvider::class,
-        limit = 1
     ) ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>
 ) {
     AllTimelines(
@@ -121,9 +120,11 @@ fun DrawScope.drawIngestion(
     val startX =
         ingestionDrawable.ingestionPointDistanceFromStart.inWholeSeconds * pixelsPerSec
     val verticalInsetForLine = strokeWidth / 2
+    val topInset =
+        (canvasHeightOuter * (1f - ingestionDrawable.verticalHeightInPercent)) + (ingestionDrawable.insetTimes * strokeWidth)
     inset(
         left = 0f,
-        top = canvasHeightOuter * (1f-ingestionDrawable.verticalHeightInPercent),
+        top = topInset,
         right = 0f,
         bottom = 0f
     ) {

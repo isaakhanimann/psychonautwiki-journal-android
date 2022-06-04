@@ -19,6 +19,11 @@ data class FullTimeline(
     val offset: FullDurationRange,
 ) : TimelineDrawable {
 
+    fun getPeakDurationRange(startDuration: Duration): ClosedRange<Duration> {
+        val startRange = startDuration + onset.interpolateAt(0.5) + comeup.interpolateAt(0.5)
+        return startRange..(startRange + peak.interpolateAt(0.5))
+    }
+
     override val width: Duration
         get() = onset.max + comeup.max + peak.max + offset.max
 
