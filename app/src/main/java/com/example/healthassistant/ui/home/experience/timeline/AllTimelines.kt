@@ -121,41 +121,49 @@ fun DrawScope.drawIngestion(
     val startX =
         ingestionDrawable.ingestionPointDistanceFromStart.inWholeSeconds * pixelsPerSec
     val verticalInsetForLine = strokeWidth / 2
-    inset(vertical = verticalInsetForLine) {
-        val canvasHeightInner = size.height
-        drawCircle(
-            color = color,
-            radius = 10f,
-            center = Offset(x = startX, y = canvasHeightInner)
-        )
-    }
-    ingestionDrawable.timelineDrawable?.let { timelineDrawable ->
+    inset(
+        left = 0f,
+        top = canvasHeightOuter * (1f-ingestionDrawable.verticalHeightInPercent),
+        right = 0f,
+        bottom = 0f
+    ) {
+        val ingestionHeight = size.height
         inset(vertical = verticalInsetForLine) {
             val canvasHeightInner = size.height
-            drawPath(
-                path = timelineDrawable.getStrokePath(
-                    pixelsPerSec = pixelsPerSec,
-                    height = canvasHeightInner,
-                    startX = startX
-                ),
+            drawCircle(
                 color = color,
-                style = Stroke(
-                    width = strokeWidth,
-                    cap = StrokeCap.Round,
-                    pathEffect = if (timelineDrawable.isDotted) PathEffect.dashPathEffect(
-                        floatArrayOf(20f, 30f)
-                    ) else null
-                )
+                radius = 10f,
+                center = Offset(x = startX, y = canvasHeightInner)
             )
         }
-        drawPath(
-            path = timelineDrawable.getFillPath(
-                pixelsPerSec = pixelsPerSec,
-                height = canvasHeightOuter,
-                startX = startX
-            ),
-            color = color.copy(alpha = 0.1f)
-        )
+        ingestionDrawable.timelineDrawable?.let { timelineDrawable ->
+            inset(vertical = verticalInsetForLine) {
+                val canvasHeightInner = size.height
+                drawPath(
+                    path = timelineDrawable.getStrokePath(
+                        pixelsPerSec = pixelsPerSec,
+                        height = canvasHeightInner,
+                        startX = startX
+                    ),
+                    color = color,
+                    style = Stroke(
+                        width = strokeWidth,
+                        cap = StrokeCap.Round,
+                        pathEffect = if (timelineDrawable.isDotted) PathEffect.dashPathEffect(
+                            floatArrayOf(20f, 30f)
+                        ) else null
+                    )
+                )
+            }
+            drawPath(
+                path = timelineDrawable.getFillPath(
+                    pixelsPerSec = pixelsPerSec,
+                    height = ingestionHeight,
+                    startX = startX
+                ),
+                color = color.copy(alpha = 0.1f)
+            )
+        }
     }
 }
 

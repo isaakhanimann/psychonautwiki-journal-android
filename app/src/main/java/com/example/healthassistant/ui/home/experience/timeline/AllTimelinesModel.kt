@@ -25,8 +25,16 @@ class AllTimelinesModel(
     init {
         startTime = ingestionDurationPairs.map { it.first.time }
             .reduce { acc, date -> if (acc.before(date)) acc else date }
-        ingestionDrawables = ingestionDurationPairs.map {
-            IngestionDrawable(startTime = startTime, ingestion = it.first, roaDuration = it.second)
+        ingestionDrawables = ingestionDurationPairs.map { pair ->
+            val verticalHeightInPercent = getVerticalHeightInPercent(
+                ingestion = pair.first,
+                allIngestions = ingestionDurationPairs.map { it.first })
+            IngestionDrawable(
+                startTime = startTime,
+                ingestion = pair.first,
+                roaDuration = pair.second,
+                verticalHeightInPercent = verticalHeightInPercent
+            )
         }
         width = ingestionDrawables.map {
             if (it.timelineDrawable != null) {
@@ -36,6 +44,25 @@ class AllTimelinesModel(
             }
         }.maxOrNull() ?: 5.0.hours
         axisDrawable = AxisDrawable(startTime, width)
+    }
+
+    companion object {
+        fun getVerticalHeightInPercent(
+            ingestion: Ingestion,
+            allIngestions: List<Ingestion>
+        ): Float {
+            val max = allIngestions
+                .filter { it.substanceName == ingestion.substanceName }
+                .mapNotNull { it.dose }
+                .maxOrNull()
+            return ingestion.dose.let { doseSnap ->
+                if (max == null || doseSnap == null) {
+                    1f
+                } else {
+                    doseSnap.div(max).toFloat()
+                }
+            }
+        }
     }
 }
 
@@ -98,7 +125,8 @@ data class FullHour(
 class IngestionDrawable(
     startTime: Date,
     ingestion: Ingestion,
-    roaDuration: RoaDuration?
+    roaDuration: RoaDuration?,
+    val verticalHeightInPercent: Float = 1f
 ) {
     val color: IngestionColor
     val ingestionPointDistanceFromStart: Duration

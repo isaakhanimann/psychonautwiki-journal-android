@@ -15,7 +15,7 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
         listOf(
             Pair(
                 Ingestion(
-                    substanceName = "Example Substance 1",
+                    substanceName = "Substance 1",
                     time = Date(Date().time - 4*60*60*1000),
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
@@ -53,7 +53,45 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
             ),
             Pair(
                 Ingestion(
-                    substanceName = "Example Substance 2",
+                    substanceName = "Substance 1",
+                    time = Date(Date().time - 3*60*60*1000),
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = 45.0,
+                    isDoseAnEstimate = false,
+                    units = "mg",
+                    color = IngestionColor.BLUE,
+                    experienceId = 0
+                ),
+                RoaDuration(
+                    onset = DurationRange(
+                        min = 20.toDuration(DurationUnit.MINUTES),
+                        max = 40.toDuration(DurationUnit.MINUTES),
+                    ),
+                    comeup = DurationRange(
+                        min = 15.toDuration(DurationUnit.MINUTES),
+                        max = 30.toDuration(DurationUnit.MINUTES),
+                    ),
+                    peak = DurationRange(
+                        min = 1.5.toDuration(DurationUnit.HOURS),
+                        max = 2.5.toDuration(DurationUnit.HOURS),
+                    ),
+                    offset = DurationRange(
+                        min = 2.toDuration(DurationUnit.HOURS),
+                        max = 4.toDuration(DurationUnit.HOURS),
+                    ),
+                    total = DurationRange(
+                        min = 3.toDuration(DurationUnit.HOURS),
+                        max = 5.toDuration(DurationUnit.HOURS),
+                    ),
+                    afterglow = DurationRange(
+                        min = 12.toDuration(DurationUnit.HOURS),
+                        max = 48.toDuration(DurationUnit.HOURS),
+                    )
+                )
+            ),
+            Pair(
+                Ingestion(
+                    substanceName = "Substance 2",
                     time = Date(Date().time - 60*60*1000),
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
@@ -91,7 +129,7 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
             ),
             Pair(
                 Ingestion(
-                    substanceName = "Example Substance 2",
+                    substanceName = "Substance 3",
                     time = Date(),
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
