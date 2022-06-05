@@ -104,7 +104,7 @@ fun ExperienceScreenContent(
             }
             if (ingestions.isEmpty()) {
                 Button(onClick = addIngestion) {
-                    Text(text = "Add an Ingestion", style = MaterialTheme.typography.subtitle1)
+                    Text(text = "Add an Ingestion")
                 }
             }
             ingestions.forEach {

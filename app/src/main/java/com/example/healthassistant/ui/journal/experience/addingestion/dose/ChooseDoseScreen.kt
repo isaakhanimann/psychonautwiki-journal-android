@@ -24,7 +24,7 @@ fun ChooseDoseScreen(
     navigateToChooseColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
-    ChooseDoseScreenContent(
+    ChooseDoseScreen(
         roaDose = viewModel.roaDose,
         doseText = viewModel.doseText,
         onChangeDoseText = viewModel::onDoseTextChange,
@@ -47,22 +47,53 @@ fun ChooseDoseScreen(
                 null
             )
         },
-        currentRoaRangeTextAndColor = viewModel.currentRoaRangeTextAndColor
+        currentRoaRangeTextAndColor = viewModel.currentRoaRangeTextAndColor,
+        purity = viewModel.purity,
+        purityText = viewModel.purityText,
+        onPurityChange = {
+            viewModel.purity = it
+        },
+        rawDoseWithUnit = viewModel.rawDoseWithUnit
     )
 }
 
 @Preview
 @Composable
-fun ChooseDoseScreenContent(
+fun ChooseDoseScreenPreview(
     @PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDose?,
-    doseText: String = "5",
-    onChangeDoseText: (String) -> Unit = {},
-    isValidDose: Boolean = true,
-    isEstimate: Boolean = false,
-    onChangeIsEstimate: (Boolean) -> Unit = {},
-    navigateToNext: () -> Unit = {},
-    useUnknownDoseAndNavigate: () -> Unit = {},
-    currentRoaRangeTextAndColor: Pair<String, DoseColor?> = Pair("threshold: 8mg", DoseColor.THRESH)
+) {
+    ChooseDoseScreen(
+        roaDose = roaDose,
+        doseText = "5",
+        onChangeDoseText = {},
+        isValidDose = true,
+        isEstimate = false,
+        onChangeIsEstimate = {},
+        navigateToNext = {},
+        useUnknownDoseAndNavigate = {},
+        currentRoaRangeTextAndColor = Pair("threshold: 8mg", DoseColor.THRESH),
+        purity = 20f,
+        purityText = "20%",
+        onPurityChange = {},
+        rawDoseWithUnit = "20 mg"
+    )
+}
+
+@Composable
+fun ChooseDoseScreen(
+    roaDose: RoaDose?,
+    doseText: String,
+    onChangeDoseText: (String) -> Unit,
+    isValidDose: Boolean,
+    isEstimate: Boolean,
+    onChangeIsEstimate: (Boolean) -> Unit,
+    navigateToNext: () -> Unit,
+    useUnknownDoseAndNavigate: () -> Unit,
+    currentRoaRangeTextAndColor: Pair<String, DoseColor?>,
+    purity: Float,
+    purityText: String,
+    onPurityChange: (purity: Float) -> Unit,
+    rawDoseWithUnit: String?
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Choose Dose") }) }
@@ -101,17 +132,20 @@ fun ChooseDoseScreenContent(
                     },
                     keyboardActions = KeyboardActions(onDone = {
                         focusManager.clearFocus()
-                        if (isValidDose) {
-                            navigateToNext()
-                        }
                     }),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true
                 )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
-                    Text("Is Estimate")
-                }
+            }
+            PurityCalculation(
+                purity = purity,
+                purityText = purityText,
+                onPurityChange = onPurityChange,
+                rawDoseWithUnit = rawDoseWithUnit
+            )
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                Text("Is Estimate", style = MaterialTheme.typography.h6)
             }
             Row(
                 horizontalArrangement = Arrangement.End,
@@ -131,6 +165,55 @@ fun ChooseDoseScreenContent(
                 ) {
                     Text("Next")
                 }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun PurityPreview() {
+    PurityCalculation(
+        purity = 20f,
+        purityText = "20%",
+        onPurityChange = {},
+        rawDoseWithUnit = "20 mg"
+    )
+}
+
+@Composable
+fun PurityCalculation(
+    purity: Float,
+    purityText: String,
+    onPurityChange: (purity: Float) -> Unit,
+    rawDoseWithUnit: String?
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Purity", style = MaterialTheme.typography.h6)
+            Text(text = purityText, style = MaterialTheme.typography.h6)
+        }
+        Slider(
+            value = purity,
+            onValueChange = onPurityChange,
+            valueRange = 1f..100f,
+            steps = 99,
+            colors = SliderDefaults.colors(
+                thumbColor = MaterialTheme.colors.secondary,
+                activeTrackColor = MaterialTheme.colors.secondary
+            )
+        )
+        if (rawDoseWithUnit != null) {
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Raw Amount")
+                Text(text = rawDoseWithUnit, style = MaterialTheme.typography.h5)
             }
         }
     }

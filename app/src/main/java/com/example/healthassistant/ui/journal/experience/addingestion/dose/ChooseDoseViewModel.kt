@@ -28,6 +28,19 @@ class ChooseDoseViewModel @Inject constructor(
     val roaDose: RoaDose?
     var isEstimate by mutableStateOf(false)
     var doseText by mutableStateOf("")
+    var purity by mutableStateOf(100f)
+    val purityRounded: Int get() = purity.toInt()
+    val purityText: String get() = "$purityRounded%"
+    val rawDoseWithUnit: String?
+        get() {
+            dose.let {
+                if (it == null) return null
+                return String
+                    .format("%.2f", it.div(purityRounded).times(100))
+                    .toDouble()
+                    .toReadableString() + " ${roaDose?.units ?: ""}"
+            }
+        }
     val dose: Double? get() = doseText.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
     val currentRoaRangeTextAndColor: Pair<String, DoseColor?>
