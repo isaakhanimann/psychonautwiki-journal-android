@@ -1,8 +1,6 @@
 package com.example.healthassistant.ui.home
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -31,6 +29,7 @@ fun HomeScreen(
         groupedExperiences = homeViewModel.experiencesGrouped.collectAsState().value,
         deleteExperience = homeViewModel::deleteExperienceWithIngestions,
         filterOptions = homeViewModel.filterOptions.collectAsState().value,
+        numberOfActiveFilters = homeViewModel.numberOfActiveFilters
     )
 }
 
@@ -44,6 +43,7 @@ fun HomeScreenPreview() {
         groupedExperiences = emptyMap(),
         deleteExperience = {},
         filterOptions = listOf(),
+        numberOfActiveFilters = 1
     )
 }
 
@@ -55,6 +55,7 @@ fun HomeScreen(
     groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
     deleteExperience: (ExperienceWithIngestions) -> Unit,
     filterOptions: List<HomeViewModel.FilterOption>,
+    numberOfActiveFilters: Int,
 ) {
     Scaffold(
         topBar = {
@@ -69,7 +70,16 @@ fun HomeScreen(
                         IconButton(
                             onClick = { isExpanded = true },
                         ) {
-                            Icon(Icons.Default.Favorite, contentDescription = "Filter")
+                            BadgedBox(badge = {
+                                if (numberOfActiveFilters!=0) {
+                                    Badge { Text(numberOfActiveFilters.toString()) }
+                                }
+                            }) {
+                                Icon(
+                                    Icons.Filled.Favorite,
+                                    contentDescription = "Filter"
+                                )
+                            }
                         }
                         DropdownMenu(
                             expanded = isExpanded,
@@ -83,8 +93,15 @@ fun HomeScreen(
                                     enabled = filterOption.isEnabled
                                 ) {
                                     if (filterOption.hasCheck) {
-                                        Icon(Icons.Default.Check, "Check")
+                                        Icon(
+                                            Icons.Filled.Check,
+                                            contentDescription = "Check",
+                                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                                        )
+                                    } else {
+                                        Spacer(Modifier.size(ButtonDefaults.IconSize))
                                     }
+                                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                                     Text(filterOption.name)
                                 }
                             }

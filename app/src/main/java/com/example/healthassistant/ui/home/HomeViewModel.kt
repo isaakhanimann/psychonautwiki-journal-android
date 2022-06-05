@@ -1,5 +1,8 @@
 package com.example.healthassistant.ui.home
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
@@ -29,6 +32,8 @@ class HomeViewModel @Inject constructor(
         MutableStateFlow<List<FilterOption>>(emptyList())
     val filterOptions = _filterOptions.asStateFlow()
 
+    var numberOfActiveFilters by mutableStateOf(0)
+
     data class FilterOption(
         val name: String,
         val hasCheck: Boolean,
@@ -47,6 +52,7 @@ class HomeViewModel @Inject constructor(
                 }
                 .collect {
                     val substanceFilters = it.first.first
+                    numberOfActiveFilters = substanceFilters.size
                     _filterOptions.value = getFilterOptions(
                         substanceFilters = substanceFilters,
                         allDistinctSubstanceNames = it.first.second
