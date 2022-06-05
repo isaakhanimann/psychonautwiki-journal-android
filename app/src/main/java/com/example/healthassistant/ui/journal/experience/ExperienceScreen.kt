@@ -1,5 +1,6 @@
 package com.example.healthassistant.ui.journal.experience
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,6 +24,7 @@ import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
+import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,7 +47,7 @@ fun ExperienceScreen(
     }
 }
 
-@Preview
+@Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun ExperienceScreenContentPreview(
     @PreviewParameter(
@@ -54,22 +55,24 @@ fun ExperienceScreenContentPreview(
         limit = 1
     ) expAndIng: ExperienceWithIngestions
 ) {
-    ExperienceScreenContent(
-        experience = expAndIng.experience,
-        ingestions = expAndIng.ingestions,
-        cumulativeDoses = listOf(
-            ExperienceViewModel.CumulativeDose(
-                substanceName = "Cocaine",
-                cumulativeDose = 50.0,
-                units = "mg",
-                isEstimate = false
-            )
-        ),
-        ingestionDurationPairs = listOf(),
-        addIngestion = {},
-        deleteIngestion = {},
-        navigateToEditExperienceScreen = {}
-    )
+    HealthAssistantTheme {
+        ExperienceScreenContent(
+            experience = expAndIng.experience,
+            ingestions = expAndIng.ingestions,
+            cumulativeDoses = listOf(
+                ExperienceViewModel.CumulativeDose(
+                    substanceName = "Cocaine",
+                    cumulativeDose = 50.0,
+                    units = "mg",
+                    isEstimate = false
+                )
+            ),
+            ingestionDurationPairs = listOf(),
+            addIngestion = {},
+            deleteIngestion = {},
+            navigateToEditExperienceScreen = {}
+        )
+    }
 }
 
 @Composable
@@ -104,12 +107,20 @@ fun ExperienceScreenContent(
                 .padding(10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            val spacingBetweenSections = 20.dp
+            AllTimelines(
+                ingestionDurationPairs = ingestionDurationPairs,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            )
+            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
             Row(
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Ingestions", style = MaterialTheme.typography.h5)
+                Text("Ingestions", style = MaterialTheme.typography.subtitle1)
                 val dateText = remember(experience.date) {
                     val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
                     formatter.format(experience.date) ?: ""
@@ -130,24 +141,16 @@ fun ExperienceScreenContent(
                     modifier = Modifier.padding(vertical = 3.dp)
                 )
             }
-            cumulativeDoses.forEach {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Cumulative ${it.substanceName} Dose:")
-                    Text(text = (if (it.isEstimate) "~" else "" ) + it.cumulativeDose.toReadableString() + " " + it.units)
+            if (cumulativeDoses.isNotEmpty()) {
+                Text(
+                    text = "Cumulative Dose",
+                    style = MaterialTheme.typography.subtitle1
+                )
+                cumulativeDoses.forEach {
+                    CumulativeDoseRow(cumulativeDose = it)
                 }
             }
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(text = "Timeline", style = MaterialTheme.typography.h5)
-            AllTimelines(
-                ingestionDurationPairs = ingestionDurationPairs,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
             if (experience.text.isEmpty()) {
                 Button(onClick = navigateToEditExperienceScreen) {
                     Icon(
@@ -159,15 +162,26 @@ fun ExperienceScreenContent(
                     Text("Add Notes")
                 }
             } else {
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(10.dp)) {
-                        Text(text = "Notes", style = MaterialTheme.typography.h6)
-                        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                            Text(text = experience.text)
-                        }
-                    }
-                }
+                Text(text = experience.text)
             }
+            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
+        }
+    }
+}
+
+@Composable
+fun CumulativeDoseRow(cumulativeDose: ExperienceViewModel.CumulativeDose) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.h6)
+            Text(
+                text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units,
+                style = MaterialTheme.typography.subtitle1
+            )
         }
     }
 }
