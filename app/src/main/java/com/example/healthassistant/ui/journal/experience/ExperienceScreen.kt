@@ -108,13 +108,15 @@ fun ExperienceScreenContent(
                 .verticalScroll(rememberScrollState())
         ) {
             val spacingBetweenSections = 20.dp
-            AllTimelines(
-                ingestionDurationPairs = ingestionDurationPairs,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
-            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
+            if (ingestionDurationPairs.isNotEmpty()) {
+                AllTimelines(
+                    ingestionDurationPairs = ingestionDurationPairs,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+                Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
+            }
             Row(
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -164,7 +166,6 @@ fun ExperienceScreenContent(
             } else {
                 Text(text = experience.text)
             }
-            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
         }
     }
 }
