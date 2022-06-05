@@ -1,10 +1,13 @@
 package com.example.healthassistant.ui.home
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,10 +30,7 @@ fun HomeScreen(
         navigateToEditExperienceScreen = navigateToEditExperienceScreen,
         groupedExperiences = homeViewModel.experiencesGrouped.collectAsState().value,
         deleteExperience = homeViewModel::deleteExperienceWithIngestions,
-        activeFilterNames = homeViewModel.filters.collectAsState().value.map { it.substanceName },
-        addFilter = {
-            homeViewModel.addFilter(substanceName = it)
-        }
+        filterOptions = homeViewModel.filterOptions.collectAsState().value,
     )
 }
 
@@ -43,8 +43,7 @@ fun HomeScreenPreview() {
         navigateToEditExperienceScreen = {},
         groupedExperiences = emptyMap(),
         deleteExperience = {},
-        activeFilterNames = listOf(),
-        addFilter = {}
+        filterOptions = listOf(),
     )
 }
 
@@ -55,8 +54,7 @@ fun HomeScreen(
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
     groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
     deleteExperience: (ExperienceWithIngestions) -> Unit,
-    activeFilterNames: List<String>,
-    addFilter: (substanceName: String) -> Unit
+    filterOptions: List<HomeViewModel.FilterOption>,
 ) {
     Scaffold(
         topBar = {
@@ -77,20 +75,18 @@ fun HomeScreen(
                             expanded = isExpanded,
                             onDismissRequest = { isExpanded = false }
                         ) {
-                            DropdownMenuItem(
-                                onClick = {
-                                    isExpanded = false
+                            filterOptions.forEach { filterOption ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        filterOption.onTap()
+                                    },
+                                    enabled = filterOption.isEnabled
+                                ) {
+                                    if (filterOption.hasCheck) {
+                                        Icon(Icons.Default.Check, "Check")
+                                    }
+                                    Text(filterOption.name)
                                 }
-                            ) {
-                                Text("Delete")
-                            }
-                            DropdownMenuItem(
-                                onClick = {
-                                    addFilter("LSD")
-                                    isExpanded = false
-                                }
-                            ) {
-                                Text("Add LSD")
                             }
                         }
                     }
@@ -103,19 +99,13 @@ fun HomeScreen(
             }
         }
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Text(text = "Hello")
-            activeFilterNames.forEach {
-                Text(text = it)
-            }
-            ExperiencesList(
-                groupedExperiences = groupedExperiences,
-                navigateToExperiencePopNothing = navigateToExperiencePopNothing,
-                navigateToEditExperienceScreen = navigateToEditExperienceScreen,
-                navigateToAddExperience = navigateToAddExperience,
-                deleteExperience = deleteExperience
-            )
-        }
+        ExperiencesList(
+            groupedExperiences = groupedExperiences,
+            navigateToExperiencePopNothing = navigateToExperiencePopNothing,
+            navigateToEditExperienceScreen = navigateToEditExperienceScreen,
+            navigateToAddExperience = navigateToAddExperience,
+            deleteExperience = deleteExperience
+        )
     }
 }
 

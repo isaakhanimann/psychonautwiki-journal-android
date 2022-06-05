@@ -25,33 +25,103 @@ class HomeViewModel @Inject constructor(
         MutableStateFlow<Map<String, List<ExperienceWithIngestions>>>(emptyMap())
     val experiencesGrouped = _experiencesGrouped.asStateFlow()
 
-    private val _filters =
-        MutableStateFlow<List<SubstanceFilter>>(emptyList())
-    val filters = _filters.asStateFlow()
+    private val _filterOptions =
+        MutableStateFlow<List<FilterOption>>(emptyList())
+    val filterOptions = _filterOptions.asStateFlow()
+
+    data class FilterOption(
+        val name: String,
+        val hasCheck: Boolean,
+        val isEnabled: Boolean,
+        val onTap: () -> Unit
+    )
 
     init {
         viewModelScope.launch {
             filterRepo.getFilters()
-                .combine(experienceRepo.getAllExperiencesWithIngestions()) { filters, experiencesWithIngestions ->
-                    Pair(first = filters, second = experiencesWithIngestions)
-                }.collect {
-                    _filters.value = it.first
+                .combine(experienceRepo.getLastUsedSubstanceNames(100)) { filters, names ->
+                    Pair(first = filters, second = names)
+                }
+                .combine(experienceRepo.getAllExperiencesWithIngestions()) { filtersAndNames, experiencesWithIngestions ->
+                    Pair(first = filtersAndNames, second = experiencesWithIngestions)
+                }
+                .collect {
+                    val substanceFilters = it.first.first
+                    _filterOptions.value = getFilterOptions(
+                        substanceFilters = substanceFilters,
+                        allDistinctSubstanceNames = it.first.second
+                    )
+                    val filteredExperiences = it.second.filter { experienceWithIngestions ->
+                        !experienceWithIngestions.ingestions.any { ingestion ->
+                             substanceFilters.any { filter ->
+                                 filter.substanceName == ingestion.substanceName
+                             }
+                        }
+                    }
                     _experiencesGrouped.value =
-                        groupExperiencesByYear(experiencesWithIngestions = it.second)
+                        groupExperiencesByYear(experiencesWithIngestions = filteredExperiences)
                 }
         }
     }
 
-    fun addFilter(substanceName: String) {
+    private fun addFilter(substanceName: String) {
         val filter = SubstanceFilter(substanceName = substanceName)
         viewModelScope.launch {
             filterRepo.insert(filter)
         }
     }
 
-    fun deleteExperienceWithIngestions(experienceWithIngs: ExperienceWithIngestions) {
+    private fun deleteFilter(substanceName: String) {
+        val filter = SubstanceFilter(substanceName = substanceName)
         viewModelScope.launch {
-            experienceRepo.deleteExperienceWithIngestions(experience = experienceWithIngs.experience)
+            filterRepo.deleteFilter(filter)
+        }
+    }
+
+    fun deleteExperienceWithIngestions(experienceWithIngestions: ExperienceWithIngestions) {
+        viewModelScope.launch {
+            experienceRepo.deleteExperienceWithIngestions(experience = experienceWithIngestions.experience)
+        }
+    }
+
+    private fun getFilterOptions(
+        substanceFilters: List<SubstanceFilter>,
+        allDistinctSubstanceNames: List<String>
+    ): List<FilterOption> {
+        val firstOption = FilterOption(
+            name = "Show All",
+            hasCheck = substanceFilters.isEmpty(),
+            isEnabled = substanceFilters.isNotEmpty(),
+            onTap = {
+                if (substanceFilters.isNotEmpty()) {
+                    deleteAllFilters()
+                }
+            }
+        )
+        val options = mutableListOf(firstOption)
+        options.addAll(
+            allDistinctSubstanceNames.map {
+                val hasCheck = !substanceFilters.any { filter -> filter.substanceName == it }
+                FilterOption(
+                    name = it,
+                    hasCheck = hasCheck,
+                    isEnabled = true,
+                    onTap = {
+                        if (hasCheck) {
+                            addFilter(substanceName = it)
+                        } else {
+                            deleteFilter(substanceName = it)
+                        }
+                    }
+                )
+            }
+        )
+        return options
+    }
+
+    private fun deleteAllFilters() {
+        viewModelScope.launch {
+            filterRepo.deleteAll()
         }
     }
 
