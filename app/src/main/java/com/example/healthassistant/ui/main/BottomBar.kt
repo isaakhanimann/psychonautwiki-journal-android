@@ -19,7 +19,7 @@ import com.example.healthassistant.ui.main.routers.TabRouter
 @Composable
 fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean>) {
     val items = listOf(
-        TabRouter.Home,
+        TabRouter.Journal,
         TabRouter.Search,
         TabRouter.Stats,
         TabRouter.Settings

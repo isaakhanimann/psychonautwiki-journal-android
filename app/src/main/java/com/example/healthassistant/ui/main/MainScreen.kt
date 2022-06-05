@@ -12,16 +12,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.ui.home.addExperience.AddExperienceScreen
-import com.example.healthassistant.ui.home.HomeScreen
-import com.example.healthassistant.ui.home.experience.ExperienceScreen
-import com.example.healthassistant.ui.home.experience.addingestion.color.ChooseColorScreen
-import com.example.healthassistant.ui.home.experience.addingestion.dose.ChooseDoseScreen
-import com.example.healthassistant.ui.home.experience.addingestion.interactions.CheckInteractionsScreen
-import com.example.healthassistant.ui.home.experience.addingestion.route.ChooseRouteScreen
-import com.example.healthassistant.ui.home.experience.addingestion.search.AddIngestionSearchScreen
-import com.example.healthassistant.ui.home.experience.addingestion.time.ChooseTimeScreen
-import com.example.healthassistant.ui.home.experience.edit.EditExperienceScreen
+import com.example.healthassistant.ui.journal.addExperience.AddExperienceScreen
+import com.example.healthassistant.ui.journal.JournalScreen
+import com.example.healthassistant.ui.journal.experience.ExperienceScreen
+import com.example.healthassistant.ui.journal.experience.addingestion.color.ChooseColorScreen
+import com.example.healthassistant.ui.journal.experience.addingestion.dose.ChooseDoseScreen
+import com.example.healthassistant.ui.journal.experience.addingestion.interactions.CheckInteractionsScreen
+import com.example.healthassistant.ui.journal.experience.addingestion.route.ChooseRouteScreen
+import com.example.healthassistant.ui.journal.experience.addingestion.search.AddIngestionSearchScreen
+import com.example.healthassistant.ui.journal.experience.addingestion.time.ChooseTimeScreen
+import com.example.healthassistant.ui.journal.experience.edit.EditExperienceScreen
 import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
@@ -32,7 +32,7 @@ fun MainScreen() {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     when (navBackStackEntry?.destination?.route) {
-        TabRouter.Home.route, TabRouter.Search.route, TabRouter.Stats.route, TabRouter.Settings.route -> {
+        TabRouter.Journal.route, TabRouter.Search.route, TabRouter.Stats.route, TabRouter.Settings.route -> {
             bottomBarState.value = true
         }
         else ->
@@ -48,11 +48,11 @@ fun MainScreen() {
     ) { innerPadding ->
         NavHost(
             navController,
-            startDestination = TabRouter.Home.route,
+            startDestination = TabRouter.Journal.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(TabRouter.Home.route) {
-                HomeScreen(
+            composable(TabRouter.Journal.route) {
+                JournalScreen(
                     navigateToAddExperience = navController::navigateToAddExperience,
                     navigateToExperiencePopNothing = {
                         navController.navigateToExperiencePopNothing(experienceId = it)

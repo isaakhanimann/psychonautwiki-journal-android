@@ -17,6 +17,6 @@ fun NavController.navigateToAddExperience() {
 
 fun NavController.navigateToExperienceFromAddExperience(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId) {
-        popUpTo(TabRouter.Home.route)
+        popUpTo(TabRouter.Journal.route)
     }
 }
