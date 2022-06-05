@@ -11,11 +11,16 @@ import java.util.*
 class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<ExperienceWithIngestions> {
     override val values: Sequence<ExperienceWithIngestions> = sequenceOf(
         ExperienceWithIngestions(
-            experience = Experience(id = 0, title = "Day at Lake Geneva", date = Date(), text = "Some notes"),
+            experience = Experience(
+                id = 0,
+                title = "Day at Lake Geneva",
+                date = Date(),
+                text = "Some notes"
+            ),
             ingestions = listOf(
                 Ingestion(
                     substanceName = "MDMA",
-                    time = Date(),
+                    time = Date(Date().time - 2*60*60*1000),
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
                     isDoseAnEstimate = false,
@@ -25,7 +30,17 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
                 ),
                 Ingestion(
                     substanceName = "Cocaine",
-                    time = Date(),
+                    time = Date(Date().time - 60*60*1000),
+                    administrationRoute = AdministrationRoute.INSUFFLATED,
+                    dose = 30.0,
+                    isDoseAnEstimate = false,
+                    units = "mg",
+                    color = IngestionColor.ORANGE,
+                    experienceId = 0
+                ),
+                Ingestion(
+                    substanceName = "Cocaine",
+                    time = Date(Date().time - 30*60*1000),
                     administrationRoute = AdministrationRoute.INSUFFLATED,
                     dose = 20.0,
                     isDoseAnEstimate = false,
@@ -36,7 +51,12 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
             )
         ),
         ExperienceWithIngestions(
-            experience = Experience(id = 0, title = "This one has a very very very long title in case somebody wants to be creative with the naming.", date = Date(), text = "Some notes"),
+            experience = Experience(
+                id = 0,
+                title = "This one has a very very very long title in case somebody wants to be creative with the naming.",
+                date = Date(),
+                text = "Some notes"
+            ),
             ingestions = listOf(
                 Ingestion(
                     substanceName = "MDMA",

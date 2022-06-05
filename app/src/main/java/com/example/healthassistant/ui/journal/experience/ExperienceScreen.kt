@@ -23,6 +23,7 @@ import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
+import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,6 +37,7 @@ fun ExperienceScreen(
         ExperienceScreenContent(
             experience = experienceWithIngestions.experience,
             ingestions = experienceWithIngestions.ingestions,
+            cumulativeDoses = viewModel.cumulativeDoses.collectAsState().value,
             ingestionDurationPairs = viewModel.ingestionDurationPairs.collectAsState().value,
             addIngestion = navigateToAddIngestionSearch,
             deleteIngestion = viewModel::deleteIngestion,
@@ -47,11 +49,22 @@ fun ExperienceScreen(
 @Preview
 @Composable
 fun ExperienceScreenContentPreview(
-    @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) expAndIng: ExperienceWithIngestions
+    @PreviewParameter(
+        ExperienceWithIngestionsPreviewProvider::class,
+        limit = 1
+    ) expAndIng: ExperienceWithIngestions
 ) {
     ExperienceScreenContent(
         experience = expAndIng.experience,
         ingestions = expAndIng.ingestions,
+        cumulativeDoses = listOf(
+            ExperienceViewModel.CumulativeDose(
+                substanceName = "Cocaine",
+                cumulativeDose = 50.0,
+                units = "mg",
+                isEstimate = false
+            )
+        ),
         ingestionDurationPairs = listOf(),
         addIngestion = {},
         deleteIngestion = {},
@@ -63,6 +76,7 @@ fun ExperienceScreenContentPreview(
 fun ExperienceScreenContent(
     experience: Experience,
     ingestions: List<Ingestion>,
+    cumulativeDoses: List<ExperienceViewModel.CumulativeDose>,
     ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>,
     addIngestion: () -> Unit,
     deleteIngestion: (Ingestion) -> Unit,
@@ -115,6 +129,15 @@ fun ExperienceScreenContent(
                     },
                     modifier = Modifier.padding(vertical = 3.dp)
                 )
+            }
+            cumulativeDoses.forEach {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Cumulative ${it.substanceName} Dose:")
+                    Text(text = (if (it.isEstimate) "~" else "" ) + it.cumulativeDose.toReadableString() + " " + it.units)
+                }
             }
             Spacer(modifier = Modifier.height(10.dp))
             Text(text = "Timeline", style = MaterialTheme.typography.h5)
