@@ -9,6 +9,7 @@ import com.example.healthassistant.data.room.filter.SubstanceFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -30,16 +31,13 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            filterRepo.getFilters().collect { filters ->
-                _filters.value = filters
-            }
-        }
-        viewModelScope.launch {
-            experienceRepo.getAllExperiencesWithIngestions()
-                .collect { experiences ->
-                    val cal = Calendar.getInstance(TimeZone.getDefault())
+            filterRepo.getFilters()
+                .combine(experienceRepo.getAllExperiencesWithIngestions()) { filters, experiencesWithIngestions ->
+                    Pair(first = filters, second = experiencesWithIngestions)
+                }.collect {
+                    _filters.value = it.first
                     _experiencesGrouped.value =
-                        experiences.groupBy { cal.get(Calendar.YEAR).toString() }
+                        groupExperiencesByYear(experiencesWithIngestions = it.second)
                 }
         }
     }
@@ -54,6 +52,13 @@ class HomeViewModel @Inject constructor(
     fun deleteExperienceWithIngestions(experienceWithIngs: ExperienceWithIngestions) {
         viewModelScope.launch {
             experienceRepo.deleteExperienceWithIngestions(experience = experienceWithIngs.experience)
+        }
+    }
+
+    companion object {
+        fun groupExperiencesByYear(experiencesWithIngestions: List<ExperienceWithIngestions>): Map<String, List<ExperienceWithIngestions>> {
+            val cal = Calendar.getInstance(TimeZone.getDefault())
+            return experiencesWithIngestions.groupBy { cal.get(Calendar.YEAR).toString() }
         }
     }
 
