@@ -4,7 +4,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.example.healthassistant.data.experiences.entities.IngestionColor
+import com.example.healthassistant.data.room.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.AdministrationRoute
 
 // argument keys

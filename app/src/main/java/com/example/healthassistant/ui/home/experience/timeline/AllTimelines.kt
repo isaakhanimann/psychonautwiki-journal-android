@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.example.healthassistant.data.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.previewproviders.TimelinesPreviewProvider
 import kotlinx.coroutines.delay

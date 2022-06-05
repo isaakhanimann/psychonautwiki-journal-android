@@ -2,7 +2,7 @@ package com.example.healthassistant.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.healthassistant.data.experiences.ExperienceRepository
+import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

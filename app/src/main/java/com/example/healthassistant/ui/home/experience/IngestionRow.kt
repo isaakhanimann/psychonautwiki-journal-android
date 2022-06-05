@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.example.healthassistant.data.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.ui.previewproviders.IngestionPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat

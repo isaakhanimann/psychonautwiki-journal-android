@@ -3,9 +3,9 @@ package com.example.healthassistant.ui.home.experience
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.healthassistant.data.experiences.ExperienceRepository
-import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
-import com.example.healthassistant.data.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.ExperienceRepository
+import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY

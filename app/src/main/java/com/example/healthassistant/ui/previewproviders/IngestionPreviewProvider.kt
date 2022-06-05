@@ -1,8 +1,8 @@
 package com.example.healthassistant.ui.previewproviders
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.example.healthassistant.data.experiences.entities.Ingestion
-import com.example.healthassistant.data.experiences.entities.IngestionColor
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.AdministrationRoute
 import java.util.*
 

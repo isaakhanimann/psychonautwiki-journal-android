@@ -17,9 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.experiences.entities.Experience
-import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
-import com.example.healthassistant.data.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.Experience
+import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.home.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider

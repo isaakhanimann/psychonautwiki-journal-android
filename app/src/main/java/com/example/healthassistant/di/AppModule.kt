@@ -2,8 +2,9 @@ package com.example.healthassistant.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.healthassistant.data.experiences.ExperienceDao
-import com.example.healthassistant.data.experiences.ExperienceDatabase
+import com.example.healthassistant.data.room.AppDatabase
+import com.example.healthassistant.data.room.experiences.ExperienceDao
+import com.example.healthassistant.data.room.filter.FilterDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,15 +19,20 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideExperiencesDao(experienceDatabase: ExperienceDatabase): ExperienceDao =
-        experienceDatabase.experienceDao()
+    fun provideExperiencesDao(appDatabase: AppDatabase): ExperienceDao =
+        appDatabase.experienceDao()
 
     @Singleton
     @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context): ExperienceDatabase =
+    fun provideFilterDao(appDatabase: AppDatabase): FilterDao =
+        appDatabase.filterDao()
+
+    @Singleton
+    @Provides
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(
             context,
-            ExperienceDatabase::class.java,
+            AppDatabase::class.java,
             "experiences_db"
         ).build()
 }

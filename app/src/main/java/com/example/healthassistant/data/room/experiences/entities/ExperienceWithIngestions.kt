@@ -1,4 +1,4 @@
-package com.example.healthassistant.data.experiences.entities
+package com.example.healthassistant.data.room.experiences.entities
 
 import androidx.room.Embedded
 import androidx.room.Relation

@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.healthassistant.data.experiences.ExperienceRepository
-import com.example.healthassistant.data.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.ExperienceRepository
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.InteractionType
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY

@@ -1,8 +1,8 @@
-package com.example.healthassistant.data.experiences
+package com.example.healthassistant.data.room.experiences
 
-import com.example.healthassistant.data.experiences.entities.Experience
-import com.example.healthassistant.data.experiences.entities.ExperienceWithIngestions
-import com.example.healthassistant.data.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.Experience
+import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate

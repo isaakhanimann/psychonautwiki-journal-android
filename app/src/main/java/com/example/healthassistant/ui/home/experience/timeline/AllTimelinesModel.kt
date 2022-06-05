@@ -1,7 +1,7 @@
 package com.example.healthassistant.ui.home.experience.timeline
 
-import com.example.healthassistant.data.experiences.entities.Ingestion
-import com.example.healthassistant.data.experiences.entities.IngestionColor
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.home.experience.timeline.ingestion.FullTimeline
 import com.example.healthassistant.ui.home.experience.timeline.ingestion.TimelineDrawable

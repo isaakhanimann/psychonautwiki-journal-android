@@ -1,4 +1,4 @@
-package com.example.healthassistant.data.experiences.entities
+package com.example.healthassistant.data.room.experiences.entities
 
 import androidx.compose.ui.graphics.Color
 
