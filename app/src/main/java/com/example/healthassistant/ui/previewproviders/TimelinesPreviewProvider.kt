@@ -265,6 +265,84 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                         max = 48.toDuration(DurationUnit.HOURS),
                     )
                 )
+            )
+        ),
+        listOf(
+            Pair(
+                Ingestion(
+                    substanceName = "Substance 1",
+                    time = Date(Date().time - 20*60*60*1000),
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = 90.0,
+                    isDoseAnEstimate = false,
+                    units = "mg",
+                    color = IngestionColor.BLUE,
+                    experienceId = 0
+                ),
+                RoaDuration(
+                    onset = DurationRange(
+                        min = 20.toDuration(DurationUnit.MINUTES),
+                        max = 40.toDuration(DurationUnit.MINUTES),
+                    ),
+                    comeup = DurationRange(
+                        min = 15.toDuration(DurationUnit.MINUTES),
+                        max = 30.toDuration(DurationUnit.MINUTES),
+                    ),
+                    peak = DurationRange(
+                        min = 1.5.toDuration(DurationUnit.HOURS),
+                        max = 2.5.toDuration(DurationUnit.HOURS),
+                    ),
+                    offset = DurationRange(
+                        min = 2.toDuration(DurationUnit.HOURS),
+                        max = 4.toDuration(DurationUnit.HOURS),
+                    ),
+                    total = DurationRange(
+                        min = 3.toDuration(DurationUnit.HOURS),
+                        max = 5.toDuration(DurationUnit.HOURS),
+                    ),
+                    afterglow = DurationRange(
+                        min = 12.toDuration(DurationUnit.HOURS),
+                        max = 48.toDuration(DurationUnit.HOURS),
+                    )
+                )
+            ),
+            Pair(
+                Ingestion(
+                    substanceName = "Substance 2",
+                    time = Date(),
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = 90.0,
+                    isDoseAnEstimate = false,
+                    units = "mg",
+                    color = IngestionColor.ORANGE,
+                    experienceId = 0
+                ),
+                RoaDuration(
+                    onset = DurationRange(
+                        min = 20.toDuration(DurationUnit.MINUTES),
+                        max = 40.toDuration(DurationUnit.MINUTES),
+                    ),
+                    comeup = DurationRange(
+                        min = 15.toDuration(DurationUnit.MINUTES),
+                        max = 30.toDuration(DurationUnit.MINUTES),
+                    ),
+                    peak = DurationRange(
+                        min = 1.5.toDuration(DurationUnit.HOURS),
+                        max = 2.5.toDuration(DurationUnit.HOURS),
+                    ),
+                    offset = DurationRange(
+                        min = 2.toDuration(DurationUnit.HOURS),
+                        max = 4.toDuration(DurationUnit.HOURS),
+                    ),
+                    total = DurationRange(
+                        min = 3.toDuration(DurationUnit.HOURS),
+                        max = 5.toDuration(DurationUnit.HOURS),
+                    ),
+                    afterglow = DurationRange(
+                        min = 12.toDuration(DurationUnit.HOURS),
+                        max = 48.toDuration(DurationUnit.HOURS),
+                    )
+                )
             ),
         )
     )
