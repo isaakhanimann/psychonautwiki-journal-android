@@ -12,7 +12,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.ui.journal.experience.addingestion.time.DatePickerButton
 
 
 @Composable
@@ -21,10 +20,6 @@ fun EditExperienceScreen(
     viewModel: EditExperienceViewModel = hiltViewModel()
 ) {
     EditExperienceScreenContent(
-        day = viewModel.day,
-        month = viewModel.month,
-        year = viewModel.year,
-        onSubmitDate = viewModel::onSubmitDate,
         enteredTitle = viewModel.enteredTitle,
         onChangeOfEnteredTitle = { viewModel.enteredTitle = it },
         isEnteredTitleOk = viewModel.isEnteredTitleOk,
@@ -32,7 +27,6 @@ fun EditExperienceScreen(
             viewModel.onDoneTap()
             navigateBack()
         },
-        dateString = viewModel.dateString,
         text = viewModel.enteredText,
         onTextChange = { viewModel.enteredText = it }
     )
@@ -42,15 +36,10 @@ fun EditExperienceScreen(
 @Composable
 fun EditExperienceScreenPreview() {
     EditExperienceScreenContent(
-        day = 5,
-        month = 3,
-        year = 2022,
-        onSubmitDate = { _: Int, _: Int, _: Int -> },
         enteredTitle = "Day at the Lake",
         onChangeOfEnteredTitle = { },
         isEnteredTitleOk = true,
         onDoneTap = {},
-        dateString = "Wed 5 Jul 2022",
         text = "Here are some sample notes",
         onTextChange = {}
     )
@@ -58,15 +47,10 @@ fun EditExperienceScreenPreview() {
 
 @Composable
 fun EditExperienceScreenContent(
-    day: Int,
-    month: Int,
-    year: Int,
-    onSubmitDate: (Int, Int, Int) -> Unit,
     enteredTitle: String,
     onChangeOfEnteredTitle: (String) -> Unit,
     isEnteredTitleOk: Boolean,
     onDoneTap: () -> Unit,
-    dateString: String,
     text: String,
     onTextChange: (String) -> Unit
 ) {
@@ -84,14 +68,6 @@ fun EditExperienceScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            DatePickerButton(
-                day = day,
-                month = month,
-                year = year,
-                onSubmitDate = onSubmitDate,
-                dateString = dateString,
-                modifier = Modifier.fillMaxWidth()
-            )
             val focusManager = LocalFocusManager.current
             OutlinedTextField(
                 value = enteredTitle,

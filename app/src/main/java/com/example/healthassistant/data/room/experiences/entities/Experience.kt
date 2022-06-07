@@ -9,6 +9,6 @@ data class Experience(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     var title: String,
-    var date: Date,
-    var text: String
-    )
+    var text: String,
+    val creationDate: Date = Date()
+)

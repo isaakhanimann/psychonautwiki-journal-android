@@ -6,10 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.room.experiences.entities.IngestionColor
-import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
@@ -125,6 +125,6 @@ class ChooseTimeViewModel @Inject constructor(
     private fun createNewExperience(): Experience {
         val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         val title = formatter.format(currentlySelectedDate) ?: "Title"
-        return Experience(title = title, date = currentlySelectedDate, text = "")
+        return Experience(title = title, text = "")
     }
 }

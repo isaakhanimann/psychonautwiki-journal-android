@@ -14,7 +14,6 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
             experience = Experience(
                 id = 0,
                 title = "Day at Lake Geneva",
-                date = Date(),
                 text = "Some notes"
             ),
             ingestions = listOf(
@@ -54,7 +53,6 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
             experience = Experience(
                 id = 0,
                 title = "This one has a very very very long title in case somebody wants to be creative with the naming.",
-                date = Date(),
                 text = "Some notes"
             ),
             ingestions = listOf(

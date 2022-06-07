@@ -14,7 +14,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.ui.journal.experience.addingestion.time.DatePickerButton
 
 @Composable
 fun AddExperienceScreen(
@@ -23,10 +22,6 @@ fun AddExperienceScreen(
 ) {
     val context = LocalContext.current
     AddExperienceContent(
-        day = viewModel.day,
-        month = viewModel.month,
-        year = viewModel.year,
-        onSubmitDate = viewModel::onSubmitDate,
         title = viewModel.title,
         onChangeOfTitle = { viewModel.title = it },
         isTitleOk = viewModel.isTitleOk,
@@ -39,7 +34,6 @@ fun AddExperienceScreen(
                 navigateToExperienceFromAddExperience(it)
             }
         },
-        dateString = viewModel.dateString,
         notes = viewModel.notes,
         onNotesChange = {
             viewModel.notes = it
@@ -51,15 +45,10 @@ fun AddExperienceScreen(
 @Composable
 fun AddExperienceContentPreview() {
     AddExperienceContent(
-        day = 5,
-        month = 3,
-        year = 2022,
-        onSubmitDate = { _: Int, _: Int, _: Int -> },
         title = "Day at the Lake",
         onChangeOfTitle = { },
         isTitleOk = true,
         onConfirmTap = {},
-        dateString = "Wed 5 Jul 2022",
         notes = "",
         onNotesChange = {}
     )
@@ -67,15 +56,10 @@ fun AddExperienceContentPreview() {
 
 @Composable
 fun AddExperienceContent(
-    day: Int,
-    month: Int,
-    year: Int,
-    onSubmitDate: (Int, Int, Int) -> Unit,
     title: String,
     onChangeOfTitle: (String) -> Unit,
     isTitleOk: Boolean,
     onConfirmTap: () -> Unit,
-    dateString: String,
     notes: String,
     onNotesChange: (String) -> Unit
 ) {
@@ -93,13 +77,6 @@ fun AddExperienceContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            DatePickerButton(
-                day = day,
-                month = month,
-                year = year,
-                onSubmitDate = onSubmitDate,
-                dateString = dateString
-            )
             val focusManager = LocalFocusManager.current
             OutlinedTextField(
                 value = title,

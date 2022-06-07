@@ -11,7 +11,7 @@ import java.util.*
 @Dao
 interface ExperienceDao {
 
-    @Query("SELECT * FROM experience ORDER BY date DESC")
+    @Query("SELECT * FROM experience ORDER BY creationDate DESC")
     fun getExperiences(): Flow<List<Experience>>
 
     @Query("SELECT * FROM ingestion ORDER BY time ASC")
@@ -24,10 +24,10 @@ interface ExperienceDao {
     fun getLastUsedSubstanceNames(limit: Int): Flow<List<String>>
 
     @Transaction
-    @Query("SELECT DISTINCT e.id, e.title, e.date, e.text FROM experience AS e LEFT JOIN ingestion AS i ON e.id == i.experienceId ORDER BY case when i.time IS NULL then e.date else i.time end DESC")
-    fun getExperiencesWithIngestions(): Flow<List<ExperienceWithIngestions>>
+    @Query("SELECT DISTINCT e.id, e.title, e.creationDate, e.text FROM experience AS e LEFT JOIN ingestion AS i ON e.id == i.experienceId ORDER BY case when i.time IS NULL then e.creationDate else i.time end DESC")
+    fun getSortedExperiencesWithIngestions(): Flow<List<ExperienceWithIngestions>>
 
-    @Query("SELECT * FROM experience ORDER BY date DESC LIMIT :limit")
+    @Query("SELECT * FROM experience ORDER BY creationDate DESC LIMIT :limit")
     suspend fun getLastExperiences(limit: Int): List<Experience>
 
     @Query("SELECT * FROM experience WHERE id =:id")

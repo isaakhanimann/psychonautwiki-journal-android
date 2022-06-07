@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,8 +24,6 @@ import com.example.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun ExperienceScreen(
@@ -94,14 +91,7 @@ fun ExperienceScreen(
         topBar = {
             TopAppBar(
                 title = {
-                        Column() {
-                            Text(experience.title)
-                            val dateText = remember(experience.date) {
-                                val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-                                formatter.format(experience.date) ?: ""
-                            }
-                            Text(text = dateText, style = MaterialTheme.typography.body1)
-                        }
+                    Text(experience.title)
                 },
                 actions = {
                     IconButton(onClick = navigateToEditExperienceScreen) {

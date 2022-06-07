@@ -51,7 +51,7 @@ class ExperienceViewModel @Inject constructor(
             experienceRepo.getExperienceWithIngestions(experienceId = id).collect {
                 _experienceWithIngestions.value = it!!
                 val ingestions = it.ingestions
-                _ingestionElements.value = getIngestionElements(ingestions, experienceDate = it.experience.date)
+                _ingestionElements.value = getIngestionElements(ingestions)
                 _cumulativeDoses.value = getCumulativeDoses(ingestions)
                 _ingestionDurationPairs.value = ingestions.map { ing ->
                     val roaDuration = substanceRepo.getSubstance(ing.substanceName)
@@ -67,16 +67,11 @@ class ExperienceViewModel @Inject constructor(
         val ingestion: Ingestion
     )
 
-    private fun getIngestionElements(sortedIngestions: List<Ingestion>, experienceDate:Date): List<IngestionElement> {
-        val experienceDateText = getDateText(experienceDate)
+    private fun getIngestionElements(sortedIngestions: List<Ingestion>): List<IngestionElement> {
         return sortedIngestions.mapIndexed { index, ingestion ->
             val ingestionTimeText = getDateText(ingestion.time)
             if (index == 0) {
-                if (ingestionTimeText == experienceDateText) {
-                    IngestionElement(dateText = null, ingestion = ingestion)
-                } else {
-                    IngestionElement(dateText = ingestionTimeText, ingestion = ingestion)
-                }
+                IngestionElement(dateText = ingestionTimeText, ingestion = ingestion)
             } else {
                 val lastIngestionDateText = getDateText(sortedIngestions[index-1].time)
                 if (lastIngestionDateText != ingestionTimeText) {

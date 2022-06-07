@@ -21,29 +21,13 @@ class AddExperienceViewModel @Inject constructor(private val repository: Experie
     var title by mutableStateOf("")
     var notes by mutableStateOf("")
     val isTitleOk get() = title.isNotEmpty()
-    private val calendar: Calendar = Calendar.getInstance()
-    var year by mutableStateOf(calendar.get(Calendar.YEAR))
-    var month by mutableStateOf(calendar.get(Calendar.MONTH))
-    var day by mutableStateOf(calendar.get(Calendar.DAY_OF_MONTH))
-    private val currentlySelectedDate: Date
-        get() {
-            calendar.set(year, month, day)
-            return calendar.time
-        }
     val dateString: String
         get() {
             val formatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-            return formatter.format(currentlySelectedDate) ?: "Unknown"
+            return formatter.format(Date()) ?: "Unknown"
         }
 
     init {
-        title = dateString
-    }
-
-    fun onSubmitDate(newDay: Int, newMonth: Int, newYear: Int) {
-        day = newDay
-        month = newMonth
-        year = newYear
         title = dateString
     }
 
@@ -53,7 +37,6 @@ class AddExperienceViewModel @Inject constructor(private val repository: Experie
                 val newExperience =
                     Experience(
                         title = title,
-                        date = currentlySelectedDate,
                         text = notes
                     )
                 val experienceId = repository.addExperience(newExperience)

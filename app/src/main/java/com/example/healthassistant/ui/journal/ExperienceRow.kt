@@ -103,9 +103,9 @@ fun ExperienceRow(
             modifier = Modifier.fillMaxHeight()
         ) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                val dateText = remember(experienceWithIngs.experience.date) {
+                val dateText = remember(experienceWithIngs.sortDate) {
                     val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
-                    formatter.format(experienceWithIngs.experience.date) ?: ""
+                    formatter.format(experienceWithIngs.sortDate) ?: ""
                 }
                 Text(text = dateText)
             }

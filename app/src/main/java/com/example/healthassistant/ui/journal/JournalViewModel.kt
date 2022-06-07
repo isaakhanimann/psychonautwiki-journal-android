@@ -47,7 +47,7 @@ class JournalViewModel @Inject constructor(
                 .combine(experienceRepo.getLastUsedSubstanceNames(100)) { filters, names ->
                     Pair(first = filters, second = names)
                 }
-                .combine(experienceRepo.getAllExperiencesWithIngestions()) { filtersAndNames, experiencesWithIngestions ->
+                .combine(experienceRepo.getSortedExperiencesWithIngestions()) { filtersAndNames, experiencesWithIngestions ->
                     Pair(first = filtersAndNames, second = experiencesWithIngestions)
                 }
                 .collect {
