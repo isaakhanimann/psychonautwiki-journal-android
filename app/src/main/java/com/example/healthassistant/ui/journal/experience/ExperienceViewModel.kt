@@ -13,6 +13,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,9 +26,14 @@ class ExperienceViewModel @Inject constructor(
 
     private val _experienceWithIngestions = MutableStateFlow<ExperienceWithIngestions?>(null)
     val experienceWithIngestions = _experienceWithIngestions.asStateFlow()
+
     private val _ingestionDurationPairs =
         MutableStateFlow<List<Pair<Ingestion, RoaDuration?>>>(listOf())
     val ingestionDurationPairs = _ingestionDurationPairs.asStateFlow()
+
+    private val _ingestionElements =
+        MutableStateFlow<List<IngestionElement>>(listOf())
+    val ingestionElements = _ingestionElements.asStateFlow()
 
     private val _cumulativeDoses = MutableStateFlow<List<CumulativeDose>>(emptyList())
     val cumulativeDoses = _cumulativeDoses.asStateFlow()
@@ -42,8 +49,9 @@ class ExperienceViewModel @Inject constructor(
         val id = state.get<Int>(EXPERIENCE_ID_KEY)!!
         viewModelScope.launch {
             experienceRepo.getExperienceWithIngestions(experienceId = id).collect {
-                _experienceWithIngestions.value = it
-                val ingestions = it?.ingestions ?: listOf()
+                _experienceWithIngestions.value = it!!
+                val ingestions = it.ingestions
+                _ingestionElements.value = getIngestionElements(ingestions, experienceDate = it.experience.date)
                 _cumulativeDoses.value = getCumulativeDoses(ingestions)
                 _ingestionDurationPairs.value = ingestions.map { ing ->
                     val roaDuration = substanceRepo.getSubstance(ing.substanceName)
@@ -52,6 +60,37 @@ class ExperienceViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    data class IngestionElement(
+        val dateText: String?,
+        val ingestion: Ingestion
+    )
+
+    private fun getIngestionElements(sortedIngestions: List<Ingestion>, experienceDate:Date): List<IngestionElement> {
+        val experienceDateText = getDateText(experienceDate)
+        return sortedIngestions.mapIndexed { index, ingestion ->
+            val ingestionTimeText = getDateText(ingestion.time)
+            if (index == 0) {
+                if (ingestionTimeText == experienceDateText) {
+                    IngestionElement(dateText = null, ingestion = ingestion)
+                } else {
+                    IngestionElement(dateText = ingestionTimeText, ingestion = ingestion)
+                }
+            } else {
+                val lastIngestionDateText = getDateText(sortedIngestions[index-1].time)
+                if (lastIngestionDateText != ingestionTimeText) {
+                    IngestionElement(dateText = ingestionTimeText, ingestion = ingestion)
+                } else {
+                    IngestionElement(dateText = null, ingestion = ingestion)
+                }
+            }
+        }
+    }
+
+    private fun getDateText(date: Date): String {
+        val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        return formatter.format(date)
     }
 
     fun deleteIngestion(ingestion: Ingestion) {

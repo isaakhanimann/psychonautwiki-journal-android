@@ -35,9 +35,9 @@ fun ExperienceScreen(
     viewModel: ExperienceViewModel = hiltViewModel()
 ) {
     viewModel.experienceWithIngestions.collectAsState().value?.also { experienceWithIngestions ->
-        ExperienceScreenContent(
+        ExperienceScreen(
             experience = experienceWithIngestions.experience,
-            ingestions = experienceWithIngestions.ingestions,
+            ingestionElements = viewModel.ingestionElements.collectAsState().value,
             cumulativeDoses = viewModel.cumulativeDoses.collectAsState().value,
             ingestionDurationPairs = viewModel.ingestionDurationPairs.collectAsState().value,
             addIngestion = navigateToAddIngestionSearch,
@@ -56,9 +56,14 @@ fun ExperienceScreenContentPreview(
     ) expAndIng: ExperienceWithIngestions
 ) {
     HealthAssistantTheme {
-        ExperienceScreenContent(
+        ExperienceScreen(
             experience = expAndIng.experience,
-            ingestions = expAndIng.ingestions,
+            ingestionElements = expAndIng.ingestions.map {
+                ExperienceViewModel.IngestionElement(
+                    dateText = null,
+                    ingestion = it
+                )
+            },
             cumulativeDoses = listOf(
                 ExperienceViewModel.CumulativeDose(
                     substanceName = "Cocaine",
@@ -76,9 +81,9 @@ fun ExperienceScreenContentPreview(
 }
 
 @Composable
-fun ExperienceScreenContent(
+fun ExperienceScreen(
     experience: Experience,
-    ingestions: List<Ingestion>,
+    ingestionElements: List<ExperienceViewModel.IngestionElement>,
     cumulativeDoses: List<ExperienceViewModel.CumulativeDose>,
     ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>,
     addIngestion: () -> Unit,
@@ -88,7 +93,16 @@ fun ExperienceScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(experience.title) },
+                title = {
+                        Column() {
+                            Text(experience.title)
+                            val dateText = remember(experience.date) {
+                                val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+                                formatter.format(experience.date) ?: ""
+                            }
+                            Text(text = dateText, style = MaterialTheme.typography.body1)
+                        }
+                },
                 actions = {
                     IconButton(onClick = navigateToEditExperienceScreen) {
                         Icon(Icons.Default.Edit, contentDescription = "Edit Experience")
@@ -117,31 +131,25 @@ fun ExperienceScreenContent(
                 )
                 Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
             }
-            Row(
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Ingestions", style = MaterialTheme.typography.subtitle1)
-                val dateText = remember(experience.date) {
-                    val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-                    formatter.format(experience.date) ?: ""
-                }
-                Text(text = dateText, style = MaterialTheme.typography.subtitle1)
-            }
-            if (ingestions.isEmpty()) {
+            Text("Ingestions", style = MaterialTheme.typography.subtitle1)
+            if (ingestionElements.isEmpty()) {
                 Button(onClick = addIngestion) {
                     Text(text = "Add an Ingestion")
                 }
             }
-            ingestions.forEach {
-                IngestionRow(
-                    ingestion = it,
-                    deleteIngestion = {
-                        deleteIngestion(it)
-                    },
-                    modifier = Modifier.padding(vertical = 3.dp)
-                )
+            ingestionElements.forEach {
+                Column(horizontalAlignment = Alignment.End) {
+                    if (it.dateText != null) {
+                        Text(text = it.dateText)
+                    }
+                    IngestionRow(
+                        ingestion = it.ingestion,
+                        deleteIngestion = {
+                            deleteIngestion(it.ingestion)
+                        },
+                        modifier = Modifier.padding(vertical = 3.dp)
+                    )
+                }
             }
             if (cumulativeDoses.isNotEmpty()) {
                 Text(
