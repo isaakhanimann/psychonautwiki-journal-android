@@ -37,6 +37,7 @@ fun RoaDurationView(
     Column {
         val total = roaDuration.total
         val color = MaterialTheme.colors.secondary
+        val colorTransparent = color.copy(alpha = 0.1f)
         if ((total?.min != null) && (total.max != null)) {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -52,19 +53,19 @@ fun RoaDurationView(
                     val max = maxDuration ?: total.max
                     val minX = (total.min.div(max) * canvasWidth).toFloat()
                     val maxX = (total.max.div(max) * canvasWidth).toFloat()
-                    val strokeWidth = 12f
+                    val midX = (minX + maxX)/2
                     drawLine(
                         start = Offset(x = 0f, y = 0f),
-                        end = Offset(x = maxX, y = 0f),
-                        color = color.copy(alpha = 0.3f),
-                        strokeWidth = strokeWidth,
+                        end = Offset(x = midX, y = 0f),
+                        color = color,
+                        strokeWidth = 10f,
                         cap = StrokeCap.Round
                     )
                     drawLine(
-                        start = Offset(x = 0f, y = 0f),
-                        end = Offset(x = minX, y = 0f),
-                        color = color,
-                        strokeWidth = strokeWidth,
+                        start = Offset(x = minX, y = 0f),
+                        end = Offset(x = maxX, y = 0f),
+                        color = colorTransparent,
+                        strokeWidth = 60f,
                         cap = StrokeCap.Round
                     )
                 }
@@ -159,7 +160,7 @@ fun RoaDurationView(
                     }
                     drawPath(
                         path = path,
-                        color = color.copy(alpha = 0.1f)
+                        color = colorTransparent
                     )
                 } else {
                     val sumDurations = allDurations.filterNotNull().reduce { acc, duration ->
