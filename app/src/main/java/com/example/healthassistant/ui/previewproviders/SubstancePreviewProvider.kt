@@ -86,28 +86,28 @@ class SubstancePreviewProvider : PreviewParameterProvider<Substance> {
                     ),
                     roaDuration = RoaDuration(
                         onset = DurationRange(
-                            min = 20.0.toDuration(DurationUnit.MINUTES),
-                            max = 40.0.toDuration(DurationUnit.MINUTES),
+                            min = 10.0.toDuration(DurationUnit.MINUTES),
+                            max = 20.0.toDuration(DurationUnit.MINUTES),
                         ),
                         comeup = DurationRange(
-                            min = 15.0.toDuration(DurationUnit.MINUTES),
-                            max = 30.0.toDuration(DurationUnit.MINUTES),
+                            min = 5.0.toDuration(DurationUnit.MINUTES),
+                            max = 15.0.toDuration(DurationUnit.MINUTES),
                         ),
                         peak = DurationRange(
+                            min = 0.75.toDuration(DurationUnit.HOURS),
+                            max = 1.25.toDuration(DurationUnit.HOURS),
+                        ),
+                        offset = DurationRange(
+                            min = 0.5.toDuration(DurationUnit.HOURS),
+                            max = 1.toDuration(DurationUnit.HOURS),
+                        ),
+                        total = DurationRange(
                             min = 1.5.toDuration(DurationUnit.HOURS),
                             max = 2.5.toDuration(DurationUnit.HOURS),
                         ),
-                        offset = DurationRange(
-                            min = 1.0.toDuration(DurationUnit.HOURS),
-                            max = 1.5.toDuration(DurationUnit.HOURS),
-                        ),
-                        total = DurationRange(
-                            min = 3.0.toDuration(DurationUnit.HOURS),
-                            max = 5.0.toDuration(DurationUnit.HOURS),
-                        ),
                         afterglow = DurationRange(
-                            min = 12.0.toDuration(DurationUnit.HOURS),
-                            max = 48.0.toDuration(DurationUnit.HOURS),
+                            min = 5.0.toDuration(DurationUnit.HOURS),
+                            max = 20.0.toDuration(DurationUnit.HOURS),
                         )
                     ),
                     bioavailability = Bioavailability(
@@ -136,24 +136,24 @@ class SubstancePreviewProvider : PreviewParameterProvider<Substance> {
                     ),
                     roaDuration = RoaDuration(
                         onset = DurationRange(
-                            min = 20.0.toDuration(DurationUnit.MINUTES),
-                            max = 40.0.toDuration(DurationUnit.MINUTES),
+                            min = 5.toDuration(DurationUnit.SECONDS),
+                            max = 10.toDuration(DurationUnit.SECONDS),
                         ),
                         comeup = DurationRange(
-                            min = 15.0.toDuration(DurationUnit.MINUTES),
-                            max = 30.0.toDuration(DurationUnit.MINUTES),
+                            min = 5.toDuration(DurationUnit.SECONDS),
+                            max = 10.toDuration(DurationUnit.SECONDS),
                         ),
                         peak = DurationRange(
-                            min = 1.5.toDuration(DurationUnit.HOURS),
-                            max = 2.5.toDuration(DurationUnit.HOURS),
+                            min = 1.toDuration(DurationUnit.HOURS),
+                            max = 2.toDuration(DurationUnit.HOURS),
                         ),
                         offset = DurationRange(
-                            min = 1.0.toDuration(DurationUnit.HOURS),
-                            max = 1.5.toDuration(DurationUnit.HOURS),
+                            min = 1.toDuration(DurationUnit.HOURS),
+                            max = 2.toDuration(DurationUnit.HOURS),
                         ),
                         total = DurationRange(
-                            min = 3.0.toDuration(DurationUnit.HOURS),
-                            max = 5.0.toDuration(DurationUnit.HOURS),
+                            min = 2.0.toDuration(DurationUnit.HOURS),
+                            max = 4.0.toDuration(DurationUnit.HOURS),
                         ),
                         afterglow = DurationRange(
                             min = 12.0.toDuration(DurationUnit.HOURS),

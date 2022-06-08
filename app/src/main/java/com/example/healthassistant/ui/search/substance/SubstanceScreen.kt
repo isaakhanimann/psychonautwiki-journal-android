@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -94,8 +95,14 @@ fun SubstanceScreenContent(
             }) {
                 Text("Read Article")
             }
+            val maxTotalDuration = remember(substance.roas) {
+                substance.roas.mapNotNull { it.roaDuration?.total?.max }.maxOrNull()
+            }
             substance.roas.forEach { roa ->
-                RoaView(roa)
+                RoaView(
+                    roa = roa,
+                    maxTotalDuration = maxTotalDuration
+                )
             }
             InteractionsView(
                 isSearchingForInteractions = isSearchingForInteractions,

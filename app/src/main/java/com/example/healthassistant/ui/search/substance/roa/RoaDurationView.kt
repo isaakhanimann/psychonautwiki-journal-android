@@ -2,12 +2,9 @@ package com.example.healthassistant.ui.search.substance.roa
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -19,22 +16,58 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.previewproviders.RoaDurationPreviewProvider
+import kotlin.time.Duration
 
 @Preview(showBackground = true)
 @Composable
-fun DurationView(@PreviewParameter(RoaDurationPreviewProvider::class, limit = 1) roaDuration: RoaDuration) {
+fun RoaDurationPreview(
+    @PreviewParameter(RoaDurationPreviewProvider::class, limit = 1) roaDuration: RoaDuration
+) {
+    RoaDurationView(roaDuration = roaDuration, maxTotalDuration = null)
+}
+
+@Composable
+fun RoaDurationView(
+    roaDuration: RoaDuration,
+    maxTotalDuration: Duration?
+) {
     Column {
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Text(
-                text = "Duration",
-                style = MaterialTheme.typography.h6,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
+        val total = roaDuration.total
+        if ((total?.min != null) && (total.max != null)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = total.text,
+                    textAlign = TextAlign.Center
+                )
+                val color = MaterialTheme.colors.secondary
+                Canvas(modifier = Modifier.fillMaxWidth()) {
+                    val canvasWidth = size.width
+                    val max = maxTotalDuration ?: total.max
+                    val minX = (total.min.div(max) * canvasWidth).toFloat()
+                    val maxX = (total.max.div(max) * canvasWidth).toFloat()
+                    val strokeWidth = 12f
+                    drawLine(
+                        start = Offset(x = 0f, y = 0f),
+                        end = Offset(x = maxX, y = 0f),
+                        color = color.copy(alpha = 0.3f),
+                        strokeWidth = strokeWidth,
+                        cap = StrokeCap.Round
+                    )
+                    drawLine(
+                        start = Offset(x = 0f, y = 0f),
+                        end = Offset(x = minX, y = 0f),
+                        color = color,
+                        strokeWidth = strokeWidth,
+                        cap = StrokeCap.Round
+                    )
+                }
+            }
         }
-        roaDuration.total?.let {
-            Text("total: ${it.text}")
-        }
+        Spacer(modifier = Modifier.height(8.dp))
         roaDuration.afterglow?.let {
             Text("after effects: ${it.text}")
         }

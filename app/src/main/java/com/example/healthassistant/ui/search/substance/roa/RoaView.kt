@@ -11,10 +11,22 @@ import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.substances.Roa
 import com.example.healthassistant.ui.previewproviders.RoaPreviewProvider
 import com.example.healthassistant.ui.search.substance.SubstanceInfoCard
+import kotlin.time.Duration
+
 
 @Preview
 @Composable
-fun RoaView(@PreviewParameter(RoaPreviewProvider::class) roa: Roa) {
+fun RoaPreview(
+    @PreviewParameter(RoaPreviewProvider::class) roa: Roa,
+    ) {
+    RoaView(roa = roa, maxTotalDuration = null)
+}
+
+@Composable
+fun RoaView(
+    roa: Roa,
+    maxTotalDuration: Duration?
+) {
     SubstanceInfoCard(title = roa.route.displayText, isContentFaded = false) {
         Column {
             roa.roaDose?.also {
@@ -22,7 +34,7 @@ fun RoaView(@PreviewParameter(RoaPreviewProvider::class) roa: Roa) {
                 Spacer(modifier = Modifier.height(5.dp))
             }
             roa.roaDuration?.also {
-                DurationView(roaDuration = it)
+                RoaDurationView(roaDuration = it, maxTotalDuration = maxTotalDuration)
             }
         }
     }
