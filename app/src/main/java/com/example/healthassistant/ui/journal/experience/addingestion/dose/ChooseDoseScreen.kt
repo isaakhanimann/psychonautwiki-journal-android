@@ -48,12 +48,12 @@ fun ChooseDoseScreen(
             )
         },
         currentRoaRangeTextAndColor = viewModel.currentRoaRangeTextAndColor,
-        purity = viewModel.purity,
         purityText = viewModel.purityText,
         onPurityChange = {
-            viewModel.purity = it
+            viewModel.purityText = it
         },
-        rawDoseWithUnit = viewModel.rawDoseWithUnit
+        isValidPurity = viewModel.isPurityValid,
+        convertedDoseAndUnitText = viewModel.rawDoseWithUnit
     )
 }
 
@@ -72,10 +72,10 @@ fun ChooseDoseScreenPreview(
         navigateToNext = {},
         useUnknownDoseAndNavigate = {},
         currentRoaRangeTextAndColor = Pair("threshold: 8mg", DoseColor.THRESH),
-        purity = 20f,
-        purityText = "20%",
+        purityText = "20",
         onPurityChange = {},
-        rawDoseWithUnit = "20 mg"
+        isValidPurity = true,
+        convertedDoseAndUnitText = "20 mg"
     )
 }
 
@@ -90,21 +90,20 @@ fun ChooseDoseScreen(
     navigateToNext: () -> Unit,
     useUnknownDoseAndNavigate: () -> Unit,
     currentRoaRangeTextAndColor: Pair<String, DoseColor?>,
-    purity: Float,
     purityText: String,
-    onPurityChange: (purity: Float) -> Unit,
-    rawDoseWithUnit: String?
+    onPurityChange: (purity: String) -> Unit,
+    isValidPurity: Boolean,
+    convertedDoseAndUnitText: String?
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Choose Dose") }) }
     ) {
-        val focusManager = LocalFocusManager.current
         Column(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             Column {
                 if (roaDose != null) {
@@ -117,16 +116,18 @@ fun ChooseDoseScreen(
                         ?: MaterialTheme.colors.primary
                 )
                 Spacer(modifier = Modifier.height(10.dp))
+                val focusManager = LocalFocusManager.current
+                val textStyle = MaterialTheme.typography.h3
                 OutlinedTextField(
                     value = doseText,
                     onValueChange = onChangeDoseText,
-                    textStyle = MaterialTheme.typography.h3,
-                    label = { Text("Enter Dose", style = MaterialTheme.typography.h4) },
+                    textStyle = textStyle,
+                    label = { Text("Pure Dose", style = textStyle) },
                     isError = !isValidDose,
                     trailingIcon = {
                         Text(
                             text = roaDose?.units ?: "",
-                            style = MaterialTheme.typography.h4,
+                            style = textStyle,
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
                     },
@@ -138,15 +139,18 @@ fun ChooseDoseScreen(
                 )
             }
             PurityCalculation(
-                purity = purity,
                 purityText = purityText,
                 onPurityChange = onPurityChange,
-                rawDoseWithUnit = rawDoseWithUnit
+                convertedDoseAndUnitText = convertedDoseAndUnitText,
+                isValidPurity = isValidPurity
             )
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text("Is Estimate", style = MaterialTheme.typography.h6)
+                Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
             }
+            Spacer(modifier = Modifier.weight(1f))
             Row(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.fillMaxWidth()
@@ -174,46 +178,58 @@ fun ChooseDoseScreen(
 @Composable
 fun PurityPreview() {
     PurityCalculation(
-        purity = 20f,
-        purityText = "20%",
+        purityText = "20",
         onPurityChange = {},
-        rawDoseWithUnit = "20 mg"
+        isValidPurity = true,
+        convertedDoseAndUnitText = "20 mg"
     )
 }
 
 @Composable
 fun PurityCalculation(
-    purity: Float,
     purityText: String,
-    onPurityChange: (purity: Float) -> Unit,
-    rawDoseWithUnit: String?
+    onPurityChange: (purity: String) -> Unit,
+    isValidPurity: Boolean,
+    convertedDoseAndUnitText: String?
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Purity", style = MaterialTheme.typography.h6)
-            Text(text = purityText, style = MaterialTheme.typography.h6)
-        }
-        Slider(
-            value = purity,
+    Column(horizontalAlignment = Alignment.Start) {
+        val focusManager = LocalFocusManager.current
+        val textStyle = MaterialTheme.typography.h6
+        OutlinedTextField(
+            value = purityText,
             onValueChange = onPurityChange,
-            valueRange = 1f..100f,
-            steps = 99,
-            colors = SliderDefaults.colors(
-                thumbColor = MaterialTheme.colors.secondary,
-                activeTrackColor = MaterialTheme.colors.secondary
-            )
+            textStyle = textStyle,
+            label = { Text("Purity", style = textStyle) },
+            isError = !isValidPurity,
+            trailingIcon = {
+                Text(
+                    text = "%",
+                    style = textStyle,
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                )
+            },
+            keyboardActions = KeyboardActions(onDone = {
+                focusManager.clearFocus()
+            }),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
         )
-        if (rawDoseWithUnit != null) {
+        if (!isValidPurity) {
+            Text(
+                text = "Purity must be between 1 and 100%",
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+            )
+        }
+        if (convertedDoseAndUnitText != null) {
             Row(
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Raw Amount")
-                Text(text = rawDoseWithUnit, style = MaterialTheme.typography.h5)
+                Text(text = "Converted Amount")
+                Text(text = convertedDoseAndUnitText, style = MaterialTheme.typography.h5)
             }
         }
     }
