@@ -89,6 +89,13 @@ data class DurationRange(
         get() = "${min.toString().filterNot { it.isWhitespace() }}-${
             max.toString().filterNot { it.isWhitespace() }
         }"
+    val isMinAndMaxDefined: Boolean get() = min != null && max != null
+
+    fun interpolateAt(value: Double): Duration? {
+        if (min == null || max == null) return null
+        val diff = max - min
+        return min + diff.times(value)
+    }
 }
 
 data class Bioavailability(
