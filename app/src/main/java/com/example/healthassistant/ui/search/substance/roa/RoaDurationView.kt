@@ -23,30 +23,30 @@ import kotlin.time.Duration
 fun RoaDurationPreview(
     @PreviewParameter(RoaDurationPreviewProvider::class, limit = 1) roaDuration: RoaDuration
 ) {
-    RoaDurationView(roaDuration = roaDuration, maxTotalDuration = null)
+    RoaDurationView(roaDuration = roaDuration, maxDuration = null)
 }
 
 @Composable
 fun RoaDurationView(
     roaDuration: RoaDuration,
-    maxTotalDuration: Duration?
+    maxDuration: Duration?
 ) {
     Column {
         val total = roaDuration.total
         if ((total?.min != null) && (total.max != null)) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = total.text,
+                    text = "total: ${total.text}",
                     textAlign = TextAlign.Center
                 )
                 val color = MaterialTheme.colors.secondary
                 Canvas(modifier = Modifier.fillMaxWidth()) {
                     val canvasWidth = size.width
-                    val max = maxTotalDuration ?: total.max
+                    val max = maxDuration ?: total.max
                     val minX = (total.min.div(max) * canvasWidth).toFloat()
                     val maxX = (total.max.div(max) * canvasWidth).toFloat()
                     val strokeWidth = 12f

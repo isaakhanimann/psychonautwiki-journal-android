@@ -19,13 +19,13 @@ import kotlin.time.Duration
 fun RoaPreview(
     @PreviewParameter(RoaPreviewProvider::class) roa: Roa,
     ) {
-    RoaView(roa = roa, maxTotalDuration = null)
+    RoaView(roa = roa, maxDuration = null)
 }
 
 @Composable
 fun RoaView(
     roa: Roa,
-    maxTotalDuration: Duration?
+    maxDuration: Duration?
 ) {
     SubstanceInfoCard(title = roa.route.displayText, isContentFaded = false) {
         Column {
@@ -34,7 +34,7 @@ fun RoaView(
                 Spacer(modifier = Modifier.height(5.dp))
             }
             roa.roaDuration?.also {
-                RoaDurationView(roaDuration = it, maxTotalDuration = maxTotalDuration)
+                RoaDurationView(roaDuration = it, maxDuration = maxDuration)
             }
         }
     }

@@ -26,6 +26,8 @@ import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import com.google.accompanist.flowlayout.FlowRow
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @Composable
 fun SubstanceScreen(
@@ -95,13 +97,44 @@ fun SubstanceScreenContent(
             }) {
                 Text("Read Article")
             }
-            val maxTotalDuration = remember(substance.roas) {
-                substance.roas.mapNotNull { it.roaDuration?.total?.max }.maxOrNull()
+            val maxDuration = remember(substance.roas) {
+                substance.roas.mapNotNull {
+                    val duration = it.roaDuration ?: return@mapNotNull null
+                    val maxTotal = duration.total?.max
+                    val maxOnset = duration.onset?.max
+                    val maxComeup = duration.comeup?.max
+                    val maxPeak = duration.peak?.max
+                    val maxOffset = duration.offset?.max
+                    val maxTimeline =
+                        if (maxOnset != null && maxComeup != null && maxPeak != null && maxOffset != null) {
+                            maxOnset + maxComeup + maxPeak + maxOffset
+                        } else {
+                            val zero = 0.toDuration(DurationUnit.SECONDS)
+                            val partialSum = ((maxOnset ?: zero) + (maxComeup ?: zero) + (maxPeak
+                                ?: zero) + (maxOffset ?: zero)).times(1.1)
+                            if (partialSum == zero) {
+                                null
+                            } else {
+                                partialSum
+                            }
+                        }
+                    if (maxTotal == null && maxTimeline == null) {
+                        return@mapNotNull null
+                    } else if (maxTotal != null && maxTimeline != null) {
+                        if (maxTotal > maxTimeline) {
+                            return@mapNotNull maxTotal
+                        } else {
+                            return@mapNotNull maxTimeline
+                        }
+                    } else {
+                        return@mapNotNull maxTotal ?: maxTimeline
+                    }
+                }.maxOrNull()
             }
             substance.roas.forEach { roa ->
                 RoaView(
                     roa = roa,
-                    maxTotalDuration = maxTotalDuration
+                    maxDuration = maxDuration
                 )
             }
             InteractionsView(
