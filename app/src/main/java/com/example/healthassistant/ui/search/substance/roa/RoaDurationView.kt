@@ -43,6 +43,7 @@ fun RoaDurationView(
         val total = roaDuration.total
         var colorTimeLine = MaterialTheme.colors.secondary
         val colorTransparent = colorTimeLine.copy(alpha = 0.1f)
+        val strokeWidth = 8f
         if ((total?.min != null) && (total.max != null)) {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -63,7 +64,7 @@ fun RoaDurationView(
                         start = Offset(x = 0f, y = 0f),
                         end = Offset(x = midX, y = 0f),
                         color = colorTimeLine,
-                        strokeWidth = 10f,
+                        strokeWidth = strokeWidth,
                         cap = StrokeCap.Round
                     )
                     drawLine(
@@ -114,7 +115,6 @@ fun RoaDurationView(
                     .fillMaxWidth()
                     .height(80.dp)
             ) {
-                val strokeWidth = 8f
                 val canvasWidth = size.width
                 val pixelsPerSec = canvasWidth.div(maxDuration.inWholeSeconds)
                 val canvasHeightOuter = size.height
