@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.inset
@@ -41,7 +42,7 @@ fun RoaDurationView(
 ) {
     Column {
         val total = roaDuration.total
-        var colorTimeLine = MaterialTheme.colors.secondary
+        val colorTimeLine = MaterialTheme.colors.secondary
         val colorTransparent = colorTimeLine.copy(alpha = 0.1f)
         val strokeWidth = 8f
         if ((total?.min != null) && (total.max != null)) {
@@ -77,9 +78,10 @@ fun RoaDurationView(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        roaDuration.afterglow?.let {
-            Text("after effects: ${it.text}")
+        if (roaDuration.afterglow != null) {
+            Text("after effects: ${roaDuration.afterglow.text}")
+        } else {
+            Spacer(modifier = Modifier.height(15.dp))
         }
         val onset = roaDuration.onset
         val comeup = roaDuration.comeup
@@ -214,37 +216,40 @@ fun RoaDurationView(
                         }
                     }
                 }
-//                val path = Path().apply {
-//                    // path over top
-//                    val onsetStartMinX = onset.min.inWholeSeconds * pixelsPerSec
-//                    val comeupEndMinX =
-//                        onsetStartMinX + (comeup.min.inWholeSeconds * pixelsPerSec)
-//                    val peakEndMaxX =
-//                        (onset.max + comeup.max + peak.max).inWholeSeconds * pixelsPerSec
-//                    val offsetEndMaxX =
-//                        peakEndMaxX + (offset.max.inWholeSeconds * pixelsPerSec)
-//                    moveTo(onsetStartMinX, canvasHeightOuter)
-//                    lineTo(x = comeupEndMinX, y = 0f)
-//                    lineTo(x = peakEndMaxX, y = 0f)
-//                    lineTo(x = offsetEndMaxX, y = canvasHeightOuter)
-//                    // path bottom back
-//                    val onsetStartMaxX = onset.max.inWholeSeconds * pixelsPerSec
-//                    val comeupEndMaxX =
-//                        onsetStartMaxX + (comeup.max.inWholeSeconds * pixelsPerSec)
-//                    val peakEndMinX =
-//                        (onset.min + comeup.min + peak.min).inWholeSeconds * pixelsPerSec
-//                    val offsetEndMinX =
-//                        peakEndMinX + (offset.min.inWholeSeconds * pixelsPerSec)
-//                    lineTo(x = offsetEndMinX, y = canvasHeightOuter)
-//                    lineTo(x = peakEndMinX, y = 0f)
-//                    lineTo(x = comeupEndMaxX, y = 0f)
-//                    lineTo(x = onsetStartMaxX, y = canvasHeightOuter)
-//                    close()
-//                }
-//                drawPath(
-//                    path = path,
-//                    color = colorTransparent
-//                )
+                val path = Path().apply {
+                    // path over top
+                    val onsetStartMinX = onset?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val comeupEndMinX =
+                        onsetStartMinX + (comeup?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths)
+                    val maxOnset = onset?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val maxComeup = comeup?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val maxPeak = peak?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val peakEndMaxX = maxOnset.plus(maxComeup).plus(maxPeak)
+                    val maxOffset = offset?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val offsetEndMaxX = peakEndMaxX + maxOffset
+                    moveTo(onsetStartMinX, canvasHeightOuter)
+                    lineTo(x = comeupEndMinX, y = 0f)
+                    lineTo(x = peakEndMaxX, y = 0f)
+                    lineTo(x = offsetEndMaxX, y = canvasHeightOuter)
+                    // path bottom back
+                    val onsetStartMaxX = onset?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val comeupEndMaxX = onsetStartMaxX + maxComeup
+                    val minOnset = onset?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val minComeup = comeup?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val minPeak = peak?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val peakEndMinX = minOnset.plus(minComeup).plus(minPeak)
+                    val minOffset = offset?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val offsetEndMinX = peakEndMinX + minOffset
+                    lineTo(x = offsetEndMinX, y = canvasHeightOuter)
+                    lineTo(x = peakEndMinX, y = 0f)
+                    lineTo(x = comeupEndMaxX, y = 0f)
+                    lineTo(x = onsetStartMaxX, y = canvasHeightOuter)
+                    close()
+                }
+                drawPath(
+                    path = path,
+                    color = colorTransparent
+                )
             }
         }
     }
