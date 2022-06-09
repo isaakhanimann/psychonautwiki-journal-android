@@ -1,16 +1,21 @@
 package com.example.healthassistant.ui.search.substance.roa
 
+import android.graphics.Paint
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.inset
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -36,8 +41,8 @@ fun RoaDurationView(
 ) {
     Column {
         val total = roaDuration.total
-        val color = MaterialTheme.colors.secondary
-        val colorTransparent = color.copy(alpha = 0.1f)
+        var colorTimeLine = MaterialTheme.colors.secondary
+        val colorTransparent = colorTimeLine.copy(alpha = 0.1f)
         if ((total?.min != null) && (total.max != null)) {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -57,7 +62,7 @@ fun RoaDurationView(
                     drawLine(
                         start = Offset(x = 0f, y = 0f),
                         end = Offset(x = midX, y = 0f),
-                        color = color,
+                        color = colorTimeLine,
                         strokeWidth = 10f,
                         cap = StrokeCap.Round
                     )
@@ -86,6 +91,24 @@ fun RoaDurationView(
         val allDurations = listOf(onsetInterpol, comeupInterpol, peakInterpol, offsetInterpol)
         val undefinedCount = allDurations.count { it == null }
         if (maxDuration != null && undefinedCount < 4) {
+            val isDarkTheme = isSystemInDarkTheme()
+            val density = LocalDensity.current
+            val textColor = if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+            val textSizeDen = density.run { 30f }
+            val textPaintAlignCenter = remember(density) {
+                Paint().apply {
+                    color = textColor
+                    textAlign = Paint.Align.CENTER
+                    textSize = textSizeDen
+                }
+            }
+            val textPaintAlignLeft = remember(density) {
+                Paint().apply {
+                    color = textColor
+                    textAlign = Paint.Align.LEFT
+                    textSize = textSizeDen
+                }
+            }
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -104,48 +127,92 @@ fun RoaDurationView(
                 val dottedLineWidths = restDuration.div(divider).inWholeSeconds * pixelsPerSec
                 inset(vertical = strokeWidth / 2) {
                     val canvasHeight = size.height
-                    val start1 = onsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val start1 =
+                        onsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
                     val pathEffect = PathEffect.dashPathEffect(
                         floatArrayOf(20f, 30f)
                     )
                     drawLine(
                         start = Offset(x = 0f, y = canvasHeight),
                         end = Offset(x = start1, y = canvasHeight),
-                        color = color,
+                        color = colorTimeLine,
                         strokeWidth = strokeWidth,
                         cap = StrokeCap.Round,
                         pathEffect = if (onsetInterpol == null) pathEffect else null
                     )
-                    val diff1 = comeupInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    val diff1 =
+                        comeupInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
                     val start2 = start1 + diff1
                     drawLine(
                         start = Offset(x = start1, y = canvasHeight),
                         end = Offset(x = start2, y = 0f),
-                        color = color,
+                        color = colorTimeLine,
                         strokeWidth = strokeWidth,
                         cap = StrokeCap.Round,
                         pathEffect = if (comeupInterpol == null) pathEffect else null
                     )
-                    val diff2 = peakInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    if (onset != null) {
+                        drawContext.canvas.nativeCanvas.apply {
+                            drawText(
+                                onset.text,
+                                0f,
+                                canvasHeight-11f,
+                                textPaintAlignLeft
+                            )
+                        }
+                    }
+                    if (comeup != null) {
+                        drawContext.canvas.nativeCanvas.apply {
+                            drawText(
+                                comeup.text,
+                                (start1 + start2)/2 + 15f,
+                                canvasHeight/2,
+                                textPaintAlignLeft
+                            )
+                        }
+                    }
+                    val diff2 =
+                        peakInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
                     val start3 = start2 + diff2
                     drawLine(
                         start = Offset(x = start2, y = 0f),
                         end = Offset(x = start3, y = 0f),
-                        color = color,
+                        color = colorTimeLine,
                         strokeWidth = strokeWidth,
                         cap = StrokeCap.Round,
                         pathEffect = if (peakInterpol == null) pathEffect else null
                     )
-                    val diff3 = offsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                    if (peak != null) {
+                        drawContext.canvas.nativeCanvas.apply {
+                            drawText(
+                                peak.text,
+                                (start2 + start3)/2,
+                                35f,
+                                textPaintAlignCenter
+                            )
+                        }
+                    }
+                    val diff3 =
+                        offsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
                     val start4 = start3 + diff3
                     drawLine(
                         start = Offset(x = start3, y = 0f),
                         end = Offset(x = start4, y = canvasHeight),
-                        color = color,
+                        color = colorTimeLine,
                         strokeWidth = strokeWidth,
                         cap = StrokeCap.Round,
                         pathEffect = if (offsetInterpol == null) pathEffect else null
                     )
+                    if (offset != null) {
+                        drawContext.canvas.nativeCanvas.apply {
+                            drawText(
+                                offset.text,
+                                (start3 + start4)/2 + 15f,
+                                canvasHeight/2,
+                                textPaintAlignLeft
+                            )
+                        }
+                    }
                 }
 //                val path = Path().apply {
 //                    // path over top
