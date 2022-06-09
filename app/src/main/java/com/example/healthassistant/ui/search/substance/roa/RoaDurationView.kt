@@ -98,7 +98,8 @@ fun RoaDurationView(
                 val sumDurations = allDurations.filterNotNull().reduce { acc, duration ->
                     acc + duration
                 }
-                val restDuration = maxDuration - sumDurations
+                val wholeDuration = roaDuration.total?.interpolateAt(0.5) ?: maxDuration
+                val restDuration = wholeDuration - sumDurations
                 val divider = if (undefinedCount == 0) 1 else undefinedCount
                 val dottedLineWidths = restDuration.div(divider).inWholeSeconds * pixelsPerSec
                 inset(vertical = strokeWidth / 2) {
