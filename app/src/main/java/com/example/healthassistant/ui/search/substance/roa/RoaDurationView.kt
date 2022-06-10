@@ -3,7 +3,10 @@ package com.example.healthassistant.ui.search.substance.roa
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -48,31 +51,31 @@ fun RoaDurationView(
         if ((total?.min != null) && (total.max != null)) {
             Column(
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = "total: ${total.text}",
                     textAlign = TextAlign.Center
                 )
-                Canvas(modifier = Modifier.fillMaxWidth()) {
+                Canvas(modifier = Modifier.fillMaxWidth().height(with(LocalDensity.current) { strokeWidthThick.toDp() })) {
                     val canvasWidth = size.width
+                    val midHeight = size.height/2
                     val max = maxDuration ?: total.max
                     val minX = (total.min.div(max) * canvasWidth).toFloat()
                     val maxX = (total.max.div(max) * canvasWidth).toFloat()
                     val midX = (minX + maxX) / 2
                     drawLine(
-                        start = Offset(x = 0f, y = 0f),
-                        end = Offset(x = midX, y = 0f),
+                        start = Offset(x = 0f, y = midHeight),
+                        end = Offset(x = midX, y = midHeight),
                         color = colorTimeLine,
                         strokeWidth = strokeWidth,
                         cap = StrokeCap.Round
                     )
                     drawLine(
-                        start = Offset(x = minX, y = 0f),
-                        end = Offset(x = maxX, y = 0f),
+                        start = Offset(x = minX, y = midHeight),
+                        end = Offset(x = maxX, y = midHeight),
                         color = colorTransparent,
-                        strokeWidth = 60f,
+                        strokeWidth = strokeWidthThick,
                         cap = StrokeCap.Round
                     )
                 }
@@ -81,7 +84,7 @@ fun RoaDurationView(
         if (roaDuration.afterglow != null) {
             Text("after effects: ${roaDuration.afterglow.text}")
         } else {
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(8.dp))
         }
         val onset = roaDuration.onset
         val comeup = roaDuration.comeup
@@ -119,7 +122,6 @@ fun RoaDurationView(
             ) {
                 val canvasWidth = size.width
                 val pixelsPerSec = canvasWidth.div(maxDuration.inWholeSeconds)
-                val canvasHeightOuter = size.height
                 val sumDurations = allDurations.filterNotNull().reduce { acc, duration ->
                     acc + duration
                 }
@@ -127,7 +129,7 @@ fun RoaDurationView(
                 val restDuration = wholeDuration - sumDurations
                 val divider = if (undefinedCount == 0) 1 else undefinedCount
                 val dottedLineWidths = restDuration.div(divider).inWholeSeconds * pixelsPerSec
-                inset(vertical = strokeWidth / 2) {
+                inset(vertical = strokeWidthThick / 2) {
                     val canvasHeight = size.height
                     val start1 =
                         onsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
