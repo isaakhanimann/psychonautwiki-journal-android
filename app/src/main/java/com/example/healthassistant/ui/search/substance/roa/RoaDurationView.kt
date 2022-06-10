@@ -11,7 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.inset
@@ -45,6 +44,7 @@ fun RoaDurationView(
         val colorTimeLine = MaterialTheme.colors.secondary
         val colorTransparent = colorTimeLine.copy(alpha = 0.1f)
         val strokeWidth = 8f
+        val strokeWidthThick = 40f
         if ((total?.min != null) && (total.max != null)) {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -142,6 +142,16 @@ fun RoaDurationView(
                         cap = StrokeCap.Round,
                         pathEffect = if (onsetInterpol == null) pathEffect else null
                     )
+                    if (onset?.max!=null && onset.min!=null) {
+                        val diff = (onset.max - onset.min).inWholeSeconds.times(pixelsPerSec)/2
+                        drawLine(
+                            start = Offset(x = start1 - diff, y = canvasHeight),
+                            end = Offset(x = start1 + diff, y = canvasHeight),
+                            color = colorTransparent,
+                            strokeWidth = strokeWidthThick,
+                            cap = StrokeCap.Round,
+                        )
+                    }
                     val diff1 =
                         comeupInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
                     val start2 = start1 + diff1
@@ -153,6 +163,16 @@ fun RoaDurationView(
                         cap = StrokeCap.Round,
                         pathEffect = if (comeupInterpol == null) pathEffect else null
                     )
+                    if (comeup?.max!=null && comeup.min!=null) {
+                        val diff = (comeup.max - comeup.min).inWholeSeconds.times(pixelsPerSec)/2
+                        drawLine(
+                            start = Offset(x = start2 - diff, y = 0f),
+                            end = Offset(x = start2 + diff, y = 0f),
+                            color = colorTransparent,
+                            strokeWidth = strokeWidthThick,
+                            cap = StrokeCap.Round,
+                        )
+                    }
                     if (onset != null) {
                         drawContext.canvas.nativeCanvas.apply {
                             drawText(
@@ -184,6 +204,16 @@ fun RoaDurationView(
                         cap = StrokeCap.Round,
                         pathEffect = if (peakInterpol == null) pathEffect else null
                     )
+                    if (peak?.max!=null && peak.min!=null) {
+                        val diff = (peak.max - peak.min).inWholeSeconds.times(pixelsPerSec)/2
+                        drawLine(
+                            start = Offset(x = start3 - diff, y = 0f),
+                            end = Offset(x = start3 + diff, y = 0f),
+                            color = colorTransparent,
+                            strokeWidth = strokeWidthThick,
+                            cap = StrokeCap.Round,
+                        )
+                    }
                     if (peak != null) {
                         drawContext.canvas.nativeCanvas.apply {
                             drawText(
@@ -205,6 +235,16 @@ fun RoaDurationView(
                         cap = StrokeCap.Round,
                         pathEffect = if (offsetInterpol == null) pathEffect else null
                     )
+                    if (offset?.max!=null && offset.min!=null) {
+                        val diff = (offset.max - offset.min).inWholeSeconds.times(pixelsPerSec)/2
+                        drawLine(
+                            start = Offset(x = start4 - diff, y = canvasHeight),
+                            end = Offset(x = start4 + diff, y = canvasHeight),
+                            color = colorTransparent,
+                            strokeWidth = strokeWidthThick,
+                            cap = StrokeCap.Round,
+                        )
+                    }
                     if (offset != null) {
                         drawContext.canvas.nativeCanvas.apply {
                             drawText(
@@ -216,40 +256,6 @@ fun RoaDurationView(
                         }
                     }
                 }
-                val path = Path().apply {
-                    // path over top
-                    val onsetStartMinX = onset?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val comeupEndMinX =
-                        onsetStartMinX + (comeup?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths)
-                    val maxOnset = onset?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val maxComeup = comeup?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val maxPeak = peak?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val peakEndMaxX = maxOnset.plus(maxComeup).plus(maxPeak)
-                    val maxOffset = offset?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val offsetEndMaxX = peakEndMaxX + maxOffset
-                    moveTo(onsetStartMinX, canvasHeightOuter)
-                    lineTo(x = comeupEndMinX, y = 0f)
-                    lineTo(x = peakEndMaxX, y = 0f)
-                    lineTo(x = offsetEndMaxX, y = canvasHeightOuter)
-                    // path bottom back
-                    val onsetStartMaxX = onset?.max?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val comeupEndMaxX = onsetStartMaxX + maxComeup
-                    val minOnset = onset?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val minComeup = comeup?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val minPeak = peak?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val peakEndMinX = minOnset.plus(minComeup).plus(minPeak)
-                    val minOffset = offset?.min?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val offsetEndMinX = peakEndMinX + minOffset
-                    lineTo(x = offsetEndMinX, y = canvasHeightOuter)
-                    lineTo(x = peakEndMinX, y = 0f)
-                    lineTo(x = comeupEndMaxX, y = 0f)
-                    lineTo(x = onsetStartMaxX, y = canvasHeightOuter)
-                    close()
-                }
-                drawPath(
-                    path = path,
-                    color = colorTransparent
-                )
             }
         }
     }
