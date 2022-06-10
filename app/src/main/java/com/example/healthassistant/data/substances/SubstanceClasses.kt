@@ -79,30 +79,7 @@ data class RoaDuration(
     val offset: DurationRange?,
     val total: DurationRange?,
     val afterglow: DurationRange?
-) {
-    val numberOfTimelineDurationsDefined: Int
-        get() {
-            return listOf(
-                onset?.isMinAndMaxDefined ?: false,
-                comeup?.isMinAndMaxDefined ?: false,
-                peak?.isMinAndMaxDefined ?: false,
-                offset?.isMinAndMaxDefined ?: false
-            ).count { it }
-        }
-
-    val sumOfInterpolatedDurations: Duration
-        get() {
-            val half = 0.5
-            return listOfNotNull(
-                onset?.interpolateAt(half),
-                comeup?.interpolateAt(half),
-                peak?.interpolateAt(half),
-                offset?.interpolateAt(half)
-            ).reduce { acc, duration ->
-                acc + duration
-            }
-        }
-}
+)
 
 data class DurationRange(
     val min: Duration?,
