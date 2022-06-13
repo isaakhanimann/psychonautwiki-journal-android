@@ -57,9 +57,13 @@ fun RoaDurationView(
                     text = "total: ${total.text}",
                     textAlign = TextAlign.Center
                 )
-                Canvas(modifier = Modifier.fillMaxWidth().height(with(LocalDensity.current) { strokeWidthThick.toDp() })) {
+                Canvas(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(with(LocalDensity.current) { strokeWidthThick.toDp() })
+                ) {
                     val canvasWidth = size.width
-                    val midHeight = size.height/2
+                    val midHeight = size.height / 2
                     val max = maxDuration ?: total.max
                     val minX = (total.min.div(max) * canvasWidth).toFloat()
                     val maxX = (total.max.div(max) * canvasWidth).toFloat()
@@ -99,7 +103,8 @@ fun RoaDurationView(
         if (maxDuration != null && undefinedCount < 4) {
             val isDarkTheme = isSystemInDarkTheme()
             val density = LocalDensity.current
-            val textColor = if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+            val textColor =
+                if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
             val textSizeDen = density.run { 30f }
             val textPaintAlignCenter = remember(density) {
                 Paint().apply {
@@ -125,7 +130,10 @@ fun RoaDurationView(
                 val sumDurations = allDurations.filterNotNull().reduce { acc, duration ->
                     acc + duration
                 }
-                val wholeDuration = roaDuration.total?.interpolateAt(0.5) ?: maxDuration
+                val offsetDiff =
+                    if (offset?.max != null && offset.min != null) offset.max - offset.min else null
+                val wholeDuration = roaDuration.total?.interpolateAt(0.5)
+                    ?: if (offsetDiff != null) maxDuration.minus(offsetDiff.div(2)) else maxDuration
                 val restDuration = wholeDuration - sumDurations
                 val divider = if (undefinedCount == 0) 1 else undefinedCount
                 val dottedLineWidths = restDuration.div(divider).inWholeSeconds * pixelsPerSec
@@ -144,8 +152,8 @@ fun RoaDurationView(
                         cap = StrokeCap.Round,
                         pathEffect = if (onsetInterpol == null) pathEffect else null
                     )
-                    if (onset?.max!=null && onset.min!=null) {
-                        val diff = (onset.max - onset.min).inWholeSeconds.times(pixelsPerSec)/2
+                    if (onset?.max != null && onset.min != null) {
+                        val diff = (onset.max - onset.min).inWholeSeconds.times(pixelsPerSec) / 2
                         drawLine(
                             start = Offset(x = start1 - diff, y = canvasHeight),
                             end = Offset(x = start1 + diff, y = canvasHeight),
@@ -165,8 +173,8 @@ fun RoaDurationView(
                         cap = StrokeCap.Round,
                         pathEffect = if (comeupInterpol == null) pathEffect else null
                     )
-                    if (comeup?.max!=null && comeup.min!=null) {
-                        val diff = (comeup.max - comeup.min).inWholeSeconds.times(pixelsPerSec)/2
+                    if (comeup?.max != null && comeup.min != null) {
+                        val diff = (comeup.max - comeup.min).inWholeSeconds.times(pixelsPerSec) / 2
                         drawLine(
                             start = Offset(x = start2 - diff, y = 0f),
                             end = Offset(x = start2 + diff, y = 0f),
@@ -180,7 +188,7 @@ fun RoaDurationView(
                             drawText(
                                 onset.text,
                                 0f,
-                                canvasHeight-11f,
+                                canvasHeight - 11f,
                                 textPaintAlignLeft
                             )
                         }
@@ -189,8 +197,8 @@ fun RoaDurationView(
                         drawContext.canvas.nativeCanvas.apply {
                             drawText(
                                 comeup.text,
-                                (start1 + start2)/2 + 15f,
-                                canvasHeight/2,
+                                (start1 + start2) / 2 + 15f,
+                                canvasHeight / 2,
                                 textPaintAlignLeft
                             )
                         }
@@ -206,8 +214,8 @@ fun RoaDurationView(
                         cap = StrokeCap.Round,
                         pathEffect = if (peakInterpol == null) pathEffect else null
                     )
-                    if (peak?.max!=null && peak.min!=null) {
-                        val diff = (peak.max - peak.min).inWholeSeconds.times(pixelsPerSec)/2
+                    if (peak?.max != null && peak.min != null) {
+                        val diff = (peak.max - peak.min).inWholeSeconds.times(pixelsPerSec) / 2
                         drawLine(
                             start = Offset(x = start3 - diff, y = 0f),
                             end = Offset(x = start3 + diff, y = 0f),
@@ -220,7 +228,7 @@ fun RoaDurationView(
                         drawContext.canvas.nativeCanvas.apply {
                             drawText(
                                 peak.text,
-                                (start2 + start3)/2,
+                                (start2 + start3) / 2,
                                 35f,
                                 textPaintAlignCenter
                             )
@@ -237,8 +245,8 @@ fun RoaDurationView(
                         cap = StrokeCap.Round,
                         pathEffect = if (offsetInterpol == null) pathEffect else null
                     )
-                    if (offset?.max!=null && offset.min!=null) {
-                        val diff = (offset.max - offset.min).inWholeSeconds.times(pixelsPerSec)/2
+                    if (offset?.max != null && offset.min != null) {
+                        val diff = (offset.max - offset.min).inWholeSeconds.times(pixelsPerSec) / 2
                         drawLine(
                             start = Offset(x = start4 - diff, y = canvasHeight),
                             end = Offset(x = start4 + diff, y = canvasHeight),
@@ -251,8 +259,8 @@ fun RoaDurationView(
                         drawContext.canvas.nativeCanvas.apply {
                             drawText(
                                 offset.text,
-                                (start3 + start4)/2 + 15f,
-                                canvasHeight/2,
+                                (start3 + start4) / 2 + 15f,
+                                canvasHeight / 2,
                                 textPaintAlignLeft
                             )
                         }
