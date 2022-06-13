@@ -180,14 +180,12 @@ fun DrawScope.drawCurrentTime(
     if (startTime.before(currentTime) && endTime.after(currentTime)) {
         val timeStartInSec = (currentTime.time - startTime.time) / 1000
         val timeStartX = timeStartInSec * pixelsPerSec
+        val color = if (isDarkTheme) Color.White else Color.Black
         drawLine(
-            color = if (isDarkTheme) Color.White else Color.Black,
+            color = color,
             start = Offset(x = timeStartX, y = canvasHeightOuter),
             end = Offset(x = timeStartX, y = 0f),
-            strokeWidth = 5f,
-            pathEffect = PathEffect.dashPathEffect(
-                floatArrayOf(20f, 10f)
-            )
+            strokeWidth = 5f
         )
     }
 }
