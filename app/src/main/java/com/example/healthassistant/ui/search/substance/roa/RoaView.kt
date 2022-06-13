@@ -35,7 +35,7 @@ fun RoaView(
                 Spacer(modifier = Modifier.height(5.dp))
             }
             roa.roaDuration?.also {
-                RoaDurationView(roaDuration = it, maxDuration = maxDuration, showOralOnsetDisclaimer = roa.route == AdministrationRoute.ORAL)
+                RoaDurationView(roaDuration = it, maxDuration = maxDuration, isOralRoute = roa.route == AdministrationRoute.ORAL)
             }
         }
     }

@@ -37,7 +37,7 @@ fun RoaDurationPreview(
     RoaDurationView(
         roaDuration = roaDuration,
         maxDuration = 13.toDuration(DurationUnit.HOURS),
-        showOralOnsetDisclaimer = true
+        isOralRoute = true
     )
 }
 
@@ -45,7 +45,7 @@ fun RoaDurationPreview(
 fun RoaDurationView(
     roaDuration: RoaDuration,
     maxDuration: Duration?,
-    showOralOnsetDisclaimer: Boolean
+    isOralRoute: Boolean
 ) {
     Column {
         val total = roaDuration.total
@@ -54,6 +54,7 @@ fun RoaDurationView(
         val strokeWidth = 8f
         val strokeWidthThick = 40f
         val ingestionDotRadius = 10f
+        val showOralOnsetDisclaimer = isOralRoute && roaDuration.onset != null
         if ((total?.min != null) && (total.max != null)) {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -290,7 +291,11 @@ fun RoaDurationView(
                     }
                 }
             }
-            Text("* can be much longer with full stomach")
+            if (showOralOnsetDisclaimer) {
+                Text("* onset can be much longer with full stomach")
+            } else if (isOralRoute) {
+                Text(text = "* a full stomach can delay the onset significantly")
+            }
         }
     }
 }
