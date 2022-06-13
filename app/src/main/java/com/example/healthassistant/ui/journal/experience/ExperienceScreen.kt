@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
@@ -119,6 +120,10 @@ fun ExperienceScreen(
                         .fillMaxWidth()
                         .height(200.dp)
                 )
+                val showOralOnsetDisclaimer = ingestionDurationPairs.any { it.first.administrationRoute == AdministrationRoute.ORAL }
+                if (showOralOnsetDisclaimer) {
+                    Text(text = "* a full stomach can delay the onset significantly")
+                }
                 Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
             }
             Text("Ingestions", style = MaterialTheme.typography.subtitle1)
