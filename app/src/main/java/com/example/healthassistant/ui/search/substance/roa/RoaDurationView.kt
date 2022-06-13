@@ -34,13 +34,18 @@ import kotlin.time.toDuration
 fun RoaDurationPreview(
     @PreviewParameter(RoaDurationPreviewProviderForRoaDurationView::class) roaDuration: RoaDuration
 ) {
-    RoaDurationView(roaDuration = roaDuration, maxDuration = 13.toDuration(DurationUnit.HOURS))
+    RoaDurationView(
+        roaDuration = roaDuration,
+        maxDuration = 13.toDuration(DurationUnit.HOURS),
+        showOralOnsetDisclaimer = true
+    )
 }
 
 @Composable
 fun RoaDurationView(
     roaDuration: RoaDuration,
-    maxDuration: Duration?
+    maxDuration: Duration?,
+    showOralOnsetDisclaimer: Boolean
 ) {
     Column {
         val total = roaDuration.total
@@ -202,7 +207,7 @@ fun RoaDurationView(
                         if (onset != null) {
                             drawContext.canvas.nativeCanvas.apply {
                                 drawText(
-                                    onset.text,
+                                    onset.text + if (showOralOnsetDisclaimer) " *" else "",
                                     0f,
                                     canvasHeight - 15f,
                                     textPaintAlignLeft
@@ -285,6 +290,7 @@ fun RoaDurationView(
                     }
                 }
             }
+            Text("* can be much longer with full stomach")
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Roa
 import com.example.healthassistant.ui.previewproviders.RoaPreviewProvider
 import com.example.healthassistant.ui.search.substance.SubstanceInfoCard
@@ -34,7 +35,7 @@ fun RoaView(
                 Spacer(modifier = Modifier.height(5.dp))
             }
             roa.roaDuration?.also {
-                RoaDurationView(roaDuration = it, maxDuration = maxDuration)
+                RoaDurationView(roaDuration = it, maxDuration = maxDuration, showOralOnsetDisclaimer = roa.route == AdministrationRoute.ORAL)
             }
         }
     }
