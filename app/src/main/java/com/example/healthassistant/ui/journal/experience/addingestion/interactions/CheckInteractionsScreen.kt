@@ -65,12 +65,10 @@ fun CheckInteractionsScreen(
     uncertainInteractions: List<String>,
     navigateToNext: () -> Unit
 ) {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Check Interactions") }) }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
+    Column {
+        LinearProgressIndicator(progress = 0.33f, modifier = Modifier.fillMaxWidth())
+        Scaffold(
+            topBar = { TopAppBar(title = { Text(text = "Check Interactions") }) }
         ) {
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())

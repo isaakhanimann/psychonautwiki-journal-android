@@ -65,93 +65,99 @@ fun ChooseRouteScreen(
     otherRoutesChunked: List<List<AdministrationRoute>>,
     navigateToNext: (AdministrationRoute) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Choose Route") },
-                navigationIcon = if (shouldShowOther && pwRoutes.isNotEmpty()) {
-                    {
-                        IconButton(onClick = { onChangeShowOther(false) }) {
-                            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-                        }
-                    }
-                } else null
-            )
-        }
-    ) {
-        val spacing = 6
-        Column(
-            modifier = Modifier.padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(spacing.dp)
-        ) {
-            val isShowingOther = shouldShowOther || pwRoutes.isEmpty()
-            AnimatedVisibility(
-                visible = isShowingOther,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(spacing.dp)
-                ) {
-                    otherRoutesChunked.forEach { otherRouteChunk ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f),
-                            horizontalArrangement = Arrangement.spacedBy(spacing.dp)
-                        ) {
-                            otherRouteChunk.forEach { route ->
-                                Card(
-                                    modifier = Modifier
-                                        .clickable {
-                                            navigateToNext(route)
-                                        }
-                                        .fillMaxHeight()
-                                        .weight(1f)
-                                ) {
-                                    RouteBox(
-                                        route = route,
-                                        titleStyle = MaterialTheme.typography.h6
-                                    )
-                                }
+    Column {
+        LinearProgressIndicator(progress = 0.5f, modifier = Modifier.fillMaxWidth())
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Choose Route") },
+                    navigationIcon = if (shouldShowOther && pwRoutes.isNotEmpty()) {
+                        {
+                            IconButton(onClick = { onChangeShowOther(false) }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = "Back"
+                                )
                             }
-                            if (otherRouteChunk.size == 1) {
-                                Box(modifier = Modifier.weight(1f))
+                        }
+                    } else null
+                )
+            }
+        ) {
+            val spacing = 6
+            Column(
+                modifier = Modifier.padding(10.dp),
+                verticalArrangement = Arrangement.spacedBy(spacing.dp)
+            ) {
+                val isShowingOther = shouldShowOther || pwRoutes.isEmpty()
+                AnimatedVisibility(
+                    visible = isShowingOther,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(spacing.dp)
+                    ) {
+                        otherRoutesChunked.forEach { otherRouteChunk ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f),
+                                horizontalArrangement = Arrangement.spacedBy(spacing.dp)
+                            ) {
+                                otherRouteChunk.forEach { route ->
+                                    Card(
+                                        modifier = Modifier
+                                            .clickable {
+                                                navigateToNext(route)
+                                            }
+                                            .fillMaxHeight()
+                                            .weight(1f)
+                                    ) {
+                                        RouteBox(
+                                            route = route,
+                                            titleStyle = MaterialTheme.typography.h6
+                                        )
+                                    }
+                                }
+                                if (otherRouteChunk.size == 1) {
+                                    Box(modifier = Modifier.weight(1f))
+                                }
                             }
                         }
                     }
                 }
-            }
-            AnimatedVisibility(
-                visible = !isShowingOther,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(spacing.dp)
+                AnimatedVisibility(
+                    visible = !isShowingOther,
+                    enter = fadeIn(),
+                    exit = fadeOut()
                 ) {
-                    pwRoutes.forEach { route ->
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(spacing.dp)
+                    ) {
+                        pwRoutes.forEach { route ->
+                            Card(
+                                modifier = Modifier
+                                    .clickable {
+                                        navigateToNext(route)
+                                    }
+                                    .fillMaxWidth()
+                                    .weight(5f)
+                            ) {
+                                RouteBox(route = route, titleStyle = MaterialTheme.typography.h4)
+                            }
+                        }
                         Card(
                             modifier = Modifier
                                 .clickable {
-                                    navigateToNext(route)
+                                    onChangeShowOther(true)
                                 }
                                 .fillMaxWidth()
                                 .weight(5f)
                         ) {
-                            RouteBox(route = route, titleStyle = MaterialTheme.typography.h4)
-                        }
-                    }
-                    Card(
-                        modifier = Modifier
-                            .clickable {
-                                onChangeShowOther(true)
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(text = "Other Routes", style = MaterialTheme.typography.h4)
                             }
-                            .fillMaxWidth()
-                            .weight(5f)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(text = "Other Routes", style = MaterialTheme.typography.h4)
                         }
                     }
                 }

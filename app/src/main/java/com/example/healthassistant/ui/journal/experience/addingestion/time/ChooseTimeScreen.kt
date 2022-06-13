@@ -66,46 +66,48 @@ fun ChooseTimeScreenContent(
     popUpToExperienceScreen: () -> Unit = {},
     popUpToSubstanceScreen: () -> Unit = {},
 ) {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) }
-    ) {
-        Column(
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth()
-                .padding(10.dp)
+    Column {
+        LinearProgressIndicator(progress = 1f, modifier = Modifier.fillMaxWidth())
+        Scaffold(
+            topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) }
         ) {
             Column(
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp)
             ) {
-                DatePickerButton(
-                    day = dateAndTime.day,
-                    month = dateAndTime.month,
-                    year = dateAndTime.year,
-                    onSubmitDate = onSubmitDate,
-                    dateString = dateAndTimeStrings.first,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                TimePickerButton(
-                    hour = dateAndTime.hour,
-                    minute = dateAndTime.minute,
-                    onSubmitTime = onSubmitTime,
-                    timeString = dateAndTimeStrings.second,
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    DatePickerButton(
+                        day = dateAndTime.day,
+                        month = dateAndTime.month,
+                        year = dateAndTime.year,
+                        onSubmitDate = onSubmitDate,
+                        dateString = dateAndTimeStrings.first,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    TimePickerButton(
+                        hour = dateAndTime.hour,
+                        minute = dateAndTime.minute,
+                        onSubmitTime = onSubmitTime,
+                        timeString = dateAndTimeStrings.second,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                AddIngestionButtons(
+                    addIngestionToExperience = addIngestionToExperience,
+                    addIngestionToNewExperience = addIngestionToNewExperience,
+                    experienceIdToAddTo = experienceIdToAddTo,
+                    latestExperienceId = latestExperienceId,
+                    popUpToSubstanceScreen = popUpToSubstanceScreen,
+                    popUpToExperienceScreen = popUpToExperienceScreen
                 )
             }
-            AddIngestionButtons(
-                addIngestionToExperience = addIngestionToExperience,
-                addIngestionToNewExperience = addIngestionToNewExperience,
-                experienceIdToAddTo = experienceIdToAddTo,
-                latestExperienceId = latestExperienceId,
-                popUpToSubstanceScreen = popUpToSubstanceScreen,
-                popUpToExperienceScreen = popUpToExperienceScreen
-            )
         }
     }
 }

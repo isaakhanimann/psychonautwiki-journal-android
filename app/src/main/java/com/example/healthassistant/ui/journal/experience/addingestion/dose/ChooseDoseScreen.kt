@@ -95,79 +95,82 @@ fun ChooseDoseScreen(
     isValidPurity: Boolean,
     convertedDoseAndUnitText: String?
 ) {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Choose Dose") }) }
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxHeight(),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(15.dp)
+    Column {
+        LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
+        Scaffold(
+            topBar = { TopAppBar(title = { Text(text = "Choose Dose") }) }
         ) {
-            Column {
-                if (roaDose != null) {
-                    RoaDoseView(roaDose = roaDose)
-                }
-                val isDarkTheme = isSystemInDarkTheme()
-                Text(
-                    text = currentRoaRangeTextAndColor.first,
-                    color = currentRoaRangeTextAndColor.second?.getComposeColor(isDarkTheme)
-                        ?: MaterialTheme.colors.primary
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                val focusManager = LocalFocusManager.current
-                val textStyle = MaterialTheme.typography.h3
-                OutlinedTextField(
-                    value = doseText,
-                    onValueChange = onChangeDoseText,
-                    textStyle = textStyle,
-                    label = { Text("Pure Dose", style = textStyle) },
-                    isError = !isValidDose,
-                    trailingIcon = {
-                        Text(
-                            text = roaDose?.units ?: "",
-                            style = textStyle,
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        )
-                    },
-                    keyboardActions = KeyboardActions(onDone = {
-                        focusManager.clearFocus()
-                    }),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    singleLine = true
-                )
-            }
-            PurityCalculation(
-                purityText = purityText,
-                onPurityChange = onPurityChange,
-                convertedDoseAndUnitText = convertedDoseAndUnitText,
-                isValidPurity = isValidPurity
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            Column(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxHeight(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                Text("Is Estimate", style = MaterialTheme.typography.h6)
-                Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TextButton(
-                    onClick = useUnknownDoseAndNavigate,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Use Unknown Dose")
+                Column {
+                    if (roaDose != null) {
+                        RoaDoseView(roaDose = roaDose)
+                    }
+                    val isDarkTheme = isSystemInDarkTheme()
+                    Text(
+                        text = currentRoaRangeTextAndColor.first,
+                        color = currentRoaRangeTextAndColor.second?.getComposeColor(isDarkTheme)
+                            ?: MaterialTheme.colors.primary
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    val focusManager = LocalFocusManager.current
+                    val textStyle = MaterialTheme.typography.h3
+                    OutlinedTextField(
+                        value = doseText,
+                        onValueChange = onChangeDoseText,
+                        textStyle = textStyle,
+                        label = { Text("Pure Dose", style = textStyle) },
+                        isError = !isValidDose,
+                        trailingIcon = {
+                            Text(
+                                text = roaDose?.units ?: "",
+                                style = textStyle,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                        },
+                        keyboardActions = KeyboardActions(onDone = {
+                            focusManager.clearFocus()
+                        }),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        singleLine = true
+                    )
                 }
-                Spacer(modifier = Modifier.width(10.dp))
-                Button(
-                    onClick = navigateToNext,
-                    enabled = isValidDose,
-                    modifier = Modifier.weight(1f)
+                PurityCalculation(
+                    purityText = purityText,
+                    onPurityChange = onPurityChange,
+                    convertedDoseAndUnitText = convertedDoseAndUnitText,
+                    isValidPurity = isValidPurity
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("Next")
+                    Text("Is Estimate", style = MaterialTheme.typography.h6)
+                    Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TextButton(
+                        onClick = useUnknownDoseAndNavigate,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Use Unknown Dose")
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Button(
+                        onClick = navigateToNext,
+                        enabled = isValidDose,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Next")
+                    }
                 }
             }
         }
