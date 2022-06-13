@@ -48,6 +48,7 @@ fun RoaDurationView(
         val colorTransparent = colorTimeLine.copy(alpha = 0.1f)
         val strokeWidth = 8f
         val strokeWidthThick = 40f
+        val ingestionDotRadius = 10f
         if ((total?.min != null) && (total.max != null)) {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -62,26 +63,33 @@ fun RoaDurationView(
                         .fillMaxWidth()
                         .height(with(LocalDensity.current) { strokeWidthThick.toDp() })
                 ) {
-                    val canvasWidth = size.width
-                    val midHeight = size.height / 2
-                    val max = maxDuration ?: total.max
-                    val minX = (total.min.div(max) * canvasWidth).toFloat()
-                    val maxX = (total.max.div(max) * canvasWidth).toFloat()
-                    val midX = (minX + maxX) / 2
-                    drawLine(
-                        start = Offset(x = 0f, y = midHeight),
-                        end = Offset(x = midX, y = midHeight),
-                        color = colorTimeLine,
-                        strokeWidth = strokeWidth,
-                        cap = StrokeCap.Round
-                    )
-                    drawLine(
-                        start = Offset(x = minX, y = midHeight),
-                        end = Offset(x = maxX, y = midHeight),
-                        color = colorTransparent,
-                        strokeWidth = strokeWidthThick,
-                        cap = StrokeCap.Round
-                    )
+                    inset(left = ingestionDotRadius, top = 0f, right = 0f, bottom = 0f) {
+                        val canvasWidth = size.width
+                        val midHeight = size.height / 2
+                        drawCircle(
+                            color = colorTimeLine,
+                            radius = ingestionDotRadius,
+                            center = Offset(x = 0f, y = midHeight)
+                        )
+                        val max = maxDuration ?: total.max
+                        val minX = (total.min.div(max) * canvasWidth).toFloat()
+                        val maxX = (total.max.div(max) * canvasWidth).toFloat()
+                        val midX = (minX + maxX) / 2
+                        drawLine(
+                            start = Offset(x = 0f, y = midHeight),
+                            end = Offset(x = midX, y = midHeight),
+                            color = colorTimeLine,
+                            strokeWidth = strokeWidth,
+                            cap = StrokeCap.Round
+                        )
+                        drawLine(
+                            start = Offset(x = minX, y = midHeight),
+                            end = Offset(x = maxX, y = midHeight),
+                            color = colorTransparent,
+                            strokeWidth = strokeWidthThick,
+                            cap = StrokeCap.Round
+                        )
+                    }
                 }
             }
         }
@@ -94,10 +102,10 @@ fun RoaDurationView(
         val comeup = roaDuration.comeup
         val peak = roaDuration.peak
         val offset = roaDuration.offset
-        val onsetInterpol = roaDuration.onset?.interpolateAt(0.5)
-        val comeupInterpol = roaDuration.comeup?.interpolateAt(0.5)
-        val peakInterpol = roaDuration.peak?.interpolateAt(0.5)
-        val offsetInterpol = roaDuration.offset?.interpolateAt(0.5)
+        val onsetInterpol = onset?.interpolateAt(0.5)
+        val comeupInterpol = comeup?.interpolateAt(0.5)
+        val peakInterpol = peak?.interpolateAt(0.5)
+        val offsetInterpol = offset?.interpolateAt(0.5)
         val allDurations = listOf(onsetInterpol, comeupInterpol, peakInterpol, offsetInterpol)
         val undefinedCount = allDurations.count { it == null }
         if (maxDuration != null && undefinedCount < 4) {
@@ -125,144 +133,154 @@ fun RoaDurationView(
                     .fillMaxWidth()
                     .height(80.dp)
             ) {
-                val canvasWidth = size.width
-                val pixelsPerSec = canvasWidth.div(maxDuration.inWholeSeconds)
-                val sumDurations = allDurations.filterNotNull().reduce { acc, duration ->
-                    acc + duration
-                }
-                val offsetDiff =
-                    if (offset?.max != null && offset.min != null) offset.max - offset.min else null
-                val wholeDuration = roaDuration.total?.interpolateAt(0.5)
-                    ?: if (offsetDiff != null) maxDuration.minus(offsetDiff.div(2)) else maxDuration
-                val restDuration = wholeDuration - sumDurations
-                val divider = if (undefinedCount == 0) 1 else undefinedCount
-                val dottedLineWidths = restDuration.div(divider).inWholeSeconds * pixelsPerSec
-                inset(vertical = strokeWidthThick / 2) {
-                    val canvasHeight = size.height
-                    val start1 =
-                        onsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val pathEffect = PathEffect.dashPathEffect(
-                        floatArrayOf(20f, 30f)
-                    )
-                    drawLine(
-                        start = Offset(x = 0f, y = canvasHeight),
-                        end = Offset(x = start1, y = canvasHeight),
-                        color = colorTimeLine,
-                        strokeWidth = strokeWidth,
-                        cap = StrokeCap.Round,
-                        pathEffect = if (onsetInterpol == null) pathEffect else null
-                    )
-                    if (onset?.max != null && onset.min != null) {
-                        val diff = (onset.max - onset.min).inWholeSeconds.times(pixelsPerSec) / 2
-                        drawLine(
-                            start = Offset(x = start1 - diff, y = canvasHeight),
-                            end = Offset(x = start1 + diff, y = canvasHeight),
-                            color = colorTransparent,
-                            strokeWidth = strokeWidthThick,
-                            cap = StrokeCap.Round,
-                        )
+                inset(left = ingestionDotRadius, top = 0f, right = 0f, bottom = 0f) {
+                    val canvasWidth = size.width
+                    val pixelsPerSec = canvasWidth.div(maxDuration.inWholeSeconds)
+                    val sumDurations = allDurations.filterNotNull().reduce { acc, duration ->
+                        acc + duration
                     }
-                    val diff1 =
-                        comeupInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val start2 = start1 + diff1
-                    drawLine(
-                        start = Offset(x = start1, y = canvasHeight),
-                        end = Offset(x = start2, y = 0f),
-                        color = colorTimeLine,
-                        strokeWidth = strokeWidth,
-                        cap = StrokeCap.Round,
-                        pathEffect = if (comeupInterpol == null) pathEffect else null
-                    )
-                    if (comeup?.max != null && comeup.min != null) {
-                        val diff = (comeup.max - comeup.min).inWholeSeconds.times(pixelsPerSec) / 2
-                        drawLine(
-                            start = Offset(x = start2 - diff, y = 0f),
-                            end = Offset(x = start2 + diff, y = 0f),
-                            color = colorTransparent,
-                            strokeWidth = strokeWidthThick,
-                            cap = StrokeCap.Round,
+                    val offsetDiff =
+                        if (offset?.max != null && offset.min != null) offset.max - offset.min else null
+                    val wholeDuration = total?.interpolateAt(0.5)
+                        ?: if (offsetDiff != null) maxDuration.minus(offsetDiff.div(2)) else maxDuration
+                    val restDuration = wholeDuration - sumDurations
+                    val divider = if (undefinedCount == 0) 1 else undefinedCount
+                    val dottedLineWidths = restDuration.div(divider).inWholeSeconds * pixelsPerSec
+                    inset(vertical = strokeWidthThick / 2) {
+                        val canvasHeight = size.height
+                        drawCircle(
+                            color = colorTimeLine,
+                            radius = ingestionDotRadius,
+                            center = Offset(x = 0f, y = canvasHeight)
                         )
-                    }
-                    if (onset != null) {
-                        drawContext.canvas.nativeCanvas.apply {
-                            drawText(
-                                onset.text,
-                                0f,
-                                canvasHeight - 11f,
-                                textPaintAlignLeft
+                        val start1 =
+                            onsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                        val pathEffect = PathEffect.dashPathEffect(
+                            floatArrayOf(20f, 30f)
+                        )
+                        drawLine(
+                            start = Offset(x = 0f, y = canvasHeight),
+                            end = Offset(x = start1, y = canvasHeight),
+                            color = colorTimeLine,
+                            strokeWidth = strokeWidth,
+                            cap = StrokeCap.Round,
+                            pathEffect = if (onsetInterpol == null) pathEffect else null
+                        )
+                        if (onset?.max != null && onset.min != null) {
+                            val diff =
+                                (onset.max - onset.min).inWholeSeconds.times(pixelsPerSec) / 2
+                            drawLine(
+                                start = Offset(x = start1 - diff, y = canvasHeight),
+                                end = Offset(x = start1 + diff, y = canvasHeight),
+                                color = colorTransparent,
+                                strokeWidth = strokeWidthThick,
+                                cap = StrokeCap.Round,
                             )
                         }
-                    }
-                    if (comeup != null) {
-                        drawContext.canvas.nativeCanvas.apply {
-                            drawText(
-                                comeup.text,
-                                (start1 + start2) / 2 + 15f,
-                                canvasHeight / 2,
-                                textPaintAlignLeft
+                        val diff1 =
+                            comeupInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                        val start2 = start1 + diff1
+                        drawLine(
+                            start = Offset(x = start1, y = canvasHeight),
+                            end = Offset(x = start2, y = 0f),
+                            color = colorTimeLine,
+                            strokeWidth = strokeWidth,
+                            cap = StrokeCap.Round,
+                            pathEffect = if (comeupInterpol == null) pathEffect else null
+                        )
+                        if (comeup?.max != null && comeup.min != null) {
+                            val diff =
+                                (comeup.max - comeup.min).inWholeSeconds.times(pixelsPerSec) / 2
+                            drawLine(
+                                start = Offset(x = start2 - diff, y = 0f),
+                                end = Offset(x = start2 + diff, y = 0f),
+                                color = colorTransparent,
+                                strokeWidth = strokeWidthThick,
+                                cap = StrokeCap.Round,
                             )
                         }
-                    }
-                    val diff2 =
-                        peakInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val start3 = start2 + diff2
-                    drawLine(
-                        start = Offset(x = start2, y = 0f),
-                        end = Offset(x = start3, y = 0f),
-                        color = colorTimeLine,
-                        strokeWidth = strokeWidth,
-                        cap = StrokeCap.Round,
-                        pathEffect = if (peakInterpol == null) pathEffect else null
-                    )
-                    if (peak?.max != null && peak.min != null) {
-                        val diff = (peak.max - peak.min).inWholeSeconds.times(pixelsPerSec) / 2
+                        if (onset != null) {
+                            drawContext.canvas.nativeCanvas.apply {
+                                drawText(
+                                    onset.text,
+                                    0f,
+                                    canvasHeight - 15f,
+                                    textPaintAlignLeft
+                                )
+                            }
+                        }
+                        if (comeup != null) {
+                            drawContext.canvas.nativeCanvas.apply {
+                                drawText(
+                                    comeup.text,
+                                    (start1 + start2) / 2 + 15f,
+                                    canvasHeight / 2,
+                                    textPaintAlignLeft
+                                )
+                            }
+                        }
+                        val diff2 =
+                            peakInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                        val start3 = start2 + diff2
                         drawLine(
-                            start = Offset(x = start3 - diff, y = 0f),
-                            end = Offset(x = start3 + diff, y = 0f),
-                            color = colorTransparent,
-                            strokeWidth = strokeWidthThick,
+                            start = Offset(x = start2, y = 0f),
+                            end = Offset(x = start3, y = 0f),
+                            color = colorTimeLine,
+                            strokeWidth = strokeWidth,
                             cap = StrokeCap.Round,
+                            pathEffect = if (peakInterpol == null) pathEffect else null
                         )
-                    }
-                    if (peak != null) {
-                        drawContext.canvas.nativeCanvas.apply {
-                            drawText(
-                                peak.text,
-                                (start2 + start3) / 2,
-                                35f,
-                                textPaintAlignCenter
+                        if (peak?.max != null && peak.min != null) {
+                            val diff = (peak.max - peak.min).inWholeSeconds.times(pixelsPerSec) / 2
+                            drawLine(
+                                start = Offset(x = start3 - diff, y = 0f),
+                                end = Offset(x = start3 + diff, y = 0f),
+                                color = colorTransparent,
+                                strokeWidth = strokeWidthThick,
+                                cap = StrokeCap.Round,
                             )
                         }
-                    }
-                    val diff3 =
-                        offsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
-                    val start4 = start3 + diff3
-                    drawLine(
-                        start = Offset(x = start3, y = 0f),
-                        end = Offset(x = start4, y = canvasHeight),
-                        color = colorTimeLine,
-                        strokeWidth = strokeWidth,
-                        cap = StrokeCap.Round,
-                        pathEffect = if (offsetInterpol == null) pathEffect else null
-                    )
-                    if (offset?.max != null && offset.min != null) {
-                        val diff = (offset.max - offset.min).inWholeSeconds.times(pixelsPerSec) / 2
+                        if (peak != null) {
+                            drawContext.canvas.nativeCanvas.apply {
+                                drawText(
+                                    peak.text,
+                                    (start2 + start3) / 2,
+                                    35f,
+                                    textPaintAlignCenter
+                                )
+                            }
+                        }
+                        val diff3 =
+                            offsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
+                        val start4 = start3 + diff3
                         drawLine(
-                            start = Offset(x = start4 - diff, y = canvasHeight),
-                            end = Offset(x = start4 + diff, y = canvasHeight),
-                            color = colorTransparent,
-                            strokeWidth = strokeWidthThick,
+                            start = Offset(x = start3, y = 0f),
+                            end = Offset(x = start4, y = canvasHeight),
+                            color = colorTimeLine,
+                            strokeWidth = strokeWidth,
                             cap = StrokeCap.Round,
+                            pathEffect = if (offsetInterpol == null) pathEffect else null
                         )
-                    }
-                    if (offset != null) {
-                        drawContext.canvas.nativeCanvas.apply {
-                            drawText(
-                                offset.text,
-                                (start3 + start4) / 2 + 15f,
-                                canvasHeight / 2,
-                                textPaintAlignLeft
+                        if (offset?.max != null && offset.min != null) {
+                            val diff =
+                                (offset.max - offset.min).inWholeSeconds.times(pixelsPerSec) / 2
+                            drawLine(
+                                start = Offset(x = start4 - diff, y = canvasHeight),
+                                end = Offset(x = start4 + diff, y = canvasHeight),
+                                color = colorTransparent,
+                                strokeWidth = strokeWidthThick,
+                                cap = StrokeCap.Round,
                             )
+                        }
+                        if (offset != null) {
+                            drawContext.canvas.nativeCanvas.apply {
+                                drawText(
+                                    offset.text,
+                                    (start3 + start4) / 2 + 15f,
+                                    canvasHeight / 2,
+                                    textPaintAlignLeft
+                                )
+                            }
                         }
                     }
                 }
