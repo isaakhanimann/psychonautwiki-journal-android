@@ -106,16 +106,12 @@ fun NavController.navigateToExperiencePopNothing(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId)
 }
 
-fun NavController.navigateToExperiencePopupToExperienceScreen(experienceId: Int) {
-    navigate(ROUTE_START_EXPERIENCES + experienceId) {
-        popUpTo(ArgumentRouter.ExperienceRouter.route) { inclusive = true }
-    }
+fun NavController.popUpToExperienceScreen() {
+    popBackStack(route = ArgumentRouter.ExperienceRouter.route, inclusive = false)
 }
 
-fun NavController.navigateToExperiencePopupToSubstanceScreen(experienceId: Int) {
-    navigate(ROUTE_START_EXPERIENCES + experienceId) {
-        popUpTo(ArgumentRouter.SubstanceRouter.route)
-    }
+fun NavController.popUpToSubstanceScreen() {
+    popBackStack(route = ArgumentRouter.SubstanceRouter.route, inclusive = false)
 }
 
 fun NavController.navigateToAddIngestionSearch(experienceId: Int) {

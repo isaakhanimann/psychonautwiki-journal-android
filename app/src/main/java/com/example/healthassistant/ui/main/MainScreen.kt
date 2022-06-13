@@ -225,8 +225,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             arguments = ArgumentRouter.ChooseTimeRouter.args
         ) {
             ChooseTimeScreen(
-                navigateToExperiencePopupToExperienceScreen = navController::navigateToExperiencePopupToExperienceScreen,
-                navigateToExperiencePopupToSubstanceScreen = navController::navigateToExperiencePopupToSubstanceScreen
+                popUpToExperienceScreen = navController::popUpToExperienceScreen,
+                popUpToSubstanceScreen = navController::popUpToSubstanceScreen
             )
         }
     }

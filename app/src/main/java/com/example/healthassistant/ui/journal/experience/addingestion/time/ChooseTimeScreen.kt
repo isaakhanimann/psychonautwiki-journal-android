@@ -15,8 +15,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun ChooseTimeScreen(
-    navigateToExperiencePopupToSubstanceScreen: (experienceId: Int) -> Unit,
-    navigateToExperiencePopupToExperienceScreen: (experienceId: Int) -> Unit,
+    popUpToExperienceScreen: () -> Unit,
+    popUpToSubstanceScreen: () -> Unit,
     viewModel: ChooseTimeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -30,7 +30,7 @@ fun ChooseTimeScreen(
                     context, "Ingestion Added",
                     Toast.LENGTH_SHORT
                 ).show()
-                navigateToExperiencePopupToSubstanceScreen(it)
+                popUpToSubstanceScreen()
             }
         },
         experienceIdToAddTo = viewModel.experienceId,
@@ -45,8 +45,8 @@ fun ChooseTimeScreen(
             minute = viewModel.minute.value
         ),
         dateAndTimeStrings = Pair(viewModel.dateString, viewModel.timeString),
-        navigateToExperiencePopUpToExperienceScreen = navigateToExperiencePopupToExperienceScreen,
-        navigateToExperiencePopUpToSubstanceScreen = navigateToExperiencePopupToSubstanceScreen
+        popUpToExperienceScreen = popUpToExperienceScreen,
+        popUpToSubstanceScreen = popUpToSubstanceScreen
     )
 }
 
@@ -63,8 +63,8 @@ fun ChooseTimeScreenContent(
     onSubmitTime: (Int, Int) -> Unit = { _: Int, _: Int -> },
     dateAndTime: DateAndTime = DateAndTime(day = 3, month = 4, year = 2022, hour = 13, minute = 52),
     dateAndTimeStrings: Pair<String, String> = Pair("Wed 9 Jul 2022", "13:52"),
-    navigateToExperiencePopUpToSubstanceScreen: (Int) -> Unit = {},
-    navigateToExperiencePopUpToExperienceScreen: (Int) -> Unit = {},
+    popUpToExperienceScreen: () -> Unit = {},
+    popUpToSubstanceScreen: () -> Unit = {},
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) }
@@ -103,8 +103,8 @@ fun ChooseTimeScreenContent(
                 addIngestionToNewExperience = addIngestionToNewExperience,
                 experienceIdToAddTo = experienceIdToAddTo,
                 latestExperienceId = latestExperienceId,
-                navigateToExperiencePopUpToExperienceScreen = navigateToExperiencePopUpToExperienceScreen,
-                navigateToExperiencePopUpToSubstanceScreen = navigateToExperiencePopUpToSubstanceScreen
+                popUpToSubstanceScreen = popUpToSubstanceScreen,
+                popUpToExperienceScreen = popUpToExperienceScreen
             )
         }
     }
@@ -116,8 +116,8 @@ fun AddIngestionButtons(
     addIngestionToNewExperience: () -> Unit,
     experienceIdToAddTo: Int?,
     latestExperienceId: Int?,
-    navigateToExperiencePopUpToSubstanceScreen: (Int) -> Unit,
-    navigateToExperiencePopUpToExperienceScreen: (Int) -> Unit,
+    popUpToSubstanceScreen: () -> Unit,
+    popUpToExperienceScreen: () -> Unit,
 ) {
     val context = LocalContext.current
     if (experienceIdToAddTo != null) {
@@ -128,7 +128,7 @@ fun AddIngestionButtons(
                     context, "Ingestion Added",
                     Toast.LENGTH_SHORT
                 ).show()
-                navigateToExperiencePopUpToExperienceScreen(experienceIdToAddTo)
+                popUpToExperienceScreen()
             },
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -147,7 +147,7 @@ fun AddIngestionButtons(
                             context, "Ingestion Added",
                             Toast.LENGTH_SHORT
                         ).show()
-                        navigateToExperiencePopUpToSubstanceScreen(latestExperienceId)
+                        popUpToSubstanceScreen()
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
