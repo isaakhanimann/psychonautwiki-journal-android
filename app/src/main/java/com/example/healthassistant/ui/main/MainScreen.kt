@@ -12,8 +12,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.ui.journal.addExperience.AddExperienceScreen
 import com.example.healthassistant.ui.journal.JournalScreen
+import com.example.healthassistant.ui.journal.addExperience.AddExperienceScreen
 import com.example.healthassistant.ui.journal.experience.ExperienceScreen
 import com.example.healthassistant.ui.journal.experience.addingestion.color.ChooseColorScreen
 import com.example.healthassistant.ui.journal.experience.addingestion.dose.ChooseDoseScreen
@@ -25,6 +25,7 @@ import com.example.healthassistant.ui.journal.experience.edit.EditExperienceScre
 import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
+import com.example.healthassistant.ui.settings.SettingsScreen
 
 @Composable
 fun MainScreen() {
@@ -109,7 +110,7 @@ fun MainScreen() {
                 )
             }
             composable(TabRouter.Stats.route) { Stats() }
-            composable(TabRouter.Settings.route) { Settings() }
+            composable(TabRouter.Settings.route) { SettingsScreen() }
         }
     }
 }
@@ -235,9 +236,4 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
 @Composable
 fun Stats() {
     Text(text = "Stats")
-}
-
-@Composable
-fun Settings() {
-    Text(text = "Settings")
 }
