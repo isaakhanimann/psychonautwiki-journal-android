@@ -1,5 +1,6 @@
-package com.example.healthassistant.data.substances
+package com.example.healthassistant.data.substances.parse
 
+import com.example.healthassistant.data.substances.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener

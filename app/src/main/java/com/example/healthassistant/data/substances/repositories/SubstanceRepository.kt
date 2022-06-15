@@ -3,7 +3,7 @@ package com.example.healthassistant.data.substances.repositories
 import android.content.Context
 import com.example.healthassistant.data.substances.InteractionType
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.data.substances.SubstanceParserInterface
+import com.example.healthassistant.data.substances.parse.SubstanceParserInterface
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
