@@ -9,25 +9,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.healthassistant.data.initialDate
+import java.util.*
 
 @Preview
 @Composable
 fun SettingsPreview() {
-    SettingsScreen(incrementCounter = {}, counterValue = 1)
+    SettingsScreen(updateDateToNow = {}, date = Date())
 }
 
 @Composable
 fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
     SettingsScreen(
-        incrementCounter = settingsViewModel::onIncrementTap,
-        counterValue = settingsViewModel.counter.collectAsState(initial = 0).value
+        updateDateToNow = settingsViewModel::updateDateToNow,
+        date = settingsViewModel.dateFlow.collectAsState(initial = initialDate).value
     )
 }
 
 @Composable
 fun SettingsScreen(
-    incrementCounter: ()->Unit,
-    counterValue: Int
+    updateDateToNow: ()->Unit,
+    date: Date
 ) {
     Scaffold(topBar = {
         TopAppBar(
@@ -35,10 +37,10 @@ fun SettingsScreen(
         )
     }) {
         Column {
-            Button(onClick = incrementCounter) {
-                Text(text = "Increment Counter")
+            Button(onClick = updateDateToNow) {
+                Text(text = "Update Date to Now")
             }
-            Text(text = "counter: $counterValue")
+            Text(text = "counter: $date")
         }
     }
 }
