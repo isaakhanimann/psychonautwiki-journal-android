@@ -1,9 +1,8 @@
 package com.example.healthassistant.ui.settings
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.healthassistant.data.substances.PsychonautWikiAPIImplementation
+import com.example.healthassistant.data.DataStorePreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,14 +10,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    psychonautWikiAPIImplementation: PsychonautWikiAPIImplementation
+    private val dataStorePreferences: DataStorePreferences
 ) : ViewModel() {
 
-    val text = mutableStateOf("")
+    val counter = dataStorePreferences.exampleCounterFlow
 
-    init {
+    fun onIncrementTap() {
         viewModelScope.launch(Dispatchers.IO) {
-            text.value = psychonautWikiAPIImplementation.getStringFromAPI()
+            dataStorePreferences.incrementCounter()
         }
     }
 }
