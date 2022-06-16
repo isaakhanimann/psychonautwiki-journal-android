@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 
@@ -71,7 +70,7 @@ fun JournalScreen(
                             onClick = { isExpanded = true },
                         ) {
                             BadgedBox(badge = {
-                                if (numberOfActiveFilters!=0) {
+                                if (numberOfActiveFilters != 0) {
                                     Badge { Text(numberOfActiveFilters.toString()) }
                                 }
                             }) {
@@ -111,18 +110,40 @@ fun JournalScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = navigateToAddExperience) {
-                Icon(Icons.Default.Add, "Add New Experience")
-            }
+            ExtendedFloatingActionButton(
+                onClick = navigateToAddExperience,
+                icon = {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add"
+                    )
+                },
+                text = {
+                    if (groupedExperiences.isEmpty()) {
+                        Text("Add Your First Experience")
+                    } else {
+                        Text("New Experience")
+                    }
+                }
+            )
         }
     ) {
-        ExperiencesList(
-            groupedExperiences = groupedExperiences,
-            navigateToExperiencePopNothing = navigateToExperiencePopNothing,
-            navigateToEditExperienceScreen = navigateToEditExperienceScreen,
-            navigateToAddExperience = navigateToAddExperience,
-            deleteExperience = deleteExperience
-        )
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            ExperiencesList(
+                groupedExperiences = groupedExperiences,
+                navigateToExperiencePopNothing = navigateToExperiencePopNothing,
+                navigateToEditExperienceScreen = navigateToEditExperienceScreen,
+                deleteExperience = deleteExperience
+            )
+            if (groupedExperiences.isEmpty()) {
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Text(text = "No Experiences Yet")
+                }
+            }
+        }
     }
 }
 
@@ -131,39 +152,29 @@ fun ExperiencesList(
     groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
-    navigateToAddExperience: () -> Unit,
     deleteExperience: (ExperienceWithIngestions) -> Unit
 ) {
-    if (groupedExperiences.isEmpty()) {
-        Button(
-            onClick = navigateToAddExperience,
-            modifier = Modifier.padding(10.dp)
-        ) {
-            Text("Add Your First Experience")
-        }
-    } else {
-        LazyColumn {
-            groupedExperiences.forEach { (year, experiencesInYear) ->
-                item {
-                    SectionTitle(title = year)
-                }
-                items(experiencesInYear.size) { i ->
-                    val experienceWithIngestions = experiencesInYear[i]
-                    ExperienceRow(
-                        experienceWithIngestions,
-                        navigateToExperienceScreen = {
-                            navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
-                        },
-                        navigateToEditExperienceScreen = {
-                            navigateToEditExperienceScreen(experienceWithIngestions.experience.id)
-                        },
-                        deleteExperienceWithIngestions = {
-                            deleteExperience(experienceWithIngestions)
-                        }
-                    )
-                    if (i < experiencesInYear.size) {
-                        Divider()
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        groupedExperiences.forEach { (year, experiencesInYear) ->
+            item {
+                SectionTitle(title = year)
+            }
+            items(experiencesInYear.size) { i ->
+                val experienceWithIngestions = experiencesInYear[i]
+                ExperienceRow(
+                    experienceWithIngestions,
+                    navigateToExperienceScreen = {
+                        navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
+                    },
+                    navigateToEditExperienceScreen = {
+                        navigateToEditExperienceScreen(experienceWithIngestions.experience.id)
+                    },
+                    deleteExperienceWithIngestions = {
+                        deleteExperience(experienceWithIngestions)
                     }
+                )
+                if (i < experiencesInYear.size) {
+                    Divider()
                 }
             }
         }
