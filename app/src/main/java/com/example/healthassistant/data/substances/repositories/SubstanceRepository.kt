@@ -7,6 +7,10 @@ import com.example.healthassistant.data.substances.PsychonautWikiAPIImplementati
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.parse.SubstanceParserInterface
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -22,6 +26,8 @@ class SubstanceRepository @Inject constructor(
 
     private var allSubstances: List<Substance>
 
+    val substancesFlow: MutableStateFlow<List<Substance>>
+
     private val fetchedSubstancesFileName = "FetchedSubstances.json"
     private val fetchedFile = File(appContext.filesDir, fetchedSubstancesFileName)
 
@@ -32,6 +38,7 @@ class SubstanceRepository @Inject constructor(
             getAssetsSubstanceFileContent()
         }
         allSubstances = substanceParser.parseAllSubstances(string = fileContent)
+        substancesFlow = MutableStateFlow(allSubstances)
     }
 
     suspend fun reset() {
@@ -43,6 +50,7 @@ class SubstanceRepository @Inject constructor(
     private fun loadSubstancesFromAsset() {
         val fileContent = getAssetsSubstanceFileContent()
         allSubstances = substanceParser.parseAllSubstances(string = fileContent)
+        substancesFlow.update { allSubstances }
     }
 
     suspend fun update(): Boolean {
@@ -54,6 +62,7 @@ class SubstanceRepository @Inject constructor(
             writeIntoFetchedFile(value = extract)
             dataStorePreferences.saveDate(Date())
             allSubstances = parsedSubstances
+            substancesFlow.update { allSubstances }
             true
         } else {
             false
@@ -76,23 +85,25 @@ class SubstanceRepository @Inject constructor(
         return appContext.assets.open("Substances.json").bufferedReader().use { it.readText() }
     }
 
-    override fun getAllSubstances(): List<Substance> {
-        return allSubstances
+    override fun getAllSubstances(): Flow<List<Substance>> {
+        return substancesFlow
     }
 
     override fun getSubstance(substanceName: String): Substance? {
         return allSubstances.firstOrNull { it.name == substanceName }
     }
 
-    override suspend fun getSubstances(searchText: String): List<Substance> {
-        return if (searchText.isEmpty()) {
-            allSubstances
-        } else {
-            allSubstances.filter {
-                it.name.startsWith(prefix = searchText, ignoreCase = true) ||
-                        it.commonNames.any { commonName ->
-                            commonName.startsWith(prefix = searchText, ignoreCase = true)
-                        }
+    override fun getSubstances(searchText: String): Flow<List<Substance>> {
+        return substancesFlow.map { list ->
+            if (searchText.isEmpty()) {
+                list
+            } else {
+                list.filter { substance ->
+                    substance.name.startsWith(prefix = searchText, ignoreCase = true) ||
+                            substance.commonNames.any { commonName ->
+                                commonName.startsWith(prefix = searchText, ignoreCase = true)
+                            }
+                }
             }
         }
     }

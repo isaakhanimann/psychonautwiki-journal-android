@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,7 +18,7 @@ class SearchViewModel @Inject constructor(
 ): ViewModel() {
 
     var searchText by mutableStateOf("")
-    var substancesToShow: List<Substance> = repository.getAllSubstances()
+    var substancesToShow: Flow<List<Substance>> = repository.getAllSubstances()
 
     fun filterSubstances() {
         viewModelScope.launch {

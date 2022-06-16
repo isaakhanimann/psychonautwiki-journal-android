@@ -33,6 +33,7 @@ fun SearchScreen(
             searchViewModel.filterSubstances()
         })
         val recents = recentlyUsedSubstancesViewModel.recentlyUsedSubstances.collectAsState().value
+        val substancesToShow = searchViewModel.substancesToShow.collectAsState(initial = emptyList()).value
         LazyColumn {
             if (searchViewModel.searchText.isEmpty() && recents.isNotEmpty()) {
                 item {
@@ -49,10 +50,10 @@ fun SearchScreen(
                     SectionTitle(title = "Other")
                 }
             }
-            items(searchViewModel.substancesToShow.size) { i ->
-                val substance = searchViewModel.substancesToShow[i]
+            items(substancesToShow.size) { i ->
+                val substance = substancesToShow[i]
                 SubstanceRow(substance = substance, onTap = onSubstanceTap)
-                if (i < searchViewModel.substancesToShow.size) {
+                if (i < substancesToShow.size) {
                     Divider()
                 }
             }
