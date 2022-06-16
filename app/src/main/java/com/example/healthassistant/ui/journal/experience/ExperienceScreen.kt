@@ -102,9 +102,16 @@ fun ExperienceScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = addIngestion) {
-                Icon(Icons.Default.Add, "Add Ingestion")
-            }
+            ExtendedFloatingActionButton(
+                onClick = addIngestion,
+                icon = {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add"
+                    )
+                },
+                text = { Text("Add Ingestion") }
+            )
         }
     ) {
         Column(

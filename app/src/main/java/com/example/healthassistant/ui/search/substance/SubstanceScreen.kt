@@ -80,9 +80,16 @@ fun SubstanceScreenContent(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onIngestTapped) {
-                Icon(Icons.Default.Add, "Ingest ${substance.name}")
-            }
+            ExtendedFloatingActionButton(
+                onClick = onIngestTapped,
+                icon = {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add"
+                    )
+                },
+                text = { Text("Ingest") }
+            )
         }
     ) {
         Column(
