@@ -9,9 +9,17 @@ import com.example.healthassistant.data.DataStorePreferences
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
+
+val Date.asTextWithDateAndTime: String get() {
+    val formatter = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
+    return formatter.format(this)
+}
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -19,7 +27,7 @@ class SettingsViewModel @Inject constructor(
     private val substanceRepository: SubstanceRepository
 ) : ViewModel() {
 
-    val dateFlow = dataStorePreferences.dateFlow
+    val dateStringFlow = dataStorePreferences.dateFlow.mapNotNull { it.asTextWithDateAndTime }
 
     var isUpdating by mutableStateOf(false)
 

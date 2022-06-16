@@ -292,9 +292,9 @@ fun RoaDurationView(
                 }
             }
             if (showOralOnsetDisclaimer) {
-                Text("* onset can be much longer with full stomach")
+                Text("* onset can be much longer with full stomach", style = MaterialTheme.typography.caption)
             } else if (isOralRoute) {
-                Text(text = "* a full stomach can delay the onset significantly")
+                Text(text = "* a full stomach can delay the onset significantly", style = MaterialTheme.typography.caption)
             }
         }
     }
