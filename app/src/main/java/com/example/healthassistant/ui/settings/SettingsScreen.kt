@@ -49,10 +49,12 @@ fun SettingsScreen(
             title = { Text(text = "Settings") },
         )
     }) {
-        val context = LocalContext.current
-        Box(contentAlignment = Alignment.Center) {
-            Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-                Button(
+        Column(modifier = Modifier.padding(10.dp)) {
+            Text(text = "Last Substance Update", style = MaterialTheme.typography.caption)
+            Text(date, style = MaterialTheme.typography.h6)
+            val context = LocalContext.current
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                TextButton(
                     onClick = {
                         updateSubstances(
                             {
@@ -77,9 +79,9 @@ fun SettingsScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Update Substances")
+                    Text("Update")
                 }
-                Button(
+                TextButton(
                     onClick = resetSubstances,
                     enabled = !isUpdating
                 ) {
@@ -89,12 +91,11 @@ fun SettingsScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Reset Substances")
+                    Text("Reset")
                 }
-                Text(text = "Last Update: $date")
-            }
-            if (isUpdating) {
-                CircularProgressIndicator()
+                if (isUpdating) {
+                    CircularProgressIndicator()
+                }
             }
         }
     }
