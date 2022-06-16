@@ -15,6 +15,7 @@ class PsychonautWikiAPIImplementation @Inject constructor(
             query AllSubstances {
                       substances(limit: 9999) {
                         name
+                        commonNames
                         url
                         effects {
                           name
