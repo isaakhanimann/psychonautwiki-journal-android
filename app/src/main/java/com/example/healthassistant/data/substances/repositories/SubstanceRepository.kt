@@ -1,27 +1,78 @@
 package com.example.healthassistant.data.substances.repositories
 
 import android.content.Context
+import com.example.healthassistant.data.DataStorePreferences
 import com.example.healthassistant.data.substances.InteractionType
+import com.example.healthassistant.data.substances.PsychonautWikiAPIImplementation
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.parse.SubstanceParserInterface
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.File
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SubstanceRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
-    substanceParser: SubstanceParserInterface
+    private val dataStorePreferences: DataStorePreferences,
+    private val substanceParser: SubstanceParserInterface,
+    private val psychonautWikiAPIImplementation: PsychonautWikiAPIImplementation
 ) : SubstanceRepositoryInterface {
 
-    private val allSubstances: List<Substance>
+    private var allSubstances: List<Substance>
+
+    private val fetchedSubstancesFileName = "FetchedSubstances.json"
+    private val fetchedFile = File(appContext.filesDir, fetchedSubstancesFileName)
 
     init {
-        val fileContent = getSubstanceFileContent()
+        val fileContent = if (fetchedFile.exists()) {
+            getFetchedSubstancesFileContent()
+        } else {
+            getAssetsSubstanceFileContent()
+        }
         allSubstances = substanceParser.parseAllSubstances(string = fileContent)
     }
 
-    private fun getSubstanceFileContent(): String {
+    suspend fun reset() {
+        deleteFetchedSubstancesFile()
+        dataStorePreferences.resetDate()
+        loadSubstancesFromAsset()
+    }
+
+    private fun loadSubstancesFromAsset() {
+        val fileContent = getAssetsSubstanceFileContent()
+        allSubstances = substanceParser.parseAllSubstances(string = fileContent)
+    }
+
+    suspend fun update(): Boolean {
+        val text = psychonautWikiAPIImplementation.getStringFromAPI()
+        val extract = substanceParser.extractSubstanceString(text) ?: return false
+        val parsedSubstances = substanceParser.parseAllSubstances(string = extract)
+        val isSuccess = parsedSubstances.size > 150
+        return if (isSuccess) {
+            writeIntoFetchedFile(value = extract)
+            dataStorePreferences.saveDate(Date())
+            allSubstances = parsedSubstances
+            true
+        } else {
+            false
+        }
+    }
+
+    private fun getFetchedSubstancesFileContent(): String {
+        return fetchedFile.bufferedReader().use { it.readText() }
+    }
+
+    private fun deleteFetchedSubstancesFile() {
+        fetchedFile.delete()
+    }
+
+    private fun writeIntoFetchedFile(value: String) {
+        fetchedFile.writeText(value)
+    }
+
+    private fun getAssetsSubstanceFileContent(): String {
         return appContext.assets.open("Substances.json").bufferedReader().use { it.readText() }
     }
 

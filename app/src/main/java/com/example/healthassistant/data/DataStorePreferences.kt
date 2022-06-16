@@ -36,6 +36,12 @@ class DataStorePreferences @Inject constructor(
             }
         }
 
+    suspend fun resetDate() {
+        context.dataStore.edit { preferences ->
+            preferences[dateKey] = initialDate.time
+        }
+    }
+
     suspend fun saveDate(date: Date) {
         context.dataStore.edit { preferences ->
             preferences[dateKey] = date.time

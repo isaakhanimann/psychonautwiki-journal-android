@@ -23,6 +23,13 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         return substances
     }
 
+    override fun extractSubstanceString(string: String): String? {
+        val wholeFile = JSONObject(string)
+        val data = wholeFile.getOptionalJSONObject("data")
+        val substances = data?.getOptionalJSONArray("substances")
+        return substances?.toString()
+    }
+
     private fun parseSubstance(jsonSubstance: JSONObject): Substance {
         val name = jsonSubstance.getString("name")
         val jsonCommonNames = jsonSubstance.getOptionalJSONArray("commonNames")
