@@ -7,6 +7,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Launch
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Update
+import androidx.compose.material.icons.outlined.ContactSupport
+import androidx.compose.material.icons.outlined.HelpCenter
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -25,13 +27,18 @@ fun SettingsPreview() {
         updateSubstances = { _: () -> Unit, _: () -> Unit -> run {} },
         resetSubstances = {},
         isUpdating = false,
-        date = "14 Jan 2022 15:35"
+        date = "14 Jan 2022 15:35",
+        navigateToFAQ = {}
     )
 }
 
 @Composable
-fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsScreen(
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
+    navigateToFAQ: () -> Unit
+) {
     SettingsScreen(
+        navigateToFAQ,
         updateSubstances = settingsViewModel::updateSubstances,
         resetSubstances = settingsViewModel::resetSubstances,
         isUpdating = settingsViewModel.isUpdating,
@@ -41,6 +48,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
 
 @Composable
 fun SettingsScreen(
+    navigateToFAQ: () -> Unit,
     updateSubstances: (onSuccess: () -> Unit, onError: () -> Unit) -> Unit,
     resetSubstances: () -> Unit,
     isUpdating: Boolean,
@@ -101,7 +109,8 @@ fun SettingsScreen(
             }
             Divider()
             val uriHandler = LocalUriHandler.current
-            TextButton(onClick = {
+            TextButton(
+                onClick = {
                 uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
             }) {
                 Icon(
@@ -111,6 +120,28 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Responsible Drug Use")
+            }
+            Divider()
+            TextButton(onClick = navigateToFAQ) {
+                Icon(
+                    Icons.Outlined.HelpCenter,
+                    contentDescription = "Frequently Asked Questions",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("FAQ")
+            }
+            Divider()
+            TextButton(onClick = {
+                uriHandler.openUri("https://t.me/isaakhanimann")
+            }) {
+                Icon(
+                    Icons.Outlined.ContactSupport,
+                    contentDescription = "Contact Support",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Question / Feedback / Bug Reports")
             }
             Divider()
         }

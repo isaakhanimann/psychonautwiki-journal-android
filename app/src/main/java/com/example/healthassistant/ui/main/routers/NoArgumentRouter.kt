@@ -4,15 +4,23 @@ import androidx.navigation.NavController
 
 
 const val ADD_EXPERIENCE_ROUTE = "addExperience"
+const val FAQ_ROUTE = "faqRoute"
 
 sealed class NoArgumentRouter(val route: String) {
     object AddExperienceRouter : NoArgumentRouter(
         route = ADD_EXPERIENCE_ROUTE
     )
+    object FAQRouter : NoArgumentRouter(
+        route = FAQ_ROUTE
+    )
 }
 
 fun NavController.navigateToAddExperience() {
     navigate(ADD_EXPERIENCE_ROUTE)
+}
+
+fun NavController.navigateToFAQ() {
+    navigate(FAQ_ROUTE)
 }
 
 fun NavController.navigateToExperienceFromAddExperience(experienceId: Int) {

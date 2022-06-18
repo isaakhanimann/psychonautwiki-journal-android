@@ -26,6 +26,7 @@ import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
 import com.example.healthassistant.ui.settings.SettingsScreen
+import com.example.healthassistant.ui.settings.faq.FAQScreen
 
 @Composable
 fun MainScreen() {
@@ -110,7 +111,8 @@ fun MainScreen() {
                 )
             }
             composable(TabRouter.Stats.route) { Stats() }
-            composable(TabRouter.Settings.route) { SettingsScreen() }
+            composable(TabRouter.Settings.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
+            composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
         }
     }
 }
