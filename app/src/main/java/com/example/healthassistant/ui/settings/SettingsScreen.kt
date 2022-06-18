@@ -120,6 +120,7 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Responsible Drug Use")
+                Spacer(modifier = Modifier.weight(1f))
             }
             Divider()
             TextButton(onClick = navigateToFAQ) {
@@ -130,6 +131,7 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("FAQ")
+                Spacer(modifier = Modifier.weight(1f))
             }
             Divider()
             TextButton(onClick = {
@@ -142,6 +144,7 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Question / Feedback / Bug Reports")
+                Spacer(modifier = Modifier.weight(1f))
             }
             Divider()
         }
