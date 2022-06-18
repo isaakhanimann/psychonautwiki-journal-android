@@ -58,11 +58,11 @@ class JournalViewModel @Inject constructor(
                         allDistinctSubstanceNames = it.first.second
                     )
                     val filteredExperiences = it.second.filter { experienceWithIngestions ->
-                        !experienceWithIngestions.ingestions.any { ingestion ->
+                        !experienceWithIngestions.ingestions.all { ingestion ->
                              substanceFilters.any { filter ->
                                  filter.substanceName == ingestion.substanceName
                              }
-                        }
+                        } || experienceWithIngestions.ingestions.isEmpty()
                     }
                     _experiencesGrouped.value =
                         groupExperiencesByYear(experiencesWithIngestions = filteredExperiences)
