@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Launch
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.runtime.Composable
@@ -11,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -97,6 +99,20 @@ fun SettingsScreen(
                     CircularProgressIndicator()
                 }
             }
+            Divider()
+            val uriHandler = LocalUriHandler.current
+            TextButton(onClick = {
+                uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
+            }) {
+                Icon(
+                    Icons.Filled.Launch,
+                    contentDescription = "Open Link",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Responsible Drug Use")
+            }
+            Divider()
         }
     }
 }

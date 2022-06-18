@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Launch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -99,9 +100,15 @@ fun SubstanceScreenContent(
                 .verticalScroll(rememberScrollState())
         ) {
             val uriHandler = LocalUriHandler.current
-            Button(onClick = {
+            TextButton(onClick = {
                 uriHandler.openUri(substance.url)
             }) {
+                Icon(
+                    Icons.Filled.Launch,
+                    contentDescription = "Open Link",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Read Article")
             }
             val maxDuration = remember(substance.roas) {

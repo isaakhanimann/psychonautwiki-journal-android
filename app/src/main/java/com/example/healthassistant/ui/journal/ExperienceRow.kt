@@ -119,7 +119,7 @@ fun ExperienceRow(
                 IconButton(
                     onClick = { isExpanded = true },
                 ) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
+                    Icon(Icons.Default.MoreVert, contentDescription = "More actions on experience")
                 }
                 DropdownMenu(
                     expanded = isExpanded,
