@@ -1,6 +1,6 @@
 package com.example.healthassistant
 
-import com.example.healthassistant.ui.journal.experience.timeline.AxisDrawable
+import com.example.healthassistant.ui.experiences.experience.timeline.AxisDrawable
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.*

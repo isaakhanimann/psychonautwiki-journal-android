@@ -19,10 +19,10 @@ import com.example.healthassistant.ui.main.routers.TabRouter
 @Composable
 fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean>) {
     val items = listOf(
-        TabRouter.Journal,
+        TabRouter.Experiences,
+        TabRouter.Ingestions,
         TabRouter.Search,
         TabRouter.Stats,
-        TabRouter.Settings
     )
     AnimatedVisibility(
         visible = bottomBarState.value,

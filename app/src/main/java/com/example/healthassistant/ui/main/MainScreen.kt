@@ -1,27 +1,30 @@
 package com.example.healthassistant.ui.main
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.ui.journal.JournalScreen
-import com.example.healthassistant.ui.journal.addExperience.AddExperienceScreen
-import com.example.healthassistant.ui.journal.experience.ExperienceScreen
-import com.example.healthassistant.ui.journal.experience.addingestion.color.ChooseColorScreen
-import com.example.healthassistant.ui.journal.experience.addingestion.dose.ChooseDoseScreen
-import com.example.healthassistant.ui.journal.experience.addingestion.interactions.CheckInteractionsScreen
-import com.example.healthassistant.ui.journal.experience.addingestion.route.ChooseRouteScreen
-import com.example.healthassistant.ui.journal.experience.addingestion.search.AddIngestionSearchScreen
-import com.example.healthassistant.ui.journal.experience.addingestion.time.ChooseTimeScreen
-import com.example.healthassistant.ui.journal.experience.edit.EditExperienceScreen
+import com.example.healthassistant.ui.experiences.JournalScreen
+import com.example.healthassistant.ui.experiences.addExperience.AddExperienceScreen
+import com.example.healthassistant.ui.experiences.experience.ExperienceScreen
+import com.example.healthassistant.ui.experiences.experience.addingestion.color.ChooseColorScreen
+import com.example.healthassistant.ui.experiences.experience.addingestion.dose.ChooseDoseScreen
+import com.example.healthassistant.ui.experiences.experience.addingestion.interactions.CheckInteractionsScreen
+import com.example.healthassistant.ui.experiences.experience.addingestion.route.ChooseRouteScreen
+import com.example.healthassistant.ui.experiences.experience.addingestion.search.AddIngestionSearchScreen
+import com.example.healthassistant.ui.experiences.experience.addingestion.time.ChooseTimeScreen
+import com.example.healthassistant.ui.experiences.experience.edit.EditExperienceScreen
 import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
@@ -34,7 +37,7 @@ fun MainScreen() {
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     when (navBackStackEntry?.destination?.route) {
-        TabRouter.Journal.route, TabRouter.Search.route, TabRouter.Stats.route, TabRouter.Settings.route -> {
+        TabRouter.Experiences.route, TabRouter.Ingestions.route, TabRouter.Search.route, TabRouter.Stats.route -> {
             bottomBarState.value = true
         }
         else ->
@@ -46,14 +49,37 @@ fun MainScreen() {
                 navController = navController,
                 bottomBarState = bottomBarState
             )
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        isFloatingActionButtonDocked = true,
+        floatingActionButton = {
+            FloatingActionButton(
+                shape = CircleShape,
+                onClick = {
+                },
+                contentColor = Color.White
+            ) {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add icon")
+            }
         }
     ) { innerPadding ->
         NavHost(
             navController,
-            startDestination = TabRouter.Journal.route,
+            startDestination = TabRouter.Search.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(TabRouter.Journal.route) {
+            composable(TabRouter.Experiences.route) {
+                JournalScreen(
+                    navigateToAddExperience = navController::navigateToAddExperience,
+                    navigateToExperiencePopNothing = {
+                        navController.navigateToExperiencePopNothing(experienceId = it)
+                    },
+                    navigateToEditExperienceScreen = {
+                        navController.navigateToEditExperience(experienceId = it)
+                    }
+                )
+            }
+            composable(TabRouter.Ingestions.route) {
                 JournalScreen(
                     navigateToAddExperience = navController::navigateToAddExperience,
                     navigateToExperiencePopNothing = {
@@ -111,8 +137,8 @@ fun MainScreen() {
                 )
             }
             composable(TabRouter.Stats.route) { Stats() }
-            composable(TabRouter.Settings.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
             composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+            composable(NoArgumentRouter.Settings.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
         }
     }
 }

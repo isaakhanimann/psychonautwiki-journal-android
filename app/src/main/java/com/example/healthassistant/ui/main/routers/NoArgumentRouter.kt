@@ -5,14 +5,12 @@ import androidx.navigation.NavController
 
 const val ADD_EXPERIENCE_ROUTE = "addExperience"
 const val FAQ_ROUTE = "faqRoute"
+const val SETTINGS_ROUTE = "settings"
 
 sealed class NoArgumentRouter(val route: String) {
-    object AddExperienceRouter : NoArgumentRouter(
-        route = ADD_EXPERIENCE_ROUTE
-    )
-    object FAQRouter : NoArgumentRouter(
-        route = FAQ_ROUTE
-    )
+    object AddExperienceRouter : NoArgumentRouter(route = ADD_EXPERIENCE_ROUTE)
+    object FAQRouter : NoArgumentRouter(route = FAQ_ROUTE)
+    object Settings : NoArgumentRouter(route = SETTINGS_ROUTE)
 }
 
 fun NavController.navigateToAddExperience() {
@@ -25,6 +23,6 @@ fun NavController.navigateToFAQ() {
 
 fun NavController.navigateToExperienceFromAddExperience(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId) {
-        popUpTo(TabRouter.Journal.route)
+        popUpTo(TabRouter.Experiences.route)
     }
 }
