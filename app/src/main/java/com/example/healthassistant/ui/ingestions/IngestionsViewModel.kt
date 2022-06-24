@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
-import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.room.filter.FilterRepository
 import com.example.healthassistant.data.room.filter.SubstanceFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +25,9 @@ class IngestionsViewModel @Inject constructor(
     private val filterRepo: FilterRepository
 ) : ViewModel() {
 
-    private val _experiencesGrouped =
-        MutableStateFlow<Map<String, List<ExperienceWithIngestions>>>(emptyMap())
-    val experiencesGrouped = _experiencesGrouped.asStateFlow()
+    private val _ingestionsGrouped =
+        MutableStateFlow<Map<String, List<Ingestion>>>(emptyMap())
+    val ingestionsGrouped = _ingestionsGrouped.asStateFlow()
 
     private val _filterOptions =
         MutableStateFlow<List<FilterOption>>(emptyList())
@@ -48,7 +48,7 @@ class IngestionsViewModel @Inject constructor(
                 .combine(experienceRepo.getLastUsedSubstanceNames(100)) { filters, names ->
                     Pair(first = filters, second = names)
                 }
-                .combine(experienceRepo.getSortedExperiencesWithIngestions()) { filtersAndNames, experiencesWithIngestions ->
+                .combine(experienceRepo.getSortedIngestions()) { filtersAndNames, experiencesWithIngestions ->
                     Pair(first = filtersAndNames, second = experiencesWithIngestions)
                 }
                 .collect {
@@ -58,15 +58,13 @@ class IngestionsViewModel @Inject constructor(
                         substanceFilters = substanceFilters,
                         allDistinctSubstanceNames = it.first.second
                     )
-                    val filteredExperiences = it.second.filter { experienceWithIngestions ->
-                        !experienceWithIngestions.ingestions.all { ingestion ->
-                            substanceFilters.any { filter ->
-                                filter.substanceName == ingestion.substanceName
-                            }
-                        } || experienceWithIngestions.ingestions.isEmpty()
+                    val filteredIngestions = it.second.filter { ingestion ->
+                        !substanceFilters.any { filter ->
+                            filter.substanceName == ingestion.substanceName
+                        }
                     }
-                    _experiencesGrouped.value =
-                        groupExperiencesByYear(experiencesWithIngestions = filteredExperiences)
+                    _ingestionsGrouped.value =
+                        groupIngestionsByYear(ingestions = filteredIngestions)
                 }
         }
     }
@@ -82,12 +80,6 @@ class IngestionsViewModel @Inject constructor(
         val filter = SubstanceFilter(substanceName = substanceName)
         viewModelScope.launch {
             filterRepo.deleteFilter(filter)
-        }
-    }
-
-    fun deleteExperienceWithIngestions(experienceWithIngestions: ExperienceWithIngestions) {
-        viewModelScope.launch {
-            experienceRepo.deleteExperienceWithIngestions(experience = experienceWithIngestions.experience)
         }
     }
 
@@ -133,9 +125,9 @@ class IngestionsViewModel @Inject constructor(
     }
 
     companion object {
-        fun groupExperiencesByYear(experiencesWithIngestions: List<ExperienceWithIngestions>): Map<String, List<ExperienceWithIngestions>> {
+        fun groupIngestionsByYear(ingestions: List<Ingestion>): Map<String, List<Ingestion>> {
             val cal = Calendar.getInstance(TimeZone.getDefault())
-            return experiencesWithIngestions.groupBy { cal.get(Calendar.YEAR).toString() }
+            return ingestions.groupBy { cal.get(Calendar.YEAR).toString() }
         }
     }
 

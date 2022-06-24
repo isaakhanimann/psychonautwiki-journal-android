@@ -25,6 +25,7 @@ import com.example.healthassistant.ui.experiences.experience.addingestion.route.
 import com.example.healthassistant.ui.experiences.experience.addingestion.search.AddIngestionSearchScreen
 import com.example.healthassistant.ui.experiences.experience.addingestion.time.ChooseTimeScreen
 import com.example.healthassistant.ui.experiences.experience.edit.EditExperienceScreen
+import com.example.healthassistant.ui.ingestions.IngestionsScreen
 import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
@@ -36,7 +37,12 @@ fun MainScreen() {
     val navController = rememberNavController()
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val isShowingBottomBar = navBackStackEntry?.destination?.route in setOf(TabRouter.Experiences.route, TabRouter.Ingestions.route, TabRouter.Search.route, TabRouter.Stats.route)
+    val isShowingBottomBar = navBackStackEntry?.destination?.route in setOf(
+        TabRouter.Experiences.route,
+        TabRouter.Ingestions.route,
+        TabRouter.Search.route,
+        TabRouter.Stats.route
+    )
     bottomBarState.value = isShowingBottomBar
     Scaffold(
         bottomBar = {
@@ -51,8 +57,7 @@ fun MainScreen() {
             if (isShowingBottomBar) {
                 FloatingActionButton(
                     shape = CircleShape,
-                    onClick = {
-                    },
+                    onClick = navController::navigateToAddIngestion,
                     contentColor = Color.White
                 ) {
                     Icon(imageVector = Icons.Filled.Add, contentDescription = "Add icon")
@@ -77,20 +82,22 @@ fun MainScreen() {
                 )
             }
             composable(TabRouter.Ingestions.route) {
-                JournalScreen(
-                    navigateToAddExperience = navController::navigateToAddExperience,
-                    navigateToExperiencePopNothing = {
-                        navController.navigateToExperiencePopNothing(experienceId = it)
-                    },
-                    navigateToEditExperienceScreen = {
-                        navController.navigateToEditExperience(experienceId = it)
-                    }
-                )
+                IngestionsScreen(navigateToIngestion = {})
             }
             composable(NoArgumentRouter.AddExperienceRouter.route) {
                 AddExperienceScreen(
                     navigateToExperienceFromAddExperience = {
                         navController.navigateToExperienceFromAddExperience(it)
+                    }
+                )
+            }
+            composable(NoArgumentRouter.AddIngestionRouter.route) {
+                AddIngestionSearchScreen(
+                    navigateToAddIngestionScreens = {
+                        navController.navigateToAddIngestion(
+                            substanceName = it,
+                            experienceId = null
+                        )
                     }
                 )
             }
@@ -135,7 +142,7 @@ fun MainScreen() {
             }
             composable(TabRouter.Stats.route) { Stats() }
             composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
-            composable(NoArgumentRouter.Settings.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
+            composable(NoArgumentRouter.SettingsRouter.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
         }
     }
 }

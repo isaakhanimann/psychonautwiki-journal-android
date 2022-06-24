@@ -14,8 +14,8 @@ interface ExperienceDao {
     @Query("SELECT * FROM experience ORDER BY creationDate DESC")
     fun getExperiences(): Flow<List<Experience>>
 
-    @Query("SELECT * FROM ingestion ORDER BY time ASC")
-    fun getIngestions(): Flow<List<Ingestion>>
+    @Query("SELECT * FROM ingestion ORDER BY time DESC")
+    fun getIngestionsSortedDescending(): Flow<List<Ingestion>>
 
     @Query("SELECT * FROM ingestion WHERE time > :date ORDER BY time ASC")
     suspend fun getIngestionAfterDate(date: Date): List<Ingestion>

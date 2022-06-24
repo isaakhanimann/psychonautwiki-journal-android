@@ -11,9 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
-import com.example.healthassistant.ui.experiences.ExperienceRow
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.ui.experiences.SectionTitle
+import com.example.healthassistant.ui.experiences.experience.IngestionRow
 
 @Composable
 fun IngestionsScreen(
@@ -22,7 +22,7 @@ fun IngestionsScreen(
 ) {
     IngestionsScreen(
         navigateToIngestion = navigateToIngestion,
-        groupedExperiences = viewModel.experiencesGrouped.collectAsState().value,
+        groupedIngestions = viewModel.ingestionsGrouped.collectAsState().value,
         filterOptions = viewModel.filterOptions.collectAsState().value,
         numberOfActiveFilters = viewModel.numberOfActiveFilters
     )
@@ -33,7 +33,7 @@ fun IngestionsScreen(
 fun IngestionsScreenPreview() {
     IngestionsScreen(
         navigateToIngestion = {},
-        groupedExperiences = emptyMap(),
+        groupedIngestions = emptyMap(),
         filterOptions = listOf(),
         numberOfActiveFilters = 1
     )
@@ -42,14 +42,14 @@ fun IngestionsScreenPreview() {
 @Composable
 fun IngestionsScreen(
     navigateToIngestion: (ingestionId: Int) -> Unit,
-    groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
+    groupedIngestions: Map<String, List<Ingestion>>,
     filterOptions: List<IngestionsViewModel.FilterOption>,
     numberOfActiveFilters: Int,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Experiences") },
+                title = { Text(text = "Ingestions") },
                 actions = {
                     var isExpanded by remember { mutableStateOf(false) }
                     Box(
@@ -105,27 +105,22 @@ fun IngestionsScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                groupedExperiences.forEach { (year, experiencesInYear) ->
+                groupedIngestions.forEach { (year, ingestionsInYear) ->
                     item {
                         SectionTitle(title = year)
                     }
-                    items(experiencesInYear.size) { i ->
-                        val experienceWithIngestions = experiencesInYear[i]
-                        ExperienceRow(
-                            experienceWithIngestions,
-                            navigateToExperienceScreen = {},
-                            navigateToEditExperienceScreen = {},
-                            deleteExperienceWithIngestions = {}
-                        )
-                        if (i < experiencesInYear.size) {
+                    items(ingestionsInYear.size) { i ->
+                        val ingestion = ingestionsInYear[i]
+                        IngestionRow(ingestion = ingestion, deleteIngestion = { /*TODO*/ })
+                        if (i < ingestionsInYear.size) {
                             Divider()
                         }
                     }
                 }
             }
-            if (groupedExperiences.isEmpty()) {
+            if (groupedIngestions.isEmpty()) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Text(text = "No Experiences Yet")
+                    Text(text = "No Ingestions Yet")
                 }
             }
         }
