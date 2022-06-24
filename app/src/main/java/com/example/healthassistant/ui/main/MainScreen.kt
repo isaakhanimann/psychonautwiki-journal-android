@@ -26,6 +26,7 @@ import com.example.healthassistant.ui.experiences.addExperience.AddExperienceScr
 import com.example.healthassistant.ui.experiences.experience.ExperienceScreen
 import com.example.healthassistant.ui.experiences.experience.edit.EditExperienceScreen
 import com.example.healthassistant.ui.ingestions.IngestionsScreen
+import com.example.healthassistant.ui.ingestions.ingestion.OneIngestionScreen
 import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
@@ -82,7 +83,11 @@ fun MainScreen() {
                 )
             }
             composable(TabRouter.Ingestions.route) {
-                IngestionsScreen(navigateToIngestion = {})
+                IngestionsScreen(
+                    navigateToIngestion = {
+                        navController.navigateToIngestion(ingestionId = it)
+                    }
+                )
             }
             composable(NoArgumentRouter.AddExperienceRouter.route) {
                 AddExperienceScreen(
@@ -120,6 +125,12 @@ fun MainScreen() {
                         navController.navigateToEditExperience(experienceId)
                     }
                 )
+            }
+            composable(
+                ArgumentRouter.IngestionRouter.route,
+                arguments = ArgumentRouter.IngestionRouter.args
+            ) {
+                OneIngestionScreen(navigateToEditIngestionScreen = {})
             }
             addIngestionGraph(navController = navController)
             composable(TabRouter.Search.route) {

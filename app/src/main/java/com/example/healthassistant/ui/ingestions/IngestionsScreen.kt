@@ -1,5 +1,6 @@
 package com.example.healthassistant.ui.ingestions
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -118,7 +119,12 @@ fun IngestionsScreen(
                     }
                     items(ingestionsInYear.size) { i ->
                         val ingestion = ingestionsInYear[i]
-                        IngestionRowInIngestionsScreen(ingestion = ingestion)
+                        IngestionRowInIngestionsScreen(
+                            ingestion = ingestion,
+                            navigateToIngestion = {
+                                navigateToIngestion(ingestion.id)
+                            }
+                        )
                         if (i < ingestionsInYear.size) {
                             Divider()
                         }
@@ -139,14 +145,22 @@ fun IngestionsScreen(
 fun IngestionRowInIngestionsScreenPreview(@PreviewParameter(IngestionPreviewProvider::class) ingestion: Ingestion) {
     IngestionRowInIngestionsScreen(
         ingestion = ingestion,
+        navigateToIngestion = {}
     )
 }
 
 
 @Composable
-fun IngestionRowInIngestionsScreen(ingestion: Ingestion) {
+fun IngestionRowInIngestionsScreen(
+    ingestion: Ingestion,
+    navigateToIngestion: () -> Unit,
+) {
     val isDarkTheme = isSystemInDarkTheme()
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = navigateToIngestion)
+    ) {
         Row(
             modifier = Modifier.padding(10.dp),
             verticalAlignment = Alignment.CenterVertically,

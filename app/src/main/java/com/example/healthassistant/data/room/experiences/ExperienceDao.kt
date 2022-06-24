@@ -33,6 +33,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM experience WHERE id =:id")
     suspend fun getExperienceByID(id: Int): Experience?
 
+    @Query("SELECT * FROM ingestion WHERE id =:id")
+    suspend fun getIngestion(id: Int): Ingestion?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(experience: Experience): Long
 

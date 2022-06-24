@@ -25,7 +25,8 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.INDIGO,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 Ingestion(
                     substanceName = "Cocaine",
@@ -35,7 +36,8 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.ORANGE,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 Ingestion(
                     substanceName = "Cocaine",
@@ -45,7 +47,8 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.ORANGE,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 )
             )
         ),
@@ -64,7 +67,8 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.INDIGO,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 Ingestion(
                     substanceName = "Cocaine",
@@ -74,7 +78,8 @@ class ExperienceWithIngestionsPreviewProvider : PreviewParameterProvider<Experie
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.ORANGE,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 )
             )
         )

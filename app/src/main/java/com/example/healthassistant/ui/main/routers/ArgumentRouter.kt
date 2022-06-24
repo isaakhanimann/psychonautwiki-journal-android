@@ -9,6 +9,7 @@ import com.example.healthassistant.data.substances.AdministrationRoute
 
 // argument keys
 const val EXPERIENCE_ID_KEY = "experienceId"
+const val INGESTION_ID_KEY = "ingestionId"
 const val SUBSTANCE_NAME_KEY = "substanceName"
 const val ADMINISTRATION_ROUTE_KEY = "administrationRoute"
 const val DOSE_KEY = "dose"
@@ -18,6 +19,7 @@ const val COLOR_KEY = "color"
 
 // route starts
 const val ROUTE_START_EXPERIENCES = "experiences/"
+const val ROUTE_START_INGESTIONS = "ingestions/"
 const val ROUTE_START_ADD_INGESTION_SEARCH = "addIngestionSearch/"
 const val ROUTE_START_EDIT_EXPERIENCE = "editExperience/"
 const val ROUTE_START_SUBSTANCES = "substances/"
@@ -31,6 +33,11 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     object ExperienceRouter : ArgumentRouter(
         route = "$ROUTE_START_EXPERIENCES{$EXPERIENCE_ID_KEY}",
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
+    )
+
+    object IngestionRouter : ArgumentRouter(
+        route = "$ROUTE_START_INGESTIONS{$INGESTION_ID_KEY}",
+        args = listOf(navArgument(INGESTION_ID_KEY) { type = NavType.IntType })
     )
 
     object EditExperienceRouter : ArgumentRouter(
@@ -104,6 +111,10 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
 
 fun NavController.navigateToExperiencePopNothing(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId)
+}
+
+fun NavController.navigateToIngestion(ingestionId: Int) {
+    navigate(ROUTE_START_INGESTIONS + ingestionId)
 }
 
 fun NavController.popUpToExperienceScreen() {

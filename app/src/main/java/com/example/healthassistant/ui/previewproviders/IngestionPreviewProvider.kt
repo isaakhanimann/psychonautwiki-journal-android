@@ -16,7 +16,8 @@ class IngestionPreviewProvider : PreviewParameterProvider<Ingestion> {
             isDoseAnEstimate = false,
             units = "mg",
             color = IngestionColor.INDIGO,
-            experienceId = 0
+            experienceId = 0,
+            notes = null
         ),
         Ingestion(
             substanceName = "LSD",
@@ -26,7 +27,8 @@ class IngestionPreviewProvider : PreviewParameterProvider<Ingestion> {
             isDoseAnEstimate = false,
             units = "mg",
             color = IngestionColor.BLUE,
-            experienceId = 0
+            experienceId = 0,
+            notes = null
         )
     )
 }

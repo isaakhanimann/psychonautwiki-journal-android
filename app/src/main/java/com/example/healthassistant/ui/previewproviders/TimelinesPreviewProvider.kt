@@ -22,7 +22,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.BLUE,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 RoaDuration(
                     onset = DurationRange(
@@ -60,7 +61,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.BLUE,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 RoaDuration(
                     onset = DurationRange(
@@ -98,7 +100,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.RED,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 RoaDuration(
                     onset = DurationRange(
@@ -136,7 +139,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.GREEN,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 RoaDuration(
                     onset = null,
@@ -161,7 +165,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.BLUE,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 RoaDuration(
                     onset = DurationRange(
@@ -199,7 +204,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.RED,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 RoaDuration(
                     onset = DurationRange(
@@ -237,7 +243,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.ORANGE,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 RoaDuration(
                     onset = DurationRange(
@@ -277,7 +284,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.BLUE,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 RoaDuration(
                     onset = DurationRange(
@@ -315,7 +323,8 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     isDoseAnEstimate = false,
                     units = "mg",
                     color = IngestionColor.ORANGE,
-                    experienceId = 0
+                    experienceId = 0,
+                    notes = null
                 ),
                 RoaDuration(
                     onset = DurationRange(

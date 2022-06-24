@@ -107,7 +107,8 @@ class ChooseTimeViewModel @Inject constructor(
             isDoseAnEstimate = isEstimate,
             units = units,
             color = color,
-            experienceId = experienceIdToAddTo
+            experienceId = experienceIdToAddTo,
+            notes = null
         )
     }
 
