@@ -21,7 +21,7 @@ import com.example.healthassistant.ui.addingestion.interactions.CheckInteraction
 import com.example.healthassistant.ui.addingestion.route.ChooseRouteScreen
 import com.example.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
 import com.example.healthassistant.ui.addingestion.time.ChooseTimeScreen
-import com.example.healthassistant.ui.experiences.JournalScreen
+import com.example.healthassistant.ui.experiences.ExperiencesScreen
 import com.example.healthassistant.ui.experiences.addExperience.AddExperienceScreen
 import com.example.healthassistant.ui.experiences.experience.ExperienceScreen
 import com.example.healthassistant.ui.experiences.experience.edit.EditExperienceScreen
@@ -71,7 +71,7 @@ fun MainScreen() {
             Modifier.padding(innerPadding)
         ) {
             composable(TabRouter.Experiences.route) {
-                JournalScreen(
+                ExperiencesScreen(
                     navigateToAddExperience = navController::navigateToAddExperience,
                     navigateToExperiencePopNothing = {
                         navController.navigateToExperiencePopNothing(experienceId = it)

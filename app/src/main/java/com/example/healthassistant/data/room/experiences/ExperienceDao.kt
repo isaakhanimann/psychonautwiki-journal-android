@@ -39,15 +39,6 @@ interface ExperienceDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(experience: Experience)
 
-    @Query("DELETE FROM ingestion WHERE experienceId = :experienceId")
-    suspend fun deleteAllIngestionsFromExperience(experienceId: Int)
-
-    @Transaction
-    suspend fun deleteExperienceWithIngestions(experience: Experience) {
-        deleteAllIngestionsFromExperience(experienceId = experience.id)
-        deleteExperience(experience)
-    }
-
     @Delete
     suspend fun deleteExperience(experience: Experience)
 

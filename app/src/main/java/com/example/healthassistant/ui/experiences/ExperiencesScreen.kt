@@ -12,30 +12,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 
 @Composable
-fun JournalScreen(
+fun ExperiencesScreen(
     navigateToAddExperience: () -> Unit,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
-    journalViewModel: JournalViewModel = hiltViewModel()
+    experiencesViewModel: ExperiencesViewModel = hiltViewModel()
 ) {
-    JournalScreen(
+    ExperiencesScreen(
         navigateToAddExperience = navigateToAddExperience,
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToEditExperienceScreen = navigateToEditExperienceScreen,
-        groupedExperiences = journalViewModel.experiencesGrouped.collectAsState().value,
-        deleteExperience = journalViewModel::deleteExperienceWithIngestions,
-        filterOptions = journalViewModel.filterOptions.collectAsState().value,
-        numberOfActiveFilters = journalViewModel.numberOfActiveFilters
+        groupedExperiences = experiencesViewModel.experiencesGrouped.collectAsState().value,
+        deleteExperience = experiencesViewModel::deleteExperience,
+        filterOptions = experiencesViewModel.filterOptions.collectAsState().value,
+        numberOfActiveFilters = experiencesViewModel.numberOfActiveFilters
     )
 }
 
 @Preview
 @Composable
-fun JournalScreenPreview() {
-    JournalScreen(
+fun ExperiencesScreenPreview() {
+    ExperiencesScreen(
         navigateToAddExperience = {},
         navigateToExperiencePopNothing = {},
         navigateToEditExperienceScreen = {},
@@ -47,13 +48,13 @@ fun JournalScreenPreview() {
 }
 
 @Composable
-fun JournalScreen(
+fun ExperiencesScreen(
     navigateToAddExperience: () -> Unit,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
     groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
-    deleteExperience: (ExperienceWithIngestions) -> Unit,
-    filterOptions: List<JournalViewModel.FilterOption>,
+    deleteExperience: (Experience) -> Unit,
+    filterOptions: List<ExperiencesViewModel.FilterOption>,
     numberOfActiveFilters: Int,
 ) {
     Scaffold(
@@ -152,7 +153,7 @@ fun ExperiencesList(
     groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
-    deleteExperience: (ExperienceWithIngestions) -> Unit
+    deleteExperience: (Experience) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         groupedExperiences.forEach { (year, experiencesInYear) ->
@@ -170,7 +171,7 @@ fun ExperiencesList(
                         navigateToEditExperienceScreen(experienceWithIngestions.experience.id)
                     },
                     deleteExperienceWithIngestions = {
-                        deleteExperience(experienceWithIngestions)
+                        deleteExperience(experienceWithIngestions.experience)
                     }
                 )
                 if (i < experiencesInYear.size) {

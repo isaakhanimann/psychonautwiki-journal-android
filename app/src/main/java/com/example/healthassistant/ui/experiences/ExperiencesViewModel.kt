@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
+import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.room.filter.FilterRepository
 import com.example.healthassistant.data.room.filter.SubstanceFilter
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class JournalViewModel @Inject constructor(
+class ExperiencesViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     private val filterRepo: FilterRepository
 ) : ViewModel() {
@@ -84,9 +85,9 @@ class JournalViewModel @Inject constructor(
         }
     }
 
-    fun deleteExperienceWithIngestions(experienceWithIngestions: ExperienceWithIngestions) {
+    fun deleteExperience(experience: Experience) {
         viewModelScope.launch {
-            experienceRepo.deleteExperienceWithIngestions(experience = experienceWithIngestions.experience)
+            experienceRepo.deleteExperience(experience = experience)
         }
     }
 
