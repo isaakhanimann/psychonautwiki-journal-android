@@ -1,13 +1,10 @@
 package com.example.healthassistant.ui.addingestion.time
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
-import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.room.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.AdministrationRoute
@@ -27,7 +24,6 @@ class ChooseTimeViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     val experienceId: Int?
-    var latestExperience by mutableStateOf<Experience?>(null)
     val substance: Substance?
     private val calendar: Calendar = Calendar.getInstance()
     val year = mutableStateOf(calendar.get(Calendar.YEAR))
@@ -35,18 +31,21 @@ class ChooseTimeViewModel @Inject constructor(
     val day = mutableStateOf(calendar.get(Calendar.DAY_OF_MONTH))
     val hour = mutableStateOf(calendar.get(Calendar.HOUR_OF_DAY))
     val minute = mutableStateOf(calendar.get(Calendar.MINUTE))
-    private val currentlySelectedDate: Date get() {
-        calendar.set(year.value, month.value, day.value, hour.value, minute.value)
-        return calendar.time
-    }
-    val dateString: String get() {
-        val formatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-        return formatter.format(currentlySelectedDate) ?: "Unknown"
-    }
-    val timeString: String get() {
-        val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
-        return formatter.format(currentlySelectedDate) ?: "Unknown"
-    }
+    private val currentlySelectedDate: Date
+        get() {
+            calendar.set(year.value, month.value, day.value, hour.value, minute.value)
+            return calendar.time
+        }
+    val dateString: String
+        get() {
+            val formatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
+            return formatter.format(currentlySelectedDate) ?: "Unknown"
+        }
+    val timeString: String
+        get() {
+            val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+            return formatter.format(currentlySelectedDate) ?: "Unknown"
+        }
 
     private val substanceName: String
     private val administrationRoute: AdministrationRoute
@@ -59,11 +58,6 @@ class ChooseTimeViewModel @Inject constructor(
         substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
         substance = substanceRepo.getSubstance(substanceName)
         experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toIntOrNull()
-        if (experienceId == null) {
-            viewModelScope.launch {
-                latestExperience = experienceRepo.getLastExperiences(limit = 1).firstOrNull()
-            }
-        }
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         dose = state.get<String>(DOSE_KEY)?.toDoubleOrNull()
@@ -91,41 +85,20 @@ class ChooseTimeViewModel @Inject constructor(
         minute.value = newMinute
     }
 
-    fun createAndSaveIngestion(experienceIdToAddTo: Int) {
+    fun createAndSaveIngestion() {
         viewModelScope.launch {
-            val newIngestion = createIngestion(experienceIdToAddTo)
+            val newIngestion = Ingestion(
+                substanceName = substanceName,
+                time = currentlySelectedDate,
+                administrationRoute = administrationRoute,
+                dose = dose,
+                isDoseAnEstimate = isEstimate,
+                units = units,
+                color = color,
+                experienceId = experienceId,
+                notes = null
+            )
             experienceRepo.addIngestion(newIngestion)
         }
-    }
-
-    private fun createIngestion(experienceIdToAddTo: Int): Ingestion {
-        return Ingestion(
-            substanceName = substanceName,
-            time = currentlySelectedDate,
-            administrationRoute = administrationRoute,
-            dose = dose,
-            isDoseAnEstimate = isEstimate,
-            units = units,
-            color = color,
-            experienceId = experienceIdToAddTo,
-            notes = null
-        )
-    }
-
-    fun addIngestionToNewExperience(showToastAndNavigateToExperience: (Int) -> Unit) {
-        viewModelScope.launch {
-            val newExp = createNewExperience()
-            val experienceId = experienceRepo.addExperience(newExp)
-            val ingestion = createIngestion(experienceIdToAddTo = experienceId.toInt())
-            experienceRepo.addIngestion(ingestion)
-            showToastAndNavigateToExperience(experienceId.toInt())
-        }
-
-    }
-
-    private fun createNewExperience(): Experience {
-        val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-        val title = formatter.format(currentlySelectedDate) ?: "Title"
-        return Experience(title = title, text = "")
     }
 }

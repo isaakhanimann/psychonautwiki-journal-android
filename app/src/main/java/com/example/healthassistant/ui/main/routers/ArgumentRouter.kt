@@ -20,7 +20,7 @@ const val COLOR_KEY = "color"
 // route starts
 const val ROUTE_START_EXPERIENCES = "experiences/"
 const val ROUTE_START_INGESTIONS = "ingestions/"
-const val ROUTE_START_ADD_INGESTION_SEARCH = "addIngestionSearch/"
+const val ROUTE_START_ADD_INGESTIONS = "addIngestions/"
 const val ROUTE_START_EDIT_EXPERIENCE = "editExperience/"
 const val ROUTE_START_SUBSTANCES = "substances/"
 const val ROUTE_START_CHECK_INTERACTIONS = "checkInteractions/"
@@ -45,15 +45,18 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
     )
 
-    object SearchRouter : ArgumentRouter(
-        route = "$ROUTE_START_ADD_INGESTION_SEARCH{$EXPERIENCE_ID_KEY}",
-        args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
-    )
-
     object SubstanceRouter : ArgumentRouter(
         route = "$ROUTE_START_SUBSTANCES{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
+        )
+    )
+
+    object AddIngestionRouter : ArgumentRouter(
+        route = "$ROUTE_START_ADD_INGESTIONS?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
+        args = listOf(
+            navArgument(EXPERIENCE_ID_KEY) { nullable = true }
+
         )
     )
 
@@ -117,16 +120,8 @@ fun NavController.navigateToIngestion(ingestionId: Int) {
     navigate(ROUTE_START_INGESTIONS + ingestionId)
 }
 
-fun NavController.popUpToExperienceScreen() {
-    popBackStack(route = ArgumentRouter.ExperienceRouter.route, inclusive = false)
-}
-
-fun NavController.popUpToSubstanceScreen() {
-    popBackStack(route = ArgumentRouter.SubstanceRouter.route, inclusive = false)
-}
-
-fun NavController.navigateToAddIngestionSearch(experienceId: Int) {
-    navigate(ROUTE_START_ADD_INGESTION_SEARCH + experienceId)
+fun NavController.dismissAddIngestionScreens() {
+    popBackStack(route = ArgumentRouter.AddIngestionRouter.route, inclusive = true)
 }
 
 fun NavController.navigateToEditExperience(experienceId: Int) {
@@ -137,7 +132,11 @@ fun NavController.navigateToSubstanceScreen(substanceName: String) {
     navigate(ROUTE_START_SUBSTANCES + substanceName)
 }
 
-fun NavController.navigateToAddIngestion(substanceName: String, experienceId: Int?) {
+fun NavController.navigateToAddIngestion(experienceId: Int?) {
+    navigate("$ROUTE_START_ADD_INGESTIONS?$EXPERIENCE_ID_KEY=$experienceId")
+}
+
+fun NavController.navigateToCheckInteractions(substanceName: String, experienceId: Int?) {
     navigate("$ROUTE_START_CHECK_INTERACTIONS$substanceName/?$EXPERIENCE_ID_KEY=$experienceId")
 }
 

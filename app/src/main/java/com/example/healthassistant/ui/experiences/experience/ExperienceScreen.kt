@@ -164,7 +164,7 @@ fun ExperienceScreen(
             }
             Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
             if (experience.text.isEmpty()) {
-                Button(onClick = navigateToEditExperienceScreen) {
+                TextButton(onClick = navigateToEditExperienceScreen) {
                     Icon(
                         Icons.Filled.Edit,
                         contentDescription = "Edit",

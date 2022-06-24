@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Launch
 import androidx.compose.runtime.Composable
@@ -32,7 +31,6 @@ import kotlin.time.toDuration
 
 @Composable
 fun SubstanceScreen(
-    navigateToAddIngestion: (substanceName: String) -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
     SubstanceScreenContent(
@@ -41,9 +39,6 @@ fun SubstanceScreen(
         dangerousInteractions = viewModel.dangerousInteractions,
         unsafeInteractions = viewModel.unsafeInteractions,
         uncertainInteractions = viewModel.uncertainInteractions,
-        onIngestTapped = {
-            navigateToAddIngestion(viewModel.substance.name)
-        }
     )
 }
 
@@ -60,7 +55,6 @@ fun SubstanceScreenPreview(
             dangerousInteractions = substance.dangerousInteractions,
             unsafeInteractions = substance.unsafeInteractions,
             uncertainInteractions = substance.uncertainInteractions,
-            onIngestTapped = {}
         )
     }
 }
@@ -72,24 +66,11 @@ fun SubstanceScreenContent(
     dangerousInteractions: List<String>,
     unsafeInteractions: List<String>,
     uncertainInteractions: List<String>,
-    onIngestTapped: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(substance.name) }
-            )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = onIngestTapped,
-                icon = {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add"
-                    )
-                },
-                text = { Text("Ingest") }
             )
         }
     ) {

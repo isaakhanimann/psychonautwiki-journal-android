@@ -58,7 +58,9 @@ fun MainScreen() {
             if (isShowingBottomBar) {
                 FloatingActionButton(
                     shape = CircleShape,
-                    onClick = navController::navigateToAddIngestion,
+                    onClick = {
+                        navController.navigateToAddIngestion(null)
+                    },
                     contentColor = Color.White
                 ) {
                     Icon(imageVector = Icons.Filled.Add, contentDescription = "Add icon")
@@ -96,16 +98,6 @@ fun MainScreen() {
                     }
                 )
             }
-            composable(NoArgumentRouter.AddIngestionRouter.route) {
-                AddIngestionSearchScreen(
-                    navigateToAddIngestionScreens = {
-                        navController.navigateToAddIngestion(
-                            substanceName = it,
-                            experienceId = null
-                        )
-                    }
-                )
-            }
             composable(
                 ArgumentRouter.EditExperienceRouter.route,
                 arguments = ArgumentRouter.EditExperienceRouter.args
@@ -119,7 +111,7 @@ fun MainScreen() {
                 val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
                 ExperienceScreen(
                     navigateToAddIngestionSearch = {
-                        navController.navigateToAddIngestionSearch(experienceId)
+                        navController.navigateToAddIngestion(experienceId = experienceId)
                     },
                     navigateToEditExperienceScreen = {
                         navController.navigateToEditExperience(experienceId)
@@ -142,14 +134,7 @@ fun MainScreen() {
                 ArgumentRouter.SubstanceRouter.route,
                 arguments = ArgumentRouter.SubstanceRouter.args
             ) {
-                SubstanceScreen(
-                    navigateToAddIngestion = {
-                        navController.navigateToAddIngestion(
-                            substanceName = it,
-                            experienceId = null
-                        )
-                    }
-                )
+                SubstanceScreen()
             }
             composable(TabRouter.Stats.route) { Stats() }
             composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
@@ -164,13 +149,13 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         route = "is not used"
     ) {
         composable(
-            ArgumentRouter.SearchRouter.route,
-            arguments = ArgumentRouter.SearchRouter.args
+            ArgumentRouter.AddIngestionRouter.route,
+            arguments = ArgumentRouter.AddIngestionRouter.args
         ) { backStackEntry ->
             AddIngestionSearchScreen(
-                navigateToAddIngestionScreens = {
-                    val experienceId = backStackEntry.arguments!!.getInt(EXPERIENCE_ID_KEY)
-                    navController.navigateToAddIngestion(
+                navigateToCheckInteractions = {
+                    val experienceId = backStackEntry.arguments?.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
+                    navController.navigateToCheckInteractions(
                         substanceName = it,
                         experienceId = experienceId
                     )
@@ -269,8 +254,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             arguments = ArgumentRouter.ChooseTimeRouter.args
         ) {
             ChooseTimeScreen(
-                popUpToExperienceScreen = navController::popUpToExperienceScreen,
-                popUpToSubstanceScreen = navController::popUpToSubstanceScreen
+                dismissAddIngestionScreens = navController::dismissAddIngestionScreens,
             )
         }
     }
