@@ -1,7 +1,9 @@
 package com.example.healthassistant.ui.ingestions
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -10,10 +12,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.ui.experiences.SectionTitle
-import com.example.healthassistant.ui.experiences.experience.IngestionRow
+import com.example.healthassistant.ui.previewproviders.IngestionPreviewProvider
+import com.example.healthassistant.ui.search.substance.roa.toReadableString
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun IngestionsScreen(
@@ -111,7 +118,7 @@ fun IngestionsScreen(
                     }
                     items(ingestionsInYear.size) { i ->
                         val ingestion = ingestionsInYear[i]
-                        IngestionRow(ingestion = ingestion, deleteIngestion = { /*TODO*/ })
+                        IngestionRowInIngestionsScreen(ingestion = ingestion)
                         if (i < ingestionsInYear.size) {
                             Divider()
                         }
@@ -123,6 +130,54 @@ fun IngestionsScreen(
                     Text(text = "No Ingestions Yet")
                 }
             }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun IngestionRowInIngestionsScreenPreview(@PreviewParameter(IngestionPreviewProvider::class) ingestion: Ingestion) {
+    IngestionRowInIngestionsScreen(
+        ingestion = ingestion,
+    )
+}
+
+
+@Composable
+fun IngestionRowInIngestionsScreen(ingestion: Ingestion) {
+    val isDarkTheme = isSystemInDarkTheme()
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Surface(
+                shape = CircleShape,
+                color = ingestion.color.getComposeColor(isDarkTheme),
+                modifier = Modifier.size(25.dp)
+            ) {}
+            Spacer(modifier = Modifier.width(10.dp))
+            Column {
+                Text(text = ingestion.substanceName, style = MaterialTheme.typography.h6)
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    ingestion.dose?.also {
+                        Text(
+                            text = "${if (ingestion.isDoseAnEstimate) "~" else ""}${it.toReadableString()} ${ingestion.units} ${ingestion.administrationRoute.displayText}",
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    } ?: run {
+                        Text(
+                            text = "Unknown Dose ${ingestion.administrationRoute.displayText}",
+                            style = MaterialTheme.typography.subtitle1
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            val formatter = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
+            val timeString = formatter.format(ingestion.time) ?: "Unknown Time"
+            Text(text = timeString, style = MaterialTheme.typography.body1)
         }
     }
 }
