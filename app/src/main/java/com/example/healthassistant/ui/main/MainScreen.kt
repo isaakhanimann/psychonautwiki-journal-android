@@ -36,13 +36,8 @@ fun MainScreen() {
     val navController = rememberNavController()
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    when (navBackStackEntry?.destination?.route) {
-        TabRouter.Experiences.route, TabRouter.Ingestions.route, TabRouter.Search.route, TabRouter.Stats.route -> {
-            bottomBarState.value = true
-        }
-        else ->
-            bottomBarState.value = false
-    }
+    val isShowingBottomBar = navBackStackEntry?.destination?.route in setOf(TabRouter.Experiences.route, TabRouter.Ingestions.route, TabRouter.Search.route, TabRouter.Stats.route)
+    bottomBarState.value = isShowingBottomBar
     Scaffold(
         bottomBar = {
             BottomBar(
@@ -53,13 +48,15 @@ fun MainScreen() {
         floatingActionButtonPosition = FabPosition.Center,
         isFloatingActionButtonDocked = true,
         floatingActionButton = {
-            FloatingActionButton(
-                shape = CircleShape,
-                onClick = {
-                },
-                contentColor = Color.White
-            ) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add icon")
+            if (isShowingBottomBar) {
+                FloatingActionButton(
+                    shape = CircleShape,
+                    onClick = {
+                    },
+                    contentColor = Color.White
+                ) {
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = "Add icon")
+                }
             }
         }
     ) { innerPadding ->
