@@ -1,13 +1,14 @@
 package com.example.healthassistant.ui.experiences
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,8 +29,6 @@ fun ExperiencesScreen(
         navigateToEditExperienceScreen = navigateToEditExperienceScreen,
         groupedExperiences = experiencesViewModel.experiencesGrouped.collectAsState().value,
         deleteExperience = experiencesViewModel::deleteExperience,
-        filterOptions = experiencesViewModel.filterOptions.collectAsState().value,
-        numberOfActiveFilters = experiencesViewModel.numberOfActiveFilters
     )
 }
 
@@ -42,8 +41,6 @@ fun ExperiencesScreenPreview() {
         navigateToEditExperienceScreen = {},
         groupedExperiences = emptyMap(),
         deleteExperience = {},
-        filterOptions = listOf(),
-        numberOfActiveFilters = 1
     )
 }
 
@@ -54,76 +51,19 @@ fun ExperiencesScreen(
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
     groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
     deleteExperience: (Experience) -> Unit,
-    filterOptions: List<ExperiencesViewModel.FilterOption>,
-    numberOfActiveFilters: Int,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Experiences") },
                 actions = {
-                    var isExpanded by remember { mutableStateOf(false) }
-                    Box(
-                        modifier = Modifier
-                            .wrapContentSize(Alignment.TopEnd)
+                    IconButton(
+                        onClick = navigateToAddExperience,
                     ) {
-                        IconButton(
-                            onClick = { isExpanded = true },
-                        ) {
-                            BadgedBox(badge = {
-                                if (numberOfActiveFilters != 0) {
-                                    Badge { Text(numberOfActiveFilters.toString()) }
-                                }
-                            }) {
-                                Icon(
-                                    Icons.Filled.FilterList,
-                                    contentDescription = "Filter"
-                                )
-                            }
-                        }
-                        DropdownMenu(
-                            expanded = isExpanded,
-                            onDismissRequest = { isExpanded = false }
-                        ) {
-                            filterOptions.forEach { filterOption ->
-                                DropdownMenuItem(
-                                    onClick = {
-                                        filterOption.onTap()
-                                    },
-                                    enabled = filterOption.isEnabled
-                                ) {
-                                    if (filterOption.hasCheck) {
-                                        Icon(
-                                            Icons.Filled.Check,
-                                            contentDescription = "Check",
-                                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                                        )
-                                    } else {
-                                        Spacer(Modifier.size(ButtonDefaults.IconSize))
-                                    }
-                                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                                    Text(filterOption.name)
-                                }
-                            }
-                        }
-                    }
-                }
-            )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = navigateToAddExperience,
-                icon = {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add"
-                    )
-                },
-                text = {
-                    if (groupedExperiences.isEmpty()) {
-                        Text("Add Your First Experience")
-                    } else {
-                        Text("New Experience")
+                        Icon(
+                            Icons.Filled.Add,
+                            contentDescription = "Add Icon"
+                        )
                     }
                 }
             )
