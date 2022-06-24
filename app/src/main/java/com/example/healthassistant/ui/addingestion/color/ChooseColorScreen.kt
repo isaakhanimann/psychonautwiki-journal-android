@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.experiences.experience.addingestion.color
+package com.example.healthassistant.ui.addingestion.color
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme

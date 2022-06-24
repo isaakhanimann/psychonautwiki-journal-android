@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.experiences.experience.addingestion.route
+package com.example.healthassistant.ui.addingestion.route
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

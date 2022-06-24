@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.experiences.experience.addingestion.search
+package com.example.healthassistant.ui.addingestion.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

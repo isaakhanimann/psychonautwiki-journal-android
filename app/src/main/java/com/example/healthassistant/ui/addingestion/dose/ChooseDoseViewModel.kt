@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.experiences.experience.addingestion.dose
+package com.example.healthassistant.ui.addingestion.dose
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

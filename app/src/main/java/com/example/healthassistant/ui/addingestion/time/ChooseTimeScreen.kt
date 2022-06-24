@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.experiences.experience.addingestion.time
+package com.example.healthassistant.ui.addingestion.time
 
 import android.app.TimePickerDialog
 import android.widget.Toast

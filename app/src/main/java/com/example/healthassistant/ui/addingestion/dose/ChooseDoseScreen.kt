@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.experiences.experience.addingestion.dose
+package com.example.healthassistant.ui.addingestion.dose
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*

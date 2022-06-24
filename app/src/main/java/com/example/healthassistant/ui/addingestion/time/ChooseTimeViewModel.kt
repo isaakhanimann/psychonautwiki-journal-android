@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.experiences.experience.addingestion.time
+package com.example.healthassistant.ui.addingestion.time
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

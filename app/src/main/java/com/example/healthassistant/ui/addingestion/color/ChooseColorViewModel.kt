@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.experiences.experience.addingestion.color
+package com.example.healthassistant.ui.addingestion.color
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

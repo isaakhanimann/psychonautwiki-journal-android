@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.experiences.experience.addingestion.interactions
+package com.example.healthassistant.ui.addingestion.interactions
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
