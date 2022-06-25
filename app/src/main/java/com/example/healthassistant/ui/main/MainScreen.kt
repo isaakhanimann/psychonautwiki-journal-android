@@ -30,6 +30,7 @@ import com.example.healthassistant.ui.experiences.experience.ExperienceScreen
 import com.example.healthassistant.ui.experiences.experience.edit.EditExperienceScreen
 import com.example.healthassistant.ui.ingestions.IngestionsScreen
 import com.example.healthassistant.ui.ingestions.ingestion.OneIngestionScreen
+import com.example.healthassistant.ui.ingestions.ingestion.edit.EditIngestionNoteScreen
 import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
@@ -77,74 +78,100 @@ fun MainScreen() {
             startDestination = TabRouter.Search.route,
             Modifier.padding(innerPadding)
         ) {
-            composable(TabRouter.Experiences.route) {
-                ExperiencesScreen(
-                    navigateToAddExperience = navController::navigateToAddExperience,
-                    navigateToExperiencePopNothing = {
-                        navController.navigateToExperiencePopNothing(experienceId = it)
-                    },
-                    navigateToEditExperienceScreen = {
-                        navController.navigateToEditExperience(experienceId = it)
-                    }
-                )
-            }
-            composable(TabRouter.Ingestions.route) {
-                IngestionsScreen(
-                    navigateToIngestion = {
-                        navController.navigateToIngestion(ingestionId = it)
-                    }
-                )
-            }
-            composable(NoArgumentRouter.AddExperienceRouter.route) {
-                AddExperienceScreen(
-                    navigateToExperienceFromAddExperience = {
-                        navController.navigateToExperienceFromAddExperience(it)
-                    }
-                )
-            }
-            composable(
-                ArgumentRouter.EditExperienceRouter.route,
-                arguments = ArgumentRouter.EditExperienceRouter.args
-            ) {
-                EditExperienceScreen(navigateBack = navController::popBackStack)
-            }
-            composable(
-                ArgumentRouter.ExperienceRouter.route,
-                arguments = ArgumentRouter.ExperienceRouter.args
-            ) {
-                val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
-                ExperienceScreen(
-                    navigateToAddIngestionSearch = {
-                        navController.navigateToAddIngestion(experienceId = experienceId)
-                    },
-                    navigateToEditExperienceScreen = {
-                        navController.navigateToEditExperience(experienceId)
-                    }
-                )
-            }
-            composable(
-                ArgumentRouter.IngestionRouter.route,
-                arguments = ArgumentRouter.IngestionRouter.args
-            ) {
-                OneIngestionScreen(navigateToEditIngestionScreen = {})
-            }
-            addIngestionGraph(navController = navController)
-            composable(TabRouter.Search.route) {
-                SearchScreen(onSubstanceTap = {
-                    navController.navigateToSubstanceScreen(substanceName = it.name)
-                })
-            }
-            composable(
-                ArgumentRouter.SubstanceRouter.route,
-                arguments = ArgumentRouter.SubstanceRouter.args
-            ) {
-                SubstanceScreen()
-            }
-            composable(TabRouter.Stats.route) { StatisticsScreen(navigateToSettings = navController::navigateToSettings) }
-            composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
-            composable(NoArgumentRouter.SettingsRouter.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
+            tabGraph(navController)
+            noArgumentGraph(navController)
+            argumentGraph(navController)
+            addIngestionGraph(navController)
         }
     }
+}
+
+fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
+    composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+    composable(NoArgumentRouter.SettingsRouter.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
+    composable(NoArgumentRouter.AddExperienceRouter.route) {
+        AddExperienceScreen(
+            navigateToExperienceFromAddExperience = {
+                navController.navigateToExperienceFromAddExperience(it)
+            }
+        )
+    }
+}
+
+fun NavGraphBuilder.argumentGraph(navController: NavController) {
+    composable(
+        ArgumentRouter.EditExperienceRouter.route,
+        arguments = ArgumentRouter.EditExperienceRouter.args
+    ) {
+        EditExperienceScreen(navigateBack = navController::popBackStack)
+    }
+    composable(
+        ArgumentRouter.ExperienceRouter.route,
+        arguments = ArgumentRouter.ExperienceRouter.args
+    ) {
+        val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
+        ExperienceScreen(
+            navigateToAddIngestionSearch = {
+                navController.navigateToAddIngestion(experienceId = experienceId)
+            },
+            navigateToEditExperienceScreen = {
+                navController.navigateToEditExperience(experienceId)
+            }
+        )
+    }
+    composable(
+        ArgumentRouter.IngestionRouter.route,
+        arguments = ArgumentRouter.IngestionRouter.args
+    ) {
+        val ingestionId = it.arguments!!.getInt(INGESTION_ID_KEY)
+
+        OneIngestionScreen(
+            navigateToEditNote = {
+            navController.navigateToEditIngestionNote(ingestionId)
+        }
+        )
+    }
+    composable(
+        ArgumentRouter.SubstanceRouter.route,
+        arguments = ArgumentRouter.SubstanceRouter.args
+    ) {
+        SubstanceScreen()
+    }
+    composable(
+        ArgumentRouter.EditIngestionNoteRouter.route,
+        arguments = ArgumentRouter.EditIngestionNoteRouter.args
+    ) {
+        EditIngestionNoteScreen(navigateBack = navController::popBackStack)
+    }
+}
+
+fun NavGraphBuilder.tabGraph(navController: NavController) {
+    composable(TabRouter.Experiences.route) {
+        ExperiencesScreen(
+            navigateToAddExperience = navController::navigateToAddExperience,
+            navigateToExperiencePopNothing = {
+                navController.navigateToExperiencePopNothing(experienceId = it)
+            },
+            navigateToEditExperienceScreen = {
+                navController.navigateToEditExperience(experienceId = it)
+            }
+        )
+    }
+    composable(TabRouter.Ingestions.route) {
+        IngestionsScreen(
+            navigateToIngestion = {
+                navController.navigateToIngestion(ingestionId = it)
+            }
+        )
+    }
+    composable(TabRouter.Search.route) {
+        SearchScreen(
+            onSubstanceTap = {
+                navController.navigateToSubstanceScreen(substanceName = it.name)
+            }
+        )
+    }
+    composable(TabRouter.Stats.route) { StatisticsScreen(navigateToSettings = navController::navigateToSettings) }
 }
 
 fun NavGraphBuilder.addIngestionGraph(navController: NavController) {

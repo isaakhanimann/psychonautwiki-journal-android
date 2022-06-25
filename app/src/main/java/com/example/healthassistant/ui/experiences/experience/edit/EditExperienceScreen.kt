@@ -19,7 +19,7 @@ fun EditExperienceScreen(
     navigateBack: () -> Unit,
     viewModel: EditExperienceViewModel = hiltViewModel()
 ) {
-    EditExperienceScreenContent(
+    EditExperienceScreen(
         enteredTitle = viewModel.enteredTitle,
         onChangeOfEnteredTitle = { viewModel.enteredTitle = it },
         isEnteredTitleOk = viewModel.isEnteredTitleOk,
@@ -35,7 +35,7 @@ fun EditExperienceScreen(
 @Preview
 @Composable
 fun EditExperienceScreenPreview() {
-    EditExperienceScreenContent(
+    EditExperienceScreen(
         enteredTitle = "Day at the Lake",
         onChangeOfEnteredTitle = { },
         isEnteredTitleOk = true,
@@ -46,7 +46,7 @@ fun EditExperienceScreenPreview() {
 }
 
 @Composable
-fun EditExperienceScreenContent(
+fun EditExperienceScreen(
     enteredTitle: String,
     onChangeOfEnteredTitle: (String) -> Unit,
     isEnteredTitleOk: Boolean,
@@ -98,5 +98,4 @@ fun EditExperienceScreenContent(
             }
         }
     }
-
 }

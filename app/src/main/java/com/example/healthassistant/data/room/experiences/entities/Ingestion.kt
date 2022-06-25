@@ -17,5 +17,5 @@ data class Ingestion(
     val units: String?,
     val color: IngestionColor,
     val experienceId: Int?,
-    val notes: String?
+    var notes: String?
 )

@@ -30,12 +30,12 @@ import java.util.*
 @Composable
 fun OneIngestionScreen(
     viewModel: OneIngestionViewModel = hiltViewModel(),
-    navigateToEditIngestionScreen: () -> Unit,
+    navigateToEditNote: () -> Unit
 ) {
     viewModel.ingestionWithDurationAndExperience.collectAsState().value?.also { ingestionWithDurationAndExperience ->
         OneIngestionScreen(
             ingestionWithDurationAndExperience = ingestionWithDurationAndExperience,
-            navigateToEditIngestionScreen = navigateToEditIngestionScreen
+            navigateToEditNote = navigateToEditNote
         )
     }
 }
@@ -51,14 +51,15 @@ fun OneIngestionScreenPreview(
     HealthAssistantTheme {
         OneIngestionScreen(
             ingestionWithDurationAndExperience = ingestionWithDurationAndExperience,
-            navigateToEditIngestionScreen = {})
+            navigateToEditNote = {}
+        )
     }
 }
 
 @Composable
 fun OneIngestionScreen(
     ingestionWithDurationAndExperience: IngestionWithDurationAndExperience,
-    navigateToEditIngestionScreen: () -> Unit,
+    navigateToEditNote: () -> Unit,
 ) {
     val ingestion = ingestionWithDurationAndExperience.ingestion
     Scaffold(
@@ -68,11 +69,6 @@ fun OneIngestionScreen(
                     val formatter = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
                     val timeString = formatter.format(ingestion.time) ?: "Unknown Time"
                     Text(text = timeString)
-                },
-                actions = {
-                    IconButton(onClick = navigateToEditIngestionScreen) {
-                        Icon(Icons.Default.Edit, contentDescription = "Edit Ingestion")
-                    }
                 }
             )
         }
@@ -133,18 +129,30 @@ fun OneIngestionScreen(
                 }
             }
             Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
-            if (ingestion.notes.isNullOrBlank()) {
-                TextButton(onClick = navigateToEditIngestionScreen) {
-                    Icon(
-                        Icons.Filled.Edit,
-                        contentDescription = "Edit",
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Add Note")
+            ingestion.notes.let {
+                val constNote = it
+                if (constNote.isNullOrBlank()) {
+                    TextButton(onClick = navigateToEditNote) {
+                        Icon(
+                            Icons.Filled.Edit,
+                            contentDescription = "Edit",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Add Note")
+                    }
+                } else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = constNote, modifier = Modifier.weight(1f))
+                        IconButton(onClick = navigateToEditNote) {
+                            Icon(
+                                Icons.Filled.Edit,
+                                contentDescription = "Edit",
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                        }
+                    }
                 }
-            } else {
-                Text(text = ingestion.notes)
             }
             Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
             val experience = ingestionWithDurationAndExperience.experience

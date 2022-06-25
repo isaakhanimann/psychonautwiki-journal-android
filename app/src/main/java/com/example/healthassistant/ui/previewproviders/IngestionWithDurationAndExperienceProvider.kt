@@ -24,7 +24,7 @@ class IngestionWithDurationAndExperienceProvider :
                 units = "mg",
                 color = IngestionColor.BLUE,
                 experienceId = 0,
-                notes = null
+                notes = "This is my note"
             ),
             roaDuration = RoaDuration(
                 onset = DurationRange(

@@ -42,6 +42,9 @@ interface ExperienceDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(experience: Experience)
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(ingestion: Ingestion)
+
     @Delete
     suspend fun deleteExperience(experience: Experience)
 

@@ -28,6 +28,7 @@ const val ROUTE_START_CHOOSE_ROUTE = "chooseRoute/"
 const val ROUTE_START_CHOOSE_DOSE = "chooseDose/"
 const val ROUTE_START_CHOOSE_COLOR = "chooseColor/"
 const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
+const val ROUTE_START_EDIT_INGESTION_NOTE = "editIngestionNote/"
 
 sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>) {
     object ExperienceRouter : ArgumentRouter(
@@ -49,6 +50,13 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         route = "$ROUTE_START_SUBSTANCES{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
+        )
+    )
+
+    object EditIngestionNoteRouter : ArgumentRouter(
+        route = "$ROUTE_START_EDIT_INGESTION_NOTE{$INGESTION_ID_KEY}",
+        args = listOf(
+            navArgument(INGESTION_ID_KEY) { type = NavType.IntType },
         )
     )
 
@@ -118,6 +126,10 @@ fun NavController.navigateToExperiencePopNothing(experienceId: Int) {
 
 fun NavController.navigateToIngestion(ingestionId: Int) {
     navigate(ROUTE_START_INGESTIONS + ingestionId)
+}
+
+fun NavController.navigateToEditIngestionNote(ingestionId: Int) {
+    navigate(ROUTE_START_EDIT_INGESTION_NOTE + ingestionId)
 }
 
 fun NavController.dismissAddIngestionScreens() {
