@@ -9,8 +9,6 @@ import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.room.experiences.entities.Experience
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 
@@ -20,16 +18,7 @@ class AddExperienceViewModel @Inject constructor(private val repository: Experie
 
     var title by mutableStateOf("")
     var notes by mutableStateOf("")
-    val isTitleOk get() = title.isNotEmpty()
-    val dateString: String
-        get() {
-            val formatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-            return formatter.format(Date()) ?: "Unknown"
-        }
-
-    init {
-        title = dateString
-    }
+    val isTitleOk get() = title.isNotBlank()
 
     fun onConfirmTap(onSuccess: (Int) -> Unit) {
         if (title.isNotEmpty()) {
