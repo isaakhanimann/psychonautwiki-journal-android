@@ -4,8 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
-import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.INGESTION_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,17 +19,26 @@ class OneIngestionViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    private val _ingestionDurationPair =
-        MutableStateFlow<Pair<Ingestion, RoaDuration?>?>(null)
-    val ingestionDurationPair = _ingestionDurationPair.asStateFlow()
+    private val _ingestionWithDurationAndExperience =
+        MutableStateFlow<IngestionWithDurationAndExperience?>(null)
+    val ingestionWithDurationAndExperience = _ingestionWithDurationAndExperience.asStateFlow()
 
     init {
         val id = state.get<Int>(INGESTION_ID_KEY)!!
         viewModelScope.launch {
-            val ingestion = experienceRepo.getIngestion(id)!!
-            val roaDuration = substanceRepo.getSubstance(ingestion.substanceName)
-                ?.getRoa(ingestion.administrationRoute)?.roaDuration
-            _ingestionDurationPair.value = Pair(first = ingestion, second = roaDuration)
+            experienceRepo.getIngestionFlow(id).collect { maybeNull ->
+                val ingestion = maybeNull!!
+                val experience =
+                    if (ingestion.experienceId == null) null else experienceRepo.getExperience(
+                        ingestion.experienceId
+                    )
+                _ingestionWithDurationAndExperience.value = IngestionWithDurationAndExperience(
+                    ingestion,
+                    roaDuration = substanceRepo.getSubstance(ingestion.substanceName)
+                        ?.getRoa(ingestion.administrationRoute)?.roaDuration,
+                    experience = experience
+                )
+            }
         }
     }
 }

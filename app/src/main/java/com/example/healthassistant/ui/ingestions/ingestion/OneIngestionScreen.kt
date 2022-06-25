@@ -18,11 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.experiences.experience.timeline.AllTimelines
-import com.example.healthassistant.ui.previewproviders.IngestionDurationPairProvider
+import com.example.healthassistant.ui.previewproviders.IngestionWithDurationAndExperienceProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import java.text.SimpleDateFormat
@@ -34,9 +32,9 @@ fun OneIngestionScreen(
     viewModel: OneIngestionViewModel = hiltViewModel(),
     navigateToEditIngestionScreen: () -> Unit,
 ) {
-    viewModel.ingestionDurationPair.collectAsState().value?.also { pair ->
+    viewModel.ingestionWithDurationAndExperience.collectAsState().value?.also { ingestionWithDurationAndExperience ->
         OneIngestionScreen(
-            ingestionDurationPair = pair,
+            ingestionWithDurationAndExperience = ingestionWithDurationAndExperience,
             navigateToEditIngestionScreen = navigateToEditIngestionScreen
         )
     }
@@ -46,23 +44,23 @@ fun OneIngestionScreen(
 @Composable
 fun OneIngestionScreenPreview(
     @PreviewParameter(
-        IngestionDurationPairProvider::class,
+        IngestionWithDurationAndExperienceProvider::class,
         limit = 1
-    ) ingestionDurationPair: Pair<Ingestion, RoaDuration?>
+    ) ingestionWithDurationAndExperience: IngestionWithDurationAndExperience
 ) {
     HealthAssistantTheme {
         OneIngestionScreen(
-            ingestionDurationPair = ingestionDurationPair,
+            ingestionWithDurationAndExperience = ingestionWithDurationAndExperience,
             navigateToEditIngestionScreen = {})
     }
 }
 
 @Composable
 fun OneIngestionScreen(
-    ingestionDurationPair: Pair<Ingestion, RoaDuration?>,
+    ingestionWithDurationAndExperience: IngestionWithDurationAndExperience,
     navigateToEditIngestionScreen: () -> Unit,
 ) {
-    val ingestion = ingestionDurationPair.first
+    val ingestion = ingestionWithDurationAndExperience.ingestion
     Scaffold(
         topBar = {
             TopAppBar(
@@ -86,7 +84,7 @@ fun OneIngestionScreen(
         ) {
             val spacingBetweenSections = 20.dp
             AllTimelines(
-                ingestionDurationPairs = listOf(ingestionDurationPair),
+                ingestionDurationPairs = listOf(Pair(first = ingestion, second = ingestionWithDurationAndExperience.roaDuration)),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
@@ -147,6 +145,25 @@ fun OneIngestionScreen(
                 }
             } else {
                 Text(text = ingestion.notes)
+            }
+            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
+            val experience = ingestionWithDurationAndExperience.experience
+            if (experience == null) {
+                Column {
+                    TextButton(onClick = { /*TODO*/ }) {
+                        Text(text = "Create New Experience With This Ingestion")
+                    }
+                    TextButton(onClick = { /*TODO*/ }) {
+                        Text(text = "Assign to Existing Experience")
+                    }
+                }
+            } else {
+                Column {
+                    Text(text = "Part of ${experience.title}")
+                    TextButton(onClick = { /*TODO*/ }) {
+                        Text(text = "Edit")
+                    }
+                }
             }
         }
     }

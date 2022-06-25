@@ -22,23 +22,26 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun deleteExperience(experience: Experience) = experienceDao.deleteExperience(experience)
 
     fun getSortedExperiencesWithIngestions(): Flow<List<ExperienceWithIngestions>> =
-        experienceDao.getSortedExperiencesWithIngestions()
+        experienceDao.getSortedExperiencesWithIngestionsFlow()
             .flowOn(Dispatchers.IO)
             .conflate()
 
     fun getSortedIngestions(): Flow<List<Ingestion>> =
-        experienceDao.getIngestionsSortedDescending()
+        experienceDao.getIngestionsSortedDescendingFlow()
             .flowOn(Dispatchers.IO)
             .conflate()
 
     fun getLastUsedSubstanceNames(limit: Int): Flow<List<String>> =
-        experienceDao.getLastUsedSubstanceNames(limit).flowOn(Dispatchers.IO).conflate()
+        experienceDao.getLastUsedSubstanceNamesFlow(limit).flowOn(Dispatchers.IO).conflate()
 
-    suspend fun getLastExperiences(limit: Int) = experienceDao.getLastExperiences(limit)
-    suspend fun getExperience(id: Int): Experience? = experienceDao.getExperienceByID(id)
-    suspend fun getIngestion(id: Int): Ingestion? = experienceDao.getIngestion(id)
+    suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)
+    fun getExperienceFlow(id: Int) = experienceDao.getExperienceFlow(id)
+        .flowOn(Dispatchers.IO)
+        .conflate()
+    fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
     fun getExperienceWithIngestions(experienceId: Int) =
-        experienceDao.getExperienceWithIngestions(experienceId).flowOn(Dispatchers.IO)
+        experienceDao.getExperienceWithIngestionsFlow(experienceId)
+            .flowOn(Dispatchers.IO)
             .conflate()
 
     suspend fun getLastIngestion(substanceName: String) =
