@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +23,7 @@ fun AddExperienceScreen(
     viewModel: AddExperienceViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    AddExperienceContent(
+    AddExperienceScreen(
         title = viewModel.title,
         onChangeOfTitle = { viewModel.title = it },
         isTitleOk = viewModel.isTitleOk,
@@ -44,7 +46,7 @@ fun AddExperienceScreen(
 @Preview
 @Composable
 fun AddExperienceContentPreview() {
-    AddExperienceContent(
+    AddExperienceScreen(
         title = "Day at the Lake",
         onChangeOfTitle = { },
         isTitleOk = true,
@@ -55,7 +57,7 @@ fun AddExperienceContentPreview() {
 }
 
 @Composable
-fun AddExperienceContent(
+fun AddExperienceScreen(
     title: String,
     onChangeOfTitle: (String) -> Unit,
     isTitleOk: Boolean,
@@ -68,6 +70,20 @@ fun AddExperienceContent(
             TopAppBar(
                 title = { Text(text = "Add Experience") },
             )
+        },
+        floatingActionButton = {
+            if (isTitleOk) {
+                ExtendedFloatingActionButton(
+                    onClick = onConfirmTap,
+                    icon = {
+                        Icon(
+                            Icons.Filled.Done,
+                            contentDescription = "Done Icon"
+                        )
+                    },
+                    text = { Text("Done") }
+                )
+            }
         }
     ) {
         Column(
@@ -97,14 +113,6 @@ fun AddExperienceContent(
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 modifier = Modifier.weight(1f).fillMaxWidth()
             )
-            Button(
-                onClick = onConfirmTap,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                enabled = isTitleOk
-            ) {
-                Text("Create Experience")
-            }
         }
     }
 }

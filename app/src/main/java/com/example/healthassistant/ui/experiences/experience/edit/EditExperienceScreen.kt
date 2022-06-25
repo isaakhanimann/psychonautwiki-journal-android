@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,6 +61,20 @@ fun EditExperienceScreen(
             TopAppBar(
                 title = { Text(text = "Edit Experience") }
             )
+        },
+        floatingActionButton = {
+            if (isEnteredTitleOk) {
+                ExtendedFloatingActionButton(
+                    onClick = onDoneTap,
+                    icon = {
+                        Icon(
+                            Icons.Filled.Done,
+                            contentDescription = "Done Icon"
+                        )
+                    },
+                    text = { Text("Done") }
+                )
+            }
         }
     ) {
         Column(
@@ -88,14 +104,6 @@ fun EditExperienceScreen(
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 modifier = Modifier.weight(1f).fillMaxWidth()
             )
-            Button(
-                onClick = onDoneTap,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                enabled = isEnteredTitleOk
-            ) {
-                Text("Save Changes")
-            }
         }
     }
 }
