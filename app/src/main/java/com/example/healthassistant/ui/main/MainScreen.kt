@@ -109,7 +109,7 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
     composable(
         ArgumentRouter.ExperienceRouter.route,
         arguments = ArgumentRouter.ExperienceRouter.args
-    ) {
+    ) { it ->
         val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
         ExperienceScreen(
             navigateToAddIngestionSearch = {
@@ -117,7 +117,11 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             },
             navigateToEditExperienceScreen = {
                 navController.navigateToEditExperience(experienceId)
-            }
+            },
+            navigateToIngestionScreen = { ingestionId ->
+                navController.navigateToIngestion(ingestionId)
+            },
+            navigateBack = navController::popBackStack
         )
     }
     composable(

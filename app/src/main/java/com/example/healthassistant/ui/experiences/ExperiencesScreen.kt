@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 
 @Composable
@@ -28,7 +27,6 @@ fun ExperiencesScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToEditExperienceScreen = navigateToEditExperienceScreen,
         groupedExperiences = experiencesViewModel.experiencesGrouped.collectAsState().value,
-        deleteExperience = experiencesViewModel::deleteExperience,
     )
 }
 
@@ -40,7 +38,6 @@ fun ExperiencesScreenPreview() {
         navigateToExperiencePopNothing = {},
         navigateToEditExperienceScreen = {},
         groupedExperiences = emptyMap(),
-        deleteExperience = {},
     )
 }
 
@@ -50,7 +47,6 @@ fun ExperiencesScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
     groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
-    deleteExperience: (Experience) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -77,7 +73,6 @@ fun ExperiencesScreen(
                 groupedExperiences = groupedExperiences,
                 navigateToExperiencePopNothing = navigateToExperiencePopNothing,
                 navigateToEditExperienceScreen = navigateToEditExperienceScreen,
-                deleteExperience = deleteExperience
             )
             if (groupedExperiences.isEmpty()) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
@@ -93,7 +88,6 @@ fun ExperiencesList(
     groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
-    deleteExperience: (Experience) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         groupedExperiences.forEach { (year, experiencesInYear) ->
@@ -109,9 +103,6 @@ fun ExperiencesList(
                     },
                     navigateToEditExperienceScreen = {
                         navigateToEditExperienceScreen(experienceWithIngestions.experience.id)
-                    },
-                    deleteExperienceWithIngestions = {
-                        deleteExperience(experienceWithIngestions.experience)
                     }
                 )
                 if (i < experiencesInYear.size) {

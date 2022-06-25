@@ -7,11 +7,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -28,9 +30,11 @@ import com.example.healthassistant.ui.theme.HealthAssistantTheme
 
 @Composable
 fun ExperienceScreen(
+    viewModel: ExperienceViewModel = hiltViewModel(),
     navigateToAddIngestionSearch: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
-    viewModel: ExperienceViewModel = hiltViewModel()
+    navigateToIngestionScreen: (ingestionId: Int) -> Unit,
+    navigateBack: () -> Unit,
 ) {
     viewModel.experienceWithIngestions.collectAsState().value?.also { experienceWithIngestions ->
         ExperienceScreen(
@@ -39,8 +43,10 @@ fun ExperienceScreen(
             cumulativeDoses = viewModel.cumulativeDoses.collectAsState().value,
             ingestionDurationPairs = viewModel.ingestionDurationPairs.collectAsState().value,
             addIngestion = navigateToAddIngestionSearch,
-            deleteIngestion = viewModel::deleteIngestion,
-            navigateToEditExperienceScreen = navigateToEditExperienceScreen
+            viewModel::deleteExperience,
+            navigateToEditExperienceScreen,
+            navigateToIngestionScreen,
+            navigateBack
         )
     }
 }
@@ -72,8 +78,10 @@ fun ExperienceScreenContentPreview(
             ),
             ingestionDurationPairs = listOf(),
             addIngestion = {},
-            deleteIngestion = {},
-            navigateToEditExperienceScreen = {}
+            deleteExperience = {},
+            navigateToEditExperienceScreen = {},
+            navigateToIngestionScreen = {},
+            navigateBack = {}
         )
     }
 }
@@ -85,8 +93,10 @@ fun ExperienceScreen(
     cumulativeDoses: List<ExperienceViewModel.CumulativeDose>,
     ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>,
     addIngestion: () -> Unit,
-    deleteIngestion: (Ingestion) -> Unit,
-    navigateToEditExperienceScreen: () -> Unit
+    deleteExperience: () -> Unit,
+    navigateToEditExperienceScreen: () -> Unit,
+    navigateToIngestionScreen: (ingestionId: Int) -> Unit,
+    navigateBack: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -119,7 +129,6 @@ fun ExperienceScreen(
                 .padding(10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            val spacingBetweenSections = 20.dp
             if (ingestionDurationPairs.isNotEmpty()) {
                 AllTimelines(
                     ingestionDurationPairs = ingestionDurationPairs,
@@ -127,11 +136,15 @@ fun ExperienceScreen(
                         .fillMaxWidth()
                         .height(200.dp)
                 )
-                val showOralOnsetDisclaimer = ingestionDurationPairs.any { it.first.administrationRoute == AdministrationRoute.ORAL }
+                val showOralOnsetDisclaimer =
+                    ingestionDurationPairs.any { it.first.administrationRoute == AdministrationRoute.ORAL }
                 if (showOralOnsetDisclaimer) {
-                    Text(text = "* a full stomach can delay the onset by hours", style = MaterialTheme.typography.caption)
+                    Text(
+                        text = "* a full stomach can delay the onset by hours",
+                        style = MaterialTheme.typography.caption
+                    )
                 }
-                Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
+                Divider(modifier = Modifier.padding(top = 10.dp))
             }
             Text("Ingestions", style = MaterialTheme.typography.subtitle1)
             if (ingestionElements.isEmpty()) {
@@ -146,9 +159,7 @@ fun ExperienceScreen(
                     }
                     IngestionRow(
                         ingestion = it.ingestion,
-                        deleteIngestion = {
-                            deleteIngestion(it.ingestion)
-                        },
+                        navigateToIngestionScreen = { navigateToIngestionScreen(it.ingestion.id) },
                         modifier = Modifier.padding(vertical = 3.dp)
                     )
                 }
@@ -162,7 +173,7 @@ fun ExperienceScreen(
                     CumulativeDoseRow(cumulativeDose = it)
                 }
             }
-            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
+            Divider(modifier = Modifier.padding(top = 10.dp))
             if (experience.text.isEmpty()) {
                 TextButton(onClick = navigateToEditExperienceScreen) {
                     Icon(
@@ -174,8 +185,25 @@ fun ExperienceScreen(
                     Text("Add Notes")
                 }
             } else {
-                Text(text = experience.text)
+                Text(text = experience.text, modifier = Modifier.padding(vertical = 10.dp))
             }
+            Divider()
+            TextButton(
+                onClick = {
+                    deleteExperience()
+                    navigateBack()
+                },
+            ) {
+                Icon(
+                    Icons.Filled.Delete,
+                    contentDescription = "Delete Experience",
+                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                    tint = Color.Red
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Delete", color = Color.Red)
+            }
+            Divider()
         }
     }
 }

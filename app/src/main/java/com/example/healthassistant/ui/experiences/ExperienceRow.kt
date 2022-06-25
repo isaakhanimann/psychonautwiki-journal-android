@@ -5,10 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,10 +28,9 @@ import java.util.*
 @Preview(showBackground = true)
 @Composable
 fun ExperienceRow(
-    @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngs: ExperienceWithIngestions,
+    @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngestions: ExperienceWithIngestions,
     navigateToExperienceScreen: () -> Unit = {},
     navigateToEditExperienceScreen: () -> Unit = {},
-    deleteExperienceWithIngestions: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -48,10 +50,11 @@ fun ExperienceRow(
         ) {
             val isDarkTheme = isSystemInDarkTheme()
             val circleSize = 45.dp
-            if (experienceWithIngs.ingestions.size >= 2) {
-                val brush = remember(experienceWithIngs.ingestions) {
+            val ingestions = experienceWithIngestions.ingestions
+            if (ingestions.size >= 2) {
+                val brush = remember(ingestions) {
                     val colors =
-                        experienceWithIngs.ingestions.map { it.color.getComposeColor(isDarkTheme) }
+                        ingestions.map { it.color.getComposeColor(isDarkTheme) }
                     val twiceColors = colors.flatMap { listOf(it, it) } + colors.first()
                     Brush.sweepGradient(twiceColors)
                 }
@@ -61,13 +64,13 @@ fun ExperienceRow(
                         .clip(CircleShape)
                         .background(brush)
                 )
-            } else if (experienceWithIngs.ingestions.size == 1) {
+            } else if (ingestions.size == 1) {
                 Box(
                     modifier = Modifier
                         .size(circleSize)
                         .clip(CircleShape)
                         .background(
-                            experienceWithIngs.ingestions.first().color.getComposeColor(
+                            ingestions.first().color.getComposeColor(
                                 isDarkTheme
                             )
                         )
@@ -82,11 +85,11 @@ fun ExperienceRow(
             }
             Column {
                 Text(
-                    text = experienceWithIngs.experience.title,
+                    text = experienceWithIngestions.experience.title,
                     style = MaterialTheme.typography.h5,
                 )
-                val substanceNames = remember(experienceWithIngs.ingestions) {
-                    experienceWithIngs.ingestions.map { it.substanceName }.distinct()
+                val substanceNames = remember(ingestions) {
+                    ingestions.map { it.substanceName }.distinct()
                         .joinToString(separator = ", ")
                 }
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
@@ -98,51 +101,12 @@ fun ExperienceRow(
                 }
             }
         }
-        Column(
-            horizontalAlignment = Alignment.End,
-            modifier = Modifier.fillMaxHeight()
-        ) {
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                val dateText = remember(experienceWithIngs.sortDate) {
-                    val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
-                    formatter.format(experienceWithIngs.sortDate) ?: ""
-                }
-                Text(text = dateText)
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            val dateText = remember(experienceWithIngestions.sortDate) {
+                val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
+                formatter.format(experienceWithIngestions.sortDate) ?: ""
             }
-            var isExpanded by remember { mutableStateOf(false) }
-            Box(
-                modifier = Modifier
-                    .wrapContentSize(Alignment.TopStart)
-                    .fillMaxHeight(),
-                contentAlignment = Alignment.Center
-            ) {
-                IconButton(
-                    onClick = { isExpanded = true },
-                ) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "More actions on experience")
-                }
-                DropdownMenu(
-                    expanded = isExpanded,
-                    onDismissRequest = { isExpanded = false }
-                ) {
-                    DropdownMenuItem(
-                        onClick = {
-                            deleteExperienceWithIngestions()
-                            isExpanded = false
-                        }
-                    ) {
-                        Text("Delete")
-                    }
-                    DropdownMenuItem(
-                        onClick = {
-                            navigateToEditExperienceScreen()
-                            isExpanded = false
-                        }
-                    ) {
-                        Text("Edit")
-                    }
-                }
-            }
+            Text(text = dateText)
         }
     }
 }

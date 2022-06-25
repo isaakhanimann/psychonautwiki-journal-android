@@ -3,7 +3,6 @@ package com.example.healthassistant.ui.experiences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
-import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,12 +28,6 @@ class ExperiencesViewModel @Inject constructor(
                     _experiencesGrouped.value =
                         groupExperiencesByYear(experiencesWithIngestions = it)
                 }
-        }
-    }
-
-    fun deleteExperience(experience: Experience) {
-        viewModelScope.launch {
-            experienceRepo.deleteExperience(experience = experience)
         }
     }
 

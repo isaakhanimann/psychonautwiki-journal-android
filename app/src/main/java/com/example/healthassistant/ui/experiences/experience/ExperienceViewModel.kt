@@ -49,8 +49,8 @@ class ExperienceViewModel @Inject constructor(
         val id = state.get<Int>(EXPERIENCE_ID_KEY)!!
         viewModelScope.launch {
             experienceRepo.getExperienceWithIngestions(experienceId = id).collect {
-                _experienceWithIngestions.value = it!!
-                val ingestions = it.ingestions
+                _experienceWithIngestions.value = it
+                val ingestions = it?.ingestions ?: emptyList()
                 _ingestionElements.value = getIngestionElements(ingestions)
                 _cumulativeDoses.value = getCumulativeDoses(ingestions)
                 _ingestionDurationPairs.value = ingestions.map { ing ->
@@ -73,7 +73,7 @@ class ExperienceViewModel @Inject constructor(
             if (index == 0) {
                 IngestionElement(dateText = ingestionTimeText, ingestion = ingestion)
             } else {
-                val lastIngestionDateText = getDateText(sortedIngestions[index-1].time)
+                val lastIngestionDateText = getDateText(sortedIngestions[index - 1].time)
                 if (lastIngestionDateText != ingestionTimeText) {
                     IngestionElement(dateText = ingestionTimeText, ingestion = ingestion)
                 } else {
@@ -88,9 +88,11 @@ class ExperienceViewModel @Inject constructor(
         return formatter.format(date)
     }
 
-    fun deleteIngestion(ingestion: Ingestion) {
+    fun deleteExperience() {
         viewModelScope.launch {
-            experienceRepo.deleteIngestion(ingestion)
+            experienceWithIngestions.value?.experience?.let {
+                experienceRepo.deleteExperience(it)
+            }
         }
     }
 

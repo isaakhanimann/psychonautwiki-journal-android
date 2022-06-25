@@ -1,12 +1,12 @@
 package com.example.healthassistant.ui.experiences.experience
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,7 +23,7 @@ import java.util.*
 fun IngestionRowPreview(@PreviewParameter(IngestionPreviewProvider::class) ingestion: Ingestion) {
     IngestionRow(
         ingestion = ingestion,
-        deleteIngestion = {}
+        navigateToIngestionScreen = {}
     )
 }
 
@@ -31,11 +31,13 @@ fun IngestionRowPreview(@PreviewParameter(IngestionPreviewProvider::class) inges
 @Composable
 fun IngestionRow(
     ingestion: Ingestion,
-    deleteIngestion: () -> Unit,
+    navigateToIngestionScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isDarkTheme = isSystemInDarkTheme()
-    Card(modifier = modifier.fillMaxWidth()) {
+    Card(
+        modifier = modifier.fillMaxWidth().clickable(onClick = navigateToIngestionScreen)
+    ) {
         Row(
             modifier = Modifier.padding(10.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -67,36 +69,9 @@ fun IngestionRow(
                     }
                 }
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(3.dp)
-            ) {
-                val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
-                val timeString = formatter.format(ingestion.time) ?: "Unknown Time"
-                Text(text = timeString)
-                var isExpanded by remember { mutableStateOf(false) }
-                Box(
-                    modifier = Modifier
-                        .wrapContentSize(Alignment.TopStart)
-                ) {
-                    IconButton(onClick = { isExpanded = true }) {
-                        Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
-                    }
-                    DropdownMenu(
-                        expanded = isExpanded,
-                        onDismissRequest = { isExpanded = false }
-                    ) {
-                        DropdownMenuItem(
-                            onClick = {
-                                deleteIngestion()
-                                isExpanded = false
-                            }
-                        ) {
-                            Text("Delete")
-                        }
-                    }
-                }
-            }
+            val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val timeString = formatter.format(ingestion.time) ?: "Unknown Time"
+            Text(text = timeString)
         }
     }
 }

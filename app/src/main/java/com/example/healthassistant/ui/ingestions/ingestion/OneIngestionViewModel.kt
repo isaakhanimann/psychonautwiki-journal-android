@@ -9,7 +9,6 @@ import com.example.healthassistant.ui.main.routers.INGESTION_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,7 +50,7 @@ class OneIngestionViewModel @Inject constructor(
 
     fun deleteIngestion() {
         viewModelScope.launch {
-            ingestionWithDurationAndExperience.firstOrNull()?.ingestion.let {
+            ingestionWithDurationAndExperience.value?.ingestion.let {
                 assert(it!=null)
                 if (it != null) {
                     experienceRepo.deleteIngestion(ingestion = it)
