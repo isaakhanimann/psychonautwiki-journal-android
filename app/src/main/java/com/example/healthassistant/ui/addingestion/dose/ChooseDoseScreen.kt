@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -98,7 +100,21 @@ fun ChooseDoseScreen(
     Column {
         LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
         Scaffold(
-            topBar = { TopAppBar(title = { Text(text = "Choose Dose") }) }
+            topBar = { TopAppBar(title = { Text(text = "Choose Dose") }) },
+            floatingActionButton = {
+                if (isValidDose) {
+                    ExtendedFloatingActionButton(
+                        onClick = navigateToNext,
+                        icon = {
+                            Icon(
+                                Icons.Filled.NavigateNext,
+                                contentDescription = "Next"
+                            )
+                        },
+                        text = { Text("Next") },
+                    )
+                }
+            }
         ) {
             Column(
                 modifier = Modifier
@@ -153,24 +169,10 @@ fun ChooseDoseScreen(
                     Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
+                TextButton(
+                    onClick = useUnknownDoseAndNavigate,
                 ) {
-                    TextButton(
-                        onClick = useUnknownDoseAndNavigate,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Use Unknown Dose")
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Button(
-                        onClick = navigateToNext,
-                        enabled = isValidDose,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Next")
-                    }
+                    Text("Use Unknown Dose")
                 }
             }
         }

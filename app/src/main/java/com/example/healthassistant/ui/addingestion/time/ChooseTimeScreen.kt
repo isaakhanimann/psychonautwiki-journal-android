@@ -4,6 +4,8 @@ import android.app.TimePickerDialog
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,8 +20,8 @@ fun ChooseTimeScreen(
     dismissAddIngestionScreens: () -> Unit,
     viewModel: ChooseTimeViewModel = hiltViewModel()
 ) {
-    ChooseTimeScreenContent(
-        addIngestionToExperience = viewModel::createAndSaveIngestion,
+    ChooseTimeScreen(
+        createAndSaveIngestion = viewModel::createAndSaveIngestion,
         onSubmitDate = viewModel::onSubmitDate,
         onSubmitTime = viewModel::onSubmitTime,
         dateAndTime = DateAndTime(
@@ -34,25 +36,55 @@ fun ChooseTimeScreen(
     )
 }
 
-data class DateAndTime(val day: Int, val month: Int, val year: Int, val hour: Int, val minute: Int)
-
 @Preview
 @Composable
-fun ChooseTimeScreenContent(
-    addIngestionToExperience: () -> Unit = {},
-    addIngestionToNewExperience: () -> Unit = {},
-    experienceIdToAddTo: Int? = null,
-    latestExperienceId: Int? = null,
-    onSubmitDate: (Int, Int, Int) -> Unit = { _: Int, _: Int, _: Int -> },
-    onSubmitTime: (Int, Int) -> Unit = { _: Int, _: Int -> },
-    dateAndTime: DateAndTime = DateAndTime(day = 3, month = 4, year = 2022, hour = 13, minute = 52),
-    dateAndTimeStrings: Pair<String, String> = Pair("Wed 9 Jul 2022", "13:52"),
-    dismissAddIngestionScreens: () -> Unit = {},
+fun ChooseTimeScreenPreview() {
+    ChooseTimeScreen(
+        createAndSaveIngestion = {},
+        onSubmitDate = { _: Int, _: Int, _: Int -> },
+        onSubmitTime = { _: Int, _: Int -> },
+        dateAndTime = DateAndTime(day = 3, month = 4, year = 2022, hour = 13, minute = 52),
+        dateAndTimeStrings = Pair("Wed 9 Jul 2022", "13:52"),
+        dismissAddIngestionScreens = {},
+    )
+}
+
+data class DateAndTime(val day: Int, val month: Int, val year: Int, val hour: Int, val minute: Int)
+
+@Composable
+fun ChooseTimeScreen(
+    createAndSaveIngestion: () -> Unit,
+    onSubmitDate: (Int, Int, Int) -> Unit,
+    onSubmitTime: (Int, Int) -> Unit,
+    dateAndTime: DateAndTime,
+    dateAndTimeStrings: Pair<String, String>,
+    dismissAddIngestionScreens: () -> Unit,
 ) {
     Column {
         LinearProgressIndicator(progress = 1f, modifier = Modifier.fillMaxWidth())
         Scaffold(
-            topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) }
+            topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) },
+            floatingActionButton = {
+                val context = LocalContext.current
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        createAndSaveIngestion()
+                        Toast.makeText(
+                            context,
+                            "Ingestion Added",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        dismissAddIngestionScreens()
+                    },
+                    icon = {
+                        Icon(
+                            Icons.Filled.Done,
+                            contentDescription = "Next"
+                        )
+                    },
+                    text = { Text("Done") },
+                )
+            }
         ) {
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
@@ -81,20 +113,6 @@ fun ChooseTimeScreenContent(
                         timeString = dateAndTimeStrings.second,
                         modifier = Modifier.fillMaxWidth()
                     )
-                }
-                val context = LocalContext.current
-                Button(
-                    onClick = {
-                        addIngestionToExperience()
-                        Toast.makeText(
-                            context, "Ingestion Added",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        dismissAddIngestionScreens()
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Add Ingestion")
                 }
             }
         }

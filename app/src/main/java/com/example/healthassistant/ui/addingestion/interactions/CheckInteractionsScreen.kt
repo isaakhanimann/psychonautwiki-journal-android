@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -68,7 +70,19 @@ fun CheckInteractionsScreen(
     Column {
         LinearProgressIndicator(progress = 0.33f, modifier = Modifier.fillMaxWidth())
         Scaffold(
-            topBar = { TopAppBar(title = { Text(text = "Check Interactions") }) }
+            topBar = { TopAppBar(title = { Text(text = "Check Interactions") }) },
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                    onClick = navigateToNext,
+                    icon = {
+                        Icon(
+                            Icons.Filled.NavigateNext,
+                            contentDescription = "Next"
+                        )
+                    },
+                    text = { Text("Next") },
+                )
+            }
         ) {
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -94,13 +108,6 @@ fun CheckInteractionsScreen(
                     uncertainInteractions.forEach {
                         InteractionChip(text = it, color = Color.Yellow)
                     }
-                }
-                Button(
-                    onClick = navigateToNext,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text("Next")
                 }
             }
             if (isShowingAlert) {
