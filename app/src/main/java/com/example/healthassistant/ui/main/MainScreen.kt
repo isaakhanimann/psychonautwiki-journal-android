@@ -2,7 +2,10 @@ package com.example.healthassistant.ui.main
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -32,6 +35,7 @@ import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
 import com.example.healthassistant.ui.settings.SettingsScreen
 import com.example.healthassistant.ui.settings.faq.FAQScreen
+import com.example.healthassistant.ui.stats.StatisticsScreen
 
 @Composable
 fun MainScreen() {
@@ -136,7 +140,7 @@ fun MainScreen() {
             ) {
                 SubstanceScreen()
             }
-            composable(TabRouter.Stats.route) { Stats() }
+            composable(TabRouter.Stats.route) { StatisticsScreen(navigateToSettings = navController::navigateToSettings) }
             composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
             composable(NoArgumentRouter.SettingsRouter.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
         }
@@ -154,7 +158,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         ) { backStackEntry ->
             AddIngestionSearchScreen(
                 navigateToCheckInteractions = {
-                    val experienceId = backStackEntry.arguments?.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
+                    val experienceId =
+                        backStackEntry.arguments?.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
                     navController.navigateToCheckInteractions(
                         substanceName = it,
                         experienceId = experienceId
@@ -258,9 +263,4 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             )
         }
     }
-}
-
-@Composable
-fun Stats() {
-    Text(text = "Stats")
 }

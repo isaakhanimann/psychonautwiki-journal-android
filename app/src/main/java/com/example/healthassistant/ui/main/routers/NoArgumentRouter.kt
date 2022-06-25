@@ -21,6 +21,10 @@ fun NavController.navigateToFAQ() {
     navigate(FAQ_ROUTE)
 }
 
+fun NavController.navigateToSettings() {
+    navigate(SETTINGS_ROUTE)
+}
+
 fun NavController.navigateToExperienceFromAddExperience(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId) {
         popUpTo(TabRouter.Experiences.route)
