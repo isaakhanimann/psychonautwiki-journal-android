@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -38,13 +39,18 @@ class AllTimelinesModel(
             )
         }
         ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)
-        width = ingestionDrawables.map {
+        val max = ingestionDrawables.map {
             if (it.timelineDrawable != null) {
                 it.timelineDrawable.width + it.ingestionPointDistanceFromStart
             } else {
                 it.ingestionPointDistanceFromStart
             }
-        }.maxOrNull() ?: 5.0.hours
+        }.maxOrNull()
+        if (max == null || max == ZERO) {
+            width = 5.hours
+        } else {
+             width = max
+        }
         axisDrawable = AxisDrawable(startTime, width)
     }
 
