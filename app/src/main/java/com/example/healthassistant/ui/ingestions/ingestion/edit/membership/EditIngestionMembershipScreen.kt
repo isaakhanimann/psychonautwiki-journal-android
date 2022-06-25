@@ -1,5 +1,6 @@
 package com.example.healthassistant.ui.ingestions.ingestion.edit.membership
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
@@ -62,8 +63,9 @@ fun EditIngestionMembershipScreen(
                 title = { Text(text = "Choose Experience") },
                 actions = {
                     if (selectedExperienceId != null) {
+                        val color = if (isSystemInDarkTheme()) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary
                         TextButton(onClick = { onIdChange(null) }) {
-                            Text(text = "Clear", color = MaterialTheme.colors.onPrimary)
+                            Text(text = "Clear", color = color)
                         }
                     }
                 }

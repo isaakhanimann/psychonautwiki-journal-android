@@ -2,6 +2,7 @@ package com.example.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -70,7 +71,25 @@ fun SubstanceScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(substance.name) }
+                title = { Text(substance.name) },
+                actions = {
+                    val uriHandler = LocalUriHandler.current
+                    TextButton(onClick = {
+                        uriHandler.openUri(substance.url)
+                    }) {
+                        val color = if (isSystemInDarkTheme()) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary
+                        Icon(
+                            Icons.Filled.Launch,
+                            contentDescription = "Open Link",
+                            modifier = Modifier.size(ButtonDefaults.IconSize),
+                            tint = color
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(
+                            "Article", color = color
+                        )
+                    }
+                }
             )
         }
     ) {
@@ -80,18 +99,6 @@ fun SubstanceScreenContent(
                 .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            val uriHandler = LocalUriHandler.current
-            TextButton(onClick = {
-                uriHandler.openUri(substance.url)
-            }) {
-                Icon(
-                    Icons.Filled.Launch,
-                    contentDescription = "Open Link",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Read Article")
-            }
             val maxDuration = remember(substance.roas) {
                 substance.roas.mapNotNull {
                     val duration = it.roaDuration ?: return@mapNotNull null
