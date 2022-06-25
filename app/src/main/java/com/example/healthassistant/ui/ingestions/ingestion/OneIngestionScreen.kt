@@ -92,7 +92,7 @@ fun OneIngestionScreen(
             val showOralOnsetDisclaimer = ingestion.administrationRoute == AdministrationRoute.ORAL
             if (showOralOnsetDisclaimer) {
                 Text(
-                    text = "* a full stomach can delay the onset significantly",
+                    text = "* a full stomach can delay the onset by hours",
                     style = MaterialTheme.typography.caption
                 )
             }

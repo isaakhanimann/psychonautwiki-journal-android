@@ -54,7 +54,6 @@ fun RoaDurationView(
         val strokeWidth = 8f
         val strokeWidthThick = 40f
         val ingestionDotRadius = 10f
-        val showOralOnsetDisclaimer = isOralRoute && roaDuration.onset != null
         if ((total?.min != null) && (total.max != null)) {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -208,7 +207,7 @@ fun RoaDurationView(
                         if (onset != null) {
                             drawContext.canvas.nativeCanvas.apply {
                                 drawText(
-                                    onset.text + if (showOralOnsetDisclaimer) " *" else "",
+                                    onset.text + if (isOralRoute) " *" else "",
                                     0f,
                                     canvasHeight - 15f,
                                     textPaintAlignLeft
@@ -291,10 +290,8 @@ fun RoaDurationView(
                     }
                 }
             }
-            if (showOralOnsetDisclaimer) {
-                Text("* onset can be much longer with full stomach", style = MaterialTheme.typography.caption)
-            } else if (isOralRoute) {
-                Text(text = "* a full stomach can delay the onset significantly", style = MaterialTheme.typography.caption)
+            if (isOralRoute) {
+                Text(text = "* a full stomach can delay the onset by hours", style = MaterialTheme.typography.caption)
             }
         }
     }

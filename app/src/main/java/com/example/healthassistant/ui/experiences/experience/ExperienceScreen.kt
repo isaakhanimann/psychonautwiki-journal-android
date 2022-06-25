@@ -129,7 +129,7 @@ fun ExperienceScreen(
                 )
                 val showOralOnsetDisclaimer = ingestionDurationPairs.any { it.first.administrationRoute == AdministrationRoute.ORAL }
                 if (showOralOnsetDisclaimer) {
-                    Text(text = "* a full stomach can delay the onset significantly", style = MaterialTheme.typography.caption)
+                    Text(text = "* a full stomach can delay the onset by hours", style = MaterialTheme.typography.caption)
                 }
                 Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
             }
