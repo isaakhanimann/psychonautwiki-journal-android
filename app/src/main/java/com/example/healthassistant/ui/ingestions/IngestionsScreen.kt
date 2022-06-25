@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -172,8 +173,13 @@ fun IngestionRowInIngestionsScreen(
                 modifier = Modifier.size(25.dp)
             ) {}
             Spacer(modifier = Modifier.width(10.dp))
-            Column {
-                Text(text = ingestion.substanceName, style = MaterialTheme.typography.h6)
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = ingestion.substanceName,
+                    style = MaterialTheme.typography.h6,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                     ingestion.dose?.also {
                         Text(
@@ -188,10 +194,17 @@ fun IngestionRowInIngestionsScreen(
                     }
                 }
             }
-            Spacer(modifier = Modifier.weight(1f))
-            val formatter = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
-            val timeString = formatter.format(ingestion.time) ?: "Unknown Time"
-            Text(text = timeString, style = MaterialTheme.typography.body1)
+            Column(
+                horizontalAlignment = Alignment.End,
+            ) {
+                val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val dateString = dateFormatter.format(ingestion.time) ?: "Unknown Date"
+                val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+                val timeString = timeFormatter.format(ingestion.time) ?: "Unknown Time"
+                Text(text = dateString, style = MaterialTheme.typography.body1)
+                Text(text = timeString, style = MaterialTheme.typography.body1)
+            }
+
         }
     }
 }
