@@ -30,12 +30,14 @@ import java.util.*
 @Composable
 fun OneIngestionScreen(
     viewModel: OneIngestionViewModel = hiltViewModel(),
-    navigateToEditNote: () -> Unit
+    navigateToEditNote: () -> Unit,
+    navigateToEditMembership: () -> Unit
 ) {
     viewModel.ingestionWithDurationAndExperience.collectAsState().value?.also { ingestionWithDurationAndExperience ->
         OneIngestionScreen(
-            ingestionWithDurationAndExperience = ingestionWithDurationAndExperience,
-            navigateToEditNote = navigateToEditNote
+            ingestionWithDurationAndExperience,
+            navigateToEditNote,
+            navigateToEditMembership
         )
     }
 }
@@ -51,7 +53,8 @@ fun OneIngestionScreenPreview(
     HealthAssistantTheme {
         OneIngestionScreen(
             ingestionWithDurationAndExperience = ingestionWithDurationAndExperience,
-            navigateToEditNote = {}
+            navigateToEditNote = {},
+            navigateToEditMembership = {}
         )
     }
 }
@@ -60,6 +63,7 @@ fun OneIngestionScreenPreview(
 fun OneIngestionScreen(
     ingestionWithDurationAndExperience: IngestionWithDurationAndExperience,
     navigateToEditNote: () -> Unit,
+    navigateToEditMembership: () -> Unit
 ) {
     val ingestion = ingestionWithDurationAndExperience.ingestion
     Scaffold(
@@ -78,7 +82,6 @@ fun OneIngestionScreen(
                 .padding(10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            val spacingBetweenSections = 20.dp
             AllTimelines(
                 ingestionDurationPairs = listOf(Pair(first = ingestion, second = ingestionWithDurationAndExperience.roaDuration)),
                 modifier = Modifier
@@ -92,10 +95,11 @@ fun OneIngestionScreen(
                     style = MaterialTheme.typography.caption
                 )
             }
-            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
+            Divider(modifier = Modifier.padding(top = 10.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.padding(vertical = 10.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -128,7 +132,7 @@ fun OneIngestionScreen(
                     }
                 }
             }
-            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
+            Divider()
             ingestion.notes.let {
                 val constNote = it
                 if (constNote.isNullOrBlank()) {
@@ -154,25 +158,25 @@ fun OneIngestionScreen(
                     }
                 }
             }
-            Divider(modifier = Modifier.padding(vertical = spacingBetweenSections))
+            Divider()
             val experience = ingestionWithDurationAndExperience.experience
             if (experience == null) {
-                Column {
-                    TextButton(onClick = { /*TODO*/ }) {
-                        Text(text = "Create New Experience With This Ingestion")
-                    }
-                    TextButton(onClick = { /*TODO*/ }) {
-                        Text(text = "Assign to Existing Experience")
-                    }
+                TextButton(onClick = navigateToEditMembership) {
+                    Text(text = "Assign to Experience")
                 }
             } else {
-                Column {
-                    Text(text = "Part of ${experience.title}")
-                    TextButton(onClick = { /*TODO*/ }) {
-                        Text(text = "Edit")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "Part of ${experience.title}", modifier = Modifier.weight(1f))
+                    IconButton(onClick = navigateToEditMembership) {
+                        Icon(
+                            Icons.Filled.Edit,
+                            contentDescription = "Edit",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
                     }
                 }
             }
+            Divider()
         }
     }
 }

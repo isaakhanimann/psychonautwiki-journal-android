@@ -24,7 +24,7 @@ class ExperiencesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            experienceRepo.getSortedExperiencesWithIngestions()
+            experienceRepo.getSortedExperiencesWithIngestionsFlow()
                 .collect {
                     _experiencesGrouped.value =
                         groupExperiencesByYear(experiencesWithIngestions = it)

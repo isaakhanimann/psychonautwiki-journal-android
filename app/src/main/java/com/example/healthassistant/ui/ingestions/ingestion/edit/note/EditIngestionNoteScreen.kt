@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.ingestions.ingestion.edit
+package com.example.healthassistant.ui.ingestions.ingestion.edit.note
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -74,5 +74,4 @@ fun EditIngestionNoteScreen(
             modifier = Modifier.padding(10.dp).fillMaxSize()
         )
     }
-
 }

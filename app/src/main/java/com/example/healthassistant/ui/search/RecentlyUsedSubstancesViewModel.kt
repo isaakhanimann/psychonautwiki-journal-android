@@ -23,7 +23,7 @@ class RecentlyUsedSubstancesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            experienceRepo.getLastUsedSubstanceNames(limit = 10)
+            experienceRepo.getLastUsedSubstanceNamesFlow(limit = 10)
                 .collect { names ->
                     _recentlyUsedSubstances.value = names.mapNotNull { substanceRepo.getSubstance(substanceName = it) }
                 }

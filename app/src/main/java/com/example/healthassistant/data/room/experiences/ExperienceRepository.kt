@@ -22,17 +22,22 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     suspend fun deleteExperience(experience: Experience) = experienceDao.deleteExperience(experience)
 
-    fun getSortedExperiencesWithIngestions(): Flow<List<ExperienceWithIngestions>> =
+    fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestions>> =
         experienceDao.getSortedExperiencesWithIngestionsFlow()
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getSortedIngestions(): Flow<List<Ingestion>> =
+    fun getExperiencesFlow(): Flow<List<Experience>> =
+        experienceDao.getExperiencesFlow()
+            .flowOn(Dispatchers.IO)
+            .conflate()
+
+    fun getSortedIngestionsFlow(): Flow<List<Ingestion>> =
         experienceDao.getIngestionsSortedDescendingFlow()
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getLastUsedSubstanceNames(limit: Int): Flow<List<String>> =
+    fun getLastUsedSubstanceNamesFlow(limit: Int): Flow<List<String>> =
         experienceDao.getLastUsedSubstanceNamesFlow(limit).flowOn(Dispatchers.IO).conflate()
 
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)

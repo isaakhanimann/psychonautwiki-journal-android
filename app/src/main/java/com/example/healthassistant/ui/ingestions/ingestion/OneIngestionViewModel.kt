@@ -28,10 +28,15 @@ class OneIngestionViewModel @Inject constructor(
         viewModelScope.launch {
             experienceRepo.getIngestionFlow(id).collect { maybeNull ->
                 val ingestion = maybeNull!!
-                val experience =
-                    if (ingestion.experienceId == null) null else experienceRepo.getExperience(
-                        ingestion.experienceId
-                    )
+                val experience = ingestion.experienceId.let {
+                    if (it == null) {
+                        null
+                    } else {
+                        experienceRepo.getExperience(
+                            it
+                        )
+                    }
+                }
                 _ingestionWithDurationAndExperience.value = IngestionWithDurationAndExperience(
                     ingestion,
                     roaDuration = substanceRepo.getSubstance(ingestion.substanceName)

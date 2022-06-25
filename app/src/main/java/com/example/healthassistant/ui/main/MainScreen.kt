@@ -30,7 +30,8 @@ import com.example.healthassistant.ui.experiences.experience.ExperienceScreen
 import com.example.healthassistant.ui.experiences.experience.edit.EditExperienceScreen
 import com.example.healthassistant.ui.ingestions.IngestionsScreen
 import com.example.healthassistant.ui.ingestions.ingestion.OneIngestionScreen
-import com.example.healthassistant.ui.ingestions.ingestion.edit.EditIngestionNoteScreen
+import com.example.healthassistant.ui.ingestions.ingestion.edit.membership.EditIngestionMembershipScreen
+import com.example.healthassistant.ui.ingestions.ingestion.edit.note.EditIngestionNoteScreen
 import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
@@ -124,11 +125,13 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         arguments = ArgumentRouter.IngestionRouter.args
     ) {
         val ingestionId = it.arguments!!.getInt(INGESTION_ID_KEY)
-
         OneIngestionScreen(
             navigateToEditNote = {
-            navController.navigateToEditIngestionNote(ingestionId)
-        }
+                navController.navigateToEditIngestionNote(ingestionId)
+            },
+            navigateToEditMembership = {
+                navController.navigateToEditIngestionMembership(ingestionId)
+            }
         )
     }
     composable(
@@ -142,6 +145,12 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         arguments = ArgumentRouter.EditIngestionNoteRouter.args
     ) {
         EditIngestionNoteScreen(navigateBack = navController::popBackStack)
+    }
+    composable(
+        ArgumentRouter.EditIngestionMembershipRouter.route,
+        arguments = ArgumentRouter.EditIngestionMembershipRouter.args
+    ) {
+        EditIngestionMembershipScreen(navigateBack = navController::popBackStack)
     }
 }
 

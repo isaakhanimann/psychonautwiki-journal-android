@@ -45,10 +45,10 @@ class IngestionsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             filterRepo.getFilters()
-                .combine(experienceRepo.getLastUsedSubstanceNames(100)) { filters, names ->
+                .combine(experienceRepo.getLastUsedSubstanceNamesFlow(100)) { filters, names ->
                     Pair(first = filters, second = names)
                 }
-                .combine(experienceRepo.getSortedIngestions()) { filtersAndNames, experiencesWithIngestions ->
+                .combine(experienceRepo.getSortedIngestionsFlow()) { filtersAndNames, experiencesWithIngestions ->
                     Pair(first = filtersAndNames, second = experiencesWithIngestions)
                 }
                 .collect {

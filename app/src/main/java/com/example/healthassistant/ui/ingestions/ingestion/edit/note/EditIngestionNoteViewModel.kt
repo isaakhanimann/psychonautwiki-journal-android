@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.ingestions.ingestion.edit
+package com.example.healthassistant.ui.ingestions.ingestion.edit.note
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,11 +32,9 @@ class EditIngestionNoteViewModel @Inject constructor(
     }
 
     fun onDoneTap() {
-        if (note.isNotEmpty()) {
-            viewModelScope.launch {
-                ingestion!!.notes = note
-                repository.updateIngestion(ingestion!!)
-            }
+        viewModelScope.launch {
+            ingestion!!.notes = note
+            repository.updateIngestion(ingestion!!)
         }
     }
 
