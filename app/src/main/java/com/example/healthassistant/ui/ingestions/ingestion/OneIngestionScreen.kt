@@ -8,12 +8,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -31,13 +33,16 @@ import java.util.*
 fun OneIngestionScreen(
     viewModel: OneIngestionViewModel = hiltViewModel(),
     navigateToEditNote: () -> Unit,
-    navigateToEditMembership: () -> Unit
+    navigateToEditMembership: () -> Unit,
+    navigateBack: () -> Unit
 ) {
     viewModel.ingestionWithDurationAndExperience.collectAsState().value?.also { ingestionWithDurationAndExperience ->
         OneIngestionScreen(
             ingestionWithDurationAndExperience,
             navigateToEditNote,
-            navigateToEditMembership
+            navigateToEditMembership,
+            navigateBack,
+            viewModel::deleteIngestion
         )
     }
 }
@@ -54,7 +59,9 @@ fun OneIngestionScreenPreview(
         OneIngestionScreen(
             ingestionWithDurationAndExperience = ingestionWithDurationAndExperience,
             navigateToEditNote = {},
-            navigateToEditMembership = {}
+            navigateToEditMembership = {},
+            navigateBack = {},
+            deleteIngestion = {}
         )
     }
 }
@@ -63,7 +70,9 @@ fun OneIngestionScreenPreview(
 fun OneIngestionScreen(
     ingestionWithDurationAndExperience: IngestionWithDurationAndExperience,
     navigateToEditNote: () -> Unit,
-    navigateToEditMembership: () -> Unit
+    navigateToEditMembership: () -> Unit,
+    navigateBack: () -> Unit,
+    deleteIngestion: () -> Unit
 ) {
     val ingestion = ingestionWithDurationAndExperience.ingestion
     Scaffold(
@@ -175,6 +184,22 @@ fun OneIngestionScreen(
                         )
                     }
                 }
+            }
+            Divider()
+            TextButton(
+                onClick = {
+                    deleteIngestion()
+                    navigateBack()
+                },
+            ) {
+                Icon(
+                    Icons.Filled.Delete,
+                    contentDescription = "Delete Ingestion",
+                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                    tint = Color.Red
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Delete", color = Color.Red)
             }
             Divider()
         }

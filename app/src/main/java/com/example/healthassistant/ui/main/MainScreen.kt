@@ -131,7 +131,8 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             },
             navigateToEditMembership = {
                 navController.navigateToEditIngestionMembership(ingestionId)
-            }
+            },
+            navigateBack = navController::popBackStack
         )
     }
     composable(
