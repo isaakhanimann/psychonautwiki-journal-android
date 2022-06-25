@@ -1,15 +1,13 @@
 package com.example.healthassistant.ui.ingestions.ingestion.edit.membership
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,37 +82,44 @@ fun EditIngestionMembershipScreen(
             )
         },
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 10.dp)
-        ) {
-            items(experiences.size) { i ->
-                val exp = experiences[i]
-                val isSelected = exp.id == selectedExperienceId
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .selectable(
-                            selected = isSelected,
-                            onClick = { onIdChange(exp.id) },
-                            role = Role.RadioButton
-                        )
-                        .padding(vertical = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = isSelected,
-                        onClick = null // null recommended for accessibility with screen readers
-                    )
-                    Text(
-                        text = exp.title,
-                        style = MaterialTheme.typography.body1.merge(),
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
+        Box(contentAlignment = Alignment.Center) {
+            if (experiences.isEmpty()) {
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Text(text = "There are no experiences yet")
                 }
-                if (i < experiences.size) {
-                    Divider()
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 10.dp)
+            ) {
+                items(experiences.size) { i ->
+                    val exp = experiences[i]
+                    val isSelected = exp.id == selectedExperienceId
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .selectable(
+                                selected = isSelected,
+                                onClick = { onIdChange(exp.id) },
+                                role = Role.RadioButton
+                            )
+                            .padding(vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = isSelected,
+                            onClick = null // null recommended for accessibility with screen readers
+                        )
+                        Text(
+                            text = exp.title,
+                            style = MaterialTheme.typography.body1.merge(),
+                            modifier = Modifier.padding(start = 16.dp)
+                        )
+                    }
+                    if (i < experiences.size) {
+                        Divider()
+                    }
                 }
             }
         }

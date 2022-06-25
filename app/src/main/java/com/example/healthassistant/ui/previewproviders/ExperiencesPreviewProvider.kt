@@ -23,5 +23,6 @@ class ExperiencesPreviewProvider : PreviewParameterProvider<List<Experience>> {
                 text = "Some notes"
             )
         },
+        listOf()
     )
 }
