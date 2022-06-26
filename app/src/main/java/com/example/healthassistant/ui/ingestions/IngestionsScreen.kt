@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.ui.experiences.SectionTitle
-import com.example.healthassistant.ui.previewproviders.IngestionPreviewProvider
 import com.example.healthassistant.ui.previewproviders.IngestionsScreenPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat
@@ -145,15 +144,6 @@ fun IngestionsScreen(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun IngestionRowInIngestionsScreenPreview(@PreviewParameter(IngestionPreviewProvider::class) ingestion: Ingestion) {
-    IngestionRowInIngestionsScreen(
-        ingestion = ingestion,
-        navigateToIngestion = {}
-    )
 }
 
 

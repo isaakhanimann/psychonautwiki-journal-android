@@ -1,7 +1,9 @@
 package com.example.healthassistant
 
 import com.example.healthassistant.ui.experiences.experience.timeline.AxisDrawable
+import com.example.healthassistant.ui.previewproviders.getDate
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 import java.util.*
 
@@ -22,5 +24,11 @@ class TestDates {
         val endTime = cal.time
         val fullHours = AxisDrawable.getDatesBetween(startTime = startTime, endTime = endTime, stepSizeInHours = 1)
         assertEquals(6, fullHours.size)
+    }
+
+    @Test
+    fun dateCreation() {
+        assertNotNull(getDate(year = 2022, month = 7, day = 5, hourOfDay = 14, minute = 20))
+        assertNotNull(getDate(year = 2022, month = 7, day = 5, hourOfDay = 12, minute = 30))
     }
 }
