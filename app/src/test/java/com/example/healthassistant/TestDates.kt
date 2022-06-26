@@ -38,7 +38,7 @@ class TestDates {
         val twoDaysInMs = 2*24*60*60*1000
         val threeHours = 3*60*60*1000
         val date = Date(Date().time - twoDaysInMs + threeHours)
-        val text = StatisticsViewModel.getTimeTextDifferenceToNow(fromDate = date, toDate = Date())
+        val text = StatisticsViewModel.getTimeDifferenceText(fromDate = date, toDate = Date())
         assertEquals("2 days", text)
     }
 }

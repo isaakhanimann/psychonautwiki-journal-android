@@ -33,7 +33,7 @@ class StatisticsViewModel @Inject constructor(
                 list.map {
                     SubstanceStat(
                         it.substanceName,
-                        getTimeTextDifferenceToNow(fromDate = it.lastUsed, toDate = currentTime)
+                        getTimeDifferenceText(fromDate = it.lastUsed, toDate = currentTime)
                     )
                 }
             }.stateIn(
@@ -43,7 +43,7 @@ class StatisticsViewModel @Inject constructor(
             )
 
     companion object {
-        fun getTimeTextDifferenceToNow(fromDate: Date, toDate: Date): String {
+        fun getTimeDifferenceText(fromDate: Date, toDate: Date): String {
             val diff: Long = toDate.time - fromDate.time
             val seconds = diff / 1000.0
             val minutes = seconds / 60
