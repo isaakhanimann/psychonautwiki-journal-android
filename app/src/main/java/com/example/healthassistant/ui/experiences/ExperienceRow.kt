@@ -5,10 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -88,15 +87,23 @@ fun ExperienceRow(
                     text = experienceWithIngestions.experience.title,
                     style = MaterialTheme.typography.h5,
                 )
-                val substanceNames = remember(ingestions) {
-                    ingestions.map { it.substanceName }.distinct()
-                        .joinToString(separator = ", ")
-                }
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    if (substanceNames.isNotEmpty()) {
-                        Text(text = substanceNames, style = MaterialTheme.typography.subtitle1)
-                    } else {
-                        Text(text = "No substance yet", style = MaterialTheme.typography.subtitle1)
+                    Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                        val substanceNames = remember(ingestions) {
+                            ingestions.map { it.substanceName }.distinct()
+                                .joinToString(separator = ", ")
+                        }
+                        if (substanceNames.isNotEmpty()) {
+                            Text(text = substanceNames, style = MaterialTheme.typography.subtitle1)
+                        } else {
+                            Text(text = "No substance yet", style = MaterialTheme.typography.subtitle1)
+                        }
+                        if (experienceWithIngestions.experience.text.isNotBlank()) {
+                            Icon(
+                                Icons.Outlined.StickyNote2,
+                                contentDescription = "Experience has notes"
+                            )
+                        }
                     }
                 }
             }

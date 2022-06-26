@@ -12,8 +12,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
+import com.example.healthassistant.ui.previewproviders.ExperiencesScreenPreviewProvider
 
 @Composable
 fun ExperiencesScreen(
@@ -32,12 +34,16 @@ fun ExperiencesScreen(
 
 @Preview
 @Composable
-fun ExperiencesScreenPreview() {
+fun ExperiencesScreenPreview(
+    @PreviewParameter(
+        ExperiencesScreenPreviewProvider::class,
+    ) groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
+) {
     ExperiencesScreen(
         navigateToAddExperience = {},
         navigateToExperiencePopNothing = {},
         navigateToEditExperienceScreen = {},
-        groupedExperiences = emptyMap(),
+        groupedExperiences = groupedExperiences,
     )
 }
 
