@@ -42,7 +42,10 @@ fun OneIngestionScreen(
             navigateToEditNote,
             navigateToEditMembership,
             navigateBack,
-            viewModel::deleteIngestion
+            viewModel::deleteIngestion,
+            viewModel.isShowingDeleteDialog,
+            showDialog = { viewModel.isShowingDeleteDialog = true },
+            dismissDialog = { viewModel.isShowingDeleteDialog = false }
         )
     }
 }
@@ -61,7 +64,10 @@ fun OneIngestionScreenPreview(
             navigateToEditNote = {},
             navigateToEditMembership = {},
             navigateBack = {},
-            deleteIngestion = {}
+            deleteIngestion = {},
+            isShowingDialog = true,
+            showDialog = {},
+            dismissDialog = {}
         )
     }
 }
@@ -72,7 +78,10 @@ fun OneIngestionScreen(
     navigateToEditNote: () -> Unit,
     navigateToEditMembership: () -> Unit,
     navigateBack: () -> Unit,
-    deleteIngestion: () -> Unit
+    deleteIngestion: () -> Unit,
+    isShowingDialog: Boolean,
+    showDialog: () -> Unit,
+    dismissDialog: () -> Unit
 ) {
     val ingestion = ingestionWithDurationAndExperience.ingestion
     Scaffold(
@@ -92,7 +101,12 @@ fun OneIngestionScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             AllTimelines(
-                ingestionDurationPairs = listOf(Pair(first = ingestion, second = ingestionWithDurationAndExperience.roaDuration)),
+                ingestionDurationPairs = listOf(
+                    Pair(
+                        first = ingestion,
+                        second = ingestionWithDurationAndExperience.roaDuration
+                    )
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
@@ -187,10 +201,7 @@ fun OneIngestionScreen(
             }
             Divider()
             TextButton(
-                onClick = {
-                    deleteIngestion()
-                    navigateBack()
-                },
+                onClick = showDialog,
             ) {
                 Icon(
                     Icons.Filled.Delete,
@@ -200,6 +211,32 @@ fun OneIngestionScreen(
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Delete", color = Color.Red)
+            }
+            if (isShowingDialog) {
+                AlertDialog(
+                    onDismissRequest = dismissDialog,
+                    title = {
+                        Text(text = "Are you sure?")
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                dismissDialog()
+                                deleteIngestion()
+                                navigateBack()
+                            }
+                        ) {
+                            Text("Delete")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = dismissDialog
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
+                )
             }
             Divider()
         }
