@@ -2,6 +2,7 @@ package com.example.healthassistant
 
 import com.example.healthassistant.ui.experiences.experience.timeline.AxisDrawable
 import com.example.healthassistant.ui.previewproviders.getDate
+import com.example.healthassistant.ui.stats.StatisticsViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -30,5 +31,14 @@ class TestDates {
     fun dateCreation() {
         assertNotNull(getDate(year = 2022, month = 7, day = 5, hourOfDay = 14, minute = 20))
         assertNotNull(getDate(year = 2022, month = 7, day = 5, hourOfDay = 12, minute = 30))
+    }
+
+    @Test
+    fun dateDifferences() {
+        val twoDaysInMs = 2*24*60*60*1000
+        val threeHours = 3*60*60*1000
+        val date = Date(Date().time - twoDaysInMs + threeHours)
+        val text = StatisticsViewModel.getTimeTextDifferenceToNow(date)
+        assertEquals("2 days", text)
     }
 }
