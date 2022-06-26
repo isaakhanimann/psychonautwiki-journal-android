@@ -36,12 +36,12 @@ fun ExperienceScreen(
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
 ) {
-    viewModel.experienceWithIngestions.collectAsState().value?.also { experienceWithIngestions ->
+    viewModel.experienceWithIngestionsFlow.collectAsState().value?.also { experienceWithIngestions ->
         ExperienceScreen(
             experience = experienceWithIngestions.experience,
-            ingestionElements = viewModel.ingestionElements.collectAsState().value,
-            cumulativeDoses = viewModel.cumulativeDoses.collectAsState().value,
-            ingestionDurationPairs = viewModel.ingestionDurationPairs.collectAsState().value,
+            ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
+            cumulativeDoses = viewModel.cumulativeDosesFlow.collectAsState().value,
+            ingestionDurationPairs = viewModel.ingestionDurationPairsFlow.collectAsState().value,
             addIngestion = navigateToAddIngestionSearch,
             viewModel::deleteExperience,
             navigateToEditExperienceScreen,

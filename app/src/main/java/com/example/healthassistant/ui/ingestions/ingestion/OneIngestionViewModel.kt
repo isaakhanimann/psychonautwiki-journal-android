@@ -10,8 +10,10 @@ import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.INGESTION_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,39 +26,39 @@ class OneIngestionViewModel @Inject constructor(
 
     var isShowingDeleteDialog by mutableStateOf(false)
 
-    private val _ingestionWithDurationAndExperience =
-        MutableStateFlow<IngestionWithDurationAndExperience?>(null)
-    val ingestionWithDurationAndExperience = _ingestionWithDurationAndExperience.asStateFlow()
-
-    init {
-        val id = state.get<Int>(INGESTION_ID_KEY)!!
-        viewModelScope.launch {
-            experienceRepo.getIngestionFlow(id).collect { ingestion ->
-                val experience = ingestion?.experienceId.let {
-                    if (it == null) {
-                        null
-                    } else {
-                        experienceRepo.getExperience(
-                            it
-                        )
-                    }
-                }
-                ingestion?.let {
-                    _ingestionWithDurationAndExperience.value = IngestionWithDurationAndExperience(
-                        ingestion,
-                        roaDuration = substanceRepo.getSubstance(ingestion.substanceName)
-                            ?.getRoa(ingestion.administrationRoute)?.roaDuration,
-                        experience = experience
+    private val ingestionFlow = experienceRepo.getIngestionFlow(state.get<Int>(INGESTION_ID_KEY)!!)
+    val ingestionWithDurationAndExperience: StateFlow<IngestionWithDurationAndExperience?> =
+        ingestionFlow.map { ingestion ->
+            val experience = ingestion?.experienceId.let {
+                if (it == null) {
+                    null
+                } else {
+                    experienceRepo.getExperience(
+                        it
                     )
                 }
             }
-        }
-    }
+            if (ingestion != null) {
+                IngestionWithDurationAndExperience(
+                    ingestion,
+                    roaDuration = substanceRepo.getSubstance(ingestion.substanceName)
+                        ?.getRoa(ingestion.administrationRoute)?.roaDuration,
+                    experience = experience
+                )
+            } else {
+                null
+            }
+
+        }.stateIn(
+            initialValue = null,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     fun deleteIngestion() {
         viewModelScope.launch {
             ingestionWithDurationAndExperience.value?.ingestion.let {
-                assert(it!=null)
+                assert(it != null)
                 if (it != null) {
                     experienceRepo.deleteIngestion(ingestion = it)
                 }

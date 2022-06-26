@@ -7,14 +7,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
-import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,21 +26,48 @@ class ExperienceViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
+
     var isShowingDeleteDialog by mutableStateOf(false)
 
-    private val _experienceWithIngestions = MutableStateFlow<ExperienceWithIngestions?>(null)
-    val experienceWithIngestions = _experienceWithIngestions.asStateFlow()
+    val experienceWithIngestionsFlow =
+        experienceRepo.getExperienceWithIngestions(experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!)
+            .stateIn(
+                initialValue = null,
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
 
-    private val _ingestionDurationPairs =
-        MutableStateFlow<List<Pair<Ingestion, RoaDuration?>>>(listOf())
-    val ingestionDurationPairs = _ingestionDurationPairs.asStateFlow()
+    private val ingestionsFlow = experienceWithIngestionsFlow.map {
+        it?.ingestions ?: emptyList()
+    }
 
-    private val _ingestionElements =
-        MutableStateFlow<List<IngestionElement>>(listOf())
-    val ingestionElements = _ingestionElements.asStateFlow()
+    val ingestionDurationPairsFlow = ingestionsFlow.map {
+        it.map { ing ->
+            val roaDuration = substanceRepo.getSubstance(ing.substanceName)
+                ?.getRoa(ing.administrationRoute)?.roaDuration
+            Pair(first = ing, second = roaDuration)
+        }
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
-    private val _cumulativeDoses = MutableStateFlow<List<CumulativeDose>>(emptyList())
-    val cumulativeDoses = _cumulativeDoses.asStateFlow()
+    val ingestionElementsFlow = ingestionsFlow.map {
+        getIngestionElements(it)
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
+    val cumulativeDosesFlow = ingestionsFlow.map {
+        getCumulativeDoses(it)
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     data class CumulativeDose(
         val substanceName: String,
@@ -49,23 +75,6 @@ class ExperienceViewModel @Inject constructor(
         val units: String?,
         val isEstimate: Boolean
     )
-
-    init {
-        val id = state.get<Int>(EXPERIENCE_ID_KEY)!!
-        viewModelScope.launch {
-            experienceRepo.getExperienceWithIngestions(experienceId = id).collect {
-                _experienceWithIngestions.value = it
-                val ingestions = it?.ingestions ?: emptyList()
-                _ingestionElements.value = getIngestionElements(ingestions)
-                _cumulativeDoses.value = getCumulativeDoses(ingestions)
-                _ingestionDurationPairs.value = ingestions.map { ing ->
-                    val roaDuration = substanceRepo.getSubstance(ing.substanceName)
-                        ?.getRoa(ing.administrationRoute)?.roaDuration
-                    Pair(first = ing, second = roaDuration)
-                }
-            }
-        }
-    }
 
     data class IngestionElement(
         val dateText: String?,
@@ -95,7 +104,7 @@ class ExperienceViewModel @Inject constructor(
 
     fun deleteExperience() {
         viewModelScope.launch {
-            experienceWithIngestions.value?.experience?.let {
+            experienceWithIngestionsFlow.value?.experience?.let {
                 experienceRepo.deleteExperience(it)
             }
         }

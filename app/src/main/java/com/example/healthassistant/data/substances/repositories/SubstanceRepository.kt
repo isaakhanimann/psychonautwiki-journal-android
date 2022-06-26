@@ -26,7 +26,7 @@ class SubstanceRepository @Inject constructor(
 
     private var allSubstances: List<Substance>
 
-    val substancesFlow: MutableStateFlow<List<Substance>>
+    private val substancesFlow: MutableStateFlow<List<Substance>>
 
     private val fetchedSubstancesFileName = "FetchedSubstances.json"
     private val fetchedFile = File(appContext.filesDir, fetchedSubstancesFileName)

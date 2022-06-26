@@ -5,31 +5,25 @@ import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.util.*
 import javax.inject.Inject
 
 
 @HiltViewModel
 class ExperiencesViewModel @Inject constructor(
-    private val experienceRepo: ExperienceRepository
+    experienceRepo: ExperienceRepository
 ) : ViewModel() {
 
-    private val _experiencesGrouped =
-        MutableStateFlow<Map<String, List<ExperienceWithIngestions>>>(emptyMap())
-    val experiencesGrouped = _experiencesGrouped.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            experienceRepo.getSortedExperiencesWithIngestionsFlow()
-                .collect {
-                    _experiencesGrouped.value =
-                        groupExperiencesByYear(experiencesWithIngestions = it)
-                }
-        }
-    }
+    val experiencesGrouped = experienceRepo.getSortedExperiencesWithIngestionsFlow()
+        .map { groupExperiencesByYear(experiencesWithIngestions = it) }
+        .stateIn(
+            initialValue = emptyMap(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     companion object {
         fun groupExperiencesByYear(experiencesWithIngestions: List<ExperienceWithIngestions>): Map<String, List<ExperienceWithIngestions>> {

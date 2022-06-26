@@ -1,9 +1,6 @@
 package com.example.healthassistant.ui.ingestions
 
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
@@ -11,9 +8,7 @@ import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.room.filter.FilterRepository
 import com.example.healthassistant.data.room.filter.SubstanceFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -21,19 +16,45 @@ import javax.inject.Inject
 
 @HiltViewModel
 class IngestionsViewModel @Inject constructor(
-    private val experienceRepo: ExperienceRepository,
+    experienceRepo: ExperienceRepository,
     private val filterRepo: FilterRepository
 ) : ViewModel() {
 
-    private val _ingestionsGrouped =
-        MutableStateFlow<Map<String, List<Ingestion>>>(emptyMap())
-    val ingestionsGrouped = _ingestionsGrouped.asStateFlow()
+    private val lastUsedSubstancesFlow = experienceRepo.getLastUsedSubstanceNamesFlow(100)
+    private val sortedIngestionsFlow = experienceRepo.getSortedIngestionsFlow()
+    private val filtersFlow = filterRepo.getFilters()
 
-    private val _filterOptions =
-        MutableStateFlow<List<FilterOption>>(emptyList())
-    val filterOptions = _filterOptions.asStateFlow()
+    val ingestionsGrouped: StateFlow<Map<String, List<Ingestion>>> =
+        filtersFlow.combine(sortedIngestionsFlow) { filters, ingestions ->
+            val filteredIngestions = ingestions.filter { ingestion ->
+                !filters.any { filter ->
+                    filter.substanceName == ingestion.substanceName
+                }
+            }
+            groupIngestionsByYear(ingestions = filteredIngestions)
+        }.stateIn(
+            initialValue = emptyMap(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
-    var numberOfActiveFilters by mutableStateOf(0)
+    val filterOptions: StateFlow<List<FilterOption>> =
+        lastUsedSubstancesFlow.combine(filtersFlow) { lastUsedSubstances, filters ->
+            getFilterOptions(
+                substanceFilters = filters,
+                allDistinctSubstanceNames = lastUsedSubstances
+            )
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
+
+    var numberOfActiveFilters: StateFlow<Int> = filtersFlow.map { it.size }.stateIn(
+        initialValue = 0,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     data class FilterOption(
         val name: String,
@@ -41,33 +62,6 @@ class IngestionsViewModel @Inject constructor(
         val isEnabled: Boolean,
         val onTap: () -> Unit
     )
-
-    init {
-        viewModelScope.launch {
-            filterRepo.getFilters()
-                .combine(experienceRepo.getLastUsedSubstanceNamesFlow(100)) { filters, names ->
-                    Pair(first = filters, second = names)
-                }
-                .combine(experienceRepo.getSortedIngestionsFlow()) { filtersAndNames, experiencesWithIngestions ->
-                    Pair(first = filtersAndNames, second = experiencesWithIngestions)
-                }
-                .collect {
-                    val substanceFilters = it.first.first
-                    numberOfActiveFilters = substanceFilters.size
-                    _filterOptions.value = getFilterOptions(
-                        substanceFilters = substanceFilters,
-                        allDistinctSubstanceNames = it.first.second
-                    )
-                    val filteredIngestions = it.second.filter { ingestion ->
-                        !substanceFilters.any { filter ->
-                            filter.substanceName == ingestion.substanceName
-                        }
-                    }
-                    _ingestionsGrouped.value =
-                        groupIngestionsByYear(ingestions = filteredIngestions)
-                }
-        }
-    }
 
     private fun addFilter(substanceName: String) {
         val filter = SubstanceFilter(substanceName = substanceName)

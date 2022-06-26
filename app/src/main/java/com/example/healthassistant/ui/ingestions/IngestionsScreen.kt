@@ -34,7 +34,7 @@ fun IngestionsScreen(
         navigateToIngestion = navigateToIngestion,
         groupedIngestions = viewModel.ingestionsGrouped.collectAsState().value,
         filterOptions = viewModel.filterOptions.collectAsState().value,
-        numberOfActiveFilters = viewModel.numberOfActiveFilters
+        numberOfActiveFilters = viewModel.numberOfActiveFilters.collectAsState().value
     )
 }
 

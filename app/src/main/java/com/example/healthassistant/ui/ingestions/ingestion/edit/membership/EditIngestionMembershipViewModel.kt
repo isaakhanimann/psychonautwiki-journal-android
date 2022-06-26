@@ -11,9 +11,10 @@ import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.ui.main.routers.INGESTION_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,19 +27,17 @@ class EditIngestionMembershipViewModel @Inject constructor(
     var ingestion: Ingestion? = null
     var selectedExperienceId: Int? by mutableStateOf(null)
 
-    private var _experiences = MutableStateFlow<List<Experience>>(emptyList())
-    val experiences = _experiences.asStateFlow()
+    val experiences: StateFlow<List<Experience>> = experienceRepo.getExperiencesFlow().stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     init {
         val id = state.get<Int>(INGESTION_ID_KEY)!!
         viewModelScope.launch {
             ingestion = experienceRepo.getIngestionFlow(id = id).first()!!
             selectedExperienceId = ingestion?.experienceId
-
-            experienceRepo.getExperiencesFlow()
-                .collect {
-                    _experiences.value = it
-                }
         }
     }
 

@@ -6,7 +6,6 @@ import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -18,36 +17,30 @@ data class SubstanceStat(
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val experienceRepo: ExperienceRepository
+    experienceRepo: ExperienceRepository
 ) : ViewModel() {
 
     private val currentTimeFlow: Flow<Date> = flow {
         while (true) {
             emit(Date())
-            delay(timeMillis = 1000*10)
+            delay(timeMillis = 1000 * 10)
         }
     }
 
-    private val _substanceStats =
-        MutableStateFlow<List<SubstanceStat>>(emptyList())
-    val substanceStats = _substanceStats.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            experienceRepo.getSubstanceWithLastDateDescendingFlow()
-                .combine(currentTimeFlow) { list, currentTime ->
-                    list.map {
-                        SubstanceStat(
-                            it.substanceName,
-                            getTimeTextDifferenceToNow(fromDate = it.lastUsed, toDate = currentTime)
-                        )
-                    }
+    val substanceStats: StateFlow<List<SubstanceStat>> =
+        experienceRepo.getSubstanceWithLastDateDescendingFlow()
+            .combine(currentTimeFlow) { list, currentTime ->
+                list.map {
+                    SubstanceStat(
+                        it.substanceName,
+                        getTimeTextDifferenceToNow(fromDate = it.lastUsed, toDate = currentTime)
+                    )
                 }
-                .collect {
-                    _substanceStats.value = it
-                }
-        }
-    }
+            }.stateIn(
+                initialValue = emptyList(),
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
 
     companion object {
         fun getTimeTextDifferenceToNow(fromDate: Date, toDate: Date): String {

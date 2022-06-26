@@ -6,28 +6,24 @@ import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class RecentlyUsedSubstancesViewModel @Inject constructor(
     private val substanceRepo: SubstanceRepository,
-    private val experienceRepo: ExperienceRepository
-): ViewModel() {
+    experienceRepo: ExperienceRepository
+) : ViewModel() {
 
-    private val _recentlyUsedSubstances = MutableStateFlow<List<Substance>>(emptyList())
-    val recentlyUsedSubstances = _recentlyUsedSubstances.asStateFlow()
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            experienceRepo.getLastUsedSubstanceNamesFlow(limit = 10)
-                .collect { names ->
-                    _recentlyUsedSubstances.value = names.mapNotNull { substanceRepo.getSubstance(substanceName = it) }
-                }
-
-        }
-    }
+    val recentlyUsedSubstances: StateFlow<List<Substance>> =
+        experienceRepo.getLastUsedSubstanceNamesFlow(limit = 10).map { lastUsedSubstanceNames ->
+            lastUsedSubstanceNames.mapNotNull { substanceRepo.getSubstance(substanceName = it) }
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 }
