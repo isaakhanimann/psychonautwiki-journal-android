@@ -4,12 +4,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.AdministrationRoute
 
 class ExperiencesScreenPreviewProvider : PreviewParameterProvider<Map<String, List<ExperienceWithIngestions>>> {
     override val values: Sequence<Map<String, List<ExperienceWithIngestions>>> = sequenceOf(
         mapOf(
+            // todo: add color
             Pair(
                 first = "2022", second = listOf(
                     ExperienceWithIngestions(
@@ -26,7 +26,6 @@ class ExperiencesScreenPreviewProvider : PreviewParameterProvider<Map<String, Li
                                 dose = 90.0,
                                 isDoseAnEstimate = false,
                                 units = "mg",
-                                color = IngestionColor.INDIGO,
                                 experienceId = 0,
                                 notes = null
                             ),
@@ -37,7 +36,6 @@ class ExperiencesScreenPreviewProvider : PreviewParameterProvider<Map<String, Li
                                 dose = 30.0,
                                 isDoseAnEstimate = false,
                                 units = "mg",
-                                color = IngestionColor.ORANGE,
                                 experienceId = 0,
                                 notes = null
                             ),
@@ -48,7 +46,6 @@ class ExperiencesScreenPreviewProvider : PreviewParameterProvider<Map<String, Li
                                 dose = 50.0,
                                 isDoseAnEstimate = false,
                                 units = "mg",
-                                color = IngestionColor.GREEN,
                                 experienceId = 0,
                                 notes = null
                             )
@@ -68,7 +65,6 @@ class ExperiencesScreenPreviewProvider : PreviewParameterProvider<Map<String, Li
                                 dose = 90.0,
                                 isDoseAnEstimate = false,
                                 units = "mg",
-                                color = IngestionColor.INDIGO,
                                 experienceId = 0,
                                 notes = null
                             )
@@ -93,7 +89,6 @@ class ExperiencesScreenPreviewProvider : PreviewParameterProvider<Map<String, Li
                                 dose = 30.0,
                                 isDoseAnEstimate = false,
                                 units = "mg",
-                                color = IngestionColor.ORANGE,
                                 experienceId = 0,
                                 notes = null
                             ),
@@ -104,7 +99,6 @@ class ExperiencesScreenPreviewProvider : PreviewParameterProvider<Map<String, Li
                                 dose = 20.0,
                                 isDoseAnEstimate = false,
                                 units = "mg",
-                                color = IngestionColor.GREEN,
                                 experienceId = 0,
                                 notes = null
                             )
@@ -124,7 +118,6 @@ class ExperiencesScreenPreviewProvider : PreviewParameterProvider<Map<String, Li
                                 dose = 90.0,
                                 isDoseAnEstimate = false,
                                 units = "µg",
-                                color = IngestionColor.MINT,
                                 experienceId = 0,
                                 notes = null
                             ),
@@ -135,7 +128,6 @@ class ExperiencesScreenPreviewProvider : PreviewParameterProvider<Map<String, Li
                                 dose = 20.0,
                                 isDoseAnEstimate = false,
                                 units = "mg",
-                                color = IngestionColor.ORANGE,
                                 experienceId = 0,
                                 notes = null
                             )

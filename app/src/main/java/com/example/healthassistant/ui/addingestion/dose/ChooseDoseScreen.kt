@@ -23,7 +23,7 @@ import com.example.healthassistant.ui.search.substance.roa.dose.DoseColor
 
 @Composable
 fun ChooseDoseScreen(
-    navigateToChooseColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
+    navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
     ChooseDoseScreen(
@@ -36,14 +36,14 @@ fun ChooseDoseScreen(
             viewModel.isEstimate = it
         },
         navigateToNext = {
-            navigateToChooseColor(
+            navigateToChooseTimeAndMaybeColor(
                 viewModel.roaDose?.units,
                 viewModel.isEstimate,
                 viewModel.dose
             )
         },
         useUnknownDoseAndNavigate = {
-            navigateToChooseColor(
+            navigateToChooseTimeAndMaybeColor(
                 viewModel.roaDose?.units,
                 false,
                 null

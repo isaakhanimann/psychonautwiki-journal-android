@@ -18,7 +18,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.ui.addingestion.color.ChooseColorScreen
 import com.example.healthassistant.ui.addingestion.dose.ChooseDoseScreen
 import com.example.healthassistant.ui.addingestion.interactions.CheckInteractionsScreen
 import com.example.healthassistant.ui.addingestion.route.ChooseRouteScreen
@@ -109,7 +108,7 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
     composable(
         ArgumentRouter.ExperienceRouter.route,
         arguments = ArgumentRouter.ExperienceRouter.args
-    ) { it ->
+    ) {
         val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
         ExperienceScreen(
             navigateToAddIngestionSearch = {
@@ -246,49 +245,17 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             arguments = ArgumentRouter.ChooseDoseRouter.args
         ) { backStackEntry ->
             ChooseDoseScreen(
-                navigateToChooseColor = { units, isEstimate, dose ->
+                navigateToChooseTimeAndMaybeColor = { units, isEstimate, dose ->
                     val args = backStackEntry.arguments!!
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
                     val experienceId = args.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
                     val route =
                         AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
-                    navController.navigateToChooseColor(
+                    navController.navigateToChooseTimeAndMaybeColor(
                         substanceName = substanceName,
                         administrationRoute = route,
                         units = units,
                         isEstimate = isEstimate,
-                        dose = dose,
-                        experienceId = experienceId
-                    )
-                }
-            )
-        }
-        composable(
-            ArgumentRouter.ChooseColorRouter.route,
-            arguments = ArgumentRouter.ChooseColorRouter.args
-        ) { backStackEntry ->
-            ChooseColorScreen(
-                navigateToChooseTime = { color ->
-                    val args = backStackEntry.arguments!!
-                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
-                    val experienceId = args.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
-                    val route =
-                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
-                    val units = args.getString(UNITS_KEY)?.let {
-                        if (it == "null") {
-                            null
-                        } else {
-                            it
-                        }
-                    }
-                    val isEstimate = args.getBoolean(IS_ESTIMATE_KEY)
-                    val dose = args.getString(DOSE_KEY)?.toDoubleOrNull()
-                    navController.navigateToChooseTime(
-                        substanceName = substanceName,
-                        administrationRoute = route,
-                        units = units,
-                        isEstimate = isEstimate,
-                        color = color,
                         dose = dose,
                         experienceId = experienceId
                     )

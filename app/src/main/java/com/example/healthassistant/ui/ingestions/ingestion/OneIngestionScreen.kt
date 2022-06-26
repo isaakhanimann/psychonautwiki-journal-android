@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -129,11 +128,12 @@ fun OneIngestionScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     val isDarkTheme = isSystemInDarkTheme()
-                    Surface(
-                        shape = CircleShape,
-                        color = ingestion.color.getComposeColor(isDarkTheme),
-                        modifier = Modifier.size(25.dp)
-                    ) {}
+                    // TODO
+//                    Surface(
+//                        shape = CircleShape,
+//                        color = ingestion.color.getComposeColor(isDarkTheme),
+//                        modifier = Modifier.size(25.dp)
+//                    ) {}
                     Column {
                         Text(
                             text = ingestion.substanceName,

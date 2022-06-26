@@ -1,9 +1,6 @@
 package com.example.healthassistant.data.room.experiences
 
-import com.example.healthassistant.data.room.experiences.entities.Experience
-import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
-import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.SubstanceLastUsed
+import com.example.healthassistant.data.room.experiences.entities.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
@@ -21,7 +18,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     suspend fun deleteIngestion(ingestion: Ingestion) = experienceDao.deleteIngestion(ingestion)
 
-    suspend fun deleteExperience(experience: Experience) = experienceDao.deleteExperience(experience)
+    suspend fun deleteExperience(experience: Experience) =
+        experienceDao.deleteExperience(experience)
 
     fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestions>> =
         experienceDao.getSortedExperiencesWithIngestionsFlow()
@@ -47,9 +45,6 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
         experienceDao.getLastUsedSubstanceNamesFlow(limit).flowOn(Dispatchers.IO).conflate()
 
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)
-    fun getExperienceFlow(id: Int) = experienceDao.getExperienceFlow(id)
-        .flowOn(Dispatchers.IO)
-        .conflate()
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
     fun getExperienceWithIngestions(experienceId: Int) =
         experienceDao.getExperienceWithIngestionsFlow(experienceId)
@@ -59,5 +54,20 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getLastIngestion(substanceName: String) =
         experienceDao.getLastIngestion(substanceName)
 
-    suspend fun getIngestionAfterDate(date: Date): List<Ingestion> = experienceDao.getIngestionAfterDate(date)
+    suspend fun getIngestionAfterDate(date: Date): List<Ingestion> =
+        experienceDao.getIngestionAfterDate(date)
+
+    suspend fun addSubstanceCompanion(substanceCompanion: SubstanceCompanion) =
+        experienceDao.insert(substanceCompanion)
+
+    suspend fun deleteSubstanceCompanion(substanceCompanion: SubstanceCompanion) =
+        experienceDao.delete(substanceCompanion)
+
+    suspend fun updateSubstanceCompanion(substanceCompanion: SubstanceCompanion) =
+        experienceDao.update(substanceCompanion)
+
+    fun getSortedIngestionsWithSubstanceCompanionsFlow() =
+        experienceDao.getSortedIngestionsWithSubstanceCompanionsFlow()
+            .flowOn(Dispatchers.IO)
+            .conflate()
 }

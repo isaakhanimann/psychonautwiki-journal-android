@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.IngestionColor
+import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
@@ -52,7 +53,6 @@ class ChooseTimeViewModel @Inject constructor(
     private val dose: Double?
     private val units: String?
     private val isEstimate: Boolean
-    private val color: IngestionColor
 
     init {
         substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
@@ -69,8 +69,6 @@ class ChooseTimeViewModel @Inject constructor(
             }
         }
         isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)!!
-        val colorName = state.get<String>(COLOR_KEY)!!
-        color = IngestionColor.valueOf(colorName)
         assert(substance != null)
     }
 
@@ -94,11 +92,16 @@ class ChooseTimeViewModel @Inject constructor(
                 dose = dose,
                 isDoseAnEstimate = isEstimate,
                 units = units,
-                color = color,
                 experienceId = experienceId,
                 notes = null
             )
             experienceRepo.addIngestion(newIngestion)
+            // TODO
+            val substanceCompanion = SubstanceCompanion(
+                substanceName,
+                color = SubstanceColor.GREEN
+            )
+            experienceRepo.addSubstanceCompanion(substanceCompanion)
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.example.healthassistant.ui.experiences.experience.timeline
 
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.IngestionColor
+import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.experiences.experience.timeline.ingestion.FullTimeline
 import com.example.healthassistant.ui.experiences.experience.timeline.ingestion.TimelineDrawable
@@ -175,7 +175,7 @@ class IngestionDrawable(
     roaDuration: RoaDuration?,
     val verticalHeightInPercent: Float = 1f
 ) {
-    val color: IngestionColor
+    val color: SubstanceColor
     val ingestionPointDistanceFromStart: Duration
     val timelineDrawable: TimelineDrawable?
     var insetTimes = 0
@@ -186,6 +186,8 @@ class IngestionDrawable(
         val full = roaDuration?.toFullTimeline()
         val total = roaDuration?.toTotalTimeline()
         timelineDrawable = full ?: total
-        color = ingestion.color
+        // TODO
+//        color = ingestion.color
+        color = SubstanceColor.BLUE
     }
 }

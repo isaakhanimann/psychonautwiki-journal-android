@@ -2,7 +2,6 @@ package com.example.healthassistant.ui.previewproviders
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.DurationRange
 import com.example.healthassistant.data.substances.RoaDuration
@@ -13,6 +12,7 @@ import kotlin.time.toDuration
 class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, RoaDuration>>> {
     override val values: Sequence<List<Pair<Ingestion, RoaDuration>>> = sequenceOf(
         listOf(
+            // todo: add color
             Pair(
                 Ingestion(
                     substanceName = "Substance 1",
@@ -21,7 +21,6 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     dose = 90.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.BLUE,
                     experienceId = 0,
                     notes = null
                 ),
@@ -60,7 +59,6 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     dose = 45.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.BLUE,
                     experienceId = 0,
                     notes = null
                 ),
@@ -99,7 +97,6 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     dose = 90.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.RED,
                     experienceId = 0,
                     notes = null
                 ),
@@ -138,7 +135,6 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     dose = 90.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.GREEN,
                     experienceId = 0,
                     notes = null
                 ),
@@ -164,7 +160,6 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     dose = 45.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.BLUE,
                     experienceId = 0,
                     notes = null
                 ),
@@ -203,7 +198,6 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     dose = 90.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.RED,
                     experienceId = 0,
                     notes = null
                 ),
@@ -242,7 +236,6 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     dose = 90.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.ORANGE,
                     experienceId = 0,
                     notes = null
                 ),
@@ -283,7 +276,6 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     dose = 90.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.BLUE,
                     experienceId = 0,
                     notes = null
                 ),
@@ -322,7 +314,6 @@ class TimelinesPreviewProvider : PreviewParameterProvider<List<Pair<Ingestion, R
                     dose = 90.0,
                     isDoseAnEstimate = false,
                     units = "mg",
-                    color = IngestionColor.ORANGE,
                     experienceId = 0,
                     notes = null
                 ),

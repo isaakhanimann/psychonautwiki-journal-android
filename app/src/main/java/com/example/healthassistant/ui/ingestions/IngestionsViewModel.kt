@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.example.healthassistant.data.room.filter.FilterRepository
 import com.example.healthassistant.data.room.filter.SubstanceFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,16 +22,16 @@ class IngestionsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val lastUsedSubstancesFlow = experienceRepo.getLastUsedSubstanceNamesFlow(100)
-    private val sortedIngestionsFlow = experienceRepo.getSortedIngestionsFlow()
+    private val sortedIngestionsWithCompanionsFlow:  Flow<Map<Ingestion, SubstanceCompanion>> = experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow()
     private val filtersFlow = filterRepo.getFilters()
 
-    val ingestionsGrouped: StateFlow<Map<String, List<Ingestion>>> =
-        filtersFlow.combine(sortedIngestionsFlow) { filters, ingestions ->
-            val filteredIngestions = ingestions.filter { ingestion ->
+    val ingestionsGrouped: StateFlow<Map<String, List<Pair<Ingestion, SubstanceCompanion>>>> =
+        filtersFlow.combine(sortedIngestionsWithCompanionsFlow) { filters, ingestionsWithCompanions ->
+            val filteredIngestions = ingestionsWithCompanions.filter { ingWithComp ->
                 !filters.any { filter ->
-                    filter.substanceName == ingestion.substanceName
+                    filter.substanceName == ingWithComp.key.substanceName
                 }
-            }
+            }.toList()
             groupIngestionsByYear(ingestions = filteredIngestions)
         }.stateIn(
             initialValue = emptyMap(),
@@ -119,7 +120,7 @@ class IngestionsViewModel @Inject constructor(
     }
 
     companion object {
-        fun groupIngestionsByYear(ingestions: List<Ingestion>): Map<String, List<Ingestion>> {
+        fun groupIngestionsByYear(ingestions: List<Pair<Ingestion, SubstanceCompanion>>): Map<String, List<Pair<Ingestion, SubstanceCompanion>>> {
             val cal = Calendar.getInstance(TimeZone.getDefault())
             return ingestions.groupBy { cal.get(Calendar.YEAR).toString() }
         }

@@ -1,10 +1,8 @@
 package com.example.healthassistant.ui.experiences
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.StickyNote2
@@ -13,9 +11,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -50,38 +45,39 @@ fun ExperienceRow(
             val isDarkTheme = isSystemInDarkTheme()
             val circleSize = 45.dp
             val ingestions = experienceWithIngestions.ingestions
-            if (ingestions.size >= 2) {
-                val brush = remember(ingestions) {
-                    val colors =
-                        ingestions.map { it.color.getComposeColor(isDarkTheme) }
-                    val twiceColors = colors.flatMap { listOf(it, it) } + colors.first()
-                    Brush.sweepGradient(twiceColors)
-                }
-                Box(
-                    modifier = Modifier
-                        .size(circleSize)
-                        .clip(CircleShape)
-                        .background(brush)
-                )
-            } else if (ingestions.size == 1) {
-                Box(
-                    modifier = Modifier
-                        .size(circleSize)
-                        .clip(CircleShape)
-                        .background(
-                            ingestions.first().color.getComposeColor(
-                                isDarkTheme
-                            )
-                        )
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(circleSize)
-                        .clip(CircleShape)
-                        .background(Color.LightGray.copy(0.1f))
-                )
-            }
+            // TODO
+//            if (ingestions.size >= 2) {
+//                val brush = remember(ingestions) {
+//                    val colors =
+//                        ingestions.map { it.color.getComposeColor(isDarkTheme) }
+//                    val twiceColors = colors.flatMap { listOf(it, it) } + colors.first()
+//                    Brush.sweepGradient(twiceColors)
+//                }
+//                Box(
+//                    modifier = Modifier
+//                        .size(circleSize)
+//                        .clip(CircleShape)
+//                        .background(brush)
+//                )
+//            } else if (ingestions.size == 1) {
+//                Box(
+//                    modifier = Modifier
+//                        .size(circleSize)
+//                        .clip(CircleShape)
+//                        .background(
+//                            ingestions.first().color.getComposeColor(
+//                                isDarkTheme
+//                            )
+//                        )
+//                )
+//            } else {
+//                Box(
+//                    modifier = Modifier
+//                        .size(circleSize)
+//                        .clip(CircleShape)
+//                        .background(Color.LightGray.copy(0.1f))
+//                )
+//            }
             Column {
                 Text(
                     text = experienceWithIngestions.experience.title,

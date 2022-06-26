@@ -2,7 +2,6 @@ package com.example.healthassistant.ui.previewproviders
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.DurationRange
 import com.example.healthassistant.data.substances.RoaDuration
@@ -14,6 +13,7 @@ import kotlin.time.toDuration
 class IngestionWithDurationAndExperienceProvider :
     PreviewParameterProvider<IngestionWithDurationAndExperience> {
     override val values: Sequence<IngestionWithDurationAndExperience> = sequenceOf(
+        // todo: add color
         IngestionWithDurationAndExperience(
             ingestion = Ingestion(
                 substanceName = "Substance 1",
@@ -22,7 +22,6 @@ class IngestionWithDurationAndExperienceProvider :
                 dose = 90.0,
                 isDoseAnEstimate = false,
                 units = "mg",
-                color = IngestionColor.BLUE,
                 experienceId = 0,
                 notes = "This is my note"
             ),

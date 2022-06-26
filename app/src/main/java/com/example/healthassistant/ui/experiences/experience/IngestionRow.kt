@@ -3,7 +3,6 @@ package com.example.healthassistant.ui.experiences.experience
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.StickyNote2
@@ -51,11 +50,12 @@ fun IngestionRow(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Surface(
-                    shape = CircleShape,
-                    color = ingestion.color.getComposeColor(isDarkTheme),
-                    modifier = Modifier.size(25.dp)
-                ) {}
+                // TODO
+//                Surface(
+//                    shape = CircleShape,
+//                    color = ingestion.color.getComposeColor(isDarkTheme),
+//                    modifier = Modifier.size(25.dp)
+//                ) {}
                 Column {
                     Text(text = ingestion.substanceName, style = MaterialTheme.typography.h6)
                     CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {

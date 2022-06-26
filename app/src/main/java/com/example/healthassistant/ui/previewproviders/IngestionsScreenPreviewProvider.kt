@@ -2,12 +2,12 @@ package com.example.healthassistant.ui.previewproviders
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.IngestionColor
 import com.example.healthassistant.data.substances.AdministrationRoute
 
 class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, List<Ingestion>>> {
     override val values: Sequence<Map<String, List<Ingestion>>> = sequenceOf(
         mapOf(
+            // todo: add color
             Pair(
                 first = "2022", second = listOf(
                     Ingestion(
@@ -17,7 +17,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = 90.0,
                         isDoseAnEstimate = false,
                         units = "mg",
-                        color = IngestionColor.PINK,
                         experienceId = 0,
                         notes = "This is one note"
                     ),
@@ -28,7 +27,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = null,
                         isDoseAnEstimate = false,
                         units = "µg",
-                        color = IngestionColor.BLUE,
                         experienceId = 0,
                         notes = null
                     ),
@@ -39,7 +37,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = null,
                         isDoseAnEstimate = false,
                         units = "µg",
-                        color = IngestionColor.BLUE,
                         experienceId = 0,
                         notes = "Note"
                     ),
@@ -50,7 +47,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = null,
                         isDoseAnEstimate = false,
                         units = "µg",
-                        color = IngestionColor.BLUE,
                         experienceId = 0,
                         notes = null
                     ),
@@ -61,7 +57,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = null,
                         isDoseAnEstimate = false,
                         units = "µg",
-                        color = IngestionColor.BLUE,
                         experienceId = 0,
                         notes = null
                     )
@@ -76,7 +71,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = 90.0,
                         isDoseAnEstimate = false,
                         units = "mg",
-                        color = IngestionColor.INDIGO,
                         experienceId = 0,
                         notes = "This is one note"
                     ),
@@ -87,7 +81,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = null,
                         isDoseAnEstimate = false,
                         units = "µg",
-                        color = IngestionColor.BLUE,
                         experienceId = 0,
                         notes = null
                     ),
@@ -98,7 +91,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = 80.0,
                         isDoseAnEstimate = true,
                         units = "mg",
-                        color = IngestionColor.GREEN,
                         experienceId = 0,
                         notes = "Note"
                     ),
@@ -109,7 +101,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = 50.0,
                         isDoseAnEstimate = false,
                         units = "mg",
-                        color = IngestionColor.YELLOW,
                         experienceId = 0,
                         notes = null
                     ),
@@ -120,7 +111,6 @@ class IngestionsScreenPreviewProvider : PreviewParameterProvider<Map<String, Lis
                         dose = 100.0,
                         isDoseAnEstimate = false,
                         units = "µg",
-                        color = IngestionColor.BLUE,
                         experienceId = 0,
                         notes = null
                     )

@@ -2,7 +2,7 @@ package com.example.healthassistant.data.room.experiences.entities
 
 import androidx.compose.ui.graphics.Color
 
-enum class IngestionColor {
+enum class SubstanceColor {
     RED {
         override fun getComposeColor(isDarkTheme: Boolean): Color {
             return if (isDarkTheme) {
