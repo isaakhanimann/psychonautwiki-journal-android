@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -22,6 +21,13 @@ class StatisticsViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository
 ) : ViewModel() {
 
+    private val currentTimeFlow: Flow<Date> = flow {
+        while (true) {
+            emit(Date())
+            delay(timeMillis = 1000*10)
+        }
+    }
+
     private val _substanceStats =
         MutableStateFlow<List<SubstanceStat>>(emptyList())
     val substanceStats = _substanceStats.asStateFlow()
@@ -29,11 +35,11 @@ class StatisticsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             experienceRepo.getSubstanceWithLastDateDescendingFlow()
-                .map { list ->
+                .combine(currentTimeFlow) { list, currentTime ->
                     list.map {
                         SubstanceStat(
                             it.substanceName,
-                            getTimeTextDifferenceToNow(it.lastUsed)
+                            getTimeTextDifferenceToNow(fromDate = it.lastUsed, toDate = currentTime)
                         )
                     }
                 }
@@ -44,8 +50,8 @@ class StatisticsViewModel @Inject constructor(
     }
 
     companion object {
-        fun getTimeTextDifferenceToNow(date: Date): String {
-            val diff: Long = Date().time - date.time
+        fun getTimeTextDifferenceToNow(fromDate: Date, toDate: Date): String {
+            val diff: Long = toDate.time - fromDate.time
             val seconds = diff / 1000.0
             val minutes = seconds / 60
             val hours = minutes / 60
