@@ -135,18 +135,6 @@ fun ChooseRouteScreen(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(spacing.dp)
                     ) {
-                        pwRoutes.forEach { route ->
-                            Card(
-                                modifier = Modifier
-                                    .clickable {
-                                        navigateToNext(route)
-                                    }
-                                    .fillMaxWidth()
-                                    .weight(5f)
-                            ) {
-                                RouteBox(route = route, titleStyle = MaterialTheme.typography.h4)
-                            }
-                        }
                         Card(
                             modifier = Modifier
                                 .clickable {
@@ -157,6 +145,18 @@ fun ChooseRouteScreen(
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Text(text = "Other Routes", style = MaterialTheme.typography.h4)
+                            }
+                        }
+                        pwRoutes.forEach { route ->
+                            Card(
+                                modifier = Modifier
+                                    .clickable {
+                                        navigateToNext(route)
+                                    }
+                                    .fillMaxWidth()
+                                    .weight(5f)
+                            ) {
+                                RouteBox(route = route, titleStyle = MaterialTheme.typography.h4)
                             }
                         }
                     }
