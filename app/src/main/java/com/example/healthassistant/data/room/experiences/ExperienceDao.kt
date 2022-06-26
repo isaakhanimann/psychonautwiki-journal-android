@@ -4,9 +4,9 @@ import androidx.room.*
 import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.SubstanceLastUsed
 import kotlinx.coroutines.flow.Flow
 import java.util.*
-
 
 @Dao
 interface ExperienceDao {
@@ -16,6 +16,9 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
     fun getIngestionsSortedDescendingFlow(): Flow<List<Ingestion>>
+
+    @Query("SELECT substanceName, MAX(time) as lastUsed FROM ingestion GROUP BY substanceName ORDER BY lastUsed DESC")
+    fun getSubstanceWithLastDateDescendingFlow(): Flow<List<SubstanceLastUsed>>
 
     @Query("SELECT * FROM ingestion WHERE time > :date ORDER BY time ASC")
     suspend fun getIngestionAfterDate(date: Date): List<Ingestion>

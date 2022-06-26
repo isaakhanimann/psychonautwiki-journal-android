@@ -3,6 +3,7 @@ package com.example.healthassistant.data.room.experiences
 import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.ExperienceWithIngestions
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.SubstanceLastUsed
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
@@ -34,6 +35,11 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     fun getSortedIngestionsFlow(): Flow<List<Ingestion>> =
         experienceDao.getIngestionsSortedDescendingFlow()
+            .flowOn(Dispatchers.IO)
+            .conflate()
+
+    fun getSubstanceWithLastDateDescendingFlow(): Flow<List<SubstanceLastUsed>> =
+        experienceDao.getSubstanceWithLastDateDescendingFlow()
             .flowOn(Dispatchers.IO)
             .conflate()
 
