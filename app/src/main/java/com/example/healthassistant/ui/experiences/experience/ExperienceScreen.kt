@@ -46,7 +46,10 @@ fun ExperienceScreen(
             viewModel::deleteExperience,
             navigateToEditExperienceScreen,
             navigateToIngestionScreen,
-            navigateBack
+            navigateBack,
+            isShowingDialog = viewModel.isShowingDeleteDialog,
+            showDialog = { viewModel.isShowingDeleteDialog = true },
+            dismissDialog = { viewModel.isShowingDeleteDialog = false }
         )
     }
 }
@@ -81,7 +84,10 @@ fun ExperienceScreenContentPreview(
             deleteExperience = {},
             navigateToEditExperienceScreen = {},
             navigateToIngestionScreen = {},
-            navigateBack = {}
+            navigateBack = {},
+            isShowingDialog = true,
+            showDialog = {},
+            dismissDialog = {}
         )
     }
 }
@@ -97,6 +103,9 @@ fun ExperienceScreen(
     navigateToEditExperienceScreen: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
+    isShowingDialog: Boolean,
+    showDialog: () -> Unit,
+    dismissDialog: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -189,10 +198,7 @@ fun ExperienceScreen(
             }
             Divider()
             TextButton(
-                onClick = {
-                    deleteExperience()
-                    navigateBack()
-                },
+                onClick = showDialog,
             ) {
                 Icon(
                     Icons.Filled.Delete,
@@ -202,6 +208,35 @@ fun ExperienceScreen(
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Delete", color = Color.Red)
+            }
+            if (isShowingDialog) {
+                AlertDialog(
+                    onDismissRequest = dismissDialog,
+                    title = {
+                        Text(text = "Are you sure?")
+                    },
+                    text = {
+                        Text("This won't delete any ingestions")
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                dismissDialog()
+                                deleteExperience()
+                                navigateBack()
+                            }
+                        ) {
+                            Text("Delete")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = dismissDialog
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
+                )
             }
             Divider()
         }

@@ -1,5 +1,8 @@
 package com.example.healthassistant.ui.experiences.experience
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,6 +26,8 @@ class ExperienceViewModel @Inject constructor(
     private val substanceRepo: SubstanceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
+
+    var isShowingDeleteDialog by mutableStateOf(false)
 
     private val _experienceWithIngestions = MutableStateFlow<ExperienceWithIngestions?>(null)
     val experienceWithIngestions = _experienceWithIngestions.asStateFlow()
