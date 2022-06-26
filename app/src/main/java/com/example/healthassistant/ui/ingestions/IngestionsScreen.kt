@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.ui.experiences.SectionTitle
 import com.example.healthassistant.ui.previewproviders.IngestionPreviewProvider
+import com.example.healthassistant.ui.previewproviders.IngestionsScreenPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,10 +41,14 @@ fun IngestionsScreen(
 
 @Preview
 @Composable
-fun IngestionsScreenPreview() {
+fun IngestionsScreenPreview(
+    @PreviewParameter(
+        IngestionsScreenPreviewProvider::class,
+    ) groupedIngestions: Map<String, List<Ingestion>>
+) {
     IngestionsScreen(
         navigateToIngestion = {},
-        groupedIngestions = emptyMap(),
+        groupedIngestions = groupedIngestions,
         filterOptions = listOf(),
         numberOfActiveFilters = 1
     )
@@ -181,16 +187,26 @@ fun IngestionRowInIngestionsScreen(
                     overflow = TextOverflow.Ellipsis
                 )
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    ingestion.dose?.also {
-                        Text(
-                            text = "${if (ingestion.isDoseAnEstimate) "~" else ""}${it.toReadableString()} ${ingestion.units} ${ingestion.administrationRoute.displayText}",
-                            style = MaterialTheme.typography.subtitle1
-                        )
-                    } ?: run {
-                        Text(
-                            text = "Unknown Dose ${ingestion.administrationRoute.displayText}",
-                            style = MaterialTheme.typography.subtitle1
-                        )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    ) {
+                        ingestion.dose?.also {
+                            Text(
+                                text = "${if (ingestion.isDoseAnEstimate) "~" else ""}${it.toReadableString()} ${ingestion.units} ${ingestion.administrationRoute.displayText}",
+                                style = MaterialTheme.typography.subtitle1
+                            )
+                        } ?: run {
+                            Text(
+                                text = "Unknown Dose ${ingestion.administrationRoute.displayText}",
+                                style = MaterialTheme.typography.subtitle1
+                            )
+                        }
+                        if (!ingestion.notes.isNullOrBlank()) {
+                            Icon(
+                                Icons.Outlined.StickyNote2,
+                                contentDescription = "Ingestion has note"
+                            )
+                        }
                     }
                 }
             }

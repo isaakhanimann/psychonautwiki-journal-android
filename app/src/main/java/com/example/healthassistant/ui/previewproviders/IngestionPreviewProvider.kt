@@ -17,7 +17,7 @@ class IngestionPreviewProvider : PreviewParameterProvider<Ingestion> {
             units = "mg",
             color = IngestionColor.INDIGO,
             experienceId = 0,
-            notes = null
+            notes = "This is a note"
         ),
         Ingestion(
             substanceName = "LSD",
