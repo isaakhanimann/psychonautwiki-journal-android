@@ -1,6 +1,9 @@
 package com.example.healthassistant.data.room.experiences
 
-import com.example.healthassistant.data.room.experiences.entities.*
+import com.example.healthassistant.data.room.experiences.entities.Experience
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
+import com.example.healthassistant.data.room.experiences.entities.SubstanceLastUsed
 import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -71,5 +74,9 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     fun getSortedIngestionsWithSubstanceCompanionsFlow() =
         experienceDao.getSortedIngestionsWithSubstanceCompanionsFlow()
             .flowOn(Dispatchers.IO)
+            .conflate()
+
+    fun getAllSubstanceCompanions() =
+        experienceDao.getAllSubstanceCompanions().flowOn(Dispatchers.IO)
             .conflate()
 }

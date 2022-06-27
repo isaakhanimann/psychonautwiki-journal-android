@@ -50,6 +50,7 @@ class ChooseTimeViewModel @Inject constructor(
             return formatter.format(currentlySelectedDate) ?: "Unknown"
         }
 
+    // todo: initialize color sensibly
     var selectedColor by mutableStateOf(SubstanceColor.BLUE)
 
     private val substanceName: String
@@ -100,6 +101,7 @@ class ChooseTimeViewModel @Inject constructor(
                 notes = null
             )
             experienceRepo.addIngestion(newIngestion)
+            // todo: update instead of replace the substance companion
             val substanceCompanion = SubstanceCompanion(
                 substanceName,
                 color = selectedColor
