@@ -155,34 +155,31 @@ fun ExperienceScreen(
                 }
                 Divider(modifier = Modifier.padding(top = 10.dp))
             }
-            Text("Ingestions", style = MaterialTheme.typography.subtitle1)
-            if (ingestionElements.isEmpty()) {
-                Button(onClick = addIngestion) {
-                    Text(text = "Add an Ingestion")
-                }
-            }
-            ingestionElements.forEach {
-                Column(horizontalAlignment = Alignment.End) {
-                    if (it.dateText != null) {
-                        Text(text = it.dateText)
+            if (ingestionElements.isNotEmpty()) {
+                Text("Ingestions", style = MaterialTheme.typography.subtitle1)
+                ingestionElements.forEach {
+                    Column(horizontalAlignment = Alignment.End) {
+                        if (it.dateText != null) {
+                            Text(text = it.dateText)
+                        }
+                        IngestionRow(
+                            ingestionWithCompanion = it.ingestionWithCompanion,
+                            navigateToIngestionScreen = { navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id) },
+                            modifier = Modifier.padding(vertical = 3.dp)
+                        )
                     }
-                    IngestionRow(
-                        ingestionWithCompanion = it.ingestionWithCompanion,
-                        navigateToIngestionScreen = { navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id) },
-                        modifier = Modifier.padding(vertical = 3.dp)
+                }
+                if (cumulativeDoses.isNotEmpty()) {
+                    Text(
+                        text = "Cumulative Dose",
+                        style = MaterialTheme.typography.subtitle1
                     )
+                    cumulativeDoses.forEach {
+                        CumulativeDoseRow(cumulativeDose = it)
+                    }
                 }
+                Divider(modifier = Modifier.padding(top = 10.dp))
             }
-            if (cumulativeDoses.isNotEmpty()) {
-                Text(
-                    text = "Cumulative Dose",
-                    style = MaterialTheme.typography.subtitle1
-                )
-                cumulativeDoses.forEach {
-                    CumulativeDoseRow(cumulativeDose = it)
-                }
-            }
-            Divider(modifier = Modifier.padding(top = 10.dp))
             if (experience.text.isEmpty()) {
                 TextButton(onClick = navigateToEditExperienceScreen) {
                     Icon(
