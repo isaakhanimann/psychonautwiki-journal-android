@@ -15,6 +15,7 @@ import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -50,7 +51,8 @@ class ChooseTimeViewModel @Inject constructor(
             return formatter.format(currentlySelectedDate) ?: "Unknown"
         }
 
-    // todo: initialize color sensibly
+    var isLoadingColor by mutableStateOf(true)
+    var isShowingColorPicker by mutableStateOf(false)
     var selectedColor by mutableStateOf(SubstanceColor.BLUE)
 
     private val substanceName: String
@@ -75,6 +77,19 @@ class ChooseTimeViewModel @Inject constructor(
         }
         isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)!!
         assert(substance != null)
+        viewModelScope.launch {
+            val allCompanions = experienceRepo.getAllSubstanceCompanionsFlow().first()
+            val existingColor = allCompanions.firstOrNull { it.substanceName == substanceName }
+            if (existingColor == null) {
+                isShowingColorPicker = true
+                val alreadyUsedColors = allCompanions.map { it.color }
+                val otherColors = SubstanceColor.values().filter { !alreadyUsedColors.contains(it) }
+                selectedColor = otherColors.randomOrNull() ?: SubstanceColor.values().random()
+            } else {
+                selectedColor = existingColor.color
+            }
+            isLoadingColor = false
+        }
     }
 
     fun onSubmitDate(newDay: Int, newMonth: Int, newYear: Int) {

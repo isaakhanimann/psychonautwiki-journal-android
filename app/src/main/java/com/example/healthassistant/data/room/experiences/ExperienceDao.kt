@@ -87,7 +87,7 @@ interface ExperienceDao {
     suspend fun update(substanceCompanion: SubstanceCompanion)
 
     @Query("SELECT * FROM substancecompanion WHERE substanceName =:substanceName")
-    fun getSubstanceCompanion(substanceName: String): Flow<SubstanceCompanion?>
+    fun getSubstanceCompanionFlow(substanceName: String): Flow<SubstanceCompanion?>
 
     @Query("SELECT * FROM substancecompanion")
     fun getAllSubstanceCompanions(): Flow<List<SubstanceCompanion>>

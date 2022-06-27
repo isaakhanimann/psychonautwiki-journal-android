@@ -2,6 +2,9 @@ package com.example.healthassistant.ui.addingestion.time
 
 import android.app.TimePickerDialog
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -35,6 +38,8 @@ fun ChooseTimeScreen(
         ),
         dateAndTimeStrings = Pair(viewModel.dateString, viewModel.timeString),
         dismissAddIngestionScreens = dismissAddIngestionScreens,
+        isLoadingColor = viewModel.isLoadingColor,
+        isShowingColorPicker = viewModel.isShowingColorPicker,
         selectedColor = viewModel.selectedColor,
         onChangeColor = { viewModel.selectedColor = it }
     )
@@ -50,6 +55,8 @@ fun ChooseTimeScreenPreview() {
         dateAndTime = DateAndTime(day = 3, month = 4, year = 2022, hour = 13, minute = 52),
         dateAndTimeStrings = Pair("Wed 9 Jul 2022", "13:52"),
         dismissAddIngestionScreens = {},
+        isLoadingColor = false,
+        isShowingColorPicker = true,
         selectedColor = SubstanceColor.BLUE,
         onChangeColor = {}
     )
@@ -65,33 +72,41 @@ fun ChooseTimeScreen(
     dateAndTime: DateAndTime,
     dateAndTimeStrings: Pair<String, String>,
     dismissAddIngestionScreens: () -> Unit,
+    isLoadingColor: Boolean,
+    isShowingColorPicker: Boolean,
     selectedColor: SubstanceColor,
-    onChangeColor: (SubstanceColor) -> Unit
+    onChangeColor: (SubstanceColor) -> Unit,
 ) {
     Column {
         LinearProgressIndicator(progress = 1f, modifier = Modifier.fillMaxWidth())
         Scaffold(
             topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) },
             floatingActionButton = {
-                val context = LocalContext.current
-                ExtendedFloatingActionButton(
-                    onClick = {
-                        createAndSaveIngestion()
-                        Toast.makeText(
-                            context,
-                            "Ingestion Added",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        dismissAddIngestionScreens()
-                    },
-                    icon = {
-                        Icon(
-                            Icons.Filled.Done,
-                            contentDescription = "Next"
-                        )
-                    },
-                    text = { Text("Done") },
-                )
+                AnimatedVisibility(
+                    visible = !isLoadingColor,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    val context = LocalContext.current
+                    ExtendedFloatingActionButton(
+                        onClick = {
+                            createAndSaveIngestion()
+                            Toast.makeText(
+                                context,
+                                "Ingestion Added",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            dismissAddIngestionScreens()
+                        },
+                        icon = {
+                            Icon(
+                                Icons.Filled.Done,
+                                contentDescription = "Next"
+                            )
+                        },
+                        text = { Text("Done") },
+                    )
+                }
             }
         ) {
             Column(
@@ -101,10 +116,12 @@ fun ChooseTimeScreen(
                     .fillMaxSize()
                     .padding(10.dp)
             ) {
-                ColorPicker(
-                    selectedColor = selectedColor,
-                    onChangeOfColor = onChangeColor
-                )
+                if (isShowingColorPicker) {
+                    ColorPicker(
+                        selectedColor = selectedColor,
+                        onChangeOfColor = onChangeColor
+                    )
+                }
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,

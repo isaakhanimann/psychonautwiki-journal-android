@@ -16,7 +16,7 @@ class ColorPickerViewModel @Inject constructor(
     experienceRepo: ExperienceRepository,
 ) : ViewModel() {
 
-    private val companionFlow = experienceRepo.getAllSubstanceCompanions()
+    private val companionFlow = experienceRepo.getAllSubstanceCompanionsFlow()
 
     val alreadyUsedColorsFlow: StateFlow<List<SubstanceColor>> =
         companionFlow.map { companions ->

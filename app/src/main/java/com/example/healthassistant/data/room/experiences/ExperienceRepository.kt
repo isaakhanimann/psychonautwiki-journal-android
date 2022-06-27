@@ -76,7 +76,9 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getAllSubstanceCompanions() =
-        experienceDao.getAllSubstanceCompanions().flowOn(Dispatchers.IO)
+    fun getAllSubstanceCompanionsFlow() = experienceDao.getAllSubstanceCompanions()
+            .flowOn(Dispatchers.IO)
             .conflate()
+
+    fun getSubstanceCompanionFlow(substanceName: String) = experienceDao.getSubstanceCompanionFlow(substanceName)
 }
