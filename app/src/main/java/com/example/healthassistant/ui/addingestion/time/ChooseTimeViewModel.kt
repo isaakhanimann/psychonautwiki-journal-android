@@ -1,6 +1,8 @@
 package com.example.healthassistant.ui.addingestion.time
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -47,6 +49,8 @@ class ChooseTimeViewModel @Inject constructor(
             val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
             return formatter.format(currentlySelectedDate) ?: "Unknown"
         }
+
+    var selectedColor by mutableStateOf(SubstanceColor.BLUE)
 
     private val substanceName: String
     private val administrationRoute: AdministrationRoute
@@ -96,10 +100,9 @@ class ChooseTimeViewModel @Inject constructor(
                 notes = null
             )
             experienceRepo.addIngestion(newIngestion)
-            // TODO
             val substanceCompanion = SubstanceCompanion(
                 substanceName,
-                color = SubstanceColor.GREEN
+                color = selectedColor
             )
             experienceRepo.addSubstanceCompanion(substanceCompanion)
         }

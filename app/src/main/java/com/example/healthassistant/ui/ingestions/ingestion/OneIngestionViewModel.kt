@@ -24,8 +24,8 @@ class OneIngestionViewModel @Inject constructor(
 
     var isShowingDeleteDialog by mutableStateOf(false)
 
-    // todo: pair ingestion with experience in dao already
-    private val ingestionFlow: Flow<IngestionWithCompanion?> = experienceRepo.getIngestionWithCompanionFlow(state.get<Int>(INGESTION_ID_KEY)!!)
+    private val ingestionId = state.get<Int>(INGESTION_ID_KEY)!!
+    private val ingestionFlow: Flow<IngestionWithCompanion?> = experienceRepo.getIngestionWithCompanionFlow(ingestionId)
     val ingestionWithCompanionDurationAndExperience: StateFlow<IngestionWithCompanionDurationAndExperience?> =
         ingestionFlow.map { ingestionWithCompanion ->
             val ingestion = ingestionWithCompanion?.ingestion
