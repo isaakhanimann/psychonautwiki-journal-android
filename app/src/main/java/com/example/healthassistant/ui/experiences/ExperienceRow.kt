@@ -18,8 +18,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.healthassistant.data.room.experiences.entities.Mood
 import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,44 +49,12 @@ fun ExperienceRow(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1f)
         ) {
-            val isDarkTheme = isSystemInDarkTheme()
-            val circleSize = 45.dp
             val ingestions = experienceWithIngestionsAndCompanions.ingestionsWithCompanions
-            if (ingestions.size >= 2) {
-                val brush = remember(ingestions) {
-                    val colors =
-                        ingestions.map { it.substanceCompanion!!.color.getComposeColor(isDarkTheme) }
-                    val twiceColors = colors.flatMap { listOf(it, it) } + colors.first()
-                    Brush.sweepGradient(twiceColors)
-                }
-                Box(
-                    modifier = Modifier
-                        .size(circleSize)
-                        .clip(CircleShape)
-                        .background(brush)
-                )
-            } else if (ingestions.size == 1) {
-                Box(
-                    modifier = Modifier
-                        .size(circleSize)
-                        .clip(CircleShape)
-                        .background(
-                            ingestions.first().substanceCompanion!!.color.getComposeColor(
-                                isDarkTheme
-                            )
-                        )
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(circleSize)
-                        .clip(CircleShape)
-                        .background(Color.LightGray.copy(0.1f))
-                )
-            }
+            val experience = experienceWithIngestionsAndCompanions.experience
+            ExperienceCircle(ingestions = ingestions, experienceMood = experience.mood)
             Column {
                 Text(
-                    text = experienceWithIngestionsAndCompanions.experience.title,
+                    text = experience.title,
                     style = MaterialTheme.typography.h5,
                 )
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
@@ -95,9 +66,12 @@ fun ExperienceRow(
                         if (substanceNames.isNotEmpty()) {
                             Text(text = substanceNames, style = MaterialTheme.typography.subtitle1)
                         } else {
-                            Text(text = "No substance yet", style = MaterialTheme.typography.subtitle1)
+                            Text(
+                                text = "No substance yet",
+                                style = MaterialTheme.typography.subtitle1
+                            )
                         }
-                        if (experienceWithIngestionsAndCompanions.experience.text.isNotBlank()) {
+                        if (experience.text.isNotBlank()) {
                             Icon(
                                 Icons.Outlined.StickyNote2,
                                 contentDescription = "Experience has notes"
@@ -115,4 +89,71 @@ fun ExperienceRow(
             Text(text = dateText)
         }
     }
+}
+
+@Composable
+fun ExperienceCircle(
+    ingestions: List<IngestionWithCompanion>,
+    experienceMood: Mood?
+) {
+    val isDarkTheme = isSystemInDarkTheme()
+    val circleSize = 45.dp
+    val iconSize = 35.dp
+    if (ingestions.size >= 2) {
+        val brush = remember(ingestions) {
+            val colors =
+                ingestions.map { it.substanceCompanion!!.color.getComposeColor(isDarkTheme) }
+            val twiceColors = colors.flatMap { listOf(it, it) } + colors.first()
+            Brush.sweepGradient(twiceColors)
+        }
+        Box(
+            modifier = Modifier
+                .size(circleSize)
+                .clip(CircleShape)
+                .background(brush),
+            contentAlignment = Alignment.Center
+        ) {
+            if (experienceMood != null) {
+                MoodIcon(mood = experienceMood, size = iconSize)
+            }
+        }
+    } else if (ingestions.size == 1) {
+        Box(
+            modifier = Modifier
+                .size(circleSize)
+                .clip(CircleShape)
+                .background(
+                    ingestions.first().substanceCompanion!!.color.getComposeColor(
+                        isDarkTheme
+                    )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            if (experienceMood != null) {
+                MoodIcon(mood = experienceMood, size = iconSize)
+            }
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .size(circleSize)
+                .clip(CircleShape)
+                .background(Color.LightGray.copy(0.1f)),
+            contentAlignment = Alignment.Center
+        ) {
+            if (experienceMood != null) {
+                MoodIcon(mood = experienceMood, size = iconSize)
+            }
+        }
+    }
+}
+
+@Composable
+fun MoodIcon(mood: Mood, size: Dp) {
+    Icon(
+        imageVector = mood.icon,
+        contentDescription = mood.description,
+        tint = MaterialTheme.colors.onSurface,
+        modifier = Modifier.size(size)
+    )
 }

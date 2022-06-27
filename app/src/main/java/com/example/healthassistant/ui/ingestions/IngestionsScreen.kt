@@ -18,6 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.healthassistant.data.room.experiences.entities.Mood
+import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.ui.experiences.SectionTitle
 import com.example.healthassistant.ui.previewproviders.IngestionsScreenPreviewProvider
@@ -152,7 +154,6 @@ fun IngestionRowInIngestionsScreen(
     ingestionWithCompanion: IngestionWithCompanion,
     navigateToIngestion: () -> Unit,
 ) {
-    val isDarkTheme = isSystemInDarkTheme()
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -163,13 +164,12 @@ fun IngestionRowInIngestionsScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Surface(
-                shape = CircleShape,
-                color = ingestionWithCompanion.substanceCompanion!!.color.getComposeColor(isDarkTheme),
-                modifier = Modifier.size(25.dp)
-            ) {}
-            Spacer(modifier = Modifier.width(10.dp))
             val ingestion = ingestionWithCompanion.ingestion
+            IngestionCircle(
+                substanceColor = ingestionWithCompanion.substanceCompanion!!.color,
+                mood = ingestion.mood
+            )
+            Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = ingestion.substanceName,
@@ -212,6 +212,29 @@ fun IngestionRowInIngestionsScreen(
                 Text(text = timeString, style = MaterialTheme.typography.body1)
             }
 
+        }
+    }
+}
+
+@Composable
+fun IngestionCircle(
+    substanceColor: SubstanceColor,
+    mood: Mood?
+) {
+    val isDarkTheme = isSystemInDarkTheme()
+    Surface(
+        shape = CircleShape,
+        color = substanceColor.getComposeColor(isDarkTheme),
+        modifier = Modifier
+            .size(40.dp)
+    ) {
+        if (mood != null) {
+            Icon(
+                imageVector = mood.icon,
+                contentDescription = mood.description,
+                modifier = Modifier.padding(5.dp),
+                tint = MaterialTheme.colors.onSurface
+            )
         }
     }
 }
