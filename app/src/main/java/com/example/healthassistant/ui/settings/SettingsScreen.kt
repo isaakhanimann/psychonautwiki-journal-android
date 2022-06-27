@@ -4,11 +4,12 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Launch
-import androidx.compose.material.icons.filled.RestartAlt
+import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.ContactSupport
-import androidx.compose.material.icons.outlined.HelpCenter
+import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -96,7 +97,7 @@ fun SettingsScreen(
                     enabled = !isUpdating
                 ) {
                     Icon(
-                        Icons.Filled.RestartAlt,
+                        Icons.Filled.Restore,
                         contentDescription = "Reset Substances",
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
@@ -125,7 +126,7 @@ fun SettingsScreen(
             Divider()
             TextButton(onClick = navigateToFAQ) {
                 Icon(
-                    Icons.Outlined.HelpCenter,
+                    Icons.Outlined.QuestionAnswer,
                     contentDescription = "Frequently Asked Questions",
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
@@ -144,6 +145,20 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Question / Feedback / Bug Reports")
+                Spacer(modifier = Modifier.weight(1f))
+            }
+            Divider()
+            TextButton(
+                onClick = {
+                    uriHandler.openUri("https://github.com/isaakhanimann/HealthAssistant")
+                }) {
+                Icon(
+                    Icons.Filled.Code,
+                    contentDescription = "Open Source Code",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Source Code")
                 Spacer(modifier = Modifier.weight(1f))
             }
             Divider()
