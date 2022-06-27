@@ -38,11 +38,9 @@ class OneIngestionViewModel @Inject constructor(
                     )
                 }
             }
-            val companion = ingestionWithCompanion?.substanceCompanion
-            if (ingestion != null && companion != null) {
+            if (ingestionWithCompanion != null && ingestion != null) {
                 IngestionWithCompanionDurationAndExperience(
-                    ingestion = ingestion,
-                    substanceCompanion = companion,
+                    ingestionWithCompanion = ingestionWithCompanion,
                     roaDuration = substanceRepo.getSubstance(ingestion.substanceName)
                         ?.getRoa(ingestion.administrationRoute)?.roaDuration,
                     experience = experience
@@ -58,10 +56,10 @@ class OneIngestionViewModel @Inject constructor(
 
     fun deleteIngestion() {
         viewModelScope.launch {
-            ingestionWithCompanionDurationAndExperience.value?.ingestion.let {
+            ingestionWithCompanionDurationAndExperience.value?.ingestionWithCompanion.let {
                 assert(it != null)
                 if (it != null) {
-                    experienceRepo.deleteIngestion(ingestion = it)
+                    experienceRepo.deleteIngestion(ingestion = it.ingestion)
                 }
             }
         }

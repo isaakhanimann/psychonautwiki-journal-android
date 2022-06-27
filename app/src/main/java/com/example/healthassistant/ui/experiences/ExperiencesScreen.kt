@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
+import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.example.healthassistant.ui.previewproviders.ExperiencesScreenPreviewProvider
 
 @Composable
@@ -37,7 +37,7 @@ fun ExperiencesScreen(
 fun ExperiencesScreenPreview(
     @PreviewParameter(
         ExperiencesScreenPreviewProvider::class,
-    ) groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
+    ) groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
 ) {
     ExperiencesScreen(
         navigateToAddExperience = {},
@@ -52,7 +52,7 @@ fun ExperiencesScreen(
     navigateToAddExperience: () -> Unit,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
-    groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
+    groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
 ) {
     Scaffold(
         topBar = {
@@ -91,7 +91,7 @@ fun ExperiencesScreen(
 
 @Composable
 fun ExperiencesList(
-    groupedExperiences: Map<String, List<ExperienceWithIngestions>>,
+    groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
 ) {

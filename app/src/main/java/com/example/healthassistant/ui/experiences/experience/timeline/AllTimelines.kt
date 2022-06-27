@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.previewproviders.TimelinesPreviewProvider
 import kotlinx.coroutines.delay
@@ -33,7 +34,7 @@ import kotlin.time.Duration
 fun AllTimelinesPreview(
     @PreviewParameter(
         TimelinesPreviewProvider::class,
-    ) ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>
+    ) ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>
 ) {
     AllTimelines(
         ingestionDurationPairs = ingestionDurationPairs,
@@ -46,7 +47,7 @@ fun AllTimelinesPreview(
 
 @Composable
 fun AllTimelines(
-    ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>,
+    ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>,
     modifier: Modifier = Modifier,
     strokeWidth: Float = 5f,
 ) {

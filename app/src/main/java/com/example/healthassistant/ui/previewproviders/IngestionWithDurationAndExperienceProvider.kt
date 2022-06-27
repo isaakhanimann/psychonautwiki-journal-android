@@ -4,6 +4,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.DurationRange
 import com.example.healthassistant.data.substances.RoaDuration
@@ -16,19 +17,21 @@ class IngestionWithDurationAndExperienceProvider :
     PreviewParameterProvider<IngestionWithCompanionDurationAndExperience> {
     override val values: Sequence<IngestionWithCompanionDurationAndExperience> = sequenceOf(
         IngestionWithCompanionDurationAndExperience(
-            ingestion = Ingestion(
-                substanceName = "Substance 1",
-                time = Date(Date().time - 4 * 60 * 60 * 1000),
-                administrationRoute = AdministrationRoute.ORAL,
-                dose = 90.0,
-                isDoseAnEstimate = false,
-                units = "mg",
-                experienceId = 0,
-                notes = "This is my note"
-            ),
-            substanceCompanion = SubstanceCompanion(
-                substanceName = "Substance 1",
-                color = SubstanceColor.MINT
+            ingestionWithCompanion = IngestionWithCompanion(
+                ingestion = Ingestion(
+                    substanceName = "Substance 1",
+                    time = Date(Date().time - 4 * 60 * 60 * 1000),
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = 90.0,
+                    isDoseAnEstimate = false,
+                    units = "mg",
+                    experienceId = 0,
+                    notes = "This is my note"
+                ),
+                substanceCompanion = SubstanceCompanion(
+                    substanceName = "Substance 1",
+                    color = SubstanceColor.MINT
+                ),
             ),
             roaDuration = RoaDuration(
                 onset = DurationRange(

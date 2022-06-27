@@ -83,7 +83,8 @@ fun OneIngestionScreen(
     showDialog: () -> Unit,
     dismissDialog: () -> Unit
 ) {
-    val ingestion = ingestionWithCompanionDurationAndExperience.ingestion
+    val ingestionWithCompanion = ingestionWithCompanionDurationAndExperience.ingestionWithCompanion
+    val ingestion = ingestionWithCompanion.ingestion
     Scaffold(
         topBar = {
             TopAppBar(
@@ -103,7 +104,7 @@ fun OneIngestionScreen(
             AllTimelines(
                 ingestionDurationPairs = listOf(
                     Pair(
-                        first = ingestion,
+                        first = ingestionWithCompanion,
                         second = ingestionWithCompanionDurationAndExperience.roaDuration
                     )
                 ),
@@ -131,7 +132,7 @@ fun OneIngestionScreen(
                     val isDarkTheme = isSystemInDarkTheme()
                     Surface(
                         shape = CircleShape,
-                        color = ingestionWithCompanionDurationAndExperience.substanceCompanion.color.getComposeColor(isDarkTheme),
+                        color = ingestionWithCompanionDurationAndExperience.ingestionWithCompanion.substanceCompanion!!.color.getComposeColor(isDarkTheme),
                         modifier = Modifier.size(25.dp)
                     ) {}
                     Column {

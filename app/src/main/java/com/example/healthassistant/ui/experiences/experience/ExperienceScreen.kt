@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Experience
-import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
-import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.experiences.experience.timeline.AllTimelines
@@ -56,19 +56,19 @@ fun ExperienceScreen(
 
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun ExperienceScreenContentPreview(
+fun ExperienceScreenPreview(
     @PreviewParameter(
         ExperienceWithIngestionsPreviewProvider::class,
         limit = 1
-    ) expAndIng: ExperienceWithIngestions
+    ) expAndIng: ExperienceWithIngestionsAndCompanions
 ) {
     HealthAssistantTheme {
         ExperienceScreen(
             experience = expAndIng.experience,
-            ingestionElements = expAndIng.ingestions.map {
+            ingestionElements = expAndIng.ingestionsWithCompanions.map {
                 ExperienceViewModel.IngestionElement(
                     dateText = null,
-                    ingestion = it
+                    ingestionWithCompanion = it
                 )
             },
             cumulativeDoses = listOf(
@@ -97,7 +97,7 @@ fun ExperienceScreen(
     experience: Experience,
     ingestionElements: List<ExperienceViewModel.IngestionElement>,
     cumulativeDoses: List<ExperienceViewModel.CumulativeDose>,
-    ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>,
+    ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>,
     addIngestion: () -> Unit,
     deleteExperience: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
@@ -146,7 +146,7 @@ fun ExperienceScreen(
                         .height(200.dp)
                 )
                 val showOralOnsetDisclaimer =
-                    ingestionDurationPairs.any { it.first.administrationRoute == AdministrationRoute.ORAL }
+                    ingestionDurationPairs.any { it.first.ingestion.administrationRoute == AdministrationRoute.ORAL }
                 if (showOralOnsetDisclaimer) {
                     Text(
                         text = "* a full stomach can delay the onset by hours",
@@ -167,8 +167,8 @@ fun ExperienceScreen(
                         Text(text = it.dateText)
                     }
                     IngestionRow(
-                        ingestion = it.ingestion,
-                        navigateToIngestionScreen = { navigateToIngestionScreen(it.ingestion.id) },
+                        ingestionWithCompanion = it.ingestionWithCompanion,
+                        navigateToIngestionScreen = { navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id) },
                         modifier = Modifier.padding(vertical = 3.dp)
                     )
                 }

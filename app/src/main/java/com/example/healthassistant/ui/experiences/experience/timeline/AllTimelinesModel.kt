@@ -2,6 +2,7 @@ package com.example.healthassistant.ui.experiences.experience.timeline
 
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.experiences.experience.timeline.ingestion.FullTimeline
 import com.example.healthassistant.ui.experiences.experience.timeline.ingestion.TimelineDrawable
@@ -17,7 +18,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class AllTimelinesModel(
-    ingestionDurationPairs: List<Pair<Ingestion, RoaDuration?>>
+    ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>
 ) {
     val startTime: Date
     val width: Duration
@@ -25,15 +26,15 @@ class AllTimelinesModel(
     val axisDrawable: AxisDrawable
 
     init {
-        startTime = ingestionDurationPairs.map { it.first.time }
+        startTime = ingestionDurationPairs.map { it.first.ingestion.time }
             .reduce { acc, date -> if (acc.before(date)) acc else date }
         val ingestionDrawablesWithoutInsets = ingestionDurationPairs.map { pair ->
             val verticalHeightInPercent = getVerticalHeightInPercent(
-                ingestion = pair.first,
-                allIngestions = ingestionDurationPairs.map { it.first })
+                ingestion = pair.first.ingestion,
+                allIngestions = ingestionDurationPairs.map { it.first.ingestion })
             IngestionDrawable(
                 startTime = startTime,
-                ingestion = pair.first,
+                ingestionWithCompanion = pair.first,
                 roaDuration = pair.second,
                 verticalHeightInPercent = verticalHeightInPercent
             )
@@ -46,10 +47,10 @@ class AllTimelinesModel(
                 it.ingestionPointDistanceFromStart
             }
         }.maxOrNull()
-        if (max == null || max == ZERO) {
-            width = 5.hours
+        width = if (max == null || max == ZERO) {
+            5.hours
         } else {
-             width = max
+            max
         }
         axisDrawable = AxisDrawable(startTime, width)
     }
@@ -171,7 +172,7 @@ data class FullHour(
 
 class IngestionDrawable(
     startTime: Date,
-    ingestion: Ingestion,
+    ingestionWithCompanion: IngestionWithCompanion,
     roaDuration: RoaDuration?,
     val verticalHeightInPercent: Float = 1f
 ) {
@@ -182,12 +183,10 @@ class IngestionDrawable(
 
     init {
         ingestionPointDistanceFromStart =
-            (ingestion.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS)
+            (ingestionWithCompanion.ingestion.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS)
         val full = roaDuration?.toFullTimeline()
         val total = roaDuration?.toTotalTimeline()
         timelineDrawable = full ?: total
-        // TODO
-//        color = ingestion.color
-        color = SubstanceColor.BLUE
+        color = ingestionWithCompanion.substanceCompanion!!.color
     }
 }

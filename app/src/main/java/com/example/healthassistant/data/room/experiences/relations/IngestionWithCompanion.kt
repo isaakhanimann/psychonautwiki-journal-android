@@ -13,5 +13,5 @@ data class IngestionWithCompanion(
         parentColumn = "substanceName",
         entityColumn = "substanceName"
     )
-    var substanceCompanion: SubstanceCompanion? = null
+    var substanceCompanion: SubstanceCompanion?
 )

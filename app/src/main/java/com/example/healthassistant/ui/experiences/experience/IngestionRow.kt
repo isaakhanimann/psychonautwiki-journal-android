@@ -3,6 +3,7 @@ package com.example.healthassistant.ui.experiences.experience
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.StickyNote2
@@ -13,17 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.ui.previewproviders.IngestionPreviewProvider
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
+import com.example.healthassistant.ui.previewproviders.IngestionRowPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Preview
 @Composable
-fun IngestionRowPreview(@PreviewParameter(IngestionPreviewProvider::class) ingestion: Ingestion) {
+fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionWithCompanion: IngestionWithCompanion) {
     IngestionRow(
-        ingestion = ingestion,
+        ingestionWithCompanion = ingestionWithCompanion,
         navigateToIngestionScreen = {}
     )
 }
@@ -31,7 +32,7 @@ fun IngestionRowPreview(@PreviewParameter(IngestionPreviewProvider::class) inges
 
 @Composable
 fun IngestionRow(
-    ingestion: Ingestion,
+    ingestionWithCompanion: IngestionWithCompanion,
     navigateToIngestionScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -46,16 +47,16 @@ fun IngestionRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            val ingestion = ingestionWithCompanion.ingestion
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                // TODO
-//                Surface(
-//                    shape = CircleShape,
-//                    color = ingestion.color.getComposeColor(isDarkTheme),
-//                    modifier = Modifier.size(25.dp)
-//                ) {}
+                Surface(
+                    shape = CircleShape,
+                    color = ingestionWithCompanion.substanceCompanion!!.color.getComposeColor(isDarkTheme),
+                    modifier = Modifier.size(25.dp)
+                ) {}
                 Column {
                     Text(text = ingestion.substanceName, style = MaterialTheme.typography.h6)
                     CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {

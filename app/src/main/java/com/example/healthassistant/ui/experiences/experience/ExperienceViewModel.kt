@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,15 +38,16 @@ class ExperienceViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000)
             )
 
-    private val ingestionsFlow = experienceWithIngestionsFlow.map {
-        it?.ingestions ?: emptyList()
+    private val ingestionsWithCompanionsFlow = experienceWithIngestionsFlow.map {
+        it?.ingestionsWithCompanions ?: emptyList()
     }
 
-    val ingestionDurationPairsFlow = ingestionsFlow.map {
-        it.map { ing ->
-            val roaDuration = substanceRepo.getSubstance(ing.substanceName)
-                ?.getRoa(ing.administrationRoute)?.roaDuration
-            Pair(first = ing, second = roaDuration)
+    val ingestionDurationPairsFlow = ingestionsWithCompanionsFlow.map { ingestionsWithComps ->
+        ingestionsWithComps.map { oneIngestionWithComp ->
+            val roaDuration =
+                substanceRepo.getSubstance(oneIngestionWithComp.ingestion.substanceName)
+                    ?.getRoa(oneIngestionWithComp.ingestion.administrationRoute)?.roaDuration
+            Pair(first = oneIngestionWithComp, second = roaDuration)
         }
     }.stateIn(
         initialValue = emptyList(),
@@ -53,7 +55,7 @@ class ExperienceViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
-    val ingestionElementsFlow = ingestionsFlow.map {
+    val ingestionElementsFlow = ingestionsWithCompanionsFlow.map {
         getIngestionElements(it)
     }.stateIn(
         initialValue = emptyList(),
@@ -61,8 +63,9 @@ class ExperienceViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
-    val cumulativeDosesFlow = ingestionsFlow.map {
-        getCumulativeDoses(it)
+    val cumulativeDosesFlow = ingestionsWithCompanionsFlow.map { ingestionsWithCompanions ->
+        val ingestions = ingestionsWithCompanions.map { it.ingestion }
+        getCumulativeDoses(ingestions)
     }.stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,
@@ -78,20 +81,30 @@ class ExperienceViewModel @Inject constructor(
 
     data class IngestionElement(
         val dateText: String?,
-        val ingestion: Ingestion
+        val ingestionWithCompanion: IngestionWithCompanion
     )
 
-    private fun getIngestionElements(sortedIngestions: List<Ingestion>): List<IngestionElement> {
-        return sortedIngestions.mapIndexed { index, ingestion ->
-            val ingestionTimeText = getDateText(ingestion.time)
+    private fun getIngestionElements(sortedIngestionsWithCompanions: List<IngestionWithCompanion>): List<IngestionElement> {
+        return sortedIngestionsWithCompanions.mapIndexed { index, ingestionWithCompanion ->
+            val ingestionTimeText = getDateText(ingestionWithCompanion.ingestion.time)
             if (index == 0) {
-                IngestionElement(dateText = ingestionTimeText, ingestion = ingestion)
+                IngestionElement(
+                    dateText = ingestionTimeText,
+                    ingestionWithCompanion = ingestionWithCompanion
+                )
             } else {
-                val lastIngestionDateText = getDateText(sortedIngestions[index - 1].time)
+                val lastIngestionDateText =
+                    getDateText(sortedIngestionsWithCompanions[index - 1].ingestion.time)
                 if (lastIngestionDateText != ingestionTimeText) {
-                    IngestionElement(dateText = ingestionTimeText, ingestion = ingestion)
+                    IngestionElement(
+                        dateText = ingestionTimeText,
+                        ingestionWithCompanion = ingestionWithCompanion
+                    )
                 } else {
-                    IngestionElement(dateText = null, ingestion = ingestion)
+                    IngestionElement(
+                        dateText = null,
+                        ingestionWithCompanion = ingestionWithCompanion
+                    )
                 }
             }
         }

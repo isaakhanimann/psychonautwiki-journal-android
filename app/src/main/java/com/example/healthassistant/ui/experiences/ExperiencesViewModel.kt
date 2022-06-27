@@ -3,7 +3,7 @@ package com.example.healthassistant.ui.experiences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
-import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
+import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -26,7 +26,7 @@ class ExperiencesViewModel @Inject constructor(
         )
 
     companion object {
-        fun groupExperiencesByYear(experiencesWithIngestions: List<ExperienceWithIngestions>): Map<String, List<ExperienceWithIngestions>> {
+        fun groupExperiencesByYear(experiencesWithIngestions: List<ExperienceWithIngestionsAndCompanions>): Map<String, List<ExperienceWithIngestionsAndCompanions>> {
             val cal = Calendar.getInstance(TimeZone.getDefault())
             return experiencesWithIngestions.groupBy { cal.get(Calendar.YEAR).toString() }
         }
