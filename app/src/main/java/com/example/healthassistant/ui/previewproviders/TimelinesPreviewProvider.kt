@@ -2,6 +2,7 @@ package com.example.healthassistant.ui.previewproviders
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.Mood
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
@@ -26,7 +27,8 @@ class TimelinesPreviewProvider :
                         isDoseAnEstimate = false,
                         units = "mg",
                         experienceId = 0,
-                        notes = null
+                        notes = null,
+                        mood = Mood.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 1",
@@ -63,7 +65,6 @@ class TimelinesPreviewProvider :
             ),
             Pair(
                 IngestionWithCompanion(
-
                     ingestion = Ingestion(
                         substanceName = "Substance 1",
                         time = Date(Date().time - 3 * 60 * 60 * 1000),
@@ -72,7 +73,8 @@ class TimelinesPreviewProvider :
                         isDoseAnEstimate = false,
                         units = "mg",
                         experienceId = 0,
-                        notes = null
+                        notes = null,
+                        mood = Mood.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 1",
@@ -116,7 +118,8 @@ class TimelinesPreviewProvider :
                         isDoseAnEstimate = false,
                         units = "mg",
                         experienceId = 0,
-                        notes = null
+                        notes = null,
+                        mood = Mood.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 2",
@@ -160,7 +163,8 @@ class TimelinesPreviewProvider :
                         isDoseAnEstimate = false,
                         units = "mg",
                         experienceId = 0,
-                        notes = null
+                        notes = null,
+                        mood = Mood.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 3",
@@ -191,7 +195,8 @@ class TimelinesPreviewProvider :
                         isDoseAnEstimate = false,
                         units = "mg",
                         experienceId = 0,
-                        notes = null
+                        notes = null,
+                        mood = Mood.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 1",
@@ -235,7 +240,8 @@ class TimelinesPreviewProvider :
                         isDoseAnEstimate = false,
                         units = "mg",
                         experienceId = 0,
-                        notes = null
+                        notes = null,
+                        mood = Mood.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 2",
@@ -279,7 +285,8 @@ class TimelinesPreviewProvider :
                         isDoseAnEstimate = false,
                         units = "mg",
                         experienceId = 0,
-                        notes = null
+                        notes = null,
+                        mood = Mood.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 3",
@@ -325,7 +332,8 @@ class TimelinesPreviewProvider :
                         isDoseAnEstimate = false,
                         units = "mg",
                         experienceId = 0,
-                        notes = null
+                        notes = null,
+                        mood = Mood.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 1",
@@ -370,7 +378,8 @@ class TimelinesPreviewProvider :
                         isDoseAnEstimate = false,
                         units = "mg",
                         experienceId = 0,
-                        notes = null
+                        notes = null,
+                        mood = Mood.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 2",

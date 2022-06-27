@@ -15,12 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 
 @Composable
 fun ChooseRouteScreen(
@@ -42,7 +39,7 @@ fun ChooseRouteScreen(
 
 @Preview
 @Composable
-fun ChooseRouteScreenPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
+fun ChooseRouteScreenPreview() {
     val pwRoutes = listOf(AdministrationRoute.INSUFFLATED, AdministrationRoute.ORAL)
     val otherRoutes = AdministrationRoute.values().filter { route ->
         !pwRoutes.contains(route)

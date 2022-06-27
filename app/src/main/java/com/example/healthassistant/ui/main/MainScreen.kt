@@ -172,9 +172,6 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             navigateToExperiencePopNothing = {
                 navController.navigateToExperiencePopNothing(experienceId = it)
             },
-            navigateToEditExperienceScreen = {
-                navController.navigateToEditExperience(experienceId = it)
-            }
         )
     }
     composable(TabRouter.Ingestions.route) {

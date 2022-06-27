@@ -10,5 +10,6 @@ data class Experience(
     val id: Int = 0,
     var title: String,
     var text: String,
-    val creationDate: Date = Date()
+    val creationDate: Date = Date(),
+    var mood: Mood?
 )

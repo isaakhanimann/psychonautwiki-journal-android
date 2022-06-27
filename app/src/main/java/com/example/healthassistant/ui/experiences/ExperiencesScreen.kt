@@ -21,13 +21,11 @@ import com.example.healthassistant.ui.previewproviders.ExperiencesScreenPreviewP
 fun ExperiencesScreen(
     navigateToAddExperience: () -> Unit,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
-    navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
     experiencesViewModel: ExperiencesViewModel = hiltViewModel()
 ) {
     ExperiencesScreen(
         navigateToAddExperience = navigateToAddExperience,
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
-        navigateToEditExperienceScreen = navigateToEditExperienceScreen,
         groupedExperiences = experiencesViewModel.experiencesGrouped.collectAsState().value,
     )
 }
@@ -42,7 +40,6 @@ fun ExperiencesScreenPreview(
     ExperiencesScreen(
         navigateToAddExperience = {},
         navigateToExperiencePopNothing = {},
-        navigateToEditExperienceScreen = {},
         groupedExperiences = groupedExperiences,
     )
 }
@@ -51,7 +48,6 @@ fun ExperiencesScreenPreview(
 fun ExperiencesScreen(
     navigateToAddExperience: () -> Unit,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
-    navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
     groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
 ) {
     Scaffold(
@@ -78,7 +74,6 @@ fun ExperiencesScreen(
             ExperiencesList(
                 groupedExperiences = groupedExperiences,
                 navigateToExperiencePopNothing = navigateToExperiencePopNothing,
-                navigateToEditExperienceScreen = navigateToEditExperienceScreen,
             )
             if (groupedExperiences.isEmpty()) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
@@ -93,7 +88,6 @@ fun ExperiencesScreen(
 fun ExperiencesList(
     groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
-    navigateToEditExperienceScreen: (experienceId: Int) -> Unit,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         groupedExperiences.forEach { (year, experiencesInYear) ->
@@ -107,9 +101,6 @@ fun ExperiencesList(
                     navigateToExperienceScreen = {
                         navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
                     },
-                    navigateToEditExperienceScreen = {
-                        navigateToEditExperienceScreen(experienceWithIngestions.experience.id)
-                    }
                 )
                 if (i < experiencesInYear.size) {
                     Divider()

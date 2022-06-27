@@ -2,6 +2,7 @@ package com.example.healthassistant.ui.previewproviders
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.Mood
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
@@ -26,7 +27,8 @@ class IngestionWithDurationAndExperienceProvider :
                     isDoseAnEstimate = false,
                     units = "mg",
                     experienceId = 0,
-                    notes = "This is my note"
+                    notes = "This is my note",
+                    mood = Mood.SATISFIED
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "Substance 1",

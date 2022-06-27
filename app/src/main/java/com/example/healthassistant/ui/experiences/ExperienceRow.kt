@@ -29,7 +29,6 @@ import java.util.*
 fun ExperienceRow(
     @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngestionsAndCompanions: ExperienceWithIngestionsAndCompanions,
     navigateToExperienceScreen: () -> Unit = {},
-    navigateToEditExperienceScreen: () -> Unit = {},
 ) {
     Row(
         modifier = Modifier
