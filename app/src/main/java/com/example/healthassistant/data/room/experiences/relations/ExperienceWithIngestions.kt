@@ -1,7 +1,9 @@
-package com.example.healthassistant.data.room.experiences.entities
+package com.example.healthassistant.data.room.experiences.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.example.healthassistant.data.room.experiences.entities.Experience
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import java.util.*
 
 data class ExperienceWithIngestions(

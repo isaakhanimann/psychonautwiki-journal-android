@@ -18,8 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.ui.experiences.SectionTitle
 import com.example.healthassistant.ui.previewproviders.IngestionsScreenPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
@@ -44,7 +43,7 @@ fun IngestionsScreen(
 fun IngestionsScreenPreview(
     @PreviewParameter(
         IngestionsScreenPreviewProvider::class,
-    ) groupedIngestions: Map<String, List<Pair<Ingestion, SubstanceCompanion>>>
+    ) groupedIngestions: Map<String, List<IngestionWithCompanion>>
 ) {
     IngestionsScreen(
         navigateToIngestion = {},
@@ -57,7 +56,7 @@ fun IngestionsScreenPreview(
 @Composable
 fun IngestionsScreen(
     navigateToIngestion: (ingestionId: Int) -> Unit,
-    groupedIngestions: Map<String, List<Pair<Ingestion, SubstanceCompanion>>>,
+    groupedIngestions: Map<String, List<IngestionWithCompanion>>,
     filterOptions: List<IngestionsViewModel.FilterOption>,
     numberOfActiveFilters: Int,
 ) {
@@ -129,7 +128,7 @@ fun IngestionsScreen(
                         IngestionRowInIngestionsScreen(
                             ingestionWithCompanion = ingestionWithCompanion,
                             navigateToIngestion = {
-                                navigateToIngestion(ingestionWithCompanion.first.id)
+                                navigateToIngestion(ingestionWithCompanion.ingestion.id)
                             }
                         )
                         if (i < ingestionsInYear.size) {
@@ -150,7 +149,7 @@ fun IngestionsScreen(
 
 @Composable
 fun IngestionRowInIngestionsScreen(
-    ingestionWithCompanion: Pair<Ingestion, SubstanceCompanion>,
+    ingestionWithCompanion: IngestionWithCompanion,
     navigateToIngestion: () -> Unit,
 ) {
     val isDarkTheme = isSystemInDarkTheme()
@@ -166,11 +165,11 @@ fun IngestionRowInIngestionsScreen(
         ) {
             Surface(
                 shape = CircleShape,
-                color = ingestionWithCompanion.second.color.getComposeColor(isDarkTheme),
+                color = ingestionWithCompanion.substanceCompanion!!.color.getComposeColor(isDarkTheme),
                 modifier = Modifier.size(25.dp)
             ) {}
             Spacer(modifier = Modifier.width(10.dp))
-            val ingestion = ingestionWithCompanion.first
+            val ingestion = ingestionWithCompanion.ingestion
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = ingestion.substanceName,

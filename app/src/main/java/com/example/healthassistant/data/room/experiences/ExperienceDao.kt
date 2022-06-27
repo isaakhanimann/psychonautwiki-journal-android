@@ -1,7 +1,12 @@
 package com.example.healthassistant.data.room.experiences
 
 import androidx.room.*
-import com.example.healthassistant.data.room.experiences.entities.*
+import com.example.healthassistant.data.room.experiences.entities.Experience
+import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
+import com.example.healthassistant.data.room.experiences.entities.SubstanceLastUsed
+import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 
@@ -28,8 +33,8 @@ interface ExperienceDao {
     fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestions>>
 
     @Transaction
-    @Query("SELECT * FROM ingestion JOIN substancecompanion ON ingestion.substanceName = substancecompanion.substanceName ORDER BY time DESC")
-    fun getSortedIngestionsWithSubstanceCompanionsFlow(): Flow<Map<Ingestion, SubstanceCompanion>>
+    @Query("SELECT * FROM ingestion ORDER BY time DESC")
+    fun getSortedIngestionsWithSubstanceCompanionsFlow(): Flow<List<IngestionWithCompanion>>
 
     @Query("SELECT * FROM experience WHERE id =:id")
     suspend fun getExperience(id: Int): Experience?
@@ -39,6 +44,10 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM ingestion WHERE id =:id")
     fun getIngestionFlow(id: Int): Flow<Ingestion?>
+
+    @Transaction
+    @Query("SELECT * FROM ingestion WHERE id =:id")
+    fun getIngestionWithCompanionFlow(id: Int): Flow<IngestionWithCompanion?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(experience: Experience): Long

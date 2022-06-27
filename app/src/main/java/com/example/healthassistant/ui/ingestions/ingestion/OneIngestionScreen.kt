@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -35,7 +36,7 @@ fun OneIngestionScreen(
     navigateToEditMembership: () -> Unit,
     navigateBack: () -> Unit
 ) {
-    viewModel.ingestionWithDurationAndExperience.collectAsState().value?.also { ingestionWithDurationAndExperience ->
+    viewModel.ingestionWithCompanionDurationAndExperience.collectAsState().value?.also { ingestionWithDurationAndExperience ->
         OneIngestionScreen(
             ingestionWithDurationAndExperience,
             navigateToEditNote,
@@ -55,11 +56,11 @@ fun OneIngestionScreenPreview(
     @PreviewParameter(
         IngestionWithDurationAndExperienceProvider::class,
         limit = 1
-    ) ingestionWithDurationAndExperience: IngestionWithDurationAndExperience
+    ) ingestionWithCompanionDurationAndExperience: IngestionWithCompanionDurationAndExperience
 ) {
     HealthAssistantTheme {
         OneIngestionScreen(
-            ingestionWithDurationAndExperience = ingestionWithDurationAndExperience,
+            ingestionWithCompanionDurationAndExperience = ingestionWithCompanionDurationAndExperience,
             navigateToEditNote = {},
             navigateToEditMembership = {},
             navigateBack = {},
@@ -73,7 +74,7 @@ fun OneIngestionScreenPreview(
 
 @Composable
 fun OneIngestionScreen(
-    ingestionWithDurationAndExperience: IngestionWithDurationAndExperience,
+    ingestionWithCompanionDurationAndExperience: IngestionWithCompanionDurationAndExperience,
     navigateToEditNote: () -> Unit,
     navigateToEditMembership: () -> Unit,
     navigateBack: () -> Unit,
@@ -82,7 +83,7 @@ fun OneIngestionScreen(
     showDialog: () -> Unit,
     dismissDialog: () -> Unit
 ) {
-    val ingestion = ingestionWithDurationAndExperience.ingestion
+    val ingestion = ingestionWithCompanionDurationAndExperience.ingestion
     Scaffold(
         topBar = {
             TopAppBar(
@@ -103,7 +104,7 @@ fun OneIngestionScreen(
                 ingestionDurationPairs = listOf(
                     Pair(
                         first = ingestion,
-                        second = ingestionWithDurationAndExperience.roaDuration
+                        second = ingestionWithCompanionDurationAndExperience.roaDuration
                     )
                 ),
                 modifier = Modifier
@@ -128,12 +129,11 @@ fun OneIngestionScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     val isDarkTheme = isSystemInDarkTheme()
-                    // TODO
-//                    Surface(
-//                        shape = CircleShape,
-//                        color = ingestion.color.getComposeColor(isDarkTheme),
-//                        modifier = Modifier.size(25.dp)
-//                    ) {}
+                    Surface(
+                        shape = CircleShape,
+                        color = ingestionWithCompanionDurationAndExperience.substanceCompanion.color.getComposeColor(isDarkTheme),
+                        modifier = Modifier.size(25.dp)
+                    ) {}
                     Column {
                         Text(
                             text = ingestion.substanceName,
@@ -182,7 +182,7 @@ fun OneIngestionScreen(
                 }
             }
             Divider()
-            val experience = ingestionWithDurationAndExperience.experience
+            val experience = ingestionWithCompanionDurationAndExperience.experience
             if (experience == null) {
                 TextButton(onClick = navigateToEditMembership) {
                     Text(text = "Assign to Experience")

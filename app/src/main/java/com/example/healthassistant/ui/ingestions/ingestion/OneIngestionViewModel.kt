@@ -7,13 +7,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
+import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.INGESTION_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,9 +24,11 @@ class OneIngestionViewModel @Inject constructor(
 
     var isShowingDeleteDialog by mutableStateOf(false)
 
-    private val ingestionFlow = experienceRepo.getIngestionFlow(state.get<Int>(INGESTION_ID_KEY)!!)
-    val ingestionWithDurationAndExperience: StateFlow<IngestionWithDurationAndExperience?> =
-        ingestionFlow.map { ingestion ->
+    // todo: pair ingestion with experience in dao already
+    private val ingestionFlow: Flow<IngestionWithCompanion?> = experienceRepo.getIngestionWithCompanionFlow(state.get<Int>(INGESTION_ID_KEY)!!)
+    val ingestionWithCompanionDurationAndExperience: StateFlow<IngestionWithCompanionDurationAndExperience?> =
+        ingestionFlow.map { ingestionWithCompanion ->
+            val ingestion = ingestionWithCompanion?.ingestion
             val experience = ingestion?.experienceId.let {
                 if (it == null) {
                     null
@@ -38,9 +38,11 @@ class OneIngestionViewModel @Inject constructor(
                     )
                 }
             }
-            if (ingestion != null) {
-                IngestionWithDurationAndExperience(
-                    ingestion,
+            val companion = ingestionWithCompanion?.substanceCompanion
+            if (ingestion != null && companion != null) {
+                IngestionWithCompanionDurationAndExperience(
+                    ingestion = ingestion,
+                    substanceCompanion = companion,
                     roaDuration = substanceRepo.getSubstance(ingestion.substanceName)
                         ?.getRoa(ingestion.administrationRoute)?.roaDuration,
                     experience = experience
@@ -48,7 +50,6 @@ class OneIngestionViewModel @Inject constructor(
             } else {
                 null
             }
-
         }.stateIn(
             initialValue = null,
             scope = viewModelScope,
@@ -57,7 +58,7 @@ class OneIngestionViewModel @Inject constructor(
 
     fun deleteIngestion() {
         viewModelScope.launch {
-            ingestionWithDurationAndExperience.value?.ingestion.let {
+            ingestionWithCompanionDurationAndExperience.value?.ingestion.let {
                 assert(it != null)
                 if (it != null) {
                     experienceRepo.deleteIngestion(ingestion = it)

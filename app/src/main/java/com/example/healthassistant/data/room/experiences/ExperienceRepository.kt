@@ -1,6 +1,7 @@
 package com.example.healthassistant.data.room.experiences
 
 import com.example.healthassistant.data.room.experiences.entities.*
+import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
@@ -46,6 +47,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
+    fun getIngestionWithCompanionFlow(id: Int) = experienceDao.getIngestionWithCompanionFlow(id)
     fun getExperienceWithIngestions(experienceId: Int) =
         experienceDao.getExperienceWithIngestionsFlow(experienceId)
             .flowOn(Dispatchers.IO)
