@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class SubstanceCompanion(
     @PrimaryKey(autoGenerate = false)
     val substanceName: String,
-    val color: SubstanceColor,
+    var color: SubstanceColor,
 )

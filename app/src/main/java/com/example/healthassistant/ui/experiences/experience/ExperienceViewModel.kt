@@ -118,7 +118,7 @@ class ExperienceViewModel @Inject constructor(
     fun deleteExperience() {
         viewModelScope.launch {
             experienceWithIngestionsFlow.value?.experience?.let {
-                experienceRepo.deleteExperience(it)
+                experienceRepo.delete(it)
             }
         }
     }

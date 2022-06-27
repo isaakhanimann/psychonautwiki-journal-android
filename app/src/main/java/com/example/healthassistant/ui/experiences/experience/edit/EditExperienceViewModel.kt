@@ -40,7 +40,7 @@ class EditExperienceViewModel @Inject constructor(
             viewModelScope.launch {
                 experience!!.title = enteredTitle
                 experience!!.text = enteredText
-                repository.updateExperience(experience = experience!!)
+                repository.update(experience = experience!!)
             }
         }
     }

@@ -28,7 +28,7 @@ class AddExperienceViewModel @Inject constructor(private val repository: Experie
                         title = title,
                         text = notes
                     )
-                val experienceId = repository.addExperience(newExperience)
+                val experienceId = repository.insert(newExperience)
                 onSuccess(experienceId.toInt())
             }
         }

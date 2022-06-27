@@ -44,7 +44,7 @@ class EditIngestionMembershipViewModel @Inject constructor(
     fun onDoneTap() {
         viewModelScope.launch {
             ingestion!!.experienceId = selectedExperienceId
-            experienceRepo.updateIngestion(ingestion!!)
+            experienceRepo.update(ingestion!!)
         }
     }
 

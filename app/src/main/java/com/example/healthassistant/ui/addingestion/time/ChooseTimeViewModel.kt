@@ -60,6 +60,7 @@ class ChooseTimeViewModel @Inject constructor(
     private val dose: Double?
     private val units: String?
     private val isEstimate: Boolean
+    private var substanceCompanion: SubstanceCompanion? = null
 
     init {
         substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
@@ -79,14 +80,15 @@ class ChooseTimeViewModel @Inject constructor(
         assert(substance != null)
         viewModelScope.launch {
             val allCompanions = experienceRepo.getAllSubstanceCompanionsFlow().first()
-            val existingColor = allCompanions.firstOrNull { it.substanceName == substanceName }
-            if (existingColor == null) {
+            val thisCompanion = allCompanions.firstOrNull { it.substanceName == substanceName }
+            substanceCompanion = thisCompanion
+            if (thisCompanion == null) {
                 isShowingColorPicker = true
                 val alreadyUsedColors = allCompanions.map { it.color }
                 val otherColors = SubstanceColor.values().filter { !alreadyUsedColors.contains(it) }
                 selectedColor = otherColors.randomOrNull() ?: SubstanceColor.values().random()
             } else {
-                selectedColor = existingColor.color
+                selectedColor = thisCompanion.color
             }
             isLoadingColor = false
         }
@@ -115,13 +117,19 @@ class ChooseTimeViewModel @Inject constructor(
                 experienceId = experienceId,
                 notes = null
             )
-            experienceRepo.addIngestion(newIngestion)
-            // todo: update instead of replace the substance companion
-            val substanceCompanion = SubstanceCompanion(
-                substanceName,
-                color = selectedColor
-            )
-            experienceRepo.addSubstanceCompanion(substanceCompanion)
+            experienceRepo.insert(newIngestion)
+            substanceCompanion.let {
+                if (it != null && it.color != selectedColor) {
+                    it.color = selectedColor
+                    experienceRepo.update(it)
+                } else if (it == null) {
+                    val substanceCompanion = SubstanceCompanion(
+                        substanceName,
+                        color = selectedColor
+                    )
+                    experienceRepo.insert(substanceCompanion)
+                }
+            }
         }
     }
 }

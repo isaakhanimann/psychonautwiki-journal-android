@@ -59,7 +59,7 @@ class OneIngestionViewModel @Inject constructor(
             ingestionWithCompanionDurationAndExperience.value?.ingestionWithCompanion.let {
                 assert(it != null)
                 if (it != null) {
-                    experienceRepo.deleteIngestion(ingestion = it.ingestion)
+                    experienceRepo.delete(ingestion = it.ingestion)
                 }
             }
         }

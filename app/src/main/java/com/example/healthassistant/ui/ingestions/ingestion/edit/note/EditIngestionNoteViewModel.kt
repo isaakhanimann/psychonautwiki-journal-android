@@ -34,7 +34,7 @@ class EditIngestionNoteViewModel @Inject constructor(
     fun onDoneTap() {
         viewModelScope.launch {
             ingestion!!.notes = note
-            repository.updateIngestion(ingestion!!)
+            repository.update(ingestion!!)
         }
     }
 

@@ -15,14 +15,14 @@ import javax.inject.Singleton
 
 @Singleton
 class ExperienceRepository @Inject constructor(private val experienceDao: ExperienceDao) {
-    suspend fun addExperience(experience: Experience) = experienceDao.insert(experience)
-    suspend fun addIngestion(ingestion: Ingestion) = experienceDao.insert(ingestion)
-    suspend fun updateExperience(experience: Experience) = experienceDao.update(experience)
-    suspend fun updateIngestion(ingestion: Ingestion) = experienceDao.update(ingestion)
+    suspend fun insert(experience: Experience) = experienceDao.insert(experience)
+    suspend fun insert(ingestion: Ingestion) = experienceDao.insert(ingestion)
+    suspend fun update(experience: Experience) = experienceDao.update(experience)
+    suspend fun update(ingestion: Ingestion) = experienceDao.update(ingestion)
 
-    suspend fun deleteIngestion(ingestion: Ingestion) = experienceDao.deleteIngestion(ingestion)
+    suspend fun delete(ingestion: Ingestion) = experienceDao.deleteIngestion(ingestion)
 
-    suspend fun deleteExperience(experience: Experience) =
+    suspend fun delete(experience: Experience) =
         experienceDao.deleteExperience(experience)
 
     fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>> =
@@ -62,13 +62,13 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getIngestionAfterDate(date: Date): List<Ingestion> =
         experienceDao.getIngestionAfterDate(date)
 
-    suspend fun addSubstanceCompanion(substanceCompanion: SubstanceCompanion) =
+    suspend fun insert(substanceCompanion: SubstanceCompanion) =
         experienceDao.insert(substanceCompanion)
 
-    suspend fun deleteSubstanceCompanion(substanceCompanion: SubstanceCompanion) =
+    suspend fun delete(substanceCompanion: SubstanceCompanion) =
         experienceDao.delete(substanceCompanion)
 
-    suspend fun updateSubstanceCompanion(substanceCompanion: SubstanceCompanion) =
+    suspend fun update(substanceCompanion: SubstanceCompanion) =
         experienceDao.update(substanceCompanion)
 
     fun getSortedIngestionsWithSubstanceCompanionsFlow() =
