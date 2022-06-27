@@ -1,14 +1,15 @@
 package com.example.healthassistant.ui.stats
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -68,10 +69,22 @@ fun StatisticsScreen(
                 .fillMaxSize()
         ) {
             items(substancesLastUsed.size) { i ->
-                val subStat = substancesLastUsed[i]
-                Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
-                    Text(text = subStat.substanceName, style = MaterialTheme.typography.h6)
-                    Text(text = "Last used ${subStat.lastUsedText} ago")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+                ) {
+                    val subStat = substancesLastUsed[i]
+                    val isDarkTheme = isSystemInDarkTheme()
+                    Surface(
+                        shape = CircleShape,
+                        color = subStat.color.getComposeColor(isDarkTheme),
+                        modifier = Modifier.size(25.dp)
+                    ) {}
+                    Column {
+                        Text(text = subStat.substanceName, style = MaterialTheme.typography.h6)
+                        Text(text = "Last used ${subStat.lastUsedText} ago")
+                    }
                 }
                 if (i < substancesLastUsed.size) {
                     Divider()

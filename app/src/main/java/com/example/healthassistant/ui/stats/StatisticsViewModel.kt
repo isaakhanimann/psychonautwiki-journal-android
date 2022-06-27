@@ -3,6 +3,7 @@ package com.example.healthassistant.ui.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
+import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -12,7 +13,8 @@ import kotlin.math.roundToInt
 
 data class SubstanceStat(
     val substanceName: String,
-    val lastUsedText: String
+    val lastUsedText: String,
+    val color: SubstanceColor
 )
 
 @HiltViewModel
@@ -32,8 +34,9 @@ class StatisticsViewModel @Inject constructor(
             .combine(currentTimeFlow) { list, currentTime ->
                 list.map {
                     SubstanceStat(
-                        it.substanceName,
-                        getTimeDifferenceText(fromDate = it.lastUsed, toDate = currentTime)
+                        substanceName = it.substanceName,
+                        lastUsedText = getTimeDifferenceText(fromDate = it.lastUsed, toDate = currentTime),
+                        color = it.color
                     )
                 }
             }.stateIn(

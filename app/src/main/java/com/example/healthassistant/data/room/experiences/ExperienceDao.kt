@@ -19,7 +19,13 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
     fun getIngestionsSortedDescendingFlow(): Flow<List<Ingestion>>
 
-    @Query("SELECT substanceName, MAX(time) as lastUsed FROM ingestion GROUP BY substanceName ORDER BY lastUsed DESC")
+    @Query(
+        "SELECT ingestion.substanceName, MAX(ingestion.time) as lastUsed, substancecompanion.color" +
+                " FROM ingestion" +
+                " LEFT JOIN substancecompanion ON ingestion.substanceName = substancecompanion.substanceName" +
+                " GROUP BY ingestion.substanceName" +
+                " ORDER BY lastUsed DESC"
+    )
     fun getSubstanceWithLastDateDescendingFlow(): Flow<List<SubstanceLastUsed>>
 
     @Query("SELECT * FROM ingestion WHERE time > :date ORDER BY time ASC")
@@ -29,7 +35,7 @@ interface ExperienceDao {
     fun getLastUsedSubstanceNamesFlow(limit: Int): Flow<List<String>>
 
     @Transaction
-    @Query("SELECT DISTINCT e.id, e.title, e.creationDate, e.text FROM experience AS e LEFT JOIN ingestion AS i ON e.id == i.experienceId ORDER BY case when i.time IS NULL then e.creationDate else i.time end DESC")
+    @Query("SELECT DISTINCT e.id, e.title, e.creationDate, e.text FROM experience AS e LEFT JOIN ingestion AS i ON e.id = i.experienceId ORDER BY case when i.time IS NULL then e.creationDate else i.time end DESC")
     fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>>
 
     @Transaction
