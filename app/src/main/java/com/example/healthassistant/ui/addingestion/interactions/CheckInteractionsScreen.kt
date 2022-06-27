@@ -7,6 +7,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +57,22 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::c
     )
 }
 
+@Preview
+@Composable
+fun CheckInteractionsScreenPreview2() {
+    CheckInteractionsScreen(
+        isSearchingForInteractions = true,
+        dangerousInteractions = emptyList(),
+        unsafeInteractions = emptyList(),
+        uncertainInteractions = emptyList(),
+        navigateToNext = {},
+        dismissAlert = {},
+        isShowingAlert = false,
+        alertTitle = "Dangerous Interaction Detected!",
+        alertText = "Dangerous Interaction with Heroin taken 4h 10m ago"
+    )
+}
+
 @Composable
 fun CheckInteractionsScreen(
     isSearchingForInteractions: Boolean,
@@ -87,26 +105,37 @@ fun CheckInteractionsScreen(
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-            Column(
-                verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .padding(horizontal = 10.dp)
-                    .weight(1f)
-            ) {
-                FlowRow(
+            if (dangerousInteractions.isEmpty() && unsafeInteractions.isEmpty() && uncertainInteractions.isEmpty()) {
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = "No interactions found... check other sources.")
+                    }
+                }
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(vertical = 5.dp)
+                        .padding(horizontal = 10.dp)
                         .weight(1f)
                 ) {
-                    dangerousInteractions.forEach {
-                        InteractionChip(text = it, color = Color.Red)
-                    }
-                    unsafeInteractions.forEach {
-                        InteractionChip(text = it, color = Color(0xFFFF9800))
-                    }
-                    uncertainInteractions.forEach {
-                        InteractionChip(text = it, color = Color.Yellow)
+                    FlowRow(
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                            .padding(vertical = 5.dp)
+                            .weight(1f)
+                    ) {
+                        dangerousInteractions.forEach {
+                            InteractionChip(text = it, color = Color.Red)
+                        }
+                        unsafeInteractions.forEach {
+                            InteractionChip(text = it, color = Color(0xFFFF9800))
+                        }
+                        uncertainInteractions.forEach {
+                            InteractionChip(text = it, color = Color.Yellow)
+                        }
                     }
                 }
             }
