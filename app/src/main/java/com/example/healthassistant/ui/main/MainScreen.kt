@@ -37,6 +37,7 @@ import com.example.healthassistant.ui.search.substance.SubstanceScreen
 import com.example.healthassistant.ui.settings.SettingsScreen
 import com.example.healthassistant.ui.settings.faq.FAQScreen
 import com.example.healthassistant.ui.stats.StatisticsScreen
+import com.example.healthassistant.ui.stats.substancecompanion.SubstanceCompanionScreen
 
 @Composable
 fun MainScreen() {
@@ -145,6 +146,12 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         SubstanceScreen()
     }
     composable(
+        ArgumentRouter.SubstanceCompanionRouter.route,
+        arguments = ArgumentRouter.SubstanceCompanionRouter.args
+    ) {
+        SubstanceCompanionScreen()
+    }
+    composable(
         ArgumentRouter.EditIngestionNoteRouter.route,
         arguments = ArgumentRouter.EditIngestionNoteRouter.args
     ) {
@@ -184,7 +191,14 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             }
         )
     }
-    composable(TabRouter.Stats.route) { StatisticsScreen(navigateToSettings = navController::navigateToSettings) }
+    composable(TabRouter.Stats.route) {
+        StatisticsScreen(
+            navigateToSettings = navController::navigateToSettings,
+            navigateToSubstanceCompanion = {
+                navController.navigateToSubstanceCompanionScreen(it)
+            }
+        )
+    }
 }
 
 fun NavGraphBuilder.addIngestionGraph(navController: NavController) {

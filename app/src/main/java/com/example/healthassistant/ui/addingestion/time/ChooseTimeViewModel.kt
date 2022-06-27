@@ -15,7 +15,7 @@ import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -61,6 +61,27 @@ class ChooseTimeViewModel @Inject constructor(
     private val units: String?
     private val isEstimate: Boolean
     private var substanceCompanion: SubstanceCompanion? = null
+
+    private val companionFlow = experienceRepo.getAllSubstanceCompanionsFlow()
+
+    val alreadyUsedColorsFlow: StateFlow<List<SubstanceColor>> =
+        companionFlow.map { companions ->
+            companions.map { it.color }.distinct()
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
+
+    val otherColorsFlow: StateFlow<List<SubstanceColor>> = alreadyUsedColorsFlow.map { alreadyUsedColors ->
+        SubstanceColor.values().filter {
+            !alreadyUsedColors.contains(it)
+        }
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     init {
         substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!

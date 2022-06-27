@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.addingestion.time.colorpicker
+package com.example.healthassistant.ui.addingestion.time
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -13,23 +13,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.google.accompanist.flowlayout.FlowRow
-
-@Composable
-fun ColorPicker(
-    viewModel: ColorPickerViewModel = hiltViewModel(),
-    selectedColor: SubstanceColor,
-    onChangeOfColor: (SubstanceColor) -> Unit
-) {
-    ColorPicker(
-        selectedColor = selectedColor,
-        onChangeOfColor = onChangeOfColor,
-        alreadyUsedColors = viewModel.alreadyUsedColorsFlow.collectAsState().value,
-        otherColors = viewModel.otherColorsFlow.collectAsState().value
-    )
-}
 
 @Preview
 @Composable

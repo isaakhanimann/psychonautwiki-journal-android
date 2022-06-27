@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
-import com.example.healthassistant.ui.addingestion.time.colorpicker.ColorPicker
 
 
 @Composable
@@ -41,13 +41,19 @@ fun ChooseTimeScreen(
         isLoadingColor = viewModel.isLoadingColor,
         isShowingColorPicker = viewModel.isShowingColorPicker,
         selectedColor = viewModel.selectedColor,
-        onChangeColor = { viewModel.selectedColor = it }
+        onChangeColor = { viewModel.selectedColor = it },
+        alreadyUsedColors = viewModel.alreadyUsedColorsFlow.collectAsState().value,
+        otherColors = viewModel.otherColorsFlow.collectAsState().value
     )
 }
 
 @Preview
 @Composable
 fun ChooseTimeScreenPreview() {
+    val alreadyUsedColors = listOf(SubstanceColor.BLUE, SubstanceColor.PINK)
+    val otherColors = SubstanceColor.values().filter { color ->
+        !alreadyUsedColors.contains(color)
+    }
     ChooseTimeScreen(
         createAndSaveIngestion = {},
         onSubmitDate = { _: Int, _: Int, _: Int -> },
@@ -58,7 +64,9 @@ fun ChooseTimeScreenPreview() {
         isLoadingColor = false,
         isShowingColorPicker = true,
         selectedColor = SubstanceColor.BLUE,
-        onChangeColor = {}
+        onChangeColor = {},
+        alreadyUsedColors = alreadyUsedColors,
+        otherColors = otherColors
     )
 }
 
@@ -76,6 +84,9 @@ fun ChooseTimeScreen(
     isShowingColorPicker: Boolean,
     selectedColor: SubstanceColor,
     onChangeColor: (SubstanceColor) -> Unit,
+    alreadyUsedColors: List<SubstanceColor>,
+    otherColors: List<SubstanceColor>
+
 ) {
     Column {
         LinearProgressIndicator(progress = 1f, modifier = Modifier.fillMaxWidth())
@@ -119,7 +130,9 @@ fun ChooseTimeScreen(
                 if (isShowingColorPicker) {
                     ColorPicker(
                         selectedColor = selectedColor,
-                        onChangeOfColor = onChangeColor
+                        onChangeOfColor = onChangeColor,
+                        alreadyUsedColors = alreadyUsedColors,
+                        otherColors = otherColors
                     )
                 }
                 Column(

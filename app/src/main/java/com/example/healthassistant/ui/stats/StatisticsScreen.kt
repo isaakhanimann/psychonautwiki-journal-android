@@ -1,5 +1,6 @@
 package com.example.healthassistant.ui.stats
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,11 +22,13 @@ import com.example.healthassistant.ui.previewproviders.StatisticsPreviewProvider
 @Composable
 fun StatisticsScreen(
     viewModel: StatisticsViewModel = hiltViewModel(),
-    navigateToSettings: () -> Unit
+    navigateToSettings: () -> Unit,
+    navigateToSubstanceCompanion: (substanceName: String) -> Unit
 ) {
     StatisticsScreen(
+        substancesLastUsed = viewModel.substanceStats.collectAsState().value,
         navigateToSettings = navigateToSettings,
-        substancesLastUsed = viewModel.substanceStats.collectAsState().value
+        navigateToSubstanceCompanion = navigateToSubstanceCompanion
     )
 }
 
@@ -37,15 +40,17 @@ fun StatisticsPreview(
     ) substancesLastUsed: List<SubstanceStat>
 ) {
     StatisticsScreen(
+        substancesLastUsed = substancesLastUsed,
         navigateToSettings = {},
-        substancesLastUsed = substancesLastUsed
+        navigateToSubstanceCompanion = {}
     )
 }
 
 @Composable
 fun StatisticsScreen(
+    substancesLastUsed: List<SubstanceStat>,
     navigateToSettings: () -> Unit,
-    substancesLastUsed: List<SubstanceStat>
+    navigateToSubstanceCompanion: (substanceName: String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -69,12 +74,17 @@ fun StatisticsScreen(
                 .fillMaxSize()
         ) {
             items(substancesLastUsed.size) { i ->
+                val subStat = substancesLastUsed[i]
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(5.dp),
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navigateToSubstanceCompanion(subStat.substanceName)
+                        }
+                        .padding(horizontal = 10.dp, vertical = 5.dp)
                 ) {
-                    val subStat = substancesLastUsed[i]
                     val isDarkTheme = isSystemInDarkTheme()
                     Surface(
                         shape = CircleShape,

@@ -27,6 +27,8 @@ const val ROUTE_START_CHOOSE_DOSE = "chooseDose/"
 const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
 const val ROUTE_START_EDIT_INGESTION_NOTE = "editIngestionNote/"
 const val ROUTE_START_EDIT_INGESTION_MEMBERSHIP = "editIngestionMembership/"
+const val ROUTE_START_SUBSTANCE_COMPANION = "substancesCompanion/"
+
 
 sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>) {
     object ExperienceRouter : ArgumentRouter(
@@ -46,6 +48,13 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
 
     object SubstanceRouter : ArgumentRouter(
         route = "$ROUTE_START_SUBSTANCES{$SUBSTANCE_NAME_KEY}",
+        args = listOf(
+            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
+        )
+    )
+
+    object SubstanceCompanionRouter : ArgumentRouter(
+        route = "$ROUTE_START_SUBSTANCE_COMPANION{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
         )
@@ -138,6 +147,10 @@ fun NavController.navigateToEditExperience(experienceId: Int) {
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {
     navigate(ROUTE_START_SUBSTANCES + substanceName)
+}
+
+fun NavController.navigateToSubstanceCompanionScreen(substanceName: String) {
+    navigate(ROUTE_START_SUBSTANCE_COMPANION + substanceName)
 }
 
 fun NavController.navigateToAddIngestion(experienceId: Int?) {
