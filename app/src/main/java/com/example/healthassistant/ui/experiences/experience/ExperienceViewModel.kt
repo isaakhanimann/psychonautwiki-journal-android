@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
+import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY
@@ -29,6 +30,27 @@ class ExperienceViewModel @Inject constructor(
 
 
     var isShowingDeleteDialog by mutableStateOf(false)
+
+    var isShowingSentimentDialog by mutableStateOf(false)
+
+    fun showEditSentimentDialog() {
+        isShowingSentimentDialog = true
+    }
+
+    fun dismissEditSentimentDialog() {
+        isShowingSentimentDialog = false
+    }
+
+    fun saveSentiment(sentiment: Sentiment?) {
+        val experience = experienceWithIngestionsFlow.value?.experience
+        if (experience != null) {
+            viewModelScope.launch {
+                experience.sentiment = sentiment
+                experienceRepo.update(experience = experience)
+            }
+        }
+    }
+
 
     val experienceWithIngestionsFlow =
         experienceRepo.getExperienceWithIngestions(experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!)

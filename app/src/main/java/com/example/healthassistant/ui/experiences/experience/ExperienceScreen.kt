@@ -7,6 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddReaction
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
@@ -19,10 +20,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Experience
+import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.RoaDuration
+import com.example.healthassistant.ui.experiences.experience.edit.SentimentDialog
 import com.example.healthassistant.ui.experiences.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
@@ -49,7 +52,11 @@ fun ExperienceScreen(
             navigateBack,
             isShowingDialog = viewModel.isShowingDeleteDialog,
             showDialog = { viewModel.isShowingDeleteDialog = true },
-            dismissDialog = { viewModel.isShowingDeleteDialog = false }
+            dismissDialog = { viewModel.isShowingDeleteDialog = false },
+            isShowingSentimentDialog = viewModel.isShowingSentimentDialog,
+            showSentimentDialog = viewModel::showEditSentimentDialog,
+            dismissSentimentDialog = viewModel::dismissEditSentimentDialog,
+            saveSentiment = viewModel::saveSentiment,
         )
     }
 }
@@ -85,9 +92,13 @@ fun ExperienceScreenPreview(
             navigateToEditExperienceScreen = {},
             navigateToIngestionScreen = {},
             navigateBack = {},
-            isShowingDialog = true,
+            isShowingDialog = false,
             showDialog = {},
-            dismissDialog = {}
+            dismissDialog = {},
+            isShowingSentimentDialog = false,
+            showSentimentDialog = {},
+            dismissSentimentDialog = {},
+            saveSentiment = {},
         )
     }
 }
@@ -105,7 +116,11 @@ fun ExperienceScreen(
     navigateBack: () -> Unit,
     isShowingDialog: Boolean,
     showDialog: () -> Unit,
-    dismissDialog: () -> Unit
+    dismissDialog: () -> Unit,
+    isShowingSentimentDialog: Boolean,
+    showSentimentDialog: () -> Unit,
+    dismissSentimentDialog: () -> Unit,
+    saveSentiment: (sentiment: Sentiment?) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -180,6 +195,14 @@ fun ExperienceScreen(
                 }
                 Divider(modifier = Modifier.padding(top = 10.dp))
             }
+            if (isShowingSentimentDialog) {
+                SentimentDialog(dismiss = dismissSentimentDialog, saveSentiment = saveSentiment)
+            }
+            SentimentSection(
+                sentiment = experience.sentiment,
+                showDialog = showSentimentDialog
+            )
+            Divider()
             if (experience.text.isEmpty()) {
                 TextButton(onClick = navigateToEditExperienceScreen) {
                     Icon(
@@ -191,7 +214,17 @@ fun ExperienceScreen(
                     Text("Add Notes")
                 }
             } else {
-                Text(text = experience.text, modifier = Modifier.padding(vertical = 10.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = experience.text, modifier = Modifier.padding(vertical = 10.dp))
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    IconButton(onClick = navigateToEditExperienceScreen) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Notes")
+                    }
+                }
             }
             Divider()
             TextButton(
@@ -236,6 +269,43 @@ fun ExperienceScreen(
                 )
             }
             Divider()
+        }
+    }
+}
+
+@Composable
+fun SentimentSection(
+    sentiment: Sentiment?,
+    showDialog: () -> Unit
+) {
+    if (sentiment == null) {
+        TextButton(
+            onClick = showDialog,
+        ) {
+            Icon(
+                Icons.Filled.AddReaction,
+                contentDescription = "Add Sentiment",
+                modifier = Modifier.size(ButtonDefaults.IconSize),
+            )
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text("Add Sentiment")
+        }
+    } else {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                sentiment.icon,
+                contentDescription = sentiment.description,
+                modifier = Modifier
+                    .padding(vertical = 7.dp)
+                    .size(40.dp),
+            )
+            IconButton(onClick = showDialog) {
+                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Sentiment")
+            }
         }
     }
 }
