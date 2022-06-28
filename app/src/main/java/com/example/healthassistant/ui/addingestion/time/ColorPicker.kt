@@ -95,18 +95,24 @@ fun ColorDialog(
         },
         text = {
             Column {
-                Text(text = "Not Yet Used", style = MaterialTheme.typography.subtitle1)
-                Spacer(modifier = Modifier.height(2.dp))
-                CircleColorButtons(colors = otherColors) {
-                    onChangeOfColor(it)
-                    dismiss()
+                if (otherColors.isEmpty()) {
+                    Text(text = "No Unused Colors", style = MaterialTheme.typography.subtitle1)
+                } else {
+                    Text(text = "Not Yet Used", style = MaterialTheme.typography.subtitle1)
+                    Spacer(modifier = Modifier.height(2.dp))
+                    CircleColorButtons(colors = otherColors) {
+                        onChangeOfColor(it)
+                        dismiss()
+                    }
                 }
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Already Used", style = MaterialTheme.typography.subtitle1)
-                Spacer(modifier = Modifier.height(2.dp))
-                CircleColorButtons(colors = alreadyUsedColors) {
-                    onChangeOfColor(it)
-                    dismiss()
+                if (alreadyUsedColors.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(text = "Already Used", style = MaterialTheme.typography.subtitle1)
+                    Spacer(modifier = Modifier.height(2.dp))
+                    CircleColorButtons(colors = alreadyUsedColors) {
+                        onChangeOfColor(it)
+                        dismiss()
+                    }
                 }
             }
         },
