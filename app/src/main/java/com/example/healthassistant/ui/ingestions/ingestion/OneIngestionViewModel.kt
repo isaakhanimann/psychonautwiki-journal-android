@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
+import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.INGESTION_ID_KEY
@@ -24,8 +25,30 @@ class OneIngestionViewModel @Inject constructor(
 
     var isShowingDeleteDialog by mutableStateOf(false)
 
+    var isShowingSentimentDialog by mutableStateOf(false)
+
+    fun showEditSentimentDialog() {
+        isShowingSentimentDialog = true
+    }
+
+    fun dismissEditSentimentDialog() {
+        isShowingSentimentDialog = false
+    }
+
+    fun saveSentiment(sentiment: Sentiment?) {
+        val ingestion =
+            ingestionWithCompanionDurationAndExperience.value?.ingestionWithCompanion?.ingestion
+        if (ingestion != null) {
+            viewModelScope.launch {
+                ingestion.sentiment = sentiment
+                experienceRepo.update(ingestion)
+            }
+        }
+    }
+
     private val ingestionId = state.get<Int>(INGESTION_ID_KEY)!!
-    private val ingestionFlow: Flow<IngestionWithCompanion?> = experienceRepo.getIngestionWithCompanionFlow(ingestionId)
+    private val ingestionFlow: Flow<IngestionWithCompanion?> =
+        experienceRepo.getIngestionWithCompanionFlow(ingestionId)
     val ingestionWithCompanionDurationAndExperience: StateFlow<IngestionWithCompanionDurationAndExperience?> =
         ingestionFlow.map { ingestionWithCompanion ->
             val ingestion = ingestionWithCompanion?.ingestion

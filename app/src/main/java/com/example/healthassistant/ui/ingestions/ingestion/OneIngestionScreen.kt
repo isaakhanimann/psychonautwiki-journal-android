@@ -20,7 +20,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.substances.AdministrationRoute
+import com.example.healthassistant.ui.experiences.experience.SentimentSection
+import com.example.healthassistant.ui.experiences.experience.edit.SentimentDialog
 import com.example.healthassistant.ui.experiences.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.previewproviders.IngestionWithDurationAndExperienceProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
@@ -45,7 +48,11 @@ fun OneIngestionScreen(
             viewModel::deleteIngestion,
             viewModel.isShowingDeleteDialog,
             showDialog = { viewModel.isShowingDeleteDialog = true },
-            dismissDialog = { viewModel.isShowingDeleteDialog = false }
+            dismissDialog = { viewModel.isShowingDeleteDialog = false },
+            isShowingSentimentDialog = viewModel.isShowingSentimentDialog,
+            showSentimentDialog = viewModel::showEditSentimentDialog,
+            dismissSentimentDialog = viewModel::dismissEditSentimentDialog,
+            saveSentiment = viewModel::saveSentiment,
         )
     }
 }
@@ -65,9 +72,13 @@ fun OneIngestionScreenPreview(
             navigateToEditMembership = {},
             navigateBack = {},
             deleteIngestion = {},
-            isShowingDialog = true,
+            isShowingDialog = false,
             showDialog = {},
-            dismissDialog = {}
+            dismissDialog = {},
+            isShowingSentimentDialog = false,
+            showSentimentDialog = {},
+            dismissSentimentDialog = {},
+            saveSentiment = {},
         )
     }
 }
@@ -81,7 +92,11 @@ fun OneIngestionScreen(
     deleteIngestion: () -> Unit,
     isShowingDialog: Boolean,
     showDialog: () -> Unit,
-    dismissDialog: () -> Unit
+    dismissDialog: () -> Unit,
+    isShowingSentimentDialog: Boolean,
+    showSentimentDialog: () -> Unit,
+    dismissSentimentDialog: () -> Unit,
+    saveSentiment: (sentiment: Sentiment?) -> Unit
 ) {
     val ingestionWithCompanion = ingestionWithCompanionDurationAndExperience.ingestionWithCompanion
     val ingestion = ingestionWithCompanion.ingestion
@@ -132,8 +147,10 @@ fun OneIngestionScreen(
                     val isDarkTheme = isSystemInDarkTheme()
                     Surface(
                         shape = CircleShape,
-                        color = ingestionWithCompanionDurationAndExperience.ingestionWithCompanion.substanceCompanion!!.color.getComposeColor(isDarkTheme),
-                        modifier = Modifier.size(25.dp)
+                        color = ingestionWithCompanionDurationAndExperience.ingestionWithCompanion.substanceCompanion!!.color.getComposeColor(
+                            isDarkTheme
+                        ),
+                        modifier = Modifier.size(30.dp)
                     ) {}
                     Column {
                         Text(
@@ -156,6 +173,11 @@ fun OneIngestionScreen(
                     }
                 }
             }
+            Divider()
+            if (isShowingSentimentDialog) {
+                SentimentDialog(dismiss = dismissSentimentDialog, saveSentiment = saveSentiment)
+            }
+            SentimentSection(sentiment = ingestion.sentiment, showDialog = showSentimentDialog)
             Divider()
             ingestion.notes.let {
                 val constNote = it
