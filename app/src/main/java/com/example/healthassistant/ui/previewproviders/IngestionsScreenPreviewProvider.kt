@@ -2,7 +2,7 @@ package com.example.healthassistant.ui.previewproviders
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.Mood
+import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
@@ -30,7 +30,7 @@ class IngestionsScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            mood = Mood.SATISFIED
+                            sentiment = Sentiment.SATISFIED
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "MDMA",
@@ -53,7 +53,7 @@ class IngestionsScreenPreviewProvider :
                             units = "µg",
                             experienceId = 0,
                             notes = null,
-                            mood = Mood.NEUTRAL
+                            sentiment = Sentiment.NEUTRAL
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "LSD",
@@ -76,7 +76,7 @@ class IngestionsScreenPreviewProvider :
                             units = "µg",
                             experienceId = 0,
                             notes = "Note",
-                            mood = null
+                            sentiment = null
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "LSD",
@@ -99,7 +99,7 @@ class IngestionsScreenPreviewProvider :
                             units = "µg",
                             experienceId = 0,
                             notes = null,
-                            mood = Mood.SATISFIED
+                            sentiment = Sentiment.SATISFIED
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "LSD",
@@ -122,7 +122,7 @@ class IngestionsScreenPreviewProvider :
                             units = "µg",
                             experienceId = 0,
                             notes = null,
-                            mood = Mood.SATISFIED
+                            sentiment = Sentiment.SATISFIED
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "LSD",
@@ -149,7 +149,7 @@ class IngestionsScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            mood = Mood.VERY_SATISFIED
+                            sentiment = Sentiment.VERY_SATISFIED
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "MDMA",
@@ -172,7 +172,7 @@ class IngestionsScreenPreviewProvider :
                             units = "µg",
                             experienceId = 0,
                             notes = null,
-                            mood = Mood.DISSATISFIED
+                            sentiment = Sentiment.DISSATISFIED
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "LSD",
@@ -195,7 +195,7 @@ class IngestionsScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "Note",
-                            mood = Mood.SATISFIED
+                            sentiment = Sentiment.SATISFIED
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Ketamine",
@@ -218,7 +218,7 @@ class IngestionsScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
-                            mood = Mood.SATISFIED
+                            sentiment = Sentiment.SATISFIED
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Cocaine",
@@ -241,7 +241,7 @@ class IngestionsScreenPreviewProvider :
                             units = "µg",
                             experienceId = 0,
                             notes = null,
-                            mood = Mood.SATISFIED
+                            sentiment = Sentiment.SATISFIED
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "LSD",

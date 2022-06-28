@@ -18,7 +18,7 @@ class ExperiencesScreenPreviewProvider :
                                 id = 0,
                                 title = "Festival",
                                 text = "Some notes",
-                                mood = Mood.SATISFIED
+                                sentiment = Sentiment.SATISFIED
                             ),
                             ingestionsWithCompanions = listOf(
                                 IngestionWithCompanion(
@@ -37,7 +37,7 @@ class ExperiencesScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        mood = Mood.SATISFIED
+                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "MDMA",
@@ -60,7 +60,7 @@ class ExperiencesScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        mood = Mood.SATISFIED
+                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Cocaine",
@@ -83,7 +83,7 @@ class ExperiencesScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        mood = Mood.SATISFIED
+                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Ketamine",
@@ -97,7 +97,7 @@ class ExperiencesScreenPreviewProvider :
                                 id = 0,
                                 title = "Bachelor Party",
                                 text = "Some notes",
-                                mood = Mood.VERY_SATISFIED
+                                sentiment = Sentiment.VERY_SATISFIED
                             ),
                             ingestionsWithCompanions = listOf(
                                 IngestionWithCompanion(
@@ -116,7 +116,7 @@ class ExperiencesScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        mood = Mood.SATISFIED
+                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "MDMA",
@@ -135,7 +135,7 @@ class ExperiencesScreenPreviewProvider :
                                 id = 0,
                                 title = "Liam's Birthday",
                                 text = "Some notes",
-                                mood = Mood.SATISFIED
+                                sentiment = Sentiment.SATISFIED
                             ),
                             ingestionsWithCompanions = listOf(
                                 IngestionWithCompanion(
@@ -154,7 +154,7 @@ class ExperiencesScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        mood = Mood.SATISFIED
+                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Cocaine",
@@ -177,7 +177,7 @@ class ExperiencesScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        mood = Mood.SATISFIED
+                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Ketamine",
@@ -192,7 +192,7 @@ class ExperiencesScreenPreviewProvider :
                                 id = 0,
                                 title = "Last day in Stockholm",
                                 text = "Some notes",
-                                mood = Mood.DISSATISFIED
+                                sentiment = Sentiment.DISSATISFIED
                             ),
                             ingestionsWithCompanions = listOf(
                                 IngestionWithCompanion(
@@ -211,7 +211,7 @@ class ExperiencesScreenPreviewProvider :
                                         units = "µg",
                                         experienceId = 0,
                                         notes = null,
-                                        mood = Mood.SATISFIED
+                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "LSD",
@@ -234,7 +234,7 @@ class ExperiencesScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        mood = Mood.SATISFIED
+                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Cocaine",

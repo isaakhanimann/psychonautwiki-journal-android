@@ -35,7 +35,7 @@ interface ExperienceDao {
     fun getLastUsedSubstanceNamesFlow(limit: Int): Flow<List<String>>
 
     @Transaction
-    @Query("SELECT DISTINCT e.id, e.title, e.creationDate, e.text, e.mood FROM experience AS e LEFT JOIN ingestion AS i ON e.id = i.experienceId ORDER BY case when i.time IS NULL then e.creationDate else i.time end DESC")
+    @Query("SELECT DISTINCT e.id, e.title, e.creationDate, e.text, e.sentiment FROM experience AS e LEFT JOIN ingestion AS i ON e.id = i.experienceId ORDER BY case when i.time IS NULL then e.creationDate else i.time end DESC")
     fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>>
 
     @Transaction

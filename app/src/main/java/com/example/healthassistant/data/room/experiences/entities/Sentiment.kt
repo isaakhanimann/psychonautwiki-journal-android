@@ -5,7 +5,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
-enum class Mood {
+enum class Sentiment {
     VERY_DISSATISFIED {
         override val icon: ImageVector
             get() = Icons.Default.SentimentVeryDissatisfied

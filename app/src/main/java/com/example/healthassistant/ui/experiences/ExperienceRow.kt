@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.healthassistant.data.room.experiences.entities.Mood
+import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
@@ -51,7 +51,7 @@ fun ExperienceRow(
         ) {
             val ingestions = experienceWithIngestionsAndCompanions.ingestionsWithCompanions
             val experience = experienceWithIngestionsAndCompanions.experience
-            ExperienceCircle(ingestions = ingestions, experienceMood = experience.mood)
+            ExperienceCircle(ingestions = ingestions, experienceSentiment = experience.sentiment)
             Column {
                 Text(
                     text = experience.title,
@@ -94,7 +94,7 @@ fun ExperienceRow(
 @Composable
 fun ExperienceCircle(
     ingestions: List<IngestionWithCompanion>,
-    experienceMood: Mood?
+    experienceSentiment: Sentiment?
 ) {
     val isDarkTheme = isSystemInDarkTheme()
     val circleSize = 45.dp
@@ -113,8 +113,8 @@ fun ExperienceCircle(
                 .background(brush),
             contentAlignment = Alignment.Center
         ) {
-            if (experienceMood != null) {
-                MoodIcon(mood = experienceMood, size = iconSize)
+            if (experienceSentiment != null) {
+                SentimentIcon(sentiment = experienceSentiment, size = iconSize)
             }
         }
     } else if (ingestions.size == 1) {
@@ -129,8 +129,8 @@ fun ExperienceCircle(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            if (experienceMood != null) {
-                MoodIcon(mood = experienceMood, size = iconSize)
+            if (experienceSentiment != null) {
+                SentimentIcon(sentiment = experienceSentiment, size = iconSize)
             }
         }
     } else {
@@ -141,18 +141,18 @@ fun ExperienceCircle(
                 .background(Color.LightGray.copy(0.1f)),
             contentAlignment = Alignment.Center
         ) {
-            if (experienceMood != null) {
-                MoodIcon(mood = experienceMood, size = iconSize)
+            if (experienceSentiment != null) {
+                SentimentIcon(sentiment = experienceSentiment, size = iconSize)
             }
         }
     }
 }
 
 @Composable
-fun MoodIcon(mood: Mood, size: Dp) {
+fun SentimentIcon(sentiment: Sentiment, size: Dp) {
     Icon(
-        imageVector = mood.icon,
-        contentDescription = mood.description,
+        imageVector = sentiment.icon,
+        contentDescription = sentiment.description,
         tint = MaterialTheme.colors.onSurface,
         modifier = Modifier.size(size)
     )

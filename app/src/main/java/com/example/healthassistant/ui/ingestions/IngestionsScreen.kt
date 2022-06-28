@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.room.experiences.entities.Mood
+import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.ui.experiences.SectionTitle
@@ -167,7 +167,7 @@ fun IngestionRowInIngestionsScreen(
             val ingestion = ingestionWithCompanion.ingestion
             IngestionCircle(
                 substanceColor = ingestionWithCompanion.substanceCompanion!!.color,
-                mood = ingestion.mood
+                sentiment = ingestion.sentiment
             )
             Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -219,7 +219,7 @@ fun IngestionRowInIngestionsScreen(
 @Composable
 fun IngestionCircle(
     substanceColor: SubstanceColor,
-    mood: Mood?
+    sentiment: Sentiment?
 ) {
     val isDarkTheme = isSystemInDarkTheme()
     Surface(
@@ -228,10 +228,10 @@ fun IngestionCircle(
         modifier = Modifier
             .size(40.dp)
     ) {
-        if (mood != null) {
+        if (sentiment != null) {
             Icon(
-                imageVector = mood.icon,
-                contentDescription = mood.description,
+                imageVector = sentiment.icon,
+                contentDescription = sentiment.description,
                 modifier = Modifier.padding(5.dp),
                 tint = MaterialTheme.colors.onSurface
             )

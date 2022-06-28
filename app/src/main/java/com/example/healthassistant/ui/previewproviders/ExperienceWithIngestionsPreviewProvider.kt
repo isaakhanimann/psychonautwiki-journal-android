@@ -15,7 +15,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 id = 0,
                 title = "Day at Lake Geneva",
                 text = "Some notes",
-                mood = Mood.SATISFIED
+                sentiment = Sentiment.SATISFIED
             ),
             ingestionsWithCompanions = listOf(
                 IngestionWithCompanion(
@@ -28,7 +28,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        mood = Mood.SATISFIED
+                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -45,7 +45,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        mood = null
+                        sentiment = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -62,7 +62,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        mood = null
+                        sentiment = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -77,7 +77,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 id = 0,
                 title = "This one has a very very very long title in case somebody wants to be creative with the naming.",
                 text = "Some notes",
-                mood = null
+                sentiment = null
             ),
             ingestionsWithCompanions = listOf(
                 IngestionWithCompanion(
@@ -90,7 +90,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        mood = Mood.VERY_SATISFIED
+                        sentiment = Sentiment.VERY_SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -107,7 +107,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        mood = Mood.NEUTRAL
+                        sentiment = Sentiment.NEUTRAL
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",

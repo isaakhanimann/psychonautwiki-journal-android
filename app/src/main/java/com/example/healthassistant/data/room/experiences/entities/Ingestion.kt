@@ -17,5 +17,5 @@ data class Ingestion(
     val units: String?,
     var experienceId: Int?,
     var notes: String?,
-    var mood: Mood?
+    var sentiment: Sentiment?
 )

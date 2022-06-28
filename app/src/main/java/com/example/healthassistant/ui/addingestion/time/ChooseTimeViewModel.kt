@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
-import com.example.healthassistant.data.room.experiences.entities.Mood
+import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
@@ -138,7 +138,7 @@ class ChooseTimeViewModel @Inject constructor(
                 units = units,
                 experienceId = experienceId,
                 notes = null,
-                mood = Mood.SATISFIED
+                sentiment = Sentiment.SATISFIED
             )
             experienceRepo.insert(newIngestion)
             substanceCompanion.let {
