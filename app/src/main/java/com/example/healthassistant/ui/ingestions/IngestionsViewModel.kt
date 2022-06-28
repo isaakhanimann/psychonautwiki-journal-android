@@ -7,6 +7,8 @@ import com.example.healthassistant.data.room.experiences.ExperienceRepository
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.room.filter.FilterRepository
 import com.example.healthassistant.data.room.filter.SubstanceFilter
+import com.example.healthassistant.data.substances.DoseClass
+import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,21 +19,38 @@ import javax.inject.Inject
 @HiltViewModel
 class IngestionsViewModel @Inject constructor(
     experienceRepo: ExperienceRepository,
+    substanceRepo: SubstanceRepository,
     private val filterRepo: FilterRepository
 ) : ViewModel() {
 
     private val lastUsedSubstancesFlow = experienceRepo.getLastUsedSubstanceNamesFlow(100)
     private val sortedIngestionsWithCompanionsFlow:  Flow<List<IngestionWithCompanion>> = experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow()
+    data class IngestionElement (
+        val ingestionWithCompanion: IngestionWithCompanion,
+        val doseClass: DoseClass?
+            )
+    private val ingestionElementsFlow: Flow<List<IngestionElement>> = sortedIngestionsWithCompanionsFlow.map { ingestionsWithCompanions ->
+        ingestionsWithCompanions.map { ingestionWithCompanion ->
+            val ingestion = ingestionWithCompanion.ingestion
+            val substance = substanceRepo.getSubstance(ingestion.substanceName)
+            val roaDose = substance?.getRoa(route = ingestion.administrationRoute)?.roaDose
+            val doseClass = roaDose?.getDoseClass(ingestionDose = ingestion.dose, ingestionUnits = ingestion.units)
+            IngestionElement(
+                ingestionWithCompanion,
+                doseClass
+            )
+        }
+    }
     private val filtersFlow = filterRepo.getFilters()
 
-    val ingestionsGrouped: StateFlow<Map<String, List<IngestionWithCompanion>>> =
-        filtersFlow.combine(sortedIngestionsWithCompanionsFlow) { filters, ingestionsWithCompanions ->
-            val filteredIngestions = ingestionsWithCompanions.filter { ingWithComp ->
+    val ingestionsGrouped: StateFlow<Map<String, List<IngestionElement>>> =
+        filtersFlow.combine(ingestionElementsFlow) { filters, elements ->
+            val filteredElements = elements.filter { e ->
                 !filters.any { filter ->
-                    filter.substanceName == ingWithComp.ingestion.substanceName
+                    filter.substanceName == e.ingestionWithCompanion.ingestion.substanceName
                 }
             }.toList()
-            groupIngestionsByYear(ingestions = filteredIngestions)
+            groupIngestionsByYear(ingestions = filteredElements)
         }.stateIn(
             initialValue = emptyMap(),
             scope = viewModelScope,
@@ -119,7 +138,7 @@ class IngestionsViewModel @Inject constructor(
     }
 
     companion object {
-        fun groupIngestionsByYear(ingestions: List<IngestionWithCompanion>): Map<String, List<IngestionWithCompanion>> {
+        fun groupIngestionsByYear(ingestions: List<IngestionElement>): Map<String, List<IngestionElement>> {
             val cal = Calendar.getInstance(TimeZone.getDefault())
             return ingestions.groupBy { cal.get(Calendar.YEAR).toString() }
         }

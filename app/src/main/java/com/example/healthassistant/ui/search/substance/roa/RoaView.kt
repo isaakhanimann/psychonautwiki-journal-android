@@ -12,6 +12,7 @@ import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Roa
 import com.example.healthassistant.ui.previewproviders.RoaPreviewProvider
 import com.example.healthassistant.ui.search.substance.SubstanceInfoCard
+import com.example.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import kotlin.time.Duration
 
 

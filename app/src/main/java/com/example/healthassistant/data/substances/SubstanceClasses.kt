@@ -1,5 +1,6 @@
 package com.example.healthassistant.data.substances
 
+import androidx.compose.ui.graphics.Color
 import kotlin.time.Duration
 
 enum class InteractionType {
@@ -60,7 +61,90 @@ data class RoaDose(
     val common: DoseRange?,
     val strong: DoseRange?,
     val heavy: Double?
-)
+) {
+    fun getDoseClass(ingestionDose: Double?, ingestionUnits: String? = units): DoseClass? {
+        if (ingestionUnits != units || ingestionDose == null) return null
+        return if (threshold != null && ingestionDose < threshold) {
+            DoseClass.THRESHOLD
+        } else if (light?.isValueInRange(ingestionDose) == true) {
+            DoseClass.LIGHT
+        } else if (common?.isValueInRange(ingestionDose) == true) {
+            DoseClass.COMMON
+        } else if (strong?.isValueInRange(ingestionDose) == true) {
+            DoseClass.STRONG
+        } else if (heavy != null && ingestionDose > heavy) {
+            DoseClass.HEAVY
+        } else {
+            null
+        }
+    }
+}
+
+enum class DoseClass {
+    THRESHOLD {
+        override val numDots: Int
+            get() = 1
+
+        override fun getComposeColor(isDarkTheme: Boolean): Color {
+            return if (isDarkTheme) {
+                Color(red = 100, green = 210, blue = 255)
+            } else {
+                Color(red = 50, green = 173, blue = 230)
+            }
+        }
+    },
+    LIGHT {
+        override val numDots: Int
+            get() = 2
+
+        override fun getComposeColor(isDarkTheme: Boolean): Color {
+            return if (isDarkTheme) {
+                Color(red = 48, green = 209, blue = 88)
+            } else {
+                Color(red = 52, green = 199, blue = 89)
+            }
+        }
+    },
+    COMMON {
+        override val numDots: Int
+            get() = 3
+
+        override fun getComposeColor(isDarkTheme: Boolean): Color {
+            return if (isDarkTheme) {
+                Color(red = 255, green = 214, blue = 10)
+            } else {
+                Color(red = 255, green = 204, blue = 0)
+            }
+        }
+    },
+    STRONG {
+        override val numDots: Int
+            get() = 4
+
+        override fun getComposeColor(isDarkTheme: Boolean): Color {
+            return if (isDarkTheme) {
+                Color(red = 255, green = 159, blue = 10)
+            } else {
+                Color(red = 255, green = 149, blue = 0)
+            }
+        }
+    },
+    HEAVY {
+        override val numDots: Int
+            get() = 5
+
+        override fun getComposeColor(isDarkTheme: Boolean): Color {
+            return if (isDarkTheme) {
+                Color(red = 255, green = 69, blue = 58)
+            } else {
+                Color(red = 255, green = 59, blue = 48)
+            }
+        }
+    };
+
+    abstract val numDots: Int
+    abstract fun getComposeColor(isDarkTheme: Boolean): Color
+}
 
 data class DoseRange(
     val min: Double?,
@@ -89,7 +173,6 @@ data class DurationRange(
         get() = "${min.toString().filterNot { it.isWhitespace() }}-${
             max.toString().filterNot { it.isWhitespace() }
         }"
-    val isMinAndMaxDefined: Boolean get() = min != null && max != null
 
     fun interpolateAt(value: Double): Duration? {
         if (min == null || max == null) return null

@@ -16,10 +16,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.healthassistant.data.substances.DoseClass
 import com.example.healthassistant.data.substances.RoaDose
 import com.example.healthassistant.ui.previewproviders.RoaDosePreviewProvider
-import com.example.healthassistant.ui.search.substance.roa.RoaDoseView
-import com.example.healthassistant.ui.search.substance.roa.dose.DoseColor
+import com.example.healthassistant.ui.search.substance.roa.dose.RoaDoseView
+import com.example.healthassistant.ui.search.substance.roa.toReadableString
 
 @Composable
 fun ChooseDoseScreen(
@@ -49,7 +50,7 @@ fun ChooseDoseScreen(
                 null
             )
         },
-        currentRoaRangeTextAndColor = viewModel.currentRoaRangeTextAndColor,
+        currentDoseClass = viewModel.currentDoseClass,
         purityText = viewModel.purityText,
         onPurityChange = {
             viewModel.purityText = it
@@ -73,7 +74,7 @@ fun ChooseDoseScreenPreview(
         onChangeIsEstimate = {},
         navigateToNext = {},
         useUnknownDoseAndNavigate = {},
-        currentRoaRangeTextAndColor = Pair("threshold: 8mg", DoseColor.THRESH),
+        currentDoseClass = DoseClass.THRESHOLD,
         purityText = "20",
         onPurityChange = {},
         isValidPurity = true,
@@ -91,7 +92,7 @@ fun ChooseDoseScreen(
     onChangeIsEstimate: (Boolean) -> Unit,
     navigateToNext: () -> Unit,
     useUnknownDoseAndNavigate: () -> Unit,
-    currentRoaRangeTextAndColor: Pair<String, DoseColor?>,
+    currentDoseClass: DoseClass?,
     purityText: String,
     onPurityChange: (purity: String) -> Unit,
     isValidPurity: Boolean,
@@ -127,10 +128,18 @@ fun ChooseDoseScreen(
                     if (roaDose != null) {
                         RoaDoseView(roaDose = roaDose)
                     }
+                    val text = when (currentDoseClass) {
+                        DoseClass.THRESHOLD -> "threshold: ${roaDose?.threshold?.toReadableString()}${roaDose?.units ?: ""}"
+                        DoseClass.LIGHT -> "light: ${roaDose?.light?.min?.toReadableString()}-${roaDose?.light?.max?.toReadableString()}${roaDose?.units ?: ""}"
+                        DoseClass.COMMON -> "common: ${roaDose?.common?.min?.toReadableString()}-${roaDose?.common?.max?.toReadableString()}${roaDose?.units ?: ""}"
+                        DoseClass.STRONG -> "strong: ${roaDose?.strong?.min?.toReadableString()}-${roaDose?.strong?.max?.toReadableString()}${roaDose?.units ?: ""}"
+                        DoseClass.HEAVY -> "heavy: ${roaDose?.heavy?.toReadableString()}${roaDose?.units ?: ""}-.."
+                        else -> ""
+                    }
                     val isDarkTheme = isSystemInDarkTheme()
                     Text(
-                        text = currentRoaRangeTextAndColor.first,
-                        color = currentRoaRangeTextAndColor.second?.getComposeColor(isDarkTheme)
+                        text = text,
+                        color = currentDoseClass?.getComposeColor(isDarkTheme)
                             ?: MaterialTheme.colors.primary
                     )
                     Spacer(modifier = Modifier.height(10.dp))

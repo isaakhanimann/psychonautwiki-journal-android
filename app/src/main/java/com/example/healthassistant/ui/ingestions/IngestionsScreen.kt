@@ -1,5 +1,7 @@
 package com.example.healthassistant.ui.ingestions
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -13,6 +15,7 @@ import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -20,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
-import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
+import com.example.healthassistant.data.substances.DoseClass
 import com.example.healthassistant.ui.experiences.SectionTitle
 import com.example.healthassistant.ui.previewproviders.IngestionsScreenPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
@@ -45,7 +48,7 @@ fun IngestionsScreen(
 fun IngestionsScreenPreview(
     @PreviewParameter(
         IngestionsScreenPreviewProvider::class,
-    ) groupedIngestions: Map<String, List<IngestionWithCompanion>>
+    ) groupedIngestions: Map<String, List<IngestionsViewModel.IngestionElement>>
 ) {
     IngestionsScreen(
         navigateToIngestion = {},
@@ -58,7 +61,7 @@ fun IngestionsScreenPreview(
 @Composable
 fun IngestionsScreen(
     navigateToIngestion: (ingestionId: Int) -> Unit,
-    groupedIngestions: Map<String, List<IngestionWithCompanion>>,
+    groupedIngestions: Map<String, List<IngestionsViewModel.IngestionElement>>,
     filterOptions: List<IngestionsViewModel.FilterOption>,
     numberOfActiveFilters: Int,
 ) {
@@ -126,11 +129,11 @@ fun IngestionsScreen(
                         SectionTitle(title = year)
                     }
                     items(ingestionsInYear.size) { i ->
-                        val ingestionWithCompanion = ingestionsInYear[i]
+                        val ingestionElement = ingestionsInYear[i]
                         IngestionRowInIngestionsScreen(
-                            ingestionWithCompanion = ingestionWithCompanion,
+                            ingestionElement = ingestionElement,
                             navigateToIngestion = {
-                                navigateToIngestion(ingestionWithCompanion.ingestion.id)
+                                navigateToIngestion(ingestionElement.ingestionWithCompanion.ingestion.id)
                             }
                         )
                         if (i < ingestionsInYear.size) {
@@ -151,7 +154,7 @@ fun IngestionsScreen(
 
 @Composable
 fun IngestionRowInIngestionsScreen(
-    ingestionWithCompanion: IngestionWithCompanion,
+    ingestionElement: IngestionsViewModel.IngestionElement,
     navigateToIngestion: () -> Unit,
 ) {
     Card(
@@ -164,6 +167,7 @@ fun IngestionRowInIngestionsScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            val ingestionWithCompanion = ingestionElement.ingestionWithCompanion
             val ingestion = ingestionWithCompanion.ingestion
             IngestionCircle(
                 substanceColor = ingestionWithCompanion.substanceCompanion!!.color,
@@ -200,6 +204,9 @@ fun IngestionRowInIngestionsScreen(
                         }
                     }
                 }
+                if (ingestionElement.doseClass != null) {
+                    DotRow(doseClass = ingestionElement.doseClass)
+                }
             }
             Column(
                 horizontalAlignment = Alignment.End,
@@ -211,7 +218,6 @@ fun IngestionRowInIngestionsScreen(
                 Text(text = dateString, style = MaterialTheme.typography.body1)
                 Text(text = timeString, style = MaterialTheme.typography.body1)
             }
-
         }
     }
 }
@@ -234,6 +240,33 @@ fun IngestionCircle(
                 contentDescription = sentiment.description,
                 modifier = Modifier.padding(5.dp),
                 tint = MaterialTheme.colors.onSurface
+            )
+        }
+    }
+}
+
+@Composable
+fun DotRow(doseClass: DoseClass) {
+    val dotSize = 10.dp
+    val horizontalPadding = 1.dp
+    Row(modifier = Modifier.padding(vertical = 3.dp)) {
+        List(doseClass.numDots, init = { it }).forEach { _ ->
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
+                    .size(dotSize)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colors.onBackground)
+            )
+        }
+        val numEmpty = DoseClass.values().size - doseClass.numDots
+        List(numEmpty, init = { it }).forEach { _ ->
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
+                    .size(dotSize)
+                    .clip(CircleShape)
+                    .border(1.dp, MaterialTheme.colors.onBackground, CircleShape)
             )
         }
     }

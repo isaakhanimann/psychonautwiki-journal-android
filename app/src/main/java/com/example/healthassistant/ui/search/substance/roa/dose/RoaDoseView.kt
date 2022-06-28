@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.search.substance.roa
+package com.example.healthassistant.ui.search.substance.roa.dose
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -13,10 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.example.healthassistant.data.substances.DoseClass
 import com.example.healthassistant.data.substances.RoaDose
 import com.example.healthassistant.ui.previewproviders.RoaDosePreviewProvider
-import com.example.healthassistant.ui.search.substance.roa.dose.DoseColor
-import com.example.healthassistant.ui.search.substance.roa.dose.textBrush
+import com.example.healthassistant.ui.search.substance.roa.toReadableString
 
 @Preview(showBackground = true)
 @Composable
@@ -30,11 +30,11 @@ fun RoaDoseView(@PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDos
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         val isDarkTheme = isSystemInDarkTheme()
-        val threshColor = DoseColor.THRESH.getComposeColor(isDarkTheme)
-        val lightColor = DoseColor.LIGHT.getComposeColor(isDarkTheme)
-        val commonColor = DoseColor.COMMON.getComposeColor(isDarkTheme)
-        val strongColor = DoseColor.STRONG.getComposeColor(isDarkTheme)
-        val heavyColor = DoseColor.HEAVY.getComposeColor(isDarkTheme)
+        val threshColor = DoseClass.THRESHOLD.getComposeColor(isDarkTheme)
+        val lightColor = DoseClass.LIGHT.getComposeColor(isDarkTheme)
+        val commonColor = DoseClass.COMMON.getComposeColor(isDarkTheme)
+        val strongColor = DoseClass.STRONG.getComposeColor(isDarkTheme)
+        val heavyColor = DoseClass.HEAVY.getComposeColor(isDarkTheme)
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.textBrush(
