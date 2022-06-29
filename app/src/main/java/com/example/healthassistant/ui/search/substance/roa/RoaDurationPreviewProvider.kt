@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.previewproviders
+package com.example.healthassistant.ui.search.substance.roa
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.substances.DurationRange
@@ -6,7 +6,7 @@ import com.example.healthassistant.data.substances.RoaDuration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class RoaDurationPreviewProviderForRoaDurationView : PreviewParameterProvider<RoaDuration> {
+class RoaDurationPreviewProvider : PreviewParameterProvider<RoaDuration> {
     override val values: Sequence<RoaDuration> = sequenceOf(
         RoaDuration(
             onset = DurationRange(

@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
-import com.example.healthassistant.ui.previewproviders.ExperiencesScreenPreviewProvider
 
 @Composable
 fun ExperiencesScreen(

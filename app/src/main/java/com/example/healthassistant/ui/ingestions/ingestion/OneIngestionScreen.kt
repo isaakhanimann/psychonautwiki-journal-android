@@ -25,7 +25,6 @@ import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.ui.experiences.experience.SentimentSection
 import com.example.healthassistant.ui.experiences.experience.edit.SentimentDialog
 import com.example.healthassistant.ui.experiences.experience.timeline.AllTimelines
-import com.example.healthassistant.ui.previewproviders.IngestionWithDurationAndExperienceProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import java.text.SimpleDateFormat

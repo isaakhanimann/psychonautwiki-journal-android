@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.substances.DoseClass
 import com.example.healthassistant.data.substances.RoaDose
-import com.example.healthassistant.ui.previewproviders.RoaDosePreviewProvider
+import com.example.healthassistant.ui.search.substance.roa.dose.RoaDosePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 

@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Experience
-import com.example.healthassistant.ui.previewproviders.ExperiencesPreviewProvider
 
 
 @Composable

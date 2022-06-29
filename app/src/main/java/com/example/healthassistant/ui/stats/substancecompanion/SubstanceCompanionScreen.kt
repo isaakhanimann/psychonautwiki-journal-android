@@ -17,7 +17,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.example.healthassistant.ui.addingestion.time.ColorPicker
-import com.example.healthassistant.ui.previewproviders.SubstanceCompanionPreviewProvider
 
 @Composable
 fun SubstanceCompanionScreen(

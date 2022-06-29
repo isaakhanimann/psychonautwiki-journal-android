@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.previewproviders
+package com.example.healthassistant.ui.ingestions.ingestion
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
@@ -9,7 +9,6 @@ import com.example.healthassistant.data.room.experiences.relations.IngestionWith
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.DurationRange
 import com.example.healthassistant.data.substances.RoaDuration
-import com.example.healthassistant.ui.ingestions.ingestion.IngestionWithCompanionDurationAndExperience
 import java.util.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration

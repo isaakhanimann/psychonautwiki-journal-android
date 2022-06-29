@@ -25,7 +25,6 @@ import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.substances.DoseClass
 import com.example.healthassistant.ui.experiences.SectionTitle
-import com.example.healthassistant.ui.previewproviders.IngestionsScreenPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat
 import java.util.*

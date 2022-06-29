@@ -1,10 +1,11 @@
-package com.example.healthassistant.ui.previewproviders
+package com.example.healthassistant.ui.experiences
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.*
 import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
+import com.example.healthassistant.ui.utils.getDate
 
 class ExperiencesScreenPreviewProvider :
     PreviewParameterProvider<Map<String, List<ExperienceWithIngestionsAndCompanions>>> {

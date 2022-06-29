@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.ui.ingestions.IngestionCircle
-import com.example.healthassistant.ui.previewproviders.IngestionRowPreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat
 import java.util.*

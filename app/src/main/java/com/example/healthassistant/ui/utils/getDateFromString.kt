@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.previewproviders
+package com.example.healthassistant.ui.utils
 
 import java.util.*
 

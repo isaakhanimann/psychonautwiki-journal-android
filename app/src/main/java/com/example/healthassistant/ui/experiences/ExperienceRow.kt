@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import com.example.healthassistant.ui.previewproviders.ExperienceWithIngestionsPreviewProvider
 import java.text.SimpleDateFormat
 import java.util.*
 

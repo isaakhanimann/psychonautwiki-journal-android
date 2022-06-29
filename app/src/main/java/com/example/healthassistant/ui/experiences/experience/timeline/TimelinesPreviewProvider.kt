@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.previewproviders
+package com.example.healthassistant.ui.experiences.experience.timeline
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion

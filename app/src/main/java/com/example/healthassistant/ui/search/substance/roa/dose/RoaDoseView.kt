@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.example.healthassistant.data.substances.DoseClass
 import com.example.healthassistant.data.substances.RoaDose
-import com.example.healthassistant.ui.previewproviders.RoaDosePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 
 @Preview(showBackground = true)

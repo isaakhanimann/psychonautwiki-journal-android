@@ -1,7 +1,7 @@
 package com.example.healthassistant
 
 import com.example.healthassistant.ui.experiences.experience.timeline.AxisDrawable
-import com.example.healthassistant.ui.previewproviders.getDate
+import com.example.healthassistant.ui.utils.getDate
 import com.example.healthassistant.ui.stats.StatisticsViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

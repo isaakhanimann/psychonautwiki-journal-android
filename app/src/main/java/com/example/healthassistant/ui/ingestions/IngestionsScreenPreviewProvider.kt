@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.previewproviders
+package com.example.healthassistant.ui.ingestions
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
@@ -8,7 +8,7 @@ import com.example.healthassistant.data.room.experiences.entities.SubstanceCompa
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.DoseClass
-import com.example.healthassistant.ui.ingestions.IngestionsViewModel
+import com.example.healthassistant.ui.utils.getDate
 
 class IngestionsScreenPreviewProvider :
     PreviewParameterProvider<Map<String, List<IngestionsViewModel.IngestionElement>>> {

@@ -24,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.substances.RoaDuration
-import com.example.healthassistant.ui.previewproviders.RoaDurationPreviewProviderForRoaDurationView
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -32,7 +31,7 @@ import kotlin.time.toDuration
 @Preview(showBackground = true)
 @Composable
 fun RoaDurationPreview(
-    @PreviewParameter(RoaDurationPreviewProviderForRoaDurationView::class) roaDuration: RoaDuration
+    @PreviewParameter(RoaDurationPreviewProvider::class) roaDuration: RoaDuration
 ) {
     RoaDurationView(
         roaDuration = roaDuration,

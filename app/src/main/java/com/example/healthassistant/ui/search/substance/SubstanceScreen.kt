@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.previewproviders.SubstancePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import com.google.accompanist.flowlayout.FlowRow
