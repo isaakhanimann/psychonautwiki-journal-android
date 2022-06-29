@@ -22,7 +22,7 @@ import com.example.healthassistant.ui.search.substance.roa.duration.RoaPreviewPr
 @Composable
 fun RoaPreview(
     @PreviewParameter(RoaPreviewProvider::class) roa: Roa,
-    ) {
+) {
     RoaView(roa = roa, maxDurationInSeconds = null)
 }
 
@@ -31,17 +31,29 @@ fun RoaView(
     roa: Roa,
     maxDurationInSeconds: Float?
 ) {
-    SubstanceInfoCard(title = roa.route.displayText, isContentFaded = false) {
-        Column {
-            roa.roaDose?.also {
-                Text(text = "Dosage", style = MaterialTheme.typography.subtitle1)
-                RoaDoseView(roaDose = it)
-                Spacer(modifier = Modifier.height(5.dp))
-            }
-            roa.roaDuration?.also {
-                Text(text = "Duration", style = MaterialTheme.typography.subtitle1)
-                RoaDurationView(roaDuration = it, maxDurationInSeconds = maxDurationInSeconds, isOralRoute = roa.route == AdministrationRoute.ORAL)
+    val roaDose = roa.roaDose
+    val isEveryDoseNull =
+        roaDose?.threshold == null && roaDose?.light == null && roaDose?.common == null && roaDose?.strong == null && roaDose?.heavy == null
+    val roaDuration = roa.roaDuration
+    val isEveryDurationNull =
+        roaDuration?.total == null && roaDuration?.onset == null && roaDuration?.comeup == null && roaDuration?.peak == null && roaDuration?.offset == null
+    val isSomethingDefined = !(isEveryDoseNull && isEveryDurationNull)
+    if (isSomethingDefined)
+        SubstanceInfoCard(title = roa.route.displayText, isContentFaded = false) {
+            Column {
+                if (!isEveryDoseNull && roaDose != null) {
+                    Text(text = "Dosage", style = MaterialTheme.typography.subtitle1)
+                    RoaDoseView(roaDose = roaDose)
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
+                if (!isEveryDurationNull && roaDuration != null) {
+                    Text(text = "Duration", style = MaterialTheme.typography.subtitle1)
+                    RoaDurationView(
+                        roaDuration = roaDuration,
+                        maxDurationInSeconds = maxDurationInSeconds,
+                        isOralRoute = roa.route == AdministrationRoute.ORAL
+                    )
+                }
             }
         }
-    }
 }
