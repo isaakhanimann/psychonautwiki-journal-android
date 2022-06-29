@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Roa
-import com.example.healthassistant.ui.search.substance.SubstanceInfoCard
 import com.example.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.example.healthassistant.ui.search.substance.roa.duration.RoaDurationView
 import com.example.healthassistant.ui.search.substance.roa.duration.RoaPreviewProvider
@@ -38,22 +37,22 @@ fun RoaView(
     val isEveryDurationNull =
         roaDuration?.total == null && roaDuration?.onset == null && roaDuration?.comeup == null && roaDuration?.peak == null && roaDuration?.offset == null
     val isSomethingDefined = !(isEveryDoseNull && isEveryDurationNull)
-    if (isSomethingDefined)
-        SubstanceInfoCard(title = roa.route.displayText, isContentFaded = false) {
-            Column {
-                if (!isEveryDoseNull && roaDose != null) {
-                    Text(text = "Dosage", style = MaterialTheme.typography.subtitle1)
-                    RoaDoseView(roaDose = roaDose)
-                    Spacer(modifier = Modifier.height(5.dp))
-                }
-                if (!isEveryDurationNull && roaDuration != null) {
-                    Text(text = "Duration", style = MaterialTheme.typography.subtitle1)
-                    RoaDurationView(
-                        roaDuration = roaDuration,
-                        maxDurationInSeconds = maxDurationInSeconds,
-                        isOralRoute = roa.route == AdministrationRoute.ORAL
-                    )
-                }
+    if (isSomethingDefined) {
+        Column {
+            Text(text = roa.route.displayText, style = MaterialTheme.typography.h6)
+            if (!isEveryDoseNull && roaDose != null) {
+                Text(text = "Dosage", style = MaterialTheme.typography.subtitle1)
+                RoaDoseView(roaDose = roaDose)
+                Spacer(modifier = Modifier.height(5.dp))
+            }
+            if (!isEveryDurationNull && roaDuration != null) {
+                Text(text = "Duration", style = MaterialTheme.typography.subtitle1)
+                RoaDurationView(
+                    roaDuration = roaDuration,
+                    maxDurationInSeconds = maxDurationInSeconds,
+                    isOralRoute = roa.route == AdministrationRoute.ORAL
+                )
             }
         }
+    }
 }

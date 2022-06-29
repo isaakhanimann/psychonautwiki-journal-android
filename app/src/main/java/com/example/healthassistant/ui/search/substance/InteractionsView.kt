@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,19 +37,19 @@ fun InteractionsView(
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-            SubstanceInfoCard(title = "Interactions") {
-                FlowRow {
-                    dangerousInteractions.forEach {
-                        InteractionChip(text = it, color = Color.Red)
-                    }
-                    unsafeInteractions.forEach {
-                        InteractionChip(text = it, color = Color(0xFFFF9800))
-                    }
-                    uncertainInteractions.forEach {
-                        InteractionChip(text = it, color = Color.Yellow)
-                    }
+            Text(text = "Interactions", style = MaterialTheme.typography.h6)
+            FlowRow {
+                dangerousInteractions.forEach {
+                    InteractionChip(text = it, color = Color.Red)
+                }
+                unsafeInteractions.forEach {
+                    InteractionChip(text = it, color = Color(0xFFFF9800))
+                }
+                uncertainInteractions.forEach {
+                    InteractionChip(text = it, color = Color.Yellow)
                 }
             }
+            Divider(modifier = Modifier.padding(top = 8.dp))
         }
     }
 }

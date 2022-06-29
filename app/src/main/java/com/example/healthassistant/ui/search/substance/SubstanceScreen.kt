@@ -129,11 +129,15 @@ fun SubstanceScreenContent(
                     }
                 }.maxOrNull()
             }
+            val titleStyle = MaterialTheme.typography.h6
             substance.roas.forEach { roa ->
                 RoaView(
                     roa = roa,
                     maxDurationInSeconds = maxDuration
                 )
+            }
+            if (substance.roas.isNotEmpty()) {
+                Divider()
             }
             InteractionsView(
                 isSearchingForInteractions = isSearchingForInteractions,
@@ -143,59 +147,51 @@ fun SubstanceScreenContent(
             )
             val tolerance = substance.tolerance
             if (tolerance != null) {
-                SubstanceInfoCard(title = "Tolerance") {
-                    Column {
-                        Text(text = "zero: ${tolerance.zero}")
-                        Text(text = "half: ${tolerance.half}")
-                        Text(text = "full: ${tolerance.full}")
-                    }
-                }
+                Text(text = "Tolerance", style = titleStyle)
+                Text(text = "zero: ${tolerance.zero}")
+                Text(text = "half: ${tolerance.half}")
+                Text(text = "full: ${tolerance.full}")
+                Divider()
             }
             if (substance.crossTolerances.isNotEmpty()) {
-                SubstanceInfoCard(title = "Cross Tolerance") {
-                    Column {
-                        substance.crossTolerances.forEach {
-                            Text(text = it)
-                        }
-                    }
+                Text(text = "Cross Tolerance", style = titleStyle)
+                substance.crossTolerances.forEach {
+                    Text(text = it)
                 }
+                Divider()
             }
             if (substance.psychoactiveClasses.isNotEmpty()) {
-                SubstanceInfoCard(title = "Psychoactive Class") {
-                    Column {
-                        substance.psychoactiveClasses.forEach {
-                            Text(text = it)
-                        }
-                    }
+                Text(text = "Psychoactive Class", style = titleStyle)
+                substance.psychoactiveClasses.forEach {
+                    Text(text = it)
                 }
+                Divider()
             }
             if (substance.chemicalClasses.isNotEmpty()) {
-                SubstanceInfoCard(title = "Chemical Class") {
-                    Column {
-                        substance.chemicalClasses.forEach {
-                            Text(text = it)
-                        }
-                    }
+                Text(text = "Chemical Class", style = titleStyle)
+                substance.chemicalClasses.forEach {
+                    Text(text = it)
                 }
+                Divider()
             }
             if (substance.toxicity != null) {
-                SubstanceInfoCard(title = "Toxicity") {
-                    Text(text = substance.toxicity)
-                }
+                Text(text = "Toxicity", style = titleStyle)
+                Text(text = substance.toxicity)
+                Divider()
             }
             if (substance.addictionPotential != null) {
-                SubstanceInfoCard(title = "Addiction Potential") {
-                    Text(substance.addictionPotential)
-                }
+                Text(text = "Addiction Potential", style = titleStyle)
+                Text(substance.addictionPotential)
+                Divider()
             }
             if (substance.effects.isNotEmpty()) {
-                SubstanceInfoCard(title = "Subjective Effects") {
-                    FlowRow {
-                        substance.effects.forEach {
-                            EffectChip(effect = it)
-                        }
+                Text(text = "Subjective Effects", style = titleStyle)
+                FlowRow {
+                    substance.effects.forEach {
+                        EffectChip(effect = it)
                     }
                 }
+                Divider()
             }
         }
     }
