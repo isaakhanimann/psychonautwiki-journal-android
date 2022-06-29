@@ -209,86 +209,103 @@ fun RoaDurationView(
                 }
             }
         }
+        GridText(roaDuration = roaDuration, isOralRoute)
+    }
+}
+
+@Composable
+fun GridText(roaDuration: RoaDuration, isOralRoute: Boolean) {
+    Column {
         val durationTextStyle = MaterialTheme.typography.caption
-        val rowArrangement = Arrangement.spacedBy(5.dp)
-        if (total != null) {
-            Row(horizontalArrangement = rowArrangement) {
-                Text(
-                    text = "total",
-                    style = durationTextStyle
-                )
-                Text(
-                    text = total.text,
-                    style = durationTextStyle
-                )
-            }
-        }
-        if (onset != null) {
-            Row(horizontalArrangement = rowArrangement) {
-                Text(
-                    "onset",
-                    style = durationTextStyle
-                )
-                Text(
-                    roaDuration.onset.text,
-                    style = durationTextStyle
-                )
-                if (isOralRoute) {
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            val total = roaDuration.total
+            val onset = roaDuration.onset
+            val comeup = roaDuration.comeup
+            val peak = roaDuration.peak
+            val offset = roaDuration.offset
+            val afterglow = roaDuration.afterglow
+            Column {
+                if (total != null) {
                     Text(
-                        text = " * a full stomach can delay the onset by hours",
+                        text = "total",
+                        style = durationTextStyle
+                    )
+                }
+                if (onset != null) {
+                    Text(
+                        "onset",
+                        style = durationTextStyle
+                    )
+                }
+                if (comeup != null) {
+                    Text(
+                        "comeup",
+                        style = durationTextStyle
+                    )
+                }
+                if (peak != null) {
+                    Text(
+                        "peak",
+                        style = durationTextStyle
+                    )
+                }
+                if (offset != null) {
+                    Text(
+                        "offset",
+                        style = durationTextStyle
+                    )
+                }
+                if (afterglow != null) {
+                    Text(
+                        "after effects",
+                        style = durationTextStyle
+                    )
+                }
+            }
+            Column {
+                if (total != null) {
+                    Text(
+                        text = total.text,
+                        style = durationTextStyle
+                    )
+                }
+                if (onset != null) {
+                    Text(
+                        roaDuration.onset.text + if (isOralRoute) " *" else "",
+                        style = durationTextStyle
+                    )
+                }
+                if (comeup != null) {
+                    Text(
+                        roaDuration.comeup.text,
+                        style = durationTextStyle
+                    )
+                }
+                if (peak != null) {
+                    Text(
+                        roaDuration.peak.text,
+                        style = durationTextStyle
+                    )
+                }
+                if (offset != null) {
+                    Text(
+                        roaDuration.offset.text,
+                        style = durationTextStyle
+                    )
+                }
+                if (roaDuration.afterglow != null) {
+                    Text(
+                        roaDuration.afterglow.text,
                         style = durationTextStyle
                     )
                 }
             }
         }
-        if (comeup != null) {
-            Row(horizontalArrangement = rowArrangement) {
-                Text(
-                    "comeup",
-                    style = durationTextStyle
-                )
-                Text(
-                    roaDuration.comeup.text,
-                    style = durationTextStyle
-                )
-            }
-        }
-        if (peak != null) {
-            Row(horizontalArrangement = rowArrangement) {
-                Text(
-                    "peak",
-                    style = durationTextStyle
-                )
-                Text(
-                    roaDuration.peak.text,
-                    style = durationTextStyle
-                )
-            }
-        }
-        if (offset != null) {
-            Row(horizontalArrangement = rowArrangement) {
-                Text(
-                    "offset",
-                    style = durationTextStyle
-                )
-                Text(
-                    roaDuration.offset.text,
-                    style = durationTextStyle
-                )
-            }
-        }
-        if (roaDuration.afterglow != null) {
-            Row(horizontalArrangement = rowArrangement) {
-                Text(
-                    "after effects",
-                    style = durationTextStyle
-                )
-                Text(
-                    roaDuration.afterglow.text,
-                    style = durationTextStyle
-                )
-            }
+        if (isOralRoute) {
+            Text(
+                text = "* a full stomach can delay the onset by hours",
+                style = durationTextStyle
+            )
         }
     }
-
 }
