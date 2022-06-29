@@ -1,12 +1,14 @@
 package com.example.healthassistant.ui.search.substance.roa.duration
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.inset
@@ -58,6 +60,7 @@ fun RoaDurationView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(80.dp)
+                    .background(Color.Red.copy(alpha = 0f)) // needed for fixing preview
             ) {
                 inset(left = ingestionDotRadius, top = 0f, right = 0f, bottom = 0f) {
                     val canvasWidth = size.width
