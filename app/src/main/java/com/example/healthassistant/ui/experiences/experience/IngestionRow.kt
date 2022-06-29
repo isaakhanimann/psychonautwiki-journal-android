@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
+import com.example.healthassistant.ui.ingestions.DotRow
 import com.example.healthassistant.ui.ingestions.IngestionCircle
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat
@@ -20,9 +20,9 @@ import java.util.*
 
 @Preview
 @Composable
-fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionWithCompanion: IngestionWithCompanion) {
+fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionElement: OneExperienceViewModel.IngestionElement) {
     IngestionRow(
-        ingestionWithCompanion = ingestionWithCompanion,
+        ingestionElement = ingestionElement,
         navigateToIngestionScreen = {}
     )
 }
@@ -30,7 +30,7 @@ fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) in
 
 @Composable
 fun IngestionRow(
-    ingestionWithCompanion: IngestionWithCompanion,
+    ingestionElement: OneExperienceViewModel.IngestionElement,
     navigateToIngestionScreen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -44,6 +44,7 @@ fun IngestionRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            val ingestionWithCompanion = ingestionElement.ingestionWithCompanion
             val ingestion = ingestionWithCompanion.ingestion
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -75,6 +76,10 @@ fun IngestionRow(
                                 )
                             }
                         }
+                    }
+                    val doseClass = ingestionElement.doseClass
+                    if (doseClass != null) {
+                        DotRow(doseClass = doseClass)
                     }
                 }
             }

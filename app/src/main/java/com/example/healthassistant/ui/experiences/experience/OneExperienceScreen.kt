@@ -21,19 +21,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.Sentiment
-import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
-import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.ui.experiences.experience.edit.SentimentDialog
 import com.example.healthassistant.ui.experiences.experience.timeline.AllTimelines
-import com.example.healthassistant.ui.experiences.ExperienceWithIngestionsPreviewProvider
+import com.example.healthassistant.ui.ingestions.DotRow
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 
 @Composable
 fun ExperienceScreen(
-    viewModel: ExperienceViewModel = hiltViewModel(),
+    viewModel: OneExperienceViewModel = hiltViewModel(),
     navigateToAddIngestionSearch: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
@@ -44,7 +41,6 @@ fun ExperienceScreen(
             experience = experienceWithIngestions.experience,
             ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
             cumulativeDoses = viewModel.cumulativeDosesFlow.collectAsState().value,
-            ingestionDurationPairs = viewModel.ingestionDurationPairsFlow.collectAsState().value,
             addIngestion = navigateToAddIngestionSearch,
             viewModel::deleteExperience,
             navigateToEditExperienceScreen,
@@ -65,28 +61,15 @@ fun ExperienceScreen(
 @Composable
 fun ExperienceScreenPreview(
     @PreviewParameter(
-        ExperienceWithIngestionsPreviewProvider::class,
+        OneExperienceScreenPreviewProvider::class,
         limit = 1
-    ) expAndIng: ExperienceWithIngestionsAndCompanions
+    ) allThatIsNeeded: OneExperienceScreenPreviewProvider.AllThatIsNeeded
 ) {
     HealthAssistantTheme {
         ExperienceScreen(
-            experience = expAndIng.experience,
-            ingestionElements = expAndIng.ingestionsWithCompanions.map {
-                ExperienceViewModel.IngestionElement(
-                    dateText = null,
-                    ingestionWithCompanion = it
-                )
-            },
-            cumulativeDoses = listOf(
-                ExperienceViewModel.CumulativeDose(
-                    substanceName = "Cocaine",
-                    cumulativeDose = 50.0,
-                    units = "mg",
-                    isEstimate = false
-                )
-            ),
-            ingestionDurationPairs = listOf(),
+            experience = allThatIsNeeded.experience,
+            ingestionElements = allThatIsNeeded.ingestionElements,
+            cumulativeDoses = allThatIsNeeded.cumulativeDoses,
             addIngestion = {},
             deleteExperience = {},
             navigateToEditExperienceScreen = {},
@@ -106,9 +89,8 @@ fun ExperienceScreenPreview(
 @Composable
 fun ExperienceScreen(
     experience: Experience,
-    ingestionElements: List<ExperienceViewModel.IngestionElement>,
-    cumulativeDoses: List<ExperienceViewModel.CumulativeDose>,
-    ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>,
+    ingestionElements: List<OneExperienceViewModel.IngestionElement>,
+    cumulativeDoses: List<OneExperienceViewModel.CumulativeDose>,
     addIngestion: () -> Unit,
     deleteExperience: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
@@ -150,9 +132,16 @@ fun ExperienceScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(10.dp)
+                .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(10.dp))
+            val ingestionDurationPairs = ingestionElements.map {
+                Pair(
+                    first = it.ingestionWithCompanion,
+                    second = it.roaDuration
+                )
+            }
             if (ingestionDurationPairs.isNotEmpty()) {
                 AllTimelines(
                     ingestionDurationPairs = ingestionDurationPairs,
@@ -178,7 +167,7 @@ fun ExperienceScreen(
                             Text(text = it.dateText)
                         }
                         IngestionRow(
-                            ingestionWithCompanion = it.ingestionWithCompanion,
+                            ingestionElement = it,
                             navigateToIngestionScreen = { navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id) },
                             modifier = Modifier.padding(vertical = 3.dp)
                         )
@@ -311,7 +300,7 @@ fun SentimentSection(
 }
 
 @Composable
-fun CumulativeDoseRow(cumulativeDose: ExperienceViewModel.CumulativeDose) {
+fun CumulativeDoseRow(cumulativeDose: OneExperienceViewModel.CumulativeDose) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.padding(10.dp),
@@ -319,10 +308,16 @@ fun CumulativeDoseRow(cumulativeDose: ExperienceViewModel.CumulativeDose) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.h6)
-            Text(
-                text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units,
-                style = MaterialTheme.typography.subtitle1
-            )
+            Column {
+                Text(
+                    text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units,
+                    style = MaterialTheme.typography.subtitle1
+                )
+                val doseClass = cumulativeDose.doseClass
+                if (doseClass != null) {
+                    DotRow(doseClass = doseClass)
+                }
+            }
         }
     }
 }
