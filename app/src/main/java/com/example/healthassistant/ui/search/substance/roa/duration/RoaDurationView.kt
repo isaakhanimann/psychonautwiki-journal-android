@@ -1,25 +1,16 @@
-package com.example.healthassistant.ui.search.substance.roa
+package com.example.healthassistant.ui.search.substance.roa.duration
 
-import android.graphics.Paint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.inset
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -48,60 +39,11 @@ fun RoaDurationView(
 ) {
     Column {
         val total = roaDuration.total
-        val colorTimeLine = MaterialTheme.colors.secondary
+        val colorTimeLine = MaterialTheme.colors.primary
         val colorTransparent = colorTimeLine.copy(alpha = 0.1f)
         val strokeWidth = 8f
         val strokeWidthThick = 40f
         val ingestionDotRadius = 10f
-        if ((total?.min != null) && (total.max != null)) {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "total: ${total.text}",
-                    textAlign = TextAlign.Center
-                )
-                Canvas(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(with(LocalDensity.current) { strokeWidthThick.toDp() })
-                ) {
-                    inset(left = ingestionDotRadius, top = 0f, right = 0f, bottom = 0f) {
-                        val canvasWidth = size.width
-                        val midHeight = size.height / 2
-                        drawCircle(
-                            color = colorTimeLine,
-                            radius = ingestionDotRadius,
-                            center = Offset(x = 0f, y = midHeight)
-                        )
-                        val max = maxDuration ?: total.max
-                        val minX = (total.min.div(max) * canvasWidth).toFloat()
-                        val maxX = (total.max.div(max) * canvasWidth).toFloat()
-                        val midX = (minX + maxX) / 2
-                        drawLine(
-                            start = Offset(x = 0f, y = midHeight),
-                            end = Offset(x = midX, y = midHeight),
-                            color = colorTimeLine,
-                            strokeWidth = strokeWidth,
-                            cap = StrokeCap.Round
-                        )
-                        drawLine(
-                            start = Offset(x = minX, y = midHeight),
-                            end = Offset(x = maxX, y = midHeight),
-                            color = colorTransparent,
-                            strokeWidth = strokeWidthThick,
-                            cap = StrokeCap.Round
-                        )
-                    }
-                }
-            }
-        }
-        if (roaDuration.afterglow != null) {
-            Text("after effects: ${roaDuration.afterglow.text}")
-        } else {
-            Spacer(modifier = Modifier.height(8.dp))
-        }
         val onset = roaDuration.onset
         val comeup = roaDuration.comeup
         val peak = roaDuration.peak
@@ -113,25 +55,6 @@ fun RoaDurationView(
         val allDurations = listOf(onsetInterpol, comeupInterpol, peakInterpol, offsetInterpol)
         val undefinedCount = allDurations.count { it == null }
         if (maxDuration != null && undefinedCount < 4) {
-            val isDarkTheme = isSystemInDarkTheme()
-            val density = LocalDensity.current
-            val textColor =
-                if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
-            val textSizeDen = density.run { 30f }
-            val textPaintAlignCenter = remember(density) {
-                Paint().apply {
-                    color = textColor
-                    textAlign = Paint.Align.CENTER
-                    textSize = textSizeDen
-                }
-            }
-            val textPaintAlignLeft = remember(density) {
-                Paint().apply {
-                    color = textColor
-                    textAlign = Paint.Align.LEFT
-                    textSize = textSizeDen
-                }
-            }
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -203,26 +126,7 @@ fun RoaDurationView(
                                 cap = StrokeCap.Round,
                             )
                         }
-                        if (onset != null) {
-                            drawContext.canvas.nativeCanvas.apply {
-                                drawText(
-                                    onset.text + if (isOralRoute) " *" else "",
-                                    0f,
-                                    canvasHeight - 15f,
-                                    textPaintAlignLeft
-                                )
-                            }
-                        }
-                        if (comeup != null) {
-                            drawContext.canvas.nativeCanvas.apply {
-                                drawText(
-                                    comeup.text,
-                                    (start1 + start2) / 2 + 15f,
-                                    canvasHeight / 2,
-                                    textPaintAlignLeft
-                                )
-                            }
-                        }
+
                         val diff2 =
                             peakInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
                         val start3 = start2 + diff2
@@ -243,16 +147,6 @@ fun RoaDurationView(
                                 strokeWidth = strokeWidthThick,
                                 cap = StrokeCap.Round,
                             )
-                        }
-                        if (peak != null) {
-                            drawContext.canvas.nativeCanvas.apply {
-                                drawText(
-                                    peak.text,
-                                    (start2 + start3) / 2,
-                                    35f,
-                                    textPaintAlignCenter
-                                )
-                            }
                         }
                         val diff3 =
                             offsetInterpol?.inWholeSeconds?.times(pixelsPerSec) ?: dottedLineWidths
@@ -276,21 +170,131 @@ fun RoaDurationView(
                                 cap = StrokeCap.Round,
                             )
                         }
-                        if (offset != null) {
-                            drawContext.canvas.nativeCanvas.apply {
-                                drawText(
-                                    offset.text,
-                                    (start3 + start4) / 2 + 15f,
-                                    canvasHeight / 2,
-                                    textPaintAlignLeft
-                                )
-                            }
-                        }
                     }
                 }
             }
-            if (isOralRoute) {
-                Text(text = "* a full stomach can delay the onset by hours", style = MaterialTheme.typography.caption)
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+        if ((total?.min != null) && (total.max != null)) {
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(with(LocalDensity.current) { strokeWidthThick.toDp() })
+            ) {
+                inset(left = ingestionDotRadius, top = 0f, right = 0f, bottom = 0f) {
+                    val canvasWidth = size.width
+                    val midHeight = size.height / 2
+                    drawCircle(
+                        color = colorTimeLine,
+                        radius = ingestionDotRadius,
+                        center = Offset(x = 0f, y = midHeight)
+                    )
+                    val max = maxDuration ?: total.max
+                    val minX = (total.min.div(max) * canvasWidth).toFloat()
+                    val maxX = (total.max.div(max) * canvasWidth).toFloat()
+                    val midX = (minX + maxX) / 2
+                    drawLine(
+                        start = Offset(x = 0f, y = midHeight),
+                        end = Offset(x = midX, y = midHeight),
+                        color = colorTimeLine,
+                        strokeWidth = strokeWidth,
+                        cap = StrokeCap.Round
+                    )
+                    drawLine(
+                        start = Offset(x = minX, y = midHeight),
+                        end = Offset(x = maxX, y = midHeight),
+                        color = colorTransparent,
+                        strokeWidth = strokeWidthThick,
+                        cap = StrokeCap.Round
+                    )
+                }
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            val durationTextStyle = MaterialTheme.typography.caption
+            Column {
+                if (total != null) {
+                    Text(
+                        text = "total",
+                        style = durationTextStyle
+                    )
+                }
+                if (onset != null) {
+                    Text(
+                        "onset",
+                        style = durationTextStyle
+                    )
+                }
+                if (comeup != null) {
+                    Text(
+                        "comeup",
+                        style = durationTextStyle
+                    )
+                }
+                if (peak != null) {
+                    Text(
+                        "peak",
+                        style = durationTextStyle
+                    )
+                }
+                if (offset != null) {
+                    Text(
+                        "offset",
+                        style = durationTextStyle
+                    )
+                }
+                if (roaDuration.afterglow != null) {
+                    Text(
+                        "after effects",
+                        style = durationTextStyle
+                    )
+                }
+            }
+            Column {
+                if (total != null) {
+                    Text(
+                        text = total.text,
+                        style = durationTextStyle
+                    )
+                }
+                if (onset != null) {
+                    Row {
+                        Text(
+                            roaDuration.onset.text,
+                            style = durationTextStyle
+                        )
+                        if (isOralRoute) {
+                            Text(
+                                text = " * a full stomach can delay the onset by hours",
+                                style = durationTextStyle
+                            )
+                        }
+                    }
+                }
+                if (comeup != null) {
+                    Text(
+                        roaDuration.comeup.text,
+                        style = durationTextStyle
+                    )
+                }
+                if (peak != null) {
+                    Text(
+                        roaDuration.peak.text,
+                        style = durationTextStyle
+                    )
+                }
+                if (offset != null) {
+                    Text(
+                        roaDuration.offset.text,
+                        style = durationTextStyle
+                    )
+                }
+                if (roaDuration.afterglow != null) {
+                    Text(
+                        roaDuration.afterglow.text,
+                        style = durationTextStyle
+                    )
+                }
             }
         }
     }
