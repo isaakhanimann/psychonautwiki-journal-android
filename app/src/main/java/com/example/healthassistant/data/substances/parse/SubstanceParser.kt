@@ -6,8 +6,6 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @Singleton
 class SubstanceParser @Inject constructor() : SubstanceParserInterface {
@@ -46,8 +44,8 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val roas = parseRoas(jsonRoas)
         val addictionPotential = jsonSubstance.getOptionalString("addictionPotential")
         val toxicity = jsonSubstance.getOptionalJSONArray("toxicity")?.getOptionalString(0)
-        val jsonTols = jsonSubstance.getOptionalJSONArray("crossTolerances")
-        val crossTolerances = parseCrossTolerances(jsonTols)
+        val jsonTolerances = jsonSubstance.getOptionalJSONArray("crossTolerances")
+        val crossTolerances = parseCrossTolerances(jsonTolerances)
         val jsonUncertain = jsonSubstance.getOptionalJSONArray("uncertainInteractions")
         val uncertainInteractions = parseInteractions(jsonUncertain)
         val jsonUnsafe = jsonSubstance.getOptionalJSONArray("unsafeInteractions")
@@ -228,28 +226,21 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val units = jsonDurationRange.getOptionalString("units")
         val min = jsonDurationRange.getOptionalDouble("min")
         val max = jsonDurationRange.getOptionalDouble("max")
-        if (min == null && max == null) {
+        if ((min == null && max == null) || units == null) {
             return null
         }
-        when (units) {
-            "seconds" -> return DurationRange(
-                min = min?.toDuration(DurationUnit.SECONDS),
-                max = max?.toDuration(DurationUnit.SECONDS)
-            )
-            "minutes" -> return DurationRange(
-                min = min?.toDuration(DurationUnit.MINUTES),
-                max = max?.toDuration(DurationUnit.MINUTES)
-            )
-            "hours" -> return DurationRange(
-                min = min?.toDuration(DurationUnit.HOURS),
-                max = max?.toDuration(DurationUnit.HOURS)
-            )
-            "days" -> return DurationRange(
-                min = min?.toDuration(DurationUnit.DAYS),
-                max = max?.toDuration(DurationUnit.DAYS)
-            )
-            else -> return null
+        val durationUnits = when(units) {
+            DurationUnits.SECONDS.text -> DurationUnits.SECONDS
+            DurationUnits.MINUTES.text -> DurationUnits.MINUTES
+            DurationUnits.HOURS.text -> DurationUnits.HOURS
+            DurationUnits.DAYS.text -> DurationUnits.DAYS
+            else -> null
         }
+        return DurationRange(
+            min?.toFloat(),
+            max?.toFloat(),
+            durationUnits
+        )
     }
 
     private fun parseBioavailability(jsonBio: JSONObject?): Bioavailability? {
@@ -263,11 +254,11 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         }
     }
 
-    private fun parseCrossTolerances(jsonTols: JSONArray?): List<String> {
-        if (jsonTols == null) return emptyList()
+    private fun parseCrossTolerances(jsonTolerances: JSONArray?): List<String> {
+        if (jsonTolerances == null) return emptyList()
         val tolNames: MutableList<String> = mutableListOf()
-        for (i in 0 until jsonTols.length()) {
-            val tolName = jsonTols.getString(i)
+        for (i in 0 until jsonTolerances.length()) {
+            val tolName = jsonTolerances.getString(i)
             tolNames.add(tolName)
         }
         return tolNames

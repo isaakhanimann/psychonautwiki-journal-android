@@ -24,7 +24,6 @@ import com.example.healthassistant.data.room.experiences.relations.IngestionWith
 import com.example.healthassistant.data.substances.RoaDuration
 import kotlinx.coroutines.delay
 import java.util.*
-import kotlin.time.Duration
 
 
 @Preview(showBackground = true)
@@ -76,7 +75,7 @@ fun AllTimelines(
         Canvas(modifier = modifier) {
             val canvasWithLabelsHeight = size.height
             val canvasWidth = size.width
-            val pixelsPerSec = canvasWidth / model.width.inWholeSeconds
+            val pixelsPerSec = canvasWidth / model.widthInSeconds
             inset(left = 0f, top = 0f, right = 0f, bottom = 50f) {
                 val canvasHeightOuter = size.height
                 model.ingestionDrawables.forEach { ingestionDrawable ->
@@ -90,7 +89,7 @@ fun AllTimelines(
                 }
                 drawCurrentTime(
                     startTime = model.startTime,
-                    timelineWidth = model.width,
+                    timelineWidthInSeconds = model.widthInSeconds,
                     currentTime = currentTime,
                     pixelsPerSec = pixelsPerSec,
                     isDarkTheme = isDarkTheme,
@@ -117,7 +116,7 @@ fun DrawScope.drawIngestion(
 ) {
     val color = ingestionDrawable.color.getComposeColor(isDarkTheme)
     val startX =
-        ingestionDrawable.ingestionPointDistanceFromStart.inWholeSeconds * pixelsPerSec
+        ingestionDrawable.ingestionPointDistanceFromStartInSeconds * pixelsPerSec
     val verticalInsetForLine = strokeWidth / 2
     val topInset =
         (canvasHeightOuter * (1f - ingestionDrawable.verticalHeightInPercent)) + (ingestionDrawable.insetTimes * strokeWidth)
@@ -169,13 +168,13 @@ fun DrawScope.drawIngestion(
 
 fun DrawScope.drawCurrentTime(
     startTime: Date,
-    timelineWidth: Duration,
+    timelineWidthInSeconds: Float,
     currentTime: Date,
     pixelsPerSec: Float,
     isDarkTheme: Boolean,
     canvasHeightOuter: Float
 ) {
-    val endTime = Date(startTime.time + timelineWidth.inWholeMilliseconds)
+    val endTime = Date(startTime.time + (timelineWidthInSeconds.toLong() * 1000))
     if (startTime.before(currentTime) && endTime.after(currentTime)) {
         val timeStartInSec = (currentTime.time - startTime.time) / 1000
         val timeStartX = timeStartInSec * pixelsPerSec

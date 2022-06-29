@@ -11,8 +11,6 @@ import com.example.healthassistant.ui.experiences.experience.timeline.ingestion.
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -21,7 +19,7 @@ class AllTimelinesModel(
     ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>
 ) {
     val startTime: Date
-    val width: Duration
+    val widthInSeconds: Float
     val ingestionDrawables: List<IngestionDrawable>
     val axisDrawable: AxisDrawable
 
@@ -42,17 +40,17 @@ class AllTimelinesModel(
         ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)
         val max = ingestionDrawables.map {
             if (it.timelineDrawable != null) {
-                it.timelineDrawable.width + it.ingestionPointDistanceFromStart
+                it.timelineDrawable.widthInSeconds + it.ingestionPointDistanceFromStartInSeconds
             } else {
-                it.ingestionPointDistanceFromStart
+                it.ingestionPointDistanceFromStartInSeconds
             }
         }.maxOrNull()
-        width = if (max == null || max == ZERO) {
-            5.hours
+        widthInSeconds = if (max == null || max == 0f) {
+            5.hours.inWholeSeconds.toFloat()
         } else {
             max
         }
-        axisDrawable = AxisDrawable(startTime, width)
+        axisDrawable = AxisDrawable(startTime, widthInSeconds)
     }
 
     companion object {
@@ -94,15 +92,15 @@ class AllTimelinesModel(
         ): Int {
             val currentFullTimeline =
                 ingestionDrawable.timelineDrawable as? FullTimeline ?: return 0
-            val otherFullTimelinePeakRangesWithSameHeight: List<ClosedRange<Duration>> =
+            val otherFullTimelinePeakRangesWithSameHeight: List<ClosedRange<Float>> =
                 otherDrawables
                     .filter { it.verticalHeightInPercent == ingestionDrawable.verticalHeightInPercent }
                     .mapNotNull {
                         val full = it.timelineDrawable as? FullTimeline ?: return@mapNotNull null
-                        return@mapNotNull full.getPeakDurationRange(startDuration = it.ingestionPointDistanceFromStart)
+                        return@mapNotNull full.getPeakDurationRangeInSeconds(startDurationInSeconds = it.ingestionPointDistanceFromStartInSeconds)
                     }
             val currentRange =
-                currentFullTimeline.getPeakDurationRange(startDuration = ingestionDrawable.ingestionPointDistanceFromStart)
+                currentFullTimeline.getPeakDurationRangeInSeconds(startDurationInSeconds = ingestionDrawable.ingestionPointDistanceFromStartInSeconds)
             var insetTimes = 0
             for (otherRange in otherFullTimelinePeakRangesWithSameHeight) {
                 val isOverlap =
@@ -116,10 +114,11 @@ class AllTimelinesModel(
 
 data class AxisDrawable(
     val startTime: Date,
-    val width: Duration
+    val widthInSeconds: Float
 ) {
     fun getFullHours(pixelsPerSec: Float, widthInPixels: Float): List<FullHour> {
-        val widthPerHour = widthInPixels / width.inWholeHours
+        val widthInWholeHours = widthInSeconds.toLong().toDuration(DurationUnit.SECONDS).inWholeHours
+        val widthPerHour = widthInPixels / widthInWholeHours
         val minWidthPerHour = 70.0
         var stepSize = (minWidthPerHour / widthPerHour).roundToInt()
         if (stepSize == 0) {
@@ -127,7 +126,7 @@ data class AxisDrawable(
         }
         val dates = getDatesBetween(
             startTime = startTime,
-            endTime = Date(startTime.time + width.inWholeMilliseconds),
+            endTime = Date(startTime.time + (widthInSeconds.toLong() * 1000)),
             stepSizeInHours = stepSize
         )
         val formatter = SimpleDateFormat("HH", Locale.getDefault())
@@ -177,13 +176,13 @@ class IngestionDrawable(
     val verticalHeightInPercent: Float = 1f
 ) {
     val color: SubstanceColor
-    val ingestionPointDistanceFromStart: Duration
+    val ingestionPointDistanceFromStartInSeconds: Float
     val timelineDrawable: TimelineDrawable?
     var insetTimes = 0
 
     init {
-        ingestionPointDistanceFromStart =
-            (ingestionWithCompanion.ingestion.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS)
+        ingestionPointDistanceFromStartInSeconds =
+            (ingestionWithCompanion.ingestion.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS).inWholeSeconds.toFloat()
         val full = roaDuration?.toFullTimeline()
         val total = roaDuration?.toTotalTimeline()
         timelineDrawable = full ?: total

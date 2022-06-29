@@ -8,10 +8,9 @@ import com.example.healthassistant.data.room.experiences.entities.SubstanceCompa
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.DurationRange
+import com.example.healthassistant.data.substances.DurationUnits
 import com.example.healthassistant.data.substances.RoaDuration
 import java.util.*
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 class IngestionWithDurationAndExperienceProvider :
     PreviewParameterProvider<IngestionWithCompanionDurationAndExperience> {
@@ -36,28 +35,34 @@ class IngestionWithDurationAndExperienceProvider :
             ),
             roaDuration = RoaDuration(
                 onset = DurationRange(
-                    min = 20.toDuration(DurationUnit.MINUTES),
-                    max = 40.toDuration(DurationUnit.MINUTES),
+                    min = 20f,
+                    max = 40f,
+                    units = DurationUnits.MINUTES
                 ),
                 comeup = DurationRange(
-                    min = 15.toDuration(DurationUnit.MINUTES),
-                    max = 30.toDuration(DurationUnit.MINUTES),
+                    min = 15f,
+                    max = 30f,
+                    units = DurationUnits.MINUTES
                 ),
                 peak = DurationRange(
-                    min = 1.5.toDuration(DurationUnit.HOURS),
-                    max = 2.5.toDuration(DurationUnit.HOURS),
+                    min = 1.5f,
+                    max = 2.5f,
+                    units = DurationUnits.HOURS
                 ),
                 offset = DurationRange(
-                    min = 2.toDuration(DurationUnit.HOURS),
-                    max = 4.toDuration(DurationUnit.HOURS),
+                    min = 2f,
+                    max = 4f,
+                    units = DurationUnits.HOURS
                 ),
                 total = DurationRange(
-                    min = 3.toDuration(DurationUnit.HOURS),
-                    max = 5.toDuration(DurationUnit.HOURS),
+                    min = 3f,
+                    max = 5f,
+                    units = DurationUnits.HOURS
                 ),
                 afterglow = DurationRange(
-                    min = 12.toDuration(DurationUnit.HOURS),
-                    max = 48.toDuration(DurationUnit.HOURS),
+                    min = 12f,
+                    max = 48f,
+                    units = DurationUnits.HOURS
                 )
             ),
             experience = null

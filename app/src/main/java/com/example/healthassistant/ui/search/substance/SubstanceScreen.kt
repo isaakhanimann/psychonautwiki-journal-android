@@ -26,8 +26,6 @@ import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import com.google.accompanist.flowlayout.FlowRow
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @Composable
 fun SubstanceScreen(
@@ -101,19 +99,18 @@ fun SubstanceScreenContent(
             val maxDuration = remember(substance.roas) {
                 substance.roas.mapNotNull {
                     val duration = it.roaDuration ?: return@mapNotNull null
-                    val maxTotal = duration.total?.max
-                    val maxOnset = duration.onset?.max
-                    val maxComeup = duration.comeup?.max
-                    val maxPeak = duration.peak?.max
-                    val maxOffset = duration.offset?.max
+                    val maxTotal = duration.total?.maxInSec
+                    val maxOnset = duration.onset?.maxInSec
+                    val maxComeup = duration.comeup?.maxInSec
+                    val maxPeak = duration.peak?.maxInSec
+                    val maxOffset = duration.offset?.maxInSec
                     val maxTimeline =
                         if (maxOnset != null && maxComeup != null && maxPeak != null && maxOffset != null) {
                             maxOnset + maxComeup + maxPeak + maxOffset
                         } else {
-                            val zero = 0.toDuration(DurationUnit.SECONDS)
-                            val partialSum = ((maxOnset ?: zero) + (maxComeup ?: zero) + (maxPeak
-                                ?: zero) + (maxOffset ?: zero)).times(1.1)
-                            if (partialSum == zero) {
+                            val partialSum = ((maxOnset ?: 0f) + (maxComeup ?: 0f) + (maxPeak
+                                ?: 0f) + (maxOffset ?: 0f)).times(1.1f)
+                            if (partialSum == 0f) {
                                 null
                             } else {
                                 partialSum
@@ -135,7 +132,7 @@ fun SubstanceScreenContent(
             substance.roas.forEach { roa ->
                 RoaView(
                     roa = roa,
-                    maxDuration = maxDuration
+                    maxDurationInSeconds = maxDuration
                 )
             }
             InteractionsView(

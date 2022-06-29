@@ -3,12 +3,11 @@ package com.example.healthassistant.ui.experiences.experience.timeline.ingestion
 import androidx.compose.ui.graphics.Path
 import com.example.healthassistant.data.substances.DurationRange
 import com.example.healthassistant.data.substances.RoaDuration
-import kotlin.time.Duration
 
 interface TimelineDrawable {
     fun getStrokePath(pixelsPerSec: Float, height: Float, startX: Float): Path
     fun getFillPath(pixelsPerSec: Float, height: Float, startX: Float): Path
-    val width: Duration
+    val widthInSeconds: Float
     val isDotted: Boolean
 }
 
@@ -19,28 +18,28 @@ data class FullTimeline(
     val offset: FullDurationRange,
 ) : TimelineDrawable {
 
-    fun getPeakDurationRange(startDuration: Duration): ClosedRange<Duration> {
-        val startRange = startDuration + onset.interpolateAt(0.5) + comeup.interpolateAt(0.5)
-        return startRange..(startRange + peak.interpolateAt(0.5))
+    fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float> {
+        val startRange = startDurationInSeconds + onset.interpolateAtValueInSeconds(0.5f) + comeup.interpolateAtValueInSeconds(0.5f)
+        return startRange..(startRange + peak.interpolateAtValueInSeconds(0.5f))
     }
 
-    override val width: Duration
-        get() = onset.max + comeup.max + peak.max + offset.max
+    override val widthInSeconds: Float
+        get() = onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds + offset.maxInSeconds
 
     override val isDotted: Boolean
         get() = false
 
     override fun getStrokePath(pixelsPerSec: Float, height: Float, startX: Float): Path {
         return Path().apply {
-            val weight = 0.5
+            val weight = 0.5f
             val onsetEndX =
-                startX + (onset.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
+                startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
             val comeupEndX =
-                onsetEndX + (comeup.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
+                onsetEndX + (comeup.interpolateAtValueInSeconds(weight) * pixelsPerSec)
             val peakEndX =
-                comeupEndX + (peak.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
+                comeupEndX + (peak.interpolateAtValueInSeconds(weight) * pixelsPerSec)
             val offsetEndX =
-                peakEndX + (offset.interpolateAt(weight).inWholeSeconds * pixelsPerSec)
+                peakEndX + (offset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
             moveTo(x = startX, y = height)
             lineTo(x = onsetEndX, y = height)
             lineTo(x = comeupEndX, y = 0f)
@@ -52,24 +51,24 @@ data class FullTimeline(
     override fun getFillPath(pixelsPerSec: Float, height: Float, startX: Float): Path {
         return Path().apply {
             // path over top
-            val onsetStartMinX = startX + (onset.min.inWholeSeconds * pixelsPerSec)
-            val comeupEndMinX = onsetStartMinX + (comeup.min.inWholeSeconds * pixelsPerSec)
+            val onsetStartMinX = startX + (onset.minInSeconds * pixelsPerSec)
+            val comeupEndMinX = onsetStartMinX + (comeup.minInSeconds * pixelsPerSec)
             val peakEndMaxX =
-                startX + ((onset.max + comeup.max + peak.max).inWholeSeconds * pixelsPerSec)
+                startX + ((onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds) * pixelsPerSec)
             val offsetEndMaxX =
-                peakEndMaxX + (offset.max.inWholeSeconds * pixelsPerSec)
+                peakEndMaxX + (offset.maxInSeconds * pixelsPerSec)
             moveTo(onsetStartMinX, height)
             lineTo(x = comeupEndMinX, y = 0f)
             lineTo(x = peakEndMaxX, y = 0f)
             lineTo(x = offsetEndMaxX, y = height)
             // path bottom back
-            val onsetStartMaxX = startX + (onset.max.inWholeSeconds * pixelsPerSec)
+            val onsetStartMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
             val comeupEndMaxX =
-                onsetStartMaxX + (comeup.max.inWholeSeconds * pixelsPerSec)
+                onsetStartMaxX + (comeup.maxInSeconds * pixelsPerSec)
             val peakEndMinX =
-                startX + ((onset.min + comeup.min + peak.min).inWholeSeconds * pixelsPerSec)
+                startX + ((onset.minInSeconds + comeup.minInSeconds + peak.minInSeconds) * pixelsPerSec)
             val offsetEndMinX =
-                peakEndMinX + (offset.min.inWholeSeconds * pixelsPerSec)
+                peakEndMinX + (offset.minInSeconds * pixelsPerSec)
             lineTo(x = offsetEndMinX, y = height)
             lineTo(x = peakEndMinX, y = 0f)
             lineTo(x = comeupEndMaxX, y = 0f)
@@ -80,31 +79,31 @@ data class FullTimeline(
 }
 
 data class FullDurationRange(
-    val min: Duration,
-    val max: Duration
+    val minInSeconds: Float,
+    val maxInSeconds: Float
 ) {
-    fun interpolateAt(value: Double): Duration {
-        val diff = max - min
-        return min + diff.times(value)
+    fun interpolateAtValueInSeconds(value: Float): Float {
+        val diff = maxInSeconds - minInSeconds
+        return minInSeconds + diff.times(value)
     }
 }
 
 data class TotalTimeline(
     val total: FullDurationRange,
-    val weight: Double = 0.5,
+    val weight: Float = 0.5f,
     val percentSmoothness: Float = 0.5f,
 ) : TimelineDrawable {
 
-    override val width: Duration
-        get() = total.max
+    override val widthInSeconds: Float
+        get() = total.maxInSeconds
 
     override val isDotted: Boolean
         get() = true
 
     override fun getStrokePath(pixelsPerSec: Float, height: Float, startX: Float): Path {
         return Path().apply {
-            val totalMinX = (total.min.inWholeSeconds) * pixelsPerSec
-            val totalX = total.interpolateAt(weight).inWholeSeconds * pixelsPerSec
+            val totalMinX = total.minInSeconds * pixelsPerSec
+            val totalX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
             moveTo(startX, height)
             endSmoothLineTo(
                 percentSmoothness = percentSmoothness,
@@ -125,8 +124,8 @@ data class TotalTimeline(
     override fun getFillPath(pixelsPerSec: Float, height: Float, startX: Float): Path {
         return Path().apply {
             // path over top
-            val totalMinX = (total.min.inWholeSeconds) * pixelsPerSec
-            val totalMaxX = (total.max.inWholeSeconds) * pixelsPerSec
+            val totalMinX = total.minInSeconds * pixelsPerSec
+            val totalMaxX = total.maxInSeconds * pixelsPerSec
             moveTo(x = startX + (totalMinX / 2), y = 0f)
             startSmoothLineTo(
                 percentSmoothness = percentSmoothness,
@@ -176,8 +175,8 @@ fun RoaDuration.toTotalTimeline(): TotalTimeline? {
 }
 
 fun DurationRange.toFullDurationRange(): FullDurationRange? {
-    return if (min != null && max != null) {
-        FullDurationRange(min, max)
+    return if (minInSec != null && maxInSec != null) {
+        FullDurationRange(minInSec, maxInSec)
     } else {
         null
     }

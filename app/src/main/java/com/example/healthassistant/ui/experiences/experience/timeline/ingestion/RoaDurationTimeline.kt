@@ -48,7 +48,7 @@ fun RoaDurationTimeline(
         Canvas(modifier = modifier.fillMaxSize()) {
             val canvasHeightOuter = size.height
             val canvasWidth = size.width
-            val pixelsPerSec = canvasWidth / timelineDrawable.width.inWholeSeconds
+            val pixelsPerSec = canvasWidth / timelineDrawable.widthInSeconds
             inset(vertical = strokeWidth / 2) {
                 val canvasHeightInner = size.height
                 drawPath(
