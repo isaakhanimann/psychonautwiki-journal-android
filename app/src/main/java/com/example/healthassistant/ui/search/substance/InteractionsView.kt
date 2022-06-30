@@ -37,16 +37,28 @@ fun InteractionsView(
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-            Text(text = "Interactions", style = MaterialTheme.typography.h6)
-            FlowRow {
-                dangerousInteractions.forEach {
-                    InteractionChip(text = it, color = Color.Red)
+            if (dangerousInteractions.isNotEmpty()) {
+                Text(text = "Dangerous Interactions", style = MaterialTheme.typography.h6)
+                FlowRow {
+                    dangerousInteractions.forEach {
+                        InteractionChip(text = it, color = Color.Red)
+                    }
                 }
-                unsafeInteractions.forEach {
-                    InteractionChip(text = it, color = Color(0xFFFF9800))
+            }
+            if (unsafeInteractions.isNotEmpty()) {
+                Text(text = "Unsafe Interactions", style = MaterialTheme.typography.h6)
+                FlowRow {
+                    unsafeInteractions.forEach {
+                        InteractionChip(text = it, color = Color(0xFFFF9800))
+                    }
                 }
-                uncertainInteractions.forEach {
-                    InteractionChip(text = it, color = Color.Yellow)
+            }
+            if (uncertainInteractions.isNotEmpty()) {
+                Text(text = "Uncertain Interactions", style = MaterialTheme.typography.h6)
+                FlowRow {
+                    uncertainInteractions.forEach {
+                        InteractionChip(text = it, color = Color.Yellow)
+                    }
                 }
             }
             Divider(modifier = Modifier.padding(top = 8.dp))
