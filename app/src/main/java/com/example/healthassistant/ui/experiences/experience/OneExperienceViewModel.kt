@@ -54,7 +54,6 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
-
     val experienceWithIngestionsFlow =
         experienceRepo.getExperienceWithIngestions(experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!)
             .stateIn(
@@ -63,8 +62,8 @@ class OneExperienceViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000)
             )
 
-    private val ingestionsWithCompanionsFlow = experienceWithIngestionsFlow.map {
-        it?.ingestionsWithCompanions ?: emptyList()
+    private val sortedIngestionsWithCompanionsFlow = experienceWithIngestionsFlow.map { experience ->
+        experience?.ingestionsWithCompanions?.sortedBy { it.ingestion.time } ?: emptyList()
     }
 
     private data class IngestionWithAssociatedData(
@@ -74,7 +73,7 @@ class OneExperienceViewModel @Inject constructor(
     )
 
     private val ingestionsWithAssociatedDataFlow: Flow<List<IngestionWithAssociatedData>> =
-        ingestionsWithCompanionsFlow.map { ingestionsWithComps ->
+        sortedIngestionsWithCompanionsFlow.map { ingestionsWithComps ->
             ingestionsWithComps.map { oneIngestionWithComp ->
                 val ingestion = oneIngestionWithComp.ingestion
                 val roa = substanceRepo.getSubstance(oneIngestionWithComp.ingestion.substanceName)
