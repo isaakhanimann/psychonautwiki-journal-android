@@ -9,7 +9,6 @@ import com.example.healthassistant.data.substances.parse.SubstanceParserInterfac
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import java.io.File
 import java.util.*
@@ -91,21 +90,6 @@ class SubstanceRepository @Inject constructor(
 
     override fun getSubstance(substanceName: String): Substance? {
         return allSubstances.firstOrNull { it.name == substanceName }
-    }
-
-    override fun getSubstances(searchText: String): Flow<List<Substance>> {
-        return substancesFlow.map { list ->
-            if (searchText.isEmpty()) {
-                list
-            } else {
-                list.filter { substance ->
-                    substance.name.startsWith(prefix = searchText, ignoreCase = true) ||
-                            substance.commonNames.any { commonName ->
-                                commonName.startsWith(prefix = searchText, ignoreCase = true)
-                            }
-                }
-            }
-        }
     }
 
     override suspend fun getAllInteractions(

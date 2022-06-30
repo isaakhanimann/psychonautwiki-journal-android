@@ -27,14 +27,17 @@ fun SearchScreen(
     onSubstanceTap: (Substance) -> Unit
 ) {
     Column {
-        SearchField(searchText = searchViewModel.searchText, onChange = {
-            searchViewModel.searchText = it
-            searchViewModel.filterSubstances()
-        })
-        val recents = searchViewModel.recentlyUsedSubstances.collectAsState().value
-        val substancesToShow = searchViewModel.substancesToShow.collectAsState(initial = emptyList()).value
+        SearchField(
+            searchText = searchViewModel.searchTextFlow.collectAsState().value,
+            onChange = {
+                searchViewModel.filterSubstances(searchText = it)
+            }
+        )
+        val recents = searchViewModel.filteredRecentlyUsed.collectAsState().value
+        val commons = searchViewModel.filteredCommonlyUsed.collectAsState().value
+        val others = searchViewModel.filteredOthers.collectAsState().value
         LazyColumn {
-            if (searchViewModel.searchText.isEmpty() && recents.isNotEmpty()) {
+            if (recents.isNotEmpty()) {
                 item {
                     SectionTitle(title = "Recently Used")
                 }
@@ -45,15 +48,29 @@ fun SearchScreen(
                         Divider()
                     }
                 }
+            }
+            if (commons.isNotEmpty()) {
+                item {
+                    SectionTitle(title = "Commonly Used")
+                }
+                items(commons.size) { i ->
+                    val substance = commons[i]
+                    SubstanceRow(substance = substance, onTap = onSubstanceTap)
+                    if (i < commons.size) {
+                        Divider()
+                    }
+                }
+            }
+            if (others.isNotEmpty()) {
                 item {
                     SectionTitle(title = "Other")
                 }
-            }
-            items(substancesToShow.size) { i ->
-                val substance = substancesToShow[i]
-                SubstanceRow(substance = substance, onTap = onSubstanceTap)
-                if (i < substancesToShow.size) {
-                    Divider()
+                items(others.size) { i ->
+                    val substance = others[i]
+                    SubstanceRow(substance = substance, onTap = onSubstanceTap)
+                    if (i < others.size) {
+                        Divider()
+                    }
                 }
             }
         }
