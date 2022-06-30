@@ -24,7 +24,6 @@ import com.example.healthassistant.ui.experiences.SectionTitle
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel(),
-    recentlyUsedSubstancesViewModel: RecentlyUsedSubstancesViewModel = hiltViewModel(),
     onSubstanceTap: (Substance) -> Unit
 ) {
     Column {
@@ -32,7 +31,7 @@ fun SearchScreen(
             searchViewModel.searchText = it
             searchViewModel.filterSubstances()
         })
-        val recents = recentlyUsedSubstancesViewModel.recentlyUsedSubstances.collectAsState().value
+        val recents = searchViewModel.recentlyUsedSubstances.collectAsState().value
         val substancesToShow = searchViewModel.substancesToShow.collectAsState(initial = emptyList()).value
         LazyColumn {
             if (searchViewModel.searchText.isEmpty() && recents.isNotEmpty()) {
