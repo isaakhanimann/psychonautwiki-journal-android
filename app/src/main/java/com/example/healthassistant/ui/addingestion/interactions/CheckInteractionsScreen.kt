@@ -16,8 +16,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.search.substance.SubstancePreviewProvider
 import com.example.healthassistant.ui.search.substance.InteractionChip
+import com.example.healthassistant.ui.search.substance.SubstancePreviewProvider
 import com.google.accompanist.flowlayout.FlowRow
 
 
@@ -51,7 +51,7 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::c
         uncertainInteractions = substance.uncertainInteractions,
         navigateToNext = {},
         dismissAlert = {},
-        isShowingAlert = true,
+        isShowingAlert = false,
         alertTitle = "Dangerous Interaction Detected!",
         alertText = "Dangerous Interaction with Heroin taken 4h 10m ago"
     )
@@ -119,22 +119,30 @@ fun CheckInteractionsScreen(
                     verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .padding(horizontal = 10.dp)
-                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    FlowRow(
-                        modifier = Modifier
-                            .verticalScroll(rememberScrollState())
-                            .padding(vertical = 5.dp)
-                            .weight(1f)
-                    ) {
-                        dangerousInteractions.forEach {
-                            InteractionChip(text = it, color = Color.Red)
+                    if (dangerousInteractions.isNotEmpty()) {
+                        Text(text = "Dangerous Interactions", style = MaterialTheme.typography.h6)
+                        FlowRow {
+                            dangerousInteractions.forEach {
+                                InteractionChip(text = it, color = Color.Red)
+                            }
                         }
-                        unsafeInteractions.forEach {
-                            InteractionChip(text = it, color = Color(0xFFFF9800))
+                    }
+                    if (unsafeInteractions.isNotEmpty()) {
+                        Text(text = "Unsafe Interactions", style = MaterialTheme.typography.h6)
+                        FlowRow {
+                            unsafeInteractions.forEach {
+                                InteractionChip(text = it, color = Color(0xFFFF9800))
+                            }
                         }
-                        uncertainInteractions.forEach {
-                            InteractionChip(text = it, color = Color.Yellow)
+                    }
+                    if (uncertainInteractions.isNotEmpty()) {
+                        Text(text = "Uncertain Interactions", style = MaterialTheme.typography.h6)
+                        FlowRow {
+                            uncertainInteractions.forEach {
+                                InteractionChip(text = it, color = Color.Yellow)
+                            }
                         }
                     }
                 }
@@ -153,7 +161,7 @@ fun CheckInteractionsScreen(
                             modifier = Modifier.padding(all = 8.dp),
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Button(
+                            TextButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = dismissAlert
                             ) {
