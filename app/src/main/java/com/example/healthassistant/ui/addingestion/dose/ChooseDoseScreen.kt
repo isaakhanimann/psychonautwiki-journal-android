@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.DoseClass
 import com.example.healthassistant.data.substances.RoaDose
 import com.example.healthassistant.ui.search.substance.roa.dose.RoaDosePreviewProvider
@@ -29,6 +30,7 @@ fun ChooseDoseScreen(
 ) {
     ChooseDoseScreen(
         roaDose = viewModel.roaDose,
+        administrationRoute = viewModel.administrationRoute,
         doseText = viewModel.doseText,
         onChangeDoseText = viewModel::onDoseTextChange,
         isValidDose = viewModel.isValidDose,
@@ -67,6 +69,7 @@ fun ChooseDoseScreenPreview(
 ) {
     ChooseDoseScreen(
         roaDose = roaDose,
+        administrationRoute = AdministrationRoute.INSUFFLATED,
         doseText = "5",
         onChangeDoseText = {},
         isValidDose = true,
@@ -78,13 +81,14 @@ fun ChooseDoseScreenPreview(
         purityText = "20",
         onPurityChange = {},
         isValidPurity = true,
-        convertedDoseAndUnitText = "20 mg"
+        convertedDoseAndUnitText = "25 mg"
     )
 }
 
 @Composable
 fun ChooseDoseScreen(
     roaDose: RoaDose?,
+    administrationRoute: AdministrationRoute,
     doseText: String,
     onChangeDoseText: (String) -> Unit,
     isValidDose: Boolean,
@@ -101,7 +105,7 @@ fun ChooseDoseScreen(
     Column {
         LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
         Scaffold(
-            topBar = { TopAppBar(title = { Text(text = "Choose Dose") }) },
+            topBar = { TopAppBar(title = { Text(text = "Choose " + administrationRoute.displayText + " Dose") }) },
             floatingActionButton = {
                 if (isValidDose) {
                     ExtendedFloatingActionButton(
