@@ -1,6 +1,7 @@
 package com.example.healthassistant.ui.experiences.experience
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -160,7 +161,6 @@ fun ExperienceScreen(
                 Divider(modifier = Modifier.padding(top = 10.dp))
             }
             if (ingestionElements.isNotEmpty()) {
-                Text("Ingestions", style = MaterialTheme.typography.subtitle1)
                 ingestionElements.forEach {
                     Column(horizontalAlignment = Alignment.End) {
                         if (it.dateText != null) {
@@ -168,19 +168,22 @@ fun ExperienceScreen(
                         }
                         IngestionRow(
                             ingestionElement = it,
-                            navigateToIngestionScreen = { navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id) },
-                            modifier = Modifier.padding(vertical = 3.dp)
+                            modifier = Modifier.clickable {
+                                navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id)
+                            }.fillMaxWidth().padding(vertical = 5.dp)
                         )
                     }
                 }
-                if (cumulativeDoses.isNotEmpty()) {
-                    Text(
-                        text = "Cumulative Dose",
-                        style = MaterialTheme.typography.subtitle1
-                    )
-                    cumulativeDoses.forEach {
-                        CumulativeDoseRow(cumulativeDose = it)
-                    }
+                Divider()
+            }
+            if (cumulativeDoses.isNotEmpty()) {
+                Text(
+                    text = "Cumulative Dose",
+                    style = MaterialTheme.typography.subtitle1,
+                    modifier = Modifier.padding(top = 10.dp)
+                )
+                cumulativeDoses.forEach {
+                    CumulativeDoseRow(cumulativeDose = it, modifier = Modifier.fillMaxWidth())
                 }
                 Divider(modifier = Modifier.padding(top = 10.dp))
             }
@@ -300,23 +303,21 @@ fun SentimentSection(
 }
 
 @Composable
-fun CumulativeDoseRow(cumulativeDose: OneExperienceViewModel.CumulativeDose) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.h6)
-            Column {
-                Text(
-                    text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units,
-                    style = MaterialTheme.typography.subtitle1
-                )
-                val doseClass = cumulativeDose.doseClass
-                if (doseClass != null) {
-                    DotRow(doseClass = doseClass)
-                }
+fun CumulativeDoseRow(cumulativeDose: OneExperienceViewModel.CumulativeDose, modifier: Modifier) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.h6)
+        Column {
+            Text(
+                text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units,
+                style = MaterialTheme.typography.subtitle1
+            )
+            val doseClass = cumulativeDose.doseClass
+            if (doseClass != null) {
+                DotRow(doseClass = doseClass)
             }
         }
     }
