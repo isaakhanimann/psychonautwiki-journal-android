@@ -140,10 +140,17 @@ class SearchViewModel @Inject constructor(
                 substances
             } else {
                 substances.filter { substance ->
-                    substance.name.startsWith(prefix = searchText, ignoreCase = true) ||
-                            substance.commonNames.any { commonName ->
-                                commonName.startsWith(prefix = searchText, ignoreCase = true)
-                            }
+                    if (searchText.length < 3) {
+                        substance.name.startsWith(prefix = searchText, ignoreCase = true) ||
+                                substance.commonNames.any { commonName ->
+                                    commonName.startsWith(prefix = searchText, ignoreCase = true)
+                                }
+                    } else {
+                        substance.name.contains(other = searchText, ignoreCase = true) ||
+                                substance.commonNames.any { commonName ->
+                                    commonName.contains(other = searchText, ignoreCase = true)
+                                }
+                    }
                 }
             }
         }

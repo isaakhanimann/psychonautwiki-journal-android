@@ -141,7 +141,7 @@ fun SubstanceRow(substance: Substance, onTap: (Substance) -> Unit) {
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Column(horizontalAlignment = Alignment.End) {
                 substance.commonNames.forEach { commonName ->
-                    Text(text = commonName)
+                    Text(text = commonName, style = MaterialTheme.typography.caption)
                 }
             }
         }
