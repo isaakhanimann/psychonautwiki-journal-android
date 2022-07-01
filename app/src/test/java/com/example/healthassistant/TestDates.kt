@@ -2,7 +2,7 @@ package com.example.healthassistant
 
 import com.example.healthassistant.ui.experiences.experience.timeline.AxisDrawable
 import com.example.healthassistant.ui.utils.getDate
-import com.example.healthassistant.ui.stats.StatisticsViewModel
+import com.example.healthassistant.ui.utils.getTimeDifferenceText
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -38,7 +38,7 @@ class TestDates {
         val twoDaysInMs = 2*24*60*60*1000
         val threeHours = 3*60*60*1000
         val date = Date(Date().time - twoDaysInMs + threeHours)
-        val text = StatisticsViewModel.getTimeDifferenceText(fromDate = date, toDate = Date())
+        val text = getTimeDifferenceText(fromDate = date, toDate = Date())
         assertEquals("2 days", text)
     }
 }

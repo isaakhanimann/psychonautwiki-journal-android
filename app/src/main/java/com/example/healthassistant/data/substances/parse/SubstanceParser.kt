@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class SubstanceParser @Inject constructor() : SubstanceParserInterface {
 
     override fun parseAllSubstances(string: String): List<Substance> {
-        val jsonArray = JSONTokener(string).nextValue() as JSONArray
+        val jsonArray = JSONTokener(string).nextValue() as? JSONArray ?: return emptyList()
         val substances: MutableList<Substance> = mutableListOf()
         for (i in 0 until jsonArray.length()) {
             val jsonSubstance = jsonArray.getOptionalJSONObject(i) ?: continue
@@ -22,7 +22,11 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
     }
 
     override fun extractSubstanceString(string: String): String? {
-        val wholeFile = JSONObject(string)
+        val wholeFile = try {
+            JSONObject(string)
+        } catch (e: Exception) {
+            return null
+        }
         val data = wholeFile.getOptionalJSONObject("data")
         val substances = data?.getOptionalJSONArray("substances")
         return substances?.toString()
