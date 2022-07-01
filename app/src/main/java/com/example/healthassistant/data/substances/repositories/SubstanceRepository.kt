@@ -102,20 +102,10 @@ class SubstanceRepository @Inject constructor(
         val otherInteractions = allSubstances.filter { sub ->
             val interactions = sub.getInteractions(interactionType = type)
             val isDirectMatch = interactions.contains(substanceName)
-            val isWildCardMatch = interactions.map { dangName ->
-                Regex(
-                    pattern = dangName.replace(
-                        oldValue = "x",
-                        newValue = "[\\S]*",
-                        ignoreCase = true
-                    ),
-                    option = RegexOption.IGNORE_CASE
-                ).matches(substanceName)
-            }.any { it }
             val isClassMatch = psychoactiveClassNames.any {
                 interactions.contains(it)
             }
-            isDirectMatch || isWildCardMatch || isClassMatch
+            isDirectMatch || isClassMatch
         }.map { it.name }
         val tooManyInteractions = (originalInteractions + otherInteractions).distinct()
         return tooManyInteractions.filter {
