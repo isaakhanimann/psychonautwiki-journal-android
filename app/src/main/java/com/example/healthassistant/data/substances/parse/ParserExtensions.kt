@@ -42,3 +42,11 @@ fun JSONArray.getOptionalString(index: Int): String? {
         getString(index)
     }
 }
+
+fun JSONArray.getOptionalJSONObject(index: Int): JSONObject? {
+    return if (isNull(index)) {
+        null
+    } else {
+        getJSONObject(index)
+    }
+}
