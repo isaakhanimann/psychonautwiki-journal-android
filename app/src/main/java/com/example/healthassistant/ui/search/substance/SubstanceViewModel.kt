@@ -11,7 +11,6 @@ import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +31,7 @@ class SubstanceViewModel @Inject constructor(
         dangerousInteractions = substance.dangerousInteractions
         unsafeInteractions = substance.unsafeInteractions
         uncertainInteractions = substance.uncertainInteractions
-        viewModelScope.launch(context = Dispatchers.Default) {
+        viewModelScope.launch {
             dangerousInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.DANGEROUS,
                 substanceName = substanceName,
