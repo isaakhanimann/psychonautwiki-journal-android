@@ -28,8 +28,13 @@ interface ExperienceDao {
     )
     fun getSubstanceWithLastDateDescendingFlow(): Flow<List<SubstanceLastUsed>>
 
-    @Query("SELECT * FROM ingestion WHERE time > :date ORDER BY time ASC")
-    suspend fun getIngestionAfterDate(date: Date): List<Ingestion>
+    @Query(
+        "SELECT * FROM ingestion as i" +
+                " INNER JOIN (SELECT id, MAX(time) AS maxTime FROM ingestion WHERE time > :date GROUP BY substanceName) as sub" +
+                " ON i.id = sub.id AND i.time = sub.maxTime" +
+                " ORDER BY time DESC"
+    )
+    suspend fun getLatestIngestionOfEverySubstanceSinceDate(date: Date): List<Ingestion>
 
     @Query("SELECT DISTINCT substanceName FROM ingestion ORDER BY time DESC LIMIT :limit")
     fun getLastUsedSubstanceNamesFlow(limit: Int): Flow<List<String>>

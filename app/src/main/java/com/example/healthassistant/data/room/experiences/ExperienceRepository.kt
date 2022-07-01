@@ -56,11 +56,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    suspend fun getLastIngestion(substanceName: String) =
-        experienceDao.getLastIngestion(substanceName)
-
-    suspend fun getIngestionAfterDate(date: Date): List<Ingestion> =
-        experienceDao.getIngestionAfterDate(date)
+    suspend fun getLatestIngestionOfEverySubstanceSinceDate(date: Date): List<Ingestion> =
+        experienceDao.getLatestIngestionOfEverySubstanceSinceDate(date)
 
     suspend fun insert(substanceCompanion: SubstanceCompanion) =
         experienceDao.insert(substanceCompanion)

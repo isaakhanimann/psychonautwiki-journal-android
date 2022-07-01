@@ -33,7 +33,7 @@ class CheckInteractionsViewModel @Inject constructor(
     var isShowingAlert by mutableStateOf(false)
     var alertTitle by mutableStateOf("")
     var alertText by mutableStateOf("")
-    private var latestIngestions: List<Ingestion> = emptyList()
+    private var latestIngestionsOfEverySubstanceSinceTwoDays: List<Ingestion> = emptyList()
 
     init {
         substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
@@ -65,7 +65,7 @@ class CheckInteractionsViewModel @Inject constructor(
             )
             val twoDaysInMs = 2.toDuration(DurationUnit.DAYS).inWholeMilliseconds
             val twoDaysAgo = Date(System.currentTimeMillis() - twoDaysInMs)
-            latestIngestions = experienceRepo.getIngestionAfterDate(twoDaysAgo)
+            latestIngestionsOfEverySubstanceSinceTwoDays = experienceRepo.getLatestIngestionOfEverySubstanceSinceDate(twoDaysAgo)
             checkInteractionsAndMaybeShowAlert()
             isSearchingForInteractions = false
         }
@@ -74,7 +74,7 @@ class CheckInteractionsViewModel @Inject constructor(
     private fun checkInteractionsAndMaybeShowAlert() {
         val dangerousIngestions = getIngestionsWithInteraction(
             interactions = dangerousInteractions
-        )
+        ).sortedByDescending { it.time }
         val unsafeIngestions = getIngestionsWithInteraction(
             interactions = unsafeInteractions
         )
@@ -91,15 +91,15 @@ class CheckInteractionsViewModel @Inject constructor(
             return
         }
         val now = Date()
-        alertText = dangerousIngestions.joinToString(separator = "\n") { ingestion ->
+        val messages = dangerousIngestions.map { ingestion ->
             "Dangerous Interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
                     fromDate = ingestion.time,
                     toDate = now
                 )
             } ago)."
-        }
-        alertText += unsafeIngestions.joinToString(separator = "\n") { ingestion ->
+        }.toMutableList()
+        messages += unsafeIngestions.map { ingestion ->
             "Unsafe Interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
                     fromDate = ingestion.time,
@@ -107,7 +107,7 @@ class CheckInteractionsViewModel @Inject constructor(
                 )
             } ago)."
         }
-        alertText += uncertainIngestions.joinToString(separator = "\n") { ingestion ->
+        messages += uncertainIngestions.map { ingestion ->
             "Uncertain Interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
                     fromDate = ingestion.time,
@@ -115,13 +115,14 @@ class CheckInteractionsViewModel @Inject constructor(
                 )
             } ago)."
         }
+        alertText = messages.distinct().joinToString(separator = "\n")
         isShowingAlert = true
     }
 
     private fun getIngestionsWithInteraction(
         interactions: List<String>
     ): List<Ingestion> {
-        return latestIngestions.filter { ingestion ->
+        return latestIngestionsOfEverySubstanceSinceTwoDays.filter { ingestion ->
             val substance = substanceRepo.getSubstance(ingestion.substanceName)
             val isSubstanceInDangerClass =
                 substance?.psychoactiveClasses?.any { interactions.contains(it) } ?: false
