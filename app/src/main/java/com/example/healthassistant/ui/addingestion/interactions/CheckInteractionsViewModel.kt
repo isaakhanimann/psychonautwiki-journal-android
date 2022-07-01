@@ -31,7 +31,7 @@ class CheckInteractionsViewModel @Inject constructor(
     var unsafeInteractions: List<String> by mutableStateOf(listOf())
     var uncertainInteractions: List<String> by mutableStateOf(listOf())
     var isShowingAlert by mutableStateOf(false)
-    var alertTitle by mutableStateOf("")
+    var alertInteractionType by mutableStateOf<InteractionType?>(null)
     var alertText by mutableStateOf("")
     private var latestIngestionsOfEverySubstanceSinceTwoDays: List<Ingestion> = emptyList()
 
@@ -81,12 +81,12 @@ class CheckInteractionsViewModel @Inject constructor(
         val uncertainIngestions = getIngestionsWithInteraction(
             interactions = uncertainInteractions
         )
-        alertTitle = if (dangerousIngestions.isNotEmpty()) {
-            "Dangerous Interaction Detected!"
+        alertInteractionType = if (dangerousIngestions.isNotEmpty()) {
+            InteractionType.DANGEROUS
         } else if (unsafeIngestions.isNotEmpty()) {
-            "Unsafe Interaction Detected!"
+            InteractionType.UNSAFE
         } else if (uncertainIngestions.isNotEmpty()) {
-            "Uncertain Interaction Detected"
+            InteractionType.UNCERTAIN
         } else {
             return
         }

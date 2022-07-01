@@ -3,7 +3,20 @@ package com.example.healthassistant.data.substances
 import androidx.compose.ui.graphics.Color
 
 enum class InteractionType {
-    DANGEROUS, UNSAFE, UNCERTAIN
+    DANGEROUS {
+        override val color: Color
+            get() = Color.Red
+    },
+    UNSAFE {
+        override val color: Color
+            get() = Color(0xFFFF9800)
+    },
+    UNCERTAIN {
+        override val color: Color
+            get() = Color.Yellow
+    };
+
+    abstract val color: Color
 }
 
 data class Substance(
@@ -170,10 +183,12 @@ data class DurationRange(
     val units: DurationUnits?
 ) {
     val text
-        get() = "${min.toString().removeSuffix(".0")}-${max.toString().removeSuffix(".0")} ${units?.text ?: ""}"
+        get() = "${min.toString().removeSuffix(".0")}-${
+            max.toString().removeSuffix(".0")
+        } ${units?.text ?: ""}"
 
-    val minInSec: Float? = if (units!=null) min?.times(units.inSecondsMultiplier) else null
-    val maxInSec: Float? = if (units!=null) max?.times(units.inSecondsMultiplier) else null
+    val minInSec: Float? = if (units != null) min?.times(units.inSecondsMultiplier) else null
+    val maxInSec: Float? = if (units != null) max?.times(units.inSecondsMultiplier) else null
 
     fun interpolateAtValueInSeconds(value: Float): Float? {
         if (min == null || max == null || units == null) return null
@@ -187,16 +202,20 @@ enum class DurationUnits(val text: String) {
     SECONDS("seconds") {
         override val inSecondsMultiplier: Int
             get() = 1
-    }, MINUTES("minutes") {
+    },
+    MINUTES("minutes") {
         override val inSecondsMultiplier: Int
             get() = 60
-    }, HOURS("hours") {
+    },
+    HOURS("hours") {
         override val inSecondsMultiplier: Int
             get() = 3600
-    }, DAYS("days") {
+    },
+    DAYS("days") {
         override val inSecondsMultiplier: Int
             get() = 86400
     };
+
     abstract val inSecondsMultiplier: Int
 }
 

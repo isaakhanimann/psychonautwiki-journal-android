@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.example.healthassistant.data.substances.InteractionType
 import com.example.healthassistant.data.substances.Substance
 import com.google.accompanist.flowlayout.FlowRow
 
@@ -41,7 +42,7 @@ fun InteractionsView(
                 Text(text = "Dangerous Interactions", style = MaterialTheme.typography.h6)
                 FlowRow {
                     dangerousInteractions.forEach {
-                        InteractionChip(text = it, color = Color.Red)
+                        InteractionChip(text = it, color = InteractionType.DANGEROUS.color)
                     }
                 }
             }
@@ -49,7 +50,7 @@ fun InteractionsView(
                 Text(text = "Unsafe Interactions", style = MaterialTheme.typography.h6)
                 FlowRow {
                     unsafeInteractions.forEach {
-                        InteractionChip(text = it, color = Color(0xFFFF9800))
+                        InteractionChip(text = it, color = InteractionType.UNSAFE.color)
                     }
                 }
             }
@@ -57,7 +58,7 @@ fun InteractionsView(
                 Text(text = "Uncertain Interactions", style = MaterialTheme.typography.h6)
                 FlowRow {
                     uncertainInteractions.forEach {
-                        InteractionChip(text = it, color = Color.Yellow)
+                        InteractionChip(text = it, color = InteractionType.UNCERTAIN.color)
                     }
                 }
             }

@@ -6,15 +6,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.healthassistant.data.substances.InteractionType
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.ui.search.substance.InteractionChip
 import com.example.healthassistant.ui.search.substance.SubstancePreviewProvider
@@ -27,6 +28,7 @@ fun CheckInteractionsScreen(
     viewModel: CheckInteractionsViewModel = hiltViewModel()
 ) {
     CheckInteractionsScreen(
+        substanceName = viewModel.substanceName,
         isSearchingForInteractions = viewModel.isSearchingForInteractions,
         dangerousInteractions = viewModel.dangerousInteractions,
         unsafeInteractions = viewModel.unsafeInteractions,
@@ -36,7 +38,7 @@ fun CheckInteractionsScreen(
             viewModel.isShowingAlert = false
         },
         isShowingAlert = viewModel.isShowingAlert,
-        alertTitle = viewModel.alertTitle,
+        alertInteractionType = viewModel.alertInteractionType,
         alertText = viewModel.alertText
     )
 }
@@ -45,6 +47,7 @@ fun CheckInteractionsScreen(
 @Composable
 fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
     CheckInteractionsScreen(
+        substanceName = "MDMA",
         isSearchingForInteractions = true,
         dangerousInteractions = substance.dangerousInteractions,
         unsafeInteractions = substance.unsafeInteractions,
@@ -52,8 +55,8 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::c
         navigateToNext = {},
         dismissAlert = {},
         isShowingAlert = false,
-        alertTitle = "Dangerous Interaction Detected!",
-        alertText = "Dangerous Interaction with Heroin taken 4h 10m ago"
+        alertInteractionType = InteractionType.DANGEROUS,
+        alertText = "Dangerous Interaction with Heroin taken 4h ago"
     )
 }
 
@@ -61,24 +64,26 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::c
 @Composable
 fun CheckInteractionsScreenPreview2() {
     CheckInteractionsScreen(
+        substanceName = "MDMA",
         isSearchingForInteractions = true,
         dangerousInteractions = emptyList(),
         unsafeInteractions = emptyList(),
         uncertainInteractions = emptyList(),
         navigateToNext = {},
         dismissAlert = {},
-        isShowingAlert = false,
-        alertTitle = "Dangerous Interaction Detected!",
-        alertText = "Dangerous Interaction with Heroin taken 4h 10m ago"
+        isShowingAlert = true,
+        alertInteractionType = InteractionType.DANGEROUS,
+        alertText = "Dangerous Interaction with Heroin taken 4h ago."
     )
 }
 
 @Composable
 fun CheckInteractionsScreen(
+    substanceName: String,
     isSearchingForInteractions: Boolean,
     isShowingAlert: Boolean,
     dismissAlert: () -> Unit,
-    alertTitle: String,
+    alertInteractionType: InteractionType?,
     alertText: String,
     dangerousInteractions: List<String>,
     unsafeInteractions: List<String>,
@@ -88,7 +93,7 @@ fun CheckInteractionsScreen(
     Column {
         LinearProgressIndicator(progress = 0.33f, modifier = Modifier.fillMaxWidth())
         Scaffold(
-            topBar = { TopAppBar(title = { Text(text = "Check Interactions") }) },
+            topBar = { TopAppBar(title = { Text(text = "Check Interactions With $substanceName") }) },
             floatingActionButton = {
                 ExtendedFloatingActionButton(
                     onClick = navigateToNext,
@@ -125,7 +130,7 @@ fun CheckInteractionsScreen(
                         Text(text = "Dangerous Interactions", style = MaterialTheme.typography.h6)
                         FlowRow {
                             dangerousInteractions.forEach {
-                                InteractionChip(text = it, color = Color.Red)
+                                InteractionChip(text = it, color = InteractionType.DANGEROUS.color)
                             }
                         }
                     }
@@ -133,7 +138,7 @@ fun CheckInteractionsScreen(
                         Text(text = "Unsafe Interactions", style = MaterialTheme.typography.h6)
                         FlowRow {
                             unsafeInteractions.forEach {
-                                InteractionChip(text = it, color = Color(0xFFFF9800))
+                                InteractionChip(text = it, color = InteractionType.UNSAFE.color)
                             }
                         }
                     }
@@ -141,20 +146,33 @@ fun CheckInteractionsScreen(
                         Text(text = "Uncertain Interactions", style = MaterialTheme.typography.h6)
                         FlowRow {
                             uncertainInteractions.forEach {
-                                InteractionChip(text = it, color = Color.Yellow)
+                                InteractionChip(text = it, color = InteractionType.UNCERTAIN.color)
                             }
                         }
                     }
                 }
             }
-            if (isShowingAlert) {
+            if (isShowingAlert && alertInteractionType != null) {
                 AlertDialog(
                     onDismissRequest = dismissAlert,
                     title = {
-                        Text(text = alertTitle)
+                        val title = when(alertInteractionType) {
+                            InteractionType.DANGEROUS -> "Dangerous Interaction!"
+                            InteractionType.UNSAFE -> "Unsafe Interaction!"
+                            InteractionType.UNCERTAIN -> "Uncertain Interaction!"
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = "Warning",
+                                tint = alertInteractionType.color
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(text = title, style = MaterialTheme.typography.h6)
+                        }
                     },
                     text = {
-                        Text(text = alertText)
+                        Text(text = alertText, style = MaterialTheme.typography.subtitle1)
                     },
                     buttons = {
                         Row(
