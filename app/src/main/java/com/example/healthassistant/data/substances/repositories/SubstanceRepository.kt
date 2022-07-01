@@ -117,7 +117,7 @@ class SubstanceRepository @Inject constructor(
             }
             isDirectMatch || isWildCardMatch || isClassMatch
         }.map { it.name }
-        val tooManyInteractions = originalInteractions + otherInteractions
+        val tooManyInteractions = (originalInteractions + otherInteractions).distinct()
         return tooManyInteractions.filter {
             !interactionsToFilterOut.contains(it)
         }
