@@ -139,18 +139,27 @@ class SearchViewModel @Inject constructor(
             return if (searchText.isEmpty()) {
                 substances
             } else {
-                substances.filter { substance ->
-                    if (searchText.length < 3) {
+                if (searchText.length < 3) {
+                    substances.filter { substance ->
                         substance.name.startsWith(prefix = searchText, ignoreCase = true) ||
                                 substance.commonNames.any { commonName ->
                                     commonName.startsWith(prefix = searchText, ignoreCase = true)
                                 }
-                    } else {
+                    }
+                } else {
+                    val containing = substances.filter { substance ->
                         substance.name.contains(other = searchText, ignoreCase = true) ||
                                 substance.commonNames.any { commonName ->
                                     commonName.contains(other = searchText, ignoreCase = true)
                                 }
                     }
+                    val prefixAndContainingMatches = containing.partition { substance ->
+                        substance.name.startsWith(prefix = searchText, ignoreCase = true) ||
+                                substance.commonNames.any { commonName ->
+                                    commonName.startsWith(prefix = searchText, ignoreCase = true)
+                                }
+                    }
+                    prefixAndContainingMatches.first + prefixAndContainingMatches.second
                 }
             }
         }
