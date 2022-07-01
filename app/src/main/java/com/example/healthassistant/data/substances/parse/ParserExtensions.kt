@@ -1,52 +1,52 @@
-package com.example.healthassistant.data.substances
+package com.example.healthassistant.data.substances.parse
 
 import org.json.JSONArray
 import org.json.JSONObject
 
 fun JSONObject.getOptionalJSONObject(name: String): JSONObject? {
-    return if (isNull(name)) {
-        null
-    } else {
+    return try {
         getJSONObject(name)
+    } catch (e: Exception) {
+        null
     }
 }
 
 fun JSONObject.getOptionalString(name: String): String? {
-    return if (isNull(name)) {
-        null
-    } else {
+    return try {
         getString(name)
+    } catch (e: Exception) {
+        null
     }
 }
 
 fun JSONObject.getOptionalJSONArray(name: String): JSONArray? {
-    return if (isNull(name)) {
-        null
-    } else {
+    return try {
         getJSONArray(name)
+    } catch (e: Exception) {
+        null
     }
 }
 
 fun JSONObject.getOptionalDouble(name: String): Double? {
-    return if (isNull(name)) {
-        null
-    } else {
+    return try {
         getDouble(name)
+    } catch (e: Exception) {
+        null
     }
 }
 
 fun JSONArray.getOptionalString(index: Int): String? {
-    return if (isNull(index)) {
-        null
-    } else {
+    return try {
         getString(index)
+    } catch (e: Exception) {
+        null
     }
 }
 
 fun JSONArray.getOptionalJSONObject(index: Int): JSONObject? {
-    return if (isNull(index)) {
-        null
-    } else {
+    return try {
         getJSONObject(index)
+    } catch (e: Exception) {
+        null
     }
 }

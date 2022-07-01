@@ -22,14 +22,14 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
     }
 
     override fun extractSubstanceString(string: String): String? {
-        val wholeFile = try {
-            JSONObject(string)
+        return try {
+            val wholeFile = JSONObject(string)
+            val data = wholeFile.getJSONObject("data")
+            val substances = data.getJSONArray("substances")
+            substances.toString()
         } catch (e: Exception) {
-            return null
+            null
         }
-        val data = wholeFile.getOptionalJSONObject("data")
-        val substances = data?.getOptionalJSONArray("substances")
-        return substances?.toString()
     }
 
     private fun parseSubstance(jsonSubstance: JSONObject): Substance? {
