@@ -40,8 +40,7 @@ fun ExperienceScreen(
     viewModel.experienceWithIngestionsFlow.collectAsState().value?.also { experienceWithIngestions ->
         ExperienceScreen(
             experience = experienceWithIngestions.experience,
-            firstDateText = viewModel.firstDateTextFlow.collectAsState().value,
-            ingestionWithAssociatedData = viewModel.ingestionsWithAssociatedDataFlow.collectAsState().value,
+            ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
             cumulativeDoses = viewModel.cumulativeDosesFlow.collectAsState().value,
             addIngestion = navigateToAddIngestionSearch,
             viewModel::deleteExperience,
@@ -70,8 +69,7 @@ fun ExperienceScreenPreview(
     HealthAssistantTheme {
         ExperienceScreen(
             experience = allThatIsNeeded.experience,
-            firstDateText = allThatIsNeeded.firstDateText,
-            ingestionWithAssociatedData = allThatIsNeeded.ingestionElements,
+            ingestionElements = allThatIsNeeded.ingestionElements,
             cumulativeDoses = allThatIsNeeded.cumulativeDoses,
             addIngestion = {},
             deleteExperience = {},
@@ -92,8 +90,7 @@ fun ExperienceScreenPreview(
 @Composable
 fun ExperienceScreen(
     experience: Experience,
-    firstDateText: String?,
-    ingestionWithAssociatedData: List<OneExperienceViewModel.IngestionWithAssociatedData>,
+    ingestionElements: List<OneExperienceViewModel.IngestionElement>,
     cumulativeDoses: List<OneExperienceViewModel.CumulativeDose>,
     addIngestion: () -> Unit,
     deleteExperience: () -> Unit,
@@ -140,7 +137,7 @@ fun ExperienceScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(10.dp))
-            val ingestionDurationPairs = ingestionWithAssociatedData.map {
+            val ingestionDurationPairs = ingestionElements.map {
                 Pair(
                     first = it.ingestionWithCompanion,
                     second = it.roaDuration
@@ -161,22 +158,21 @@ fun ExperienceScreen(
                         style = MaterialTheme.typography.caption
                     )
                 }
-                if (firstDateText != null) {
-                    Text(text = firstDateText)
-                }
                 Divider(modifier = Modifier.padding(top = 10.dp))
             }
-            if (ingestionWithAssociatedData.isNotEmpty()) {
-                ingestionWithAssociatedData.forEach {
-                    IngestionRow(
-                        ingestionElement = it,
-                        modifier = Modifier
-                            .clickable {
+            if (ingestionElements.isNotEmpty()) {
+                ingestionElements.forEach {
+                    Column(horizontalAlignment = Alignment.End) {
+                        if (it.dateText != null) {
+                            Text(text = it.dateText)
+                        }
+                        IngestionRow(
+                            ingestionElement = it,
+                            modifier = Modifier.clickable {
                                 navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id)
-                            }
-                            .fillMaxWidth()
-                            .padding(vertical = 5.dp)
-                    )
+                            }.fillMaxWidth().padding(vertical = 5.dp)
+                        )
+                    }
                 }
                 Divider()
             }

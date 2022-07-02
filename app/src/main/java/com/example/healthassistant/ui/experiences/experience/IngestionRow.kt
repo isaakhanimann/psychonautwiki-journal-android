@@ -21,7 +21,7 @@ import java.util.*
 
 @Preview
 @Composable
-fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionElement: OneExperienceViewModel.IngestionWithAssociatedData) {
+fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionElement: OneExperienceViewModel.IngestionElement) {
     IngestionRow(
         ingestionElement = ingestionElement,
     )
@@ -30,7 +30,7 @@ fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) in
 
 @Composable
 fun IngestionRow(
-    ingestionElement: OneExperienceViewModel.IngestionWithAssociatedData,
+    ingestionElement: OneExperienceViewModel.IngestionElement,
     modifier: Modifier = Modifier,
 ) {
     Row(

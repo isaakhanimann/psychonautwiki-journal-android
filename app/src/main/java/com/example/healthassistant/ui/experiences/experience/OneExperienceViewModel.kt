@@ -15,8 +15,8 @@ import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -62,47 +62,35 @@ class OneExperienceViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000)
             )
 
-    private val sortedIngestionsWithCompanionsFlow =
-        experienceWithIngestionsFlow.map { experience ->
-            experience?.ingestionsWithCompanions?.sortedBy { it.ingestion.time } ?: emptyList()
-        }
+    private val sortedIngestionsWithCompanionsFlow = experienceWithIngestionsFlow.map { experience ->
+        experience?.ingestionsWithCompanions?.sortedBy { it.ingestion.time } ?: emptyList()
+    }
 
-    data class IngestionWithAssociatedData(
+    private data class IngestionWithAssociatedData(
         val ingestionWithCompanion: IngestionWithCompanion,
         val roaDuration: RoaDuration?,
-        val roaDose: RoaDose?,
-        val doseClass: DoseClass?
+        val roaDose: RoaDose?
     )
 
-    val ingestionsWithAssociatedDataFlow: StateFlow<List<IngestionWithAssociatedData>> =
+    private val ingestionsWithAssociatedDataFlow: Flow<List<IngestionWithAssociatedData>> =
         sortedIngestionsWithCompanionsFlow.map { ingestionsWithComps ->
             ingestionsWithComps.map { oneIngestionWithComp ->
                 val ingestion = oneIngestionWithComp.ingestion
                 val roa = substanceRepo.getSubstance(oneIngestionWithComp.ingestion.substanceName)
                     ?.getRoa(ingestion.administrationRoute)
                 val roaDuration = roa?.roaDuration
-                val roaDose = roa?.roaDose
                 IngestionWithAssociatedData(
                     ingestionWithCompanion = oneIngestionWithComp,
                     roaDuration = roaDuration,
-                    roaDose = roaDose,
-                    doseClass = roaDose?.getDoseClass(
-                        ingestionDose = ingestion.dose,
-                        ingestionUnits = ingestion.units
-                    )
+                    roaDose = roa?.roaDose
                 )
             }
-        }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
+        }
 
-    val firstDateTextFlow: StateFlow<String?> = sortedIngestionsWithCompanionsFlow.map {
-        val date = it.firstOrNull()?.ingestion?.time ?: return@map null
-        getDateText(date)
+    val ingestionElementsFlow = ingestionsWithAssociatedDataFlow.map {
+        getIngestionElements(it)
     }.stateIn(
-        initialValue = null,
+        initialValue = emptyList(),
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
     )
@@ -123,6 +111,46 @@ class OneExperienceViewModel @Inject constructor(
         val doseClass: DoseClass?
     )
 
+    data class IngestionElement(
+        val dateText: String?,
+        val ingestionWithCompanion: IngestionWithCompanion,
+        val roaDuration: RoaDuration?,
+        val doseClass: DoseClass?
+    )
+
+    private fun getIngestionElements(sortedIngestionsWith: List<IngestionWithAssociatedData>): List<IngestionElement> {
+        return sortedIngestionsWith.mapIndexed { index, ingestionWith ->
+            val ingestionTimeText = getDateText(ingestionWith.ingestionWithCompanion.ingestion.time)
+            val timeText = if (index == 0) {
+                ingestionTimeText
+            } else {
+                val lastIngestionDateText =
+                    getDateText(sortedIngestionsWith[index - 1].ingestionWithCompanion.ingestion.time)
+                if (lastIngestionDateText != ingestionTimeText) {
+                    ingestionTimeText
+                } else {
+                    null
+                }
+            }
+            val doseClass =
+                ingestionWith.roaDose?.getDoseClass(
+                    ingestionWith.ingestionWithCompanion.ingestion.dose,
+                    ingestionUnits = ingestionWith.ingestionWithCompanion.ingestion.units
+                )
+            IngestionElement(
+                dateText = timeText,
+                ingestionWithCompanion = ingestionWith.ingestionWithCompanion,
+                roaDuration = ingestionWith.roaDuration,
+                doseClass = doseClass
+            )
+        }
+    }
+
+    private fun getDateText(date: Date): String {
+        val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        return formatter.format(date)
+    }
+
     fun deleteExperience() {
         viewModelScope.launch {
             experienceWithIngestionsFlow.value?.experience?.let {
@@ -131,8 +159,8 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
-    companion object {
-        private fun getCumulativeDoses(ingestions: List<IngestionWithAssociatedData>): List<CumulativeDose> {
+    private companion object {
+        fun getCumulativeDoses(ingestions: List<IngestionWithAssociatedData>): List<CumulativeDose> {
             return ingestions.groupBy { it.ingestionWithCompanion.ingestion.substanceName }
                 .mapNotNull { grouped ->
                     val groupedIngestions = grouped.value
@@ -157,11 +185,6 @@ class OneExperienceViewModel @Inject constructor(
                         doseClass = doseClass
                     )
                 }
-        }
-
-        fun getDateText(date: Date): String {
-            val formatter = SimpleDateFormat("EEE, dd MMMM yyyy", Locale.getDefault())
-            return formatter.format(date)
         }
     }
 }

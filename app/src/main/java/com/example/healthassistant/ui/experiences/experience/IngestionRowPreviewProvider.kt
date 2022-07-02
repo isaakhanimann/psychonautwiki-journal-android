@@ -10,10 +10,10 @@ import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.DoseClass
 import java.util.*
 
-class IngestionRowPreviewProvider :
-    PreviewParameterProvider<OneExperienceViewModel.IngestionWithAssociatedData> {
-    override val values: Sequence<OneExperienceViewModel.IngestionWithAssociatedData> = sequenceOf(
-        OneExperienceViewModel.IngestionWithAssociatedData(
+class IngestionRowPreviewProvider : PreviewParameterProvider<OneExperienceViewModel.IngestionElement> {
+    override val values: Sequence<OneExperienceViewModel.IngestionElement> = sequenceOf(
+        OneExperienceViewModel.IngestionElement(
+            dateText = null,
             ingestionWithCompanion = IngestionWithCompanion(
                 ingestion = Ingestion(
                     substanceName = "MDMA",
@@ -32,10 +32,10 @@ class IngestionRowPreviewProvider :
                 )
             ),
             roaDuration = null,
-            roaDose = null,
             doseClass = DoseClass.COMMON
         ),
-        OneExperienceViewModel.IngestionWithAssociatedData(
+        OneExperienceViewModel.IngestionElement(
+            dateText = null,
             ingestionWithCompanion = IngestionWithCompanion(
                 ingestion = Ingestion(
                     substanceName = "LSD",
@@ -54,7 +54,6 @@ class IngestionRowPreviewProvider :
                 )
             ),
             roaDuration = null,
-            roaDose = null,
             doseClass = DoseClass.COMMON
         )
     )

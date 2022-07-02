@@ -12,12 +12,9 @@ class OneExperienceScreenPreviewProvider :
 
     data class AllThatIsNeeded(
         val experience: Experience,
-        val firstDateText: String,
-        val ingestionElements: List<OneExperienceViewModel.IngestionWithAssociatedData>,
+        val ingestionElements: List<OneExperienceViewModel.IngestionElement>,
         val cumulativeDoses: List<OneExperienceViewModel.CumulativeDose>
     )
-
-    private val firstDate = Date(Date().time - 2 * 60 * 60 * 1000)
 
     override val values: Sequence<AllThatIsNeeded> = sequenceOf(
         AllThatIsNeeded(
@@ -27,13 +24,13 @@ class OneExperienceScreenPreviewProvider :
                 text = "Some notes",
                 sentiment = Sentiment.SATISFIED
             ),
-            firstDateText = OneExperienceViewModel.getDateText(firstDate),
             ingestionElements = listOf(
-                OneExperienceViewModel.IngestionWithAssociatedData(
+                OneExperienceViewModel.IngestionElement(
+                    dateText = null,
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "MDMA",
-                            time = firstDate,
+                            time = Date(Date().time - 2 * 60 * 60 * 1000),
                             administrationRoute = AdministrationRoute.ORAL,
                             dose = 90.0,
                             isDoseAnEstimate = false,
@@ -48,10 +45,10 @@ class OneExperienceScreenPreviewProvider :
                         )
                     ),
                     roaDuration = null,
-                    roaDose = null,
                     doseClass = DoseClass.COMMON
                 ),
-                OneExperienceViewModel.IngestionWithAssociatedData(
+                OneExperienceViewModel.IngestionElement(
+                    dateText = null,
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",
@@ -70,10 +67,10 @@ class OneExperienceScreenPreviewProvider :
                         )
                     ),
                     roaDuration = null,
-                    roaDose = null,
                     doseClass = DoseClass.COMMON
                 ),
-                OneExperienceViewModel.IngestionWithAssociatedData(
+                OneExperienceViewModel.IngestionElement(
+                    dateText = null,
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",
@@ -92,7 +89,6 @@ class OneExperienceScreenPreviewProvider :
                         )
                     ),
                     roaDuration = null,
-                    roaDose = null,
                     doseClass = DoseClass.LIGHT
                 )
             ),
