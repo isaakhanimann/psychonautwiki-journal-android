@@ -120,16 +120,18 @@ class OneExperienceViewModel @Inject constructor(
 
     private fun getIngestionElements(sortedIngestionsWith: List<IngestionWithAssociatedData>): List<IngestionElement> {
         return sortedIngestionsWith.mapIndexed { index, ingestionWith ->
-            val ingestionTimeText = getDateText(ingestionWith.ingestionWithCompanion.ingestion.time)
+            val currentIngestionTime = ingestionWith.ingestionWithCompanion.ingestion.time
+            val currentIngestionTimeText = getFullDateText(currentIngestionTime)
             val timeText = if (index == 0) {
-                ingestionTimeText
+                currentIngestionTimeText
             } else {
-                val lastIngestionDateText =
-                    getDateText(sortedIngestionsWith[index - 1].ingestionWithCompanion.ingestion.time)
-                if (lastIngestionDateText != ingestionTimeText) {
-                    ingestionTimeText
-                } else {
+                val previousIngestionTimeText =
+                    getFullDateText(sortedIngestionsWith[index - 1].ingestionWithCompanion.ingestion.time)
+                val isCurrentSameAsPrevious = previousIngestionTimeText == currentIngestionTimeText
+                if (isCurrentSameAsPrevious) {
                     null
+                } else {
+                    currentIngestionTimeText
                 }
             }
             val doseClass =
@@ -146,8 +148,8 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
-    private fun getDateText(date: Date): String {
-        val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+    private fun getFullDateText(date: Date): String {
+        val formatter = SimpleDateFormat("EEE, dd MMMM yyyy", Locale.getDefault())
         return formatter.format(date)
     }
 

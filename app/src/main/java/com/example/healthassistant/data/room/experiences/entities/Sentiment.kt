@@ -10,13 +10,13 @@ enum class Sentiment {
         override val icon: ImageVector
             get() = Icons.Default.SentimentVeryDissatisfied
         override val description: String
-            get() = "Very Dissatisfied"
+            get() = "Very Bad"
     },
     DISSATISFIED {
         override val icon: ImageVector
             get() = Icons.Default.SentimentDissatisfied
         override val description: String
-            get() = "Dissatisfied"
+            get() = "Bad"
     },
     NEUTRAL {
         override val icon: ImageVector
@@ -28,13 +28,13 @@ enum class Sentiment {
         override val icon: ImageVector
             get() = Icons.Default.SentimentSatisfied
         override val description: String
-            get() = "Satisfied"
+            get() = "Good"
     },
     VERY_SATISFIED {
         override val icon: ImageVector
             get() = Icons.Default.SentimentVerySatisfied
         override val description: String
-            get() = "Very Satisfied"
+            get() = "Very Good"
 
     };
 

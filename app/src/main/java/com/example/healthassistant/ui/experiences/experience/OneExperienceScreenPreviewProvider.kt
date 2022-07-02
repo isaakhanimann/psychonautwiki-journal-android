@@ -5,7 +5,7 @@ import com.example.healthassistant.data.room.experiences.entities.*
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.DoseClass
-import java.util.*
+import com.example.healthassistant.ui.utils.getDate
 
 class OneExperienceScreenPreviewProvider :
     PreviewParameterProvider<OneExperienceScreenPreviewProvider.AllThatIsNeeded> {
@@ -26,11 +26,11 @@ class OneExperienceScreenPreviewProvider :
             ),
             ingestionElements = listOf(
                 OneExperienceViewModel.IngestionElement(
-                    dateText = null,
+                    dateText = "Sat, 19 Feb 2022",
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "MDMA",
-                            time = Date(Date().time - 2 * 60 * 60 * 1000),
+                            time = getDate(year = 2022, month = 2, day = 19, hourOfDay = 20, minute = 5)!!,
                             administrationRoute = AdministrationRoute.ORAL,
                             dose = 90.0,
                             isDoseAnEstimate = false,
@@ -52,7 +52,7 @@ class OneExperienceScreenPreviewProvider :
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",
-                            time = Date(Date().time - 60 * 60 * 1000),
+                            time = getDate(year = 2022, month = 2, day = 19, hourOfDay = 23, minute = 5)!!,
                             administrationRoute = AdministrationRoute.INSUFFLATED,
                             dose = 40.0,
                             isDoseAnEstimate = false,
@@ -70,11 +70,11 @@ class OneExperienceScreenPreviewProvider :
                     doseClass = DoseClass.COMMON
                 ),
                 OneExperienceViewModel.IngestionElement(
-                    dateText = null,
+                    dateText = "Sun, 20 Feb 2022",
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",
-                            time = Date(Date().time - 30 * 60 * 1000),
+                            time = getDate(year = 2022, month = 2, day = 20, hourOfDay = 1, minute = 15)!!,
                             administrationRoute = AdministrationRoute.INSUFFLATED,
                             dose = 20.0,
                             isDoseAnEstimate = false,

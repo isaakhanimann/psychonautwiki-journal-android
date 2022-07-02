@@ -9,13 +9,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddReaction
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -155,25 +153,31 @@ fun ExperienceScreen(
                 if (showOralOnsetDisclaimer) {
                     Text(
                         text = "* a full stomach can delay the onset by hours",
-                        style = MaterialTheme.typography.caption
+                        style = MaterialTheme.typography.caption,
+                        modifier = Modifier.padding(vertical = 10.dp)
                     )
                 }
-                Divider(modifier = Modifier.padding(top = 10.dp))
+                Divider()
             }
             if (ingestionElements.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(5.dp))
                 ingestionElements.forEach {
-                    Column(horizontalAlignment = Alignment.End) {
+                    Column(horizontalAlignment = Alignment.Start) {
                         if (it.dateText != null) {
                             Text(text = it.dateText)
                         }
                         IngestionRow(
                             ingestionElement = it,
-                            modifier = Modifier.clickable {
-                                navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id)
-                            }.fillMaxWidth().padding(vertical = 5.dp)
+                            modifier = Modifier
+                                .clickable {
+                                    navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id)
+                                }
+                                .fillMaxWidth()
+                                .padding(vertical = 5.dp)
                         )
                     }
                 }
+                Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
             if (cumulativeDoses.isNotEmpty()) {
@@ -185,7 +189,8 @@ fun ExperienceScreen(
                 cumulativeDoses.forEach {
                     CumulativeDoseRow(cumulativeDose = it, modifier = Modifier.fillMaxWidth())
                 }
-                Divider(modifier = Modifier.padding(top = 10.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+                Divider()
             }
             if (isShowingSentimentDialog) {
                 SentimentDialog(dismiss = dismissSentimentDialog, saveSentiment = saveSentiment)
@@ -222,20 +227,16 @@ fun ExperienceScreen(
             TextButton(
                 onClick = showDialog,
             ) {
-                Icon(
-                    Icons.Filled.Delete,
-                    contentDescription = "Delete Experience",
-                    modifier = Modifier.size(ButtonDefaults.IconSize),
-                    tint = Color.Red
+                Text(
+                    "Delete Experience",
+                    style = MaterialTheme.typography.caption
                 )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Delete", color = Color.Red)
             }
             if (isShowingDialog) {
                 AlertDialog(
                     onDismissRequest = dismissDialog,
                     title = {
-                        Text(text = "Are you sure?")
+                        Text(text = "Delete Experience?")
                     },
                     text = {
                         Text("This won't delete any ingestions")
@@ -260,7 +261,6 @@ fun ExperienceScreen(
                     }
                 )
             }
-            Divider()
         }
     }
 }
@@ -284,17 +284,21 @@ fun SentimentSection(
         }
     } else {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp)
         ) {
+            Text(text = "Overall Sentiment:")
+            Spacer(modifier = Modifier.weight(1f))
             Icon(
                 sentiment.icon,
                 contentDescription = sentiment.description,
                 modifier = Modifier
-                    .padding(vertical = 7.dp)
                     .size(40.dp),
             )
+            Text(text = sentiment.description, style = MaterialTheme.typography.h6)
             IconButton(onClick = showDialog) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Sentiment")
             }
@@ -310,7 +314,7 @@ fun CumulativeDoseRow(cumulativeDose: OneExperienceViewModel.CumulativeDose, mod
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.h6)
-        Column {
+        Column(horizontalAlignment = Alignment.End) {
             Text(
                 text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units,
                 style = MaterialTheme.typography.subtitle1
