@@ -34,22 +34,27 @@ fun SentimentSection(
     saveSentiment: (Sentiment?) -> Unit
 ) {
     if (sentiment == null) {
-        TextButton(
-            onClick = show,
+        Box(
+            modifier = Modifier
+                .wrapContentSize(Alignment.TopEnd)
         ) {
-            Icon(
-                Icons.Filled.AddReaction,
-                contentDescription = "Add Sentiment",
-                modifier = Modifier.size(ButtonDefaults.IconSize),
+            TextButton(
+                onClick = show,
+            ) {
+                Icon(
+                    Icons.Filled.AddReaction,
+                    contentDescription = "Add Sentiment",
+                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Add Sentiment")
+            }
+            SentimentDropDownMenu(
+                isShowingEditSentiment = isShowingEditSentiment,
+                dismiss = dismiss,
+                saveSentiment = saveSentiment
             )
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text("Add Sentiment")
         }
-        SentimentDropDownMenu(
-            isShowingEditSentiment = isShowingEditSentiment,
-            dismiss = dismiss,
-            saveSentiment = saveSentiment
-        )
     } else {
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
