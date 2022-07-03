@@ -231,11 +231,7 @@ fun OneIngestionScreen(
             }
             Divider()
             val experience = ingestionWithCompanionDurationAndExperience.experience
-            if (experience == null) {
-                TextButton(onClick = navigateToEditMembership) {
-                    Text(text = "Assign to Experience")
-                }
-            } else {
+            if (experience != null) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = "Part of ${experience.title}", modifier = Modifier.weight(1f))
                     IconButton(onClick = navigateToEditMembership) {
@@ -248,6 +244,11 @@ fun OneIngestionScreen(
                 }
             }
             Divider()
+            if (experience == null) {
+                TextButton(onClick = navigateToEditMembership) {
+                    Text(text = "Assign to Experience", style = MaterialTheme.typography.caption)
+                }
+            }
             TextButton(
                 onClick = showDialog,
             ) {
