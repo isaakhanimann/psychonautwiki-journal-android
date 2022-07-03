@@ -306,7 +306,7 @@ fun GridText(roaDuration: RoaDuration, isOralRoute: Boolean) {
         }
         if (isOralRoute) {
             Text(
-                text = "* a full stomach can delay the onset by hours",
+                text = "* a full stomach can delay the onset for hours",
                 style = durationTextStyle
             )
         }

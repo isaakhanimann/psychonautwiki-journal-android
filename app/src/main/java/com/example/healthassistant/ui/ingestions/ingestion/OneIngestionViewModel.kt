@@ -7,8 +7,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
+import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
+import com.example.healthassistant.data.substances.RoaDose
+import com.example.healthassistant.data.substances.RoaDuration
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
 import com.example.healthassistant.ui.main.routers.INGESTION_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,6 +49,13 @@ class OneIngestionViewModel @Inject constructor(
         }
     }
 
+    data class IngestionWithCompanionDurationAndExperience(
+        val ingestionWithCompanion: IngestionWithCompanion,
+        val roaDuration: RoaDuration?,
+        val roaDose: RoaDose?,
+        val experience: Experience?
+    )
+
     private val ingestionId = state.get<Int>(INGESTION_ID_KEY)!!
     private val ingestionFlow: Flow<IngestionWithCompanion?> =
         experienceRepo.getIngestionWithCompanionFlow(ingestionId)
@@ -62,10 +72,12 @@ class OneIngestionViewModel @Inject constructor(
                 }
             }
             if (ingestionWithCompanion != null && ingestion != null) {
+                val roa = substanceRepo.getSubstance(ingestion.substanceName)
+                    ?.getRoa(ingestion.administrationRoute)
                 IngestionWithCompanionDurationAndExperience(
                     ingestionWithCompanion = ingestionWithCompanion,
-                    roaDuration = substanceRepo.getSubstance(ingestion.substanceName)
-                        ?.getRoa(ingestion.administrationRoute)?.roaDuration,
+                    roaDuration = roa?.roaDuration,
+                    roaDose = roa?.roaDose,
                     experience = experience
                 )
             } else {

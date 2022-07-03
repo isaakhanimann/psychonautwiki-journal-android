@@ -6,16 +6,13 @@ import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.data.substances.DurationRange
-import com.example.healthassistant.data.substances.DurationUnits
-import com.example.healthassistant.data.substances.RoaDuration
+import com.example.healthassistant.data.substances.*
 import java.util.*
 
 class IngestionWithDurationAndExperienceProvider :
-    PreviewParameterProvider<IngestionWithCompanionDurationAndExperience> {
-    override val values: Sequence<IngestionWithCompanionDurationAndExperience> = sequenceOf(
-        IngestionWithCompanionDurationAndExperience(
+    PreviewParameterProvider<OneIngestionViewModel.IngestionWithCompanionDurationAndExperience> {
+    override val values: Sequence<OneIngestionViewModel.IngestionWithCompanionDurationAndExperience> = sequenceOf(
+        OneIngestionViewModel.IngestionWithCompanionDurationAndExperience(
             ingestionWithCompanion = IngestionWithCompanion(
                 ingestion = Ingestion(
                     substanceName = "Substance 1",
@@ -64,6 +61,23 @@ class IngestionWithDurationAndExperienceProvider :
                     max = 48f,
                     units = DurationUnits.HOURS
                 )
+            ),
+            roaDose = RoaDose(
+                "mg",
+                threshold = 20.0,
+                light = DoseRange(
+                    min = 20.0,
+                    max = 40.0
+                ),
+                common = DoseRange(
+                    min = 40.0,
+                    max = 90.0
+                ),
+                strong = DoseRange(
+                    min = 90.0,
+                    max = 140.0
+                ),
+                heavy = 140.0
             ),
             experience = null
         ),

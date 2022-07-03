@@ -62,7 +62,7 @@ fun SentimentSection(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "Overall Sentiment:")
+            Text(text = "Overall Sentiment")
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 sentiment.icon,

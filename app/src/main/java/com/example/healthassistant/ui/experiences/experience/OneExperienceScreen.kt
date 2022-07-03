@@ -151,7 +151,7 @@ fun ExperienceScreen(
                     ingestionDurationPairs.any { it.first.ingestion.administrationRoute == AdministrationRoute.ORAL }
                 if (showOralOnsetDisclaimer) {
                     Text(
-                        text = "* a full stomach can delay the onset by hours",
+                        text = "* a full stomach can delay the onset for hours",
                         style = MaterialTheme.typography.caption,
                         modifier = Modifier.padding(vertical = 10.dp)
                     )

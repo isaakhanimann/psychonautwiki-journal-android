@@ -136,6 +136,9 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToEditMembership = {
                 navController.navigateToEditIngestionMembership(ingestionId)
             },
+            navigateToSubstance = {
+                navController.navigateToSubstanceScreen(substanceName = it)
+            },
             navigateBack = navController::popBackStack
         )
     }
