@@ -8,7 +8,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddReaction
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,9 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.ui.experiences.experience.edit.SentimentDialog
 import com.example.healthassistant.ui.experiences.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.ingestions.DotRow
+import com.example.healthassistant.ui.ingestions.ingestion.SentimentSection
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 
@@ -48,9 +47,9 @@ fun ExperienceScreen(
             isShowingDialog = viewModel.isShowingDeleteDialog,
             showDialog = { viewModel.isShowingDeleteDialog = true },
             dismissDialog = { viewModel.isShowingDeleteDialog = false },
-            isShowingSentimentDialog = viewModel.isShowingSentimentDialog,
-            showSentimentDialog = viewModel::showEditSentimentDialog,
-            dismissSentimentDialog = viewModel::dismissEditSentimentDialog,
+            isShowingSentimentMenu = viewModel.isShowingSentimentMenu,
+            showSentimentMenu = viewModel::showEditSentimentMenu,
+            dismissSentimentMenu = viewModel::dismissEditSentimentMenu,
             saveSentiment = viewModel::saveSentiment,
         )
     }
@@ -77,9 +76,9 @@ fun ExperienceScreenPreview(
             isShowingDialog = false,
             showDialog = {},
             dismissDialog = {},
-            isShowingSentimentDialog = false,
-            showSentimentDialog = {},
-            dismissSentimentDialog = {},
+            isShowingSentimentMenu = false,
+            showSentimentMenu = {},
+            dismissSentimentMenu = {},
             saveSentiment = {},
         )
     }
@@ -98,9 +97,9 @@ fun ExperienceScreen(
     isShowingDialog: Boolean,
     showDialog: () -> Unit,
     dismissDialog: () -> Unit,
-    isShowingSentimentDialog: Boolean,
-    showSentimentDialog: () -> Unit,
-    dismissSentimentDialog: () -> Unit,
+    isShowingSentimentMenu: Boolean,
+    showSentimentMenu: () -> Unit,
+    dismissSentimentMenu: () -> Unit,
     saveSentiment: (sentiment: Sentiment?) -> Unit
 ) {
     Scaffold(
@@ -192,12 +191,12 @@ fun ExperienceScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 Divider()
             }
-            if (isShowingSentimentDialog) {
-                SentimentDialog(dismiss = dismissSentimentDialog, saveSentiment = saveSentiment)
-            }
             SentimentSection(
                 sentiment = experience.sentiment,
-                showDialog = showSentimentDialog
+                isShowingEditSentiment = isShowingSentimentMenu,
+                show = showSentimentMenu,
+                dismiss = dismissSentimentMenu,
+                saveSentiment = saveSentiment
             )
             Divider()
             if (experience.text.isEmpty()) {
@@ -260,47 +259,6 @@ fun ExperienceScreen(
                         }
                     }
                 )
-            }
-        }
-    }
-}
-
-@Composable
-fun SentimentSection(
-    sentiment: Sentiment?,
-    showDialog: () -> Unit
-) {
-    if (sentiment == null) {
-        TextButton(
-            onClick = showDialog,
-        ) {
-            Icon(
-                Icons.Filled.AddReaction,
-                contentDescription = "Add Sentiment",
-                modifier = Modifier.size(ButtonDefaults.IconSize),
-            )
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text("Add Sentiment")
-        }
-    } else {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp)
-        ) {
-            Text(text = "Overall Sentiment:")
-            Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                sentiment.icon,
-                contentDescription = sentiment.description,
-                modifier = Modifier
-                    .size(40.dp),
-            )
-            Text(text = sentiment.description, style = MaterialTheme.typography.h6)
-            IconButton(onClick = showDialog) {
-                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Sentiment")
             }
         }
     }

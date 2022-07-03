@@ -25,14 +25,14 @@ class OneIngestionViewModel @Inject constructor(
 
     var isShowingDeleteDialog by mutableStateOf(false)
 
-    var isShowingSentimentDialog by mutableStateOf(false)
+    var isShowingSentimentMenu by mutableStateOf(false)
 
     fun showEditSentimentDialog() {
-        isShowingSentimentDialog = true
+        isShowingSentimentMenu = true
     }
 
     fun dismissEditSentimentDialog() {
-        isShowingSentimentDialog = false
+        isShowingSentimentMenu = false
     }
 
     fun saveSentiment(sentiment: Sentiment?) {

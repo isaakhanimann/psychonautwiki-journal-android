@@ -8,22 +8,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.room.experiences.entities.Sentiment
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.ui.experiences.experience.SentimentSection
-import com.example.healthassistant.ui.experiences.experience.edit.SentimentDialog
 import com.example.healthassistant.ui.experiences.experience.timeline.AllTimelines
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
@@ -48,9 +44,9 @@ fun OneIngestionScreen(
             viewModel.isShowingDeleteDialog,
             showDialog = { viewModel.isShowingDeleteDialog = true },
             dismissDialog = { viewModel.isShowingDeleteDialog = false },
-            isShowingSentimentDialog = viewModel.isShowingSentimentDialog,
-            showSentimentDialog = viewModel::showEditSentimentDialog,
-            dismissSentimentDialog = viewModel::dismissEditSentimentDialog,
+            isShowingEditSentiment = viewModel.isShowingSentimentMenu,
+            showSentimentMenu = viewModel::showEditSentimentDialog,
+            dismissSentimentMenu = viewModel::dismissEditSentimentDialog,
             saveSentiment = viewModel::saveSentiment,
         )
     }
@@ -74,9 +70,9 @@ fun OneIngestionScreenPreview(
             isShowingDialog = false,
             showDialog = {},
             dismissDialog = {},
-            isShowingSentimentDialog = false,
-            showSentimentDialog = {},
-            dismissSentimentDialog = {},
+            isShowingEditSentiment = false,
+            showSentimentMenu = {},
+            dismissSentimentMenu = {},
             saveSentiment = {},
         )
     }
@@ -92,9 +88,9 @@ fun OneIngestionScreen(
     isShowingDialog: Boolean,
     showDialog: () -> Unit,
     dismissDialog: () -> Unit,
-    isShowingSentimentDialog: Boolean,
-    showSentimentDialog: () -> Unit,
-    dismissSentimentDialog: () -> Unit,
+    isShowingEditSentiment: Boolean,
+    showSentimentMenu: () -> Unit,
+    dismissSentimentMenu: () -> Unit,
     saveSentiment: (sentiment: Sentiment?) -> Unit
 ) {
     val ingestionWithCompanion = ingestionWithCompanionDurationAndExperience.ingestionWithCompanion
@@ -173,10 +169,13 @@ fun OneIngestionScreen(
                 }
             }
             Divider()
-            if (isShowingSentimentDialog) {
-                SentimentDialog(dismiss = dismissSentimentDialog, saveSentiment = saveSentiment)
-            }
-            SentimentSection(sentiment = ingestion.sentiment, showDialog = showSentimentDialog)
+            SentimentSection(
+                sentiment = ingestion.sentiment,
+                isShowingEditSentiment = isShowingEditSentiment,
+                show = showSentimentMenu,
+                dismiss = dismissSentimentMenu,
+                saveSentiment = saveSentiment,
+            )
             Divider()
             ingestion.notes.let {
                 val constNote = it
@@ -225,20 +224,13 @@ fun OneIngestionScreen(
             TextButton(
                 onClick = showDialog,
             ) {
-                Icon(
-                    Icons.Filled.Delete,
-                    contentDescription = "Delete Ingestion",
-                    modifier = Modifier.size(ButtonDefaults.IconSize),
-                    tint = Color.Red
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Delete", color = Color.Red)
+                Text("Delete Ingestion", style = MaterialTheme.typography.caption)
             }
             if (isShowingDialog) {
                 AlertDialog(
                     onDismissRequest = dismissDialog,
                     title = {
-                        Text(text = "Are you sure?")
+                        Text(text = "Delete Ingestion?")
                     },
                     confirmButton = {
                         TextButton(
@@ -260,7 +252,6 @@ fun OneIngestionScreen(
                     }
                 )
             }
-            Divider()
         }
     }
 }

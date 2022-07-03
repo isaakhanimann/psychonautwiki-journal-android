@@ -35,11 +35,6 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getSortedIngestionsFlow(): Flow<List<Ingestion>> =
-        experienceDao.getIngestionsSortedDescendingFlow()
-            .flowOn(Dispatchers.IO)
-            .conflate()
-
     fun getSubstanceWithLastDateDescendingFlow(): Flow<List<SubstanceLastUsed>> =
         experienceDao.getSubstanceWithLastDateDescendingFlow()
             .flowOn(Dispatchers.IO)
