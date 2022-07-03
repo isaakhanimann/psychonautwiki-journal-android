@@ -46,7 +46,7 @@ fun AllTimelinesPreview(
 fun AllTimelines(
     ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>,
     modifier: Modifier = Modifier,
-    strokeWidth: Float = 5f,
+    strokeWidth: Float = 8f,
 ) {
     if (ingestionDurationPairs.isEmpty()) {
         Text(text = "Insufficient Data for Timeline")
@@ -131,7 +131,7 @@ fun DrawScope.drawIngestion(
             val canvasHeightInner = size.height
             drawCircle(
                 color = color,
-                radius = 10f,
+                radius = 13f,
                 center = Offset(x = startX, y = canvasHeightInner)
             )
         }

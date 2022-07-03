@@ -36,7 +36,6 @@ class TimelinesPreviewProvider :
                         color = SubstanceColor.BLUE
                     )
                 ),
-
                 RoaDuration(
                     onset = DurationRange(
                         min = 20f,
