@@ -34,6 +34,8 @@ import com.example.healthassistant.ui.ingestions.ingestion.edit.note.EditIngesti
 import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
+import com.example.healthassistant.ui.search.substance.roa.DoseExplanationScreen
+import com.example.healthassistant.ui.search.substance.roa.DurationExplanationScreen
 import com.example.healthassistant.ui.settings.SettingsScreen
 import com.example.healthassistant.ui.settings.faq.FAQScreen
 import com.example.healthassistant.ui.stats.StatisticsScreen
@@ -90,6 +92,8 @@ fun MainScreen() {
 fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
     composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
     composable(NoArgumentRouter.SettingsRouter.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
+    composable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
+    composable(NoArgumentRouter.DurationExplanationRouter.route) { DurationExplanationScreen() }
     composable(NoArgumentRouter.AddExperienceRouter.route) {
         AddExperienceScreen(
             navigateToExperienceFromAddExperience = {
@@ -136,8 +140,8 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToEditMembership = {
                 navController.navigateToEditIngestionMembership(ingestionId)
             },
-            navigateToSubstance = {
-                navController.navigateToSubstanceScreen(substanceName = it)
+            navigateToSubstance = { substanceName ->
+                navController.navigateToSubstanceScreen(substanceName)
             },
             navigateBack = navController::popBackStack
         )
@@ -146,7 +150,10 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         ArgumentRouter.SubstanceRouter.route,
         arguments = ArgumentRouter.SubstanceRouter.args
     ) {
-        SubstanceScreen()
+        SubstanceScreen(
+            navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
+            navigateToDurationExplanationScreen = navController::navigateToDurationExplanationScreen
+        )
     }
     composable(
         ArgumentRouter.SubstanceCompanionRouter.route,

@@ -29,9 +29,13 @@ import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun SubstanceScreen(
+    navigateToDosageExplanationScreen: () -> Unit,
+    navigateToDurationExplanationScreen: () -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
-    SubstanceScreenContent(
+    SubstanceScreen(
+        navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
+        navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
         substance = viewModel.substance,
         isSearchingForInteractions = viewModel.isSearchingForInteractions,
         dangerousInteractions = viewModel.dangerousInteractions,
@@ -47,7 +51,9 @@ fun SubstanceScreenPreview(
     @PreviewParameter(SubstancePreviewProvider::class) substance: Substance
 ) {
     HealthAssistantTheme {
-        SubstanceScreenContent(
+        SubstanceScreen(
+            navigateToDosageExplanationScreen = {},
+            navigateToDurationExplanationScreen = {},
             substance = substance,
             isSearchingForInteractions = true,
             dangerousInteractions = substance.dangerousInteractions,
@@ -58,7 +64,9 @@ fun SubstanceScreenPreview(
 }
 
 @Composable
-fun SubstanceScreenContent(
+fun SubstanceScreen(
+    navigateToDosageExplanationScreen: () -> Unit,
+    navigateToDurationExplanationScreen: () -> Unit,
     substance: Substance,
     isSearchingForInteractions: Boolean,
     dangerousInteractions: List<String>,
@@ -74,7 +82,8 @@ fun SubstanceScreenContent(
                     TextButton(onClick = {
                         uriHandler.openUri(substance.url)
                     }) {
-                        val color = if (isSystemInDarkTheme()) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary
+                        val color =
+                            if (isSystemInDarkTheme()) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary
                         Icon(
                             Icons.Filled.Launch,
                             contentDescription = "Open Link",
@@ -132,6 +141,8 @@ fun SubstanceScreenContent(
             val titleStyle = MaterialTheme.typography.h6
             substance.roas.forEach { roa ->
                 RoaView(
+                    navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
+                    navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
                     roa = roa,
                     maxDurationInSeconds = maxDuration
                 )
