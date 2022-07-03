@@ -173,7 +173,7 @@ fun TimePickerButton(
         context,
         { _, newHour: Int, newMinute: Int ->
             onSubmitTime(newHour, newMinute)
-        }, hour, minute, true
+        }, hour, minute, false
     )
     OutlinedButton(onClick = timePickerDialog::show, modifier = modifier) {
         Text(timeString)
