@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -22,6 +23,7 @@ import com.example.healthassistant.data.substances.AdministrationRoute
 @Composable
 fun ChooseRouteScreen(
     navigateToChooseDose: (administrationRoute: AdministrationRoute) -> Unit,
+    navigateToRouteExplanationScreen: () -> Unit,
     viewModel: ChooseRouteViewModel = hiltViewModel()
 ) {
     ChooseRouteScreen(
@@ -33,7 +35,8 @@ fun ChooseRouteScreen(
         otherRoutesChunked = viewModel.otherRoutesChunked,
         navigateToNext = { route ->
             navigateToChooseDose(route)
-        }
+        },
+        navigateToRouteExplanationScreen = navigateToRouteExplanationScreen
     )
 }
 
@@ -50,7 +53,8 @@ fun ChooseRouteScreenPreview() {
         onChangeShowOther = {},
         pwRoutes = pwRoutes,
         otherRoutesChunked = otherRoutesChunked,
-        navigateToNext = {}
+        navigateToNext = {},
+        navigateToRouteExplanationScreen = {}
     )
 }
 
@@ -60,8 +64,9 @@ fun ChooseRouteScreen(
     onChangeShowOther: (Boolean) -> Unit,
     pwRoutes: List<AdministrationRoute>,
     otherRoutesChunked: List<List<AdministrationRoute>>,
-    navigateToNext: (AdministrationRoute) -> Unit
-) {
+    navigateToNext: (AdministrationRoute) -> Unit,
+    navigateToRouteExplanationScreen: () -> Unit,
+    ) {
     Column {
         LinearProgressIndicator(progress = 0.5f, modifier = Modifier.fillMaxWidth())
         Scaffold(
@@ -77,7 +82,15 @@ fun ChooseRouteScreen(
                                 )
                             }
                         }
-                    } else null
+                    } else null,
+                    actions = {
+                        IconButton(onClick = navigateToRouteExplanationScreen) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = "Administration Routes Info"
+                            )
+                        }
+                    }
                 )
             }
         ) {

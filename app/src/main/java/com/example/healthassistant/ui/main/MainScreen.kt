@@ -21,6 +21,7 @@ import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.ui.addingestion.dose.ChooseDoseScreen
 import com.example.healthassistant.ui.addingestion.interactions.CheckInteractionsScreen
 import com.example.healthassistant.ui.addingestion.route.ChooseRouteScreen
+import com.example.healthassistant.ui.addingestion.route.RouteExplanationScreen
 import com.example.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
 import com.example.healthassistant.ui.addingestion.time.ChooseTimeScreen
 import com.example.healthassistant.ui.experiences.ExperiencesScreen
@@ -94,6 +95,7 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
     composable(NoArgumentRouter.SettingsRouter.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
     composable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
     composable(NoArgumentRouter.DurationExplanationRouter.route) { DurationExplanationScreen() }
+    composable(NoArgumentRouter.AdministrationRouteExplanationRouter.route) { RouteExplanationScreen() }
     composable(NoArgumentRouter.AddExperienceRouter.route) {
         AddExperienceScreen(
             navigateToExperienceFromAddExperience = {
@@ -258,7 +260,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         administrationRoute = administrationRoute,
                         experienceId = experienceId
                     )
-                }
+                },
+                navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen
             )
         }
         composable(

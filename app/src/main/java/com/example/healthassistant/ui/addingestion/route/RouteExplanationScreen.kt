@@ -3,12 +3,12 @@ package com.example.healthassistant.ui.addingestion.route
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Launch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.healthassistant.data.substances.AdministrationRoute
@@ -41,11 +41,35 @@ The route through which a substance is administered can greatly impact its poten
 Determining an optimal route of administration is highly dependent on the substance consumed, its desired duration and potency and side effects, and one's personal comfort level."""
             )
             Spacer(modifier = Modifier.height(5.dp))
-            AdministrationRoute.values().forEach {
+            AdministrationRoute.values().filter { !it.isInjectionMethod }.forEach {
+                Text(text = it.displayText, style = MaterialTheme.typography.h6)
+                Text(text = it.articleText)
+                Spacer(modifier = Modifier.height(5.dp))
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(text = "Injection", style = MaterialTheme.typography.h4)
+            SaferInjectionLink()
+            AdministrationRoute.values().filter { it.isInjectionMethod }.forEach {
                 Text(text = it.displayText, style = MaterialTheme.typography.h6)
                 Text(text = it.articleText)
                 Spacer(modifier = Modifier.height(5.dp))
             }
         }
+    }
+}
+
+@Composable
+fun SaferInjectionLink() {
+    val uriHandler = LocalUriHandler.current
+    TextButton(onClick = {
+        uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL)
+    }) {
+        Icon(
+            Icons.Filled.Launch,
+            contentDescription = "Open Link",
+            modifier = Modifier.size(ButtonDefaults.IconSize),
+        )
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+        Text("Safer Injection Article")
     }
 }
