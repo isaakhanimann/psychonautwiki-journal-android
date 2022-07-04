@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -33,10 +34,22 @@ fun ChooseRouteScreen(
         },
         pwRoutes = viewModel.pwRoutes,
         otherRoutesChunked = viewModel.otherRoutesChunked,
-        navigateToNext = { route ->
-            navigateToChooseDose(route)
+        onRouteTapped = { route ->
+            if (route.isInjectionMethod) {
+                viewModel.currentRoute = route
+                viewModel.isShowingInjectionDialog = true
+            } else {
+                navigateToChooseDose(route)
+            }
         },
-        navigateToRouteExplanationScreen = navigateToRouteExplanationScreen
+        navigateToRouteExplanationScreen = navigateToRouteExplanationScreen,
+        isShowingInjectionDialog = viewModel.isShowingInjectionDialog,
+        navigateWithCurrentRoute = {
+            navigateToChooseDose(viewModel.currentRoute)
+        },
+        dismissInjectionDialog = {
+            viewModel.isShowingInjectionDialog = false
+        }
     )
 }
 
@@ -53,8 +66,11 @@ fun ChooseRouteScreenPreview() {
         onChangeShowOther = {},
         pwRoutes = pwRoutes,
         otherRoutesChunked = otherRoutesChunked,
-        navigateToNext = {},
-        navigateToRouteExplanationScreen = {}
+        onRouteTapped = {},
+        navigateToRouteExplanationScreen = {},
+        isShowingInjectionDialog = false,
+        navigateWithCurrentRoute = {},
+        dismissInjectionDialog = {}
     )
 }
 
@@ -64,9 +80,12 @@ fun ChooseRouteScreen(
     onChangeShowOther: (Boolean) -> Unit,
     pwRoutes: List<AdministrationRoute>,
     otherRoutesChunked: List<List<AdministrationRoute>>,
-    navigateToNext: (AdministrationRoute) -> Unit,
+    onRouteTapped: (route: AdministrationRoute) -> Unit,
     navigateToRouteExplanationScreen: () -> Unit,
-    ) {
+    isShowingInjectionDialog: Boolean,
+    navigateWithCurrentRoute: () -> Unit,
+    dismissInjectionDialog: () -> Unit
+) {
     Column {
         LinearProgressIndicator(progress = 0.5f, modifier = Modifier.fillMaxWidth())
         Scaffold(
@@ -95,6 +114,12 @@ fun ChooseRouteScreen(
             }
         ) {
             val spacing = 6
+            if (isShowingInjectionDialog) {
+                InjectionDialog(
+                    navigateToNext = navigateWithCurrentRoute,
+                    dismiss = dismissInjectionDialog
+                )
+            }
             Column(
                 modifier = Modifier.padding(10.dp),
                 verticalArrangement = Arrangement.spacedBy(spacing.dp)
@@ -119,7 +144,7 @@ fun ChooseRouteScreen(
                                     Card(
                                         modifier = Modifier
                                             .clickable {
-                                                navigateToNext(route)
+                                                onRouteTapped(route)
                                             }
                                             .fillMaxHeight()
                                             .weight(1f)
@@ -161,7 +186,7 @@ fun ChooseRouteScreen(
                             Card(
                                 modifier = Modifier
                                     .clickable {
-                                        navigateToNext(route)
+                                        onRouteTapped(route)
                                     }
                                     .fillMaxWidth()
                                     .weight(5f)
@@ -174,6 +199,61 @@ fun ChooseRouteScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun InjectionDialogPreview() {
+    InjectionDialog(
+        navigateToNext = {},
+        dismiss = {}
+    )
+}
+
+@Composable
+fun InjectionDialog(
+    navigateToNext: () -> Unit,
+    dismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = dismiss,
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning")
+                Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                Text(text = "Safer Injection", style = MaterialTheme.typography.h5)
+            }
+        },
+        text = {
+            Column {
+                Text("Using and sharing injection equipment is an extremely high-risk activity and is never truly safe to do in a non-medical context.")
+                Text("Read the safer injection guide:")
+                SaferInjectionLink()
+                Text("This guide is provided for educational and harm reduction purposes only and we strongly discourage users from engaging in this activity.")
+
+            }
+
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    dismiss()
+                    navigateToNext()
+                }
+            ) {
+                Text("Continue")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = dismiss
+            ) {
+                Text("Cancel")
+            }
+        }
+    )
 }
 
 @Composable

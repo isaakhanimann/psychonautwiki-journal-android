@@ -26,4 +26,6 @@ class ChooseRouteViewModel @Inject constructor(
     }
     val otherRoutesChunked = otherRoutes.chunked(2)
 
+    var isShowingInjectionDialog by  mutableStateOf(false)
+    var currentRoute by  mutableStateOf(AdministrationRoute.INTRAVENOUS)
 }

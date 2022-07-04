@@ -70,6 +70,6 @@ fun SaferInjectionLink() {
             modifier = Modifier.size(ButtonDefaults.IconSize),
         )
         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        Text("Safer Injection Article")
+        Text("Safer Injection Guide")
     }
 }
