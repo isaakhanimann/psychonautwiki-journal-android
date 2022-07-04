@@ -30,6 +30,7 @@ fun ChooseDoseScreen(
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
     ChooseDoseScreen(
+        substanceName = viewModel.substance.name,
         roaDose = viewModel.roaDose,
         administrationRoute = viewModel.administrationRoute,
         doseText = viewModel.doseText,
@@ -66,9 +67,10 @@ fun ChooseDoseScreen(
 @Preview
 @Composable
 fun ChooseDoseScreenPreview(
-    @PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDose?,
+    @PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDose,
 ) {
     ChooseDoseScreen(
+        substanceName = "Example Substance",
         roaDose = roaDose,
         administrationRoute = AdministrationRoute.INSUFFLATED,
         doseText = "5",
@@ -86,8 +88,31 @@ fun ChooseDoseScreenPreview(
     )
 }
 
+@Preview
+@Composable
+fun ChooseDoseScreenPreview2() {
+    ChooseDoseScreen(
+        substanceName = "Example Substance",
+        roaDose = null,
+        administrationRoute = AdministrationRoute.INSUFFLATED,
+        doseText = "5",
+        onChangeDoseText = {},
+        isValidDose = true,
+        isEstimate = false,
+        onChangeIsEstimate = {},
+        navigateToNext = {},
+        useUnknownDoseAndNavigate = {},
+        currentDoseClass = null,
+        purityText = "20",
+        onPurityChange = {},
+        isValidPurity = true,
+        convertedDoseAndUnitText = "25 mg"
+    )
+}
+
 @Composable
 fun ChooseDoseScreen(
+    substanceName: String,
     roaDose: RoaDose?,
     administrationRoute: AdministrationRoute,
     doseText: String,
@@ -132,6 +157,20 @@ fun ChooseDoseScreen(
                 Column {
                     if (roaDose != null) {
                         RoaDoseView(roaDose = roaDose)
+                    } else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = "Dosage Warning"
+                            )
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(
+                                text = "There is no dosage info for ${administrationRoute.displayText} $substanceName. This is potentially extremely dangerous.",
+                                style = MaterialTheme.typography.subtitle2
+                            )
+                        }
                     }
                     val text = when (currentDoseClass) {
                         DoseClass.THRESHOLD -> "threshold: ${roaDose?.threshold?.toReadableString()}${roaDose?.units ?: ""}"
