@@ -2,10 +2,7 @@ package com.example.healthassistant.ui.settings.faq
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -28,8 +25,9 @@ fun FAQScreen() {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(10.dp)
+                .padding(horizontal = 10.dp)
         ) {
+            Spacer(modifier = Modifier.height(10.dp))
             ExpandableContainer(
                 title = "When does the app detect interactions?",
             ) {

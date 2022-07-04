@@ -28,9 +28,10 @@ fun DoseExplanationScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
+                .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "The range and intensity of the effects of a substance depends on upon a number of factors. These include route of administration, dosage, set and setting, and personal and environmental factors.\n" +
                         "Effective doses can be divided into five categories: threshold, light, common, strong, and heavy."

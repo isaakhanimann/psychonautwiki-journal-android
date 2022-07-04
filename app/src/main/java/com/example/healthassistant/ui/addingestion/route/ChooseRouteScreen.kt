@@ -261,13 +261,13 @@ fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
     Box(contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = route.description,
+                text = route.displayText,
                 textAlign = TextAlign.Center,
                 style = titleStyle
             )
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Text(
-                    text = route.displayText,
+                    text = route.description,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.caption
                 )

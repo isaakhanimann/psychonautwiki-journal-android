@@ -32,9 +32,10 @@ fun RouteExplanationScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
+                .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = """A route of administration is the method in which a psychoactive substance is delivered into the body.
 The route through which a substance is administered can greatly impact its potency, duration, and subjective effects. For example, many substances are more effective when consumed using particular routes of administration, while some substances are completely inactive with certain routes.

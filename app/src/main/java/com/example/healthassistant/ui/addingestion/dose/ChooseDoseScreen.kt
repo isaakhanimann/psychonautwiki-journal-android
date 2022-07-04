@@ -27,9 +27,13 @@ import com.example.healthassistant.ui.search.substance.roa.toReadableString
 @Composable
 fun ChooseDoseScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
+    navigateToDoseGuideScreen: () -> Unit,
+    navigateToVolumetricDosingScreen: () -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
     ChooseDoseScreen(
+        navigateToDoseGuideScreen = navigateToDoseGuideScreen,
+        navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
         substanceName = viewModel.substance.name,
         roaDose = viewModel.roaDose,
         administrationRoute = viewModel.administrationRoute,
@@ -70,6 +74,8 @@ fun ChooseDoseScreenPreview(
     @PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDose,
 ) {
     ChooseDoseScreen(
+        navigateToDoseGuideScreen = {},
+        navigateToVolumetricDosingScreen = {},
         substanceName = "Example Substance",
         roaDose = roaDose,
         administrationRoute = AdministrationRoute.INSUFFLATED,
@@ -92,6 +98,8 @@ fun ChooseDoseScreenPreview(
 @Composable
 fun ChooseDoseScreenPreview2() {
     ChooseDoseScreen(
+        navigateToDoseGuideScreen = {},
+        navigateToVolumetricDosingScreen = {},
         substanceName = "Example Substance",
         roaDose = null,
         administrationRoute = AdministrationRoute.INSUFFLATED,
@@ -112,6 +120,8 @@ fun ChooseDoseScreenPreview2() {
 
 @Composable
 fun ChooseDoseScreen(
+    navigateToDoseGuideScreen: () -> Unit,
+    navigateToVolumetricDosingScreen: () -> Unit,
     substanceName: String,
     roaDose: RoaDose?,
     administrationRoute: AdministrationRoute,
@@ -152,74 +162,82 @@ fun ChooseDoseScreen(
                     .padding(10.dp)
                     .fillMaxHeight(),
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                Column {
-                    if (roaDose != null) {
-                        RoaDoseView(roaDose = roaDose)
-                    } else {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Warning,
-                                contentDescription = "Dosage Warning"
-                            )
-                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                            Text(
-                                text = "There is no dosage info for ${administrationRoute.displayText} $substanceName. This is potentially extremely dangerous.",
-                                style = MaterialTheme.typography.subtitle2
-                            )
-                        }
+                if (roaDose != null) {
+                    RoaDoseView(roaDose = roaDose)
+                } else {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = "Dosage Warning"
+                        )
+                        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                        Text(
+                            text = "There is no dosage info for ${administrationRoute.displayText} $substanceName. This is potentially extremely dangerous.",
+                            style = MaterialTheme.typography.subtitle2
+                        )
                     }
-                    val text = when (currentDoseClass) {
-                        DoseClass.THRESHOLD -> "threshold: ${roaDose?.threshold?.toReadableString()}${roaDose?.units ?: ""}"
-                        DoseClass.LIGHT -> "light: ${roaDose?.light?.min?.toReadableString()}-${roaDose?.light?.max?.toReadableString()}${roaDose?.units ?: ""}"
-                        DoseClass.COMMON -> "common: ${roaDose?.common?.min?.toReadableString()}-${roaDose?.common?.max?.toReadableString()}${roaDose?.units ?: ""}"
-                        DoseClass.STRONG -> "strong: ${roaDose?.strong?.min?.toReadableString()}-${roaDose?.strong?.max?.toReadableString()}${roaDose?.units ?: ""}"
-                        DoseClass.HEAVY -> "heavy: ${roaDose?.heavy?.toReadableString()}${roaDose?.units ?: ""}-.."
-                        else -> ""
-                    }
-                    val isDarkTheme = isSystemInDarkTheme()
-                    Text(
-                        text = text,
-                        color = currentDoseClass?.getComposeColor(isDarkTheme)
-                            ?: MaterialTheme.colors.primary
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    val focusManager = LocalFocusManager.current
-                    val textStyle = MaterialTheme.typography.h3
-                    OutlinedTextField(
-                        value = doseText,
-                        onValueChange = onChangeDoseText,
-                        textStyle = textStyle,
-                        label = { Text("Pure Dose", style = textStyle) },
-                        isError = !isValidDose,
-                        trailingIcon = {
-                            Text(
-                                text = roaDose?.units ?: "",
-                                style = textStyle,
-                                modifier = Modifier.padding(horizontal = 10.dp)
-                            )
-                        },
-                        keyboardActions = KeyboardActions(onDone = {
-                            focusManager.clearFocus()
-                        }),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        singleLine = true
-                    )
                 }
+                val text = when (currentDoseClass) {
+                    DoseClass.THRESHOLD -> "threshold: ${roaDose?.threshold?.toReadableString()}${roaDose?.units ?: ""}"
+                    DoseClass.LIGHT -> "light: ${roaDose?.light?.min?.toReadableString()}-${roaDose?.light?.max?.toReadableString()}${roaDose?.units ?: ""}"
+                    DoseClass.COMMON -> "common: ${roaDose?.common?.min?.toReadableString()}-${roaDose?.common?.max?.toReadableString()}${roaDose?.units ?: ""}"
+                    DoseClass.STRONG -> "strong: ${roaDose?.strong?.min?.toReadableString()}-${roaDose?.strong?.max?.toReadableString()}${roaDose?.units ?: ""}"
+                    DoseClass.HEAVY -> "heavy: ${roaDose?.heavy?.toReadableString()}${roaDose?.units ?: ""}-.."
+                    else -> ""
+                }
+                val isDarkTheme = isSystemInDarkTheme()
+                Text(
+                    text = text,
+                    color = currentDoseClass?.getComposeColor(isDarkTheme)
+                        ?: MaterialTheme.colors.primary
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                val focusManager = LocalFocusManager.current
+                val textStyle = MaterialTheme.typography.h3
+                OutlinedTextField(
+                    value = doseText,
+                    onValueChange = onChangeDoseText,
+                    textStyle = textStyle,
+                    label = { Text("Pure Dose", style = textStyle) },
+                    isError = !isValidDose,
+                    trailingIcon = {
+                        Text(
+                            text = roaDose?.units ?: "",
+                            style = textStyle,
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        )
+                    },
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusManager.clearFocus()
+                    }),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(10.dp))
                 PurityCalculation(
                     purityText = purityText,
                     onPurityChange = onPurityChange,
                     convertedDoseAndUnitText = convertedDoseAndUnitText,
                     isValidPurity = isValidPurity
                 )
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text("Is Estimate", style = MaterialTheme.typography.h6)
                     Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                }
+                TextButton(onClick = navigateToDoseGuideScreen) {
+                    Text(text = "Dosage Guide")
+                }
+                if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
+                    Text(text = "To measure $substanceName dose use:", style = MaterialTheme.typography.h6)
+                    TextButton(onClick = navigateToVolumetricDosingScreen) {
+                        Text(text = "Volumetric Liquid Dosing")
+                    }
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }

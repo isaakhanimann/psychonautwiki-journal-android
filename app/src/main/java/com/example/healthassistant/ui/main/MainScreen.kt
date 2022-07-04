@@ -19,6 +19,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.ui.addingestion.dose.ChooseDoseScreen
+import com.example.healthassistant.ui.addingestion.dose.DoseGuideScreen
+import com.example.healthassistant.ui.addingestion.dose.VolumetricDosingScreen
 import com.example.healthassistant.ui.addingestion.interactions.CheckInteractionsScreen
 import com.example.healthassistant.ui.addingestion.route.ChooseRouteScreen
 import com.example.healthassistant.ui.addingestion.route.RouteExplanationScreen
@@ -96,6 +98,13 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
     composable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
     composable(NoArgumentRouter.DurationExplanationRouter.route) { DurationExplanationScreen() }
     composable(NoArgumentRouter.AdministrationRouteExplanationRouter.route) { RouteExplanationScreen() }
+    composable(NoArgumentRouter.DosageGuideRouter.route) {
+        DoseGuideScreen(
+            navigateToDoseClassification = navController::navigateToDosageExplanationScreen,
+            navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreen
+        )
+    }
+    composable(NoArgumentRouter.VolumetricDosingRouter.route) { VolumetricDosingScreen() }
     composable(NoArgumentRouter.AddExperienceRouter.route) {
         AddExperienceScreen(
             navigateToExperienceFromAddExperience = {
@@ -283,7 +292,9 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         dose = dose,
                         experienceId = experienceId
                     )
-                }
+                },
+                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
+                navigateToDoseGuideScreen = navController::navigateToDosageGuideScreen
             )
         }
         composable(

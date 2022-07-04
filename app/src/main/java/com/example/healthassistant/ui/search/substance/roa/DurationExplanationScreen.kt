@@ -27,9 +27,10 @@ fun DurationExplanationScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
+                .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "Duration refers to the length of time over which the subjective effects of a psychoactive substance manifest themselves.\n" +
                         "Duration can be broken down into 6 parts: (1) total duration (2) onset (3) come up (4) peak (5) offset and (6) after effects. Depending upon the substance consumed, each of these occurs in a separate and continuous fashion."
