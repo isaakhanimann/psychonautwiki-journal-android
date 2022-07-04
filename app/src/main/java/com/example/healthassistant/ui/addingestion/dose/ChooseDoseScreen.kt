@@ -7,7 +7,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -182,10 +183,17 @@ fun ChooseDoseScreen(
                     Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                 }
                 Spacer(modifier = Modifier.weight(1f))
+                var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
                 TextButton(
-                    onClick = useUnknownDoseAndNavigate,
+                    onClick = { isShowingUnknownDoseDialog = true },
                 ) {
                     Text("Use Unknown Dose")
+                }
+                if (isShowingUnknownDoseDialog) {
+                    UnknownDoseDialog(
+                        useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
+                        dismiss = { isShowingUnknownDoseDialog = false }
+                    )
                 }
             }
         }
@@ -194,12 +202,52 @@ fun ChooseDoseScreen(
 
 @Preview
 @Composable
-fun PurityPreview() {
-    PurityCalculation(
-        purityText = "20",
-        onPurityChange = {},
-        isValidPurity = true,
-        convertedDoseAndUnitText = "20 mg"
+fun UnknownDoseDialogPreview() {
+    UnknownDoseDialog(
+        useUnknownDoseAndNavigate = {},
+        dismiss = {}
+    )
+}
+
+@Composable
+fun UnknownDoseDialog(
+    useUnknownDoseAndNavigate: () -> Unit,
+    dismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = dismiss,
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning")
+                Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                Text(text = "Unknown Danger", style = MaterialTheme.typography.h5)
+            }
+        },
+        text = {
+            Text(
+                "Administering the wrong dosage of a substance can lead to negative experiences such as extreme anxiety, uncomfortable physical side effects, hospitalization, or (in extreme cases) death.\n" +
+                        "Read the dosage guide."
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    dismiss()
+                    useUnknownDoseAndNavigate()
+                }
+            ) {
+                Text("Continue")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = dismiss
+            ) {
+                Text("Cancel")
+            }
+        }
     )
 }
 
