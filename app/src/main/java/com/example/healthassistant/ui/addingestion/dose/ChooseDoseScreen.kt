@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.*
@@ -141,7 +142,19 @@ fun ChooseDoseScreen(
     Column {
         LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
         Scaffold(
-            topBar = { TopAppBar(title = { Text(text = "Choose " + administrationRoute.displayText + " Dose") }) },
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Choose " + administrationRoute.displayText + " Dose") },
+                    actions = {
+                        IconButton(onClick = navigateToDoseGuideScreen) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = "Dosage Info"
+                            )
+                        }
+                    }
+                )
+            },
             floatingActionButton = {
                 if (isValidDose) {
                     ExtendedFloatingActionButton(
@@ -230,11 +243,11 @@ fun ChooseDoseScreen(
                     Text("Is Estimate", style = MaterialTheme.typography.h6)
                     Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                 }
-                TextButton(onClick = navigateToDoseGuideScreen) {
-                    Text(text = "Dosage Guide")
-                }
                 if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
-                    Text(text = "To measure $substanceName dose use:", style = MaterialTheme.typography.h6)
+                    Text(
+                        text = "To measure $substanceName dose use:",
+                        style = MaterialTheme.typography.h6
+                    )
                     TextButton(onClick = navigateToVolumetricDosingScreen) {
                         Text(text = "Volumetric Liquid Dosing")
                     }
