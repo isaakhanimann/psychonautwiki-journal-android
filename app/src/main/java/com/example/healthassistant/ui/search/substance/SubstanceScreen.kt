@@ -78,23 +78,7 @@ fun SubstanceScreen(
             TopAppBar(
                 title = { Text(substance.name) },
                 actions = {
-                    val uriHandler = LocalUriHandler.current
-                    TextButton(onClick = {
-                        uriHandler.openUri(substance.url)
-                    }) {
-                        val color =
-                            if (isSystemInDarkTheme()) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary
-                        Icon(
-                            Icons.Filled.Launch,
-                            contentDescription = "Open Link",
-                            modifier = Modifier.size(ButtonDefaults.IconSize),
-                            tint = color
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(
-                            "Article", color = color
-                        )
-                    }
+                    ArticleLink(url = substance.url)
                 }
             )
         }
