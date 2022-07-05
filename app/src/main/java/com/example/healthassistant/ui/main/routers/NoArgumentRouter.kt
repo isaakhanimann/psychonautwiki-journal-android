@@ -11,6 +11,7 @@ const val DURATION_EXPLANATION_ROUTE = "durationExplanation"
 const val ADMINISTRATION_ROUTE_EXPLANATION_ROUTE = "administrationRouteExplanation"
 const val DOSAGE_GUIDE_ROUTE = "dosageGuide"
 const val VOLUMETRIC_DOSING_ROUTE = "volumetricDosing"
+const val DRUG_TESTING_ROUTE = "drugTesting"
 
 sealed class NoArgumentRouter(val route: String) {
     object AddExperienceRouter : NoArgumentRouter(route = ADD_EXPERIENCE_ROUTE)
@@ -21,6 +22,7 @@ sealed class NoArgumentRouter(val route: String) {
     object AdministrationRouteExplanationRouter : NoArgumentRouter(route = ADMINISTRATION_ROUTE_EXPLANATION_ROUTE)
     object DosageGuideRouter : NoArgumentRouter(route = DOSAGE_GUIDE_ROUTE)
     object VolumetricDosingRouter : NoArgumentRouter(route = VOLUMETRIC_DOSING_ROUTE)
+    object DrugTestingRouter : NoArgumentRouter(route = DRUG_TESTING_ROUTE)
 }
 
 fun NavController.navigateToAddExperience() {
@@ -55,6 +57,9 @@ fun NavController.navigateToVolumetricDosingScreen() {
     navigate(VOLUMETRIC_DOSING_ROUTE)
 }
 
+fun NavController.navigateToDrugTestingScreen() {
+    navigate(DRUG_TESTING_ROUTE)
+}
 
 fun NavController.navigateToExperienceFromAddExperience(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId) {

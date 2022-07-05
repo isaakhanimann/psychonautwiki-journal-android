@@ -25,6 +25,7 @@ import com.example.healthassistant.ui.addingestion.interactions.CheckInteraction
 import com.example.healthassistant.ui.addingestion.route.ChooseRouteScreen
 import com.example.healthassistant.ui.addingestion.route.RouteExplanationScreen
 import com.example.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
+import com.example.healthassistant.ui.addingestion.search.DrugTestingScreen
 import com.example.healthassistant.ui.addingestion.time.ChooseTimeScreen
 import com.example.healthassistant.ui.experiences.ExperiencesScreen
 import com.example.healthassistant.ui.experiences.addExperience.AddExperienceScreen
@@ -98,6 +99,7 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
     composable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
     composable(NoArgumentRouter.DurationExplanationRouter.route) { DurationExplanationScreen() }
     composable(NoArgumentRouter.AdministrationRouteExplanationRouter.route) { RouteExplanationScreen() }
+    composable(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
     composable(NoArgumentRouter.DosageGuideRouter.route) {
         DoseGuideScreen(
             navigateToDoseClassification = navController::navigateToDosageExplanationScreen,
@@ -236,7 +238,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         substanceName = it,
                         experienceId = experienceId
                     )
-                }
+                },
+                navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen
             )
         }
         composable(

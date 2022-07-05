@@ -5,7 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Launch
+import androidx.compose.material.icons.outlined.Launch
+import androidx.compose.material.icons.outlined.Science
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +16,10 @@ import androidx.compose.ui.unit.dp
 import com.example.healthassistant.ui.search.SearchScreen
 
 @Composable
-fun AddIngestionSearchScreen(navigateToCheckInteractions: (substanceName: String) -> Unit) {
+fun AddIngestionSearchScreen(
+    navigateToCheckInteractions: (substanceName: String) -> Unit,
+    navigateToDrugTestingScreen: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -31,14 +35,21 @@ fun AddIngestionSearchScreen(navigateToCheckInteractions: (substanceName: String
                 },
                 modifier = Modifier.weight(1f)
             )
-            TestingSection()
+            TestingSection(navigateToDrugTestingScreen)
         }
     }
 }
-
 @Preview
 @Composable
-fun TestingSection() {
+fun TestingSectionPreview(
+) {
+    TestingSection(navigateToDrugTestingScreen = {})
+}
+
+@Composable
+fun TestingSection(
+    navigateToDrugTestingScreen: () -> Unit
+) {
     var isVisible by remember {
         mutableStateOf(true)
     }
@@ -61,6 +72,15 @@ fun TestingSection() {
                     }
                 }
                 Text(text = "If Available Use:")
+                TextButton(onClick = navigateToDrugTestingScreen) {
+                    Icon(
+                        Icons.Outlined.Science,
+                        contentDescription = "Navigate to Testing Services",
+                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Drug Testing Services")
+                }
                 Text(text = "Or At Least Use:")
                 val uriHandler = LocalUriHandler.current
                 TextButton(
@@ -69,7 +89,7 @@ fun TestingSection() {
                     }
                 ) {
                     Icon(
-                        Icons.Filled.Launch,
+                        Icons.Outlined.Launch,
                         contentDescription = "Open Link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
