@@ -1,6 +1,5 @@
 package com.example.healthassistant.ui.addingestion.dose
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,7 +22,6 @@ import com.example.healthassistant.data.substances.DoseClass
 import com.example.healthassistant.data.substances.RoaDose
 import com.example.healthassistant.ui.search.substance.roa.dose.RoaDosePreviewProvider
 import com.example.healthassistant.ui.search.substance.roa.dose.RoaDoseView
-import com.example.healthassistant.ui.search.substance.roa.toReadableString
 
 @Composable
 fun ChooseDoseScreen(
@@ -193,20 +191,7 @@ fun ChooseDoseScreen(
                         )
                     }
                 }
-                val text = when (currentDoseClass) {
-                    DoseClass.THRESHOLD -> "threshold: ${roaDose?.threshold?.toReadableString()}${roaDose?.units ?: ""}"
-                    DoseClass.LIGHT -> "light: ${roaDose?.light?.min?.toReadableString()}-${roaDose?.light?.max?.toReadableString()}${roaDose?.units ?: ""}"
-                    DoseClass.COMMON -> "common: ${roaDose?.common?.min?.toReadableString()}-${roaDose?.common?.max?.toReadableString()}${roaDose?.units ?: ""}"
-                    DoseClass.STRONG -> "strong: ${roaDose?.strong?.min?.toReadableString()}-${roaDose?.strong?.max?.toReadableString()}${roaDose?.units ?: ""}"
-                    DoseClass.HEAVY -> "heavy: ${roaDose?.heavy?.toReadableString()}${roaDose?.units ?: ""}-.."
-                    else -> ""
-                }
-                val isDarkTheme = isSystemInDarkTheme()
-                Text(
-                    text = text,
-                    color = currentDoseClass?.getComposeColor(isDarkTheme)
-                        ?: MaterialTheme.colors.primary
-                )
+                CurrentDoseClassInfo(currentDoseClass, roaDose)
                 Spacer(modifier = Modifier.height(10.dp))
                 val focusManager = LocalFocusManager.current
                 val textStyle = MaterialTheme.typography.h3
@@ -265,107 +250,6 @@ fun ChooseDoseScreen(
                         dismiss = { isShowingUnknownDoseDialog = false }
                     )
                 }
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-fun UnknownDoseDialogPreview() {
-    UnknownDoseDialog(
-        useUnknownDoseAndNavigate = {},
-        dismiss = {}
-    )
-}
-
-@Composable
-fun UnknownDoseDialog(
-    useUnknownDoseAndNavigate: () -> Unit,
-    dismiss: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = dismiss,
-        title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning")
-                Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                Text(text = "Unknown Danger", style = MaterialTheme.typography.h5)
-            }
-        },
-        text = {
-            Text(
-                "Administering the wrong dosage of a substance can lead to negative experiences such as extreme anxiety, uncomfortable physical side effects, hospitalization, or (in extreme cases) death.\n" +
-                        "Read the dosage guide."
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    dismiss()
-                    useUnknownDoseAndNavigate()
-                }
-            ) {
-                Text("Continue")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = dismiss
-            ) {
-                Text("Cancel")
-            }
-        }
-    )
-}
-
-@Composable
-fun PurityCalculation(
-    purityText: String,
-    onPurityChange: (purity: String) -> Unit,
-    isValidPurity: Boolean,
-    convertedDoseAndUnitText: String?
-) {
-    Column(horizontalAlignment = Alignment.Start) {
-        val focusManager = LocalFocusManager.current
-        val textStyle = MaterialTheme.typography.h6
-        OutlinedTextField(
-            value = purityText,
-            onValueChange = onPurityChange,
-            textStyle = textStyle,
-            label = { Text("Purity", style = textStyle) },
-            isError = !isValidPurity,
-            trailingIcon = {
-                Text(
-                    text = "%",
-                    style = textStyle,
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                )
-            },
-            keyboardActions = KeyboardActions(onDone = {
-                focusManager.clearFocus()
-            }),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-        if (!isValidPurity) {
-            Text(
-                text = "Purity must be between 1 and 100%",
-                color = MaterialTheme.colors.error,
-                style = MaterialTheme.typography.caption,
-            )
-        }
-        if (convertedDoseAndUnitText != null) {
-            Row(
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Converted Amount")
-                Text(text = convertedDoseAndUnitText, style = MaterialTheme.typography.h5)
             }
         }
     }
