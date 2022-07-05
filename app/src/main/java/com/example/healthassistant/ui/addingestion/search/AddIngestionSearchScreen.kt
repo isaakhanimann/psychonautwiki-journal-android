@@ -54,7 +54,9 @@ fun TestingSection(
         mutableStateOf(true)
     }
     AnimatedVisibility(visible = isVisible) {
-        Card(elevation = 100.dp) {
+        Card(elevation = 100.dp,
+        backgroundColor = MaterialTheme.colors.primarySurface
+        ) {
             Column(
                 modifier = Modifier.padding(start = 10.dp),
             ) {
@@ -77,9 +79,10 @@ fun TestingSection(
                         Icons.Outlined.Science,
                         contentDescription = "Navigate to Testing Services",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
+                        tint = MaterialTheme.colors.secondary
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Drug Testing Services")
+                    Text("Drug Testing Services", color = MaterialTheme.colors.secondary)
                 }
                 Text(text = "Or At Least Use:")
                 val uriHandler = LocalUriHandler.current
@@ -92,9 +95,10 @@ fun TestingSection(
                         Icons.Outlined.Launch,
                         contentDescription = "Open Link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
+                        tint = MaterialTheme.colors.secondary
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Reagent Testing")
+                    Text("Reagent Testing", color = MaterialTheme.colors.secondary)
                 }
             }
         }
