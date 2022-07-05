@@ -24,9 +24,10 @@ import com.example.healthassistant.ui.experiences.SectionTitle
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel(),
-    onSubstanceTap: (Substance) -> Unit
+    onSubstanceTap: (Substance) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column {
+    Column(modifier = modifier) {
         SearchField(
             searchText = searchViewModel.searchTextFlow.collectAsState().value,
             onChange = {
