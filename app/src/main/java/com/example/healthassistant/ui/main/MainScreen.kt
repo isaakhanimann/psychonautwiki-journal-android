@@ -258,7 +258,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         substanceName = substanceName,
                         experienceId = experienceId
                     )
-                }
+                },
+                navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogensScreen
             )
         }
         composable(

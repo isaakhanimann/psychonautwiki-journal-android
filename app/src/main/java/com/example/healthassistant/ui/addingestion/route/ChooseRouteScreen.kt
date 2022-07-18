@@ -86,33 +86,33 @@ fun ChooseRouteScreen(
     navigateWithCurrentRoute: () -> Unit,
     dismissInjectionDialog: () -> Unit
 ) {
-    Column {
-        LinearProgressIndicator(progress = 0.5f, modifier = Modifier.fillMaxWidth())
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = "Choose Route") },
-                    navigationIcon = if (shouldShowOther && pwRoutes.isNotEmpty()) {
-                        {
-                            IconButton(onClick = { onChangeShowOther(false) }) {
-                                Icon(
-                                    imageVector = Icons.Default.ArrowBack,
-                                    contentDescription = "Back"
-                                )
-                            }
-                        }
-                    } else null,
-                    actions = {
-                        IconButton(onClick = navigateToRouteExplanationScreen) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Choose Route") },
+                navigationIcon = if (shouldShowOther && pwRoutes.isNotEmpty()) {
+                    {
+                        IconButton(onClick = { onChangeShowOther(false) }) {
                             Icon(
-                                imageVector = Icons.Default.Info,
-                                contentDescription = "Administration Routes Info"
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back"
                             )
                         }
                     }
-                )
-            }
-        ) {
+                } else null,
+                actions = {
+                    IconButton(onClick = navigateToRouteExplanationScreen) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "Administration Routes Info"
+                        )
+                    }
+                }
+            )
+        }
+    ) {
+        Column {
+            LinearProgressIndicator(progress = 0.5f, modifier = Modifier.fillMaxWidth())
             val spacing = 6
             if (isShowingInjectionDialog) {
                 InjectionDialog(

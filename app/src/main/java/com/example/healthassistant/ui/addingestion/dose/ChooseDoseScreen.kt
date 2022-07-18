@@ -137,37 +137,37 @@ fun ChooseDoseScreen(
     isValidPurity: Boolean,
     convertedDoseAndUnitText: String?
 ) {
-    Column {
-        LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = "Choose " + administrationRoute.displayText + " Dose") },
-                    actions = {
-                        IconButton(onClick = navigateToDoseGuideScreen) {
-                            Icon(
-                                imageVector = Icons.Default.Info,
-                                contentDescription = "Dosage Info"
-                            )
-                        }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Choose " + administrationRoute.displayText + " Dose") },
+                actions = {
+                    IconButton(onClick = navigateToDoseGuideScreen) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "Dosage Info"
+                        )
                     }
-                )
-            },
-            floatingActionButton = {
-                if (isValidDose) {
-                    ExtendedFloatingActionButton(
-                        onClick = navigateToNext,
-                        icon = {
-                            Icon(
-                                Icons.Filled.NavigateNext,
-                                contentDescription = "Next"
-                            )
-                        },
-                        text = { Text("Next") },
-                    )
                 }
+            )
+        },
+        floatingActionButton = {
+            if (isValidDose) {
+                ExtendedFloatingActionButton(
+                    onClick = navigateToNext,
+                    icon = {
+                        Icon(
+                            Icons.Filled.NavigateNext,
+                            contentDescription = "Next"
+                        )
+                    },
+                    text = { Text("Next") },
+                )
             }
-        ) {
+        }
+    ) {
+        Column {
+            LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
             Column(
                 modifier = Modifier
                     .padding(10.dp)

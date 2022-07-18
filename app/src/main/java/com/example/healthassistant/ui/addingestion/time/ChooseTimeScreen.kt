@@ -88,38 +88,38 @@ fun ChooseTimeScreen(
     otherColors: List<SubstanceColor>
 
 ) {
-    Column {
-        LinearProgressIndicator(progress = 1f, modifier = Modifier.fillMaxWidth())
-        Scaffold(
-            topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) },
-            floatingActionButton = {
-                AnimatedVisibility(
-                    visible = !isLoadingColor,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    val context = LocalContext.current
-                    ExtendedFloatingActionButton(
-                        onClick = {
-                            createAndSaveIngestion()
-                            Toast.makeText(
-                                context,
-                                "Ingestion Added",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            dismissAddIngestionScreens()
-                        },
-                        icon = {
-                            Icon(
-                                Icons.Filled.Done,
-                                contentDescription = "Next"
-                            )
-                        },
-                        text = { Text("Done") },
-                    )
-                }
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) },
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = !isLoadingColor,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                val context = LocalContext.current
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        createAndSaveIngestion()
+                        Toast.makeText(
+                            context,
+                            "Ingestion Added",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        dismissAddIngestionScreens()
+                    },
+                    icon = {
+                        Icon(
+                            Icons.Filled.Done,
+                            contentDescription = "Next"
+                        )
+                    },
+                    text = { Text("Done") },
+                )
             }
-        ) {
+        }
+    ) {
+        Column {
+            LinearProgressIndicator(progress = 0.9f, modifier = Modifier.fillMaxWidth())
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally,

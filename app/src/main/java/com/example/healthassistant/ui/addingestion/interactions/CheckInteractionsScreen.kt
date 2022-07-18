@@ -25,15 +25,18 @@ import com.google.accompanist.flowlayout.FlowRow
 @Composable
 fun CheckInteractionsScreen(
     navigateToChooseRouteScreen: () -> Unit,
+    navigateToSaferHallucinogensScreen: () -> Unit,
     viewModel: CheckInteractionsViewModel = hiltViewModel()
 ) {
     CheckInteractionsScreen(
         substanceName = viewModel.substanceName,
         isSearchingForInteractions = viewModel.isSearchingForInteractions,
+        isShowingHallucinogenLink = viewModel.isShowingHallucinogenLink,
         dangerousInteractions = viewModel.dangerousInteractions,
         unsafeInteractions = viewModel.unsafeInteractions,
         uncertainInteractions = viewModel.uncertainInteractions,
         navigateToNext = navigateToChooseRouteScreen,
+        navigateToSaferHallucinogensScreen = navigateToSaferHallucinogensScreen,
         dismissAlert = {
             viewModel.isShowingAlert = false
         },
@@ -47,12 +50,14 @@ fun CheckInteractionsScreen(
 @Composable
 fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
     CheckInteractionsScreen(
-        substanceName = "MDMA",
+        substanceName = "LSD",
         isSearchingForInteractions = true,
+        isShowingHallucinogenLink = true,
         dangerousInteractions = substance.dangerousInteractions,
         unsafeInteractions = substance.unsafeInteractions,
         uncertainInteractions = substance.uncertainInteractions,
         navigateToNext = {},
+        navigateToSaferHallucinogensScreen = {},
         dismissAlert = {},
         isShowingAlert = false,
         alertInteractionType = InteractionType.DANGEROUS,
@@ -66,10 +71,12 @@ fun CheckInteractionsScreenPreview2() {
     CheckInteractionsScreen(
         substanceName = "MDMA",
         isSearchingForInteractions = true,
+        isShowingHallucinogenLink = false,
         dangerousInteractions = emptyList(),
         unsafeInteractions = emptyList(),
         uncertainInteractions = emptyList(),
         navigateToNext = {},
+        navigateToSaferHallucinogensScreen = {},
         dismissAlert = {},
         isShowingAlert = true,
         alertInteractionType = InteractionType.DANGEROUS,
@@ -80,6 +87,7 @@ fun CheckInteractionsScreenPreview2() {
 @Composable
 fun CheckInteractionsScreen(
     substanceName: String,
+    isShowingHallucinogenLink: Boolean,
     isSearchingForInteractions: Boolean,
     isShowingAlert: Boolean,
     dismissAlert: () -> Unit,
@@ -88,27 +96,35 @@ fun CheckInteractionsScreen(
     dangerousInteractions: List<String>,
     unsafeInteractions: List<String>,
     uncertainInteractions: List<String>,
-    navigateToNext: () -> Unit
+    navigateToNext: () -> Unit,
+    navigateToSaferHallucinogensScreen: () -> Unit,
 ) {
-    Column {
-        LinearProgressIndicator(progress = 0.33f, modifier = Modifier.fillMaxWidth())
-        Scaffold(
-            topBar = { TopAppBar(title = { Text(text = "Check Interactions With $substanceName") }) },
-            floatingActionButton = {
-                ExtendedFloatingActionButton(
-                    onClick = navigateToNext,
-                    icon = {
-                        Icon(
-                            Icons.Filled.NavigateNext,
-                            contentDescription = "Next"
-                        )
-                    },
-                    text = { Text("Next") },
-                )
-            }
-        ) {
+
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(text = "Check Interactions With $substanceName") }) },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = navigateToNext,
+                icon = {
+                    Icon(
+                        Icons.Filled.NavigateNext,
+                        contentDescription = "Next"
+                    )
+                },
+                text = { Text("Next") },
+            )
+        }
+    ) {
+        Column {
+            LinearProgressIndicator(progress = 0.33f, modifier = Modifier.fillMaxWidth())
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+            if (isShowingHallucinogenLink) {
+                TextButton(onClick = navigateToSaferHallucinogensScreen) {
+                    Text(text = "Safer Hallucinogen Use")
+                }
+                Divider()
             }
             if (dangerousInteractions.isEmpty() && unsafeInteractions.isEmpty() && uncertainInteractions.isEmpty()) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
@@ -156,7 +172,7 @@ fun CheckInteractionsScreen(
                 AlertDialog(
                     onDismissRequest = dismissAlert,
                     title = {
-                        val title = when(alertInteractionType) {
+                        val title = when (alertInteractionType) {
                             InteractionType.DANGEROUS -> "Dangerous Interaction!"
                             InteractionType.UNSAFE -> "Unsafe Interaction!"
                             InteractionType.UNCERTAIN -> "Uncertain Interaction!"
