@@ -196,7 +196,7 @@ fun ChooseDoseScreen(
                         )
                         Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
                         Text(
-                            text = "There is no dosage info for ${administrationRoute.displayText} $substanceName. This is potentially extremely dangerous.",
+                            text = "There is no dosage info for ${administrationRoute.displayText} $substanceName. Research dosages somewhere else.",
                             style = MaterialTheme.typography.subtitle2
                         )
                     }
