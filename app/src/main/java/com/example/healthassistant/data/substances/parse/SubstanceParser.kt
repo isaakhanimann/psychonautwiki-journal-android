@@ -37,8 +37,6 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val jsonCommonNames = jsonSubstance.getOptionalJSONArray("commonNames")
         val commonNames = parseCommonNames(jsonCommonNames, removeName = name)
         val url = jsonSubstance.getOptionalString("url") ?: return null
-        val jsonEffects = jsonSubstance.getOptionalJSONArray("effects")
-        val effects = parseEffects(jsonEffects)
         val jsonClass = jsonSubstance.getOptionalJSONObject("class")
         val chemicalClasses = parseChemicalClasses(jsonClass)
         val psychoactiveClasses = parsePsychoactiveClasses(jsonClass)
@@ -60,7 +58,6 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
             name = name,
             commonNames = commonNames,
             url = url,
-            effects = effects,
             chemicalClasses = chemicalClasses,
             psychoactiveClasses = psychoactiveClasses,
             tolerance = tolerance,
@@ -84,19 +81,6 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
             }
         }
         return commonNames
-    }
-
-    private fun parseEffects(jsonEffects: JSONArray?): List<Effect> {
-        if (jsonEffects == null) return emptyList()
-        val effects: MutableList<Effect> = mutableListOf()
-        for (i in 0 until jsonEffects.length()) {
-            val effectJson = jsonEffects.getOptionalJSONObject(i) ?: continue
-            val name = effectJson.getOptionalString("name") ?: continue
-            val url = effectJson.getOptionalString("url") ?: continue
-            val newEffect = Effect(name, url)
-            effects.add(newEffect)
-        }
-        return effects
     }
 
     private fun parseChemicalClasses(jsonClass: JSONObject?): List<String> {

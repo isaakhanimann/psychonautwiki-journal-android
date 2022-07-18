@@ -1,31 +1,24 @@
 package com.example.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.substances.AdministrationRoute
-import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.ui.addingestion.route.SaferInjectionLink
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
-import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun SubstanceScreen(
@@ -199,15 +192,6 @@ fun SubstanceScreen(
                 Text(substance.addictionPotential)
                 Divider()
             }
-            if (substance.effects.isNotEmpty()) {
-                Text(text = "Subjective Effects", style = titleStyle)
-                FlowRow {
-                    substance.effects.forEach {
-                        EffectChip(effect = it)
-                    }
-                }
-                Divider()
-            }
             if (substance.isHallucinogen) {
                 TextButton(onClick = navigateToSaferHallucinogensScreen) {
                     Text(text = "Safer Hallucinogen Use")
@@ -221,36 +205,5 @@ fun SubstanceScreen(
                 Divider()
             }
         }
-    }
-}
-
-@Composable
-fun EffectChip(effect: Effect) {
-    val uriHandler = LocalUriHandler.current
-    Surface(
-        modifier = Modifier
-            .padding(2.dp)
-            .clickable {
-                uriHandler.openUri(effect.url)
-            },
-        shape = RoundedCornerShape(20.dp),
-        color = Color.Blue
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.ExitToApp,
-                contentDescription = "link",
-                tint = Color.White, modifier = Modifier.size(12.dp)
-            )
-            Text(
-                effect.name,
-                color = Color.White,
-                style = MaterialTheme.typography.caption
-            )
-        }
-
     }
 }

@@ -23,7 +23,6 @@ data class Substance(
     val name: String,
     val commonNames: List<String>,
     val url: String,
-    val effects: List<Effect>,
     val chemicalClasses: List<String>,
     val psychoactiveClasses: List<String>,
     val tolerance: Tolerance?,
@@ -70,11 +69,6 @@ data class Substance(
             stimulants.contains(it.lowercase())
         }
 }
-
-data class Effect(
-    val name: String,
-    val url: String
-)
 
 data class Tolerance(
     val full: String?,
