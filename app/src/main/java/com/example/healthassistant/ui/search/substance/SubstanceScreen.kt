@@ -32,6 +32,7 @@ fun SubstanceScreen(
     navigateToDosageExplanationScreen: () -> Unit,
     navigateToDurationExplanationScreen: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
+    navigateToSaferStimulantsScreen: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
@@ -40,6 +41,7 @@ fun SubstanceScreen(
         navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
         navigateToSaferHallucinogensScreen = navigateToSaferHallucinogensScreen,
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
+        navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
         substance = viewModel.substance,
         isSearchingForInteractions = viewModel.isSearchingForInteractions,
         dangerousInteractions = viewModel.dangerousInteractions,
@@ -60,6 +62,7 @@ fun SubstanceScreenPreview(
             navigateToDurationExplanationScreen = {},
             navigateToSaferHallucinogensScreen = {},
             navigateToSaferSniffingScreen = {},
+            navigateToSaferStimulantsScreen = {},
             substance = substance,
             isSearchingForInteractions = true,
             dangerousInteractions = substance.dangerousInteractions,
@@ -75,6 +78,7 @@ fun SubstanceScreen(
     navigateToDurationExplanationScreen: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
+    navigateToSaferStimulantsScreen: () -> Unit,
     substance: Substance,
     isSearchingForInteractions: Boolean,
     dangerousInteractions: List<String>,
@@ -207,6 +211,12 @@ fun SubstanceScreen(
             if (substance.isHallucinogen) {
                 TextButton(onClick = navigateToSaferHallucinogensScreen) {
                     Text(text = "Safer Hallucinogen Use")
+                }
+                Divider()
+            }
+            if (substance.isStimulant) {
+                TextButton(onClick = navigateToSaferStimulantsScreen) {
+                    Text(text = "Safer Stimulant Use")
                 }
                 Divider()
             }

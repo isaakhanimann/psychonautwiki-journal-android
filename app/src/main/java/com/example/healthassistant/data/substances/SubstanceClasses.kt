@@ -61,6 +61,14 @@ data class Substance(
             )
             hallucinogens.contains(it.lowercase())
         }
+    val isStimulant
+        get() = psychoactiveClasses.any {
+            val stimulants = setOf(
+                "stimulant",
+                "stimulants"
+            )
+            stimulants.contains(it.lowercase())
+        }
 }
 
 data class Effect(

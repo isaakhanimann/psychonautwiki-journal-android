@@ -14,6 +14,7 @@ const val VOLUMETRIC_DOSING_ROUTE = "volumetricDosing"
 const val DRUG_TESTING_ROUTE = "drugTesting"
 const val SAFER_HALLUCINOGENS_ROUTE = "saferHallucinogens"
 const val SAFER_SNIFFING_ROUTE = "saferSniffing"
+const val SAFER_STIMULANTS_ROUTE = "saferStimulants"
 
 sealed class NoArgumentRouter(val route: String) {
     object AddExperienceRouter : NoArgumentRouter(route = ADD_EXPERIENCE_ROUTE)
@@ -27,10 +28,15 @@ sealed class NoArgumentRouter(val route: String) {
     object DrugTestingRouter : NoArgumentRouter(route = DRUG_TESTING_ROUTE)
     object SaferHallucinogens : NoArgumentRouter(route = SAFER_HALLUCINOGENS_ROUTE)
     object SaferSniffing : NoArgumentRouter(route = SAFER_SNIFFING_ROUTE)
+    object SaferStimulants : NoArgumentRouter(route = SAFER_STIMULANTS_ROUTE)
 }
 
 fun NavController.navigateToAddExperience() {
     navigate(ADD_EXPERIENCE_ROUTE)
+}
+
+fun NavController.navigateToSaferStimulantsScreen() {
+    navigate(SAFER_STIMULANTS_ROUTE)
 }
 
 fun NavController.navigateToSaferHallucinogensScreen() {

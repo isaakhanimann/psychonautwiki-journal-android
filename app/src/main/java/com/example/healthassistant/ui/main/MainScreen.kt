@@ -39,6 +39,7 @@ import com.example.healthassistant.ui.main.routers.*
 import com.example.healthassistant.ui.search.SearchScreen
 import com.example.healthassistant.ui.search.substance.SaferHallucinogensScreen
 import com.example.healthassistant.ui.search.substance.SaferSniffingScreen
+import com.example.healthassistant.ui.search.substance.SaferStimulantsScreen
 import com.example.healthassistant.ui.search.substance.SubstanceScreen
 import com.example.healthassistant.ui.search.substance.roa.DoseExplanationScreen
 import com.example.healthassistant.ui.search.substance.roa.DurationExplanationScreen
@@ -98,6 +99,7 @@ fun MainScreen() {
 fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
     composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
     composable(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
+    composable(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
     composable(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
     composable(NoArgumentRouter.SettingsRouter.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
     composable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
@@ -171,7 +173,8 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
             navigateToDurationExplanationScreen = navController::navigateToDurationExplanationScreen,
             navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogensScreen,
-            navigateToSaferSniffingScreen = navController::navigateToSaferSniffingScreen
+            navigateToSaferSniffingScreen = navController::navigateToSaferSniffingScreen,
+            navigateToSaferStimulantsScreen = navController::navigateToSaferStimulantsScreen
         )
     }
     composable(
@@ -262,7 +265,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         experienceId = experienceId
                     )
                 },
-                navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogensScreen
+                navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogensScreen,
+                navigateToSaferStimulantsScreen = navController::navigateToSaferStimulantsScreen
             )
         }
         composable(

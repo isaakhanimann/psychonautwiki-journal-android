@@ -27,6 +27,7 @@ class CheckInteractionsViewModel @Inject constructor(
 ) : ViewModel() {
     val substanceName: String
     val isShowingHallucinogenLink: Boolean
+    val isShowingStimulantsLink: Boolean
     var isSearchingForInteractions by mutableStateOf(true)
     var dangerousInteractions: List<String> by mutableStateOf(listOf())
     var unsafeInteractions: List<String> by mutableStateOf(listOf())
@@ -40,6 +41,7 @@ class CheckInteractionsViewModel @Inject constructor(
         substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
         val substance = substanceRepo.getSubstance(substanceName)!!
         isShowingHallucinogenLink = substance.isHallucinogen
+        isShowingStimulantsLink = substance.isStimulant
         dangerousInteractions = substance.dangerousInteractions
         unsafeInteractions = substance.unsafeInteractions
         uncertainInteractions = substance.uncertainInteractions
