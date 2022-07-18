@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
+import com.example.healthassistant.ui.addingestion.route.SaferInjectionLink
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 import com.google.accompanist.flowlayout.FlowRow
@@ -141,6 +142,9 @@ fun SubstanceScreen(
                     TextButton(onClick = navigateToSaferSniffingScreen) {
                         Text(text = "Safer Sniffing")
                     }
+                }
+                if (roa.route.isInjectionMethod) {
+                    SaferInjectionLink()
                 }
             }
             if (substance.roas.isNotEmpty()) {
