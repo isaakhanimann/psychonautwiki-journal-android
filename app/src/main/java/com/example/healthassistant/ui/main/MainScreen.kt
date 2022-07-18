@@ -162,7 +162,8 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToSubstance = { substanceName ->
                 navController.navigateToSubstanceScreen(substanceName)
             },
-            navigateBack = navController::popBackStack
+            navigateBack = navController::popBackStack,
+            navigateToDoseExplanationScreen = navController::navigateToDosageExplanationScreen
         )
     }
     composable(

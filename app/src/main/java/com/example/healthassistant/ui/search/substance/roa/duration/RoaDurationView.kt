@@ -2,10 +2,16 @@ package com.example.healthassistant.ui.search.substance.roa.duration
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -26,6 +32,7 @@ fun RoaDurationPreview(
     @PreviewParameter(RoaDurationPreviewProvider::class) roaDuration: RoaDuration
 ) {
     RoaDurationView(
+        navigateToDurationExplanationScreen = {},
         roaDuration = roaDuration,
         maxDurationInSeconds = 13.toDuration(DurationUnit.HOURS).inWholeSeconds.toFloat(),
         isOralRoute = true
@@ -34,6 +41,7 @@ fun RoaDurationPreview(
 
 @Composable
 fun RoaDurationView(
+    navigateToDurationExplanationScreen: () -> Unit,
     roaDuration: RoaDuration,
     maxDurationInSeconds: Float?,
     isOralRoute: Boolean
@@ -212,15 +220,26 @@ fun RoaDurationView(
                 }
             }
         }
-        GridText(roaDuration = roaDuration, isOralRoute)
+        GridText(
+            roaDuration = roaDuration,
+            isOralRoute = isOralRoute,
+            navigateToDurationExplanationScreen = navigateToDurationExplanationScreen
+        )
     }
 }
 
 @Composable
-fun GridText(roaDuration: RoaDuration, isOralRoute: Boolean) {
+fun GridText(
+    roaDuration: RoaDuration,
+    isOralRoute: Boolean,
+    navigateToDurationExplanationScreen: () -> Unit,
+) {
     Column {
         val durationTextStyle = MaterialTheme.typography.caption
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             val total = roaDuration.total
             val onset = roaDuration.onset
             val comeup = roaDuration.comeup
@@ -303,6 +322,14 @@ fun GridText(roaDuration: RoaDuration, isOralRoute: Boolean) {
                     )
                 }
             }
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                Icons.Outlined.Info,
+                contentDescription = "Duration Info",
+                Modifier
+                    .size(ButtonDefaults.IconSize)
+                    .clickable(onClick = navigateToDurationExplanationScreen)
+            )
         }
         if (isOralRoute) {
             Text(

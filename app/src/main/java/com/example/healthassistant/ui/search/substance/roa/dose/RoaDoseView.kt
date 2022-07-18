@@ -1,12 +1,14 @@
 package com.example.healthassistant.ui.search.substance.roa.dose
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +21,20 @@ import com.example.healthassistant.ui.search.substance.roa.toReadableString
 
 @Preview(showBackground = true)
 @Composable
-fun RoaDoseView(@PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDose) {
+fun RoaDoseViewPreview(
+    @PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDose,
+) {
+    RoaDoseView(
+        roaDose = roaDose,
+        navigateToDosageExplanationScreen = {}
+    )
+}
+
+@Composable
+fun RoaDoseView(
+    roaDose: RoaDose,
+    navigateToDosageExplanationScreen: () -> Unit,
+) {
     val lightMaxOrCommonMin = roaDose.light?.max ?: roaDose.common?.min
     val commonMaxOrStrongMin = roaDose.common?.max ?: roaDose.strong?.min
     val strongMaxOrHeavy = roaDose.strong?.max ?: roaDose.heavy
@@ -92,6 +107,15 @@ fun RoaDoseView(@PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDos
             Text("-", color = heavyColor)
             Text("heavy", style = MaterialTheme.typography.caption, color = heavyColor)
         }
-        Text(text = roaDose.units ?: "")
+        Column(horizontalAlignment = Alignment.End) {
+            Text(text = roaDose.units ?: "")
+            Icon(
+                Icons.Outlined.Info,
+                contentDescription = "Dosage Info",
+                Modifier
+                    .size(ButtonDefaults.IconSize)
+                    .clickable(onClick = navigateToDosageExplanationScreen)
+            )
+        }
     }
 }

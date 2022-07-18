@@ -34,6 +34,7 @@ fun OneIngestionScreen(
     navigateToEditNote: () -> Unit,
     navigateToEditMembership: () -> Unit,
     navigateToSubstance: (substanceName: String) -> Unit,
+    navigateToDoseExplanationScreen: () -> Unit,
     navigateBack: () -> Unit
 ) {
     viewModel.ingestionWithCompanionDurationAndExperience.collectAsState().value?.also { ingestionWithDurationAndExperience ->
@@ -42,6 +43,7 @@ fun OneIngestionScreen(
             navigateToEditNote = navigateToEditNote,
             navigateToEditMembership = navigateToEditMembership,
             navigateToSubstance = navigateToSubstance,
+            navigateToDoseExplanationScreen = navigateToDoseExplanationScreen,
             navigateBack = navigateBack,
             deleteIngestion = viewModel::deleteIngestion,
             isShowingDialog = viewModel.isShowingDeleteDialog,
@@ -69,6 +71,7 @@ fun OneIngestionScreenPreview(
             navigateToEditNote = {},
             navigateToEditMembership = {},
             navigateToSubstance = {},
+            navigateToDoseExplanationScreen = {},
             navigateBack = {},
             deleteIngestion = {},
             isShowingDialog = false,
@@ -88,6 +91,7 @@ fun OneIngestionScreen(
     navigateToEditNote: () -> Unit,
     navigateToEditMembership: () -> Unit,
     navigateToSubstance: (substanceName: String) -> Unit,
+    navigateToDoseExplanationScreen: () -> Unit,
     navigateBack: () -> Unit,
     deleteIngestion: () -> Unit,
     isShowingDialog: Boolean,
@@ -169,7 +173,10 @@ fun OneIngestionScreen(
                 )
                 val roaDose = ingestionWithCompanionDurationAndExperience.roaDose
                 if (roaDose != null) {
-                    RoaDoseView(roaDose = roaDose)
+                    RoaDoseView(
+                        roaDose = roaDose,
+                        navigateToDosageExplanationScreen = navigateToDoseExplanationScreen
+                    )
                 }
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,

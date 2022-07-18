@@ -5,7 +5,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.*
@@ -145,15 +144,7 @@ fun ChooseDoseScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Choose " + administrationRoute.displayText + " Dose") },
-                actions = {
-                    IconButton(onClick = navigateToDoseGuideScreen) {
-                        Icon(
-                            imageVector = Icons.Default.Info,
-                            contentDescription = "Dosage Info"
-                        )
-                    }
-                }
+                title = { Text(text = "Choose " + administrationRoute.displayText + " Dose") }
             )
         },
         floatingActionButton = {
@@ -185,7 +176,10 @@ fun ChooseDoseScreen(
                     }
                 }
                 if (roaDose != null) {
-                    RoaDoseView(roaDose = roaDose)
+                    RoaDoseView(
+                        roaDose = roaDose,
+                        navigateToDosageExplanationScreen = navigateToDoseGuideScreen
+                    )
                 } else {
                     Row(
                         verticalAlignment = Alignment.CenterVertically

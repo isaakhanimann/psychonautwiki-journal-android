@@ -1,11 +1,11 @@
 package com.example.healthassistant.ui.search.substance.roa
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -48,42 +48,20 @@ fun RoaView(
         Column {
             Text(text = roa.route.displayText, style = MaterialTheme.typography.h6)
             if (!isEveryDoseNull && roaDose != null) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Dosage", style = MaterialTheme.typography.subtitle1)
-                    IconButton(onClick = navigateToDosageExplanationScreen) {
-                        Icon(
-                            Icons.Outlined.Info,
-                            contentDescription = "Dosage Info",
-                            Modifier.size(ButtonDefaults.IconSize)
-                        )
-                    }
-                }
-                RoaDoseView(roaDose = roaDose)
+                Text(text = "Dosage", style = MaterialTheme.typography.subtitle1)
+                RoaDoseView(
+                    roaDose = roaDose,
+                    navigateToDosageExplanationScreen = navigateToDosageExplanationScreen
+                )
                 Spacer(modifier = Modifier.height(5.dp))
             }
             if (!isEveryDurationNull && roaDuration != null) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Duration", style = MaterialTheme.typography.subtitle1)
-                    IconButton(onClick = navigateToDurationExplanationScreen) {
-                        Icon(
-                            Icons.Outlined.Info,
-                            contentDescription = "Dosage Info",
-                            Modifier.size(ButtonDefaults.IconSize)
-                        )
-                    }
-                }
+                Text(text = "Duration", style = MaterialTheme.typography.subtitle1)
                 RoaDurationView(
                     roaDuration = roaDuration,
                     maxDurationInSeconds = maxDurationInSeconds,
-                    isOralRoute = roa.route == AdministrationRoute.ORAL
+                    isOralRoute = roa.route == AdministrationRoute.ORAL,
+                    navigateToDurationExplanationScreen = navigateToDurationExplanationScreen
                 )
             }
         }
