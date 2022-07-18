@@ -29,11 +29,13 @@ import com.google.accompanist.flowlayout.FlowRow
 fun SubstanceScreen(
     navigateToDosageExplanationScreen: () -> Unit,
     navigateToDurationExplanationScreen: () -> Unit,
+    navigateToSaferHallucinogensScreen: () -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
     SubstanceScreen(
         navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
         navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
+        navigateToSaferHallucinogensScreen = navigateToSaferHallucinogensScreen,
         substance = viewModel.substance,
         isSearchingForInteractions = viewModel.isSearchingForInteractions,
         dangerousInteractions = viewModel.dangerousInteractions,
@@ -52,6 +54,7 @@ fun SubstanceScreenPreview(
         SubstanceScreen(
             navigateToDosageExplanationScreen = {},
             navigateToDurationExplanationScreen = {},
+            navigateToSaferHallucinogensScreen = {},
             substance = substance,
             isSearchingForInteractions = true,
             dangerousInteractions = substance.dangerousInteractions,
@@ -65,6 +68,7 @@ fun SubstanceScreenPreview(
 fun SubstanceScreen(
     navigateToDosageExplanationScreen: () -> Unit,
     navigateToDurationExplanationScreen: () -> Unit,
+    navigateToSaferHallucinogensScreen: () -> Unit,
     substance: Substance,
     isSearchingForInteractions: Boolean,
     dangerousInteractions: List<String>,
@@ -183,6 +187,12 @@ fun SubstanceScreen(
                     substance.effects.forEach {
                         EffectChip(effect = it)
                     }
+                }
+                Divider()
+            }
+            if (substance.isHallucinogen) {
+                TextButton(onClick = navigateToSaferHallucinogensScreen) {
+                    Text(text = "Safer Hallucinogen Use")
                 }
                 Divider()
             }

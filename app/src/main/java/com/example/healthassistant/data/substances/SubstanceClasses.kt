@@ -46,6 +46,21 @@ data class Substance(
             InteractionType.UNCERTAIN -> uncertainInteractions
         }
     }
+
+    val isHallucinogen
+        get() = psychoactiveClasses.any {
+            val hallucinogens = setOf(
+                "hallucinogens",
+                "hallucinogen",
+                "psychedelics",
+                "psychedelic",
+                "dissociatives",
+                "dissociative",
+                "deliriant",
+                "deliriants"
+            )
+            hallucinogens.contains(it.lowercase())
+        }
 }
 
 data class Effect(
