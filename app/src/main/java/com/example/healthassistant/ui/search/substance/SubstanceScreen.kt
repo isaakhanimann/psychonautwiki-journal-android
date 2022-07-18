@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Effect
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.ui.search.substance.roa.RoaView
@@ -30,12 +31,14 @@ fun SubstanceScreen(
     navigateToDosageExplanationScreen: () -> Unit,
     navigateToDurationExplanationScreen: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
+    navigateToSaferSniffingScreen: () -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
     SubstanceScreen(
         navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
         navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
         navigateToSaferHallucinogensScreen = navigateToSaferHallucinogensScreen,
+        navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         substance = viewModel.substance,
         isSearchingForInteractions = viewModel.isSearchingForInteractions,
         dangerousInteractions = viewModel.dangerousInteractions,
@@ -55,6 +58,7 @@ fun SubstanceScreenPreview(
             navigateToDosageExplanationScreen = {},
             navigateToDurationExplanationScreen = {},
             navigateToSaferHallucinogensScreen = {},
+            navigateToSaferSniffingScreen = {},
             substance = substance,
             isSearchingForInteractions = true,
             dangerousInteractions = substance.dangerousInteractions,
@@ -69,6 +73,7 @@ fun SubstanceScreen(
     navigateToDosageExplanationScreen: () -> Unit,
     navigateToDurationExplanationScreen: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
+    navigateToSaferSniffingScreen: () -> Unit,
     substance: Substance,
     isSearchingForInteractions: Boolean,
     dangerousInteractions: List<String>,
@@ -132,6 +137,11 @@ fun SubstanceScreen(
                     roa = roa,
                     maxDurationInSeconds = maxDuration
                 )
+                if (roa.route == AdministrationRoute.INSUFFLATED) {
+                    TextButton(onClick = navigateToSaferSniffingScreen) {
+                        Text(text = "Safer Sniffing")
+                    }
+                }
             }
             if (substance.roas.isNotEmpty()) {
                 Divider()

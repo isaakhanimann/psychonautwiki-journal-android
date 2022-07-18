@@ -28,11 +28,13 @@ fun ChooseDoseScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
     navigateToDoseGuideScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
+    navigateToSaferSniffingScreen: () -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
     ChooseDoseScreen(
         navigateToDoseGuideScreen = navigateToDoseGuideScreen,
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
+        navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         substanceName = viewModel.substance.name,
         roaDose = viewModel.roaDose,
         administrationRoute = viewModel.administrationRoute,
@@ -75,6 +77,7 @@ fun ChooseDoseScreenPreview(
     ChooseDoseScreen(
         navigateToDoseGuideScreen = {},
         navigateToVolumetricDosingScreen = {},
+        navigateToSaferSniffingScreen = {},
         substanceName = "Example Substance",
         roaDose = roaDose,
         administrationRoute = AdministrationRoute.INSUFFLATED,
@@ -99,6 +102,7 @@ fun ChooseDoseScreenPreview2() {
     ChooseDoseScreen(
         navigateToDoseGuideScreen = {},
         navigateToVolumetricDosingScreen = {},
+        navigateToSaferSniffingScreen = {},
         substanceName = "Example Substance",
         roaDose = null,
         administrationRoute = AdministrationRoute.INSUFFLATED,
@@ -121,6 +125,7 @@ fun ChooseDoseScreenPreview2() {
 fun ChooseDoseScreen(
     navigateToDoseGuideScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
+    navigateToSaferSniffingScreen: () -> Unit,
     substanceName: String,
     roaDose: RoaDose?,
     administrationRoute: AdministrationRoute,
@@ -174,6 +179,11 @@ fun ChooseDoseScreen(
                     .fillMaxHeight(),
                 horizontalAlignment = Alignment.Start,
             ) {
+                if (administrationRoute == AdministrationRoute.INSUFFLATED) {
+                    TextButton(onClick = navigateToSaferSniffingScreen) {
+                        Text(text = "Safer Sniffing")
+                    }
+                }
                 if (roaDose != null) {
                     RoaDoseView(roaDose = roaDose)
                 } else {

@@ -132,5 +132,4 @@ fun SaferHallucinogensScreen() {
             Spacer(modifier = Modifier.height(10.dp))
         }
     }
-
 }
