@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 val initialDate: Date get() {
     val calendar: Calendar = Calendar.getInstance()
-    calendar.set(2022, 5, 12, 13, 40)
+    calendar.set(2022, 6, 18, 14, 0)
     return calendar.time
 }
 

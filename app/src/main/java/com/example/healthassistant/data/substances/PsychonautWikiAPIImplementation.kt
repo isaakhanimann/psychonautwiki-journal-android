@@ -17,10 +17,6 @@ class PsychonautWikiAPIImplementation @Inject constructor(
                         name
                         commonNames
                         url
-                        effects {
-                          name
-                          url
-                        }
                         class {
                           chemical
                           psychoactive
@@ -86,7 +82,6 @@ class PsychonautWikiAPIImplementation @Inject constructor(
                             max
                           }
                         }
-                        summary
                         addictionPotential
                         toxicity
                         crossTolerances
