@@ -45,7 +45,8 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val jsonRoas = jsonSubstance.getOptionalJSONArray("roas")
         val roas = parseRoas(jsonRoas)
         val addictionPotential = jsonSubstance.getOptionalString("addictionPotential")
-        val toxicity = jsonSubstance.getOptionalJSONArray("toxicity")?.getOptionalString(0)
+        val jsonToxicities = jsonSubstance.getOptionalJSONArray("toxicity")
+        val toxicities = parseToxicities(jsonToxicities)
         val jsonTolerances = jsonSubstance.getOptionalJSONArray("crossTolerances")
         val crossTolerances = parseCrossTolerances(jsonTolerances)
         val jsonUncertain = jsonSubstance.getOptionalJSONArray("uncertainInteractions")
@@ -63,12 +64,24 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
             tolerance = tolerance,
             roas = roas,
             addictionPotential = addictionPotential,
-            toxicity = toxicity,
+            toxicities = toxicities,
             crossTolerances = crossTolerances,
             uncertainInteractions = uncertainInteractions,
             unsafeInteractions = unsafeInteractions,
             dangerousInteractions = dangerousInteractions
         )
+    }
+
+    private fun parseToxicities(jsonToxicities: JSONArray?): List<String> {
+        if (jsonToxicities == null) return emptyList()
+        val toxicities: MutableList<String> = mutableListOf()
+        for (i in 0 until jsonToxicities.length()) {
+            val toxicity = jsonToxicities.getOptionalString(i) ?: continue
+            if (!toxicity.contains("unknown", ignoreCase = true)) {
+                toxicities.add(toxicity)
+            }
+        }
+        return toxicities
     }
 
     private fun parseCommonNames(jsonNames: JSONArray?, removeName: String): List<String> {

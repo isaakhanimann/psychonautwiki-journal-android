@@ -28,7 +28,7 @@ data class Substance(
     val tolerance: Tolerance?,
     val roas: List<Roa>,
     val addictionPotential: String?,
-    val toxicity: String?,
+    val toxicities: List<String>,
     val crossTolerances: List<String>,
     val uncertainInteractions: List<String>,
     val unsafeInteractions: List<String>,

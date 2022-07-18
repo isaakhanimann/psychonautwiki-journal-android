@@ -187,7 +187,9 @@ class SubstancePreviewProvider : PreviewParameterProvider<Substance> {
                 )
             ),
             addictionPotential = "moderately addictive with a high potential for abuse",
-            toxicity = "toxic dose is unknown",
+            toxicities = listOf(
+                "lethal if mixed with alcohol"
+            ),
             crossTolerances = listOf(
                 "Psychedelics",
                 "Stimulants"

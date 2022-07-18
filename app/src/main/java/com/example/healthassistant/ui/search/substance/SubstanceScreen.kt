@@ -182,9 +182,11 @@ fun SubstanceScreen(
                 }
                 Divider()
             }
-            if (substance.toxicity != null) {
+            if (substance.toxicities.isNotEmpty()) {
                 Text(text = "Toxicity", style = titleStyle)
-                Text(text = substance.toxicity)
+                substance.toxicities.forEach {
+                    Text(text = it)
+                }
                 Divider()
             }
             if (substance.addictionPotential != null) {
