@@ -106,7 +106,7 @@ fun ChooseDoseScreenPreview2() {
         navigateToSaferSniffingScreen = {},
         substanceName = "Example Substance",
         roaDose = null,
-        administrationRoute = AdministrationRoute.INSUFFLATED,
+        administrationRoute = AdministrationRoute.ORAL,
         doseText = "5",
         onChangeDoseText = {},
         isValidDose = true,
@@ -146,7 +146,7 @@ fun ChooseDoseScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Choose " + administrationRoute.displayText + " Dose") }
+                title = { Text(text = "Choose Dose") }
             )
         },
         floatingActionButton = {
@@ -168,7 +168,7 @@ fun ChooseDoseScreen(
             LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
             Column(
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(horizontal = 10.dp)
                     .fillMaxHeight(),
                 horizontalAlignment = Alignment.Start,
             ) {
@@ -176,6 +176,7 @@ fun ChooseDoseScreen(
                     TextButton(onClick = navigateToSaferSniffingScreen) {
                         Text(text = "Safer Sniffing")
                     }
+                    Divider()
                 } else if (administrationRoute == AdministrationRoute.RECTAL) {
                     val uriHandler = LocalUriHandler.current
                     TextButton(onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
@@ -186,7 +187,14 @@ fun ChooseDoseScreen(
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                         Text("Safer Plugging")
                     }
+                    Divider()
                 }
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = administrationRoute.displayText + " " + substanceName + " Dosage",
+                    style = MaterialTheme.typography.subtitle2
+                )
+                Spacer(modifier = Modifier.height(5.dp))
                 if (roaDose != null) {
                     RoaDoseView(
                         roaDose = roaDose,
@@ -202,12 +210,14 @@ fun ChooseDoseScreen(
                         )
                         Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
                         Text(
-                            text = "There is no dosage info for ${administrationRoute.displayText} $substanceName. Research dosages somewhere else.",
+                            text = "There is no dosage info for this administration route. Research dosages somewhere else.",
                             style = MaterialTheme.typography.subtitle2
                         )
                     }
                 }
-                CurrentDoseClassInfo(currentDoseClass, roaDose)
+                if (roaDose != null) {
+                    CurrentDoseClassInfo(currentDoseClass, roaDose)
+                }
                 Spacer(modifier = Modifier.height(10.dp))
                 val focusManager = LocalFocusManager.current
                 val textStyle = MaterialTheme.typography.h3

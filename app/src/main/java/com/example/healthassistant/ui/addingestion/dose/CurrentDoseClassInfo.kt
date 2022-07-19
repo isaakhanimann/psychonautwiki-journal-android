@@ -22,14 +22,8 @@ fun CurrentDoseClassInfoPreview(@PreviewParameter(RoaDosePreviewProvider::class)
     CurrentDoseClassInfo(currentDoseClass = DoseClass.LIGHT, roaDose = roaDose)
 }
 
-@Preview
 @Composable
-fun CurrentDoseClassInfoPreview2() {
-    CurrentDoseClassInfo(currentDoseClass = null, roaDose = null)
-}
-
-@Composable
-fun CurrentDoseClassInfo(currentDoseClass: DoseClass?, roaDose: RoaDose?) {
+fun CurrentDoseClassInfo(currentDoseClass: DoseClass?, roaDose: RoaDose) {
     val height = 50.dp
     if (currentDoseClass != null) {
         val doseColor = currentDoseClass.getComposeColor(isSystemInDarkTheme())
@@ -48,11 +42,11 @@ fun CurrentDoseClassInfo(currentDoseClass: DoseClass?, roaDose: RoaDose?) {
             )
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
             val text = when (currentDoseClass) {
-                DoseClass.THRESHOLD -> "threshold: ${roaDose?.threshold?.toReadableString()}${roaDose?.units ?: ""}"
-                DoseClass.LIGHT -> "light: ${roaDose?.light?.min?.toReadableString()}-${roaDose?.light?.max?.toReadableString()}${roaDose?.units ?: ""}"
-                DoseClass.COMMON -> "common: ${roaDose?.common?.min?.toReadableString()}-${roaDose?.common?.max?.toReadableString()}${roaDose?.units ?: ""}"
-                DoseClass.STRONG -> "strong: ${roaDose?.strong?.min?.toReadableString()}-${roaDose?.strong?.max?.toReadableString()}${roaDose?.units ?: ""}"
-                DoseClass.HEAVY -> "heavy: ${roaDose?.heavy?.toReadableString()}${roaDose?.units ?: ""}-.."
+                DoseClass.THRESHOLD -> "threshold: ${roaDose.threshold?.toReadableString()}${roaDose.units ?: ""}"
+                DoseClass.LIGHT -> "light: ${roaDose.light?.min?.toReadableString()}-${roaDose.light?.max?.toReadableString()}${roaDose.units ?: ""}"
+                DoseClass.COMMON -> "common: ${roaDose.common?.min?.toReadableString()}-${roaDose.common?.max?.toReadableString()}${roaDose.units ?: ""}"
+                DoseClass.STRONG -> "strong: ${roaDose.strong?.min?.toReadableString()}-${roaDose.strong?.max?.toReadableString()}${roaDose.units ?: ""}"
+                DoseClass.HEAVY -> "heavy: ${roaDose.heavy?.toReadableString()}${roaDose.units ?: ""}-.."
             }
             Text(
                 text = text,
