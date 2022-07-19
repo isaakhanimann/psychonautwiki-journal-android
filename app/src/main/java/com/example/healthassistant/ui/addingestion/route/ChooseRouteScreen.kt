@@ -208,7 +208,7 @@ fun ChooseRouteScreen(
                             }
                         }
                         if (sortedIngestions.isNotEmpty()) {
-                            Text(text = "Copy Last Ingestion", style = MaterialTheme.typography.subtitle2)
+                            Text(text = "Copy Earlier Ingestion", style = MaterialTheme.typography.subtitle2)
                             sortedIngestions.forEach {
                                 IngestionRowInChooseRoute(
                                     ingestion = it,

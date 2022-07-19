@@ -28,6 +28,7 @@ class ChooseTimeViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     val experienceId: Int?
+    private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
     val substance: Substance?
     private val calendar: Calendar = Calendar.getInstance()
     val year = mutableStateOf(calendar.get(Calendar.YEAR))
@@ -54,8 +55,17 @@ class ChooseTimeViewModel @Inject constructor(
     var isLoadingColor by mutableStateOf(true)
     var isShowingColorPicker by mutableStateOf(false)
     var selectedColor by mutableStateOf(SubstanceColor.BLUE)
+    var note by mutableStateOf("")
 
-    private val substanceName: String
+    val previousNotesFlow: StateFlow<List<String>> =
+        experienceRepo.getSortedIngestionsFlow(substanceName, limit = 10).map { list ->
+            list.mapNotNull { it.notes }.distinct()
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
+
     private val administrationRoute: AdministrationRoute
     private val dose: Double?
     private val units: String?
@@ -73,18 +83,18 @@ class ChooseTimeViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    val otherColorsFlow: StateFlow<List<SubstanceColor>> = alreadyUsedColorsFlow.map { alreadyUsedColors ->
-        SubstanceColor.values().filter {
-            !alreadyUsedColors.contains(it)
-        }
-    }.stateIn(
-        initialValue = emptyList(),
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    val otherColorsFlow: StateFlow<List<SubstanceColor>> =
+        alreadyUsedColorsFlow.map { alreadyUsedColors ->
+            SubstanceColor.values().filter {
+                !alreadyUsedColors.contains(it)
+            }
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     init {
-        substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
         substance = substanceRepo.getSubstance(substanceName)
         experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toIntOrNull()
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
@@ -136,7 +146,7 @@ class ChooseTimeViewModel @Inject constructor(
                 isDoseAnEstimate = isEstimate,
                 units = units,
                 experienceId = experienceId,
-                notes = null,
+                notes = note,
                 sentiment = null
             )
             experienceRepo.insert(newIngestion)

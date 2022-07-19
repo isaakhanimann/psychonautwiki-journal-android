@@ -5,15 +5,24 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,7 +52,12 @@ fun ChooseTimeScreen(
         selectedColor = viewModel.selectedColor,
         onChangeColor = { viewModel.selectedColor = it },
         alreadyUsedColors = viewModel.alreadyUsedColorsFlow.collectAsState().value,
-        otherColors = viewModel.otherColorsFlow.collectAsState().value
+        otherColors = viewModel.otherColorsFlow.collectAsState().value,
+        previousNotes = viewModel.previousNotesFlow.collectAsState().value,
+        note = viewModel.note,
+        onNoteChange = {
+            viewModel.note = it
+        }
     )
 }
 
@@ -66,7 +80,13 @@ fun ChooseTimeScreenPreview() {
         selectedColor = SubstanceColor.BLUE,
         onChangeColor = {},
         alreadyUsedColors = alreadyUsedColors,
-        otherColors = otherColors
+        otherColors = otherColors,
+        previousNotes = listOf(
+            "My previous note where I make some remarks",
+            "Another previous note and this one is very long, such that it doesn't fit on one line"
+        ),
+        note = "",
+        onNoteChange = {}
     )
 }
 
@@ -85,8 +105,10 @@ fun ChooseTimeScreen(
     selectedColor: SubstanceColor,
     onChangeColor: (SubstanceColor) -> Unit,
     alreadyUsedColors: List<SubstanceColor>,
-    otherColors: List<SubstanceColor>
-
+    otherColors: List<SubstanceColor>,
+    previousNotes: List<String>,
+    note: String,
+    onNoteChange: (String) -> Unit
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) },
@@ -121,7 +143,6 @@ fun ChooseTimeScreen(
         Column {
             LinearProgressIndicator(progress = 0.9f, modifier = Modifier.fillMaxWidth())
             Column(
-                verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
@@ -135,6 +156,7 @@ fun ChooseTimeScreen(
                         otherColors = otherColors
                     )
                 }
+                Spacer(modifier = Modifier.height(20.dp))
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -154,6 +176,71 @@ fun ChooseTimeScreen(
                         timeString = dateAndTimeStrings.second,
                         modifier = Modifier.fillMaxWidth()
                     )
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                NoteSection(
+                    previousNotes,
+                    note,
+                    onNoteChange
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun NoteSection(
+    previousNotes: List<String>,
+    note: String,
+    onNoteChange: (String) -> Unit
+) {
+    val focusManager = LocalFocusManager.current
+    var isShowingSuggestions by remember { mutableStateOf(true) }
+    LazyColumn(
+        state = rememberLazyListState(),
+        modifier = Modifier.heightIn(max = TextFieldDefaults.MinHeight * 6)
+    ) {
+        item {
+            OutlinedTextField(
+                value = note,
+                onValueChange = onNoteChange,
+                label = { Text(text = "Notes", style = MaterialTheme.typography.subtitle1) },
+                keyboardActions = KeyboardActions(onDone = {
+                    focusManager.clearFocus()
+                    isShowingSuggestions = false
+                }),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) {
+                            isShowingSuggestions = true
+                        }
+                    }
+            )
+        }
+        if (previousNotes.isNotEmpty() && isShowingSuggestions) {
+            items(previousNotes.size) { i ->
+                val previousNote = previousNotes[i]
+                Row(
+                    Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .clickable {
+                            focusManager.clearFocus()
+                            isShowingSuggestions = false
+                            onNoteChange(previousNote)
+                        }
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Filled.ContentCopy,
+                            contentDescription = "Copy",
+                            Modifier.size(15.dp)
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = previousNote, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
                 }
             }
         }
