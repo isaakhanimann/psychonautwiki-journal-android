@@ -48,7 +48,7 @@ fun RoaView(
         Column {
             Text(text = roa.route.displayText, style = MaterialTheme.typography.h6)
             if (!isEveryDoseNull && roaDose != null) {
-                Text(text = "Dosage", style = MaterialTheme.typography.subtitle1)
+                Text(text = "Dosage", style = MaterialTheme.typography.subtitle2)
                 RoaDoseView(
                     roaDose = roaDose,
                     navigateToDosageExplanationScreen = navigateToDosageExplanationScreen
@@ -56,7 +56,7 @@ fun RoaView(
                 Spacer(modifier = Modifier.height(5.dp))
             }
             if (!isEveryDurationNull && roaDuration != null) {
-                Text(text = "Duration", style = MaterialTheme.typography.subtitle1)
+                Text(text = "Duration", style = MaterialTheme.typography.subtitle2)
                 RoaDurationView(
                     roaDuration = roaDuration,
                     maxDurationInSeconds = maxDurationInSeconds,
