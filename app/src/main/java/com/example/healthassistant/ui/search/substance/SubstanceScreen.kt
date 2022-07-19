@@ -20,9 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Substance
-import com.example.healthassistant.ui.addingestion.route.SaferInjectionLink
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
@@ -137,17 +135,10 @@ fun SubstanceScreen(
                 RoaView(
                     navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
                     navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
+                    navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
                     roa = roa,
                     maxDurationInSeconds = maxDuration
                 )
-                if (roa.route == AdministrationRoute.INSUFFLATED) {
-                    TextButton(onClick = navigateToSaferSniffingScreen) {
-                        Text(text = "Safer Sniffing")
-                    }
-                }
-                if (roa.route.isInjectionMethod) {
-                    SaferInjectionLink()
-                }
                 Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
@@ -164,7 +155,6 @@ fun SubstanceScreen(
                 crossTolerances = substance.crossTolerances,
                 titleStyle
             )
-
             if (substance.toxicities.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Toxicity", style = titleStyle)

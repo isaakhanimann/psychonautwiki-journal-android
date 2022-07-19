@@ -1,12 +1,17 @@
 package com.example.healthassistant.ui.search.substance.roa
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Launch
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -25,6 +30,7 @@ fun RoaPreview(
     RoaView(
         navigateToDosageExplanationScreen = {},
         navigateToDurationExplanationScreen = {},
+        navigateToSaferSniffingScreen = {},
         roa = roa,
         maxDurationInSeconds = null
     )
@@ -34,6 +40,7 @@ fun RoaPreview(
 fun RoaView(
     navigateToDosageExplanationScreen: () -> Unit,
     navigateToDurationExplanationScreen: () -> Unit,
+    navigateToSaferSniffingScreen: () -> Unit,
     roa: Roa,
     maxDurationInSeconds: Float?,
 ) {
@@ -46,7 +53,41 @@ fun RoaView(
     val isSomethingDefined = !(isEveryDoseNull && isEveryDurationNull)
     if (isSomethingDefined) {
         Column {
-            Text(text = roa.route.displayText, style = MaterialTheme.typography.h6)
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = roa.route.displayText, style = MaterialTheme.typography.h6)
+                if (roa.route == AdministrationRoute.INSUFFLATED) {
+                    Text(
+                        "Safer Sniffing",
+                        color = MaterialTheme.colors.primary,
+                        style = MaterialTheme.typography.button,
+                        modifier = Modifier
+                            .clickable(onClick = navigateToSaferSniffingScreen)
+                    )
+                }
+                if (roa.route.isInjectionMethod) {
+                    val uriHandler = LocalUriHandler.current
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                        .clickable { uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL) }) {
+                        Icon(
+                            Icons.Filled.Launch,
+                            contentDescription = "Open Link",
+                            modifier = Modifier.size(15.dp),
+                            tint = MaterialTheme.colors.primary
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Safer Injection Guide",
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.button
+                        )
+                    }
+                }
+            }
             if (!isEveryDoseNull && roaDose != null) {
                 Text(text = "Dosage", style = MaterialTheme.typography.subtitle2)
                 RoaDoseView(
