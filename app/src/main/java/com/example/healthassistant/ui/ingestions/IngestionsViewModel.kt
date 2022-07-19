@@ -24,23 +24,30 @@ class IngestionsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val lastUsedSubstancesFlow = experienceRepo.getLastUsedSubstanceNamesFlow(100)
-    private val sortedIngestionsWithCompanionsFlow:  Flow<List<IngestionWithCompanion>> = experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow()
-    data class IngestionElement (
+    private val sortedIngestionsWithCompanionsFlow: Flow<List<IngestionWithCompanion>> =
+        experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow()
+
+    data class IngestionElement(
         val ingestionWithCompanion: IngestionWithCompanion,
         val doseClass: DoseClass?
-            )
-    private val ingestionElementsFlow: Flow<List<IngestionElement>> = sortedIngestionsWithCompanionsFlow.map { ingestionsWithCompanions ->
-        ingestionsWithCompanions.map { ingestionWithCompanion ->
-            val ingestion = ingestionWithCompanion.ingestion
-            val substance = substanceRepo.getSubstance(ingestion.substanceName)
-            val roaDose = substance?.getRoa(route = ingestion.administrationRoute)?.roaDose
-            val doseClass = roaDose?.getDoseClass(ingestionDose = ingestion.dose, ingestionUnits = ingestion.units)
-            IngestionElement(
-                ingestionWithCompanion,
-                doseClass
-            )
+    )
+
+    private val ingestionElementsFlow: Flow<List<IngestionElement>> =
+        sortedIngestionsWithCompanionsFlow.map { ingestionsWithCompanions ->
+            ingestionsWithCompanions.map { ingestionWithCompanion ->
+                val ingestion = ingestionWithCompanion.ingestion
+                val substance = substanceRepo.getSubstance(ingestion.substanceName)
+                val roaDose = substance?.getRoa(route = ingestion.administrationRoute)?.roaDose
+                val doseClass = roaDose?.getDoseClass(
+                    ingestionDose = ingestion.dose,
+                    ingestionUnits = ingestion.units
+                )
+                IngestionElement(
+                    ingestionWithCompanion,
+                    doseClass
+                )
+            }
         }
-    }
     private val filtersFlow = filterRepo.getFilters()
 
     val ingestionsGrouped: StateFlow<Map<String, List<IngestionElement>>> =

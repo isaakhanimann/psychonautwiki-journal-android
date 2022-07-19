@@ -47,6 +47,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
     fun getSortedIngestionsWithSubstanceCompanionsFlow(): Flow<List<IngestionWithCompanion>>
 
+    @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC LIMIT :limit")
+    fun getSortedIngestionsFlow(substanceName: String, limit: Int): Flow<List<Ingestion>>
+
     @Query("SELECT * FROM experience WHERE id =:id")
     suspend fun getExperience(id: Int): Experience?
 

@@ -275,18 +275,28 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             ArgumentRouter.ChooseRouteRouter.route,
             arguments = ArgumentRouter.ChooseRouteRouter.args
         ) { backStackEntry ->
+            val args = backStackEntry.arguments!!
+            val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+            val experienceId = args.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
             ChooseRouteScreen(
                 navigateToChooseDose = { administrationRoute ->
-                    val args = backStackEntry.arguments!!
-                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
-                    val experienceId = args.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
                     navController.navigateToChooseDose(
                         substanceName = substanceName,
                         administrationRoute = administrationRoute,
                         experienceId = experienceId
                     )
                 },
-                navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen
+                navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
+                navigateToChooseTimeAndMaybeColor = { administrationRoute, dose, units, isEstimate ->
+                    navController.navigateToChooseTimeAndMaybeColor(
+                        substanceName = substanceName,
+                        administrationRoute = administrationRoute,
+                        experienceId = experienceId,
+                        units = units,
+                        isEstimate = isEstimate,
+                        dose = dose
+                    )
+                }
             )
         }
         composable(
