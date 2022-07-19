@@ -1,8 +1,9 @@
 package com.example.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -10,9 +11,14 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Substance
@@ -20,6 +26,7 @@ import com.example.healthassistant.ui.addingestion.route.SaferInjectionLink
 import com.example.healthassistant.ui.search.substance.roa.RoaView
 import com.example.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
+import kotlin.text.Typography
 
 @Composable
 fun SubstanceScreen(
@@ -89,7 +96,6 @@ fun SubstanceScreen(
         }
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
                 .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
@@ -127,7 +133,6 @@ fun SubstanceScreen(
                     }
                 }.maxOrNull()
             }
-            val titleStyle = MaterialTheme.typography.h6
             substance.roas.forEach { roa ->
                 RoaView(
                     navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
@@ -143,16 +148,17 @@ fun SubstanceScreen(
                 if (roa.route.isInjectionMethod) {
                     SaferInjectionLink()
                 }
-            }
-            if (substance.roas.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
+            Spacer(modifier = Modifier.height(5.dp))
             InteractionsView(
                 isSearchingForInteractions = isSearchingForInteractions,
                 dangerousInteractions = dangerousInteractions,
                 unsafeInteractions = unsafeInteractions,
                 uncertainInteractions = uncertainInteractions
             )
+            val titleStyle = MaterialTheme.typography.subtitle2
             ToleranceSection(
                 tolerance = substance.tolerance,
                 crossTolerances = substance.crossTolerances,
@@ -160,15 +166,32 @@ fun SubstanceScreen(
             )
 
             if (substance.toxicities.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Toxicity", style = titleStyle)
-                substance.toxicities.forEach {
-                    Text(text = it)
-                }
+                val paragraphStyle = ParagraphStyle(textIndent = TextIndent(restLine = 15.sp))
+                Text(
+                    buildAnnotatedString {
+                        if (substance.toxicities.size == 1) {
+                            append(substance.toxicities.first())
+                        } else {
+                            substance.toxicities.forEach {
+                                withStyle(style = paragraphStyle) {
+                                    append(Typography.bullet)
+                                    append("\t\t")
+                                    append(it)
+                                }
+                            }
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
             if (substance.addictionPotential != null) {
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Addiction Potential", style = titleStyle)
                 Text(substance.addictionPotential)
+                Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
             if (substance.isHallucinogen) {

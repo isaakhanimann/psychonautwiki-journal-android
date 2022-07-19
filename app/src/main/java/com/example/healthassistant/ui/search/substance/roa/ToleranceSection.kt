@@ -26,7 +26,7 @@ fun ToleranceSectionPreview() {
             "dopamine",
             "stimulant"
         ),
-        titleStyle = MaterialTheme.typography.h6
+        titleStyle = MaterialTheme.typography.subtitle2
     )
 }
 
@@ -38,6 +38,7 @@ fun ToleranceSection(
 ) {
     if (tolerance != null || crossTolerances.isNotEmpty()) {
         Column {
+            Spacer(modifier = Modifier.height(5.dp))
             Text(text = "Tolerance", style = titleStyle)
             if (tolerance != null) {
                 Row(

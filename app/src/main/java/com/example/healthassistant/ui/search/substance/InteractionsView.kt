@@ -38,8 +38,9 @@ fun InteractionsView(
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
+            val titleStyle = MaterialTheme.typography.subtitle2
             if (dangerousInteractions.isNotEmpty()) {
-                Text(text = "Dangerous Interactions", style = MaterialTheme.typography.h6)
+                Text(text = "Dangerous Interactions", style = titleStyle)
                 FlowRow {
                     dangerousInteractions.forEach {
                         InteractionChip(text = it, color = InteractionType.DANGEROUS.color)
@@ -47,7 +48,7 @@ fun InteractionsView(
                 }
             }
             if (unsafeInteractions.isNotEmpty()) {
-                Text(text = "Unsafe Interactions", style = MaterialTheme.typography.h6)
+                Text(text = "Unsafe Interactions", style = titleStyle)
                 FlowRow {
                     unsafeInteractions.forEach {
                         InteractionChip(text = it, color = InteractionType.UNSAFE.color)
@@ -55,7 +56,7 @@ fun InteractionsView(
                 }
             }
             if (uncertainInteractions.isNotEmpty()) {
-                Text(text = "Uncertain Interactions", style = MaterialTheme.typography.h6)
+                Text(text = "Uncertain Interactions", style = titleStyle)
                 FlowRow {
                     uncertainInteractions.forEach {
                         InteractionChip(text = it, color = InteractionType.UNCERTAIN.color)
