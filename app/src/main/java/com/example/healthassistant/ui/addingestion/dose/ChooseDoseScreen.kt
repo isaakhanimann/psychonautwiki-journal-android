@@ -5,12 +5,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Launch
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -173,6 +175,16 @@ fun ChooseDoseScreen(
                 if (administrationRoute == AdministrationRoute.INSUFFLATED) {
                     TextButton(onClick = navigateToSaferSniffingScreen) {
                         Text(text = "Safer Sniffing")
+                    }
+                } else if (administrationRoute == AdministrationRoute.RECTAL) {
+                    val uriHandler = LocalUriHandler.current
+                    TextButton(onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
+                        Icon(
+                            Icons.Filled.Launch,
+                            contentDescription = "Open Link"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Safer Plugging")
                     }
                 }
                 if (roaDose != null) {

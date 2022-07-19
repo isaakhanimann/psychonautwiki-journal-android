@@ -67,13 +67,12 @@ fun RoaView(
                         modifier = Modifier
                             .clickable(onClick = navigateToSaferSniffingScreen)
                     )
-                }
-                if (roa.route.isInjectionMethod) {
+                } else if (roa.route == AdministrationRoute.RECTAL) {
                     val uriHandler = LocalUriHandler.current
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                        .clickable { uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL) }) {
+                            .clickable { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
                         Icon(
                             Icons.Filled.Launch,
                             contentDescription = "Open Link",
@@ -81,7 +80,27 @@ fun RoaView(
                             tint = MaterialTheme.colors.primary
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Safer Injection",
+                        Text(
+                            "Safer Plugging",
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.button
+                        )
+                    }
+                } else if (roa.route.isInjectionMethod) {
+                    val uriHandler = LocalUriHandler.current
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clickable { uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL) }) {
+                        Icon(
+                            Icons.Filled.Launch,
+                            contentDescription = "Open Link",
+                            modifier = Modifier.size(15.dp),
+                            tint = MaterialTheme.colors.primary
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(
+                            "Safer Injection",
                             color = MaterialTheme.colors.primary,
                             style = MaterialTheme.typography.button
                         )

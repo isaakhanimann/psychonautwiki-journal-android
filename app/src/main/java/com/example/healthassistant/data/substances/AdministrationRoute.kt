@@ -121,5 +121,6 @@ Many substances can be inhaled to achieve an altered state of consciousness, how
         const val psychonautWikiArticleURL =
             "https://psychonautwiki.org/wiki/Route_of_administration"
         const val saferInjectionArticleURL = "https://psychonautwiki.org/wiki/Safer_injection_guide"
+        const val saferPluggingArticleURL = "https://wiki.tripsit.me/wiki/Quick_Guide_to_Plugging"
     }
 }
