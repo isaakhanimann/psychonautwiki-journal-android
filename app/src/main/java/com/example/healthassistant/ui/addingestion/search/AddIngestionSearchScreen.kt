@@ -39,6 +39,7 @@ fun AddIngestionSearchScreen(
         }
     }
 }
+
 @Preview
 @Composable
 fun TestingSectionPreview(
@@ -54,8 +55,9 @@ fun TestingSection(
         mutableStateOf(true)
     }
     AnimatedVisibility(visible = isVisible) {
-        Card(elevation = 100.dp,
-        backgroundColor = MaterialTheme.colors.primarySurface
+        Card(
+            elevation = 100.dp,
+            backgroundColor = MaterialTheme.colors.primarySurface
         ) {
             Column(
                 modifier = Modifier.padding(start = 10.dp),
@@ -73,32 +75,42 @@ fun TestingSection(
                         )
                     }
                 }
-                Text(text = "If Available Use:")
-                TextButton(onClick = navigateToDrugTestingScreen) {
-                    Icon(
-                        Icons.Outlined.Science,
-                        contentDescription = "Navigate to Testing Services",
-                        modifier = Modifier.size(ButtonDefaults.IconSize),
-                        tint = MaterialTheme.colors.secondary
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Drug Testing Services", color = MaterialTheme.colors.secondary)
-                }
-                Text(text = "Or At Least Use:")
-                val uriHandler = LocalUriHandler.current
-                TextButton(
-                    onClick = {
-                        uriHandler.openUri("https://dancesafe.org/testing-kit-instructions/")
-                    }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        Icons.Outlined.Launch,
-                        contentDescription = "Open Link",
-                        modifier = Modifier.size(ButtonDefaults.IconSize),
-                        tint = MaterialTheme.colors.secondary
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Reagent Testing", color = MaterialTheme.colors.secondary)
+                    Text(text = "If Available Use ")
+                    TextButton(onClick = navigateToDrugTestingScreen) {
+                        Icon(
+                            Icons.Outlined.Science,
+                            contentDescription = "Navigate to Testing Services",
+                            modifier = Modifier.size(ButtonDefaults.IconSize),
+                            tint = MaterialTheme.colors.secondary
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Drug Testing Services", color = MaterialTheme.colors.secondary)
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Or At Least Use ")
+                    val uriHandler = LocalUriHandler.current
+                    TextButton(
+                        onClick = {
+                            uriHandler.openUri("https://dancesafe.org/testing-kit-instructions/")
+                        }
+                    ) {
+                        Icon(
+                            Icons.Outlined.Launch,
+                            contentDescription = "Open Link",
+                            modifier = Modifier.size(ButtonDefaults.IconSize),
+                            tint = MaterialTheme.colors.secondary
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Reagent Testing", color = MaterialTheme.colors.secondary)
+                    }
                 }
             }
         }
