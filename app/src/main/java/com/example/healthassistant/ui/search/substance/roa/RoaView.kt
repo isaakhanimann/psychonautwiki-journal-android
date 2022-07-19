@@ -81,7 +81,7 @@ fun RoaView(
                             tint = MaterialTheme.colors.primary
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Safer Injection Guide",
+                        Text("Safer Injection",
                             color = MaterialTheme.colors.primary,
                             style = MaterialTheme.typography.button
                         )

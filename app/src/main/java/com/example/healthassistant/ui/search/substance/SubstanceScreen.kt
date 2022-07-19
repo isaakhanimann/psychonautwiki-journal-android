@@ -33,6 +33,7 @@ fun SubstanceScreen(
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
+    navigateToVolumetricDosingScreen: () -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
     SubstanceScreen(
@@ -41,6 +42,7 @@ fun SubstanceScreen(
         navigateToSaferHallucinogensScreen = navigateToSaferHallucinogensScreen,
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
+        navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
         substance = viewModel.substance,
         isSearchingForInteractions = viewModel.isSearchingForInteractions,
         dangerousInteractions = viewModel.dangerousInteractions,
@@ -61,6 +63,7 @@ fun SubstanceScreenPreview(
             navigateToSaferHallucinogensScreen = {},
             navigateToSaferSniffingScreen = {},
             navigateToSaferStimulantsScreen = {},
+            navigateToVolumetricDosingScreen = {},
             substance = substance,
             isSearchingForInteractions = true,
             dangerousInteractions = substance.dangerousInteractions,
@@ -77,6 +80,7 @@ fun SubstanceScreen(
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
+    navigateToVolumetricDosingScreen: () -> Unit,
     substance: Substance,
     isSearchingForInteractions: Boolean,
     dangerousInteractions: List<String>,
@@ -193,6 +197,13 @@ fun SubstanceScreen(
             if (substance.isStimulant) {
                 TextButton(onClick = navigateToSaferStimulantsScreen) {
                     Text(text = "Safer Stimulant Use")
+                }
+                Divider()
+            }
+            val firstRoa = substance.roas.firstOrNull()
+            if (firstRoa?.roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
+                TextButton(onClick = navigateToVolumetricDosingScreen) {
+                    Text(text = "Volumetric Liquid Dosing")
                 }
                 Divider()
             }

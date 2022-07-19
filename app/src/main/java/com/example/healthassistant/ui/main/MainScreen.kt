@@ -175,7 +175,8 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToDurationExplanationScreen = navController::navigateToDurationExplanationScreen,
             navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogensScreen,
             navigateToSaferSniffingScreen = navController::navigateToSaferSniffingScreen,
-            navigateToSaferStimulantsScreen = navController::navigateToSaferStimulantsScreen
+            navigateToSaferStimulantsScreen = navController::navigateToSaferStimulantsScreen,
+            navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen
         )
     }
     composable(

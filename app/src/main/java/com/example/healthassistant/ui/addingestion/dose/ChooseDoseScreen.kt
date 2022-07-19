@@ -233,12 +233,8 @@ fun ChooseDoseScreen(
                     Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                 }
                 if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
-                    Text(
-                        text = "To measure $substanceName dose use:",
-                        style = MaterialTheme.typography.h6
-                    )
                     TextButton(onClick = navigateToVolumetricDosingScreen) {
-                        Text(text = "Volumetric Liquid Dosing")
+                        Text(text = "Use Volumetric Liquid Dosing")
                     }
                 }
                 Spacer(modifier = Modifier.weight(1f))
