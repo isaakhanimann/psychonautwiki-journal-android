@@ -1,14 +1,15 @@
 package com.example.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -17,6 +18,7 @@ import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.ui.addingestion.route.SaferInjectionLink
 import com.example.healthassistant.ui.search.substance.roa.RoaView
+import com.example.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.example.healthassistant.ui.theme.HealthAssistantTheme
 
 @Composable
@@ -151,21 +153,11 @@ fun SubstanceScreen(
                 unsafeInteractions = unsafeInteractions,
                 uncertainInteractions = uncertainInteractions
             )
-            val tolerance = substance.tolerance
-            if (tolerance != null) {
-                Text(text = "Tolerance", style = titleStyle)
-                Text(text = "zero: ${tolerance.zero}")
-                Text(text = "half: ${tolerance.half}")
-                Text(text = "full: ${tolerance.full}")
-                Divider()
-            }
-            if (substance.crossTolerances.isNotEmpty()) {
-                Text(text = "Cross Tolerance", style = titleStyle)
-                substance.crossTolerances.forEach {
-                    Text(text = it)
-                }
-                Divider()
-            }
+            ToleranceSection(
+                tolerance = substance.tolerance,
+                crossTolerances = substance.crossTolerances,
+                titleStyle
+            )
 
             if (substance.toxicities.isNotEmpty()) {
                 Text(text = "Toxicity", style = titleStyle)
@@ -192,51 +184,5 @@ fun SubstanceScreen(
                 Divider()
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ClassSectionPreview() {
-    ClassSection(
-        psychoactiveClasses = listOf("Stimulants", "Psychedelics"),
-        chemicalClasses = listOf("Substituted Phenethylamines"),
-        titleStyle = MaterialTheme.typography.h6
-    )
-}
-
-@Composable
-fun ClassSection(
-    psychoactiveClasses: List<String>,
-    chemicalClasses: List<String>,
-    titleStyle: TextStyle
-) {
-    if (psychoactiveClasses.isNotEmpty() || chemicalClasses.isNotEmpty()) {
-        Column {
-            Text(text = "Class Membership", style = titleStyle)
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                if (psychoactiveClasses.isNotEmpty()) {
-                    Column {
-                        Text(text = "Psychoactive", style = MaterialTheme.typography.subtitle2)
-                        psychoactiveClasses.forEach {
-                            Text(text = it)
-                        }
-                    }
-                }
-                if (chemicalClasses.isNotEmpty()) {
-                    Column {
-                        Text(text = "Chemical", style = MaterialTheme.typography.subtitle2)
-                        chemicalClasses.forEach {
-                            Text(text = it)
-                        }
-                    }
-                }
-            }
-
-        }
-        Divider()
     }
 }
