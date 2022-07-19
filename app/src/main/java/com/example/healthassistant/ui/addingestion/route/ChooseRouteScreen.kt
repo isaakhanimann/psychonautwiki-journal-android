@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.ui.search.substance.roa.toReadableString
 
@@ -63,7 +62,7 @@ fun ChooseRouteScreen(
 @Preview
 @Composable
 fun ChooseRouteScreenPreview(
-    @PreviewParameter(RouteIngestionsPreviewProvider::class) ingestions: List<Ingestion>,
+    @PreviewParameter(RouteIngestionsPreviewProvider::class) ingestions: List<ChooseRouteViewModel.IngestionSuggestion>,
 ) {
     val pwRoutes = listOf(AdministrationRoute.INSUFFLATED, AdministrationRoute.ORAL)
     val otherRoutes = AdministrationRoute.values().filter { route ->
@@ -96,7 +95,7 @@ fun ChooseRouteScreen(
     isShowingInjectionDialog: Boolean,
     navigateWithCurrentRoute: () -> Unit,
     dismissInjectionDialog: () -> Unit,
-    sortedIngestions: List<Ingestion>,
+    sortedIngestions: List<ChooseRouteViewModel.IngestionSuggestion>,
     navigateToChooseTimeAndMaybeColor: (administrationRoute: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     ) {
     Scaffold(
@@ -231,7 +230,7 @@ fun ChooseRouteScreen(
 }
 
 @Composable
-fun IngestionRowInChooseRoute(ingestion: Ingestion, navigateToEnd: () -> Unit) {
+fun IngestionRowInChooseRoute(ingestion: ChooseRouteViewModel.IngestionSuggestion, navigateToEnd: () -> Unit) {
     Card(
         modifier = Modifier
             .clickable(onClick = navigateToEnd)

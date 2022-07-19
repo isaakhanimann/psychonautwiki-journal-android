@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.healthassistant.data.room.experiences.ExperienceRepository
-import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.substances.AdministrationRoute
 import com.example.healthassistant.data.substances.Substance
 import com.example.healthassistant.data.substances.repositories.SubstanceRepository
@@ -15,6 +14,7 @@ import com.example.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -26,8 +26,26 @@ class ChooseRouteViewModel @Inject constructor(
 ) : ViewModel() {
     val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
     val substance: Substance = substanceRepo.getSubstance(substanceName)!!
-    val sortedIngestionsFlow: StateFlow<List<Ingestion>> =
-        experienceRepo.getSortedIngestionsFlow(substanceName, limit = 3)
+
+    data class IngestionSuggestion(
+        val dose: Double?,
+        val units: String?,
+        val administrationRoute: AdministrationRoute,
+        val isDoseAnEstimate: Boolean
+    )
+
+    val sortedIngestionsFlow: StateFlow<List<IngestionSuggestion>> =
+        experienceRepo.getSortedIngestionsFlow(substanceName, limit = 4)
+            .map { list ->
+                list.map {
+                    IngestionSuggestion(
+                        dose = it.dose,
+                        units = it.units,
+                        administrationRoute = it.administrationRoute,
+                        isDoseAnEstimate = it.isDoseAnEstimate
+                    )
+                }.distinct()
+            }
             .stateIn(
                 initialValue = emptyList(),
                 scope = viewModelScope,
