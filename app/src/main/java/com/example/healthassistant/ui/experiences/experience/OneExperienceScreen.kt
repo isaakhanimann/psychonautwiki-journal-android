@@ -130,9 +130,9 @@ fun ExperienceScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            val horizontalPadding = 10.dp
             Spacer(modifier = Modifier.height(10.dp))
             val ingestionDurationPairs = ingestionElements.map {
                 Pair(
@@ -141,27 +141,33 @@ fun ExperienceScreen(
                 )
             }
             if (ingestionDurationPairs.isNotEmpty()) {
-                AllTimelines(
-                    ingestionDurationPairs = ingestionDurationPairs,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                )
-                val showOralOnsetDisclaimer =
-                    ingestionDurationPairs.any { it.first.ingestion.administrationRoute == AdministrationRoute.ORAL }
-                if (showOralOnsetDisclaimer) {
-                    Text(
-                        text = "* a full stomach can delay the onset for hours",
-                        style = MaterialTheme.typography.caption,
-                        modifier = Modifier.padding(vertical = 10.dp)
+                Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
+                    AllTimelines(
+                        ingestionDurationPairs = ingestionDurationPairs,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
                     )
+                    val showOralOnsetDisclaimer =
+                        ingestionDurationPairs.any { it.first.ingestion.administrationRoute == AdministrationRoute.ORAL }
+                    if (showOralOnsetDisclaimer) {
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Text(
+                            text = "* a full stomach can delay the onset for hours",
+                            style = MaterialTheme.typography.caption,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
                 Divider()
             }
             if (ingestionElements.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(5.dp))
-                ingestionElements.forEach {
-                    Column(horizontalAlignment = Alignment.Start) {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    ingestionElements.forEach {
                         if (it.dateText != null) {
                             Text(text = it.dateText)
                         }
@@ -180,15 +186,19 @@ fun ExperienceScreen(
                 Divider()
             }
             if (cumulativeDoses.isNotEmpty()) {
-                Text(
-                    text = "Cumulative Dose",
-                    style = MaterialTheme.typography.subtitle1,
-                    modifier = Modifier.padding(top = 10.dp)
-                )
-                cumulativeDoses.forEach {
-                    CumulativeDoseRow(cumulativeDose = it, modifier = Modifier.fillMaxWidth())
+                Column(
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
+                    Text(
+                        text = "Cumulative Dose",
+                        style = MaterialTheme.typography.subtitle1,
+                        modifier = Modifier.padding(top = 10.dp)
+                    )
+                    cumulativeDoses.forEach {
+                        CumulativeDoseRow(cumulativeDose = it, modifier = Modifier.fillMaxWidth())
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
-                Spacer(modifier = Modifier.height(10.dp))
                 Divider()
             }
             SentimentSection(
@@ -196,11 +206,15 @@ fun ExperienceScreen(
                 isShowingEditSentiment = isShowingSentimentMenu,
                 show = showSentimentMenu,
                 dismiss = dismissSentimentMenu,
-                saveSentiment = saveSentiment
+                saveSentiment = saveSentiment,
+                modifier = Modifier.padding(start = horizontalPadding)
             )
             Divider()
             if (experience.text.isEmpty()) {
-                TextButton(onClick = navigateToEditExperienceScreen) {
+                TextButton(
+                    onClick = navigateToEditExperienceScreen,
+                    modifier = Modifier.padding(horizontal = 5.dp)
+                ) {
                     Icon(
                         Icons.Filled.Edit,
                         contentDescription = "Edit",
@@ -213,7 +227,9 @@ fun ExperienceScreen(
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = horizontalPadding)
                 ) {
                     Text(text = experience.text, modifier = Modifier.padding(vertical = 10.dp))
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
@@ -225,6 +241,7 @@ fun ExperienceScreen(
             Divider()
             TextButton(
                 onClick = showDialog,
+                modifier = Modifier.padding(horizontal = 5.dp)
             ) {
                 Text(
                     "Delete Experience",

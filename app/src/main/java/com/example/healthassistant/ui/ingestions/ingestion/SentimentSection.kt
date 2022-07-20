@@ -31,7 +31,8 @@ fun SentimentSection(
     isShowingEditSentiment: Boolean,
     show: () -> Unit,
     dismiss: () -> Unit,
-    saveSentiment: (Sentiment?) -> Unit
+    saveSentiment: (Sentiment?) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     if (sentiment == null) {
         Box(
@@ -59,7 +60,7 @@ fun SentimentSection(
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
         ) {
             Text(text = "Overall Sentiment")

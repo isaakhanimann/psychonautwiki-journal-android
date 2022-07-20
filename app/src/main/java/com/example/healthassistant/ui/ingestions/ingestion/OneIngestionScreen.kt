@@ -117,28 +117,34 @@ fun OneIngestionScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            AllTimelines(
-                ingestionDurationPairs = listOf(
-                    Pair(
-                        first = ingestionWithCompanion,
-                        second = ingestionWithCompanionDurationAndExperience.roaDuration
-                    )
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
-            val showOralOnsetDisclaimer = ingestion.administrationRoute == AdministrationRoute.ORAL
-            if (showOralOnsetDisclaimer) {
-                Text(
-                    text = "* a full stomach can delay the onset for hours",
-                    style = MaterialTheme.typography.caption
+            val horizontalPadding = 10.dp
+            Spacer(modifier = Modifier.height(10.dp))
+            Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
+                AllTimelines(
+                    ingestionDurationPairs = listOf(
+                        Pair(
+                            first = ingestionWithCompanion,
+                            second = ingestionWithCompanionDurationAndExperience.roaDuration
+                        )
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
                 )
+                val showOralOnsetDisclaimer =
+                    ingestion.administrationRoute == AdministrationRoute.ORAL
+                if (showOralOnsetDisclaimer) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = "* a full stomach can delay the onset for hours",
+                        style = MaterialTheme.typography.caption
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
             }
-            Divider(modifier = Modifier.padding(top = 10.dp))
+            Divider()
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -147,7 +153,7 @@ fun OneIngestionScreen(
                         navigateToSubstance(ingestion.substanceName)
                     }
                     .fillMaxWidth()
-                    .padding(vertical = 10.dp)
+                    .padding(vertical = 10.dp, horizontal = horizontalPadding)
             ) {
                 val isDarkTheme = isSystemInDarkTheme()
                 Surface(
@@ -165,11 +171,11 @@ fun OneIngestionScreen(
             Divider()
             Column(
                 verticalArrangement = Arrangement.spacedBy(3.dp),
-                modifier = Modifier.padding(vertical = 10.dp)
+                modifier = Modifier.padding(vertical = 10.dp, horizontal = horizontalPadding)
             ) {
                 Text(
                     text = "${ingestion.administrationRoute.displayText} Dose",
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.subtitle2
                 )
                 val roaDose = ingestionWithCompanionDurationAndExperience.roaDose
                 if (roaDose != null) {
@@ -209,12 +215,16 @@ fun OneIngestionScreen(
                 show = showSentimentMenu,
                 dismiss = dismissSentimentMenu,
                 saveSentiment = saveSentiment,
+                modifier = Modifier.padding(start = horizontalPadding)
             )
             Divider()
             ingestion.notes.let {
                 val constNote = it
                 if (constNote.isNullOrBlank()) {
-                    TextButton(onClick = navigateToEditNote) {
+                    TextButton(
+                        onClick = navigateToEditNote,
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    ) {
                         Icon(
                             Icons.Filled.Edit,
                             contentDescription = "Edit",
@@ -224,7 +234,10 @@ fun OneIngestionScreen(
                         Text("Add Note")
                     }
                 } else {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(start = horizontalPadding)
+                    ) {
                         Text(text = constNote, modifier = Modifier.weight(1f))
                         IconButton(onClick = navigateToEditNote) {
                             Icon(
@@ -235,11 +248,14 @@ fun OneIngestionScreen(
                         }
                     }
                 }
+                Divider()
             }
-            Divider()
             val experience = ingestionWithCompanionDurationAndExperience.experience
             if (experience != null) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
                     Text(text = "Part of ${experience.title}", modifier = Modifier.weight(1f))
                     IconButton(onClick = navigateToEditMembership) {
                         Icon(
@@ -249,17 +265,22 @@ fun OneIngestionScreen(
                         )
                     }
                 }
+                Divider()
             }
-            Divider()
-            if (experience == null) {
-                TextButton(onClick = navigateToEditMembership) {
-                    Text(text = "Assign to Experience", style = MaterialTheme.typography.caption)
+            Column(modifier = Modifier.padding(horizontal = 5.dp)) {
+                if (experience == null) {
+                    TextButton(onClick = navigateToEditMembership) {
+                        Text(
+                            text = "Assign to Experience",
+                            style = MaterialTheme.typography.caption
+                        )
+                    }
                 }
-            }
-            TextButton(
-                onClick = showDialog,
-            ) {
-                Text("Delete Ingestion", style = MaterialTheme.typography.caption)
+                TextButton(
+                    onClick = showDialog,
+                ) {
+                    Text("Delete Ingestion", style = MaterialTheme.typography.caption)
+                }
             }
             if (isShowingDialog) {
                 AlertDialog(
