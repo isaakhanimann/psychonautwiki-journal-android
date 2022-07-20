@@ -149,7 +149,7 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val routeName = oneJsonRoa.getOptionalString("name")?.uppercase() ?: return null
         val route = when (routeName) {
             AdministrationRoute.ORAL.name -> AdministrationRoute.ORAL
-            AdministrationRoute.SUBLINGUAL.name -> AdministrationRoute.BUCCAL
+            AdministrationRoute.SUBLINGUAL.name -> AdministrationRoute.SUBLINGUAL
             AdministrationRoute.BUCCAL.name -> AdministrationRoute.BUCCAL
             AdministrationRoute.INSUFFLATED.name -> AdministrationRoute.INSUFFLATED
             AdministrationRoute.RECTAL.name -> AdministrationRoute.RECTAL
