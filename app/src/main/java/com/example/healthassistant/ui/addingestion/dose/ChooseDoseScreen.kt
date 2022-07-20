@@ -168,10 +168,10 @@ fun ChooseDoseScreen(
             LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
                     .fillMaxHeight(),
                 horizontalAlignment = Alignment.Start,
             ) {
+                val horizontalPadding = 10.dp
                 if (administrationRoute == AdministrationRoute.INSUFFLATED) {
                     TextButton(onClick = navigateToSaferSniffingScreen) {
                         Text(text = "Safer Sniffing")
@@ -189,88 +189,90 @@ fun ChooseDoseScreen(
                     }
                     Divider()
                 }
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = administrationRoute.displayText + " " + substanceName + " Dosage",
-                    style = MaterialTheme.typography.subtitle2
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                if (roaDose != null) {
-                    RoaDoseView(
-                        roaDose = roaDose,
-                        navigateToDosageExplanationScreen = navigateToDoseGuideScreen
+                Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = administrationRoute.displayText + " " + substanceName + " Dosage",
+                        style = MaterialTheme.typography.subtitle2
                     )
-                } else {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    if (roaDose != null) {
+                        RoaDoseView(
+                            roaDose = roaDose,
+                            navigateToDosageExplanationScreen = navigateToDoseGuideScreen
+                        )
+                    } else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Warning,
+                                contentDescription = "Dosage Warning"
+                            )
+                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                            Text(
+                                text = "There is no dosage info for this administration route. Research dosages somewhere else.",
+                                style = MaterialTheme.typography.subtitle2
+                            )
+                        }
+                    }
+                    if (roaDose != null) {
+                        CurrentDoseClassInfo(currentDoseClass, roaDose)
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    val focusManager = LocalFocusManager.current
+                    val textStyle = MaterialTheme.typography.h3
+                    OutlinedTextField(
+                        value = doseText,
+                        onValueChange = onChangeDoseText,
+                        textStyle = textStyle,
+                        label = { Text("Dose", style = textStyle) },
+                        isError = !isValidDose,
+                        trailingIcon = {
+                            Text(
+                                text = roaDose?.units ?: "",
+                                style = textStyle,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                        },
+                        keyboardActions = KeyboardActions(onDone = {
+                            focusManager.clearFocus()
+                        }),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        singleLine = true
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    PurityCalculation(
+                        purityText = purityText,
+                        onPurityChange = onPurityChange,
+                        convertedDoseAndUnitText = convertedDoseAndUnitText,
+                        isValidPurity = isValidPurity
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Warning,
-                            contentDescription = "Dosage Warning"
-                        )
-                        Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                        Text(
-                            text = "There is no dosage info for this administration route. Research dosages somewhere else.",
-                            style = MaterialTheme.typography.subtitle2
+                        Text("Is Estimate", style = MaterialTheme.typography.h6)
+                        Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                    }
+                    if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
+                        TextButton(onClick = navigateToVolumetricDosingScreen) {
+                            Text(text = "Use Volumetric Liquid Dosing")
+                        }
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
+                    TextButton(
+                        onClick = { isShowingUnknownDoseDialog = true },
+                    ) {
+                        Text("Use Unknown Dose")
+                    }
+                    if (isShowingUnknownDoseDialog) {
+                        UnknownDoseDialog(
+                            useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
+                            dismiss = { isShowingUnknownDoseDialog = false }
                         )
                     }
-                }
-                if (roaDose != null) {
-                    CurrentDoseClassInfo(currentDoseClass, roaDose)
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                val focusManager = LocalFocusManager.current
-                val textStyle = MaterialTheme.typography.h3
-                OutlinedTextField(
-                    value = doseText,
-                    onValueChange = onChangeDoseText,
-                    textStyle = textStyle,
-                    label = { Text("Pure Dose", style = textStyle) },
-                    isError = !isValidDose,
-                    trailingIcon = {
-                        Text(
-                            text = roaDose?.units ?: "",
-                            style = textStyle,
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        )
-                    },
-                    keyboardActions = KeyboardActions(onDone = {
-                        focusManager.clearFocus()
-                    }),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                PurityCalculation(
-                    purityText = purityText,
-                    onPurityChange = onPurityChange,
-                    convertedDoseAndUnitText = convertedDoseAndUnitText,
-                    isValidPurity = isValidPurity
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text("Is Estimate", style = MaterialTheme.typography.h6)
-                    Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
-                }
-                if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
-                    TextButton(onClick = navigateToVolumetricDosingScreen) {
-                        Text(text = "Use Volumetric Liquid Dosing")
-                    }
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
-                TextButton(
-                    onClick = { isShowingUnknownDoseDialog = true },
-                ) {
-                    Text("Use Unknown Dose")
-                }
-                if (isShowingUnknownDoseDialog) {
-                    UnknownDoseDialog(
-                        useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
-                        dismiss = { isShowingUnknownDoseDialog = false }
-                    )
                 }
             }
         }
