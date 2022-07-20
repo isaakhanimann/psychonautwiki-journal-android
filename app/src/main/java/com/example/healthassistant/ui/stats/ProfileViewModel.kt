@@ -11,14 +11,8 @@ import kotlinx.coroutines.flow.*
 import java.util.*
 import javax.inject.Inject
 
-data class SubstanceStat(
-    val substanceName: String,
-    val lastUsedText: String,
-    val color: SubstanceColor
-)
-
 @HiltViewModel
-class StatisticsViewModel @Inject constructor(
+class ProfileViewModel @Inject constructor(
     experienceRepo: ExperienceRepository
 ) : ViewModel() {
 
@@ -45,3 +39,9 @@ class StatisticsViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000)
             )
 }
+
+data class SubstanceStat(
+    val substanceName: String,
+    val lastUsedText: String,
+    val color: SubstanceColor
+)

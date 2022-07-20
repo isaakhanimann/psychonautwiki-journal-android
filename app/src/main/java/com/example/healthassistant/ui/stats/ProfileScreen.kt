@@ -19,12 +19,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 
 @Composable
-fun StatisticsScreen(
-    viewModel: StatisticsViewModel = hiltViewModel(),
+fun ProfileScreen(
+    viewModel: ProfileViewModel = hiltViewModel(),
     navigateToSettings: () -> Unit,
     navigateToSubstanceCompanion: (substanceName: String) -> Unit
 ) {
-    StatisticsScreen(
+    ProfileScreen(
         substancesLastUsed = viewModel.substanceStats.collectAsState().value,
         navigateToSettings = navigateToSettings,
         navigateToSubstanceCompanion = navigateToSubstanceCompanion
@@ -33,12 +33,12 @@ fun StatisticsScreen(
 
 @Preview
 @Composable
-fun StatisticsPreview(
+fun ProfilePreview(
     @PreviewParameter(
-        StatisticsPreviewProvider::class,
+        ProfilePreviewProvider::class,
     ) substancesLastUsed: List<SubstanceStat>
 ) {
-    StatisticsScreen(
+    ProfileScreen(
         substancesLastUsed = substancesLastUsed,
         navigateToSettings = {},
         navigateToSubstanceCompanion = {}
@@ -46,7 +46,7 @@ fun StatisticsPreview(
 }
 
 @Composable
-fun StatisticsScreen(
+fun ProfileScreen(
     substancesLastUsed: List<SubstanceStat>,
     navigateToSettings: () -> Unit,
     navigateToSubstanceCompanion: (substanceName: String) -> Unit
@@ -54,7 +54,7 @@ fun StatisticsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Statistics") },
+                title = { Text(text = "Profile") },
                 actions = {
                     IconButton(
                         onClick = navigateToSettings,
