@@ -28,7 +28,10 @@ class ExperiencesViewModel @Inject constructor(
     companion object {
         fun groupExperiencesByYear(experiencesWithIngestions: List<ExperienceWithIngestionsAndCompanions>): Map<String, List<ExperienceWithIngestionsAndCompanions>> {
             val cal = Calendar.getInstance(TimeZone.getDefault())
-            return experiencesWithIngestions.groupBy { cal.get(Calendar.YEAR).toString() }
+            return experiencesWithIngestions.groupBy { out ->
+                cal.time = out.sortDate
+                cal.get(Calendar.YEAR).toString()
+            }
         }
     }
 
