@@ -59,7 +59,7 @@ class ChooseTimeViewModel @Inject constructor(
 
     val previousNotesFlow: StateFlow<List<String>> =
         experienceRepo.getSortedIngestionsFlow(substanceName, limit = 10).map { list ->
-            list.mapNotNull { it.notes }.distinct()
+            list.mapNotNull { it.notes }.filter { it.isNotBlank() }.distinct()
         }.stateIn(
             initialValue = emptyList(),
             scope = viewModelScope,
