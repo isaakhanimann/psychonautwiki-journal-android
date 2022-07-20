@@ -147,7 +147,10 @@ class IngestionsViewModel @Inject constructor(
     companion object {
         fun groupIngestionsByYear(ingestions: List<IngestionElement>): Map<String, List<IngestionElement>> {
             val cal = Calendar.getInstance(TimeZone.getDefault())
-            return ingestions.groupBy { cal.get(Calendar.YEAR).toString() }
+            return ingestions.groupBy {
+                cal.time = it.ingestionWithCompanion.ingestion.time
+                cal.get(Calendar.YEAR).toString()
+            }
         }
     }
 

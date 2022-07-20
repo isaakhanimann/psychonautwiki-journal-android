@@ -80,13 +80,11 @@ fun ExperienceRow(
                 }
             }
         }
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            val dateText = remember(experienceWithIngestionsAndCompanions.sortDate) {
-                val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
-                formatter.format(experienceWithIngestionsAndCompanions.sortDate) ?: ""
-            }
-            Text(text = dateText)
+        val dateText = remember(experienceWithIngestionsAndCompanions.sortDate) {
+            val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
+            formatter.format(experienceWithIngestionsAndCompanions.sortDate) ?: ""
         }
+        Text(text = dateText)
     }
 }
 
