@@ -38,7 +38,7 @@ import com.example.healthassistant.ui.search.substance.roa.DoseExplanationScreen
 import com.example.healthassistant.ui.search.substance.roa.DurationExplanationScreen
 import com.example.healthassistant.ui.settings.SettingsScreen
 import com.example.healthassistant.ui.settings.faq.FAQScreen
-import com.example.healthassistant.ui.stats.ProfileScreen
+import com.example.healthassistant.ui.stats.StatsScreen
 import com.example.healthassistant.ui.stats.substancecompanion.SubstanceCompanionScreen
 
 @Composable
@@ -50,7 +50,6 @@ fun MainScreen() {
         TabRouter.Experiences.route,
         TabRouter.Ingestions.route,
         TabRouter.Search.route,
-        TabRouter.Stats.route
     )
     bottomBarState.value = isShowingBottomBar
     Scaffold(
@@ -75,6 +74,13 @@ fun MainScreen() {
 }
 
 fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
+    composable(NoArgumentRouter.StatsRouter.route) {
+        StatsScreen(
+            navigateToSubstanceCompanion = {
+                navController.navigateToSubstanceCompanionScreen(it)
+            }
+        )
+    }
     composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
     composable(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
     composable(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
@@ -151,9 +157,9 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         SubstanceScreen(
             navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
             navigateToDurationExplanationScreen = navController::navigateToDurationExplanationScreen,
-            navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogensScreen,
-            navigateToSaferSniffingScreen = navController::navigateToSaferSniffingScreen,
-            navigateToSaferStimulantsScreen = navController::navigateToSaferStimulantsScreen,
+            navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
+            navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
+            navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
             navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen
         )
     }
@@ -193,23 +199,16 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             },
             navigateToAddIngestion = {
                 navController.navigateToAddIngestion(experienceId = null)
-            }
+            },
+            navigateToStatsScreen = navController::navigateToStats
         )
     }
     composable(TabRouter.Search.route) {
         SearchScreen(
-            onSubstanceTap = {
-                navController.navigateToSubstanceScreen(substanceName = it.name)
-            }
-        )
-    }
-    composable(TabRouter.Stats.route) {
-        ProfileScreen(
             navigateToSettings = navController::navigateToSettings,
-            navigateToSubstanceCompanion = {
-                navController.navigateToSubstanceCompanionScreen(it)
-            }
-        )
+            navigateToSubstanceScreen = {
+                navController.navigateToSubstanceScreen(substanceName = it)
+            })
     }
 }
 
@@ -248,8 +247,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         experienceId = experienceId
                     )
                 },
-                navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogensScreen,
-                navigateToSaferStimulantsScreen = navController::navigateToSaferStimulantsScreen
+                navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
+                navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants
             )
         }
         composable(
@@ -302,7 +301,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 },
                 navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
                 navigateToDoseGuideScreen = navController::navigateToDosageGuideScreen,
-                navigateToSaferSniffingScreen = navController::navigateToSaferSniffingScreen
+                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing
             )
         }
         composable(

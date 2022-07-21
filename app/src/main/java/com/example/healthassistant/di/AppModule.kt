@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.example.healthassistant.data.room.AppDatabase
 import com.example.healthassistant.data.room.experiences.ExperienceDao
-import com.example.healthassistant.data.room.filter.FilterDao
 import com.example.healthassistant.data.substances.PsychonautWikiAPI
 import dagger.Module
 import dagger.Provides
@@ -34,11 +33,6 @@ object AppModule {
     @Provides
     fun provideExperiencesDao(appDatabase: AppDatabase): ExperienceDao =
         appDatabase.experienceDao()
-
-    @Singleton
-    @Provides
-    fun provideFilterDao(appDatabase: AppDatabase): FilterDao =
-        appDatabase.filterDao()
 
     @Singleton
     @Provides

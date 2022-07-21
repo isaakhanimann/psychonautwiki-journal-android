@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.healthassistant.ui.search.SearchScreen
+import com.example.healthassistant.ui.search.SearchContent
 
 @Composable
 fun AddIngestionSearchScreen(
@@ -29,7 +29,7 @@ fun AddIngestionSearchScreen(
     ) {
         Column {
             LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
-            SearchScreen(
+            SearchContent(
                 onSubstanceTap = {
                     navigateToCheckInteractions(it.name)
                 },

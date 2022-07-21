@@ -10,10 +10,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.outlined.StickyNote2
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,14 +35,14 @@ import java.util.*
 fun IngestionsScreen(
     navigateToIngestion: (ingestionId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
+    navigateToStatsScreen: () -> Unit,
     viewModel: IngestionsViewModel = hiltViewModel()
 ) {
     IngestionsScreen(
         navigateToIngestion = navigateToIngestion,
         navigateToAddIngestion = navigateToAddIngestion,
+        navigateToStatsScreen = navigateToStatsScreen,
         groupedIngestions = viewModel.ingestionsGrouped.collectAsState().value,
-        filterOptions = viewModel.filterOptions.collectAsState().value,
-        numberOfActiveFilters = viewModel.numberOfActiveFilters.collectAsState().value
     )
 }
 
@@ -55,9 +56,8 @@ fun IngestionsScreenPreview(
     IngestionsScreen(
         navigateToIngestion = {},
         navigateToAddIngestion = {},
-        groupedIngestions = groupedIngestions,
-        filterOptions = listOf(),
-        numberOfActiveFilters = 1
+        navigateToStatsScreen = {},
+        groupedIngestions = groupedIngestions
     )
 }
 
@@ -65,59 +65,21 @@ fun IngestionsScreenPreview(
 fun IngestionsScreen(
     navigateToIngestion: (ingestionId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    groupedIngestions: Map<String, List<IngestionsViewModel.IngestionElement>>,
-    filterOptions: List<IngestionsViewModel.FilterOption>,
-    numberOfActiveFilters: Int,
+    navigateToStatsScreen: () -> Unit,
+    groupedIngestions: Map<String, List<IngestionsViewModel.IngestionElement>>
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Ingestions") },
                 actions = {
-                    var isExpanded by remember { mutableStateOf(false) }
-                    Box(
-                        modifier = Modifier
-                            .wrapContentSize(Alignment.TopEnd)
+                    IconButton(
+                        onClick = navigateToStatsScreen,
                     ) {
-                        IconButton(
-                            onClick = { isExpanded = true },
-                        ) {
-                            BadgedBox(badge = {
-                                if (numberOfActiveFilters != 0) {
-                                    Badge { Text(numberOfActiveFilters.toString()) }
-                                }
-                            }) {
-                                Icon(
-                                    Icons.Filled.FilterList,
-                                    contentDescription = "Filter"
-                                )
-                            }
-                        }
-                        DropdownMenu(
-                            expanded = isExpanded,
-                            onDismissRequest = { isExpanded = false }
-                        ) {
-                            filterOptions.forEach { filterOption ->
-                                DropdownMenuItem(
-                                    onClick = {
-                                        filterOption.onTap()
-                                    },
-                                    enabled = filterOption.isEnabled
-                                ) {
-                                    if (filterOption.hasCheck) {
-                                        Icon(
-                                            Icons.Filled.Check,
-                                            contentDescription = "Check",
-                                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                                        )
-                                    } else {
-                                        Spacer(Modifier.size(ButtonDefaults.IconSize))
-                                    }
-                                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                                    Text(filterOption.name)
-                                }
-                            }
-                        }
+                        Icon(
+                            Icons.Filled.BarChart,
+                            contentDescription = "Stats"
+                        )
                     }
                 }
             )

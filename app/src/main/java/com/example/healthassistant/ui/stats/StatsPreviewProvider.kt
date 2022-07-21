@@ -3,7 +3,7 @@ package com.example.healthassistant.ui.stats
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
 
-class ProfilePreviewProvider : PreviewParameterProvider<List<SubstanceStat>> {
+class StatsPreviewProvider : PreviewParameterProvider<List<SubstanceStat>> {
     override val values: Sequence<List<SubstanceStat>> = sequenceOf(
         listOf(
             SubstanceStat(

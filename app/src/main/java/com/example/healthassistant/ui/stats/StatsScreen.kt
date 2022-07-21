@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -20,52 +18,38 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 
 @Composable
-fun ProfileScreen(
-    viewModel: ProfileViewModel = hiltViewModel(),
-    navigateToSettings: () -> Unit,
+fun StatsScreen(
+    viewModel: StatsViewModel = hiltViewModel(),
     navigateToSubstanceCompanion: (substanceName: String) -> Unit
 ) {
-    ProfileScreen(
+    StatsScreen(
         substancesLastUsed = viewModel.substanceStats.collectAsState().value,
-        navigateToSettings = navigateToSettings,
         navigateToSubstanceCompanion = navigateToSubstanceCompanion
     )
 }
 
 @Preview
 @Composable
-fun ProfilePreview(
+fun StatsPreview(
     @PreviewParameter(
-        ProfilePreviewProvider::class,
+        StatsPreviewProvider::class,
     ) substancesLastUsed: List<SubstanceStat>
 ) {
-    ProfileScreen(
+    StatsScreen(
         substancesLastUsed = substancesLastUsed,
-        navigateToSettings = {},
         navigateToSubstanceCompanion = {}
     )
 }
 
 @Composable
-fun ProfileScreen(
+fun StatsScreen(
     substancesLastUsed: List<SubstanceStat>,
-    navigateToSettings: () -> Unit,
     navigateToSubstanceCompanion: (substanceName: String) -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Profile") },
-                actions = {
-                    IconButton(
-                        onClick = navigateToSettings,
-                    ) {
-                        Icon(
-                            Icons.Filled.Settings,
-                            contentDescription = "Navigate to Settings"
-                        )
-                    }
-                }
+                title = { Text(text = "Statistics") }
             )
         }
     ) {

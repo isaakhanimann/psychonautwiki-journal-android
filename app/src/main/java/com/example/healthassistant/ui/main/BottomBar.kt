@@ -19,7 +19,6 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
         TabRouter.Experiences,
         TabRouter.Ingestions,
         TabRouter.Search,
-        TabRouter.Stats,
     )
     AnimatedVisibility(
         visible = bottomBarState.value,

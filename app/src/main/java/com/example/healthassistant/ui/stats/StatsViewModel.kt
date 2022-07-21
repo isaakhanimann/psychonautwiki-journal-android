@@ -12,7 +12,7 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
+class StatsViewModel @Inject constructor(
     experienceRepo: ExperienceRepository
 ) : ViewModel() {
 
