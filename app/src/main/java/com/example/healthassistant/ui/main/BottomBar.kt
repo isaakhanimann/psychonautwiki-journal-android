@@ -3,7 +3,6 @@ package com.example.healthassistant.ui.main
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -27,9 +26,7 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
         enter = slideInVertically(initialOffsetY = { it }),
         exit = slideOutVertically(targetOffsetY = { it }),
         content = {
-            BottomAppBar(
-                cutoutShape = CircleShape
-            ) {
+            BottomAppBar {
                 BottomNavigation {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route

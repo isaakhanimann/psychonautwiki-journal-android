@@ -1,19 +1,12 @@
 package com.example.healthassistant.ui.main
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.FabPosition
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
@@ -66,21 +59,6 @@ fun MainScreen() {
                 navController = navController,
                 bottomBarState = bottomBarState
             )
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true,
-        floatingActionButton = {
-            if (isShowingBottomBar) {
-                FloatingActionButton(
-                    shape = CircleShape,
-                    onClick = {
-                        navController.navigateToAddIngestion(null)
-                    },
-                    contentColor = Color.White
-                ) {
-                    Icon(imageVector = Icons.Filled.Add, contentDescription = "Add icon")
-                }
-            }
         }
     ) { innerPadding ->
         NavHost(
@@ -212,6 +190,9 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
         IngestionsScreen(
             navigateToIngestion = {
                 navController.navigateToIngestion(ingestionId = it)
+            },
+            navigateToAddIngestion = {
+                navController.navigateToAddIngestion(experienceId = null)
             }
         )
     }

@@ -52,17 +52,19 @@ fun ExperiencesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Experiences") },
-                actions = {
-                    IconButton(
-                        onClick = navigateToAddExperience,
-                    ) {
-                        Icon(
-                            Icons.Filled.Add,
-                            contentDescription = "Add Icon"
-                        )
-                    }
-                }
+                title = { Text(text = "Experiences") }
+            )
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = navigateToAddExperience,
+                icon = {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add"
+                    )
+                },
+                text = { Text("Experience") },
             )
         }
     ) {

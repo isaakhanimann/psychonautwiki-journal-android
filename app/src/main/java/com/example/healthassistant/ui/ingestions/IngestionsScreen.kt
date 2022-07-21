@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.outlined.StickyNote2
@@ -32,10 +33,12 @@ import java.util.*
 @Composable
 fun IngestionsScreen(
     navigateToIngestion: (ingestionId: Int) -> Unit,
+    navigateToAddIngestion: () -> Unit,
     viewModel: IngestionsViewModel = hiltViewModel()
 ) {
     IngestionsScreen(
         navigateToIngestion = navigateToIngestion,
+        navigateToAddIngestion = navigateToAddIngestion,
         groupedIngestions = viewModel.ingestionsGrouped.collectAsState().value,
         filterOptions = viewModel.filterOptions.collectAsState().value,
         numberOfActiveFilters = viewModel.numberOfActiveFilters.collectAsState().value
@@ -51,6 +54,7 @@ fun IngestionsScreenPreview(
 ) {
     IngestionsScreen(
         navigateToIngestion = {},
+        navigateToAddIngestion = {},
         groupedIngestions = groupedIngestions,
         filterOptions = listOf(),
         numberOfActiveFilters = 1
@@ -60,6 +64,7 @@ fun IngestionsScreenPreview(
 @Composable
 fun IngestionsScreen(
     navigateToIngestion: (ingestionId: Int) -> Unit,
+    navigateToAddIngestion: () -> Unit,
     groupedIngestions: Map<String, List<IngestionsViewModel.IngestionElement>>,
     filterOptions: List<IngestionsViewModel.FilterOption>,
     numberOfActiveFilters: Int,
@@ -115,6 +120,18 @@ fun IngestionsScreen(
                         }
                     }
                 }
+            )
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = navigateToAddIngestion,
+                icon = {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add"
+                    )
+                },
+                text = { Text("Ingestion") },
             )
         }
     ) {
