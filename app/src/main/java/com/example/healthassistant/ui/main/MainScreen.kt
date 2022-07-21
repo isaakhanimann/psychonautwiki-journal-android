@@ -38,8 +38,8 @@ import com.example.healthassistant.ui.search.substance.roa.DoseExplanationScreen
 import com.example.healthassistant.ui.search.substance.roa.DurationExplanationScreen
 import com.example.healthassistant.ui.settings.SettingsScreen
 import com.example.healthassistant.ui.settings.faq.FAQScreen
-import com.example.healthassistant.ui.stats.StatsScreen
-import com.example.healthassistant.ui.stats.substancecompanion.SubstanceCompanionScreen
+import com.example.healthassistant.ui.ingestions.stats.StatsScreen
+import com.example.healthassistant.ui.ingestions.stats.substancecompanion.SubstanceCompanionScreen
 
 @Composable
 fun MainScreen() {

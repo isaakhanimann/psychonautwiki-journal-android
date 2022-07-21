@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.stats
+package com.example.healthassistant.ui.ingestions.stats
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -89,6 +89,11 @@ fun StatsScreen(
                             Text(text = subStat.substanceName, style = MaterialTheme.typography.h6)
                             Text(text = "Last used ${subStat.lastUsedText} ago")
                         }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = subStat.ingestionCount.toString(),
+                            style = MaterialTheme.typography.subtitle2
+                        )
                     }
                     if (i < substancesLastUsed.size) {
                         Divider()

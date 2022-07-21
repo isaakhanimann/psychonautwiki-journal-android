@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.stats
+package com.example.healthassistant.ui.ingestions.stats
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,13 +24,16 @@ class StatsViewModel @Inject constructor(
     }
 
     val substanceStats: StateFlow<List<SubstanceStat>> =
-        experienceRepo.getSubstanceWithLastDateDescendingFlow()
+        experienceRepo.getSubstanceCompanionWithIngestionsFlow()
             .combine(currentTimeFlow) { list, currentTime ->
-                list.map {
+                list.mapNotNull { companionWithIngestions ->
+                    val lastIngestion = companionWithIngestions.ingestions.sortedBy { it.time }.lastOrNull()
+                        ?: return@mapNotNull null
                     SubstanceStat(
-                        substanceName = it.substanceName,
-                        lastUsedText = getTimeDifferenceText(fromDate = it.lastUsed, toDate = currentTime),
-                        color = it.color
+                        substanceName = companionWithIngestions.substanceCompanion.substanceName,
+                        lastUsedText = getTimeDifferenceText(fromDate = lastIngestion.time, toDate = currentTime),
+                        color = companionWithIngestions.substanceCompanion.color,
+                        ingestionCount = companionWithIngestions.ingestions.size
                     )
                 }
             }.stateIn(
@@ -43,5 +46,6 @@ class StatsViewModel @Inject constructor(
 data class SubstanceStat(
     val substanceName: String,
     val lastUsedText: String,
-    val color: SubstanceColor
+    val color: SubstanceColor,
+    val ingestionCount: Int
 )

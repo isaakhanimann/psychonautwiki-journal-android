@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.stats.substancecompanion
+package com.example.healthassistant.ui.ingestions.stats.substancecompanion
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

@@ -4,7 +4,7 @@ import androidx.room.*
 import com.example.healthassistant.data.room.experiences.entities.Experience
 import com.example.healthassistant.data.room.experiences.entities.Ingestion
 import com.example.healthassistant.data.room.experiences.entities.SubstanceCompanion
-import com.example.healthassistant.data.room.experiences.entities.SubstanceLastUsed
+import com.example.healthassistant.data.room.experiences.relations.CompanionWithIngestions
 import com.example.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.example.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import kotlinx.coroutines.flow.Flow
@@ -18,15 +18,6 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
     fun getIngestionsSortedDescendingFlow(): Flow<List<Ingestion>>
-
-    @Query(
-        "SELECT ingestion.substanceName, MAX(ingestion.time) as lastUsed, substancecompanion.color" +
-                " FROM ingestion" +
-                " LEFT JOIN substancecompanion ON ingestion.substanceName = substancecompanion.substanceName" +
-                " GROUP BY ingestion.substanceName" +
-                " ORDER BY lastUsed DESC"
-    )
-    fun getSubstanceWithLastDateDescendingFlow(): Flow<List<SubstanceLastUsed>>
 
     @Query(
         "SELECT * FROM ingestion as i" +
@@ -88,8 +79,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC LIMIT 1")
     suspend fun getLastIngestion(substanceName: String): Ingestion?
 
+    @Transaction
     @Query("SELECT * FROM substancecompanion")
-    fun getSubstanceCompanionFlow(): Flow<List<SubstanceCompanion>>
+    fun getSubstanceCompanionWithIngestionsFlow(): Flow<List<CompanionWithIngestions>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(substanceCompanion: SubstanceCompanion)

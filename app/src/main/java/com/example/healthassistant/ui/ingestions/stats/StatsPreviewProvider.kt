@@ -1,4 +1,4 @@
-package com.example.healthassistant.ui.stats
+package com.example.healthassistant.ui.ingestions.stats
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.example.healthassistant.data.room.experiences.entities.SubstanceColor
@@ -9,22 +9,26 @@ class StatsPreviewProvider : PreviewParameterProvider<List<SubstanceStat>> {
             SubstanceStat(
                 substanceName = "LSD",
                 lastUsedText = "2 minutes",
-                color = SubstanceColor.BLUE
+                color = SubstanceColor.BLUE,
+                ingestionCount = 3
             ),
             SubstanceStat(
                 substanceName = "MDMA",
                 lastUsedText = "1 day",
-                color = SubstanceColor.PINK
+                color = SubstanceColor.PINK,
+                ingestionCount = 8
             ),
             SubstanceStat(
                 substanceName = "Cocaine",
                 lastUsedText = "3 months",
-                color = SubstanceColor.ORANGE
+                color = SubstanceColor.ORANGE,
+                ingestionCount = 20
             ),
             SubstanceStat(
                 substanceName = "Ketamine",
                 lastUsedText = "10 months",
-                color = SubstanceColor.PURPLE
+                color = SubstanceColor.PURPLE,
+                ingestionCount = 1
             )
         ),
         listOf()
