@@ -13,7 +13,10 @@ fun JSONObject.getOptionalJSONObject(name: String): JSONObject? {
 
 fun JSONObject.getOptionalString(name: String): String? {
     return try {
-        getString(name)
+        if (isNull(name))
+            null
+        else
+            getString(name)
     } catch (e: Exception) {
         null
     }
@@ -37,7 +40,10 @@ fun JSONObject.getOptionalDouble(name: String): Double? {
 
 fun JSONArray.getOptionalString(index: Int): String? {
     return try {
-        getString(index)
+        if (isNull(index))
+            null
+        else
+            getString(index)
     } catch (e: Exception) {
         null
     }
