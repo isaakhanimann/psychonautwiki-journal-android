@@ -215,7 +215,7 @@ class SubstancePreviewProvider : PreviewParameterProvider<Substance> {
             dosageRemark = "This is a dosage remark",
             generalRisks = "Here are the risks associated with using this substance",
             longtermRisks = "Here are the longterm risks associated with using this substance",
-            saferUse = emptyList()
+            saferUse = listOf("this is tip number 1", "this is tip number 2", "this is tip number 3")
         )
     )
 }

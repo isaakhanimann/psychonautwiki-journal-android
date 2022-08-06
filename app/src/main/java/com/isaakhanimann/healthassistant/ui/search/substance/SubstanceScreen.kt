@@ -102,6 +102,55 @@ fun SubstanceScreen(
                 .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            val titleStyle = MaterialTheme.typography.subtitle2
+            if (substance.summary != null) {
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = "Summary", style = titleStyle)
+                Text(text = substance.summary)
+                Spacer(modifier = Modifier.height(5.dp))
+                Divider()
+            }
+            if (substance.effectsSummary != null) {
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = "Effects", style = titleStyle)
+                Text(text = substance.effectsSummary)
+                Spacer(modifier = Modifier.height(5.dp))
+                Divider()
+            }
+            if (substance.generalRisks != null && substance.longtermRisks != null) {
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = "Risks", style = titleStyle)
+                Text(text = substance.generalRisks)
+                Text(text = "Long-term", style = titleStyle)
+                Text(text = substance.longtermRisks)
+                Spacer(modifier = Modifier.height(5.dp))
+                Divider()
+            }
+            if (substance.saferUse.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = "Safer Use", style = titleStyle)
+                val paragraphStyle = ParagraphStyle(textIndent = TextIndent(restLine = 15.sp))
+                Text(
+                    buildAnnotatedString {
+                        substance.saferUse.forEach {
+                            withStyle(style = paragraphStyle) {
+                                append(Typography.bullet)
+                                append("\t\t")
+                                append(it)
+                            }
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.height(5.dp))
+                Divider()
+            }
+            if (substance.dosageRemark != null) {
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = "Dosage Remark", style = titleStyle)
+                Text(text = substance.dosageRemark)
+                Spacer(modifier = Modifier.height(5.dp))
+                Divider()
+            }
             val maxDuration = remember(substance.roas) {
                 substance.roas.mapNotNull {
                     val duration = it.roaDuration ?: return@mapNotNull null
@@ -153,7 +202,6 @@ fun SubstanceScreen(
                 unsafeInteractions = unsafeInteractions,
                 uncertainInteractions = uncertainInteractions
             )
-            val titleStyle = MaterialTheme.typography.subtitle2
             ToleranceSection(
                 tolerance = substance.tolerance,
                 crossTolerances = substance.crossTolerances,
