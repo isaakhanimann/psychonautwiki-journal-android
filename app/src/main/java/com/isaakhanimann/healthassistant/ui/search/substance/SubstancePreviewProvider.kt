@@ -9,8 +9,7 @@ class SubstancePreviewProvider : PreviewParameterProvider<Substance> {
             name = "Example Substance",
             commonNames = listOf("Hat", "Boot", "Hoodie", "Shirt", "Blouse"),
             url = "https://psychonautwiki.org/wiki/Lsd",
-            chemicalClasses = listOf("Amphetamines"),
-            psychoactiveClasses = listOf("Entactogens"),
+            categories = listOf("entactogen, common"),
             tolerance = Tolerance(
                 full = "with prolonged and repeated use",
                 half = "1 month",
@@ -194,21 +193,29 @@ class SubstancePreviewProvider : PreviewParameterProvider<Substance> {
                 "Psychedelics",
                 "Stimulants"
             ),
-            uncertainInteractions = listOf(
-                "MDMA",
-                "Stimulants",
-                "Dextromethorphan"
+            interactions = Interactions(
+                dangerous = listOf(
+                    "Alcohol",
+                    "AMT",
+                    "Cocaine"
+                ),
+                unsafe = listOf(
+                    "Tramadol",
+                    "MAOI",
+                    "Dissociatives"
+                ),
+                uncertain = listOf(
+                    "MDMA",
+                    "Stimulants",
+                    "Dextromethorphan"
+                ),
             ),
-            unsafeInteractions = listOf(
-                "Tramadol",
-                "MAOI",
-                "Dissociatives"
-            ),
-            dangerousInteractions = listOf(
-                "Alcohol",
-                "AMT",
-                "Cocaine"
-            )
+            summary = "This is a little summary of the substance.",
+            effectsSummary = "This is a little summary of the effects.",
+            dosageRemark = "This is a dosage remark",
+            generalRisks = "Here are the risks associated with using this substance",
+            longtermRisks = "Here are the longterm risks associated with using this substance",
+            saferUse = emptyList()
         )
     )
 }

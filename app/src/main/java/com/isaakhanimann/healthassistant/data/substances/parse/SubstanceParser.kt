@@ -3,22 +3,18 @@ package com.isaakhanimann.healthassistant.data.substances.parse
 import com.isaakhanimann.healthassistant.data.substances.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.json.JSONTokener
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SubstanceParser @Inject constructor() : SubstanceParserInterface {
 
-    override fun parseAllSubstances(string: String): List<Substance> {
-        val jsonArray = JSONTokener(string).nextValue() as? JSONArray ?: return emptyList()
-        val substances: MutableList<Substance> = mutableListOf()
-        for (i in 0 until jsonArray.length()) {
-            val jsonSubstance = jsonArray.getOptionalJSONObject(i) ?: continue
-            val newSub = parseSubstance(jsonSubstance) ?: continue
-            substances.add(newSub)
-        }
-        return substances
+    override fun parseSubstanceFile(string: String): SubstanceFile {
+        val wholeFile = JSONObject(string)
+        return SubstanceFile(
+            categories = parseCategories(wholeFile),
+            substances = parseSubstances(wholeFile)
+        )
     }
 
     override fun extractSubstanceString(string: String): String? {
@@ -32,43 +28,92 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         }
     }
 
+    private fun parseCategories(wholeFile: JSONObject): List<Category> {
+        val jsonCategories = wholeFile.getJSONArray("categories")
+        val categories: MutableList<Category> = mutableListOf()
+        for (i in 0 until jsonCategories.length()) {
+            val jsonCategory = jsonCategories.getOptionalJSONObject(i) ?: continue
+            val newCategory = parseCategory(jsonCategory) ?: continue
+            categories.add(newCategory)
+        }
+        return categories
+    }
+
+    private fun parseSubstances(wholeFile: JSONObject): List<Substance> {
+        val jsonSubstances = wholeFile.getJSONArray("substances")
+        val substances: MutableList<Substance> = mutableListOf()
+        for (i in 0 until jsonSubstances.length()) {
+            val jsonCategory = jsonSubstances.getOptionalJSONObject(i) ?: continue
+            val newSubstance = parseSubstance(jsonCategory) ?: continue
+            substances.add(newSubstance)
+        }
+        return substances
+    }
+
+    private fun parseCategory(jsonCategory: JSONObject): Category? {
+        val name = jsonCategory.getOptionalString("name") ?: return null
+        val description = jsonCategory.getOptionalString("description") ?: return null
+        val url = jsonCategory.getOptionalString("url")
+        return Category(name, description, url)
+    }
+
     private fun parseSubstance(jsonSubstance: JSONObject): Substance? {
         val name = jsonSubstance.getOptionalString("name") ?: return null
         val jsonCommonNames = jsonSubstance.getOptionalJSONArray("commonNames")
         val commonNames = parseCommonNames(jsonCommonNames, removeName = name)
         val url = jsonSubstance.getOptionalString("url") ?: return null
-        val jsonClass = jsonSubstance.getOptionalJSONObject("class")
-        val chemicalClasses = parseChemicalClasses(jsonClass)
-        val psychoactiveClasses = parsePsychoactiveClasses(jsonClass)
         val jsonTolerance = jsonSubstance.getOptionalJSONObject("tolerance")
         val tolerance = parseTolerance(jsonTolerance)
-        val jsonRoas = jsonSubstance.getOptionalJSONArray("roas")
-        val roas = parseRoas(jsonRoas)
-        val addictionPotential = jsonSubstance.getOptionalString("addictionPotential")
-        val jsonToxicities = jsonSubstance.getOptionalJSONArray("toxicity")
-        val toxicities = parseToxicities(jsonToxicities)
         val jsonTolerances = jsonSubstance.getOptionalJSONArray("crossTolerances")
         val crossTolerances = parseCrossTolerances(jsonTolerances)
-        val jsonUncertain = jsonSubstance.getOptionalJSONArray("uncertainInteractions")
-        val uncertainInteractions = parseInteractions(jsonUncertain)
-        val jsonUnsafe = jsonSubstance.getOptionalJSONArray("unsafeInteractions")
-        val unsafeInteractions = parseInteractions(jsonUnsafe)
-        val jsonDangerous = jsonSubstance.getOptionalJSONArray("dangerousInteractions")
-        val dangerousInteractions = parseInteractions(jsonDangerous)
+        val addictionPotential = jsonSubstance.getOptionalString("addictionPotential")
+        val jsonToxicities = jsonSubstance.getOptionalJSONArray("toxicities")
+        val toxicities = parseToxicities(jsonToxicities)
+        val jsonCategory = jsonSubstance.getOptionalJSONArray("categories")
+        val categories = parseJsonArrayToStringArray(jsonCategory)
+        val summary = jsonSubstance.getOptionalString("summary")
+        val effectsSummary = jsonSubstance.getOptionalString("effectsSummary")
+        val dosageRemark = jsonSubstance.getOptionalString("dosageRemark")
+        val generalRisks = jsonSubstance.getOptionalString("generalRisks")
+        val longtermRisks = jsonSubstance.getOptionalString("longtermRisks")
+        val jsonSaferUse = jsonSubstance.getOptionalJSONArray("saferUse")
+        val saferUse = parseJsonArrayToStringArray(jsonSaferUse)
+        val jsonInteractions = jsonSubstance.getOptionalJSONObject("interactions")
+        val interactions = parseInteractions(jsonInteractions)
+        val jsonRoas = jsonSubstance.getOptionalJSONArray("roas")
+        val roas = parseRoas(jsonRoas)
         return Substance(
             name = name,
             commonNames = commonNames,
             url = url,
-            chemicalClasses = chemicalClasses,
-            psychoactiveClasses = psychoactiveClasses,
             tolerance = tolerance,
-            roas = roas,
+            crossTolerances = crossTolerances,
             addictionPotential = addictionPotential,
             toxicities = toxicities,
-            crossTolerances = crossTolerances,
-            uncertainInteractions = uncertainInteractions,
-            unsafeInteractions = unsafeInteractions,
-            dangerousInteractions = dangerousInteractions
+            categories = categories,
+            summary = summary,
+            effectsSummary = effectsSummary,
+            dosageRemark = dosageRemark,
+            generalRisks = generalRisks,
+            longtermRisks = longtermRisks,
+            saferUse = saferUse,
+            interactions = interactions,
+            roas = roas,
+        )
+    }
+
+    private fun parseInteractions(jsonInteractions: JSONObject?): Interactions? {
+        if (jsonInteractions == null) return null
+        val jsonUncertain = jsonInteractions.getOptionalJSONArray("uncertain")
+        val uncertainInteractions = parseInteractionItems(jsonUncertain)
+        val jsonUnsafe = jsonInteractions.getOptionalJSONArray("unsafe")
+        val unsafeInteractions = parseInteractionItems(jsonUnsafe)
+        val jsonDangerous = jsonInteractions.getOptionalJSONArray("dangerous")
+        val dangerousInteractions = parseInteractionItems(jsonDangerous)
+        return Interactions(
+            dangerous = dangerousInteractions,
+            unsafe = unsafeInteractions,
+            uncertain = uncertainInteractions
         )
     }
 
@@ -96,28 +141,14 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         return commonNames
     }
 
-    private fun parseChemicalClasses(jsonClass: JSONObject?): List<String> {
-        if (jsonClass == null) return emptyList()
-        val jsonChemicals = jsonClass.getOptionalJSONArray("chemical")
-        val chemicals: MutableList<String> = mutableListOf()
-        if (jsonChemicals == null) return chemicals
-        for (i in 0 until jsonChemicals.length()) {
-            val chemicalName = jsonChemicals.getOptionalString(i) ?: continue
-            chemicals.add(chemicalName)
+    private fun parseJsonArrayToStringArray(jsonArray: JSONArray?): List<String> {
+        if (jsonArray == null) return emptyList()
+        val result: MutableList<String> = mutableListOf()
+        for (i in 0 until jsonArray.length()) {
+            val item = jsonArray.getOptionalString(i) ?: continue
+            result.add(item)
         }
-        return chemicals
-    }
-
-    private fun parsePsychoactiveClasses(jsonClass: JSONObject?): List<String> {
-        if (jsonClass == null) return emptyList()
-        val jsonPsychoactives = jsonClass.getOptionalJSONArray("psychoactive")
-        val psychoactives: MutableList<String> = mutableListOf()
-        if (jsonPsychoactives == null) return psychoactives
-        for (i in 0 until jsonPsychoactives.length()) {
-            val psyName = jsonPsychoactives.getOptionalString(i) ?: continue
-            psychoactives.add(psyName)
-        }
-        return psychoactives
+        return result
     }
 
     private fun parseTolerance(jsonTolerance: JSONObject?): Tolerance? {
@@ -282,7 +313,7 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         return tolNames
     }
 
-    private fun parseInteractions(jsonInteractions: JSONArray?): List<String> {
+    private fun parseInteractionItems(jsonInteractions: JSONArray?): List<String> {
         if (jsonInteractions == null) return emptyList()
         val interactionNames: MutableList<String> = mutableListOf()
         for (i in 0 until jsonInteractions.length()) {

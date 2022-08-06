@@ -42,34 +42,35 @@ class CheckInteractionsViewModel @Inject constructor(
         val substance = substanceRepo.getSubstance(substanceName)!!
         isShowingHallucinogenLink = substance.isHallucinogen
         isShowingStimulantsLink = substance.isStimulant
-        dangerousInteractions = substance.dangerousInteractions
-        unsafeInteractions = substance.unsafeInteractions
-        uncertainInteractions = substance.uncertainInteractions
+        dangerousInteractions = substance.interactions?.dangerous ?: emptyList()
+        unsafeInteractions = substance.interactions?.unsafe ?: emptyList()
+        uncertainInteractions = substance.interactions?.uncertain ?: emptyList()
         viewModelScope.launch {
             dangerousInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.DANGEROUS,
                 substanceName = substanceName,
-                originalInteractions = substance.dangerousInteractions,
+                originalInteractions = substance.interactions?.dangerous ?: emptyList(),
                 interactionsToFilterOut = emptyList(),
-                psychoactiveClassNames = substance.psychoactiveClasses
+                categories = substance.categories
             )
             unsafeInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.UNSAFE,
                 substanceName = substanceName,
-                originalInteractions = substance.unsafeInteractions,
+                originalInteractions = substance.interactions?.unsafe ?: emptyList(),
                 interactionsToFilterOut = dangerousInteractions,
-                psychoactiveClassNames = substance.psychoactiveClasses
+                categories = substance.categories
             )
             uncertainInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.UNCERTAIN,
                 substanceName = substanceName,
-                originalInteractions = substance.uncertainInteractions,
+                originalInteractions = substance.interactions?.uncertain ?: emptyList(),
                 interactionsToFilterOut = dangerousInteractions + unsafeInteractions,
-                psychoactiveClassNames = substance.psychoactiveClasses
+                categories = substance.categories
             )
             val twoDaysInMs = 2.toDuration(DurationUnit.DAYS).inWholeMilliseconds
             val twoDaysAgo = Date(System.currentTimeMillis() - twoDaysInMs)
-            latestIngestionsOfEverySubstanceSinceTwoDays = experienceRepo.getLatestIngestionOfEverySubstanceSinceDate(twoDaysAgo)
+            latestIngestionsOfEverySubstanceSinceTwoDays =
+                experienceRepo.getLatestIngestionOfEverySubstanceSinceDate(twoDaysAgo)
             checkInteractionsAndMaybeShowAlert()
             isSearchingForInteractions = false
         }
@@ -129,7 +130,11 @@ class CheckInteractionsViewModel @Inject constructor(
         return latestIngestionsOfEverySubstanceSinceTwoDays.filter { ingestion ->
             val substance = substanceRepo.getSubstance(ingestion.substanceName)
             val isSubstanceInDangerClass =
-                substance?.psychoactiveClasses?.any { interactions.contains(it) } ?: false
+                substance?.categories?.any { categoryName ->
+                    interactions.any { interactionName ->
+                        interactionName.contains(categoryName, ignoreCase = true)
+                    }
+                } ?: false
             val isWildCardMatch = interactions.map { interaction ->
                 Regex(
                     pattern = interaction.replace(

@@ -28,30 +28,30 @@ class SubstanceViewModel @Inject constructor(
     init {
         val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
         substance = substanceRepo.getSubstance(substanceName)!!
-        dangerousInteractions = substance.dangerousInteractions
-        unsafeInteractions = substance.unsafeInteractions
-        uncertainInteractions = substance.uncertainInteractions
+        dangerousInteractions = substance.interactions?.dangerous ?: emptyList()
+        unsafeInteractions = substance.interactions?.unsafe ?: emptyList()
+        uncertainInteractions = substance.interactions?.uncertain ?: emptyList()
         viewModelScope.launch {
             dangerousInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.DANGEROUS,
                 substanceName = substanceName,
-                originalInteractions = substance.dangerousInteractions,
+                originalInteractions = substance.interactions?.dangerous ?: emptyList(),
                 interactionsToFilterOut = emptyList(),
-                psychoactiveClassNames = substance.psychoactiveClasses
+                categories = substance.categories
             )
             unsafeInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.UNSAFE,
                 substanceName = substanceName,
-                originalInteractions = substance.unsafeInteractions,
+                originalInteractions = substance.interactions?.unsafe ?: emptyList(),
                 interactionsToFilterOut = dangerousInteractions,
-                psychoactiveClassNames = substance.psychoactiveClasses
+                categories = substance.categories
             )
             uncertainInteractions = substanceRepo.getAllInteractions(
                 type = InteractionType.UNCERTAIN,
                 substanceName = substanceName,
-                originalInteractions = substance.uncertainInteractions,
+                originalInteractions = substance.interactions?.uncertain ?: emptyList(),
                 interactionsToFilterOut = dangerousInteractions + unsafeInteractions,
-                psychoactiveClassNames = substance.psychoactiveClasses
+                categories = substance.categories
             )
             isSearchingForInteractions = false
         }

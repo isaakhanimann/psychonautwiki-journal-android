@@ -15,11 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.data.substances.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.Substance
 import com.isaakhanimann.healthassistant.ui.search.substance.InteractionChip
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstancePreviewProvider
-import com.google.accompanist.flowlayout.FlowRow
 
 
 @Composable
@@ -57,9 +57,9 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::c
         isSearchingForInteractions = true,
         isShowingHallucinogenLink = true,
         isShowingStimulantsLink = false,
-        dangerousInteractions = substance.dangerousInteractions,
-        unsafeInteractions = substance.unsafeInteractions,
-        uncertainInteractions = substance.uncertainInteractions,
+        dangerousInteractions = substance.interactions?.dangerous ?: emptyList(),
+        unsafeInteractions = substance.interactions?.unsafe ?: emptyList(),
+        uncertainInteractions = substance.interactions?.uncertain ?: emptyList(),
         navigateToNext = {},
         navigateToSaferHallucinogensScreen = {},
         navigateToSaferStimulantsScreen = {},

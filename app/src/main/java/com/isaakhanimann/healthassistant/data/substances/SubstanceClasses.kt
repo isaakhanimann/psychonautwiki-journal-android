@@ -2,6 +2,58 @@ package com.isaakhanimann.healthassistant.data.substances
 
 import androidx.compose.ui.graphics.Color
 
+data class SubstanceFile(
+    val categories: List<Category>,
+    val substances: List<Substance>
+)
+
+data class Category(
+    val name: String,
+    val description: String,
+    val url: String?
+)
+
+data class Substance(
+    val name: String,
+    val commonNames: List<String>,
+    val url: String,
+    val tolerance: Tolerance?,
+    val crossTolerances: List<String>,
+    val addictionPotential: String?,
+    val toxicities: List<String>,
+    val categories: List<String>,
+    val summary: String?,
+    val effectsSummary: String?,
+    val dosageRemark: String?,
+    val generalRisks: String?,
+    val longtermRisks: String?,
+    val saferUse: List<String>,
+    val interactions: Interactions?,
+    val roas: List<Roa>,
+) {
+    fun getRoa(route: AdministrationRoute): Roa? {
+        return roas.firstOrNull { it.route == route }
+    }
+
+    val isHallucinogen
+        get() = categories.any {
+            val hallucinogens = setOf(
+                "hallucinogen",
+                "psychedelic",
+                "dissociative",
+                "deliriant",
+            )
+            hallucinogens.contains(it.lowercase())
+        }
+    val isStimulant
+        get() = categories.any {
+            val stimulants = setOf(
+                "stimulant",
+            )
+            stimulants.contains(it.lowercase())
+        }
+}
+
 enum class InteractionType {
     DANGEROUS {
         override val color: Color
@@ -19,55 +71,18 @@ enum class InteractionType {
     abstract val color: Color
 }
 
-data class Substance(
-    val name: String,
-    val commonNames: List<String>,
-    val url: String,
-    val chemicalClasses: List<String>,
-    val psychoactiveClasses: List<String>,
-    val tolerance: Tolerance?,
-    val roas: List<Roa>,
-    val addictionPotential: String?,
-    val toxicities: List<String>,
-    val crossTolerances: List<String>,
-    val uncertainInteractions: List<String>,
-    val unsafeInteractions: List<String>,
-    val dangerousInteractions: List<String>
+data class Interactions(
+    val dangerous: List<String>,
+    val unsafe: List<String>,
+    val uncertain: List<String>
 ) {
-    fun getRoa(route: AdministrationRoute): Roa? {
-        return roas.firstOrNull { it.route == route }
-    }
-
     fun getInteractions(interactionType: InteractionType): List<String> {
         return when (interactionType) {
-            InteractionType.DANGEROUS -> dangerousInteractions
-            InteractionType.UNSAFE -> unsafeInteractions
-            InteractionType.UNCERTAIN -> uncertainInteractions
+            InteractionType.DANGEROUS -> dangerous
+            InteractionType.UNSAFE -> unsafe
+            InteractionType.UNCERTAIN -> uncertain
         }
     }
-
-    val isHallucinogen
-        get() = psychoactiveClasses.any {
-            val hallucinogens = setOf(
-                "hallucinogens",
-                "hallucinogen",
-                "psychedelics",
-                "psychedelic",
-                "dissociatives",
-                "dissociative",
-                "deliriant",
-                "deliriants"
-            )
-            hallucinogens.contains(it.lowercase())
-        }
-    val isStimulant
-        get() = psychoactiveClasses.any {
-            val stimulants = setOf(
-                "stimulant",
-                "stimulants"
-            )
-            stimulants.contains(it.lowercase())
-        }
 }
 
 data class Tolerance(

@@ -11,18 +11,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.data.substances.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.Substance
-import com.google.accompanist.flowlayout.FlowRow
 
 @Preview
 @Composable
 fun InteractionsPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
     InteractionsView(
         isSearchingForInteractions = true,
-        dangerousInteractions = substance.dangerousInteractions,
-        unsafeInteractions = substance.unsafeInteractions,
-        uncertainInteractions = substance.uncertainInteractions
+        dangerousInteractions = substance.interactions?.dangerous ?: emptyList(),
+        unsafeInteractions = substance.interactions?.unsafe ?: emptyList(),
+        uncertainInteractions = substance.interactions?.uncertain ?: emptyList()
     )
 }
 

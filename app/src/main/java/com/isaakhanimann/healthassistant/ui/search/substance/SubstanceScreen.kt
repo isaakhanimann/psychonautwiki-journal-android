@@ -66,9 +66,9 @@ fun SubstanceScreenPreview(
             navigateToVolumetricDosingScreen = {},
             substance = substance,
             isSearchingForInteractions = true,
-            dangerousInteractions = substance.dangerousInteractions,
-            unsafeInteractions = substance.unsafeInteractions,
-            uncertainInteractions = substance.uncertainInteractions,
+            dangerousInteractions = substance.interactions?.dangerous ?: emptyList(),
+            unsafeInteractions = substance.interactions?.unsafe ?: emptyList(),
+            uncertainInteractions = substance.interactions?.uncertain ?: emptyList(),
         )
     }
 }

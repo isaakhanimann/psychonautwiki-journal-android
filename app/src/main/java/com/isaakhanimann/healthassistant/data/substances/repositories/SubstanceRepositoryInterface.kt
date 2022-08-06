@@ -12,6 +12,6 @@ interface SubstanceRepositoryInterface {
         substanceName: String,
         originalInteractions: List<String>,
         interactionsToFilterOut: List<String>,
-        psychoactiveClassNames: List<String>
+        categories: List<String>
     ): List<String>
 }
