@@ -55,7 +55,6 @@ fun SearchContent(
                 Spacer(modifier = Modifier.width(2.dp))
             }
         }
-        val recents = searchViewModel.filteredRecentlyUsed.collectAsState().value
         val filteredSubstances = searchViewModel.filteredSubstances.collectAsState().value
         LazyColumn {
             items(filteredSubstances.size) { i ->

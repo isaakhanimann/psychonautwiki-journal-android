@@ -61,7 +61,7 @@ class SearchViewModel @Inject constructor(
                     isActive = isActive
                 )
             }
-        }.combine(_isShowingYouUsedFlow){ chips, isShowingYouUsed ->
+        }.combine(_isShowingYouUsedFlow) { chips, isShowingYouUsed ->
             val newChips = chips.toMutableList()
             newChips.add(
                 0, CategoryChipModel(
@@ -77,24 +77,16 @@ class SearchViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    val filteredRecentlyUsed: StateFlow<List<Substance>> =
-        recentlyUsedSubstancesFlow.combine(searchTextFlow) { recents, searchText ->
-            getMatchingSubstances(searchText, recents)
-        }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
-
-    private val allOrYouUsedSubstances = allSubstancesFlow.combine(recentlyUsedSubstancesFlow) { all, recents ->
-        Pair(first = all, recents)
-    }.combine(_isShowingYouUsedFlow) { pair, isShowingYouUsed ->
-        if (isShowingYouUsed) {
-            return@combine pair.second
-        } else {
-            return@combine pair.first
+    private val allOrYouUsedSubstances =
+        allSubstancesFlow.combine(recentlyUsedSubstancesFlow) { all, recents ->
+            Pair(first = all, recents)
+        }.combine(_isShowingYouUsedFlow) { pair, isShowingYouUsed ->
+            if (isShowingYouUsed) {
+                return@combine pair.second
+            } else {
+                return@combine pair.first
+            }
         }
-    }
 
     val filteredSubstances =
         allOrYouUsedSubstances.combine(_filtersFlow) { substances, filters ->
