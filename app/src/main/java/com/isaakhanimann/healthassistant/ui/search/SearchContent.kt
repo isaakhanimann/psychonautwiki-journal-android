@@ -20,7 +20,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.classes.Substance
-import com.isaakhanimann.healthassistant.ui.experiences.SectionTitle
 
 @Composable
 fun SearchContent(
@@ -36,12 +35,13 @@ fun SearchContent(
             }
         )
         val categories = searchViewModel.chipCategoriesFlow.collectAsState().value
-        val recents = searchViewModel.filteredRecentlyUsed.collectAsState().value
-        val commons = searchViewModel.filteredSubstances.collectAsState().value
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(top = 4.dp)
         ) {
+            item {
+                Spacer(modifier = Modifier.width(2.dp))
+            }
             items(categories.size) {
                 val categoryChipModel = categories[it]
                 CategoryChip(
@@ -51,27 +51,17 @@ fun SearchContent(
                     }
                 )
             }
-        }
-        LazyColumn {
-            if (recents.isNotEmpty()) {
-                item {
-                    SectionTitle(title = "Recently Used")
-                }
-                items(recents.size) {
-                    val substance = recents[it]
-                    SubstanceRow(substance = substance, onTap = onSubstanceTap)
-                    if (it < recents.size) {
-                        Divider()
-                    }
-                }
-            }
             item {
-                SectionTitle(title = "All")
+                Spacer(modifier = Modifier.width(2.dp))
             }
-            items(commons.size) { i ->
-                val substance = commons[i]
+        }
+        val recents = searchViewModel.filteredRecentlyUsed.collectAsState().value
+        val filteredSubstances = searchViewModel.filteredSubstances.collectAsState().value
+        LazyColumn {
+            items(filteredSubstances.size) { i ->
+                val substance = filteredSubstances[i]
                 SubstanceRow(substance = substance, onTap = onSubstanceTap)
-                if (i < commons.size) {
+                if (i < filteredSubstances.size) {
                     Divider()
                 }
             }

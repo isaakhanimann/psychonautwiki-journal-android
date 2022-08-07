@@ -43,20 +43,21 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> = allCategoriesFlow.combine(_filtersFlow) { categories, filters ->
-        categories.map { category ->
-            val isActive = filters.contains(category.name)
-            CategoryChipModel(
-                chipName = category.name,
-                color = category.color,
-                isActive = isActive
-            )
-        }
-    }.stateIn(
-        initialValue = emptyList(),
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> =
+        allCategoriesFlow.combine(_filtersFlow) { categories, filters ->
+            categories.map { category ->
+                val isActive = filters.contains(category.name)
+                CategoryChipModel(
+                    chipName = category.name,
+                    color = category.color,
+                    isActive = isActive
+                )
+            }
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     val filteredRecentlyUsed: StateFlow<List<Substance>> =
         recentlyUsedNamesFlow.combine(searchTextFlow) { recents, searchText ->
@@ -68,8 +69,12 @@ class SearchViewModel @Inject constructor(
         )
 
     val filteredSubstances =
-        allSubstancesFlow.combine(searchTextFlow) { commons, searchText ->
-            getMatchingSubstances(searchText, commons)
+        allSubstancesFlow.combine(_filtersFlow) { substances, filters ->
+            substances.filter { substance ->
+                filters.all { substance.categories.contains(it) }
+            }
+        }.combine(searchTextFlow) { substances, searchText ->
+            getMatchingSubstances(searchText, substances)
         }.stateIn(
             initialValue = emptyList(),
             scope = viewModelScope,
