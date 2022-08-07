@@ -1,5 +1,6 @@
 package com.isaakhanimann.healthassistant.data.substances.parse
 
+import androidx.compose.ui.graphics.Color
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.*
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.*
@@ -56,7 +57,9 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val name = jsonCategory.getOptionalString("name") ?: return null
         val description = jsonCategory.getOptionalString("description") ?: return null
         val url = jsonCategory.getOptionalString("url")
-        return Category(name, description, url)
+        val colorDecimal = jsonCategory.getOptionalLong("color") ?: 4278876927
+        val color = Color(colorDecimal)
+        return Category(name, description, url, color)
     }
 
     private fun parseSubstance(jsonSubstance: JSONObject): Substance? {

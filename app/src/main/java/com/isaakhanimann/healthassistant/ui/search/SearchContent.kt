@@ -23,9 +23,9 @@ import com.isaakhanimann.healthassistant.ui.experiences.SectionTitle
 
 @Composable
 fun SearchContent(
+    modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel = hiltViewModel(),
     onSubstanceTap: (Substance) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         SearchField(
@@ -35,8 +35,7 @@ fun SearchContent(
             }
         )
         val recents = searchViewModel.filteredRecentlyUsed.collectAsState().value
-        val commons = searchViewModel.filteredCommonlyUsed.collectAsState().value
-        val others = searchViewModel.filteredOthers.collectAsState().value
+        val commons = searchViewModel.filteredSubstances.collectAsState().value
         LazyColumn {
             if (recents.isNotEmpty()) {
                 item {
@@ -50,28 +49,14 @@ fun SearchContent(
                     }
                 }
             }
-            if (commons.isNotEmpty()) {
-                item {
-                    SectionTitle(title = "Commonly Used")
-                }
-                items(commons.size) { i ->
-                    val substance = commons[i]
-                    SubstanceRow(substance = substance, onTap = onSubstanceTap)
-                    if (i < commons.size) {
-                        Divider()
-                    }
-                }
+            item {
+                SectionTitle(title = "All")
             }
-            if (others.isNotEmpty()) {
-                item {
-                    SectionTitle(title = "Other")
-                }
-                items(others.size) { i ->
-                    val substance = others[i]
-                    SubstanceRow(substance = substance, onTap = onSubstanceTap)
-                    if (i < others.size) {
-                        Divider()
-                    }
+            items(commons.size) { i ->
+                val substance = commons[i]
+                SubstanceRow(substance = substance, onTap = onSubstanceTap)
+                if (i < commons.size) {
+                    Divider()
                 }
             }
         }

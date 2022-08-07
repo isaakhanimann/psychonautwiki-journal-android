@@ -23,79 +23,6 @@ class SearchViewModel @Inject constructor(
             lastUsedSubstanceNames.mapNotNull { substanceRepo.getSubstance(substanceName = it) }
         }
 
-    private val commonNames = listOf(
-        "Alcohol",
-        "Caffeine",
-        "Nicotine",
-        "Cannabis",
-        "MDMA",
-        "Cocaine",
-        "Amphetamine",
-        "LSD",
-        "Psilocybin mushrooms",
-        "Ketamine",
-        "Nitrous",
-        "2C-B",
-        "Methamphetamine",
-        "GHB",
-        "GBL",
-        "Poppers",
-        "Heroin",
-        "Fentanyl",
-        "Hydrocodone",
-        "Oxycodone",
-        "Alprazolam",
-        "2C-I",
-        "DMT",
-        "5-MeO-DMT",
-        "DOM",
-        "DOI",
-        "DOB",
-        "Ephedrine",
-        "MDA",
-        "MDEA",
-        "Mephedrone",
-        "Mescaline",
-        "Methcathinone",
-        "Methylone",
-        "Kratom",
-        "Dextromethorphan",
-        "PCP",
-        "Salvia divinorum",
-        "Oxymorphone",
-        "Morphine",
-        "Methadone",
-        "Codeine",
-        "Methylphenidate",
-        "Pentobarbital",
-        "Chlorodiazepoxide",
-        "Diazepam",
-        "Lorazepam",
-        "Triazolam",
-        "Zaleplon",
-        "Zolpidem",
-        "Pethidine",
-        "MDPV",
-    )
-
-    private val commonSubstancesWithoutRecentsFlow: Flow<List<Substance>> =
-        allSubstancesFlow.combine(recentlyUsedNamesFlow) { allSubstances, recents ->
-            allSubstances.filter { substance ->
-                val name = substance.name
-                commonNames.contains(name) && !recents.any { it.name == name }
-            }
-        }
-
-    private val allWithoutRecentsFlow =
-        allSubstancesFlow.combine(recentlyUsedNamesFlow) { allSubstances, recents ->
-            allSubstances.filter { !recents.contains(it) }
-        }
-
-    private val otherSubstancesFlow =
-        allWithoutRecentsFlow.combine(commonSubstancesWithoutRecentsFlow) { allWithoutRecents, commons ->
-            allWithoutRecents.filter { !commons.contains(it) }
-        }
-
     private val _searchTextFlow = MutableStateFlow("")
     val searchTextFlow = _searchTextFlow.asStateFlow()
 
@@ -108,22 +35,14 @@ class SearchViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    val filteredCommonlyUsed =
-        commonSubstancesWithoutRecentsFlow.combine(searchTextFlow) { commons, searchText ->
+    val filteredSubstances =
+        allSubstancesFlow.combine(searchTextFlow) { commons, searchText ->
             getMatchingSubstances(searchText, commons)
         }.stateIn(
             initialValue = emptyList(),
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000)
         )
-
-    val filteredOthers = otherSubstancesFlow.combine(searchTextFlow) { others, searchText ->
-        getMatchingSubstances(searchText, others)
-    }.stateIn(
-        initialValue = emptyList(),
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
 
     fun filterSubstances(searchText: String) {
         viewModelScope.launch {

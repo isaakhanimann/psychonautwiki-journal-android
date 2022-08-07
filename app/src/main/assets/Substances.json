@@ -3,102 +3,122 @@
     {
       "name": "common",
       "description": "Common drugs are those which are well known and widely used among the drug community. This doesn't necessarily mean they are safe, but it usually comes with a longer relative history of use in humans with which to establish a safety profile.",
-      "url": null
+      "url": null,
+      "color": 4278876927
     },
     {
       "name": "psychedelic",
       "description": "Psychedelics are drugs which alter the perception, causing a number of mental effects which manifest in many forms including altered states of consciousness, visual or tactile effects.",
-      "url": "https://psychonautwiki.org/wiki/Psychedelics"
+      "url": "https://psychonautwiki.org/wiki/Psychedelics",
+      "color": 4287564543
     },
     {
       "name": "stimulant",
       "description": "Stimulants excite the nervous system and increase physiological function.",
-      "url": "https://psychonautwiki.org/wiki/Stimulants"
+      "url": "https://psychonautwiki.org/wiki/Stimulants",
+      "color": 4278246860
     },
     {
       "name": "entactogen",
       "description": "Entactogens (also known as empathogens) are a class of psychoactive substances that produce distinctive emotional and social effects similar to those of MDMA.",
-      "url": "https://psychonautwiki.org/wiki/Entactogens"
+      "url": "https://psychonautwiki.org/wiki/Entactogens",
+      "color": 4294904442
     },
     {
       "name": "depressant",
       "description": "Depressants are drugs which reduce arousal and stimulation in the user, characterised by a depressing of mental and physical functions.",
-      "url": "https://psychonautwiki.org/wiki/Depressant"
+      "url": "https://psychonautwiki.org/wiki/Depressant",
+      "color": 4294606340
     },
     {
       "name": "opioid",
       "description": "Opioids are pain-killing depressants which may also cause euphoria.",
-      "url": "https://psychonautwiki.org/wiki/Opioids"
+      "url": "https://psychonautwiki.org/wiki/Opioids",
+      "color": 4294955889
     },
     {
       "name": "habit-forming",
       "description": "These drugs pose a higher risk of causing habit forming behaviour, take particular care with the amount and frequency they are taken.",
-      "url": null
+      "url": null,
+      "color": 4291698538
     },
     {
       "name": "research-chemical",
       "description": "Research chemicals are drugs with relatively little history of human use, and thus particular care should be taken if choosing to ingest them.",
-      "url": "https://psychonautwiki.org/wiki/Research_chemicals"
+      "url": "https://psychonautwiki.org/wiki/Research_chemicals",
+      "color": 4286350333
     },
     {
       "name": "tentative",
       "description": "Tentative means that there is not much reliable information about it. This is often because the drug is very new. Information listed under these drugs should not be entirely trusted.",
-      "url": null
+      "url": null,
+      "color": 4287054400
     },
     {
       "name": "dissociative",
       "description": "Dissociatives are mostly NMDA receptor antagonists, these substances are hallucinogenic but different than psychedelics. As per the name, these substances create a distance between the user and reality.",
-      "url": "https://psychonautwiki.org/wiki/Dissociatives"
+      "url": "https://psychonautwiki.org/wiki/Dissociatives",
+      "color": 4294928359
     },
     {
       "name": "benzodiazepine",
       "description": "Benzodiazepines are generally hypnotic or anxiolytic depressant drugs.",
-      "url": "https://psychonautwiki.org/wiki/Benzodiazepines"
+      "url": "https://psychonautwiki.org/wiki/Benzodiazepines",
+      "color": 4291603072
     },
     {
       "name": "cannabinoid",
       "description": "A cannabinoid is one of a class of diverse chemical compounds that act on cannabinoid receptors on cells that alter neurotransmitter functioning in the brain.",
-      "url": "https://psychonautwiki.org/wiki/Cannabinoid"
+      "url": "https://psychonautwiki.org/wiki/Cannabinoid",
+      "color": 4282175310
     },
     {
       "name": "nootropic",
       "description": "Nootropics (also referred to as smart drugs, neuro enhancers, and cognitive enhancers) are substances that purportedly improve cognitive functions such as memory, motivation, attention, and concentration, in healthy individuals.",
-      "url": "https://psychonautwiki.org/wiki/Nootropic"
+      "url": "https://psychonautwiki.org/wiki/Nootropic",
+      "color": 4282309616
     },
     {
       "name": "deliriant",
       "description": "Deliriants are considered to be true hallucinogens, because the visuals they produce are hard or impossible to tell apart from reality; they are also known for negative physical effects.",
-      "url": "https://psychonautwiki.org/wiki/Deliriant"
+      "url": "https://psychonautwiki.org/wiki/Deliriant",
+      "color": 4278452378
     },
     {
       "name": "barbiturate",
       "description": "Barbiturates (also known as barbs and barbies) are a class of psychoactive substances that act as depressants of the central nervous system. They produce a variety of sedative-hypnotic effects including sedation, anxiety suppression, muscle relaxation, and seizure suppression when administered.",
-      "url": "https://psychonautwiki.org/wiki/Barbiturates"
+      "url": "https://psychonautwiki.org/wiki/Barbiturates",
+      "color": 4279550862
     },
     {
       "name": "eugeroic",
       "description": "Eugeroics, also known as wakefulness-promoting agents and wakefulness-promoting drugs, are a class of psychoactive substances that promote wakefulness and alertness. The best-known member of this class is modafinil.",
-      "url": "https://psychonautwiki.org/wiki/Eugeroics"
+      "url": "https://psychonautwiki.org/wiki/Eugeroics",
+      "color": 4283267071
     },
     {
       "name": "hallucinogen",
       "description": "Hallucinogens are a class of psychoactive substances that produce powerful alterations in perception, mood, and various cognitive processes. Hallucinogens can be classified into psychedelics, dissociatives and deliriants",
-      "url": "https://psychonautwiki.org/wiki/Hallucinogens"
+      "url": "https://psychonautwiki.org/wiki/Hallucinogens",
+      "color": 4294554120
     },
     {
       "name": "oneirogen",
       "description": "Oneirogen describes a wide array of psychoactive plants and chemicals ranging from normal dream enhancers to intense dissociative or deliriant drugs.",
-      "url": "https://psychonautwiki.org/wiki/Oneirogen"
+      "url": "https://psychonautwiki.org/wiki/Oneirogen",
+      "color": 4290969561
     },
     {
       "name": "antipsychotic",
       "description": "Antipsychotics (also known as neuroleptics or major tranquilizers) are a class of psychiatric medication primarily used to manage psychosis (including delusions, hallucinations, or disordered thought), particularly in schizophrenia and bipolar disorder.",
-      "url": "https://psychonautwiki.org/wiki/Antipsychotic"
+      "url": "https://psychonautwiki.org/wiki/Antipsychotic",
+      "color": 4293455940
     },
     {
       "name": "antidepressant",
       "description": "Antidepressants are a class of psychoactive substances that are prescribed to treat psychiatric disorders, most commonly major depressive disorder and some forms of anxiety disorders.",
-      "url": "https://psychonautwiki.org/wiki/Antidepressants"
+      "url": "https://psychonautwiki.org/wiki/Antidepressants",
+      "color": 4294954702
     }
   ],
   "substances": [
