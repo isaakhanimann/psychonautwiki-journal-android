@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.data.substances.Roa
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.Roa
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDurationView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaPreviewProvider

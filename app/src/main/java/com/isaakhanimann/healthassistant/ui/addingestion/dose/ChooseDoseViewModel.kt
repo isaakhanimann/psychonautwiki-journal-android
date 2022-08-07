@@ -6,9 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.data.substances.DoseClass
-import com.isaakhanimann.healthassistant.data.substances.RoaDose
-import com.isaakhanimann.healthassistant.data.substances.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.ADMINISTRATION_ROUTE_KEY
 import com.isaakhanimann.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY

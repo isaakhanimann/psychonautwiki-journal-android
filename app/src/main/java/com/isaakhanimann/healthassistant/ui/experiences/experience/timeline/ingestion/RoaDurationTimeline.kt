@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.healthassistant.data.substances.RoaDuration
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 
 @Preview
 @Composable

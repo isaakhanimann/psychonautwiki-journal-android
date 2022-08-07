@@ -2,10 +2,10 @@ package com.isaakhanimann.healthassistant.data.substances.repositories
 
 import android.content.Context
 import com.isaakhanimann.healthassistant.data.DataStorePreferences
-import com.isaakhanimann.healthassistant.data.substances.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.PsychonautWikiAPIImplementation
-import com.isaakhanimann.healthassistant.data.substances.Substance
-import com.isaakhanimann.healthassistant.data.substances.SubstanceFile
+import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceFile
 import com.isaakhanimann.healthassistant.data.substances.parse.SubstanceParserInterface
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow

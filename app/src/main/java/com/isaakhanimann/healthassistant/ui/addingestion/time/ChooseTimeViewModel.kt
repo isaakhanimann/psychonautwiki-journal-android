@@ -11,7 +11,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestio
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.data.substances.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.*
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -6,7 +6,8 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentimen
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.healthassistant.data.substances.*
+import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.*
 import java.util.*
 
 class IngestionWithDurationAndExperienceProvider :

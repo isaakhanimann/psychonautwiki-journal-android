@@ -10,8 +10,8 @@ import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceReposit
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.healthassistant.data.substances.RoaDose
-import com.isaakhanimann.healthassistant.data.substances.RoaDuration
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.INGESTION_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel

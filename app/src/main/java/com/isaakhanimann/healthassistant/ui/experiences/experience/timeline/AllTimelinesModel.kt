@@ -3,7 +3,7 @@ package com.isaakhanimann.healthassistant.ui.experiences.experience.timeline
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.healthassistant.data.substances.RoaDuration
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.experiences.experience.timeline.ingestion.FullTimeline
 import com.isaakhanimann.healthassistant.ui.experiences.experience.timeline.ingestion.TimelineDrawable
 import com.isaakhanimann.healthassistant.ui.experiences.experience.timeline.ingestion.toFullTimeline

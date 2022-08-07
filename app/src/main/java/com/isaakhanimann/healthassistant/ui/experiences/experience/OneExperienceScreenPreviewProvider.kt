@@ -4,7 +4,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.*
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.data.substances.DoseClass
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.ui.utils.getDate
 
 class OneExperienceScreenPreviewProvider :

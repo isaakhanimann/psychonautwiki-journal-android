@@ -16,8 +16,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
-import com.isaakhanimann.healthassistant.data.substances.InteractionType
-import com.isaakhanimann.healthassistant.data.substances.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.ui.search.substance.InteractionChip
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstancePreviewProvider
 

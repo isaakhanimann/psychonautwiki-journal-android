@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.data.substances.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme

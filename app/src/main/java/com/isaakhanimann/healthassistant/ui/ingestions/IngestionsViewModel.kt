@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.healthassistant.data.substances.DoseClass
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

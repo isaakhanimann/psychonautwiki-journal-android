@@ -1,7 +1,7 @@
 package com.isaakhanimann.healthassistant.data.substances.repositories
 
-import com.isaakhanimann.healthassistant.data.substances.InteractionType
-import com.isaakhanimann.healthassistant.data.substances.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import kotlinx.coroutines.flow.Flow
 
 interface SubstanceRepositoryInterface {

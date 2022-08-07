@@ -1,8 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.search.substance.roa.dose
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.healthassistant.data.substances.DoseRange
-import com.isaakhanimann.healthassistant.data.substances.RoaDose
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseRange
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
 
 class RoaDosePreviewProvider : PreviewParameterProvider<RoaDose> {
     override val values: Sequence<RoaDose> = sequenceOf(

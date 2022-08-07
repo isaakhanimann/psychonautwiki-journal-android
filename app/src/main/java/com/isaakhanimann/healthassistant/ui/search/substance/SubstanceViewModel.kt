@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.isaakhanimann.healthassistant.data.substances.InteractionType
-import com.isaakhanimann.healthassistant.data.substances.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel

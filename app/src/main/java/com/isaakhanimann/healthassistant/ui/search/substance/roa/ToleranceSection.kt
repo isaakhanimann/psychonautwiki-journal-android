@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.healthassistant.data.substances.Tolerance
+import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
 
 @Preview(showBackground = true)
 @Composable

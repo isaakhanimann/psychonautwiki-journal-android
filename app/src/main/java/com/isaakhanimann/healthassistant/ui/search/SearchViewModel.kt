@@ -3,7 +3,7 @@ package com.isaakhanimann.healthassistant.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.healthassistant.data.substances.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

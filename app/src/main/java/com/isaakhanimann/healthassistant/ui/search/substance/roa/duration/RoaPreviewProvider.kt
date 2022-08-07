@@ -1,7 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.search.substance.roa.duration
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.healthassistant.data.substances.*
+import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.*
 
 class RoaPreviewProvider : PreviewParameterProvider<Roa> {
     override val values: Sequence<Roa> = sequenceOf(

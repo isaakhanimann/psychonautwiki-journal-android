@@ -7,7 +7,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.data.substances.DoseClass
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import java.util.*
 
 class IngestionRowPreviewProvider : PreviewParameterProvider<OneExperienceViewModel.IngestionElement> {

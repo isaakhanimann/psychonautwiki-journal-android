@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
-import com.isaakhanimann.healthassistant.data.substances.InteractionType
-import com.isaakhanimann.healthassistant.data.substances.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 
 @Preview
 @Composable

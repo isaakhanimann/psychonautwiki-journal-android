@@ -1,8 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.experiences.experience.timeline.ingestion
 
 import androidx.compose.ui.graphics.Path
-import com.isaakhanimann.healthassistant.data.substances.DurationRange
-import com.isaakhanimann.healthassistant.data.substances.RoaDuration
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationRange
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 
 interface TimelineDrawable {
     fun getStrokePath(pixelsPerSec: Float, height: Float, startX: Float): Path

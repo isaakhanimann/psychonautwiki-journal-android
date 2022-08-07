@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.isaakhanimann.healthassistant.data.substances.DoseClass
-import com.isaakhanimann.healthassistant.data.substances.RoaDose
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 
 @Preview(showBackground = true)

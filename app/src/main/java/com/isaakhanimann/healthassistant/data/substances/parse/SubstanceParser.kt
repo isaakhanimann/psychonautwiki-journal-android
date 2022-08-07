@@ -1,6 +1,8 @@
 package com.isaakhanimann.healthassistant.data.substances.parse
 
-import com.isaakhanimann.healthassistant.data.substances.*
+import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.data.substances.classes.*
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.*
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject

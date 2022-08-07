@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.data.substances.DoseClass
-import com.isaakhanimann.healthassistant.data.substances.RoaDose
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 

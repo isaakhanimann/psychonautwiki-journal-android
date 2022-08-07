@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.substances.InteractionType
+import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.healthassistant.ui.utils.getTimeDifferenceText

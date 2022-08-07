@@ -7,9 +7,9 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.data.substances.DurationRange
-import com.isaakhanimann.healthassistant.data.substances.DurationUnits
-import com.isaakhanimann.healthassistant.data.substances.RoaDuration
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationRange
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationUnits
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import java.util.*
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration

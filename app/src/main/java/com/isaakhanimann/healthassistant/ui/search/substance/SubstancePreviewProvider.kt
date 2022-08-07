@@ -1,7 +1,11 @@
 package com.isaakhanimann.healthassistant.ui.search.substance
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.healthassistant.data.substances.*
+import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.data.substances.classes.Interactions
+import com.isaakhanimann.healthassistant.data.substances.classes.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.*
 
 class SubstancePreviewProvider : PreviewParameterProvider<Substance> {
     override val values: Sequence<Substance> = sequenceOf(

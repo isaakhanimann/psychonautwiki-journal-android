@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
-import com.isaakhanimann.healthassistant.data.substances.DoseClass
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.ui.experiences.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat

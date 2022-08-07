@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.healthassistant.data.substances.RoaDuration
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import kotlinx.coroutines.delay
 import java.util.*
 
