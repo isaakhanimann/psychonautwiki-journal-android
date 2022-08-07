@@ -21,8 +21,8 @@ class SearchViewModel @Inject constructor(
     private val allSubstancesFlow: Flow<List<Substance>> = substanceRepo.getAllSubstances()
     private val allCategoriesFlow: Flow<List<Category>> = substanceRepo.getAllCategoriesFlow()
 
-    private val recentlyUsedNamesFlow: Flow<List<Substance>> =
-        experienceRepo.getLastUsedSubstanceNamesFlow(limit = 10).map { lastUsedSubstanceNames ->
+    private val recentlyUsedSubstancesFlow: Flow<List<Substance>> =
+        experienceRepo.getLastUsedSubstanceNamesFlow(limit = 100).map { lastUsedSubstanceNames ->
             lastUsedSubstanceNames.mapNotNull { substanceRepo.getSubstance(substanceName = it) }
         }
 
@@ -31,17 +31,25 @@ class SearchViewModel @Inject constructor(
 
     private val _filtersFlow = MutableStateFlow(listOf("common"))
 
+    private val youUsedChipName = "you-used"
+
     fun onFilterTapped(filterName: String) {
         viewModelScope.launch {
-            val filters = _filtersFlow.value.toMutableList()
-            if (filters.contains(filterName)) {
-                filters.remove(filterName)
+            if (filterName == youUsedChipName) {
+                _isShowingYouUsedFlow.emit(_isShowingYouUsedFlow.value.not())
             } else {
-                filters.add(filterName)
+                val filters = _filtersFlow.value.toMutableList()
+                if (filters.contains(filterName)) {
+                    filters.remove(filterName)
+                } else {
+                    filters.add(filterName)
+                }
+                _filtersFlow.emit(filters)
             }
-            _filtersFlow.emit(filters)
         }
     }
+
+    private val _isShowingYouUsedFlow = MutableStateFlow(false)
 
     val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> =
         allCategoriesFlow.combine(_filtersFlow) { categories, filters ->
@@ -53,6 +61,16 @@ class SearchViewModel @Inject constructor(
                     isActive = isActive
                 )
             }
+        }.combine(_isShowingYouUsedFlow){ chips, isShowingYouUsed ->
+            val newChips = chips.toMutableList()
+            newChips.add(
+                0, CategoryChipModel(
+                    chipName = youUsedChipName,
+                    color = Color.Magenta,
+                    isActive = isShowingYouUsed
+                )
+            )
+            return@combine newChips
         }.stateIn(
             initialValue = emptyList(),
             scope = viewModelScope,
@@ -60,7 +78,7 @@ class SearchViewModel @Inject constructor(
         )
 
     val filteredRecentlyUsed: StateFlow<List<Substance>> =
-        recentlyUsedNamesFlow.combine(searchTextFlow) { recents, searchText ->
+        recentlyUsedSubstancesFlow.combine(searchTextFlow) { recents, searchText ->
             getMatchingSubstances(searchText, recents)
         }.stateIn(
             initialValue = emptyList(),
@@ -68,8 +86,18 @@ class SearchViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
+    private val allOrYouUsedSubstances = allSubstancesFlow.combine(recentlyUsedSubstancesFlow) { all, recents ->
+        Pair(first = all, recents)
+    }.combine(_isShowingYouUsedFlow) { pair, isShowingYouUsed ->
+        if (isShowingYouUsed) {
+            return@combine pair.second
+        } else {
+            return@combine pair.first
+        }
+    }
+
     val filteredSubstances =
-        allSubstancesFlow.combine(_filtersFlow) { substances, filters ->
+        allOrYouUsedSubstances.combine(_filtersFlow) { substances, filters ->
             substances.filter { substance ->
                 filters.all { substance.categories.contains(it) }
             }
