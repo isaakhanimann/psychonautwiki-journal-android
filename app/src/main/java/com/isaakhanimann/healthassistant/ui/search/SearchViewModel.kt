@@ -3,6 +3,7 @@ package com.isaakhanimann.healthassistant.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
+import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,13 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val allSubstancesFlow: Flow<List<Substance>> = substanceRepo.getAllSubstances()
+    private val allCategoriesFlow: Flow<List<Category>> = substanceRepo.getAllCategoriesFlow()
+
+    val showCategoriesFlow: StateFlow<List<Category>> = allCategoriesFlow.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     private val recentlyUsedNamesFlow: Flow<List<Substance>> =
         experienceRepo.getLastUsedSubstanceNamesFlow(limit = 10).map { lastUsedSubstanceNames ->

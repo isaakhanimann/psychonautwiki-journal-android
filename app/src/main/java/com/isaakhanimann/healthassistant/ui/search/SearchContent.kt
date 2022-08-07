@@ -3,6 +3,7 @@ package com.isaakhanimann.healthassistant.ui.search
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -34,17 +35,24 @@ fun SearchContent(
                 searchViewModel.filterSubstances(searchText = it)
             }
         )
+        val categories = searchViewModel.showCategoriesFlow.collectAsState().value
         val recents = searchViewModel.filteredRecentlyUsed.collectAsState().value
         val commons = searchViewModel.filteredSubstances.collectAsState().value
+        LazyRow {
+            items(categories.size) {
+                val category = categories[it]
+                Text(text = category.name)
+            }
+        }
         LazyColumn {
             if (recents.isNotEmpty()) {
                 item {
                     SectionTitle(title = "Recently Used")
                 }
-                items(recents.size) { i ->
-                    val substance = recents[i]
+                items(recents.size) {
+                    val substance = recents[it]
                     SubstanceRow(substance = substance, onTap = onSubstanceTap)
-                    if (i < recents.size) {
+                    if (it < recents.size) {
                         Divider()
                     }
                 }

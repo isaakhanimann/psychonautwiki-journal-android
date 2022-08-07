@@ -3,6 +3,7 @@ package com.isaakhanimann.healthassistant.data.substances.repositories
 import android.content.Context
 import com.isaakhanimann.healthassistant.data.DataStorePreferences
 import com.isaakhanimann.healthassistant.data.substances.PsychonautWikiAPIImplementation
+import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceFile
@@ -89,6 +90,10 @@ class SubstanceRepository @Inject constructor(
 
     override fun getAllSubstances(): Flow<List<Substance>> {
         return fileFlow.map { it.substances }
+    }
+
+    override fun getAllCategoriesFlow(): Flow<List<Category>> {
+        return fileFlow.map { it.categories }
     }
 
     override fun getSubstance(substanceName: String): Substance? {
