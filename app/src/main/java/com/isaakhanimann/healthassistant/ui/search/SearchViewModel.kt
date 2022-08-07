@@ -1,5 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.search
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
@@ -20,12 +21,6 @@ class SearchViewModel @Inject constructor(
     private val allSubstancesFlow: Flow<List<Substance>> = substanceRepo.getAllSubstances()
     private val allCategoriesFlow: Flow<List<Category>> = substanceRepo.getAllCategoriesFlow()
 
-    val showCategoriesFlow: StateFlow<List<Category>> = allCategoriesFlow.stateIn(
-        initialValue = emptyList(),
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
-
     private val recentlyUsedNamesFlow: Flow<List<Substance>> =
         experienceRepo.getLastUsedSubstanceNamesFlow(limit = 10).map { lastUsedSubstanceNames ->
             lastUsedSubstanceNames.mapNotNull { substanceRepo.getSubstance(substanceName = it) }
@@ -33,6 +28,35 @@ class SearchViewModel @Inject constructor(
 
     private val _searchTextFlow = MutableStateFlow("")
     val searchTextFlow = _searchTextFlow.asStateFlow()
+
+    private val _filtersFlow = MutableStateFlow(listOf("common"))
+
+    fun onFilterTapped(filterName: String) {
+        viewModelScope.launch {
+            val filters = _filtersFlow.value.toMutableList()
+            if (filters.contains(filterName)) {
+                filters.remove(filterName)
+            } else {
+                filters.add(filterName)
+            }
+            _filtersFlow.emit(filters)
+        }
+    }
+
+    val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> = allCategoriesFlow.combine(_filtersFlow) { categories, filters ->
+        categories.map { category ->
+            val isActive = filters.contains(category.name)
+            CategoryChipModel(
+                chipName = category.name,
+                color = category.color,
+                isActive = isActive
+            )
+        }
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     val filteredRecentlyUsed: StateFlow<List<Substance>> =
         recentlyUsedNamesFlow.combine(searchTextFlow) { recents, searchText ->
@@ -92,3 +116,9 @@ class SearchViewModel @Inject constructor(
         }
     }
 }
+
+data class CategoryChipModel(
+    val chipName: String,
+    val color: Color,
+    val isActive: Boolean
+)

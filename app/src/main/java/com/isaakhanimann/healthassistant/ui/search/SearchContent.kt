@@ -35,13 +35,21 @@ fun SearchContent(
                 searchViewModel.filterSubstances(searchText = it)
             }
         )
-        val categories = searchViewModel.showCategoriesFlow.collectAsState().value
+        val categories = searchViewModel.chipCategoriesFlow.collectAsState().value
         val recents = searchViewModel.filteredRecentlyUsed.collectAsState().value
         val commons = searchViewModel.filteredSubstances.collectAsState().value
-        LazyRow {
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            modifier = Modifier.padding(vertical = 4.dp)
+        ) {
             items(categories.size) {
-                val category = categories[it]
-                Text(text = category.name)
+                val categoryChipModel = categories[it]
+                CategoryChip(
+                    categoryChipModel = categoryChipModel,
+                    modifier = Modifier.clickable {
+                        searchViewModel.onFilterTapped(filterName = categoryChipModel.chipName)
+                    }
+                )
             }
         }
         LazyColumn {
