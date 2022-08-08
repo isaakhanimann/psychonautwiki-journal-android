@@ -3,10 +3,7 @@ package com.isaakhanimann.healthassistant.data.substances.repositories
 import android.content.Context
 import com.isaakhanimann.healthassistant.data.DataStorePreferences
 import com.isaakhanimann.healthassistant.data.substances.PsychonautWikiAPIImplementation
-import com.isaakhanimann.healthassistant.data.substances.classes.Category
-import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
-import com.isaakhanimann.healthassistant.data.substances.classes.Substance
-import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceFile
+import com.isaakhanimann.healthassistant.data.substances.classes.*
 import com.isaakhanimann.healthassistant.data.substances.parse.SubstanceParserInterface
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -92,12 +89,34 @@ class SubstanceRepository @Inject constructor(
         return fileFlow.map { it.substances }
     }
 
+    override fun getAllSubstancesWithCategoriesFlow(): Flow<List<SubstanceWithCategories>> {
+        return fileFlow.map { file ->
+            file.substances.map { substance ->
+                SubstanceWithCategories(
+                    substance = substance,
+                    categories = file.categories.filter { category ->
+                        substance.categories.contains(category.name)
+                    }
+                )
+            }
+        }
+    }
+
     override fun getAllCategoriesFlow(): Flow<List<Category>> {
         return fileFlow.map { it.categories }
     }
 
     override fun getSubstance(substanceName: String): Substance? {
         return substanceFile.substances.firstOrNull { it.name == substanceName }
+    }
+
+    override fun getSubstanceWithCategories(substanceName: String): SubstanceWithCategories? {
+        val substance =
+            substanceFile.substances.firstOrNull { it.name == substanceName } ?: return null
+        return SubstanceWithCategories(
+            substance = substance,
+            categories = substanceFile.categories.filter { substance.categories.contains(it.name) }
+        )
     }
 
     override suspend fun getAllInteractions(
@@ -108,7 +127,8 @@ class SubstanceRepository @Inject constructor(
         categories: List<String>
     ): List<String> {
         val otherInteractions = substanceFile.substances.filter { sub ->
-            val interactions = sub.interactions?.getInteractions(interactionType = type) ?: emptyList()
+            val interactions =
+                sub.interactions?.getInteractions(interactionType = type) ?: emptyList()
             val isDirectMatch = interactions.contains(substanceName)
             val isClassMatch = categories.any { categoryName ->
                 interactions.any { interactionName ->

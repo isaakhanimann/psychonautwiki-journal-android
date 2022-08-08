@@ -31,7 +31,7 @@ fun AddIngestionSearchScreen(
             LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
             SearchContent(
                 onSubstanceTap = {
-                    navigateToCheckInteractions(it.name)
+                    navigateToCheckInteractions(it)
                 },
                 modifier = Modifier.weight(1f)
             )

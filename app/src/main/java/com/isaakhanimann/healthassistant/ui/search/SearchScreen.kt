@@ -29,7 +29,7 @@ fun SearchScreen(
     ) {
         SearchContent(
             onSubstanceTap = {
-                navigateToSubstanceScreen(it.name)
+                navigateToSubstanceScreen(it)
             }
         )
     }
