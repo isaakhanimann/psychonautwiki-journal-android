@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -29,25 +28,14 @@ fun SearchScreen(
     navigateToSettings: () -> Unit
 ) {
     Column(modifier = modifier) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            SearchField(
-                searchText = searchViewModel.searchTextFlow.collectAsState().value,
-                onChange = {
-                    searchViewModel.filterSubstances(searchText = it)
-                },
-                modifier = Modifier.weight(1f)
-            )
-            if (isShowingSettings) {
-                IconButton(
-                    onClick = navigateToSettings,
-                ) {
-                    Icon(
-                        Icons.Filled.Settings,
-                        contentDescription = "Navigate to Settings"
-                    )
-                }
-            }
-        }
+        SearchField(
+            searchText = searchViewModel.searchTextFlow.collectAsState().value,
+            onChange = {
+                searchViewModel.filterSubstances(searchText = it)
+            },
+            isShowingSettings = isShowingSettings,
+            navigateToSettings = navigateToSettings
+        )
         val categories = searchViewModel.chipCategoriesFlow.collectAsState().value
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -83,7 +71,8 @@ fun SearchScreen(
 fun SearchField(
     searchText: String,
     onChange: (String) -> Unit,
-    modifier: Modifier
+    isShowingSettings: Boolean,
+    navigateToSettings: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     TextField(
@@ -91,7 +80,7 @@ fun SearchField(
         onValueChange = { value ->
             onChange(value)
         },
-        modifier = modifier,
+        modifier = Modifier.fillMaxWidth(),
         placeholder = { Text(text = "Search Substances") },
         leadingIcon = {
             Icon(
@@ -115,6 +104,15 @@ fun SearchField(
                         modifier = Modifier
                             .padding(15.dp)
                             .size(24.dp)
+                    )
+                }
+            } else if (isShowingSettings) {
+                IconButton(
+                    onClick = navigateToSettings,
+                ) {
+                    Icon(
+                        Icons.Filled.Settings,
+                        contentDescription = "Navigate to Settings"
                     )
                 }
             }
