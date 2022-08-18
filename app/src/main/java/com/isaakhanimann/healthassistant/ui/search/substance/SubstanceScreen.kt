@@ -184,14 +184,9 @@ fun SubstanceScreen(
                 Divider()
             }
             Spacer(modifier = Modifier.height(5.dp))
-            val interactions = substance.interactions
-            if (interactions != null) {
-                InteractionsView(
-                    dangerousInteractions = interactions.dangerous,
-                    unsafeInteractions = interactions.unsafe,
-                    uncertainInteractions = interactions.uncertain
-                )
-            }
+            InteractionsView(
+                interactions = substance.interactions
+            )
             ToleranceSection(
                 tolerance = substance.tolerance,
                 crossTolerances = substance.crossTolerances,
