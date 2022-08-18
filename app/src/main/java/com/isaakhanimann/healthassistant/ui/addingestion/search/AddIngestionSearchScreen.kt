@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.Science
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,25 +21,17 @@ fun AddIngestionSearchScreen(
     navigateToCheckInteractions: (substanceName: String) -> Unit,
     navigateToDrugTestingScreen: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Choose Substance") }
-            )
-        }
-    ) {
-        Column {
-            LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
-            SearchScreen(
-                onSubstanceTap = {
-                    navigateToCheckInteractions(it)
-                },
-                modifier = Modifier.weight(1f),
-                isShowingSettings = false,
-                navigateToSettings = {}
-            )
-            TestingSection(navigateToDrugTestingScreen)
-        }
+    Column {
+        LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
+        TestingSection(navigateToDrugTestingScreen)
+        SearchScreen(
+            onSubstanceTap = {
+                navigateToCheckInteractions(it)
+            },
+            modifier = Modifier.weight(1f),
+            isShowingSettings = false,
+            navigateToSettings = {}
+        )
     }
 }
 
@@ -59,7 +52,8 @@ fun TestingSection(
     AnimatedVisibility(visible = isVisible) {
         Card(
             elevation = 100.dp,
-            backgroundColor = MaterialTheme.colors.primarySurface
+            backgroundColor = MaterialTheme.colors.primarySurface,
+            shape = RectangleShape
         ) {
             Column(
                 modifier = Modifier.padding(start = 10.dp),
