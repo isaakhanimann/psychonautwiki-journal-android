@@ -47,18 +47,17 @@ fun ToleranceSection(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column {
-
                         val labelWidth = 40.dp
                         Row(
                             verticalAlignment = Alignment.Bottom
                         ) {
-                            if (tolerance.zero != null) {
+                            if (tolerance.full != null) {
                                 Text(
-                                    text = "zero",
+                                    text = "full",
                                     style = MaterialTheme.typography.subtitle2,
                                     modifier = Modifier.width(labelWidth)
                                 )
-                                Text(text = tolerance.zero)
+                                Text(text = tolerance.full)
                             }
                         }
                         Row(
@@ -76,13 +75,13 @@ fun ToleranceSection(
                         Row(
                             verticalAlignment = Alignment.Bottom
                         ) {
-                            if (tolerance.full != null) {
+                            if (tolerance.zero != null) {
                                 Text(
-                                    text = "full",
+                                    text = "zero",
                                     style = MaterialTheme.typography.subtitle2,
                                     modifier = Modifier.width(labelWidth)
                                 )
-                                Text(text = tolerance.full)
+                                Text(text = tolerance.zero)
                             }
                         }
                     }
