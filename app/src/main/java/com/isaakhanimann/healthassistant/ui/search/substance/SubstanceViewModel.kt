@@ -13,5 +13,5 @@ class SubstanceViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
-    val substance = substanceRepo.getSubstance(substanceName)!!
+    val substanceWithCategories = substanceRepo.getSubstanceWithCategories(substanceName)!!
 }

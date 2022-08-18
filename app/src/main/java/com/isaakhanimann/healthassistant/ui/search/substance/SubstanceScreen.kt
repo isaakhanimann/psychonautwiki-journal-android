@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.data.substances.classes.Substance
+import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
@@ -43,14 +43,14 @@ fun SubstanceScreen(
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
-        substance = viewModel.substance
+        substanceWithCategories = viewModel.substanceWithCategories
     )
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun SubstanceScreenPreview(
-    @PreviewParameter(SubstancePreviewProvider::class) substance: Substance
+    @PreviewParameter(SubstanceWithCategoriesPreviewProvider::class) substanceWithCategories: SubstanceWithCategories
 ) {
     HealthAssistantTheme {
         SubstanceScreen(
@@ -60,7 +60,7 @@ fun SubstanceScreenPreview(
             navigateToSaferSniffingScreen = {},
             navigateToSaferStimulantsScreen = {},
             navigateToVolumetricDosingScreen = {},
-            substance = substance
+            substanceWithCategories = substanceWithCategories
         )
     }
 }
@@ -73,8 +73,9 @@ fun SubstanceScreen(
     navigateToSaferSniffingScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
-    substance: Substance
+    substanceWithCategories: SubstanceWithCategories
 ) {
+    val substance = substanceWithCategories.substance
     Scaffold(
         topBar = {
             TopAppBar(
@@ -95,7 +96,19 @@ fun SubstanceScreen(
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Summary", style = titleStyle)
                 Text(text = substance.summary)
+                val categories = substanceWithCategories.categories
                 Spacer(modifier = Modifier.height(5.dp))
+                categories.forEach { category ->
+                    Column {
+                        CategoryChipLink(
+                            name = category.name,
+                            color = category.color,
+                            url = category.url
+                        )
+                        Text(text = category.description, style = MaterialTheme.typography.caption)
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
                 Divider()
             }
             if (substance.effectsSummary != null) {

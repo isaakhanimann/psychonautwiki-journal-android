@@ -16,13 +16,12 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.classes.Interactions
-import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 
 @Preview
 @Composable
-fun InteractionsPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
+fun InteractionsPreview(@PreviewParameter(InteractionsPreviewProvider::class) interactions: Interactions) {
     InteractionsView(
-        interactions = substance.interactions
+        interactions
     )
 }
 

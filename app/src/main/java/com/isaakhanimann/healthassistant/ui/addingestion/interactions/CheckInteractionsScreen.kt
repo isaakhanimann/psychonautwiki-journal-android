@@ -19,7 +19,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.ui.search.substance.InteractionChip
-import com.isaakhanimann.healthassistant.ui.search.substance.SubstancePreviewProvider
+import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceWithCategoriesPreviewProvider
 
 
 @Composable
@@ -51,7 +51,7 @@ fun CheckInteractionsScreen(
 
 @Preview
 @Composable
-fun CheckInteractionsScreenPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
+fun CheckInteractionsScreenPreview(@PreviewParameter(SubstanceWithCategoriesPreviewProvider::class) substance: Substance) {
     CheckInteractionsScreen(
         substanceName = "LSD",
         isSearchingForInteractions = true,
