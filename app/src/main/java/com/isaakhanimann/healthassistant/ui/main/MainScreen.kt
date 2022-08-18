@@ -28,6 +28,8 @@ import com.isaakhanimann.healthassistant.ui.ingestions.IngestionsScreen
 import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.OneIngestionScreen
 import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.edit.membership.EditIngestionMembershipScreen
 import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.edit.note.EditIngestionNoteScreen
+import com.isaakhanimann.healthassistant.ui.ingestions.stats.StatsScreen
+import com.isaakhanimann.healthassistant.ui.ingestions.stats.substancecompanion.SubstanceCompanionScreen
 import com.isaakhanimann.healthassistant.ui.main.routers.*
 import com.isaakhanimann.healthassistant.ui.search.SearchScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferHallucinogensScreen
@@ -38,8 +40,6 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.DoseExplanation
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.DurationExplanationScreen
 import com.isaakhanimann.healthassistant.ui.settings.SettingsScreen
 import com.isaakhanimann.healthassistant.ui.settings.faq.FAQScreen
-import com.isaakhanimann.healthassistant.ui.ingestions.stats.StatsScreen
-import com.isaakhanimann.healthassistant.ui.ingestions.stats.substancecompanion.SubstanceCompanionScreen
 
 @Composable
 fun MainScreen() {
@@ -205,10 +205,12 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
     }
     composable(TabRouter.Search.route) {
         SearchScreen(
-            navigateToSettings = navController::navigateToSettings,
-            navigateToSubstanceScreen = {
+            onSubstanceTap = {
                 navController.navigateToSubstanceScreen(substanceName = it)
-            })
+            },
+            isShowingSettings = true,
+            navigateToSettings = navController::navigateToSettings
+        )
     }
 }
 
