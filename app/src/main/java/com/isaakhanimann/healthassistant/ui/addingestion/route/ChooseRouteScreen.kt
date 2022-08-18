@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
@@ -238,14 +239,16 @@ fun IngestionRowInChooseRoute(ingestion: ChooseRouteViewModel.IngestionSuggestio
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.padding(10.dp)
         ) {
+            Icon(imageVector = Icons.Default.History, contentDescription = "History")
+            Spacer(modifier = Modifier.width(12.dp))
             val textStyle = MaterialTheme.typography.h5
             Text(
                 text = ingestion.administrationRoute.displayText,
                 style = textStyle
             )
+            Spacer(modifier = Modifier.weight(1f))
             if (ingestion.dose != null) {
                 val isEstimateText = if (ingestion.isDoseAnEstimate) "~" else ""
                 val doseText = ingestion.dose.toReadableString()
