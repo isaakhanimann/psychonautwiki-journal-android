@@ -1,10 +1,12 @@
 package com.isaakhanimann.healthassistant.ui.search.substance
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +21,6 @@ import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 @Composable
 fun InteractionsPreview(@PreviewParameter(SubstancePreviewProvider::class) substance: Substance) {
     InteractionsView(
-        isSearchingForInteractions = true,
         dangerousInteractions = substance.interactions?.dangerous ?: emptyList(),
         unsafeInteractions = substance.interactions?.unsafe ?: emptyList(),
         uncertainInteractions = substance.interactions?.uncertain ?: emptyList()
@@ -28,16 +29,12 @@ fun InteractionsPreview(@PreviewParameter(SubstancePreviewProvider::class) subst
 
 @Composable
 fun InteractionsView(
-    isSearchingForInteractions: Boolean,
     dangerousInteractions: List<String>,
     unsafeInteractions: List<String>,
     uncertainInteractions: List<String>,
 ) {
     if (dangerousInteractions.isNotEmpty() || unsafeInteractions.isNotEmpty() || uncertainInteractions.isNotEmpty()) {
         Column {
-            if (isSearchingForInteractions) {
-                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            }
             val titleStyle = MaterialTheme.typography.subtitle2
             if (dangerousInteractions.isNotEmpty()) {
                 Text(text = "Dangerous Interactions", style = titleStyle)

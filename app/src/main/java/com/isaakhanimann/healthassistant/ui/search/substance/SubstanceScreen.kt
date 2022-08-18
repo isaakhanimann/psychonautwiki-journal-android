@@ -43,11 +43,7 @@ fun SubstanceScreen(
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
-        substance = viewModel.substance,
-        isSearchingForInteractions = viewModel.isSearchingForInteractions,
-        dangerousInteractions = viewModel.dangerousInteractions,
-        unsafeInteractions = viewModel.unsafeInteractions,
-        uncertainInteractions = viewModel.uncertainInteractions,
+        substance = viewModel.substance
     )
 }
 
@@ -64,11 +60,7 @@ fun SubstanceScreenPreview(
             navigateToSaferSniffingScreen = {},
             navigateToSaferStimulantsScreen = {},
             navigateToVolumetricDosingScreen = {},
-            substance = substance,
-            isSearchingForInteractions = true,
-            dangerousInteractions = substance.interactions?.dangerous ?: emptyList(),
-            unsafeInteractions = substance.interactions?.unsafe ?: emptyList(),
-            uncertainInteractions = substance.interactions?.uncertain ?: emptyList(),
+            substance = substance
         )
     }
 }
@@ -81,11 +73,7 @@ fun SubstanceScreen(
     navigateToSaferSniffingScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
-    substance: Substance,
-    isSearchingForInteractions: Boolean,
-    dangerousInteractions: List<String>,
-    unsafeInteractions: List<String>,
-    uncertainInteractions: List<String>,
+    substance: Substance
 ) {
     Scaffold(
         topBar = {
@@ -196,12 +184,14 @@ fun SubstanceScreen(
                 Divider()
             }
             Spacer(modifier = Modifier.height(5.dp))
-            InteractionsView(
-                isSearchingForInteractions = isSearchingForInteractions,
-                dangerousInteractions = dangerousInteractions,
-                unsafeInteractions = unsafeInteractions,
-                uncertainInteractions = uncertainInteractions
-            )
+            val interactions = substance.interactions
+            if (interactions != null) {
+                InteractionsView(
+                    dangerousInteractions = interactions.dangerous,
+                    unsafeInteractions = interactions.unsafe,
+                    uncertainInteractions = interactions.uncertain
+                )
+            }
             ToleranceSection(
                 tolerance = substance.tolerance,
                 crossTolerances = substance.crossTolerances,
