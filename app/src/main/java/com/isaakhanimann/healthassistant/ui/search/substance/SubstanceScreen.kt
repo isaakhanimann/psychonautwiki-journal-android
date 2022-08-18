@@ -1,16 +1,18 @@
 package com.isaakhanimann.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextIndent
@@ -21,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
+import com.isaakhanimann.healthassistant.ui.search.CategoryModel
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
+import com.isaakhanimann.healthassistant.ui.search.substancerow.CategoryChipStatic
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import kotlin.text.Typography
 
@@ -98,13 +102,31 @@ fun SubstanceScreen(
                 Text(text = substance.summary)
                 val categories = substanceWithCategories.categories
                 Spacer(modifier = Modifier.height(5.dp))
+                val uriHandler = LocalUriHandler.current
                 categories.forEach { category ->
                     Column {
-                        CategoryChipLink(
-                            name = category.name,
-                            color = category.color,
-                            url = category.url
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            CategoryChipStatic(
+                                categoryModel = CategoryModel(
+                                    name = category.name,
+                                    color = category.color
+                                )
+                            )
+                            val url = category.url
+                            if (url != null) {
+                                Icon(
+                                    imageVector = Icons.Default.Link,
+                                    contentDescription = "Open Article",
+                                    modifier = Modifier.clickable {
+                                        uriHandler.openUri(url)
+                                    }
+                                )
+                            }
+                        }
                         Text(text = category.description, style = MaterialTheme.typography.caption)
                     }
                     Spacer(modifier = Modifier.height(5.dp))
