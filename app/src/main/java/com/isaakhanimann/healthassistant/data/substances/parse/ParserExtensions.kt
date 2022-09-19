@@ -22,6 +22,17 @@ fun JSONObject.getOptionalString(name: String): String? {
     }
 }
 
+fun JSONObject.getOptionalBoolean(name: String): Boolean? {
+    return try {
+        if (isNull(name))
+            null
+        else
+            getBoolean(name)
+    } catch (e: Exception) {
+        null
+    }
+}
+
 fun JSONObject.getOptionalLong(name: String): Long? {
     return try {
         if (isNull(name))

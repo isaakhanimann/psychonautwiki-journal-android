@@ -7,6 +7,7 @@ data class Substance(
     val name: String,
     val commonNames: List<String>,
     val url: String,
+    val isApproved: Boolean,
     val tolerance: Tolerance?,
     val crossTolerances: List<String>,
     val addictionPotential: String?,

@@ -13,6 +13,7 @@ class SubstanceWithCategoriesPreviewProvider : PreviewParameterProvider<Substanc
                 name = "Example Substance",
                 commonNames = listOf("Hat", "Boot", "Hoodie", "Shirt", "Blouse"),
                 url = "https://psychonautwiki.org/wiki/Lsd",
+                isApproved = true,
                 categories = listOf("entactogen, common"),
                 tolerance = Tolerance(
                     full = "with prolonged and repeated use",

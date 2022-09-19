@@ -67,6 +67,7 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val jsonCommonNames = jsonSubstance.getOptionalJSONArray("commonNames")
         val commonNames = parseCommonNames(jsonCommonNames, removeName = name)
         val url = jsonSubstance.getOptionalString("url") ?: return null
+        val isApproved = jsonSubstance.getOptionalBoolean("isApproved") ?: false
         val jsonTolerance = jsonSubstance.getOptionalJSONObject("tolerance")
         val tolerance = parseTolerance(jsonTolerance)
         val jsonTolerances = jsonSubstance.getOptionalJSONArray("crossTolerances")
@@ -91,6 +92,7 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
             name = name,
             commonNames = commonNames,
             url = url,
+            isApproved = isApproved,
             tolerance = tolerance,
             crossTolerances = crossTolerances,
             addictionPotential = addictionPotential,

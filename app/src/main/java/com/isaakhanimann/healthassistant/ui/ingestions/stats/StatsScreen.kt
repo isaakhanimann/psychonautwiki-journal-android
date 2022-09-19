@@ -49,7 +49,7 @@ fun StatsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Statistics") }
+                title = { Text(text = "Ingestion Statistics") }
             )
         }
     ) {

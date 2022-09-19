@@ -7,7 +7,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.Verified
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -96,8 +98,21 @@ fun SubstanceScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             val titleStyle = MaterialTheme.typography.subtitle2
+            if (substance.isApproved) {
+                Row(modifier = Modifier.padding(vertical = 5.dp)) {
+                    Icon(imageVector = Icons.Default.Verified, contentDescription = "Verified")
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(text = "Info is approved")
+                }
+
+            } else {
+                Row(modifier = Modifier.padding(vertical = 5.dp)) {
+                    Icon(imageVector = Icons.Default.GppBad, contentDescription = "Verified")
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(text = "Info is not approved")
+                }
+            }
             if (substance.summary != null) {
-                Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Summary", style = titleStyle)
                 Text(text = substance.summary)
                 val categories = substanceWithCategories.categories
