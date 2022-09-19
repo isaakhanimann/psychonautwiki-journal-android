@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -55,12 +56,18 @@ fun SearchScreen(
             }
         }
         val filteredSubstances = searchViewModel.filteredSubstances.collectAsState().value
-        LazyColumn {
-            items(filteredSubstances.size) { i ->
-                val substance = filteredSubstances[i]
-                SubstanceRow(substanceModel = substance, onTap = onSubstanceTap)
-                if (i < filteredSubstances.size) {
-                    Divider()
+        if (filteredSubstances.isEmpty()) {
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Text("None Found", modifier = Modifier.padding(10.dp))
+            }
+        } else {
+            LazyColumn {
+                items(filteredSubstances.size) { i ->
+                    val substance = filteredSubstances[i]
+                    SubstanceRow(substanceModel = substance, onTap = onSubstanceTap)
+                    if (i < filteredSubstances.size) {
+                        Divider()
+                    }
                 }
             }
         }
