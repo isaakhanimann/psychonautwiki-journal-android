@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.ui.experiences.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
@@ -120,6 +121,8 @@ fun OneIngestionScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             val horizontalPadding = 10.dp
+            val roaDose = ingestionWithCompanionDurationAndExperience.roaDose
+            val doseClass = roaDose?.getDoseClass(ingestion.dose, ingestion.units)
             Spacer(modifier = Modifier.height(10.dp))
             Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                 AllTimelines(
@@ -139,6 +142,13 @@ fun OneIngestionScreen(
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
                         text = "* a full stomach can delay the onset for hours",
+                        style = MaterialTheme.typography.caption
+                    )
+                }
+                if (doseClass == DoseClass.HEAVY) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = "* heavy doses can have longer durations",
                         style = MaterialTheme.typography.caption
                     )
                 }
@@ -177,7 +187,6 @@ fun OneIngestionScreen(
                     text = "${ingestion.administrationRoute.displayText} Dose",
                     style = MaterialTheme.typography.subtitle2
                 )
-                val roaDose = ingestionWithCompanionDurationAndExperience.roaDose
                 if (roaDose != null) {
                     RoaDoseView(
                         roaDose = roaDose,
@@ -192,7 +201,6 @@ fun OneIngestionScreen(
                     Text(text = "Consumed Dose")
                     ingestion.dose?.also {
                         val estimateText = if (ingestion.isDoseAnEstimate) "~" else ""
-                        val doseClass = roaDose?.getDoseClass(ingestion.dose, ingestion.units)
                         val doseTextColor = doseClass?.getComposeColor(isSystemInDarkTheme())
                             ?: MaterialTheme.colors.onBackground
                         Text(
