@@ -1,4 +1,4 @@
-package com.isaakhanimann.healthassistant.ui.addingestion.dose
+package com.isaakhanimann.healthassistant.ui.safer
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState

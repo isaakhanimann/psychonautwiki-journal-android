@@ -1,4 +1,4 @@
-package com.isaakhanimann.healthassistant.ui.addingestion.search
+package com.isaakhanimann.healthassistant.ui.addingestion
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

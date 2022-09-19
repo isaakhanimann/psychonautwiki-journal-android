@@ -9,7 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Launch
-import androidx.compose.material.icons.outlined.Science
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -19,13 +18,17 @@ import androidx.compose.ui.unit.dp
 @Preview
 @Composable
 fun SaferUsePreview() {
-    SaferUseScreen(navigateToDrugTestingScreen = {}, navigateToSaferHallucinogensScreen = {})
+    SaferUseScreen(
+        navigateToDrugTestingScreen = {},
+        navigateToSaferHallucinogensScreen = {},
+        navigateToVolumetricDosingScreen = {})
 }
 
 @Composable
 fun SaferUseScreen(
     navigateToDrugTestingScreen: () -> Unit,
-    navigateToSaferHallucinogensScreen: () -> Unit
+    navigateToSaferHallucinogensScreen: () -> Unit,
+    navigateToVolumetricDosingScreen: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -45,12 +48,6 @@ fun SaferUseScreen(
             Text(text = "2. Testing", style = titleStyle)
             Text(text = "Test your substance with anonymous and free drug testing services. If not available in your country use reagent testing kits. Times change. Producers change. Don‘t trust your dealer. Its better to have a tested stash instead of relying on a source spontaneously.")
             Button(onClick = navigateToDrugTestingScreen) {
-                Icon(
-                    Icons.Outlined.Science,
-                    contentDescription = "Navigate to Testing Services",
-                    modifier = Modifier.size(ButtonDefaults.IconSize),
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Drug Testing Services")
             }
             val uriHandler = LocalUriHandler.current
@@ -69,6 +66,9 @@ fun SaferUseScreen(
             }
             Text(text = "3. Dosage", style = titleStyle)
             Text(text = "You can always take more, but you can’t take less. Know your dose. Start small and wait. A full stomach can delay the onset of an swallowed ingestion by hours. A dose that's easy for somebody with a tolerance might be too much for you. Invest in a milligram scale so you can accurately weigh your dosages. Bear in mind that milligram scales under ${'$'}1000 cannot accurately weigh out doses below 50 mg and are highly inaccurate under 10 - 15 mg. If the amounts of the drug are smaller, use volumetric dosing which means dissolving in water or alcohol to make it easier to measure. Many substances do not have linear dose-response curves, meaning that doubling the dose amount will cause a greater than double increase (and rapidly result in overwhelming, unpleasant, and potentially dangerous experiences), therefore doses should only be adjusted upward with slight increases (e.g. 1/4 to 1/2 of the previous dose).")
+            Button(onClick = navigateToVolumetricDosingScreen) {
+                Text("Volumetric Liquid Dosing")
+            }
             Text(text = "4. Set and Setting", style = titleStyle)
             Text(text = "Set: Make sure your thoughts, desires, feelings, general mood, and any preconceived notions or expectations about what you are about to experience are conducive to the experience. Your body is also an important part of the Set. Better not to take it if you feel sick, injured or generally unhealthy.\u2028Setting: An unfamiliar, uncontrollable or otherwise disagreeable social or physical environment may result in an unpleasant or dangerous experience. Choose an environment that provides a sense of safety, familiarity, control, and comfort. For using hallucinogens (psychedelics, dissociatives and deliriants) refer to the safer Hallucinogen guide.")
             Button(onClick = navigateToSaferHallucinogensScreen) {

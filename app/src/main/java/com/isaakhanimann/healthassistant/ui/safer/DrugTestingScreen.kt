@@ -1,4 +1,4 @@
-package com.isaakhanimann.healthassistant.ui.addingestion.search
+package com.isaakhanimann.healthassistant.ui.safer
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

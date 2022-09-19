@@ -11,14 +11,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.ui.addingestion.AddIngestionSearchScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.ChooseDoseScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.DoseGuideScreen
-import com.isaakhanimann.healthassistant.ui.addingestion.dose.VolumetricDosingScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.interactions.CheckInteractionsScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.RouteExplanationScreen
-import com.isaakhanimann.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
-import com.isaakhanimann.healthassistant.ui.addingestion.search.DrugTestingScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ChooseTimeScreen
 import com.isaakhanimann.healthassistant.ui.experiences.ExperiencesScreen
 import com.isaakhanimann.healthassistant.ui.experiences.addExperience.AddExperienceScreen
@@ -31,9 +29,11 @@ import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.edit.note.EditI
 import com.isaakhanimann.healthassistant.ui.ingestions.stats.StatsScreen
 import com.isaakhanimann.healthassistant.ui.ingestions.stats.substancecompanion.SubstanceCompanionScreen
 import com.isaakhanimann.healthassistant.ui.main.routers.*
+import com.isaakhanimann.healthassistant.ui.safer.DrugTestingScreen
+import com.isaakhanimann.healthassistant.ui.safer.SaferHallucinogensScreen
 import com.isaakhanimann.healthassistant.ui.safer.SaferUseScreen
+import com.isaakhanimann.healthassistant.ui.safer.VolumetricDosingScreen
 import com.isaakhanimann.healthassistant.ui.search.SearchScreen
-import com.isaakhanimann.healthassistant.ui.search.substance.SaferHallucinogensScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceScreen
@@ -218,6 +218,7 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
         SaferUseScreen(
             navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen,
             navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
+            navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen
         )
     }
 }
