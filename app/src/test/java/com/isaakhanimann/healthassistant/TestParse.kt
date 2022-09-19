@@ -9,7 +9,7 @@ class TestParse {
     @Test
     fun noCrash() {
         val substances = SubstanceParser().parseSubstanceFile(string = "error")
-        assertTrue(substances.isEmpty())
+        assertTrue(substances.substances.isEmpty())
     }
 
     @Test
