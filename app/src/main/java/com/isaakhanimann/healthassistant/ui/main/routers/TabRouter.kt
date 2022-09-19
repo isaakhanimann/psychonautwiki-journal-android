@@ -2,6 +2,7 @@ package com.isaakhanimann.healthassistant.ui.main.routers
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.LocalLibrary
 import androidx.compose.material.icons.filled.Search
@@ -12,4 +13,5 @@ sealed class TabRouter(val route: String, @StringRes val resourceId: Int, val ic
     object Experiences : TabRouter("experiences", R.string.experiences, Icons.Filled.LocalLibrary)
     object Ingestions : TabRouter("ingestions", R.string.ingestions, Icons.Filled.History)
     object Search : TabRouter("search", R.string.search, Icons.Filled.Search)
+    object SaferUse : TabRouter("saferUse", R.string.safer, Icons.Filled.HealthAndSafety)
 }

@@ -31,6 +31,7 @@ import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.edit.note.EditI
 import com.isaakhanimann.healthassistant.ui.ingestions.stats.StatsScreen
 import com.isaakhanimann.healthassistant.ui.ingestions.stats.substancecompanion.SubstanceCompanionScreen
 import com.isaakhanimann.healthassistant.ui.main.routers.*
+import com.isaakhanimann.healthassistant.ui.safer.SaferUseScreen
 import com.isaakhanimann.healthassistant.ui.search.SearchScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferHallucinogensScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferSniffingScreen
@@ -50,6 +51,7 @@ fun MainScreen() {
         TabRouter.Experiences.route,
         TabRouter.Ingestions.route,
         TabRouter.Search.route,
+        TabRouter.SaferUse.route
     )
     bottomBarState.value = isShowingBottomBar
     Scaffold(
@@ -211,6 +213,9 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             isShowingSettings = true,
             navigateToSettings = navController::navigateToSettings
         )
+    }
+    composable(TabRouter.SaferUse.route) {
+        SaferUseScreen()
     }
 }
 
