@@ -157,6 +157,11 @@ fun ExperienceScreen(
                             style = MaterialTheme.typography.caption,
                         )
                     }
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = "* heavy doses can have longer durations",
+                        style = MaterialTheme.typography.caption
+                    )
                     Spacer(modifier = Modifier.height(10.dp))
                 }
                 Divider()
