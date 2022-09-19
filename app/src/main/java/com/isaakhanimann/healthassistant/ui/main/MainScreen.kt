@@ -216,7 +216,8 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
     }
     composable(TabRouter.SaferUse.route) {
         SaferUseScreen(
-            navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen
+            navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen,
+            navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
         )
     }
 }
