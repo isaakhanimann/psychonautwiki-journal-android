@@ -1,21 +1,31 @@
 package com.isaakhanimann.healthassistant.ui.safer
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Launch
+import androidx.compose.material.icons.outlined.Science
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
-fun SaferUseScreen() {
+fun SaferUsePreview() {
+    SaferUseScreen(navigateToDrugTestingScreen = {})
+}
+
+@Composable
+fun SaferUseScreen(
+    navigateToDrugTestingScreen: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -33,6 +43,29 @@ fun SaferUseScreen() {
             Text(text = "Research the substance you intend to consume. Read the info in here and also the PsychonautWiki Article. Its best to cross-reference with other sources (Tripsit, Erowid, Wikipedia, Bluelight, Reddit, etc ). There is no rush.")
             Text(text = "2. Testing", style = titleStyle)
             Text(text = "Test your substance with anonymous and free drug testing services. If not available in your country use reagent testing kits. Times change. Producers change. Don‘t trust your dealer. Its better to have a tested stash instead of relying on a source spontaneously.")
+            Button(onClick = navigateToDrugTestingScreen) {
+                Icon(
+                    Icons.Outlined.Science,
+                    contentDescription = "Navigate to Testing Services",
+                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Drug Testing Services")
+            }
+            val uriHandler = LocalUriHandler.current
+            Button(
+                onClick = {
+                    uriHandler.openUri("https://dancesafe.org/testing-kit-instructions/")
+                }
+            ) {
+                Icon(
+                    Icons.Outlined.Launch,
+                    contentDescription = "Open Link",
+                    modifier = Modifier.size(ButtonDefaults.IconSize),
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Reagent Testing")
+            }
             Text(text = "3. Dosage", style = titleStyle)
             Text(text = "You can always take more, but you can’t take less. Know your dose. Start small and wait. A full stomach can delay the onset by hours. A dose thats easy for somebody with a tolerance might be too much or even fatal for you. Invest in a milligram scale so you can accurately weigh your dosages. Bear in mind that milligram scales under ${'$'}1000 cannot accurately weigh out doses below at least 50 milligrams and are highly inaccurate under 10 - 15 milligrams. If the amounts of the drug are smaller, use volumetric dosing which means dissolving in water or alcohol to make it easier to measure. Many substances do not have linear dose-response curves, meaning that doubling the dose amount will cause a greater than double increase (and rapidly result in overwhelming, unpleasant, and potentially dangerous experiences), therefore doses should always be adjusted upward with slight increases (e.g. 1/4 to 1/2 of the previous dose)")
             Text(text = "4. Set and Setting", style = titleStyle)

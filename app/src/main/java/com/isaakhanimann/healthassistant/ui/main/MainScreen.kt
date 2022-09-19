@@ -215,7 +215,9 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
         )
     }
     composable(TabRouter.SaferUse.route) {
-        SaferUseScreen()
+        SaferUseScreen(
+            navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen
+        )
     }
 }
 
@@ -236,8 +238,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         substanceName = it,
                         experienceId = experienceId
                     )
-                },
-                navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen
+                }
             )
         }
         composable(
