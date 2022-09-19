@@ -1,8 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.addingestion.interactions
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
@@ -15,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.ui.search.substance.InteractionChip
@@ -107,7 +104,7 @@ fun CheckInteractionsScreen(
     navigateToNext: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
-    ) {
+) {
 
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Check Interactions With $substanceName") }) },
@@ -151,37 +148,28 @@ fun CheckInteractionsScreen(
                     }
                 }
             } else {
-                Column(
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    val titleStyle = MaterialTheme.typography.subtitle2
+                Column {
                     if (dangerousInteractions.isNotEmpty()) {
-                        Text(text = "Dangerous Interactions", style = titleStyle)
-                        FlowRow {
-                            dangerousInteractions.forEach {
-                                InteractionChip(text = it, color = InteractionType.DANGEROUS.color)
-                            }
+                        dangerousInteractions.forEach {
+                            InteractionChip(text = it, color = InteractionType.DANGEROUS.color)
                         }
                     }
                     if (unsafeInteractions.isNotEmpty()) {
-                        Text(text = "Unsafe Interactions", style = titleStyle)
-                        FlowRow {
-                            unsafeInteractions.forEach {
-                                InteractionChip(text = it, color = InteractionType.UNSAFE.color)
-                            }
+                        unsafeInteractions.forEach {
+                            InteractionChip(text = it, color = InteractionType.UNSAFE.color)
+
                         }
                     }
                     if (uncertainInteractions.isNotEmpty()) {
-                        Text(text = "Uncertain Interactions", style = titleStyle)
-                        FlowRow {
-                            uncertainInteractions.forEach {
-                                InteractionChip(text = it, color = InteractionType.UNCERTAIN.color)
-                            }
+                        uncertainInteractions.forEach {
+                            InteractionChip(text = it, color = InteractionType.UNCERTAIN.color)
                         }
                     }
+                    Text(
+                        text = "Check the PsychonautWiki article for explanations",
+                        style = MaterialTheme.typography.caption,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
                 }
             }
             if (isShowingAlert && alertInteractionType != null) {
