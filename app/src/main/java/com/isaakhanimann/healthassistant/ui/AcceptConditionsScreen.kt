@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -33,22 +34,26 @@ fun AcceptConditionsScreen(
     ) {
         val configuration = LocalConfiguration.current
         val screenWidth = configuration.screenWidthDp.dp
-        Image(
-            painter = painterResource(R.drawable.eye),
-            contentDescription = "PsychonautWiki eye",
-            modifier = Modifier.size(screenWidth/2)
-        )
+
         val checkedState0 = remember { mutableStateOf(false) }
         val checkedState1 = remember { mutableStateOf(false) }
         val checkedState2 = remember { mutableStateOf(false) }
         val checkedState3 = remember { mutableStateOf(false) }
+        val allIsChecked =
+            checkedState0.value && checkedState1.value && checkedState2.value && checkedState3.value
+        val painter = if (allIsChecked) painterResource(R.drawable.eye_open) else painterResource(R.drawable.eye_closed)
+        Image(
+            painter = painter,
+            contentDescription = "PsychonautWiki eye",
+            modifier = Modifier.size(screenWidth/2)
+        )
         Column(horizontalAlignment = Alignment.Start) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = checkedState0.value,
                     onCheckedChange = { checkedState0.value = it }
                 )
-                Text(text = "I’m aware of the risks of drugs")
+                Text(text = "I acknowledge that I am the only one responsible for my actions, especially when deciding to use drugs")
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
@@ -72,9 +77,8 @@ fun AcceptConditionsScreen(
                 Text(text = "I’m going to seek professional help before attempting to self-medicate")
             }
         }
-        val isEnabled =
-            checkedState0.value && checkedState1.value && checkedState2.value && checkedState3.value
-        Button(onClick = onTapAccept, enabled = isEnabled) {
+        Text(text = "Journaling data in the app always stays on this device", style = MaterialTheme.typography.caption)
+        Button(onClick = onTapAccept, enabled = allIsChecked) {
             Text(text = "Continue")
         }
     }
