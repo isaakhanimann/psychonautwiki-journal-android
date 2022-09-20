@@ -12,9 +12,9 @@ fun AcceptConditionsScreen(
     acceptConditionsViewModel: AcceptConditionsViewModel = hiltViewModel()
 ) {
     Column {
-        Text(text = acceptConditionsViewModel.exampleCounterFlow.collectAsState(initial = 0).value.toString())
-        Button(onClick = acceptConditionsViewModel::incrementCounter) {
-            Text(text = "Increment Counter")
+        Text(text = acceptConditionsViewModel.isAcceptedFlow.collectAsState(initial = false).value.toString())
+        Button(onClick = acceptConditionsViewModel::toggleAccepted) {
+            Text(text = "Toggle")
         }
     }
 }
