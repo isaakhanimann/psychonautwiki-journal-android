@@ -24,7 +24,8 @@ fun StatsScreen(
         substancesLastUsed = viewModel.substanceStats.collectAsState().value,
         navigateToSubstanceCompanion = navigateToSubstanceCompanion,
         selectedOption = viewModel.optionFlow.collectAsState().value,
-        onTapOption = viewModel::onTapOption
+        onTapOption = viewModel::onTapOption,
+        startDateText = viewModel.startDateTextFlow.collectAsState().value
     )
 }
 
@@ -39,7 +40,8 @@ fun StatsPreview(
         substancesLastUsed = substancesLastUsed,
         navigateToSubstanceCompanion = {},
         selectedOption = TimePickerOption.DAYS_30,
-        onTapOption = {}
+        onTapOption = {},
+        startDateText = "22. June 2022"
     )
 }
 
@@ -48,7 +50,8 @@ fun StatsScreen(
     substancesLastUsed: List<SubstanceStat>,
     navigateToSubstanceCompanion: (substanceName: String) -> Unit,
     selectedOption: TimePickerOption,
-    onTapOption: (option: TimePickerOption) -> Unit
+    onTapOption: (option: TimePickerOption) -> Unit,
+    startDateText: String
 ) {
     Scaffold(
         topBar = {
@@ -79,9 +82,8 @@ fun StatsScreen(
                     }
                 }
                 Text(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    text = "Text tab selected",
-                    style = MaterialTheme.typography.body1
+                    text = "Since $startDateText",
+                    style = MaterialTheme.typography.h6
                 )
             }
 

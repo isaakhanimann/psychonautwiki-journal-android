@@ -48,6 +48,12 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getLatestIngestionOfEverySubstanceSinceDate(date: Date): List<Ingestion> =
         experienceDao.getLatestIngestionOfEverySubstanceSinceDate(date)
 
+    suspend fun getIngestionsSinceDate(date: Date): List<Ingestion> =
+        experienceDao.getIngestionsSinceDate(date)
+
+    suspend fun getAllIngestions(): List<Ingestion> =
+        experienceDao.getAllIngestions()
+
     suspend fun insert(substanceCompanion: SubstanceCompanion) =
         experienceDao.insert(substanceCompanion)
 

@@ -27,6 +27,12 @@ interface ExperienceDao {
     )
     suspend fun getLatestIngestionOfEverySubstanceSinceDate(date: Date): List<Ingestion>
 
+    @Query("SELECT * FROM ingestion WHERE time > :date")
+    suspend fun getIngestionsSinceDate(date: Date): List<Ingestion>
+
+    @Query("SELECT * FROM ingestion")
+    suspend fun getAllIngestions(): List<Ingestion>
+
     @Query("SELECT DISTINCT substanceName FROM ingestion ORDER BY time DESC LIMIT :limit")
     fun getLastUsedSubstanceNamesFlow(limit: Int): Flow<List<String>>
 
