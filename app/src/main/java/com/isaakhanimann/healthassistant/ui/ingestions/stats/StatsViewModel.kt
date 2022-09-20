@@ -55,12 +55,15 @@ class StatsViewModel @Inject constructor(
             experienceRepo.getIngestionsSinceDate(it)
         }
     }.combine(experienceRepo.getAllSubstanceCompanionsFlow()) { ingestions, companions ->
-        ingestions.mapNotNull { oneIngestion ->
-            val oneCompanion = companions.firstOrNull { it.substanceName == oneIngestion.substanceName }
+        val map = ingestions.groupBy { it.substanceName }
+        return@combine map.values.mapNotNull { groupedIngestions ->
+            val name = groupedIngestions.firstOrNull()?.substanceName ?: return@mapNotNull null
+            val oneCompanion =
+                companions.firstOrNull { it.substanceName == name } ?: return@mapNotNull null
             SubstanceStat(
-                substanceName = oneIngestion.substanceName,
-                color = oneCompanion?.color ?: SubstanceColor.BLUE,
-                ingestionCount = 2
+                substanceName = name,
+                color = oneCompanion.color,
+                ingestionCount = groupedIngestions.size
             )
         }
     }.stateIn(

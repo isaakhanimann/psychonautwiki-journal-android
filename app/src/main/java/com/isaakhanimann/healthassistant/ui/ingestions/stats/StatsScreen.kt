@@ -1,8 +1,10 @@
 package com.isaakhanimann.healthassistant.ui.ingestions.stats
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -83,55 +85,47 @@ fun StatsScreen(
                 }
                 Text(
                     text = "Since $startDateText",
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.padding(10.dp)
                 )
+                Divider()
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    items(substancesLastUsed.size) { i ->
+                        val subStat = substancesLastUsed[i]
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    navigateToSubstanceCompanion(subStat.substanceName)
+                                }
+                                .padding(horizontal = 10.dp, vertical = 5.dp)
+                        ) {
+                            val isDarkTheme = isSystemInDarkTheme()
+                            Surface(
+                                shape = CircleShape,
+                                color = subStat.color.getComposeColor(isDarkTheme),
+                                modifier = Modifier.size(25.dp)
+                            ) {}
+                            Text(text = subStat.substanceName, style = MaterialTheme.typography.h6)
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(
+                                text = subStat.ingestionCount.toString(),
+                                style = MaterialTheme.typography.subtitle2
+                            )
+                        }
+                        if (i < substancesLastUsed.size) {
+                            Divider()
+                        }
+                    }
+                }
             }
 
-//            LazyColumn(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//            ) {
-//                item {
-//                    Row {
-//                        TimePickerOption.values().forEach { thisOption ->
-//                            val isChecked = thisOption == selectedOption
-//                            IconToggleButton(checked = isChecked, onCheckedChange = { onTapOption(thisOption) }) {
-////                                val tint by animateColorAsState(if (checked) Color(0xFFEC407A) else Color(0xFFB0BEC5))
-//                                Text(text = thisOption.displayText)
-//                            }
-//                        }
-//                    }
-//                }
-//                items(substancesLastUsed.size) { i ->
-//                    val subStat = substancesLastUsed[i]
-//                    Row(
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .clickable {
-//                                navigateToSubstanceCompanion(subStat.substanceName)
-//                            }
-//                            .padding(horizontal = 10.dp, vertical = 5.dp)
-//                    ) {
-//                        val isDarkTheme = isSystemInDarkTheme()
-//                        Surface(
-//                            shape = CircleShape,
-//                            color = subStat.color.getComposeColor(isDarkTheme),
-//                            modifier = Modifier.size(25.dp)
-//                        ) {}
-//                        Text(text = subStat.substanceName, style = MaterialTheme.typography.h6)
-//                        Spacer(modifier = Modifier.weight(1f))
-//                        Text(
-//                            text = subStat.ingestionCount.toString(),
-//                            style = MaterialTheme.typography.subtitle2
-//                        )
-//                    }
-//                    if (i < substancesLastUsed.size) {
-//                        Divider()
-//                    }
-//                }
-//            }
+
         }
     }
 }
