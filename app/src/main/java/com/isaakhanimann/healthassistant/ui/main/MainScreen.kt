@@ -1,16 +1,17 @@
 package com.isaakhanimann.healthassistant.ui.main
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.*
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigation
+import androidx.navigation.compose.rememberNavController
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.ui.AcceptConditionsScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.AddIngestionSearchScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.ChooseDoseScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.DoseGuideScreen
@@ -54,25 +55,26 @@ fun MainScreen() {
         TabRouter.SaferUse.route
     )
     bottomBarState.value = isShowingBottomBar
-    Scaffold(
-        bottomBar = {
-            BottomBar(
-                navController = navController,
-                bottomBarState = bottomBarState
-            )
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController,
-            startDestination = TabRouter.Search.route,
-            Modifier.padding(innerPadding)
-        ) {
-            tabGraph(navController)
-            noArgumentGraph(navController)
-            argumentGraph(navController)
-            addIngestionGraph(navController)
-        }
-    }
+    AcceptConditionsScreen()
+//    Scaffold(
+//        bottomBar = {
+//            BottomBar(
+//                navController = navController,
+//                bottomBarState = bottomBarState
+//            )
+//        }
+//    ) { innerPadding ->
+//        NavHost(
+//            navController,
+//            startDestination = TabRouter.Search.route,
+//            Modifier.padding(innerPadding)
+//        ) {
+//            tabGraph(navController)
+//            noArgumentGraph(navController)
+//            argumentGraph(navController)
+//            addIngestionGraph(navController)
+//        }
+//    }
 }
 
 fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
