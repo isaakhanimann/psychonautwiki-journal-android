@@ -1,4 +1,4 @@
-package com.isaakhanimann.healthassistant.ui.ingestions.stats.substancecompanion
+package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

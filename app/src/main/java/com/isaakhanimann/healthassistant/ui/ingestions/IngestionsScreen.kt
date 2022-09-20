@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -35,13 +34,11 @@ import java.util.*
 fun IngestionsScreen(
     navigateToIngestion: (ingestionId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    navigateToStatsScreen: () -> Unit,
     viewModel: IngestionsViewModel = hiltViewModel()
 ) {
     IngestionsScreen(
         navigateToIngestion = navigateToIngestion,
         navigateToAddIngestion = navigateToAddIngestion,
-        navigateToStatsScreen = navigateToStatsScreen,
         groupedIngestions = viewModel.ingestionsGrouped.collectAsState().value,
     )
 }
@@ -56,7 +53,6 @@ fun IngestionsScreenPreview(
     IngestionsScreen(
         navigateToIngestion = {},
         navigateToAddIngestion = {},
-        navigateToStatsScreen = {},
         groupedIngestions = groupedIngestions
     )
 }
@@ -65,23 +61,12 @@ fun IngestionsScreenPreview(
 fun IngestionsScreen(
     navigateToIngestion: (ingestionId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    navigateToStatsScreen: () -> Unit,
     groupedIngestions: Map<String, List<IngestionsViewModel.IngestionElement>>
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Ingestions") },
-                actions = {
-                    IconButton(
-                        onClick = navigateToStatsScreen,
-                    ) {
-                        Icon(
-                            Icons.Filled.BarChart,
-                            contentDescription = "Stats"
-                        )
-                    }
-                }
+                title = { Text(text = "Ingestions") }
             )
         },
         floatingActionButton = {

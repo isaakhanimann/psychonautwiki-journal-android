@@ -29,8 +29,6 @@ import com.isaakhanimann.healthassistant.ui.ingestions.IngestionsScreen
 import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.OneIngestionScreen
 import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.edit.membership.EditIngestionMembershipScreen
 import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.edit.note.EditIngestionNoteScreen
-import com.isaakhanimann.healthassistant.ui.ingestions.stats.StatsScreen
-import com.isaakhanimann.healthassistant.ui.ingestions.stats.substancecompanion.SubstanceCompanionScreen
 import com.isaakhanimann.healthassistant.ui.main.routers.*
 import com.isaakhanimann.healthassistant.ui.safer.DrugTestingScreen
 import com.isaakhanimann.healthassistant.ui.safer.SaferHallucinogensScreen
@@ -44,6 +42,8 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.DoseExplanation
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.DurationExplanationScreen
 import com.isaakhanimann.healthassistant.ui.settings.SettingsScreen
 import com.isaakhanimann.healthassistant.ui.settings.faq.FAQScreen
+import com.isaakhanimann.healthassistant.ui.stats.StatsScreen
+import com.isaakhanimann.healthassistant.ui.stats.substancecompanion.SubstanceCompanionScreen
 
 @Composable
 fun MainScreen(
@@ -56,6 +56,7 @@ fun MainScreen(
         val isShowingBottomBar = navBackStackEntry?.destination?.route in setOf(
             TabRouter.Experiences.route,
             TabRouter.Ingestions.route,
+            TabRouter.Statistics.route,
             TabRouter.Search.route,
             TabRouter.SaferUse.route
         )
@@ -210,8 +211,14 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             },
             navigateToAddIngestion = {
                 navController.navigateToAddIngestion(experienceId = null)
-            },
-            navigateToStatsScreen = navController::navigateToStats
+            }
+        )
+    }
+    composable(TabRouter.Statistics.route) {
+        StatsScreen(
+            navigateToSubstanceCompanion = {
+                navController.navigateToSubstanceCompanionScreen(substanceName = it)
+            }
         )
     }
     composable(TabRouter.Search.route) {

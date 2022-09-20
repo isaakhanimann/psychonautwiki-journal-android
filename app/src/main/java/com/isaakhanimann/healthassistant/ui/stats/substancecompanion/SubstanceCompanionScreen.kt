@@ -1,4 +1,4 @@
-package com.isaakhanimann.healthassistant.ui.ingestions.stats.substancecompanion
+package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

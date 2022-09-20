@@ -1,4 +1,4 @@
-package com.isaakhanimann.healthassistant.ui.ingestions.stats
+package com.isaakhanimann.healthassistant.ui.stats
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

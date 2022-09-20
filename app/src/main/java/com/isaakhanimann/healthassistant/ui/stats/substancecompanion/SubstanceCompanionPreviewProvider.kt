@@ -1,4 +1,4 @@
-package com.isaakhanimann.healthassistant.ui.ingestions.stats.substancecompanion
+package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
