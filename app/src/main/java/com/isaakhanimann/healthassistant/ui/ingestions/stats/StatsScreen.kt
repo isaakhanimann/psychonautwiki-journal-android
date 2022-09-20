@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 
 
 @Composable
@@ -111,12 +112,26 @@ fun StatsScreen(
                                 color = subStat.color.getComposeColor(isDarkTheme),
                                 modifier = Modifier.size(25.dp)
                             ) {}
-                            Text(text = subStat.substanceName, style = MaterialTheme.typography.h6)
+                            Column {
+                                Text(text = subStat.substanceName, style = MaterialTheme.typography.h6)
+                                val cumulativeDose = subStat.cumulativeDose
+                                if (cumulativeDose != null) {
+                                    Text(text = "Cumulative dose: ${if (cumulativeDose.isEstimate) "~" else ""} ${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
+                                } else {
+                                    Text(text = "Cumulative dose unknown")
+                                }
+                            }
                             Spacer(modifier = Modifier.weight(1f))
-                            Text(
-                                text = subStat.ingestionCount.toString(),
-                                style = MaterialTheme.typography.subtitle2
-                            )
+                            Column {
+                                Text(
+                                    text = subStat.ingestionCount.toString() + if (subStat.ingestionCount == 1) " Ingestion" else " Ingestions",
+                                    style = MaterialTheme.typography.subtitle2
+                                )
+                                subStat.routeCounts.forEach {
+                                    Text(text = "${it.count}x ${it.administrationRoute.displayText}")
+                                }
+                            }
+
                         }
                         if (i < substancesLastUsed.size) {
                             Divider()

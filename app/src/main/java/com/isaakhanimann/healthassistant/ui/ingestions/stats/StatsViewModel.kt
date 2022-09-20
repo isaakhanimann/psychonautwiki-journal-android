@@ -3,7 +3,9 @@ package com.isaakhanimann.healthassistant.ui.ingestions.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -63,7 +65,9 @@ class StatsViewModel @Inject constructor(
             SubstanceStat(
                 substanceName = name,
                 color = oneCompanion.color,
-                ingestionCount = groupedIngestions.size
+                ingestionCount = groupedIngestions.size,
+                routeCounts = getRouteCounts(groupedIngestions),
+                cumulativeDose = getCumulativeDose(groupedIngestions)
             )
         }
     }.stateIn(
@@ -71,45 +75,65 @@ class StatsViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
     )
+
+    private fun getRouteCounts(groupedIngestions: List<Ingestion>): List<RouteCount> {
+        val routeMap = groupedIngestions.groupBy { it.administrationRoute }
+        return routeMap.values.mapNotNull {
+            val route = it.firstOrNull()?.administrationRoute ?: return@mapNotNull null
+            RouteCount(administrationRoute = route, count = it.size)
+        }
+    }
+
+    private fun getCumulativeDose(groupedIngestions: List<Ingestion>): CumulativeDose? {
+        val units = groupedIngestions.firstOrNull()?.units ?: return null
+        if (groupedIngestions.any { it.units != units || it.dose == null }) return null
+        val sumDose = groupedIngestions.sumOf { it.dose ?: 0.0 }
+        val isEstimate = groupedIngestions.any { it.isDoseAnEstimate }
+        return CumulativeDose(dose = sumDose, units = units, isEstimate = isEstimate)
+    }
 }
 
 data class SubstanceStat(
     val substanceName: String,
     val color: SubstanceColor,
     val ingestionCount: Int,
-//    val cumulativeDose: Double,
-//    val doseUnit: String,
+    val routeCounts: List<RouteCount>,
+    val cumulativeDose: CumulativeDose?
+)
+
+data class RouteCount(
+    val administrationRoute: AdministrationRoute,
+    val count: Int
+)
+
+data class CumulativeDose(
+    val dose: Double,
+    val units: String,
+    val isEstimate: Boolean
 )
 
 enum class TimePickerOption {
     DAYS_7 {
         override val displayText = "7D"
         override val tabIndex = 0
-        override val milliseconds: Long = 7 * 24 * 60 * 60 * 1000
     },
     DAYS_30 {
         override val displayText = "30D"
         override val tabIndex = 1
-        override val milliseconds: Long = 30 * 24 * 60 * 60 * 1000
     },
     WEEKS_26 {
         override val displayText = "26W"
         override val tabIndex = 2
-        override val milliseconds: Long = 26 * 7 * 24 * 60 * 60 * 1000
     },
     MONTHS_12 {
         override val displayText = "12M"
         override val tabIndex = 3
-        override val milliseconds: Long = 52 * 7 * 24 * 60 * 60 * 1000
     },
     YEARS {
         override val displayText = "All"
         override val tabIndex = 4
-        override val milliseconds: Long = 7 * 24 * 60 * 60 * 1000
     };
 
     abstract val displayText: String
     abstract val tabIndex: Int
-    abstract val milliseconds: Long
-
 }
