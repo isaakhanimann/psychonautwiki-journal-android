@@ -8,11 +8,10 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +19,14 @@ class SubstanceCompanionViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
+
+    private val currentTimeFlow: Flow<Date> = flow {
+        while (true) {
+            emit(Date())
+            delay(timeMillis = 1000 * 10)
+        }
+    }
+    // getTimeDifferenceText(fromDate = lastIngestion.time, toDate = currentTime)
 
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
 
