@@ -3,6 +3,7 @@ package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -25,6 +26,7 @@ fun SubstanceCompanionScreen(
     viewModel.thisCompanionFlow.collectAsState().value?.also { companion ->
         SubstanceCompanionScreen(
             substanceCompanion = companion,
+            ingestionBursts = viewModel.ingestionBurstsFlow.collectAsState().value,
             onChangeColor = { viewModel.updateColor(it) },
             alreadyUsedColors = viewModel.alreadyUsedColorsFlow.collectAsState().value,
             otherColors = viewModel.otherColorsFlow.collectAsState().value
@@ -41,6 +43,7 @@ fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionPreviewProvide
     }
     SubstanceCompanionScreen(
         substanceCompanion = companion,
+        ingestionBursts = emptyList(),
         onChangeColor = {},
         alreadyUsedColors = alreadyUsedColors,
         otherColors = otherColors
@@ -50,6 +53,7 @@ fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionPreviewProvide
 @Composable
 fun SubstanceCompanionScreen(
     substanceCompanion: SubstanceCompanion,
+    ingestionBursts: List<IngestionsBurst>,
     onChangeColor: (SubstanceColor) -> Unit,
     alreadyUsedColors: List<SubstanceColor>,
     otherColors: List<SubstanceColor>
@@ -63,7 +67,7 @@ fun SubstanceCompanionScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(10.dp)
+                .padding(top = 10.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -73,6 +77,17 @@ fun SubstanceCompanionScreen(
                 alreadyUsedColors = alreadyUsedColors,
                 otherColors = otherColors
             )
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                ingestionBursts.forEach { burst ->
+                    item {
+                        Text(text = burst.timeUntil)
+                    }
+                    items(burst.ingestions.size) { i ->
+                        val ingestion = burst.ingestions[i]
+                        Text(text = ingestion.time.toString())
+                    }
+                }
+            }
         }
     }
 }
