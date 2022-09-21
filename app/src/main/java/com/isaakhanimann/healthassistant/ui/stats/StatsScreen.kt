@@ -24,11 +24,9 @@ fun StatsScreen(
     navigateToSubstanceCompanion: (substanceName: String) -> Unit
 ) {
     StatsScreen(
-        substancesLastUsed = viewModel.substanceStats.collectAsState().value,
         navigateToSubstanceCompanion = navigateToSubstanceCompanion,
-        selectedOption = viewModel.optionFlow.collectAsState().value,
         onTapOption = viewModel::onTapOption,
-        startDateText = viewModel.startDateTextFlow.collectAsState().value
+        statsModel = viewModel.statsModelFlow.collectAsState().value
     )
 }
 
@@ -37,24 +35,20 @@ fun StatsScreen(
 fun StatsPreview(
     @PreviewParameter(
         StatsPreviewProvider::class,
-    ) substancesLastUsed: List<SubstanceStat>
+    ) statsModel: StatsModel
 ) {
     StatsScreen(
-        substancesLastUsed = substancesLastUsed,
         navigateToSubstanceCompanion = {},
-        selectedOption = TimePickerOption.DAYS_30,
         onTapOption = {},
-        startDateText = "22. June 2022"
+        statsModel = statsModel
     )
 }
 
 @Composable
 fun StatsScreen(
-    substancesLastUsed: List<SubstanceStat>,
     navigateToSubstanceCompanion: (substanceName: String) -> Unit,
-    selectedOption: TimePickerOption,
     onTapOption: (option: TimePickerOption) -> Unit,
-    startDateText: String
+    statsModel: StatsModel?
 ) {
     Scaffold(
         topBar = {
@@ -64,7 +58,7 @@ fun StatsScreen(
             )
         }
     ) {
-        if (substancesLastUsed.isEmpty()) {
+        if (statsModel?.substanceStats?.isEmpty() != false) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
@@ -75,17 +69,17 @@ fun StatsScreen(
             }
         } else {
             Column {
-                TabRow(selectedTabIndex = selectedOption.tabIndex) {
+                TabRow(selectedTabIndex = statsModel.selectedOption.tabIndex) {
                     TimePickerOption.values().forEachIndexed { index, option ->
                         Tab(
                             text = { Text(option.displayText) },
-                            selected = selectedOption.tabIndex == index,
+                            selected = statsModel.selectedOption.tabIndex == index,
                             onClick = { onTapOption(option) }
                         )
                     }
                 }
                 Text(
-                    text = "Since $startDateText",
+                    text = "Since ${statsModel.startDateText}",
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(10.dp)
                 )
@@ -94,8 +88,8 @@ fun StatsScreen(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    items(substancesLastUsed.size) { i ->
-                        val subStat = substancesLastUsed[i]
+                    items(statsModel.substanceStats.size) { i ->
+                        val subStat = statsModel.substanceStats[i]
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -133,7 +127,7 @@ fun StatsScreen(
                             }
 
                         }
-                        if (i < substancesLastUsed.size) {
+                        if (i < statsModel.substanceStats.size) {
                             Divider()
                         }
                     }
