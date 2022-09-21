@@ -36,13 +36,12 @@ class StatsViewModel @Inject constructor(
             TimePickerOption.DAYS_30 -> cal.add(Calendar.MONTH, -1)
             TimePickerOption.WEEKS_26 -> cal.add(Calendar.WEEK_OF_YEAR, -26)
             TimePickerOption.MONTHS_12 -> cal.add(Calendar.YEAR, -1)
-            TimePickerOption.YEARS -> return@map null
+            TimePickerOption.YEARS_5 -> cal.add(Calendar.YEAR, -5)
         }
         return@map cal.time
     }
 
     private val startDateTextFlow = startDateFlow.map {
-        if (it == null) return@map "Start"
         val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         formatter.format(it) ?: ""
     }
@@ -68,7 +67,7 @@ class StatsViewModel @Inject constructor(
                     TimePickerOption.DAYS_30 -> cal.add(Calendar.DAY_OF_MONTH, -1)
                     TimePickerOption.WEEKS_26 -> cal.add(Calendar.WEEK_OF_YEAR, -1)
                     TimePickerOption.MONTHS_12 -> cal.add(Calendar.MONTH, -1)
-                    TimePickerOption.YEARS -> cal.add(Calendar.YEAR, -1)
+                    TimePickerOption.YEARS_5 -> cal.add(Calendar.YEAR, -1)
                 }
                 val ingestionsForBucket = remainingIngestions.takeWhile { it.time > cal.time }
                 buckets.add(ingestionsForBucket)
@@ -203,8 +202,8 @@ enum class TimePickerOption {
         override val tabIndex = 3
         override val bucketCount = 12
     },
-    YEARS {
-        override val displayText = "Years"
+    YEARS_5 {
+        override val displayText = "5Y"
         override val tabIndex = 4
         override val bucketCount = 5
     };
