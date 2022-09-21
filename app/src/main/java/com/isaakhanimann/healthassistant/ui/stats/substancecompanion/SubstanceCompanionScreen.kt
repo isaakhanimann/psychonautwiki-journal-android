@@ -1,9 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -15,9 +14,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ColorPicker
+import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Composable
 fun SubstanceCompanionScreen(
@@ -36,14 +39,14 @@ fun SubstanceCompanionScreen(
 
 @Preview
 @Composable
-fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionPreviewProvider::class) companion: SubstanceCompanion) {
+fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionScreenPreviewProvider::class) pair: Pair<SubstanceCompanion, List<IngestionsBurst>>) {
     val alreadyUsedColors = listOf(SubstanceColor.BLUE, SubstanceColor.PINK)
     val otherColors = SubstanceColor.values().filter { color ->
         !alreadyUsedColors.contains(color)
     }
     SubstanceCompanionScreen(
-        substanceCompanion = companion,
-        ingestionBursts = emptyList(),
+        substanceCompanion = pair.first,
+        ingestionBursts = pair.second,
         onChangeColor = {},
         alreadyUsedColors = alreadyUsedColors,
         otherColors = otherColors
@@ -81,13 +84,38 @@ fun SubstanceCompanionScreen(
                 ingestionBursts.forEach { burst ->
                     item {
                         Text(text = burst.timeUntil)
+                        Divider()
                     }
                     items(burst.ingestions.size) { i ->
                         val ingestion = burst.ingestions[i]
-                        Text(text = ingestion.time.toString())
+                        IngestionRow(ingestion = ingestion)
+                        Divider()
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun IngestionRow(ingestion: Ingestion) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        ingestion.dose?.also {
+            Text(
+                text = "${if (ingestion.isDoseAnEstimate) "~" else ""}${it.toReadableString()} ${ingestion.units} ${ingestion.administrationRoute.displayText}",
+            )
+        } ?: run {
+            Text(
+                text = "Unknown Dose ${ingestion.administrationRoute.displayText}",
+            )
+        }
+        val dateFormatter = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+        val dateString = dateFormatter.format(ingestion.time) ?: "Unknown Date"
+        Text(text = dateString)
     }
 }

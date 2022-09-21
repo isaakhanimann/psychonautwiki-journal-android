@@ -11,7 +11,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,9 +31,6 @@ fun AcceptConditionsScreen(
         verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.padding(10.dp)
     ) {
-        val configuration = LocalConfiguration.current
-        val screenWidth = configuration.screenWidthDp.dp
-
         val checkedState0 = remember { mutableStateOf(false) }
         val checkedState1 = remember { mutableStateOf(false) }
         val checkedState2 = remember { mutableStateOf(false) }
@@ -45,7 +41,7 @@ fun AcceptConditionsScreen(
         Image(
             painter = painter,
             contentDescription = "PsychonautWiki eye",
-            modifier = Modifier.size(screenWidth/2)
+            modifier = Modifier.fillMaxWidth(0.4f)
         )
         Column(horizontalAlignment = Alignment.Start) {
             Row(verticalAlignment = Alignment.CenterVertically) {
