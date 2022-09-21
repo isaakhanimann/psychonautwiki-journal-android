@@ -68,29 +68,32 @@ fun SubstanceCompanionScreen(
             )
         }
     ) {
-        Column(
+        LazyColumn(
             modifier = Modifier
-                .padding(top = 10.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ColorPicker(
-                selectedColor = substanceCompanion.color,
-                onChangeOfColor = onChangeColor,
-                alreadyUsedColors = alreadyUsedColors,
-                otherColors = otherColors
-            )
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                ingestionBursts.forEach { burst ->
-                    item {
-                        Text(text = burst.timeUntil)
-                        Divider()
-                    }
-                    items(burst.ingestions.size) { i ->
-                        val ingestion = burst.ingestions[i]
-                        IngestionRow(ingestion = ingestion)
-                        Divider()
-                    }
+            item {
+                Spacer(modifier = Modifier.height(10.dp))
+                ColorPicker(
+                    selectedColor = substanceCompanion.color,
+                    onChangeOfColor = onChangeColor,
+                    alreadyUsedColors = alreadyUsedColors,
+                    otherColors = otherColors
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(text = "Now")
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+            ingestionBursts.forEach { burst ->
+                item {
+                    TimeArrowUp(timeText = burst.timeUntil)
+                    Divider()
+                }
+                items(burst.ingestions.size) { i ->
+                    val ingestion = burst.ingestions[i]
+                    IngestionRow(ingestion = ingestion)
+                    Divider()
                 }
             }
         }

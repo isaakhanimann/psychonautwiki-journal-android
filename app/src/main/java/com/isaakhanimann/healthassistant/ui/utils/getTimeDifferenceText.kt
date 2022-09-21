@@ -1,6 +1,7 @@
 package com.isaakhanimann.healthassistant.ui.utils
 
 import java.util.*
+import kotlin.math.roundToInt
 
 fun getTimeDifferenceText(fromDate: Date, toDate: Date): String {
     val diff: Long = toDate.time - fromDate.time
@@ -22,6 +23,6 @@ fun getTimeDifferenceText(fromDate: Date, toDate: Date): String {
     } else if (hours > 1) {
         String.format("%.1f", hours) + " hours"
     } else {
-        String.format("%.1f", minutes) + " minutes"
+        minutes.roundToInt().toString() + " minutes"
     }
 }
