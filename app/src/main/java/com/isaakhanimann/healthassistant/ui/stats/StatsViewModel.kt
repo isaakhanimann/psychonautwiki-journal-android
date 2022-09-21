@@ -19,7 +19,7 @@ class StatsViewModel @Inject constructor(
     experienceRepo: ExperienceRepository
 ) : ViewModel() {
 
-    private val _optionFlow = MutableStateFlow(TimePickerOption.DAYS_30)
+    private val _optionFlow = MutableStateFlow(TimePickerOption.WEEKS_26)
     private val optionFlow = _optionFlow.asStateFlow()
 
     fun onTapOption(timePickerOption: TimePickerOption) {

@@ -85,7 +85,6 @@ fun StatsScreen(
                 val buckets = statsModel.chartBuckets
                 Canvas(
                     modifier = Modifier
-                        .padding(horizontal = 10.dp, vertical = 5.dp)
                         .fillMaxWidth()
                         .height(150.dp)
                 ) {
@@ -102,6 +101,12 @@ fun StatsScreen(
                         color = chartDividerColor,
                         start = Offset(x = 0f, y = 0f),
                         end = Offset(x = 0f, y = canvasHeight),
+                        strokeWidth = dividerWidth,
+                    )
+                    drawLine(
+                        color = chartDividerColor,
+                        start = Offset(x = 0f, y = canvasHeight),
+                        end = Offset(x = canvasWidth, y = canvasHeight),
                         strokeWidth = dividerWidth,
                     )
                     buckets.forEachIndexed { index, colorCounts ->
@@ -129,9 +134,8 @@ fun StatsScreen(
                 }
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 5.dp)
-                        .fillMaxWidth()
-                        .height(40.dp),
+                        .padding(horizontal = 5.dp, vertical = 5.dp)
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val style = MaterialTheme.typography.subtitle2
@@ -139,16 +143,17 @@ fun StatsScreen(
                         text = statsModel.startDateText,
                         style = style,
                     )
-                    ArrowRight(modifier = Modifier
-                        .weight(1f)
-                        .height(10.dp).padding(horizontal = 5.dp)
+                    ArrowRight(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(8.dp)
+                            .padding(horizontal = 8.dp)
                     )
                     Text(
                         text = "Now",
                         style = style,
                     )
                 }
-                Spacer(modifier = Modifier.height(5.dp))
                 Divider()
                 LazyColumn(
                     modifier = Modifier
@@ -166,7 +171,6 @@ fun StatsScreen(
                                 }
                                 .padding(horizontal = 10.dp, vertical = 5.dp)
                         ) {
-                            val isDarkTheme = isSystemInDarkTheme()
                             Surface(
                                 shape = CircleShape,
                                 color = subStat.color.getComposeColor(isDarkTheme),

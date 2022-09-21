@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun ArrowRight(modifier: Modifier = Modifier.width(200.dp).height(10.dp)) {
     val color = MaterialTheme.colors.onBackground
     val strokeWidth = 3f
-    val fraction = 19f/20f
+    val fraction = 19.5f/20f
     Canvas(
         modifier = modifier.fillMaxWidth()
     ) {
