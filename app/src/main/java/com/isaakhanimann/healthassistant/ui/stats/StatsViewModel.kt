@@ -50,12 +50,10 @@ class StatsViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
-    val substanceStats: StateFlow<List<SubstanceStat>> = startDateFlow.map {
-        if (it == null) {
-            experienceRepo.getAllIngestions()
-        } else {
-            experienceRepo.getIngestionsSinceDate(it)
-        }
+    private val allIngestionsSortedFlow: Flow<List<Ingestion>> = experienceRepo.getSortedIngestionsFlow()
+
+    val substanceStats: StateFlow<List<SubstanceStat>> = allIngestionsSortedFlow.combine(startDateFlow) { ingestions, startDate ->
+        return@combine ingestions.takeWhile { it.time > startDate }
     }.combine(experienceRepo.getAllSubstanceCompanionsFlow()) { ingestions, companions ->
         val map = ingestions.groupBy { it.substanceName }
         return@combine map.values.mapNotNull { groupedIngestions ->
@@ -130,7 +128,7 @@ enum class TimePickerOption {
         override val tabIndex = 3
     },
     YEARS {
-        override val displayText = "All"
+        override val displayText = "Years"
         override val tabIndex = 4
     };
 
