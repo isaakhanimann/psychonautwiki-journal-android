@@ -8,7 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.GppBad
-import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.Launch
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -134,11 +134,13 @@ fun SubstanceScreen(
                             val url = category.url
                             if (url != null) {
                                 Icon(
-                                    imageVector = Icons.Default.Link,
+                                    imageVector = Icons.Default.Launch,
                                     contentDescription = "Open Article",
-                                    modifier = Modifier.clickable {
-                                        uriHandler.openUri(url)
-                                    }
+                                    modifier = Modifier
+                                        .clickable {
+                                            uriHandler.openUri(url)
+                                        }
+                                        .size(15.dp)
                                 )
                             }
                         }
