@@ -95,10 +95,6 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                         color = SubstanceColor.ORANGE,
                         count = 11
                     ),
-                    ColorCount(
-                        color = SubstanceColor.PINK,
-                        count = 8
-                    ),
                 ),
                 listOf(
                     ColorCount(

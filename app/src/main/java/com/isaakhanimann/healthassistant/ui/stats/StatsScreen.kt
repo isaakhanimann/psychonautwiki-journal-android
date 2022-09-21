@@ -86,6 +86,7 @@ fun StatsScreen(
                     modifier = Modifier.padding(10.dp)
                 )
                 val isDarkTheme = isSystemInDarkTheme()
+                val chartDividerColor = MaterialTheme.colors.onBackground
                 Canvas(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -94,25 +95,32 @@ fun StatsScreen(
                     val canvasHeight = size.height
                     val canvasWidth = size.width
                     val numBuckets = statsModel.chartBuckets.size
-                    val spaceBetween = 8f
-                    val numSpaces = numBuckets - 1
-                    val bucketWidth = (canvasWidth - (numSpaces * spaceBetween)) / numBuckets
+                    val dividerWidth = 3f
+                    val numDividers = numBuckets - 1
+                    val bucketWidth = (canvasWidth - (numDividers * dividerWidth)) / numBuckets
                     val maxCount = statsModel.chartBuckets.maxOf { bucket ->
                         bucket.sumOf { it.count }
                     }
                     statsModel.chartBuckets.forEachIndexed { index, colorCounts ->
-                        val x = (index * (bucketWidth + spaceBetween)) + (bucketWidth / 2)
+                        val xBucket = (index * (bucketWidth + dividerWidth)) + (bucketWidth / 2)
                         var yStart = canvasHeight
                         colorCounts.forEach { colorCount ->
                             val yEnd = canvasHeight - (colorCount.count * canvasHeight / maxCount)
                             drawLine(
                                 color = colorCount.color.getComposeColor(isDarkTheme),
-                                start = Offset(x = x, y = yStart),
-                                end = Offset(x = x, y = yEnd),
+                                start = Offset(x = xBucket, y = yStart),
+                                end = Offset(x = xBucket, y = yEnd),
                                 strokeWidth = bucketWidth,
                             )
                             yStart = yEnd
                         }
+                        val xDivider = xBucket + (bucketWidth/2) + (dividerWidth/2)
+                        drawLine(
+                            color = chartDividerColor,
+                            start = Offset(x = xDivider, y = 0f),
+                            end = Offset(x = xDivider, y = canvasHeight),
+                            strokeWidth = dividerWidth,
+                        )
                     }
                 }
                 Divider()
