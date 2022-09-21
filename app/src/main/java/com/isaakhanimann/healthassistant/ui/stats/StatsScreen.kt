@@ -80,16 +80,12 @@ fun StatsScreen(
                         )
                     }
                 }
-                Text(
-                    text = "Since ${statsModel.startDateText}",
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(10.dp)
-                )
                 val isDarkTheme = isSystemInDarkTheme()
                 val chartDividerColor = MaterialTheme.colors.onBackground
                 val buckets = statsModel.chartBuckets
                 Canvas(
                     modifier = Modifier
+                        .padding(horizontal = 10.dp, vertical = 5.dp)
                         .fillMaxWidth()
                         .height(150.dp)
                 ) {
@@ -102,6 +98,12 @@ fun StatsScreen(
                     val maxCount = buckets.maxOf { bucket ->
                         bucket.sumOf { it.count }
                     }
+                    drawLine(
+                        color = chartDividerColor,
+                        start = Offset(x = 0f, y = 0f),
+                        end = Offset(x = 0f, y = canvasHeight),
+                        strokeWidth = dividerWidth,
+                    )
                     buckets.forEachIndexed { index, colorCounts ->
                         val xBucket = (index * (bucketWidth + dividerWidth)) + (bucketWidth / 2)
                         var yStart = canvasHeight
@@ -116,7 +118,7 @@ fun StatsScreen(
                             )
                             yStart = yEnd
                         }
-                        val xDivider = xBucket + (bucketWidth/2) + (dividerWidth/2)
+                        val xDivider = xBucket + (bucketWidth / 2) + (dividerWidth / 2)
                         drawLine(
                             color = chartDividerColor,
                             start = Offset(x = xDivider, y = 0f),
@@ -125,6 +127,28 @@ fun StatsScreen(
                         )
                     }
                 }
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                        .fillMaxWidth()
+                        .height(40.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val style = MaterialTheme.typography.subtitle2
+                    Text(
+                        text = statsModel.startDateText,
+                        style = style,
+                    )
+                    ArrowRight(modifier = Modifier
+                        .weight(1f)
+                        .height(10.dp).padding(horizontal = 5.dp)
+                    )
+                    Text(
+                        text = "Now",
+                        style = style,
+                    )
+                }
+                Spacer(modifier = Modifier.height(5.dp))
                 Divider()
                 LazyColumn(
                     modifier = Modifier

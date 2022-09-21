@@ -75,5 +75,4 @@ fun TimeArrowUp(timeText: String) {
             )
         }
     }
-
 }
