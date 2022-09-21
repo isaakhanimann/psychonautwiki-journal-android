@@ -70,9 +70,9 @@ fun SaferUseScreen(
                 Text("Volumetric Liquid Dosing")
             }
             Text(text = "4. Set and Setting", style = titleStyle)
-            Text(text = "Set: Make sure your thoughts, desires, feelings, general mood, and any preconceived notions or expectations about what you are about to experience are conducive to the experience. Your body is also an important part of the Set. Better not to take it if you feel sick, injured or generally unhealthy.\u2028Setting: An unfamiliar, uncontrollable or otherwise disagreeable social or physical environment may result in an unpleasant or dangerous experience. Choose an environment that provides a sense of safety, familiarity, control, and comfort. For using hallucinogens (psychedelics, dissociatives and deliriants) refer to the safer Hallucinogen guide.")
+            Text(text = "Set: Make sure your thoughts, desires, feelings, general mood, and any preconceived notions or expectations about what you are about to experience are conducive to the experience. Your body is also an important part of the Set. Better not to take it if you feel sick, injured or generally unhealthy.\nSetting: An unfamiliar, uncontrollable or otherwise disagreeable social or physical environment may result in an unpleasant or dangerous experience. Choose an environment that provides a sense of safety, familiarity, control, and comfort. For using hallucinogens (psychedelics, dissociatives and deliriants) refer to the safer hallucinogen guide.")
             Button(onClick = navigateToSaferHallucinogensScreen) {
-                Text("Safer Hallucinogen Use")
+                Text("Safer Hallucinogen Guide")
             }
             Text(text = "5. Combinations", style = titleStyle)
             Text(text = "Don’t combine drugs, including Alcohol, without research on the combo. The most common cause of substance-related deaths is the combination of depressants (such as opiates, benzodiazepines, or alcohol) with other depressants.")
