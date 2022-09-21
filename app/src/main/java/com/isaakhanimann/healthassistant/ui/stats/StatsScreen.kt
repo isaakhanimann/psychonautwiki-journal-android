@@ -87,6 +87,7 @@ fun StatsScreen(
                 )
                 val isDarkTheme = isSystemInDarkTheme()
                 val chartDividerColor = MaterialTheme.colors.onBackground
+                val buckets = statsModel.chartBuckets
                 Canvas(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -94,14 +95,14 @@ fun StatsScreen(
                 ) {
                     val canvasHeight = size.height
                     val canvasWidth = size.width
-                    val numBuckets = statsModel.chartBuckets.size
-                    val dividerWidth = 3f
+                    val numBuckets = buckets.size
+                    val dividerWidth = 1f
                     val numDividers = numBuckets - 1
                     val bucketWidth = (canvasWidth - (numDividers * dividerWidth)) / numBuckets
-                    val maxCount = statsModel.chartBuckets.maxOf { bucket ->
+                    val maxCount = buckets.maxOf { bucket ->
                         bucket.sumOf { it.count }
                     }
-                    statsModel.chartBuckets.forEachIndexed { index, colorCounts ->
+                    buckets.forEachIndexed { index, colorCounts ->
                         val xBucket = (index * (bucketWidth + dividerWidth)) + (bucketWidth / 2)
                         var yStart = canvasHeight
                         colorCounts.forEach { colorCount ->

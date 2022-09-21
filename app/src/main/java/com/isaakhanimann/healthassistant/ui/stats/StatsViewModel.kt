@@ -45,11 +45,7 @@ class StatsViewModel @Inject constructor(
         if (it == null) return@map "Start"
         val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         formatter.format(it) ?: ""
-    }.stateIn(
-        initialValue = "",
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    }
 
     private val allIngestionsSortedFlow: Flow<List<Ingestion>> =
         experienceRepo.getSortedIngestionsFlow()
@@ -60,7 +56,7 @@ class StatsViewModel @Inject constructor(
 
     private val companionFlow = experienceRepo.getAllSubstanceCompanionsFlow()
 
-    private val chartBucketsFlow: StateFlow<List<List<ColorCount>>> =
+    private val chartBucketsFlow: Flow<List<List<ColorCount>>> =
         relevantIngestionsSortedFlow.combine(optionFlow) { sortedIngestions, option ->
             var remainingIngestions = sortedIngestions
             val cal = Calendar.getInstance(TimeZone.getDefault())
@@ -85,11 +81,7 @@ class StatsViewModel @Inject constructor(
             return@combine buckets.map { ingestionsInBucket ->
                 return@map getColorCounts(ingestionsInBucket, companions)
             }
-        }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
+        }
 
     private fun getColorCounts(
         ingestions: List<Ingestion>,
@@ -107,7 +99,7 @@ class StatsViewModel @Inject constructor(
         }
     }
 
-    private val substanceStatsFlow: StateFlow<List<SubstanceStat>> =
+    private val substanceStatsFlow: Flow<List<SubstanceStat>> =
         relevantIngestionsSortedFlow.combine(companionFlow) { ingestions, companions ->
             val map = ingestions.groupBy { it.substanceName }
             return@combine map.values.mapNotNull { groupedIngestions ->
@@ -122,11 +114,7 @@ class StatsViewModel @Inject constructor(
                     cumulativeDose = getCumulativeDose(groupedIngestions)
                 )
             }
-        }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
+        }
 
     private fun getRouteCounts(groupedIngestions: List<Ingestion>): List<RouteCount> {
         val routeMap = groupedIngestions.groupBy { it.administrationRoute }
