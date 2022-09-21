@@ -1,7 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.search.substance.roa
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -84,8 +83,6 @@ fun ToleranceSection(
                     .joinToString(separator = ", ")
                 Text(text = "Cross tolerance with $names")
             }
-            Spacer(modifier = Modifier.height(5.dp))
-            Divider()
         }
 
     }

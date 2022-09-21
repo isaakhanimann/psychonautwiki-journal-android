@@ -242,6 +242,10 @@ fun SubstanceScreen(
                 crossTolerances = substance.crossTolerances,
                 titleStyle
             )
+            if (substance.tolerance != null || substance.crossTolerances.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(5.dp))
+                Divider()
+            }
             if (substance.toxicities.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Toxicity", style = titleStyle)

@@ -7,6 +7,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceReposit
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.healthassistant.ui.utils.getTimeDifferenceText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SubstanceCompanionViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
+    substanceRepo: SubstanceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -30,6 +32,10 @@ class SubstanceCompanionViewModel @Inject constructor(
     }
 
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
+
+    private val substance = substanceRepo.getSubstance(substanceName)
+    val tolerance = substance?.tolerance
+    val crossTolerances = substance?.crossTolerances ?: emptyList()
 
     val thisCompanionFlow: StateFlow<SubstanceCompanion?> =
         experienceRepo.getSubstanceCompanionFlow(substanceName).stateIn(
