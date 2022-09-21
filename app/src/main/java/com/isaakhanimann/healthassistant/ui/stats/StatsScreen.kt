@@ -106,7 +106,8 @@ fun StatsScreen(
                         val xBucket = (index * (bucketWidth + dividerWidth)) + (bucketWidth / 2)
                         var yStart = canvasHeight
                         colorCounts.forEach { colorCount ->
-                            val yEnd = canvasHeight - (colorCount.count * canvasHeight / maxCount)
+                            val yLength = colorCount.count * canvasHeight / maxCount
+                            val yEnd = yStart - yLength
                             drawLine(
                                 color = colorCount.color.getComposeColor(isDarkTheme),
                                 start = Offset(x = xBucket, y = yStart),

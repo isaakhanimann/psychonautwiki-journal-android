@@ -80,7 +80,7 @@ class StatsViewModel @Inject constructor(
         }.combine(companionFlow) { buckets, companions ->
             return@combine buckets.map { ingestionsInBucket ->
                 return@map getColorCounts(ingestionsInBucket, companions)
-            }
+            }.reversed()
         }
 
     private fun getColorCounts(
