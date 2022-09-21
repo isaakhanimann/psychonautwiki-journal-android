@@ -1,5 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.stats
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -83,6 +86,27 @@ fun StatsScreen(
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(10.dp)
                 )
+                Canvas(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                ) {
+                    val canvasHeight = size.height
+                    val canvasWidth = size.width
+                    val numBuckets = statsModel.chartBuckets.size
+                    val spaceBetween = 8f
+                    val numSpaces = numBuckets - 1
+                    val bucketWidth = (canvasWidth - (numSpaces * spaceBetween)) / numBuckets
+                    statsModel.chartBuckets.forEachIndexed { index, colorCounts ->
+                        val x = (index * (bucketWidth + spaceBetween)) + (bucketWidth / 2)
+                        drawLine(
+                            color = Color.Blue,
+                            start = Offset(x = x, y = canvasHeight),
+                            end = Offset(x = x, y = 0f),
+                            strokeWidth = bucketWidth,
+                        )
+                    }
+                }
                 Divider()
                 LazyColumn(
                     modifier = Modifier
@@ -107,7 +131,10 @@ fun StatsScreen(
                                 modifier = Modifier.size(25.dp)
                             ) {}
                             Column {
-                                Text(text = subStat.substanceName, style = MaterialTheme.typography.h6)
+                                Text(
+                                    text = subStat.substanceName,
+                                    style = MaterialTheme.typography.h6
+                                )
                                 val cumulativeDose = subStat.cumulativeDose
                                 if (cumulativeDose != null) {
                                     Text(text = "Cumulative dose: ${if (cumulativeDose.isEstimate) "~" else ""} ${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
