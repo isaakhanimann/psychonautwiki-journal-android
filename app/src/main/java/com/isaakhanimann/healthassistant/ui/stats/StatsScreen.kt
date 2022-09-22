@@ -86,7 +86,8 @@ fun StatsScreen(
                 val chartDividerColor = MaterialTheme.colors.onSurface.copy(alpha = 0.20f)
                 val buckets = statsModel.chartBuckets
                 Canvas(
-                    modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                    modifier = Modifier
+                        .padding(top = 10.dp, start = 10.dp, end = 10.dp)
                         .fillMaxWidth()
                         .height(150.dp)
                 ) {
@@ -94,16 +95,16 @@ fun StatsScreen(
                     val canvasHeightOuter = size.height
                     val tickHeight = 8f
                     val numBuckets = buckets.size
-                    val numSpacers = numBuckets - 1
+                    val numSpacers = numBuckets + 1
                     val spaceWidth = 20f
-                    val bucketWidth = (canvasWidth - (numSpacers * spaceWidth)) / numBuckets
+                    val bucketWidth = (canvasWidth - (numBuckets * spaceWidth)) / numBuckets
                     inset(left = 0f, top = 0f, right = 0f, bottom = tickHeight) {
                         val canvasHeightInner = size.height
                         val maxCount = buckets.maxOf { bucket ->
                             bucket.sumOf { it.count }
                         }
                         buckets.forEachIndexed { index, colorCounts ->
-                            val xBucket = (index * (bucketWidth + spaceWidth)) + (bucketWidth / 2)
+                            val xBucket = (((index * 2f) + 1) / 2) * (spaceWidth + bucketWidth)
                             var yStart = canvasHeightInner
                             colorCounts.forEach { colorCount ->
                                 val yLength = colorCount.count * canvasHeightInner / maxCount
@@ -119,7 +120,7 @@ fun StatsScreen(
                         }
                     }
                     // bottom line
-                    val bottomLineWidth = 5f
+                    val bottomLineWidth = 4f
                     drawLine(
                         color = chartDividerColor,
                         start = Offset(x = 0f, y = canvasHeightOuter - tickHeight),
@@ -128,8 +129,7 @@ fun StatsScreen(
                         cap = StrokeCap.Round
                     )
                     for (index in 0 until numSpacers) {
-                        val xSpacer =
-                            (index + 1) * bucketWidth + (spaceWidth / 2 + (index * spaceWidth))
+                        val xSpacer = index * (canvasWidth / numBuckets)
                         drawLine(
                             color = chartDividerColor,
                             start = Offset(x = xSpacer, y = canvasHeightOuter),
