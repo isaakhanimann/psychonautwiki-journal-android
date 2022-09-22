@@ -107,7 +107,7 @@ class SubstanceRepository @Inject constructor(
     }
 
     override fun getSubstance(substanceName: String): Substance? {
-        return substanceFile.substances.firstOrNull { it.name == substanceName }
+        return substanceFile.substancesMap[substanceName]
     }
 
     override fun getSubstanceWithCategories(substanceName: String): SubstanceWithCategories? {
