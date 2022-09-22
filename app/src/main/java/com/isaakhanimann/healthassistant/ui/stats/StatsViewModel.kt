@@ -95,7 +95,7 @@ class StatsViewModel @Inject constructor(
                 color = oneCompanion.color,
                 count = ingestionsOfOneSubstance.size
             )
-        }
+        }.sortedByDescending { it.count }
     }
 
     private val substanceStatsFlow: Flow<List<SubstanceStat>> =

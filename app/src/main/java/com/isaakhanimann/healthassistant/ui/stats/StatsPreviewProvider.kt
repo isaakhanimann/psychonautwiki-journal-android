@@ -78,12 +78,12 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
             chartBuckets = listOf(
                 listOf(
                     ColorCount(
-                        color = SubstanceColor.BLUE,
-                        count = 3
-                    ),
-                    ColorCount(
                         color = SubstanceColor.PINK,
                         count = 8
+                    ),
+                    ColorCount(
+                        color = SubstanceColor.BLUE,
+                        count = 3
                     ),
                 ),
                 listOf(),

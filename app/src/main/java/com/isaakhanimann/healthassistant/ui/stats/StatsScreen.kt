@@ -12,7 +12,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.tooling.preview.Preview
@@ -87,7 +89,7 @@ fun StatsScreen(
                 val buckets = statsModel.chartBuckets
                 Canvas(
                     modifier = Modifier
-                        .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                        .padding(top = 20.dp, start = 10.dp, end = 10.dp)
                         .fillMaxWidth()
                         .height(150.dp)
                 ) {
@@ -109,11 +111,12 @@ fun StatsScreen(
                             colorCounts.forEach { colorCount ->
                                 val yLength = colorCount.count * canvasHeightInner / maxCount
                                 val yEnd = yStart - yLength
-                                drawLine(
+                                val cornerRadius = bucketWidth/6
+                                drawRoundRect(
                                     color = colorCount.color.getComposeColor(isDarkTheme),
-                                    start = Offset(x = xBucket, y = yStart),
-                                    end = Offset(x = xBucket, y = yEnd),
-                                    strokeWidth = bucketWidth,
+                                    topLeft = Offset(x = xBucket - (bucketWidth / 2), y = yEnd),
+                                    size = Size(width = bucketWidth, height = yLength),
+                                    cornerRadius = CornerRadius(x = cornerRadius, y = cornerRadius)
                                 )
                                 yStart = yEnd
                             }
