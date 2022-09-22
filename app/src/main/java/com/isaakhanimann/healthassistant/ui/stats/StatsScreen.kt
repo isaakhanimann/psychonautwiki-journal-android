@@ -13,6 +13,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -81,54 +83,59 @@ fun StatsScreen(
                     }
                 }
                 val isDarkTheme = isSystemInDarkTheme()
-                val chartDividerColor = MaterialTheme.colors.onBackground
+                val chartDividerColor = MaterialTheme.colors.onSurface.copy(alpha = 0.20f)
                 val buckets = statsModel.chartBuckets
                 Canvas(
-                    modifier = Modifier
+                    modifier = Modifier.padding(top = 10.dp, start = 10.dp, end = 10.dp)
                         .fillMaxWidth()
                         .height(150.dp)
                 ) {
-                    val canvasHeight = size.height
                     val canvasWidth = size.width
+                    val canvasHeightOuter = size.height
+                    val tickHeight = 8f
                     val numBuckets = buckets.size
-                    val dividerWidth = 1f
-                    val numDividers = numBuckets - 1
-                    val bucketWidth = (canvasWidth - (numDividers * dividerWidth)) / numBuckets
-                    val maxCount = buckets.maxOf { bucket ->
-                        bucket.sumOf { it.count }
-                    }
-                    drawLine(
-                        color = chartDividerColor,
-                        start = Offset(x = 0f, y = 0f),
-                        end = Offset(x = 0f, y = canvasHeight),
-                        strokeWidth = dividerWidth,
-                    )
-                    drawLine(
-                        color = chartDividerColor,
-                        start = Offset(x = 0f, y = canvasHeight),
-                        end = Offset(x = canvasWidth, y = canvasHeight),
-                        strokeWidth = dividerWidth,
-                    )
-                    buckets.forEachIndexed { index, colorCounts ->
-                        val xBucket = (index * (bucketWidth + dividerWidth)) + (bucketWidth / 2)
-                        var yStart = canvasHeight
-                        colorCounts.forEach { colorCount ->
-                            val yLength = colorCount.count * canvasHeight / maxCount
-                            val yEnd = yStart - yLength
-                            drawLine(
-                                color = colorCount.color.getComposeColor(isDarkTheme),
-                                start = Offset(x = xBucket, y = yStart),
-                                end = Offset(x = xBucket, y = yEnd),
-                                strokeWidth = bucketWidth,
-                            )
-                            yStart = yEnd
+                    val numSpacers = numBuckets - 1
+                    val spaceWidth = 20f
+                    val bucketWidth = (canvasWidth - (numSpacers * spaceWidth)) / numBuckets
+                    inset(left = 0f, top = 0f, right = 0f, bottom = tickHeight) {
+                        val canvasHeightInner = size.height
+                        val maxCount = buckets.maxOf { bucket ->
+                            bucket.sumOf { it.count }
                         }
-                        val xDivider = xBucket + (bucketWidth / 2) + (dividerWidth / 2)
+                        buckets.forEachIndexed { index, colorCounts ->
+                            val xBucket = (index * (bucketWidth + spaceWidth)) + (bucketWidth / 2)
+                            var yStart = canvasHeightInner
+                            colorCounts.forEach { colorCount ->
+                                val yLength = colorCount.count * canvasHeightInner / maxCount
+                                val yEnd = yStart - yLength
+                                drawLine(
+                                    color = colorCount.color.getComposeColor(isDarkTheme),
+                                    start = Offset(x = xBucket, y = yStart),
+                                    end = Offset(x = xBucket, y = yEnd),
+                                    strokeWidth = bucketWidth,
+                                )
+                                yStart = yEnd
+                            }
+                        }
+                    }
+                    // bottom line
+                    val bottomLineWidth = 5f
+                    drawLine(
+                        color = chartDividerColor,
+                        start = Offset(x = 0f, y = canvasHeightOuter - tickHeight),
+                        end = Offset(x = canvasWidth, y = canvasHeightOuter - tickHeight),
+                        strokeWidth = bottomLineWidth,
+                        cap = StrokeCap.Round
+                    )
+                    for (index in 0 until numSpacers) {
+                        val xSpacer =
+                            (index + 1) * bucketWidth + (spaceWidth / 2 + (index * spaceWidth))
                         drawLine(
                             color = chartDividerColor,
-                            start = Offset(x = xDivider, y = 0f),
-                            end = Offset(x = xDivider, y = canvasHeight),
-                            strokeWidth = dividerWidth,
+                            start = Offset(x = xSpacer, y = canvasHeightOuter),
+                            end = Offset(x = xSpacer, y = canvasHeightOuter - tickHeight),
+                            strokeWidth = bottomLineWidth,
+                            cap = StrokeCap.Round
                         )
                     }
                 }
