@@ -108,7 +108,7 @@ fun StatsScreen(
                     val halfLineHeight = half.toFloat() * canvasHeightOuter / maxCount
                     val labelHeight = 30f
                     val halfLabelHeight = labelHeight/2
-                    val labelWidth = 50f
+                    val labelWidth = 60f
                     val spaceBetweenLabelAndChart = 20f
                     drawContext.canvas.nativeCanvas.apply {
                         drawText(
@@ -140,7 +140,7 @@ fun StatsScreen(
                             color = tickColor,
                             start = Offset(x = 0f, y = 0f),
                             end = Offset(x = canvasWidthWithoutLabel, y = 0f),
-                            strokeWidth = horizontalLinesWidth,
+                            strokeWidth = horizontalLinesWidth/2,
                             cap = StrokeCap.Round
                         )
                         // half line
@@ -148,11 +148,14 @@ fun StatsScreen(
                             color = tickColor,
                             start = Offset(x = 0f, y = canvasHeightOuter-halfLineHeight),
                             end = Offset(x = canvasWidthWithoutLabel, y = canvasHeightOuter-halfLineHeight),
-                            strokeWidth = horizontalLinesWidth,
+                            strokeWidth = horizontalLinesWidth/2,
                             cap = StrokeCap.Round
                         )
                         // bottom line
                         val tickHeight = 8f
+                        val numBuckets = buckets.size
+                        val spaceBetweenTicks = canvasWidthWithoutLabel / numBuckets
+                        val numSpacers = numBuckets + 1
                         drawLine(
                             color = tickColor,
                             start = Offset(x = 0f, y = canvasHeightOuter - tickHeight),
@@ -163,9 +166,17 @@ fun StatsScreen(
                             strokeWidth = horizontalLinesWidth,
                             cap = StrokeCap.Round
                         )
-                        val numBuckets = buckets.size
-                        val spaceBetweenTicks = canvasWidthWithoutLabel / numBuckets
-                        val numSpacers = numBuckets + 1
+                        // ticks
+                        for (index in 0 until numSpacers) {
+                            val xSpacer = index * spaceBetweenTicks
+                            drawLine(
+                                color = tickColor,
+                                start = Offset(x = xSpacer, y = canvasHeightOuter),
+                                end = Offset(x = xSpacer, y = canvasHeightOuter - tickHeight),
+                                strokeWidth = horizontalLinesWidth,
+                                cap = StrokeCap.Round
+                            )
+                        }
                         val percentageOfBucketWidthToSpaceBetweenTicks = 0.7f
                         val bucketWidth =
                             spaceBetweenTicks * percentageOfBucketWidthToSpaceBetweenTicks
@@ -191,16 +202,6 @@ fun StatsScreen(
                                     yStart = yEnd
                                 }
                             }
-                        }
-                        for (index in 0 until numSpacers) {
-                            val xSpacer = index * spaceBetweenTicks
-                            drawLine(
-                                color = tickColor,
-                                start = Offset(x = xSpacer, y = canvasHeightOuter),
-                                end = Offset(x = xSpacer, y = canvasHeightOuter - tickHeight),
-                                strokeWidth = horizontalLinesWidth,
-                                cap = StrokeCap.Round
-                            )
                         }
                     }
                 }
