@@ -59,7 +59,7 @@ fun StatsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Ingestion Statistics") },
+                title = { Text(text = "Statistics") },
                 elevation = 0.dp
             )
         }
@@ -84,22 +84,25 @@ fun StatsScreen(
                         )
                     }
                 }
+                Text(text = "Ingestion Counts", style = MaterialTheme.typography.h6, modifier = Modifier.padding(10.dp))
                 val isDarkTheme = isSystemInDarkTheme()
                 val chartDividerColor = MaterialTheme.colors.onSurface.copy(alpha = 0.20f)
                 val buckets = statsModel.chartBuckets
                 Canvas(
                     modifier = Modifier
-                        .padding(top = 20.dp, start = 10.dp, end = 10.dp)
+                        .padding(horizontal = 10.dp)
                         .fillMaxWidth()
                         .height(150.dp)
                 ) {
                     val canvasWidth = size.width
                     val canvasHeightOuter = size.height
-                    val tickHeight = 8f
                     val numBuckets = buckets.size
+                    val tickHeight = 8f
+                    val spaceBetweenTicks = canvasWidth / numBuckets
                     val numSpacers = numBuckets + 1
-                    val spaceWidth = 20f
-                    val bucketWidth = (canvasWidth - (numBuckets * spaceWidth)) / numBuckets
+                    val percentageOfBucketWidthToSpaceBetweenTicks = 0.7f
+                    val bucketWidth = spaceBetweenTicks * percentageOfBucketWidthToSpaceBetweenTicks
+                    val spaceWidth = spaceBetweenTicks - bucketWidth
                     inset(left = 0f, top = 0f, right = 0f, bottom = tickHeight) {
                         val canvasHeightInner = size.height
                         val maxCount = buckets.maxOf { bucket ->
@@ -132,7 +135,7 @@ fun StatsScreen(
                         cap = StrokeCap.Round
                     )
                     for (index in 0 until numSpacers) {
-                        val xSpacer = index * (canvasWidth / numBuckets)
+                        val xSpacer = index * spaceBetweenTicks
                         drawLine(
                             color = chartDividerColor,
                             start = Offset(x = xSpacer, y = canvasHeightOuter),

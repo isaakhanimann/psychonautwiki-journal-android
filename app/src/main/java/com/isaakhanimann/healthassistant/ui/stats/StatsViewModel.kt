@@ -112,7 +112,7 @@ class StatsViewModel @Inject constructor(
                     routeCounts = getRouteCounts(groupedIngestions),
                     cumulativeDose = getCumulativeDose(groupedIngestions)
                 )
-            }
+            }.sortedByDescending { it.ingestionCount }
         }
 
     private fun getRouteCounts(groupedIngestions: List<Ingestion>): List<RouteCount> {
