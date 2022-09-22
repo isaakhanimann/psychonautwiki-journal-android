@@ -142,7 +142,7 @@ fun SettingsScreen(
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Question / Feedback / Bug Reports")
+                Text("Question / Feedback / Bug Report")
                 Spacer(modifier = Modifier.weight(1f))
             }
             Divider()

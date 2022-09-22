@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,7 +23,7 @@ fun DrugTestingScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Drug Testing") }
+                title = { Text(text = "Drug Testing Services") }
             )
         }
     ) {
@@ -126,6 +127,16 @@ fun DrugTestingScreen() {
                 url = "https://www.gassenarbeit.ch/angebote/dilu"
             )
             Divider()
+            val uriHandler = LocalUriHandler.current
+            TextButton(onClick = {
+                uriHandler.openUri("https://t.me/isaakhanimann")
+            }) {
+                Text(
+                    "Contact support if a service is missing",
+                    style = MaterialTheme.typography.caption,
+                    textDecoration = TextDecoration.Underline
+                )
+            }
         }
     }
 }
