@@ -85,10 +85,7 @@ fun SubstanceScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(substance.name) },
-                actions = {
-                    ArticleLink(url = substance.url)
-                }
+                title = { Text(substance.name) }
             )
         }
     ) {
@@ -97,16 +94,29 @@ fun SubstanceScreen(
                 .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            val uriHandler = LocalUriHandler.current
+            Button(
+                onClick = {
+                    uriHandler.openUri(substance.url)
+                },
+                modifier = Modifier.padding(vertical = 5.dp)
+            ) {
+                Icon(
+                    Icons.Filled.Launch,
+                    contentDescription = "Open Link",
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text(
+                    "Read Article (Recommended)"
+                )
+            }
             val titleStyle = MaterialTheme.typography.subtitle2
-            if (substance.isApproved) {
-                Row(modifier = Modifier.padding(vertical = 5.dp)) {
+            Row(modifier = Modifier.padding(bottom = 5.dp)) {
+                if (substance.isApproved) {
                     Icon(imageVector = Icons.Default.Verified, contentDescription = "Verified")
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(text = "Info is approved")
-                }
-
-            } else {
-                Row(modifier = Modifier.padding(vertical = 5.dp)) {
+                } else {
                     Icon(imageVector = Icons.Default.GppBad, contentDescription = "Verified")
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(text = "Info is not approved")
@@ -117,7 +127,6 @@ fun SubstanceScreen(
                 Text(text = substance.summary)
                 val categories = substanceWithCategories.categories
                 Spacer(modifier = Modifier.height(5.dp))
-                val uriHandler = LocalUriHandler.current
                 categories.forEach { category ->
                     Column {
                         Row(
