@@ -194,22 +194,16 @@ fun StatsScreen(
                                     text = subStat.substanceName,
                                     style = MaterialTheme.typography.h6
                                 )
-                                val cumulativeDose = subStat.cumulativeDose
-                                if (cumulativeDose != null) {
-                                    Text(text = "Cumulative dose: ${if (cumulativeDose.isEstimate) "~" else ""} ${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
-                                } else {
-                                    Text(text = "Cumulative dose unknown")
+                                subStat.routeCounts.forEach {
+                                    Text(text = "${it.count}x ${it.administrationRoute.displayText}", style = MaterialTheme.typography.subtitle1)
                                 }
                             }
                             Spacer(modifier = Modifier.weight(1f))
-                            Column {
-                                Text(
-                                    text = subStat.ingestionCount.toString() + if (subStat.ingestionCount == 1) " Ingestion" else " Ingestions",
-                                    style = MaterialTheme.typography.subtitle2
-                                )
-                                subStat.routeCounts.forEach {
-                                    Text(text = "${it.count}x ${it.administrationRoute.displayText}")
-                                }
+                            val cumulativeDose = subStat.cumulativeDose
+                            if (cumulativeDose != null) {
+                                Text(text = "total: ${if (cumulativeDose.isEstimate) "~" else ""}${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
+                            } else {
+                                Text(text = "total dose unknown")
                             }
 
                         }
