@@ -23,6 +23,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
+const val hourLimitToSeparateIngestions = 12
+
 @HiltViewModel
 class ChooseTimeViewModel @Inject constructor(
     substanceRepo: SubstanceRepository,
@@ -53,12 +55,12 @@ class ChooseTimeViewModel @Inject constructor(
                 val lastIngestionTime = sortedIngestions.lastOrNull()?.time
                 val cal = Calendar.getInstance(TimeZone.getDefault())
                 cal.time = selectedDate
-                cal.add(Calendar.HOUR_OF_DAY, -12)
-                val selectedDateMinus12 = cal.time
+                cal.add(Calendar.HOUR_OF_DAY, -hourLimitToSeparateIngestions)
+                val selectedDateMinusLimit = cal.time
                 cal.time = selectedDate
-                cal.add(Calendar.HOUR_OF_DAY, 12)
-                val selectedDatePlus12 = cal.time
-                return@firstOrNull selectedDateMinus12 < lastIngestionTime && selectedDatePlus12 > firstIngestionTime
+                cal.add(Calendar.HOUR_OF_DAY, hourLimitToSeparateIngestions)
+                val selectedDatePlusLimit = cal.time
+                return@firstOrNull selectedDateMinusLimit < lastIngestionTime && selectedDatePlusLimit > firstIngestionTime
             }
         }
 

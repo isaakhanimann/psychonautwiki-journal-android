@@ -50,6 +50,7 @@ fun ExperienceScreen(
             showSentimentMenu = viewModel::showEditSentimentMenu,
             dismissSentimentMenu = viewModel::dismissEditSentimentMenu,
             saveSentiment = viewModel::saveSentiment,
+            isShowingAddIngestionButton = viewModel.isShowingAddIngestionButtonFlow.collectAsState().value
         )
     }
 }
@@ -79,6 +80,7 @@ fun ExperienceScreenPreview(
             showSentimentMenu = {},
             dismissSentimentMenu = {},
             saveSentiment = {},
+            isShowingAddIngestionButton = true
         )
     }
 }
@@ -99,7 +101,8 @@ fun ExperienceScreen(
     isShowingSentimentMenu: Boolean,
     showSentimentMenu: () -> Unit,
     dismissSentimentMenu: () -> Unit,
-    saveSentiment: (sentiment: Sentiment?) -> Unit
+    saveSentiment: (sentiment: Sentiment?) -> Unit,
+    isShowingAddIngestionButton: Boolean
 ) {
     Scaffold(
         topBar = {
@@ -115,16 +118,18 @@ fun ExperienceScreen(
             )
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = addIngestion,
-                icon = {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add"
-                    )
-                },
-                text = { Text("Add Ingestion") }
-            )
+            if (isShowingAddIngestionButton) {
+                ExtendedFloatingActionButton(
+                    onClick = addIngestion,
+                    icon = {
+                        Icon(
+                            Icons.Filled.Add,
+                            contentDescription = "Add"
+                        )
+                    },
+                    text = { Text("Ingestion") }
+                )
+            }
         }
     ) {
         Column(

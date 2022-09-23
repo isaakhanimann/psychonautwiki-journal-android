@@ -13,8 +13,10 @@ import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
+import com.isaakhanimann.healthassistant.ui.addingestion.time.hourLimitToSeparateIngestions
 import com.isaakhanimann.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -58,6 +60,27 @@ class OneExperienceViewModel @Inject constructor(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000)
             )
+
+    private val currentTimeFlow: Flow<Date> = flow {
+        while (true) {
+            emit(Date())
+            delay(timeMillis = 1000 * 10)
+        }
+    }
+
+    val isShowingAddIngestionButtonFlow = experienceWithIngestionsFlow.combine(currentTimeFlow) { experienceWithIngestions, currentTime ->
+        val ingestionTimes = experienceWithIngestions?.ingestionsWithCompanions?.map { it.ingestion.time }
+        val lastIngestionTime = ingestionTimes?.maxOrNull()
+        val cal = Calendar.getInstance(TimeZone.getDefault())
+        cal.time = currentTime
+        cal.add(Calendar.HOUR_OF_DAY, -hourLimitToSeparateIngestions)
+        val limitAgo = cal.time
+        return@combine limitAgo < lastIngestionTime
+    }.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     private val sortedIngestionsWithCompanionsFlow = experienceWithIngestionsFlow.map { experience ->
         experience?.ingestionsWithCompanions?.sortedBy { it.ingestion.time } ?: emptyList()
