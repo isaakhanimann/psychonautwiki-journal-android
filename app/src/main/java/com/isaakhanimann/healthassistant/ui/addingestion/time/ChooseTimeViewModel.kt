@@ -31,7 +31,16 @@ class ChooseTimeViewModel @Inject constructor(
 ) : ViewModel() {
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
     val substance: Substance?
-    val dateAndTimeFlow = MutableStateFlow(DateAndTime())
+    private val calendar = Calendar.getInstance()
+    val dateAndTimeFlow = MutableStateFlow(
+        DateAndTime(
+            year = calendar.get(Calendar.YEAR),
+            month = calendar.get(Calendar.MONTH),
+            day = calendar.get(Calendar.DAY_OF_MONTH),
+            hour = calendar.get(Calendar.HOUR_OF_DAY),
+            minute = calendar.get(Calendar.MINUTE)
+        )
+    )
 
     private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()
 
@@ -45,15 +54,11 @@ class ChooseTimeViewModel @Inject constructor(
                 val cal = Calendar.getInstance(TimeZone.getDefault())
                 cal.time = selectedDate
                 cal.add(Calendar.HOUR_OF_DAY, -12)
-                if (cal.time < lastIngestionTime) {
-                    return@firstOrNull true
-                }
+                val selectedDateMinus12 = cal.time
                 cal.time = selectedDate
                 cal.add(Calendar.HOUR_OF_DAY, 12)
-                if (cal.time > firstIngestionTime) {
-                    return@firstOrNull true
-                }
-                return@firstOrNull false
+                val selectedDatePlus12 = cal.time
+                return@firstOrNull selectedDateMinus12 < lastIngestionTime && selectedDatePlus12 > firstIngestionTime
             }
         }.stateIn(
             initialValue = null,
@@ -145,14 +150,36 @@ class ChooseTimeViewModel @Inject constructor(
     }
 
     fun onSubmitDate(newDay: Int, newMonth: Int, newYear: Int) {
-        dateAndTimeFlow.value.day = newDay
-        dateAndTimeFlow.value.month = newMonth
-        dateAndTimeFlow.value.year = newYear
+        val hour = dateAndTimeFlow.value.hour
+        val minute = dateAndTimeFlow.value.minute
+        viewModelScope.launch {
+            dateAndTimeFlow.emit(
+                DateAndTime(
+                    day = newDay,
+                    month = newMonth,
+                    year = newYear,
+                    hour = hour,
+                    minute = minute
+                )
+            )
+        }
     }
 
     fun onSubmitTime(newHour: Int, newMinute: Int) {
-        dateAndTimeFlow.value.hour = newHour
-        dateAndTimeFlow.value.minute = newMinute
+        val year = dateAndTimeFlow.value.year
+        val month = dateAndTimeFlow.value.month
+        val day = dateAndTimeFlow.value.day
+        viewModelScope.launch {
+            dateAndTimeFlow.emit(
+                DateAndTime(
+                    day = day,
+                    month = month,
+                    year = year,
+                    hour = newHour,
+                    minute = newMinute
+                )
+            )
+        }
     }
 
     fun createAndSaveIngestion() {
@@ -211,17 +238,16 @@ class ChooseTimeViewModel @Inject constructor(
     }
 }
 
-class DateAndTime {
-    private val calendar: Calendar = Calendar.getInstance()
-
-    var year = calendar.get(Calendar.YEAR)
-    var month = calendar.get(Calendar.MONTH)
-    var day = calendar.get(Calendar.DAY_OF_MONTH)
-    var hour = calendar.get(Calendar.HOUR_OF_DAY)
-    var minute = calendar.get(Calendar.MINUTE)
-
+data class DateAndTime(
+    val year: Int,
+    val month: Int,
+    val day: Int,
+    val hour: Int,
+    val minute: Int,
+) {
     val currentlySelectedDate: Date
         get() {
+            val calendar = Calendar.getInstance()
             calendar.set(year, month, day, hour, minute)
             return calendar.time
         }

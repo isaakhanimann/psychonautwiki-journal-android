@@ -66,7 +66,7 @@ fun ChooseTimeScreenPreview() {
         createAndSaveIngestion = {},
         onSubmitDate = { _: Int, _: Int, _: Int -> },
         onSubmitTime = { _: Int, _: Int -> },
-        dateAndTime = DateAndTime(),
+        dateAndTime = DateAndTime(year = 2022, month = 2, day = 19, hour = 7, minute = 7),
         dismissAddIngestionScreens = {},
         isLoadingColor = false,
         isShowingColorPicker = true,

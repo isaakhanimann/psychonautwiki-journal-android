@@ -3,8 +3,7 @@ package com.isaakhanimann.healthassistant
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AxisDrawable
 import com.isaakhanimann.healthassistant.ui.utils.getDate
 import com.isaakhanimann.healthassistant.ui.utils.getTimeDifferenceText
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Test
 import java.util.*
 
@@ -40,5 +39,20 @@ class TestDates {
         val date = Date(Date().time - twoDaysInMs + threeHours)
         val text = getTimeDifferenceText(fromDate = date, toDate = Date())
         assertEquals("2 days", text)
+    }
+
+    @Test
+    fun dateRange() {
+        val cal = Calendar.getInstance(TimeZone.getDefault())
+        val firstIngestionTime = getDate(year = 2022, month = 9, day = 23, hourOfDay = 14, minute = 20)!!
+        val lastIngestionTime = getDate(year = 2022, month = 9, day = 23, hourOfDay = 23, minute = 20)!!
+        val selectedDate = getDate(year = 2022, month = 9, day = 21, hourOfDay = 23, minute = 20)!!
+        cal.time = selectedDate
+        cal.add(Calendar.HOUR_OF_DAY, -12)
+        val selectedDateMinus12 = cal.time
+        cal.time = selectedDate
+        cal.add(Calendar.HOUR_OF_DAY, 12)
+        val selectedDatePlus12 = cal.time
+        assertFalse(selectedDateMinus12 < lastIngestionTime && selectedDatePlus12 > firstIngestionTime)
     }
 }
