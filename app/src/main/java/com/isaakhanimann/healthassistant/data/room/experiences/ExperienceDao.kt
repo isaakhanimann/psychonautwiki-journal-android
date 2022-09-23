@@ -82,6 +82,22 @@ interface ExperienceDao {
     @Delete
     suspend fun deleteExperience(experience: Experience)
 
+    @Transaction
+    suspend fun deleteExperienceWithIngestions(experienceWithIngestions: ExperienceWithIngestions) {
+        deleteExperience(experience = experienceWithIngestions.experience)
+        experienceWithIngestions.ingestions.forEach {
+            deleteIngestion(it)
+        }
+    }
+
+    @Transaction
+    suspend fun deleteExperienceWithIngestions(experienceWithIngestionsAndCompanions: ExperienceWithIngestionsAndCompanions) {
+        deleteExperience(experience = experienceWithIngestionsAndCompanions.experience)
+        experienceWithIngestionsAndCompanions.ingestionsWithCompanions.forEach {
+            deleteIngestion(it.ingestion)
+        }
+    }
+
     @Delete
     suspend fun deleteIngestion(ingestion: Ingestion)
 

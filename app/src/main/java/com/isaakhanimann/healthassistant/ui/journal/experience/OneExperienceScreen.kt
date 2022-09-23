@@ -20,8 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.journal.experience.ingestion.SentimentSection
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 
@@ -259,7 +259,7 @@ fun ExperienceScreen(
                         Text(text = "Delete Experience?")
                     },
                     text = {
-                        Text("This won't delete any ingestions")
+                        Text("This will also delete all its ingestions.")
                     },
                     confirmButton = {
                         TextButton(

@@ -15,10 +15,7 @@ import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.EXPERIENCE_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -155,7 +152,7 @@ class OneExperienceViewModel @Inject constructor(
 
     fun deleteExperience() {
         viewModelScope.launch {
-            experienceWithIngestionsFlow.value?.experience?.let {
+            experienceWithIngestionsFlow.firstOrNull()?.let {
                 experienceRepo.delete(it)
             }
         }
