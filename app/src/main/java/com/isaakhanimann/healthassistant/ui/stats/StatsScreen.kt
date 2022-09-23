@@ -58,7 +58,7 @@ fun StatsScreen(
             )
         }
     ) {
-        if (statsModel?.substanceStats?.isEmpty() != false) {
+        if (statsModel?.ingestionStats?.isEmpty() != false) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
@@ -80,7 +80,7 @@ fun StatsScreen(
                 }
                 Row(
                     modifier = Modifier
-                        .padding(10.dp)
+                        .padding(horizontal = 10.dp)
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -106,7 +106,7 @@ fun StatsScreen(
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
                 )
-                BarChart(buckets = statsModel.chartBuckets)
+                BarChart(buckets = statsModel.ingestionChartBuckets)
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                     Row(
                         modifier = Modifier
@@ -132,8 +132,8 @@ fun StatsScreen(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    items(statsModel.substanceStats.size) { i ->
-                        val subStat = statsModel.substanceStats[i]
+                    items(statsModel.ingestionStats.size) { i ->
+                        val subStat = statsModel.ingestionStats[i]
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -161,7 +161,7 @@ fun StatsScreen(
                                 }
                             }
                             Spacer(modifier = Modifier.weight(1f))
-                            val cumulativeDose = subStat.cumulativeDose
+                            val cumulativeDose = subStat.totalDose
                             if (cumulativeDose != null) {
                                 Text(text = "total ${if (cumulativeDose.isEstimate) "~" else ""}${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
                             } else {
@@ -169,7 +169,7 @@ fun StatsScreen(
                             }
 
                         }
-                        if (i < statsModel.substanceStats.size) {
+                        if (i < statsModel.ingestionStats.size) {
                             Divider()
                         }
                     }

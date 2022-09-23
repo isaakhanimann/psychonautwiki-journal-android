@@ -98,19 +98,19 @@ class StatsViewModel @Inject constructor(
         }.sortedByDescending { it.count }
     }
 
-    private val substanceStatsFlow: Flow<List<SubstanceStat>> =
+    private val ingestionStatsFlow: Flow<List<IngestionStat>> =
         relevantIngestionsSortedFlow.combine(companionFlow) { ingestions, companions ->
             val map = ingestions.groupBy { it.substanceName }
             return@combine map.values.mapNotNull { groupedIngestions ->
                 val name = groupedIngestions.firstOrNull()?.substanceName ?: return@mapNotNull null
                 val oneCompanion =
                     companions.firstOrNull { it.substanceName == name } ?: return@mapNotNull null
-                SubstanceStat(
+                IngestionStat(
                     substanceName = name,
                     color = oneCompanion.color,
                     ingestionCount = groupedIngestions.size,
                     routeCounts = getRouteCounts(groupedIngestions),
-                    cumulativeDose = getCumulativeDose(groupedIngestions)
+                    totalDose = getCumulativeDose(groupedIngestions)
                 )
             }.sortedByDescending { it.ingestionCount }
         }
@@ -123,25 +123,25 @@ class StatsViewModel @Inject constructor(
         }
     }
 
-    private fun getCumulativeDose(groupedIngestions: List<Ingestion>): CumulativeDose? {
+    private fun getCumulativeDose(groupedIngestions: List<Ingestion>): TotalDose? {
         val units = groupedIngestions.firstOrNull()?.units ?: return null
         if (groupedIngestions.any { it.units != units || it.dose == null }) return null
         val sumDose = groupedIngestions.sumOf { it.dose ?: 0.0 }
         val isEstimate = groupedIngestions.any { it.isDoseAnEstimate }
-        return CumulativeDose(dose = sumDose, units = units, isEstimate = isEstimate)
+        return TotalDose(dose = sumDose, units = units, isEstimate = isEstimate)
     }
 
     val statsModelFlow: StateFlow<StatsModel?> =
         optionFlow.combine(startDateTextFlow) { option, startDateText ->
             return@combine Pair(first = option, second = startDateText)
-        }.combine(substanceStatsFlow) { pair, substanceStats ->
+        }.combine(ingestionStatsFlow) { pair, substanceStats ->
             return@combine Pair(first = pair, second = substanceStats)
         }.combine(chartBucketsFlow) { pair, chartBuckets ->
             return@combine StatsModel(
                 selectedOption = pair.first.first,
                 startDateText = pair.first.second,
-                substanceStats = pair.second,
-                chartBuckets = chartBuckets
+                ingestionStats = pair.second,
+                ingestionChartBuckets = chartBuckets
             )
         }.stateIn(
             initialValue = null,
@@ -153,8 +153,8 @@ class StatsViewModel @Inject constructor(
 data class StatsModel(
     val selectedOption: TimePickerOption,
     val startDateText: String,
-    val substanceStats: List<SubstanceStat>,
-    val chartBuckets: List<List<ColorCount>>
+    val ingestionStats: List<IngestionStat>,
+    val ingestionChartBuckets: List<List<ColorCount>>
 )
 
 data class ColorCount(
@@ -162,12 +162,12 @@ data class ColorCount(
     val count: Int
 )
 
-data class SubstanceStat(
+data class IngestionStat(
     val substanceName: String,
     val color: SubstanceColor,
     val ingestionCount: Int,
     val routeCounts: List<RouteCount>,
-    val cumulativeDose: CumulativeDose?
+    val totalDose: TotalDose?
 )
 
 data class RouteCount(
@@ -175,7 +175,7 @@ data class RouteCount(
     val count: Int
 )
 
-data class CumulativeDose(
+data class TotalDose(
     val dose: Double,
     val units: String,
     val isEstimate: Boolean

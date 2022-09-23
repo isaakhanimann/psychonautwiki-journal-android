@@ -9,8 +9,8 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
         StatsModel(
             selectedOption = TimePickerOption.DAYS_7,
             startDateText = "22. June 2022",
-            substanceStats = listOf(
-                SubstanceStat(
+            ingestionStats = listOf(
+                IngestionStat(
                     substanceName = "LSD",
                     color = SubstanceColor.BLUE,
                     ingestionCount = 3,
@@ -20,13 +20,13 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                             count = 3
                         )
                     ),
-                    cumulativeDose = CumulativeDose(
+                    totalDose = TotalDose(
                         dose = 500.0,
                         units = "ug",
                         isEstimate = false
                     )
                 ),
-                SubstanceStat(
+                IngestionStat(
                     substanceName = "MDMA",
                     color = SubstanceColor.PINK,
                     ingestionCount = 8,
@@ -40,13 +40,13 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                             count = 2
                         )
                     ),
-                    cumulativeDose = CumulativeDose(
+                    totalDose = TotalDose(
                         dose = 950.0,
                         units = "mg",
                         isEstimate = true
                     )
                 ),
-                SubstanceStat(
+                IngestionStat(
                     substanceName = "Cocaine",
                     color = SubstanceColor.ORANGE,
                     ingestionCount = 11,
@@ -56,9 +56,9 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                             count = 11
                         )
                     ),
-                    cumulativeDose = null
+                    totalDose = null
                 ),
-                SubstanceStat(
+                IngestionStat(
                     substanceName = "Ketamine",
                     color = SubstanceColor.PURPLE,
                     ingestionCount = 1,
@@ -68,14 +68,14 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                             count = 1
                         )
                     ),
-                    cumulativeDose = CumulativeDose(
+                    totalDose = TotalDose(
                         dose = 30.0,
                         units = "mg",
                         isEstimate = true
                     )
                 )
             ),
-            chartBuckets = listOf(
+            ingestionChartBuckets = listOf(
                 listOf(
                     ColorCount(
                         color = SubstanceColor.PINK,
