@@ -33,7 +33,7 @@ fun JournalScreen(
 @Composable
 fun ExperiencesScreenPreview(
     @PreviewParameter(
-        ExperiencesScreenPreviewProvider::class,
+        JournalScreenPreviewProvider::class,
     ) groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
 ) {
     JournalScreen(

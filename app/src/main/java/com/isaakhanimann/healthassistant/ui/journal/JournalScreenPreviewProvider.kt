@@ -7,7 +7,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.relations.Ingesti
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.utils.getDate
 
-class ExperiencesScreenPreviewProvider :
+class JournalScreenPreviewProvider :
     PreviewParameterProvider<Map<String, List<ExperienceWithIngestionsAndCompanions>>> {
     override val values: Sequence<Map<String, List<ExperienceWithIngestionsAndCompanions>>> =
         sequenceOf(
