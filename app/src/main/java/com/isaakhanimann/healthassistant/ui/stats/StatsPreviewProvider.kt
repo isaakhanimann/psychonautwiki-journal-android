@@ -9,10 +9,11 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
         StatsModel(
             selectedOption = TimePickerOption.DAYS_7,
             startDateText = "22. June 2022",
-            ingestionStats = listOf(
-                IngestionStat(
+            statItems = listOf(
+                StatItem(
                     substanceName = "LSD",
                     color = SubstanceColor.BLUE,
+                    experienceCount = 3,
                     ingestionCount = 3,
                     routeCounts = listOf(
                         RouteCount(
@@ -26,10 +27,11 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                         isEstimate = false
                     )
                 ),
-                IngestionStat(
+                StatItem(
                     substanceName = "MDMA",
                     color = SubstanceColor.PINK,
                     ingestionCount = 8,
+                    experienceCount = 2,
                     routeCounts = listOf(
                         RouteCount(
                             administrationRoute = AdministrationRoute.ORAL,
@@ -46,10 +48,11 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                         isEstimate = true
                     )
                 ),
-                IngestionStat(
+                StatItem(
                     substanceName = "Cocaine",
                     color = SubstanceColor.ORANGE,
                     ingestionCount = 11,
+                    experienceCount = 1,
                     routeCounts = listOf(
                         RouteCount(
                             administrationRoute = AdministrationRoute.INSUFFLATED,
@@ -58,9 +61,10 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                     ),
                     totalDose = null
                 ),
-                IngestionStat(
+                StatItem(
                     substanceName = "Ketamine",
                     color = SubstanceColor.PURPLE,
+                    experienceCount = 1,
                     ingestionCount = 1,
                     routeCounts = listOf(
                         RouteCount(
@@ -75,11 +79,11 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                     )
                 )
             ),
-            ingestionChartBuckets = listOf(
+            chartBuckets = listOf(
                 listOf(
                     ColorCount(
                         color = SubstanceColor.PINK,
-                        count = 8
+                        count = 2
                     ),
                     ColorCount(
                         color = SubstanceColor.BLUE,
@@ -93,35 +97,7 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                 listOf(
                     ColorCount(
                         color = SubstanceColor.ORANGE,
-                        count = 11
-                    ),
-                ),
-                listOf(
-                    ColorCount(
-                        color = SubstanceColor.PURPLE,
                         count = 1
-                    )
-                )
-            ),
-            experienceChartBuckets = listOf(
-                listOf(
-                    ColorCount(
-                        color = SubstanceColor.PINK,
-                        count = 3
-                    ),
-                    ColorCount(
-                        color = SubstanceColor.BLUE,
-                        count = 2
-                    ),
-                ),
-                listOf(),
-                listOf(),
-                listOf(),
-                listOf(),
-                listOf(
-                    ColorCount(
-                        color = SubstanceColor.ORANGE,
-                        count = 2
                     ),
                 ),
                 listOf(

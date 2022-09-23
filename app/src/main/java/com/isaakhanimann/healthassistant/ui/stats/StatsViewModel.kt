@@ -47,13 +47,6 @@ class StatsViewModel @Inject constructor(
         formatter.format(it) ?: ""
     }
 
-    private val allIngestionsSortedFlow: Flow<List<Ingestion>> =
-        experienceRepo.getSortedIngestionsFlow()
-    private val relevantIngestionsSortedFlow: Flow<List<Ingestion>> =
-        allIngestionsSortedFlow.combine(startDateFlow) { ingestions, startDate ->
-            return@combine ingestions.takeWhile { it.time > startDate }
-        }
-
     private val allExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
         experienceRepo.getSortedExperiencesWithIngestionsFlow()
     private val relevantExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
@@ -62,49 +55,6 @@ class StatsViewModel @Inject constructor(
         }
 
     private val companionFlow = experienceRepo.getAllSubstanceCompanionsFlow()
-
-    private val ingestionChartBucketsFlow: Flow<List<List<ColorCount>>> =
-        relevantIngestionsSortedFlow.combine(optionFlow) { sortedIngestions, option ->
-            var remainingIngestions = sortedIngestions
-            val cal = Calendar.getInstance(TimeZone.getDefault())
-            cal.time = Date()
-            val buckets = mutableListOf<List<Ingestion>>()
-            for (i in 0 until option.bucketCount) {
-                when (option) {
-                    TimePickerOption.DAYS_7 -> cal.add(Calendar.DAY_OF_MONTH, -1)
-                    TimePickerOption.DAYS_30 -> cal.add(Calendar.DAY_OF_MONTH, -1)
-                    TimePickerOption.WEEKS_26 -> cal.add(Calendar.WEEK_OF_YEAR, -1)
-                    TimePickerOption.MONTHS_12 -> cal.add(Calendar.MONTH, -1)
-                    TimePickerOption.YEARS_5 -> cal.add(Calendar.YEAR, -1)
-                }
-                val ingestionsForBucket = remainingIngestions.takeWhile { it.time > cal.time }
-                buckets.add(ingestionsForBucket)
-                val numIngestions = ingestionsForBucket.size
-                remainingIngestions =
-                    remainingIngestions.takeLast(remainingIngestions.size - numIngestions)
-            }
-            return@combine buckets
-        }.combine(companionFlow) { buckets, companions ->
-            return@combine buckets.map { ingestionsInBucket ->
-                return@map getColorCountsForIngestions(ingestionsInBucket, companions)
-            }.reversed()
-        }
-
-    private fun getColorCountsForIngestions(
-        ingestions: List<Ingestion>,
-        companions: List<SubstanceCompanion>
-    ): List<ColorCount> {
-        return ingestions.groupBy { it.substanceName }.values.mapNotNull { ingestionsOfOneSubstance ->
-            val name =
-                ingestionsOfOneSubstance.firstOrNull()?.substanceName ?: return@mapNotNull null
-            val oneCompanion =
-                companions.firstOrNull { it.substanceName == name } ?: return@mapNotNull null
-            return@mapNotNull ColorCount(
-                color = oneCompanion.color,
-                count = ingestionsOfOneSubstance.size
-            )
-        }.sortedByDescending { it.count }
-    }
 
     private val experienceChartBucketsFlow: Flow<List<List<ColorCount>>> =
         relevantExperiencesSortedFlow.combine(optionFlow) { sortedExperiences, option ->
@@ -152,21 +102,27 @@ class StatsViewModel @Inject constructor(
             }.sortedByDescending { it.count }
     }
 
-    private val ingestionStatsFlow: Flow<List<IngestionStat>> =
-        relevantIngestionsSortedFlow.combine(companionFlow) { ingestions, companions ->
-            val map = ingestions.groupBy { it.substanceName }
+    private val statsFlowItem: Flow<List<StatItem>> =
+        relevantExperiencesSortedFlow.combine(companionFlow) { experiencesWithIngestions, companions ->
+            val allIngestions = experiencesWithIngestions.flatMap { it.ingestions }
+            val experienceNamesMap =
+                experiencesWithIngestions.map { e -> e.ingestions.map { it.substanceName }.toSet() }
+                    .flatten().groupBy { it }
+            val map = allIngestions.groupBy { it.substanceName }
             return@combine map.values.mapNotNull { groupedIngestions ->
                 val name = groupedIngestions.firstOrNull()?.substanceName ?: return@mapNotNull null
                 val oneCompanion =
                     companions.firstOrNull { it.substanceName == name } ?: return@mapNotNull null
-                IngestionStat(
+                val experienceCounts = experienceNamesMap[name]?.size ?: 0
+                StatItem(
                     substanceName = name,
                     color = oneCompanion.color,
+                    experienceCount = experienceCounts,
                     ingestionCount = groupedIngestions.size,
                     routeCounts = getRouteCounts(groupedIngestions),
                     totalDose = getTotalDose(groupedIngestions)
                 )
-            }.sortedByDescending { it.ingestionCount }
+            }.sortedByDescending { it.experienceCount }
         }
 
     private fun getRouteCounts(groupedIngestions: List<Ingestion>): List<RouteCount> {
@@ -188,17 +144,14 @@ class StatsViewModel @Inject constructor(
     val statsModelFlow: StateFlow<StatsModel?> =
         optionFlow.combine(startDateTextFlow) { option, startDateText ->
             return@combine Pair(first = option, second = startDateText)
-        }.combine(ingestionStatsFlow) { pair, substanceStats ->
+        }.combine(statsFlowItem) { pair, substanceStats ->
             return@combine Pair(first = pair, second = substanceStats)
-        }.combine(ingestionChartBucketsFlow) { pair, chartBuckets ->
-            return@combine Pair(first = pair, second = chartBuckets)
         }.combine(experienceChartBucketsFlow) { pair, chartBuckets ->
             return@combine StatsModel(
-                selectedOption = pair.first.first.first,
-                startDateText = pair.first.first.second,
-                ingestionStats = pair.first.second,
-                ingestionChartBuckets = pair.second,
-                experienceChartBuckets = chartBuckets
+                selectedOption = pair.first.first,
+                startDateText = pair.first.second,
+                statItems = pair.second,
+                chartBuckets = chartBuckets
             )
         }.stateIn(
             initialValue = null,
@@ -210,9 +163,8 @@ class StatsViewModel @Inject constructor(
 data class StatsModel(
     val selectedOption: TimePickerOption,
     val startDateText: String,
-    val ingestionStats: List<IngestionStat>,
-    val ingestionChartBuckets: List<List<ColorCount>>,
-    val experienceChartBuckets: List<List<ColorCount>>
+    val statItems: List<StatItem>,
+    val chartBuckets: List<List<ColorCount>>
 )
 
 data class ColorCount(
@@ -220,12 +172,13 @@ data class ColorCount(
     val count: Int
 )
 
-data class IngestionStat(
+data class StatItem(
     val substanceName: String,
     val color: SubstanceColor,
+    val experienceCount: Int,
     val ingestionCount: Int,
     val routeCounts: List<RouteCount>,
-    val totalDose: TotalDose?
+    val totalDose: TotalDose?,
 )
 
 data class RouteCount(

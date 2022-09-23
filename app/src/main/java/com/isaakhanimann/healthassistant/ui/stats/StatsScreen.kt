@@ -65,7 +65,7 @@ fun StatsScreen(
             )
         }
     ) {
-        if (statsModel?.ingestionStats?.isEmpty() != false) {
+        if (statsModel?.statItems?.isEmpty() != false) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
@@ -92,18 +92,23 @@ fun StatsScreen(
                 ) {
                     item {
                         Text(
-                            text = "Ingestion Counts",
+                            text = "Experiences",
                             style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp, top = 5.dp)
+                            modifier = Modifier.padding(start = 10.dp, top = 5.dp)
+                        )
+                        Text(
+                            text = "Substance counted once per experience",
+                            style = MaterialTheme.typography.caption,
+                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
                         )
                         BarChart(
-                            buckets = statsModel.ingestionChartBuckets,
+                            buckets = statsModel.chartBuckets,
                             startDateText = statsModel.startDateText
                         )
                         Divider()
                     }
-                    items(statsModel.ingestionStats.size) { i ->
-                        val subStat = statsModel.ingestionStats[i]
+                    items(statsModel.statItems.size) { i ->
+                        val subStat = statsModel.statItems[i]
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -124,40 +129,30 @@ fun StatsScreen(
                                     text = subStat.substanceName,
                                     style = MaterialTheme.typography.subtitle1
                                 )
+                                val addOn = if (subStat.experienceCount == 1) " experience" else " experiences"
+                                Text(
+                                    text = subStat.experienceCount.toString() + addOn,
+                                )
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            Column(horizontalAlignment = Alignment.End) {
+                                val cumulativeDose = subStat.totalDose
+                                if (cumulativeDose != null) {
+                                    Text(text = "total ${if (cumulativeDose.isEstimate) "~" else ""}${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
+                                } else {
+                                    Text(text = "total dose unknown")
+                                }
                                 subStat.routeCounts.forEach {
                                     Text(
-                                        text = "${it.count}x ${it.administrationRoute.displayText}",
+                                        text = "${it.administrationRoute.displayText.lowercase()} ${it.count}x ",
                                     )
                                 }
                             }
-                            Spacer(modifier = Modifier.weight(1f))
-                            val cumulativeDose = subStat.totalDose
-                            if (cumulativeDose != null) {
-                                Text(text = "total ${if (cumulativeDose.isEstimate) "~" else ""}${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
-                            } else {
-                                Text(text = "total dose unknown")
-                            }
 
                         }
-                        if (i < statsModel.ingestionStats.size) {
+                        if (i < statsModel.statItems.size) {
                             Divider()
                         }
-                    }
-                    item {
-                        Text(
-                            text = "Experience Counts",
-                            style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(start = 10.dp, top = 10.dp)
-                        )
-                        Text(
-                            text = "Substance counted once per experience",
-                            style = MaterialTheme.typography.caption,
-                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
-                        )
-                        BarChart(
-                            buckets = statsModel.experienceChartBuckets,
-                            startDateText = statsModel.startDateText
-                        )
                     }
                 }
             }
