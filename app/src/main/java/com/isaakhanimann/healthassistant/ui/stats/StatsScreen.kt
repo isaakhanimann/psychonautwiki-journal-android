@@ -1,7 +1,5 @@
 package com.isaakhanimann.healthassistant.ui.stats
 
-import android.graphics.Paint
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -13,12 +11,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.inset
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -86,132 +78,13 @@ fun StatsScreen(
                         )
                     }
                 }
-                Text(
-                    text = "Ingestion Counts",
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(10.dp)
-                )
-                val isDarkTheme = isSystemInDarkTheme()
-                val tickColor = MaterialTheme.colors.onSurface.copy(alpha = 0.20f)
-                val buckets = statsModel.chartBuckets
-                Canvas(
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                        .fillMaxWidth()
-                        .height(150.dp)
-                ) {
-                    val canvasHeightOuter = size.height
-                    val maxCount = buckets.maxOf { bucket ->
-                        bucket.sumOf { it.count }
-                    }
-                    val half = maxCount / 2
-                    val halfLineHeight = half.toFloat() * canvasHeightOuter / maxCount
-                    val labelHeight = 30f
-                    val halfLabelHeight = labelHeight/2
-                    val labelWidth = 60f
-                    val spaceBetweenLabelAndChart = 20f
-                    drawContext.canvas.nativeCanvas.apply {
-                        drawText(
-                            half.toString(),
-                            labelWidth - spaceBetweenLabelAndChart,
-                            canvasHeightOuter - halfLineHeight + halfLabelHeight,
-                            Paint().apply {
-                                textSize = labelHeight
-                                color = android.graphics.Color.GRAY
-                                textAlign = Paint.Align.RIGHT
-                            }
-                        )
-                        drawText(
-                            maxCount.toString(),
-                            labelWidth - spaceBetweenLabelAndChart,
-                            halfLabelHeight,
-                            Paint().apply {
-                                textSize = labelHeight
-                                color = android.graphics.Color.GRAY
-                                textAlign = Paint.Align.RIGHT
-                            }
-                        )
-                    }
-                    inset(left = labelWidth, right = 0f, top = 0f, bottom = 0f) {
-                        val horizontalLinesWidth = 4f
-                        val canvasWidthWithoutLabel = size.width
-                        // top line
-                        drawLine(
-                            color = tickColor,
-                            start = Offset(x = 0f, y = 0f),
-                            end = Offset(x = canvasWidthWithoutLabel, y = 0f),
-                            strokeWidth = horizontalLinesWidth/2,
-                            cap = StrokeCap.Round
-                        )
-                        // half line
-                        drawLine(
-                            color = tickColor,
-                            start = Offset(x = 0f, y = canvasHeightOuter-halfLineHeight),
-                            end = Offset(x = canvasWidthWithoutLabel, y = canvasHeightOuter-halfLineHeight),
-                            strokeWidth = horizontalLinesWidth/2,
-                            cap = StrokeCap.Round
-                        )
-                        // bottom line
-                        val tickHeight = 8f
-                        val numBuckets = buckets.size
-                        val spaceBetweenTicks = canvasWidthWithoutLabel / numBuckets
-                        val numSpacers = numBuckets + 1
-                        drawLine(
-                            color = tickColor,
-                            start = Offset(x = 0f, y = canvasHeightOuter - tickHeight),
-                            end = Offset(
-                                x = canvasWidthWithoutLabel,
-                                y = canvasHeightOuter - tickHeight
-                            ),
-                            strokeWidth = horizontalLinesWidth,
-                            cap = StrokeCap.Round
-                        )
-                        // ticks
-                        for (index in 0 until numSpacers) {
-                            val xSpacer = index * spaceBetweenTicks
-                            drawLine(
-                                color = tickColor,
-                                start = Offset(x = xSpacer, y = canvasHeightOuter),
-                                end = Offset(x = xSpacer, y = canvasHeightOuter - tickHeight),
-                                strokeWidth = horizontalLinesWidth,
-                                cap = StrokeCap.Round
-                            )
-                        }
-                        val percentageOfBucketWidthToSpaceBetweenTicks = 0.7f
-                        val bucketWidth =
-                            spaceBetweenTicks * percentageOfBucketWidthToSpaceBetweenTicks
-                        val spaceWidth = spaceBetweenTicks - bucketWidth
-                        inset(left = 0f, top = 0f, right = 0f, bottom = tickHeight) {
-                            val canvasHeightInner = size.height
-                            buckets.forEachIndexed { index, colorCounts ->
-                                val xBucket = (((index * 2f) + 1) / 2) * (spaceWidth + bucketWidth)
-                                var yStart = canvasHeightInner
-                                colorCounts.forEach { colorCount ->
-                                    val yLength = colorCount.count * canvasHeightInner / maxCount
-                                    val yEnd = yStart - yLength
-                                    val cornerRadius = bucketWidth / 6
-                                    drawRoundRect(
-                                        color = colorCount.color.getComposeColor(isDarkTheme),
-                                        topLeft = Offset(x = xBucket - (bucketWidth / 2), y = yEnd),
-                                        size = Size(width = bucketWidth, height = yLength),
-                                        cornerRadius = CornerRadius(
-                                            x = cornerRadius,
-                                            y = cornerRadius
-                                        )
-                                    )
-                                    yStart = yEnd
-                                }
-                            }
-                        }
-                    }
-                }
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 5.dp, vertical = 5.dp)
+                        .padding(10.dp)
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val style = MaterialTheme.typography.subtitle2
+                    val style = MaterialTheme.typography.h5
                     Text(
                         text = statsModel.startDateText,
                         style = style,
@@ -220,14 +93,41 @@ fun StatsScreen(
                         modifier = Modifier
                             .weight(1f)
                             .height(8.dp)
-                            .padding(horizontal = 8.dp)
+                            .padding(horizontal = 8.dp),
+                        strokeWidth = 4f
                     )
                     Text(
                         text = "Now",
                         style = style,
                     )
                 }
+                Text(
+                    text = "Ingestion Counts",
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
+                )
+                BarChart(buckets = statsModel.chartBuckets)
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Row(
+                        modifier = Modifier
+                            .padding(horizontal = 5.dp, vertical = 5.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        val style = MaterialTheme.typography.caption
+                        Text(
+                            text = statsModel.startDateText,
+                            style = style,
+                        )
+                        Text(
+                            text = "Now",
+                            style = style,
+                        )
+                    }
+                }
                 Divider()
+                val isDarkTheme = isSystemInDarkTheme()
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -252,12 +152,11 @@ fun StatsScreen(
                             Column {
                                 Text(
                                     text = subStat.substanceName,
-                                    style = MaterialTheme.typography.h6
+                                    style = MaterialTheme.typography.subtitle1
                                 )
                                 subStat.routeCounts.forEach {
                                     Text(
                                         text = "${it.count}x ${it.administrationRoute.displayText}",
-                                        style = MaterialTheme.typography.subtitle1
                                     )
                                 }
                             }
