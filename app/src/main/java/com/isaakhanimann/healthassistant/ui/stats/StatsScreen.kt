@@ -55,7 +55,7 @@ fun StatsScreen(
             TopAppBar(
                 title = {
                     val startText = statsModel?.startDateText
-                    if (startText != null) {
+                    if (startText != null && statsModel.statItems.isNotEmpty()) {
                         Text(text = "Statistics Since $startText")
                     } else {
                         Text(text = "Statistics")
