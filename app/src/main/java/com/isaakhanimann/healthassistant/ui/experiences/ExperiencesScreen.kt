@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -18,12 +16,10 @@ import com.isaakhanimann.healthassistant.data.room.experiences.relations.Experie
 
 @Composable
 fun ExperiencesScreen(
-    navigateToAddExperience: () -> Unit,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     experiencesViewModel: ExperiencesViewModel = hiltViewModel()
 ) {
     ExperiencesScreen(
-        navigateToAddExperience = navigateToAddExperience,
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         groupedExperiences = experiencesViewModel.experiencesGrouped.collectAsState().value,
     )
@@ -37,7 +33,6 @@ fun ExperiencesScreenPreview(
     ) groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
 ) {
     ExperiencesScreen(
-        navigateToAddExperience = {},
         navigateToExperiencePopNothing = {},
         groupedExperiences = groupedExperiences,
     )
@@ -45,7 +40,6 @@ fun ExperiencesScreenPreview(
 
 @Composable
 fun ExperiencesScreen(
-    navigateToAddExperience: () -> Unit,
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
 ) {
@@ -53,18 +47,6 @@ fun ExperiencesScreen(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Experiences") }
-            )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = navigateToAddExperience,
-                icon = {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add"
-                    )
-                },
-                text = { Text("Experience") },
             )
         }
     ) {

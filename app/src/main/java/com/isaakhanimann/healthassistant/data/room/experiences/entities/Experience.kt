@@ -6,8 +6,8 @@ import java.util.*
 
 @Entity
 data class Experience(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey
+    val id: Int,
     var title: String,
     var text: String,
     val creationDate: Date = Date(),

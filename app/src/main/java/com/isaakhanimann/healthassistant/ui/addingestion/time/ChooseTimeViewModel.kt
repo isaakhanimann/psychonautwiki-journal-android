@@ -105,6 +105,15 @@ class ChooseTimeViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
+    private val newExperienceIdToUse: StateFlow<Int> = sortedExperiencesFlow.map { experiences ->
+        val previousMax = experiences.maxOfOrNull { it.experience.id } ?: 0
+        return@map previousMax + 1
+    }.stateIn(
+        initialValue = 1,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
     init {
         substance = substanceRepo.getSubstance(substanceName)
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
@@ -157,6 +166,7 @@ class ChooseTimeViewModel @Inject constructor(
                     val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
                     val now = Date()
                     val newExperience = Experience(
+                        id = newExperienceIdToUse.value,
                         title = formatter.format(now),
                         text = "",
                         creationDate = now,
@@ -201,7 +211,7 @@ class ChooseTimeViewModel @Inject constructor(
     }
 }
 
-class DateAndTime() {
+class DateAndTime {
     private val calendar: Calendar = Calendar.getInstance()
 
     var year = calendar.get(Calendar.YEAR)

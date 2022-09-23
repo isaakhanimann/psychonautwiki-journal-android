@@ -3,7 +3,6 @@ package com.isaakhanimann.healthassistant.ui.main.routers
 import androidx.navigation.NavController
 
 
-const val ADD_EXPERIENCE_ROUTE = "addExperience"
 const val FAQ_ROUTE = "faqRoute"
 const val SETTINGS_ROUTE = "settings"
 const val DOSAGE_EXPLANATION_ROUTE = "dosageExplanation"
@@ -18,7 +17,6 @@ const val SAFER_STIMULANTS_ROUTE = "saferStimulants"
 const val STATS_ROUTE = "stats"
 
 sealed class NoArgumentRouter(val route: String) {
-    object AddExperienceRouter : NoArgumentRouter(route = ADD_EXPERIENCE_ROUTE)
     object StatsRouter : NoArgumentRouter(route = STATS_ROUTE)
     object FAQRouter : NoArgumentRouter(route = FAQ_ROUTE)
     object SettingsRouter : NoArgumentRouter(route = SETTINGS_ROUTE)
@@ -32,10 +30,6 @@ sealed class NoArgumentRouter(val route: String) {
     object SaferSniffing : NoArgumentRouter(route = SAFER_SNIFFING_ROUTE)
     object SaferStimulants : NoArgumentRouter(route = SAFER_STIMULANTS_ROUTE)
     object AddIngestionRouter : NoArgumentRouter(route = ROUTE_START_ADD_INGESTIONS)
-}
-
-fun NavController.navigateToAddExperience() {
-    navigate(ADD_EXPERIENCE_ROUTE)
 }
 
 fun NavController.navigateToAddIngestion() {

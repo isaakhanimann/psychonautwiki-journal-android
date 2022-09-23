@@ -22,7 +22,6 @@ import com.isaakhanimann.healthassistant.ui.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.RouteExplanationScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ChooseTimeScreen
 import com.isaakhanimann.healthassistant.ui.experiences.ExperiencesScreen
-import com.isaakhanimann.healthassistant.ui.experiences.addExperience.AddExperienceScreen
 import com.isaakhanimann.healthassistant.ui.experiences.experience.ExperienceScreen
 import com.isaakhanimann.healthassistant.ui.experiences.experience.edit.EditExperienceScreen
 import com.isaakhanimann.healthassistant.ui.ingestions.IngestionsScreen
@@ -109,13 +108,6 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
         )
     }
     composable(NoArgumentRouter.VolumetricDosingRouter.route) { VolumetricDosingScreen() }
-    composable(NoArgumentRouter.AddExperienceRouter.route) {
-        AddExperienceScreen(
-            navigateToExperienceFromAddExperience = {
-                navController.navigateToExperienceFromAddExperience(it)
-            }
-        )
-    }
     composable(NoArgumentRouter.AddIngestionRouter.route) {
         AddIngestionSearchScreen(
             navigateToCheckInteractions = {
@@ -205,7 +197,6 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
 fun NavGraphBuilder.tabGraph(navController: NavController) {
     composable(TabRouter.Experiences.route) {
         ExperiencesScreen(
-            navigateToAddExperience = navController::navigateToAddExperience,
             navigateToExperiencePopNothing = {
                 navController.navigateToExperiencePopNothing(experienceId = it)
             },
