@@ -101,37 +101,20 @@ fun StatsScreen(
                         style = style,
                     )
                 }
-                Text(
-                    text = "Ingestion Counts",
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
-                )
-                BarChart(buckets = statsModel.ingestionChartBuckets)
-                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 5.dp, vertical = 5.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        val style = MaterialTheme.typography.caption
-                        Text(
-                            text = statsModel.startDateText,
-                            style = style,
-                        )
-                        Text(
-                            text = "Now",
-                            style = style,
-                        )
-                    }
-                }
-                Divider()
                 val isDarkTheme = isSystemInDarkTheme()
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
+                    item {
+                        Text(
+                            text = "Ingestion Counts",
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
+                        )
+                        BarChart(buckets = statsModel.ingestionChartBuckets, startDateText = statsModel.startDateText)
+                        Divider()
+                    }
                     items(statsModel.ingestionStats.size) { i ->
                         val subStat = statsModel.ingestionStats[i]
                         Row(
@@ -173,10 +156,21 @@ fun StatsScreen(
                             Divider()
                         }
                     }
+                    item {
+                        Text(
+                            text = "Experience Counts",
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier.padding(start = 10.dp, top = 10.dp)
+                        )
+                        Text(
+                            text = "Substance counted once per experience",
+                            style = MaterialTheme.typography.caption,
+                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
+                        )
+                        BarChart(buckets = statsModel.experienceChartBuckets, startDateText = statsModel.startDateText)
+                    }
                 }
             }
-
-
         }
     }
 }

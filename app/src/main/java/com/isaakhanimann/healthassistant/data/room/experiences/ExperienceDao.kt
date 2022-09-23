@@ -4,6 +4,7 @@ import androidx.room.*
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,7 @@ import java.util.*
 interface ExperienceDao {
 
     @Query("SELECT * FROM experience ORDER BY creationDate DESC")
-    fun getExperiencesFlow(): Flow<List<Experience>>
+    fun getSortedExperiencesFlow(): Flow<List<Experience>>
 
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
     fun getIngestionsSortedDescendingFlow(): Flow<List<Ingestion>>
@@ -37,7 +38,11 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT DISTINCT e.id, e.title, e.creationDate, e.text, e.sentiment FROM experience AS e LEFT JOIN ingestion AS i ON e.id = i.experienceId ORDER BY case when i.time IS NULL then e.creationDate else i.time end DESC")
-    fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>>
+    fun getSortedExperiencesWithIngestionsAndCompanionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>>
+
+    @Transaction
+    @Query("SELECT DISTINCT e.id, e.title, e.creationDate, e.text, e.sentiment FROM experience AS e LEFT JOIN ingestion AS i ON e.id = i.experienceId ORDER BY case when i.time IS NULL then e.creationDate else i.time end DESC")
+    fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestions>>
 
     @Transaction
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
@@ -85,7 +90,7 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM experience WHERE id = :experienceId")
-    fun getExperienceWithIngestionsFlow(experienceId: Int): Flow<ExperienceWithIngestionsAndCompanions?>
+    fun getExperienceWithIngestionsAndCompanionsFlow(experienceId: Int): Flow<ExperienceWithIngestionsAndCompanions?>
 
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC LIMIT 1")
     suspend fun getLastIngestion(substanceName: String): Ingestion?

@@ -27,7 +27,7 @@ class EditIngestionMembershipViewModel @Inject constructor(
     var ingestion: Ingestion? = null
     var selectedExperienceId: Int? by mutableStateOf(null)
 
-    val experiences: StateFlow<List<Experience>> = experienceRepo.getExperiencesFlow().stateIn(
+    val experiences: StateFlow<List<Experience>> = experienceRepo.getSortedExperiencesFlow().stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)

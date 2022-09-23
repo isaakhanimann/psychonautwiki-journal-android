@@ -3,6 +3,7 @@ package com.isaakhanimann.healthassistant.data.room.experiences
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -24,13 +25,18 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun delete(experience: Experience) =
         experienceDao.deleteExperience(experience)
 
-    fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>> =
+    fun getSortedExperiencesWithIngestionsAndCompanionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>> =
+        experienceDao.getSortedExperiencesWithIngestionsAndCompanionsFlow()
+            .flowOn(Dispatchers.IO)
+            .conflate()
+
+    fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestions>> =
         experienceDao.getSortedExperiencesWithIngestionsFlow()
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getExperiencesFlow(): Flow<List<Experience>> =
-        experienceDao.getExperiencesFlow()
+    fun getSortedExperiencesFlow(): Flow<List<Experience>> =
+        experienceDao.getSortedExperiencesFlow()
             .flowOn(Dispatchers.IO)
             .conflate()
 
@@ -40,8 +46,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
     fun getIngestionWithCompanionFlow(id: Int) = experienceDao.getIngestionWithCompanionFlow(id)
-    fun getExperienceWithIngestions(experienceId: Int) =
-        experienceDao.getExperienceWithIngestionsFlow(experienceId)
+    fun getExperienceWithIngestionsAndCompanionsFlow(experienceId: Int) =
+        experienceDao.getExperienceWithIngestionsAndCompanionsFlow(experienceId)
             .flowOn(Dispatchers.IO)
             .conflate()
 

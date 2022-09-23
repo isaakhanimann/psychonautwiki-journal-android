@@ -55,7 +55,7 @@ class OneExperienceViewModel @Inject constructor(
     }
 
     val experienceWithIngestionsFlow =
-        experienceRepo.getExperienceWithIngestions(experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!)
+        experienceRepo.getExperienceWithIngestionsAndCompanionsFlow(experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!)
             .stateIn(
                 initialValue = null,
                 scope = viewModelScope,

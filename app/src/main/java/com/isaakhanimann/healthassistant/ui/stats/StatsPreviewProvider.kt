@@ -102,7 +102,35 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                         count = 1
                     )
                 )
-            )
+            ),
+            experienceChartBuckets = listOf(
+                listOf(
+                    ColorCount(
+                        color = SubstanceColor.PINK,
+                        count = 3
+                    ),
+                    ColorCount(
+                        color = SubstanceColor.BLUE,
+                        count = 2
+                    ),
+                ),
+                listOf(),
+                listOf(),
+                listOf(),
+                listOf(),
+                listOf(
+                    ColorCount(
+                        color = SubstanceColor.ORANGE,
+                        count = 2
+                    ),
+                ),
+                listOf(
+                    ColorCount(
+                        color = SubstanceColor.PURPLE,
+                        count = 1
+                    )
+                )
+            ),
         )
     )
 }

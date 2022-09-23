@@ -17,7 +17,7 @@ class ExperiencesViewModel @Inject constructor(
     experienceRepo: ExperienceRepository
 ) : ViewModel() {
 
-    val experiencesGrouped = experienceRepo.getSortedExperiencesWithIngestionsFlow()
+    val experiencesGrouped = experienceRepo.getSortedExperiencesWithIngestionsAndCompanionsFlow()
         .map { groupExperiencesByYear(experiencesWithIngestions = it) }
         .stateIn(
             initialValue = emptyMap(),
