@@ -32,13 +32,7 @@ class StatsViewModel @Inject constructor(
     private val startDateFlow = _optionFlow.map {
         val cal = Calendar.getInstance(TimeZone.getDefault())
         cal.time = Date()
-        when (it) {
-            TimePickerOption.DAYS_7 -> cal.add(Calendar.WEEK_OF_YEAR, -1)
-            TimePickerOption.DAYS_30 -> cal.add(Calendar.MONTH, -1)
-            TimePickerOption.WEEKS_26 -> cal.add(Calendar.WEEK_OF_YEAR, -26)
-            TimePickerOption.MONTHS_12 -> cal.add(Calendar.YEAR, -1)
-            TimePickerOption.YEARS_5 -> cal.add(Calendar.YEAR, -5)
-        }
+        it.subtractWholeRange(cal)
         return@map cal.time
     }
 
@@ -63,13 +57,7 @@ class StatsViewModel @Inject constructor(
             cal.time = Date()
             val buckets = mutableListOf<List<ExperienceWithIngestions>>()
             for (i in 0 until option.bucketCount) {
-                when (option) {
-                    TimePickerOption.DAYS_7 -> cal.add(Calendar.DAY_OF_MONTH, -1)
-                    TimePickerOption.DAYS_30 -> cal.add(Calendar.DAY_OF_MONTH, -1)
-                    TimePickerOption.WEEKS_26 -> cal.add(Calendar.WEEK_OF_YEAR, -1)
-                    TimePickerOption.MONTHS_12 -> cal.add(Calendar.MONTH, -1)
-                    TimePickerOption.YEARS_5 -> cal.add(Calendar.YEAR, -1)
-                }
+                option.subtractBucketSize(cal)
                 val experiencesForBucket = remainingExperiences.takeWhile { it.sortDate > cal.time }
                 buckets.add(experiencesForBucket)
                 val numExperiences = experiencesForBucket.size
@@ -197,29 +185,66 @@ enum class TimePickerOption {
         override val displayText = "7D"
         override val tabIndex = 0
         override val bucketCount = 7
+        override fun subtractBucketSize(cal: Calendar) {
+            cal.add(Calendar.DAY_OF_MONTH, -1)
+        }
+
+        override fun subtractWholeRange(cal: Calendar) {
+            cal.add(Calendar.WEEK_OF_YEAR, -1)
+        }
     },
     DAYS_30 {
         override val displayText = "30D"
         override val tabIndex = 1
         override val bucketCount = 30
+        override fun subtractBucketSize(cal: Calendar) {
+            cal.add(Calendar.DAY_OF_MONTH, -1)
+        }
+
+        override fun subtractWholeRange(cal: Calendar) {
+            cal.add(Calendar.MONTH, -1)
+        }
     },
     WEEKS_26 {
         override val displayText = "26W"
         override val tabIndex = 2
         override val bucketCount = 26
+        override fun subtractBucketSize(cal: Calendar) {
+            cal.add(Calendar.WEEK_OF_YEAR, -1)
+        }
+
+        override fun subtractWholeRange(cal: Calendar) {
+            cal.add(Calendar.WEEK_OF_YEAR, -26)
+        }
     },
     MONTHS_12 {
         override val displayText = "12M"
         override val tabIndex = 3
         override val bucketCount = 12
+        override fun subtractBucketSize(cal: Calendar) {
+            cal.add(Calendar.MONTH, -1)
+        }
+
+        override fun subtractWholeRange(cal: Calendar) {
+            cal.add(Calendar.YEAR, -1)
+        }
     },
-    YEARS_5 {
-        override val displayText = "5Y"
+    YEARS_10 {
+        override val displayText = "10Y"
         override val tabIndex = 4
-        override val bucketCount = 5
+        override val bucketCount = 10
+        override fun subtractBucketSize(cal: Calendar) {
+            cal.add(Calendar.YEAR, -1)
+        }
+
+        override fun subtractWholeRange(cal: Calendar) {
+            cal.add(Calendar.YEAR, -10)
+        }
     };
 
     abstract val displayText: String
     abstract val tabIndex: Int
     abstract val bucketCount: Int
+    abstract fun subtractBucketSize(cal: Calendar)
+    abstract fun subtractWholeRange(cal: Calendar)
 }
