@@ -10,6 +10,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
+import com.isaakhanimann.healthassistant.ui.search.substance.ArrowDown
 
 @Preview(showBackground = true)
 @Composable
@@ -40,40 +41,51 @@ fun ToleranceSection(
             Text(text = "Tolerance", style = titleStyle)
             if (tolerance != null) {
                 val labelWidth = 40.dp
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    if (tolerance.full != null) {
-                        Text(
-                            text = "full",
-                            style = MaterialTheme.typography.subtitle2,
-                            modifier = Modifier.width(labelWidth)
-                        )
-                        Text(text = tolerance.full)
-                    }
-                }
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    if (tolerance.half != null) {
-                        Text(
-                            text = "half",
-                            style = MaterialTheme.typography.subtitle2,
-                            modifier = Modifier.width(labelWidth)
-                        )
-                        Text(text = tolerance.half)
-                    }
-                }
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    if (tolerance.zero != null) {
-                        Text(
-                            text = "zero",
-                            style = MaterialTheme.typography.subtitle2,
-                            modifier = Modifier.width(labelWidth)
-                        )
-                        Text(text = tolerance.zero)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    ArrowDown(
+                        strokeWidth = 4f,
+                        fractionWhenHeadStarts = 9f/10,
+                        width = 5.dp,
+                        height = 30.dp
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.Bottom
+                        ) {
+                            if (tolerance.full != null) {
+                                Text(
+                                    text = "full",
+                                    style = MaterialTheme.typography.subtitle2,
+                                    modifier = Modifier.width(labelWidth)
+                                )
+                                Text(text = tolerance.full)
+                            }
+                        }
+                        Row(
+                            verticalAlignment = Alignment.Bottom
+                        ) {
+                            if (tolerance.half != null) {
+                                Text(
+                                    text = "half",
+                                    style = MaterialTheme.typography.subtitle2,
+                                    modifier = Modifier.width(labelWidth)
+                                )
+                                Text(text = tolerance.half)
+                            }
+                        }
+                        Row(
+                            verticalAlignment = Alignment.Bottom
+                        ) {
+                            if (tolerance.zero != null) {
+                                Text(
+                                    text = "zero",
+                                    style = MaterialTheme.typography.subtitle2,
+                                    modifier = Modifier.width(labelWidth)
+                                )
+                                Text(text = tolerance.zero)
+                            }
+                        }
                     }
                 }
                 Text(text = "zero is the time until tolerance is like the first time", style = MaterialTheme.typography.caption)
