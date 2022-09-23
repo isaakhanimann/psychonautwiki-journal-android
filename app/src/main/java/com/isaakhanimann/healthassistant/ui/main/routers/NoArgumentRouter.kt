@@ -31,14 +31,19 @@ sealed class NoArgumentRouter(val route: String) {
     object SaferHallucinogens : NoArgumentRouter(route = SAFER_HALLUCINOGENS_ROUTE)
     object SaferSniffing : NoArgumentRouter(route = SAFER_SNIFFING_ROUTE)
     object SaferStimulants : NoArgumentRouter(route = SAFER_STIMULANTS_ROUTE)
+    object AddIngestionRouter : NoArgumentRouter(route = ROUTE_START_ADD_INGESTIONS)
 }
 
 fun NavController.navigateToAddExperience() {
     navigate(ADD_EXPERIENCE_ROUTE)
 }
 
-fun NavController.navigateToStats() {
-    navigate(STATS_ROUTE)
+fun NavController.navigateToAddIngestion() {
+    navigate(ROUTE_START_ADD_INGESTIONS)
+}
+
+fun NavController.dismissAddIngestionScreens() {
+    popBackStack(route = NoArgumentRouter.AddIngestionRouter.route, inclusive = true)
 }
 
 fun NavController.navigateToSaferStimulants() {

@@ -89,6 +89,19 @@ interface ExperienceDao {
     suspend fun insert(ingestion: Ingestion)
 
     @Transaction
+    suspend fun insertIngestionExperienceAndCompanion(ingestion: Ingestion, experience: Experience, substanceCompanion: SubstanceCompanion) {
+        insert(ingestion)
+        insert(experience)
+        insert(substanceCompanion)
+    }
+
+    @Transaction
+    suspend fun insertIngestionAndCompanion(ingestion: Ingestion, substanceCompanion: SubstanceCompanion) {
+        insert(ingestion)
+        insert(substanceCompanion)
+    }
+
+    @Transaction
     @Query("SELECT * FROM experience WHERE id = :experienceId")
     fun getExperienceWithIngestionsAndCompanionsFlow(experienceId: Int): Flow<ExperienceWithIngestionsAndCompanions?>
 

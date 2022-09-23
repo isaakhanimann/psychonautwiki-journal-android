@@ -1,12 +1,9 @@
 package com.isaakhanimann.healthassistant.ui.ingestions.ingestion.edit.membership
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -26,12 +23,11 @@ fun EditIngestionMembershipScreen(
     viewModel: EditIngestionMembershipViewModel = hiltViewModel()
 ) {
     EditIngestionMembershipScreen(
-        onDoneTap = {
-            viewModel.onDoneTap()
+        onTap = {
+            viewModel.onTap(it)
             navigateBack()
         },
         selectedExperienceId = viewModel.selectedExperienceId,
-        onIdChange = { viewModel.selectedExperienceId = it },
         experiences = viewModel.experiences.collectAsState().value
     )
 }
@@ -42,46 +38,24 @@ fun EditIngestionMembershipScreenPreview(
     @PreviewParameter(ExperiencesPreviewProvider::class) experiences: List<Experience>,
 ) {
     EditIngestionMembershipScreen(
-        onDoneTap = {},
+        onTap = {},
         selectedExperienceId = null,
-        onIdChange = {},
         experiences = experiences
     )
 }
 
 @Composable
 fun EditIngestionMembershipScreen(
-    onDoneTap: () -> Unit,
+    onTap: (Int) -> Unit,
     selectedExperienceId: Int?,
-    onIdChange: (Int?) -> Unit,
     experiences: List<Experience>
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Choose Experience") },
-                actions = {
-                    if (selectedExperienceId != null) {
-                        val color = if (isSystemInDarkTheme()) MaterialTheme.colors.primary else MaterialTheme.colors.onPrimary
-                        TextButton(onClick = { onIdChange(null) }) {
-                            Text(text = "Clear", color = color)
-                        }
-                    }
-                }
             )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = onDoneTap,
-                icon = {
-                    Icon(
-                        Icons.Filled.Done,
-                        contentDescription = "Done Icon"
-                    )
-                },
-                text = { Text("Done") }
-            )
-        },
+        }
     ) {
         Box(contentAlignment = Alignment.Center) {
             if (experiences.isEmpty()) {
@@ -102,7 +76,7 @@ fun EditIngestionMembershipScreen(
                             .fillMaxWidth()
                             .selectable(
                                 selected = isSelected,
-                                onClick = { onIdChange(exp.id) },
+                                onClick = { onTap(exp.id) },
                                 role = Role.RadioButton
                             )
                             .padding(vertical = 10.dp),

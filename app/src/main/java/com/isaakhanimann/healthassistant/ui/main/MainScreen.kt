@@ -116,6 +116,13 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
             }
         )
     }
+    composable(NoArgumentRouter.AddIngestionRouter.route) {
+        AddIngestionSearchScreen(
+            navigateToCheckInteractions = {
+                navController.navigateToCheckInteractions(substanceName = it)
+            }
+        )
+    }
 }
 
 fun NavGraphBuilder.argumentGraph(navController: NavController) {
@@ -132,7 +139,7 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
         ExperienceScreen(
             navigateToAddIngestionSearch = {
-                navController.navigateToAddIngestion(experienceId = experienceId)
+                navController.navigateToAddIngestion()
             },
             navigateToEditExperienceScreen = {
                 navController.navigateToEditExperience(experienceId)
@@ -210,7 +217,7 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
                 navController.navigateToIngestion(ingestionId = it)
             },
             navigateToAddIngestion = {
-                navController.navigateToAddIngestion(experienceId = null)
+                navController.navigateToAddIngestion()
             }
         )
     }
@@ -245,21 +252,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         route = "is not used"
     ) {
         composable(
-            ArgumentRouter.AddIngestionRouter.route,
-            arguments = ArgumentRouter.AddIngestionRouter.args
-        ) { backStackEntry ->
-            AddIngestionSearchScreen(
-                navigateToCheckInteractions = {
-                    val experienceId =
-                        backStackEntry.arguments?.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
-                    navController.navigateToCheckInteractions(
-                        substanceName = it,
-                        experienceId = experienceId
-                    )
-                }
-            )
-        }
-        composable(
             ArgumentRouter.CheckInteractionsRouter.route,
             arguments = ArgumentRouter.CheckInteractionsRouter.args
         ) { backStackEntry ->
@@ -267,11 +259,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToChooseRouteScreen = {
                     val args = backStackEntry.arguments!!
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
-                    val experienceId = args.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
-                    navController.navigateToChooseRoute(
-                        substanceName = substanceName,
-                        experienceId = experienceId
-                    )
+                    navController.navigateToChooseRoute(substanceName = substanceName)
                 },
                 navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
                 navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants
@@ -283,13 +271,11 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         ) { backStackEntry ->
             val args = backStackEntry.arguments!!
             val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
-            val experienceId = args.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
             ChooseRouteScreen(
                 navigateToChooseDose = { administrationRoute ->
                     navController.navigateToChooseDose(
                         substanceName = substanceName,
                         administrationRoute = administrationRoute,
-                        experienceId = experienceId
                     )
                 },
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
@@ -297,7 +283,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigateToChooseTimeAndMaybeColor(
                         substanceName = substanceName,
                         administrationRoute = administrationRoute,
-                        experienceId = experienceId,
                         units = units,
                         isEstimate = isEstimate,
                         dose = dose
@@ -313,7 +298,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToChooseTimeAndMaybeColor = { units, isEstimate, dose ->
                     val args = backStackEntry.arguments!!
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
-                    val experienceId = args.getString(EXPERIENCE_ID_KEY)?.toIntOrNull()
                     val route =
                         AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
                     navController.navigateToChooseTimeAndMaybeColor(
@@ -322,7 +306,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         units = units,
                         isEstimate = isEstimate,
                         dose = dose,
-                        experienceId = experienceId
                     )
                 },
                 navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,

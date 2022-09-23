@@ -15,7 +15,7 @@ data class Ingestion(
     val dose: Double?,
     val isDoseAnEstimate: Boolean,
     val units: String?,
-    var experienceId: Int?,
+    var experienceId: Int,
     var notes: String?,
     var sentiment: Sentiment?
 )

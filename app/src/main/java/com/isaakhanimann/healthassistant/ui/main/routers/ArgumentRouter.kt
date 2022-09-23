@@ -74,49 +74,36 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         )
     )
 
-    object AddIngestionRouter : ArgumentRouter(
-        route = "$ROUTE_START_ADD_INGESTIONS?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
-        args = listOf(
-            navArgument(EXPERIENCE_ID_KEY) { nullable = true }
-
-        )
-    )
-
     object CheckInteractionsRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHECK_INTERACTIONS{$SUBSTANCE_NAME_KEY}/?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
+        route = "$ROUTE_START_CHECK_INTERACTIONS{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
-            navArgument(EXPERIENCE_ID_KEY) { nullable = true }
-
         )
     )
 
     object ChooseRouteRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_ROUTE{$SUBSTANCE_NAME_KEY}/?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
-        args = listOf(navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
-            navArgument(EXPERIENCE_ID_KEY) { nullable = true }
+        route = "$ROUTE_START_CHOOSE_ROUTE{$SUBSTANCE_NAME_KEY}",
+        args = listOf(
+            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
         )
     )
 
     object ChooseDoseRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_DOSE{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
+        route = "$ROUTE_START_CHOOSE_DOSE{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
-            navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType },
-            navArgument(EXPERIENCE_ID_KEY) { nullable = true }
-
+            navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType }
         )
     )
 
     object ChooseTimeRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_TIME{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$EXPERIENCE_ID_KEY={$EXPERIENCE_ID_KEY}",
+        route = "$ROUTE_START_CHOOSE_TIME{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
             navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType },
             navArgument(IS_ESTIMATE_KEY) { type = NavType.BoolType },
             navArgument(UNITS_KEY) { nullable = true },
             navArgument(DOSE_KEY) { nullable = true },
-            navArgument(EXPERIENCE_ID_KEY) { nullable = true }
         )
     )
 }
@@ -137,10 +124,6 @@ fun NavController.navigateToEditIngestionMembership(ingestionId: Int) {
     navigate(ROUTE_START_EDIT_INGESTION_MEMBERSHIP + ingestionId)
 }
 
-fun NavController.dismissAddIngestionScreens() {
-    popBackStack(route = ArgumentRouter.AddIngestionRouter.route, inclusive = true)
-}
-
 fun NavController.navigateToEditExperience(experienceId: Int) {
     navigate(ROUTE_START_EDIT_EXPERIENCE + experienceId)
 }
@@ -153,23 +136,19 @@ fun NavController.navigateToSubstanceCompanionScreen(substanceName: String) {
     navigate(ROUTE_START_SUBSTANCE_COMPANION + substanceName)
 }
 
-fun NavController.navigateToAddIngestion(experienceId: Int?) {
-    navigate("$ROUTE_START_ADD_INGESTIONS?$EXPERIENCE_ID_KEY=$experienceId")
+fun NavController.navigateToCheckInteractions(substanceName: String) {
+    navigate("$ROUTE_START_CHECK_INTERACTIONS$substanceName")
 }
 
-fun NavController.navigateToCheckInteractions(substanceName: String, experienceId: Int?) {
-    navigate("$ROUTE_START_CHECK_INTERACTIONS$substanceName/?$EXPERIENCE_ID_KEY=$experienceId")
-}
-
-fun NavController.navigateToChooseRoute(substanceName: String, experienceId: Int?) {
-    navigate("$ROUTE_START_CHOOSE_ROUTE$substanceName/?$EXPERIENCE_ID_KEY=$experienceId")
+fun NavController.navigateToChooseRoute(substanceName: String) {
+    navigate("$ROUTE_START_CHOOSE_ROUTE$substanceName")
 }
 
 fun NavController.navigateToChooseDose(
     substanceName: String,
-    administrationRoute: AdministrationRoute, experienceId: Int?
+    administrationRoute: AdministrationRoute
 ) {
-    navigate("$ROUTE_START_CHOOSE_DOSE$substanceName/${administrationRoute.name}/?$EXPERIENCE_ID_KEY=$experienceId")
+    navigate("$ROUTE_START_CHOOSE_DOSE$substanceName/${administrationRoute.name}")
 }
 
 fun NavController.navigateToChooseTimeAndMaybeColor(
@@ -178,7 +157,6 @@ fun NavController.navigateToChooseTimeAndMaybeColor(
     units: String?,
     isEstimate: Boolean,
     dose: Double?,
-    experienceId: Int?
 ) {
-    navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose/?$EXPERIENCE_ID_KEY=$experienceId")
+    navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose")
 }

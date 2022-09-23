@@ -34,18 +34,12 @@ fun ChooseTimeScreen(
     dismissAddIngestionScreens: () -> Unit,
     viewModel: ChooseTimeViewModel = hiltViewModel()
 ) {
+    val dateAndTime = viewModel.dateAndTimeFlow.collectAsState().value
     ChooseTimeScreen(
         createAndSaveIngestion = viewModel::createAndSaveIngestion,
         onSubmitDate = viewModel::onSubmitDate,
         onSubmitTime = viewModel::onSubmitTime,
-        dateAndTime = DateAndTime(
-            day = viewModel.day.value,
-            month = viewModel.month.value,
-            year = viewModel.year.value,
-            hour = viewModel.hour.value,
-            minute = viewModel.minute.value
-        ),
-        dateAndTimeStrings = Pair(viewModel.dateString, viewModel.timeString),
+        dateAndTime = dateAndTime,
         dismissAddIngestionScreens = dismissAddIngestionScreens,
         isLoadingColor = viewModel.isLoadingColor,
         isShowingColorPicker = viewModel.isShowingColorPicker,
@@ -72,8 +66,7 @@ fun ChooseTimeScreenPreview() {
         createAndSaveIngestion = {},
         onSubmitDate = { _: Int, _: Int, _: Int -> },
         onSubmitTime = { _: Int, _: Int -> },
-        dateAndTime = DateAndTime(day = 3, month = 4, year = 2022, hour = 13, minute = 52),
-        dateAndTimeStrings = Pair("Wed 9 Jul 2022", "13:52"),
+        dateAndTime = DateAndTime(),
         dismissAddIngestionScreens = {},
         isLoadingColor = false,
         isShowingColorPicker = true,
@@ -90,15 +83,12 @@ fun ChooseTimeScreenPreview() {
     )
 }
 
-data class DateAndTime(val day: Int, val month: Int, val year: Int, val hour: Int, val minute: Int)
-
 @Composable
 fun ChooseTimeScreen(
     createAndSaveIngestion: () -> Unit,
     onSubmitDate: (Int, Int, Int) -> Unit,
     onSubmitTime: (Int, Int) -> Unit,
     dateAndTime: DateAndTime,
-    dateAndTimeStrings: Pair<String, String>,
     dismissAddIngestionScreens: () -> Unit,
     isLoadingColor: Boolean,
     isShowingColorPicker: Boolean,
@@ -166,14 +156,14 @@ fun ChooseTimeScreen(
                         month = dateAndTime.month,
                         year = dateAndTime.year,
                         onSubmitDate = onSubmitDate,
-                        dateString = dateAndTimeStrings.first,
+                        dateString = dateAndTime.dateString,
                         modifier = Modifier.fillMaxWidth()
                     )
                     TimePickerButton(
                         hour = dateAndTime.hour,
                         minute = dateAndTime.minute,
                         onSubmitTime = onSubmitTime,
-                        timeString = dateAndTimeStrings.second,
+                        timeString = dateAndTime.timeString,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }

@@ -19,6 +19,23 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun insert(ingestion: Ingestion) = experienceDao.insert(ingestion)
     suspend fun update(experience: Experience) = experienceDao.update(experience)
     suspend fun update(ingestion: Ingestion) = experienceDao.update(ingestion)
+    suspend fun insertIngestionExperienceAndCompanion(
+        ingestion: Ingestion,
+        experience: Experience,
+        substanceCompanion: SubstanceCompanion
+    ) = experienceDao.insertIngestionExperienceAndCompanion(
+        ingestion,
+        experience,
+        substanceCompanion
+    )
+
+    suspend fun insertIngestionAndCompanion(
+        ingestion: Ingestion,
+        substanceCompanion: SubstanceCompanion
+    ) = experienceDao.insertIngestionAndCompanion(
+        ingestion,
+        substanceCompanion
+    )
 
     suspend fun delete(ingestion: Ingestion) = experienceDao.deleteIngestion(ingestion)
 

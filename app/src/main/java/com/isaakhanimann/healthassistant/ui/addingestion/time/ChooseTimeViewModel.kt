@@ -7,9 +7,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
@@ -27,30 +29,39 @@ class ChooseTimeViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    val experienceId: Int?
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
     val substance: Substance?
-    private val calendar: Calendar = Calendar.getInstance()
-    val year = mutableStateOf(calendar.get(Calendar.YEAR))
-    val month = mutableStateOf(calendar.get(Calendar.MONTH))
-    val day = mutableStateOf(calendar.get(Calendar.DAY_OF_MONTH))
-    val hour = mutableStateOf(calendar.get(Calendar.HOUR_OF_DAY))
-    val minute = mutableStateOf(calendar.get(Calendar.MINUTE))
-    private val currentlySelectedDate: Date
-        get() {
-            calendar.set(year.value, month.value, day.value, hour.value, minute.value)
-            return calendar.time
-        }
-    val dateString: String
-        get() {
-            val formatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-            return formatter.format(currentlySelectedDate) ?: "Unknown"
-        }
-    val timeString: String
-        get() {
-            val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
-            return formatter.format(currentlySelectedDate) ?: "Unknown"
-        }
+    val dateAndTimeFlow = MutableStateFlow(DateAndTime())
+
+    private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()
+
+    private val experienceToAddToFlow: StateFlow<ExperienceWithIngestions?> =
+        sortedExperiencesFlow.combine(dateAndTimeFlow) { sortedExperiences, relevantDateFields ->
+            val selectedDate = relevantDateFields.currentlySelectedDate
+            return@combine sortedExperiences.firstOrNull { experience ->
+                val sortedIngestions = experience.ingestions.sortedBy { it.time }
+                val firstIngestionTime = sortedIngestions.firstOrNull()?.time
+                val lastIngestionTime = sortedIngestions.lastOrNull()?.time
+                val cal = Calendar.getInstance(TimeZone.getDefault())
+                cal.time = selectedDate
+                cal.add(Calendar.HOUR_OF_DAY, -12)
+                if (cal.time < lastIngestionTime) {
+                    return@firstOrNull true
+                }
+                cal.time = selectedDate
+                cal.add(Calendar.HOUR_OF_DAY, 12)
+                if (cal.time > firstIngestionTime) {
+                    return@firstOrNull true
+                }
+                return@firstOrNull false
+            }
+        }.stateIn(
+            initialValue = null,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
+
+    private val userForcedToCreateNewExperience = MutableStateFlow(false)
 
     var isLoadingColor by mutableStateOf(true)
     var isShowingColorPicker by mutableStateOf(false)
@@ -96,7 +107,6 @@ class ChooseTimeViewModel @Inject constructor(
 
     init {
         substance = substanceRepo.getSubstance(substanceName)
-        experienceId = state.get<String>(EXPERIENCE_ID_KEY)?.toIntOrNull()
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         dose = state.get<String>(DOSE_KEY)?.toDoubleOrNull()
@@ -126,42 +136,93 @@ class ChooseTimeViewModel @Inject constructor(
     }
 
     fun onSubmitDate(newDay: Int, newMonth: Int, newYear: Int) {
-        day.value = newDay
-        month.value = newMonth
-        year.value = newYear
+        dateAndTimeFlow.value.day = newDay
+        dateAndTimeFlow.value.month = newMonth
+        dateAndTimeFlow.value.year = newYear
     }
 
     fun onSubmitTime(newHour: Int, newMinute: Int) {
-        hour.value = newHour
-        minute.value = newMinute
+        dateAndTimeFlow.value.hour = newHour
+        dateAndTimeFlow.value.minute = newMinute
     }
 
     fun createAndSaveIngestion() {
         viewModelScope.launch {
-            val newIngestion = Ingestion(
-                substanceName = substanceName,
-                time = currentlySelectedDate,
-                administrationRoute = administrationRoute,
-                dose = dose,
-                isDoseAnEstimate = isEstimate,
-                units = units,
-                experienceId = experienceId,
-                notes = note,
-                sentiment = null
+            val substanceCompanion = SubstanceCompanion(
+                substanceName,
+                color = selectedColor
             )
-            experienceRepo.insert(newIngestion)
-            substanceCompanion.let {
-                if (it != null && it.color != selectedColor) {
-                    it.color = selectedColor
-                    experienceRepo.update(it)
-                } else if (it == null) {
-                    val substanceCompanion = SubstanceCompanion(
-                        substanceName,
-                        color = selectedColor
+            experienceToAddToFlow.value?.experience?.id.let {
+                if (userForcedToCreateNewExperience.value || it == null) {
+                    val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                    val now = Date()
+                    val newExperience = Experience(
+                        title = formatter.format(now),
+                        text = "",
+                        creationDate = now,
+                        sentiment = null
                     )
-                    experienceRepo.insert(substanceCompanion)
+                    val newIngestion = Ingestion(
+                        substanceName = substanceName,
+                        time = dateAndTimeFlow.value.currentlySelectedDate,
+                        administrationRoute = administrationRoute,
+                        dose = dose,
+                        isDoseAnEstimate = isEstimate,
+                        units = units,
+                        experienceId = newExperience.id,
+                        notes = note,
+                        sentiment = null
+                    )
+                    experienceRepo.insertIngestionExperienceAndCompanion(
+                        ingestion = newIngestion,
+                        experience = newExperience,
+                        substanceCompanion = substanceCompanion
+                    )
+
+                } else {
+                    val newIngestion = Ingestion(
+                        substanceName = substanceName,
+                        time = dateAndTimeFlow.value.currentlySelectedDate,
+                        administrationRoute = administrationRoute,
+                        dose = dose,
+                        isDoseAnEstimate = isEstimate,
+                        units = units,
+                        experienceId = it,
+                        notes = note,
+                        sentiment = null
+                    )
+                    experienceRepo.insertIngestionAndCompanion(
+                        ingestion = newIngestion,
+                        substanceCompanion = substanceCompanion
+                    )
                 }
             }
         }
     }
+}
+
+class DateAndTime() {
+    private val calendar: Calendar = Calendar.getInstance()
+
+    var year = calendar.get(Calendar.YEAR)
+    var month = calendar.get(Calendar.MONTH)
+    var day = calendar.get(Calendar.DAY_OF_MONTH)
+    var hour = calendar.get(Calendar.HOUR_OF_DAY)
+    var minute = calendar.get(Calendar.MINUTE)
+
+    val currentlySelectedDate: Date
+        get() {
+            calendar.set(year, month, day, hour, minute)
+            return calendar.time
+        }
+    val dateString: String
+        get() {
+            val formatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
+            return formatter.format(currentlySelectedDate) ?: "Unknown"
+        }
+    val timeString: String
+        get() {
+            val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+            return formatter.format(currentlySelectedDate) ?: "Unknown"
+        }
 }
