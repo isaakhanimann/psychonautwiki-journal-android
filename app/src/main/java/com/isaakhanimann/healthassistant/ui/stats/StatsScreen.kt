@@ -53,7 +53,14 @@ fun StatsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Statistics") },
+                title = {
+                    val startText = statsModel?.startDateText
+                    if (startText != null) {
+                        Text(text = "Statistics Since $startText")
+                    } else {
+                        Text(text = "Statistics")
+                    }
+                },
                 elevation = 0.dp
             )
         }
@@ -78,29 +85,6 @@ fun StatsScreen(
                         )
                     }
                 }
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val style = MaterialTheme.typography.h5
-                    Text(
-                        text = statsModel.startDateText,
-                        style = style,
-                    )
-                    ArrowRight(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(8.dp)
-                            .padding(horizontal = 8.dp),
-                        strokeWidth = 4f
-                    )
-                    Text(
-                        text = "Now",
-                        style = style,
-                    )
-                }
                 val isDarkTheme = isSystemInDarkTheme()
                 LazyColumn(
                     modifier = Modifier
@@ -110,9 +94,12 @@ fun StatsScreen(
                         Text(
                             text = "Ingestion Counts",
                             style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
+                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp, top = 5.dp)
                         )
-                        BarChart(buckets = statsModel.ingestionChartBuckets, startDateText = statsModel.startDateText)
+                        BarChart(
+                            buckets = statsModel.ingestionChartBuckets,
+                            startDateText = statsModel.startDateText
+                        )
                         Divider()
                     }
                     items(statsModel.ingestionStats.size) { i ->
@@ -167,7 +154,10 @@ fun StatsScreen(
                             style = MaterialTheme.typography.caption,
                             modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
                         )
-                        BarChart(buckets = statsModel.experienceChartBuckets, startDateText = statsModel.startDateText)
+                        BarChart(
+                            buckets = statsModel.experienceChartBuckets,
+                            startDateText = statsModel.startDateText
+                        )
                     }
                 }
             }
