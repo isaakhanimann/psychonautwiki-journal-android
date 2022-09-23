@@ -11,6 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -35,7 +36,7 @@ fun StatsScreen(
 fun StatsPreview(
     @PreviewParameter(
         StatsPreviewProvider::class,
-    ) statsModel: StatsModel
+    ) statsModel: StatsModel?
 ) {
     StatsScreen(
         navigateToSubstanceCompanion = {},
@@ -71,7 +72,12 @@ fun StatsScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Text(text = "Nothing to Show Yet")
+                    Column(
+                        modifier = Modifier.padding(horizontal = 20.dp),horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(text = "Nothing to Show Yet", style = MaterialTheme.typography.h5, textAlign = TextAlign.Center)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(text = "Start logging your ingestions to see an overview of your consumption pattern.", style = MaterialTheme.typography.body1, textAlign = TextAlign.Center)
+                    }
                 }
             }
         } else {

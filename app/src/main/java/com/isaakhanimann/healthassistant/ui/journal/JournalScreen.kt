@@ -1,7 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.journal
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,8 +10,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 
@@ -78,7 +79,12 @@ fun JournalScreen(
             )
             if (groupedExperiences.isEmpty()) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Text(text = "No Experiences Yet")
+                    Column(
+                        modifier = Modifier.padding(horizontal = 20.dp),horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(text = "No Experiences Yet", style = MaterialTheme.typography.h5, textAlign = TextAlign.Center)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(text = "Add your first ingestion.", style = MaterialTheme.typography.body1, textAlign = TextAlign.Center)
+                    }
                 }
             }
         }
