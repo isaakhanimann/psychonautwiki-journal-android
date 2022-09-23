@@ -1,8 +1,5 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience.ingestion.edit.membership
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,7 +22,6 @@ class EditIngestionMembershipViewModel @Inject constructor(
 ) : ViewModel() {
 
     var ingestion: Ingestion? = null
-    var selectedExperienceId: Int? by mutableStateOf(null)
 
     val experiences: StateFlow<List<Experience>> = experienceRepo.getSortedExperiencesFlow().stateIn(
         initialValue = emptyList(),
@@ -37,7 +33,6 @@ class EditIngestionMembershipViewModel @Inject constructor(
         val id = state.get<Int>(INGESTION_ID_KEY)!!
         viewModelScope.launch {
             ingestion = experienceRepo.getIngestionFlow(id = id).first()!!
-            selectedExperienceId = ingestion?.experienceId
         }
     }
 
