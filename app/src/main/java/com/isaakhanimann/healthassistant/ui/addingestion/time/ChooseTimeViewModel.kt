@@ -44,7 +44,7 @@ class ChooseTimeViewModel @Inject constructor(
 
     private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()
 
-    private val experienceToAddToFlow: StateFlow<ExperienceWithIngestions?> =
+    private val experienceToAddToFlow: Flow<ExperienceWithIngestions?> =
         sortedExperiencesFlow.combine(dateAndTimeFlow) { sortedExperiences, relevantDateFields ->
             val selectedDate = relevantDateFields.currentlySelectedDate
             return@combine sortedExperiences.firstOrNull { experience ->
@@ -60,11 +60,7 @@ class ChooseTimeViewModel @Inject constructor(
                 val selectedDatePlus12 = cal.time
                 return@firstOrNull selectedDateMinus12 < lastIngestionTime && selectedDatePlus12 > firstIngestionTime
             }
-        }.stateIn(
-            initialValue = null,
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
+        }
 
     private val userForcedToCreateNewExperience = MutableStateFlow(false)
 
@@ -110,14 +106,10 @@ class ChooseTimeViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    private val newExperienceIdToUse: StateFlow<Int> = sortedExperiencesFlow.map { experiences ->
-        val previousMax = experiences.maxOfOrNull { it.experience.id } ?: 0
+    private val newExperienceIdToUseFlow: Flow<Int> = sortedExperiencesFlow.map { experiences ->
+        val previousMax = experiences.maxOfOrNull { it.experience.id } ?: 1
         return@map previousMax + 1
-    }.stateIn(
-        initialValue = 1,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    }
 
     init {
         substance = substanceRepo.getSubstance(substanceName)
@@ -184,55 +176,55 @@ class ChooseTimeViewModel @Inject constructor(
 
     fun createAndSaveIngestion() {
         viewModelScope.launch {
+            val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
+            val oldIdToUse = experienceToAddToFlow.firstOrNull()?.experience?.id
             val substanceCompanion = SubstanceCompanion(
                 substanceName,
                 color = selectedColor
             )
-            experienceToAddToFlow.value?.experience?.id.let {
-                if (userForcedToCreateNewExperience.value || it == null) {
-                    val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-                    val now = Date()
-                    val newExperience = Experience(
-                        id = newExperienceIdToUse.value,
-                        title = formatter.format(now),
-                        text = "",
-                        creationDate = now,
-                        sentiment = null
-                    )
-                    val newIngestion = Ingestion(
-                        substanceName = substanceName,
-                        time = dateAndTimeFlow.value.currentlySelectedDate,
-                        administrationRoute = administrationRoute,
-                        dose = dose,
-                        isDoseAnEstimate = isEstimate,
-                        units = units,
-                        experienceId = newExperience.id,
-                        notes = note,
-                        sentiment = null
-                    )
-                    experienceRepo.insertIngestionExperienceAndCompanion(
-                        ingestion = newIngestion,
-                        experience = newExperience,
-                        substanceCompanion = substanceCompanion
-                    )
+            val ingestionTime = dateAndTimeFlow.first().currentlySelectedDate
+            if (userForcedToCreateNewExperience.value || oldIdToUse == null) {
+                val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val newExperience = Experience(
+                    id = newIdToUse,
+                    title = formatter.format(ingestionTime),
+                    text = "",
+                    creationDate = Date(),
+                    sentiment = null
+                )
+                val newIngestion = Ingestion(
+                    substanceName = substanceName,
+                    time = ingestionTime,
+                    administrationRoute = administrationRoute,
+                    dose = dose,
+                    isDoseAnEstimate = isEstimate,
+                    units = units,
+                    experienceId = newExperience.id,
+                    notes = note,
+                    sentiment = null
+                )
+                experienceRepo.insertIngestionExperienceAndCompanion(
+                    ingestion = newIngestion,
+                    experience = newExperience,
+                    substanceCompanion = substanceCompanion
+                )
 
-                } else {
-                    val newIngestion = Ingestion(
-                        substanceName = substanceName,
-                        time = dateAndTimeFlow.value.currentlySelectedDate,
-                        administrationRoute = administrationRoute,
-                        dose = dose,
-                        isDoseAnEstimate = isEstimate,
-                        units = units,
-                        experienceId = it,
-                        notes = note,
-                        sentiment = null
-                    )
-                    experienceRepo.insertIngestionAndCompanion(
-                        ingestion = newIngestion,
-                        substanceCompanion = substanceCompanion
-                    )
-                }
+            } else {
+                val newIngestion = Ingestion(
+                    substanceName = substanceName,
+                    time = ingestionTime,
+                    administrationRoute = administrationRoute,
+                    dose = dose,
+                    isDoseAnEstimate = isEstimate,
+                    units = units,
+                    experienceId = oldIdToUse,
+                    notes = note,
+                    sentiment = null
+                )
+                experienceRepo.insertIngestionAndCompanion(
+                    ingestion = newIngestion,
+                    substanceCompanion = substanceCompanion
+                )
             }
         }
     }
