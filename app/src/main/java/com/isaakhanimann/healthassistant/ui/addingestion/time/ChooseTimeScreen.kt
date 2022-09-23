@@ -51,7 +51,10 @@ fun ChooseTimeScreen(
         note = viewModel.note,
         onNoteChange = {
             viewModel.note = it
-        }
+        },
+        experienceTitleToAddTo = viewModel.experienceTitleToAddToFlow.collectAsState().value,
+        check = viewModel::toggleCheck,
+        isChecked = viewModel.userWantsToContinueSameExperienceFlow.collectAsState().value
     )
 }
 
@@ -79,7 +82,10 @@ fun ChooseTimeScreenPreview() {
             "Another previous note and this one is very long, such that it doesn't fit on one line"
         ),
         note = "",
-        onNoteChange = {}
+        onNoteChange = {},
+        experienceTitleToAddTo = "New Years Eve",
+        check = {},
+        isChecked = false
     )
 }
 
@@ -98,7 +104,10 @@ fun ChooseTimeScreen(
     otherColors: List<SubstanceColor>,
     previousNotes: List<String>,
     note: String,
-    onNoteChange: (String) -> Unit
+    onNoteChange: (String) -> Unit,
+    experienceTitleToAddTo: String?,
+    check: (Boolean) -> Unit,
+    isChecked: Boolean,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) },
@@ -173,6 +182,13 @@ fun ChooseTimeScreen(
                     note,
                     onNoteChange
                 )
+                Spacer(modifier = Modifier.height(20.dp))
+                if (experienceTitleToAddTo != null) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = isChecked, onCheckedChange = check)
+                        Text(text = "Add to $experienceTitleToAddTo")
+                    }
+                }
             }
         }
     }

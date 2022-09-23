@@ -46,7 +46,7 @@ class ChooseTimeViewModel @Inject constructor(
 
     private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()
 
-    private val experienceToAddToFlow: Flow<ExperienceWithIngestions?> =
+    private val experienceWithIngestionsToAddToFlow: Flow<ExperienceWithIngestions?> =
         sortedExperiencesFlow.combine(dateAndTimeFlow) { sortedExperiences, relevantDateFields ->
             val selectedDate = relevantDateFields.currentlySelectedDate
             return@combine sortedExperiences.firstOrNull { experience ->
@@ -64,7 +64,21 @@ class ChooseTimeViewModel @Inject constructor(
             }
         }
 
-    private val userForcedToCreateNewExperience = MutableStateFlow(false)
+    val experienceTitleToAddToFlow: StateFlow<String?> =
+        experienceWithIngestionsToAddToFlow.map { it?.experience?.title }.stateIn(
+            initialValue = null,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
+
+
+    val userWantsToContinueSameExperienceFlow = MutableStateFlow(true)
+
+    fun toggleCheck(userWantsToContinueSameExperience: Boolean) {
+        viewModelScope.launch {
+            userWantsToContinueSameExperienceFlow.emit(userWantsToContinueSameExperience)
+        }
+    }
 
     var isLoadingColor by mutableStateOf(true)
     var isShowingColorPicker by mutableStateOf(false)
@@ -179,13 +193,14 @@ class ChooseTimeViewModel @Inject constructor(
     fun createAndSaveIngestion() {
         viewModelScope.launch {
             val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
-            val oldIdToUse = experienceToAddToFlow.firstOrNull()?.experience?.id
+            val oldIdToUse = experienceWithIngestionsToAddToFlow.firstOrNull()?.experience?.id
+            val userWantsToCreateANewExperience = !(userWantsToContinueSameExperienceFlow.firstOrNull() ?: true)
             val substanceCompanion = SubstanceCompanion(
                 substanceName,
                 color = selectedColor
             )
             val ingestionTime = dateAndTimeFlow.first().currentlySelectedDate
-            if (userForcedToCreateNewExperience.value || oldIdToUse == null) {
+            if (userWantsToCreateANewExperience || oldIdToUse == null) {
                 val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
                 val newExperience = Experience(
                     id = newIdToUse,
