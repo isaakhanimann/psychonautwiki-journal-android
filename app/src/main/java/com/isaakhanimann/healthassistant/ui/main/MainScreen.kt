@@ -21,13 +21,12 @@ import com.isaakhanimann.healthassistant.ui.addingestion.interactions.CheckInter
 import com.isaakhanimann.healthassistant.ui.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.RouteExplanationScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ChooseTimeScreen
-import com.isaakhanimann.healthassistant.ui.experiences.ExperiencesScreen
-import com.isaakhanimann.healthassistant.ui.experiences.experience.ExperienceScreen
-import com.isaakhanimann.healthassistant.ui.experiences.experience.edit.EditExperienceScreen
-import com.isaakhanimann.healthassistant.ui.ingestions.IngestionsScreen
-import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.OneIngestionScreen
-import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.edit.membership.EditIngestionMembershipScreen
-import com.isaakhanimann.healthassistant.ui.ingestions.ingestion.edit.note.EditIngestionNoteScreen
+import com.isaakhanimann.healthassistant.ui.journal.JournalScreen
+import com.isaakhanimann.healthassistant.ui.journal.experience.ExperienceScreen
+import com.isaakhanimann.healthassistant.ui.journal.experience.edit.EditExperienceScreen
+import com.isaakhanimann.healthassistant.ui.journal.experience.ingestion.OneIngestionScreen
+import com.isaakhanimann.healthassistant.ui.journal.experience.ingestion.edit.membership.EditIngestionMembershipScreen
+import com.isaakhanimann.healthassistant.ui.journal.experience.ingestion.edit.note.EditIngestionNoteScreen
 import com.isaakhanimann.healthassistant.ui.main.routers.*
 import com.isaakhanimann.healthassistant.ui.safer.DrugTestingScreen
 import com.isaakhanimann.healthassistant.ui.safer.SaferHallucinogensScreen
@@ -53,8 +52,7 @@ fun MainScreen(
         val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val isShowingBottomBar = navBackStackEntry?.destination?.route in setOf(
-            TabRouter.Experiences.route,
-            TabRouter.Ingestions.route,
+            TabRouter.Journal.route,
             TabRouter.Statistics.route,
             TabRouter.Search.route,
             TabRouter.SaferUse.route
@@ -195,21 +193,12 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
 }
 
 fun NavGraphBuilder.tabGraph(navController: NavController) {
-    composable(TabRouter.Experiences.route) {
-        ExperiencesScreen(
+    composable(TabRouter.Journal.route) {
+        JournalScreen(
             navigateToExperiencePopNothing = {
                 navController.navigateToExperiencePopNothing(experienceId = it)
             },
-        )
-    }
-    composable(TabRouter.Ingestions.route) {
-        IngestionsScreen(
-            navigateToIngestion = {
-                navController.navigateToIngestion(ingestionId = it)
-            },
-            navigateToAddIngestion = {
-                navController.navigateToAddIngestion()
-            }
+            navigateToAddIngestion = navController::navigateToAddIngestion
         )
     }
     composable(TabRouter.Statistics.route) {

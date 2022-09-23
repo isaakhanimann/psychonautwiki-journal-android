@@ -86,6 +86,6 @@ fun NavController.navigateToDrugTestingScreen() {
 
 fun NavController.navigateToExperienceFromAddExperience(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId) {
-        popUpTo(TabRouter.Experiences.route)
+        popUpTo(TabRouter.Journal.route)
     }
 }

@@ -1,6 +1,6 @@
 package com.isaakhanimann.healthassistant
 
-import com.isaakhanimann.healthassistant.ui.experiences.experience.timeline.AxisDrawable
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AxisDrawable
 import com.isaakhanimann.healthassistant.ui.utils.getDate
 import com.isaakhanimann.healthassistant.ui.utils.getTimeDifferenceText
 import org.junit.Assert.assertEquals

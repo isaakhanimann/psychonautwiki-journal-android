@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -17,8 +16,7 @@ import com.isaakhanimann.healthassistant.ui.main.routers.TabRouter
 @Composable
 fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean>) {
     val items = listOf(
-        TabRouter.Experiences,
-        TabRouter.Ingestions,
+        TabRouter.Journal,
         TabRouter.Statistics,
         TabRouter.Search,
         TabRouter.SaferUse
@@ -35,7 +33,7 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
                     items.forEach { item ->
                         BottomNavigationItem(
                             icon = { Icon(item.icon, contentDescription = null) },
-                            label = { Text(stringResource(item.resourceId), fontSize = 9.sp) },
+                            label = { Text(stringResource(item.resourceId)) },
                             selected = currentRoute == item.route,
                             onClick = {
                                 navController.navigate(item.route) {
