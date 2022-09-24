@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -70,7 +71,7 @@ fun InteractionRow(
     interactionType: InteractionType,
     verticalSpaceBetween: Dp = 1.dp,
     verticalPaddingInside: Dp = 2.dp,
-    textStyle: TextStyle = MaterialTheme.typography.subtitle2
+    textStyle: TextStyle = MaterialTheme.typography.body1
 ) {
     Surface(
         modifier = Modifier
@@ -87,15 +88,16 @@ fun InteractionRow(
                 text = text,
                 textAlign = TextAlign.Center,
                 color = Color.Black,
-                style = textStyle
+                style = textStyle,
+                fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.weight(1f))
             LazyRow {
                 items(interactionType.dangerCount) {
                     Icon(
                         imageVector = Icons.Outlined.WarningAmber,
-                        contentDescription = "Danger",
-                        tint = Color.Black
+                        contentDescription = "Warning",
+                        tint = Color.Black,
                     )
                 }
             }
