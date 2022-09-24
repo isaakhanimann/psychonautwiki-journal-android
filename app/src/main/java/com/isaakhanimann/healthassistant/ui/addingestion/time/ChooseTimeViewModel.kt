@@ -201,7 +201,7 @@ class ChooseTimeViewModel @Inject constructor(
             )
             val ingestionTime = dateAndTimeFlow.first().currentlySelectedDate
             if (userWantsToCreateANewExperience || oldIdToUse == null) {
-                val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
                 val newExperience = Experience(
                     id = newIdToUse,
                     title = formatter.format(ingestionTime),

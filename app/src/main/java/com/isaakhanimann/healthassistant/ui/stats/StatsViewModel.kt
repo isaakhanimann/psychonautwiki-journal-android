@@ -37,7 +37,7 @@ class StatsViewModel @Inject constructor(
     }
 
     private val startDateTextFlow = startDateFlow.map {
-        val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         formatter.format(it) ?: ""
     }
 
