@@ -1,19 +1,20 @@
 package com.isaakhanimann.healthassistant.ui.search.substance
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.classes.Interactions
@@ -35,22 +36,24 @@ fun InteractionsView(
             Column {
                 val titleStyle = MaterialTheme.typography.subtitle2
                 Text(text = "Interactions", style = titleStyle)
+                Spacer(modifier = Modifier.height(2.dp))
                 if (interactions.dangerous.isNotEmpty()) {
                     interactions.dangerous.forEach {
-                        InteractionChip(text = it, color = InteractionType.DANGEROUS.color)
+                        InteractionRow(text = it, interactionType = InteractionType.DANGEROUS)
                     }
                 }
                 if (interactions.unsafe.isNotEmpty()) {
                     interactions.unsafe.forEach {
-                        InteractionChip(text = it, color = InteractionType.UNSAFE.color)
+                        InteractionRow(text = it, interactionType = InteractionType.UNSAFE)
 
                     }
                 }
                 if (interactions.uncertain.isNotEmpty()) {
                     interactions.uncertain.forEach {
-                        InteractionChip(text = it, color = InteractionType.UNCERTAIN.color)
+                        InteractionRow(text = it, interactionType = InteractionType.UNCERTAIN)
                     }
                 }
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "Check the PsychonautWiki article for explanations",
                     style = MaterialTheme.typography.caption
@@ -62,15 +65,40 @@ fun InteractionsView(
 }
 
 @Composable
-fun InteractionChip(text: String, color: Color) {
+fun InteractionRow(
+    text: String,
+    interactionType: InteractionType,
+    verticalSpaceBetween: Dp = 1.dp,
+    verticalPaddingInside: Dp = 2.dp,
+    textStyle: TextStyle = MaterialTheme.typography.subtitle2
+) {
     Surface(
-        modifier = Modifier.padding(vertical = 0.5.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(vertical = verticalSpaceBetween)
+            .fillMaxWidth(),
         shape = RoundedCornerShape(2.dp),
-        color = color
+        color = interactionType.color
     ) {
-        Text(
-            text = text,
-            textAlign = TextAlign.Center,
-        )
+        Row(
+            modifier = Modifier.padding(horizontal = 5.dp, vertical = verticalPaddingInside),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                textAlign = TextAlign.Center,
+                color = Color.Black,
+                style = textStyle
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            LazyRow {
+                items(interactionType.dangerCount) {
+                    Icon(
+                        imageVector = Icons.Outlined.WarningAmber,
+                        contentDescription = "Danger",
+                        tint = Color.Black
+                    )
+                }
+            }
+        }
     }
 }

@@ -240,9 +240,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     val args = backStackEntry.arguments!!
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
                     navController.navigateToChooseRoute(substanceName = substanceName)
-                },
-                navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
-                navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants
+                }
             )
         }
         composable(

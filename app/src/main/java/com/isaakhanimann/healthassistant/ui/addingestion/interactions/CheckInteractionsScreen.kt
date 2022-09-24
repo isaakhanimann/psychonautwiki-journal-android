@@ -14,29 +14,23 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
-import com.isaakhanimann.healthassistant.data.substances.classes.Substance
-import com.isaakhanimann.healthassistant.ui.search.substance.InteractionChip
+import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
+import com.isaakhanimann.healthassistant.ui.search.substance.InteractionRow
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceWithCategoriesPreviewProvider
 
 
 @Composable
 fun CheckInteractionsScreen(
     navigateToChooseRouteScreen: () -> Unit,
-    navigateToSaferHallucinogensScreen: () -> Unit,
-    navigateToSaferStimulantsScreen: () -> Unit,
     viewModel: CheckInteractionsViewModel = hiltViewModel()
 ) {
     CheckInteractionsScreen(
         substanceName = viewModel.substanceName,
         isSearchingForInteractions = viewModel.isSearchingForInteractions,
-        isShowingHallucinogenLink = viewModel.isShowingHallucinogenLink,
-        isShowingStimulantsLink = viewModel.isShowingStimulantsLink,
         dangerousInteractions = viewModel.dangerousInteractions,
         unsafeInteractions = viewModel.unsafeInteractions,
         uncertainInteractions = viewModel.uncertainInteractions,
         navigateToNext = navigateToChooseRouteScreen,
-        navigateToSaferHallucinogensScreen = navigateToSaferHallucinogensScreen,
-        navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
         dismissAlert = {
             viewModel.isShowingAlert = false
         },
@@ -48,18 +42,16 @@ fun CheckInteractionsScreen(
 
 @Preview
 @Composable
-fun CheckInteractionsScreenPreview(@PreviewParameter(SubstanceWithCategoriesPreviewProvider::class) substance: Substance) {
+fun CheckInteractionsScreenPreview(@PreviewParameter(SubstanceWithCategoriesPreviewProvider::class) substanceWithCategories: SubstanceWithCategories) {
     CheckInteractionsScreen(
         substanceName = "LSD",
         isSearchingForInteractions = true,
-        isShowingHallucinogenLink = true,
-        isShowingStimulantsLink = false,
-        dangerousInteractions = substance.interactions?.dangerous ?: emptyList(),
-        unsafeInteractions = substance.interactions?.unsafe ?: emptyList(),
-        uncertainInteractions = substance.interactions?.uncertain ?: emptyList(),
+        dangerousInteractions = substanceWithCategories.substance.interactions?.dangerous
+            ?: emptyList(),
+        unsafeInteractions = substanceWithCategories.substance.interactions?.unsafe ?: emptyList(),
+        uncertainInteractions = substanceWithCategories.substance.interactions?.uncertain
+            ?: emptyList(),
         navigateToNext = {},
-        navigateToSaferHallucinogensScreen = {},
-        navigateToSaferStimulantsScreen = {},
         dismissAlert = {},
         isShowingAlert = false,
         alertInteractionType = InteractionType.DANGEROUS,
@@ -73,14 +65,10 @@ fun CheckInteractionsScreenPreview2() {
     CheckInteractionsScreen(
         substanceName = "MDMA",
         isSearchingForInteractions = true,
-        isShowingHallucinogenLink = false,
-        isShowingStimulantsLink = false,
         dangerousInteractions = emptyList(),
         unsafeInteractions = emptyList(),
         uncertainInteractions = emptyList(),
         navigateToNext = {},
-        navigateToSaferHallucinogensScreen = {},
-        navigateToSaferStimulantsScreen = {},
         dismissAlert = {},
         isShowingAlert = true,
         alertInteractionType = InteractionType.DANGEROUS,
@@ -91,8 +79,6 @@ fun CheckInteractionsScreenPreview2() {
 @Composable
 fun CheckInteractionsScreen(
     substanceName: String,
-    isShowingHallucinogenLink: Boolean,
-    isShowingStimulantsLink: Boolean,
     isSearchingForInteractions: Boolean,
     isShowingAlert: Boolean,
     dismissAlert: () -> Unit,
@@ -101,9 +87,7 @@ fun CheckInteractionsScreen(
     dangerousInteractions: List<String>,
     unsafeInteractions: List<String>,
     uncertainInteractions: List<String>,
-    navigateToNext: () -> Unit,
-    navigateToSaferHallucinogensScreen: () -> Unit,
-    navigateToSaferStimulantsScreen: () -> Unit,
+    navigateToNext: () -> Unit
 ) {
 
     Scaffold(
@@ -126,18 +110,6 @@ fun CheckInteractionsScreen(
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-            if (isShowingHallucinogenLink) {
-                TextButton(onClick = navigateToSaferHallucinogensScreen) {
-                    Text(text = "Safer Hallucinogen Use")
-                }
-                Divider()
-            }
-            if (isShowingStimulantsLink) {
-                TextButton(onClick = navigateToSaferStimulantsScreen) {
-                    Text(text = "Safer Stimulant Use")
-                }
-                Divider()
-            }
             if (dangerousInteractions.isEmpty() && unsafeInteractions.isEmpty() && uncertainInteractions.isEmpty()) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                     Box(
@@ -148,27 +120,47 @@ fun CheckInteractionsScreen(
                     }
                 }
             } else {
-                Column {
+                val verticalSpaceBetween = 1.dp
+                val verticalPaddingInside = 4.dp
+                val style = MaterialTheme.typography.h6
+
+                Column(modifier = Modifier.padding(horizontal = 5.dp, vertical = 5.dp)) {
                     if (dangerousInteractions.isNotEmpty()) {
                         dangerousInteractions.forEach {
-                            InteractionChip(text = it, color = InteractionType.DANGEROUS.color)
+                            InteractionRow(
+                                text = it,
+                                interactionType = InteractionType.DANGEROUS,
+                                verticalSpaceBetween = verticalSpaceBetween,
+                                verticalPaddingInside = verticalPaddingInside,
+                                textStyle = style
+                            )
                         }
                     }
                     if (unsafeInteractions.isNotEmpty()) {
                         unsafeInteractions.forEach {
-                            InteractionChip(text = it, color = InteractionType.UNSAFE.color)
+                            InteractionRow(
+                                text = it, interactionType = InteractionType.UNSAFE,
+                                verticalSpaceBetween = verticalSpaceBetween,
+                                verticalPaddingInside = verticalPaddingInside,
+                                textStyle = style
+                            )
 
                         }
                     }
                     if (uncertainInteractions.isNotEmpty()) {
                         uncertainInteractions.forEach {
-                            InteractionChip(text = it, color = InteractionType.UNCERTAIN.color)
+                            InteractionRow(
+                                text = it, interactionType = InteractionType.UNCERTAIN,
+                                verticalSpaceBetween = verticalSpaceBetween,
+                                verticalPaddingInside = verticalPaddingInside,
+                                textStyle = style
+                            )
                         }
                     }
+                    Spacer(modifier = Modifier.height(3.dp))
                     Text(
                         text = "Check the PsychonautWiki article for explanations",
                         style = MaterialTheme.typography.caption,
-                        modifier = Modifier.padding(horizontal = 10.dp)
                     )
                 }
             }
