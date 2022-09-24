@@ -81,7 +81,7 @@ fun ExperienceRow(
             }
         }
         val dateText = remember(experienceWithIngestionsAndCompanions.sortDate) {
-            val formatter = SimpleDateFormat("dd MMMM", Locale.getDefault())
+            val formatter = SimpleDateFormat("dd MMM yy", Locale.getDefault())
             formatter.format(experienceWithIngestionsAndCompanions.sortDate) ?: ""
         }
         Text(text = dateText)
