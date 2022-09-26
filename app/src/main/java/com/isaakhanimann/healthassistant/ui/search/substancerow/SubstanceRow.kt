@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.ui.search.CategoryModel
 import com.isaakhanimann.healthassistant.ui.search.SubstanceModel
 
@@ -32,31 +33,28 @@ fun SubstanceRow(
     substanceModel: SubstanceModel,
     onTap: (substanceName: String) -> Unit
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
                 onTap(substanceModel.name)
             }
-            .padding(horizontal = 6.dp, vertical = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(horizontal = 6.dp, vertical = 6.dp),
     ) {
-        Column {
-            Text(
-                text = substanceModel.name,
-                style = MaterialTheme.typography.body1,
-            )
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                Column(horizontalAlignment = Alignment.Start) {
-                    substanceModel.commonNames.forEach { commonName ->
-                        Text(text = commonName, style = MaterialTheme.typography.caption)
-                    }
-                }
+        Text(
+            text = substanceModel.name,
+            style = MaterialTheme.typography.body1,
+        )
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Row {
+                val commaSeparatedNames = substanceModel.commonNames.joinToString(separator = ", ")
+                Text(text = commaSeparatedNames, style = MaterialTheme.typography.caption)
             }
         }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(3.dp),
-            horizontalAlignment = Alignment.End
+        FlowRow(
+            mainAxisSpacing = 3.dp,
+            crossAxisSpacing = 3.dp,
+            modifier = Modifier.padding(vertical = 5.dp)
         ) {
             substanceModel.categories.forEach {
                 CategoryChipStatic(categoryModel = it)
