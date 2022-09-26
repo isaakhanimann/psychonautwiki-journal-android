@@ -5,27 +5,25 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Color(0xFF96a4fe),
+    primaryVariant = Color(0xFF001FB5),
+    secondary = Color(0xFF5b29ff),
+    onPrimary = Color.Black,
+    onSecondary = Color.White
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
+    primary = Color(0xFF003bf0),
+    primaryVariant = Color(0xFF0001c0),
+    secondary = Color(0xFF5b29ff),
     onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    onSecondary = Color.White
 )
+
+val yellow = Color(0xFFffc629)
 
 @Composable
 fun HealthAssistantTheme(
@@ -37,7 +35,6 @@ fun HealthAssistantTheme(
     } else {
         LightColorPalette
     }
-
     MaterialTheme(
         colors = colors,
         typography = Typography,
