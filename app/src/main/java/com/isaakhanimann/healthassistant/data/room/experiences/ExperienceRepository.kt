@@ -5,6 +5,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestio
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithExperience
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
@@ -58,8 +59,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getSortedExperiencesFlow(): Flow<List<Experience>> =
-        experienceDao.getSortedExperiencesFlow()
+    fun getIngestionsWithExperiencesFlow(fromDate: Date, toDate: Date): Flow<List<IngestionWithExperience>> =
+        experienceDao.getIngestionWithExperiencesFlow(fromDate, toDate)
             .flowOn(Dispatchers.IO)
             .conflate()
 

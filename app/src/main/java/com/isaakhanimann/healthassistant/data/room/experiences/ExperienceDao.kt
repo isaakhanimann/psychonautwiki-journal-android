@@ -68,6 +68,10 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion WHERE id =:id")
     fun getIngestionWithExperienceFlow(id: Int): Flow<IngestionWithExperience?>
 
+    @Transaction
+    @Query("SELECT * FROM ingestion WHERE time > :fromDate AND time < :toDate")
+    fun getIngestionWithExperiencesFlow(fromDate: Date, toDate: Date): Flow<List<IngestionWithExperience>>
+
     @Query("SELECT * FROM ingestion WHERE id =:id")
     fun getIngestionFlow(id: Int): Flow<Ingestion?>
 

@@ -7,15 +7,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.ui.main.routers.INGESTION_ID_KEY
+import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +24,11 @@ class EditIngestionViewModel @Inject constructor(
     var ingestion: Ingestion? = null
     var note by mutableStateOf("")
     var isEstimate by mutableStateOf(false)
+    var dose by mutableStateOf("")
+    var units by mutableStateOf("")
     var experienceId by mutableStateOf(1)
+
+    private val dateFlow = MutableStateFlow(Date())
 
     init {
         val id = state.get<Int>(INGESTION_ID_KEY)!!
@@ -36,10 +38,27 @@ class EditIngestionViewModel @Inject constructor(
             note = ing.notes ?: ""
             isEstimate = ing.isDoseAnEstimate
             experienceId = ing.experienceId
+            dose = ing.dose?.toReadableString() ?: ""
+            units = ing.units ?: ""
+            dateFlow.emit(ing.time)
         }
     }
 
-    val experiences: StateFlow<List<Experience>> = experienceRepo.getSortedExperiencesFlow().stateIn(
+    val relevantExperiences: StateFlow<List<ExperienceOption>> = dateFlow.map {
+        val cal = Calendar.getInstance(TimeZone.getDefault())
+        cal.time = it
+        cal.add(Calendar.DAY_OF_YEAR, -2)
+        val fromDate = cal.time
+        cal.time = it
+        cal.add(Calendar.DAY_OF_YEAR, 2)
+        val toDate = cal.time
+        return@map experienceRepo.getIngestionsWithExperiencesFlow(fromDate, toDate).firstOrNull()
+            ?: emptyList()
+    }.map { list ->
+        return@map list.map {
+            ExperienceOption(id = it.experience.id, title = it.experience.title)
+        }.distinct()
+    }.stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
@@ -51,6 +70,8 @@ class EditIngestionViewModel @Inject constructor(
                 it.notes = note
                 it.isDoseAnEstimate = isEstimate
                 it.experienceId = experienceId
+                it.dose = dose.toDoubleOrNull()
+                it.units = units
                 experienceRepo.update(it)
             }
         }
@@ -64,3 +85,8 @@ class EditIngestionViewModel @Inject constructor(
         }
     }
 }
+
+data class ExperienceOption(
+    val id: Int,
+    val title: String
+)
