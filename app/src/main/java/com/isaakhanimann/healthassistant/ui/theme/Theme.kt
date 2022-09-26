@@ -23,8 +23,6 @@ private val LightColorPalette = lightColors(
     onSecondary = Color.White
 )
 
-val yellow = Color(0xFFffc629)
-
 @Composable
 fun HealthAssistantTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
