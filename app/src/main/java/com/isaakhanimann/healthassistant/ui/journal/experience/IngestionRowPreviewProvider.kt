@@ -22,7 +22,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<OneExperienceViewMo
                     isDoseAnEstimate = false,
                     units = "mg",
                     experienceId = 0,
-                    notes = "This is a note",
+                    notes = "This is a very long note which I wrote to see how it looks like if the note spans more than one line in the ingestion row.",
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "MDMA",
