@@ -25,8 +25,6 @@ const val ROUTE_START_CHECK_INTERACTIONS = "checkInteractions/"
 const val ROUTE_START_CHOOSE_ROUTE = "chooseRoute/"
 const val ROUTE_START_CHOOSE_DOSE = "chooseDose/"
 const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
-const val ROUTE_START_EDIT_INGESTION_NOTE = "editIngestionNote/"
-const val ROUTE_START_EDIT_INGESTION_MEMBERSHIP = "editIngestionMembership/"
 const val ROUTE_START_SUBSTANCE_COMPANION = "substancesCompanion/"
 
 
@@ -57,20 +55,6 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         route = "$ROUTE_START_SUBSTANCE_COMPANION{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
-        )
-    )
-
-    object EditIngestionNoteRouter : ArgumentRouter(
-        route = "$ROUTE_START_EDIT_INGESTION_NOTE{$INGESTION_ID_KEY}",
-        args = listOf(
-            navArgument(INGESTION_ID_KEY) { type = NavType.IntType },
-        )
-    )
-
-    object EditIngestionMembershipRouter : ArgumentRouter(
-        route = "$ROUTE_START_EDIT_INGESTION_MEMBERSHIP{$INGESTION_ID_KEY}",
-        args = listOf(
-            navArgument(INGESTION_ID_KEY) { type = NavType.IntType },
         )
     )
 
@@ -114,14 +98,6 @@ fun NavController.navigateToExperiencePopNothing(experienceId: Int) {
 
 fun NavController.navigateToIngestion(ingestionId: Int) {
     navigate(ROUTE_START_INGESTIONS + ingestionId)
-}
-
-fun NavController.navigateToEditIngestionNote(ingestionId: Int) {
-    navigate(ROUTE_START_EDIT_INGESTION_NOTE + ingestionId)
-}
-
-fun NavController.navigateToEditIngestionMembership(ingestionId: Int) {
-    navigate(ROUTE_START_EDIT_INGESTION_MEMBERSHIP + ingestionId)
 }
 
 fun NavController.navigateToEditExperience(experienceId: Int) {

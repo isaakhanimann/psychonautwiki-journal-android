@@ -7,6 +7,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithExperience
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 
@@ -63,6 +64,10 @@ interface ExperienceDao {
     @Query("SELECT * FROM experience WHERE id =:id")
     fun getExperienceFlow(id: Int): Flow<Experience?>
 
+    @Transaction
+    @Query("SELECT * FROM ingestion WHERE id =:id")
+    fun getIngestionWithExperienceFlow(id: Int): Flow<IngestionWithExperience?>
+
     @Query("SELECT * FROM ingestion WHERE id =:id")
     fun getIngestionFlow(id: Int): Flow<Ingestion?>
 
@@ -105,14 +110,21 @@ interface ExperienceDao {
     suspend fun insert(ingestion: Ingestion)
 
     @Transaction
-    suspend fun insertIngestionExperienceAndCompanion(ingestion: Ingestion, experience: Experience, substanceCompanion: SubstanceCompanion) {
+    suspend fun insertIngestionExperienceAndCompanion(
+        ingestion: Ingestion,
+        experience: Experience,
+        substanceCompanion: SubstanceCompanion
+    ) {
         insert(ingestion)
         insert(experience)
         insert(substanceCompanion)
     }
 
     @Transaction
-    suspend fun insertIngestionAndCompanion(ingestion: Ingestion, substanceCompanion: SubstanceCompanion) {
+    suspend fun insertIngestionAndCompanion(
+        ingestion: Ingestion,
+        substanceCompanion: SubstanceCompanion
+    ) {
         insert(ingestion)
         insert(substanceCompanion)
     }

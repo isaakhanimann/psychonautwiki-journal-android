@@ -1,5 +1,8 @@
-package com.isaakhanimann.healthassistant.ui.journal.experience.ingestion.edit.membership
+package com.isaakhanimann.healthassistant.ui.journal.experience.editingestion
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,12 +19,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditIngestionMembershipViewModel @Inject constructor(
+class EditIngestionViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-
     var ingestion: Ingestion? = null
+    var note by mutableStateOf("")
+    var isEstimate by mutableStateOf(false)
+    var experienceId by mutableStateOf(1)
+
+    init {
+        val id = state.get<Int>(INGESTION_ID_KEY)!!
+        viewModelScope.launch {
+            val ing = experienceRepo.getIngestionFlow(id = id).first() ?: return@launch
+            ingestion = ing
+            note = ing.notes ?: ""
+            isEstimate = ing.isDoseAnEstimate
+            experienceId = ing.experienceId
+        }
+    }
 
     val experiences: StateFlow<List<Experience>> = experienceRepo.getSortedExperiencesFlow().stateIn(
         initialValue = emptyList(),
@@ -29,18 +45,22 @@ class EditIngestionMembershipViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
-    init {
-        val id = state.get<Int>(INGESTION_ID_KEY)!!
+    fun onDoneTap() {
         viewModelScope.launch {
-            ingestion = experienceRepo.getIngestionFlow(id = id).first()!!
+            ingestion?.let {
+                it.notes = note
+                it.isDoseAnEstimate = isEstimate
+                it.experienceId = experienceId
+                experienceRepo.update(it)
+            }
         }
     }
 
-    fun onTap(experienceId: Int) {
+    fun deleteIngestion() {
         viewModelScope.launch {
-            ingestion!!.experienceId = experienceId
-            experienceRepo.update(ingestion!!)
+            ingestion?.let {
+                experienceRepo.delete(ingestion = it)
+            }
         }
     }
-
 }

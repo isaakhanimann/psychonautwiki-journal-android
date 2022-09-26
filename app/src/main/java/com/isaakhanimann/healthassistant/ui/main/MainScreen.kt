@@ -24,9 +24,7 @@ import com.isaakhanimann.healthassistant.ui.addingestion.time.ChooseTimeScreen
 import com.isaakhanimann.healthassistant.ui.journal.JournalScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.ExperienceScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.edit.EditExperienceScreen
-import com.isaakhanimann.healthassistant.ui.journal.experience.ingestion.OneIngestionScreen
-import com.isaakhanimann.healthassistant.ui.journal.experience.ingestion.edit.membership.EditIngestionMembershipScreen
-import com.isaakhanimann.healthassistant.ui.journal.experience.ingestion.edit.note.EditIngestionNoteScreen
+import com.isaakhanimann.healthassistant.ui.journal.experience.editingestion.EditIngestionScreen
 import com.isaakhanimann.healthassistant.ui.main.routers.*
 import com.isaakhanimann.healthassistant.ui.safer.DrugTestingScreen
 import com.isaakhanimann.healthassistant.ui.safer.SaferHallucinogensScreen
@@ -144,20 +142,7 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         ArgumentRouter.IngestionRouter.route,
         arguments = ArgumentRouter.IngestionRouter.args
     ) {
-        val ingestionId = it.arguments!!.getInt(INGESTION_ID_KEY)
-        OneIngestionScreen(
-            navigateToEditNote = {
-                navController.navigateToEditIngestionNote(ingestionId)
-            },
-            navigateToEditMembership = {
-                navController.navigateToEditIngestionMembership(ingestionId)
-            },
-            navigateToSubstance = { substanceName ->
-                navController.navigateToSubstanceScreen(substanceName)
-            },
-            navigateBack = navController::popBackStack,
-            navigateToDoseExplanationScreen = navController::navigateToDosageExplanationScreen
-        )
+        EditIngestionScreen(navigateBack = navController::popBackStack)
     }
     composable(
         ArgumentRouter.SubstanceRouter.route,
@@ -177,18 +162,6 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         arguments = ArgumentRouter.SubstanceCompanionRouter.args
     ) {
         SubstanceCompanionScreen()
-    }
-    composable(
-        ArgumentRouter.EditIngestionNoteRouter.route,
-        arguments = ArgumentRouter.EditIngestionNoteRouter.args
-    ) {
-        EditIngestionNoteScreen(navigateBack = navController::popBackStack)
-    }
-    composable(
-        ArgumentRouter.EditIngestionMembershipRouter.route,
-        arguments = ArgumentRouter.EditIngestionMembershipRouter.args
-    ) {
-        EditIngestionMembershipScreen(navigateBack = navController::popBackStack)
     }
 }
 

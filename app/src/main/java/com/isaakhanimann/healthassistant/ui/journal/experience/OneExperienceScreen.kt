@@ -86,7 +86,11 @@ fun ExperienceScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(oneExperienceScreenModel.title)
                         IconButton(onClick = navigateToEditExperienceScreen) {
-                            Icon(Icons.Default.Edit, contentDescription = "Edit Experience", modifier = Modifier.size(17.dp))
+                            Icon(
+                                Icons.Default.Edit,
+                                contentDescription = "Edit Experience",
+                                modifier = Modifier.size(17.dp)
+                            )
                         }
                     }
                 },
@@ -140,17 +144,16 @@ fun ExperienceScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
+                            .padding(bottom = 5.dp)
                     )
                     val showOralOnsetDisclaimer =
                         ingestionDurationPairs.any { it.first.ingestion.administrationRoute == AdministrationRoute.ORAL }
                     if (showOralOnsetDisclaimer) {
-                        Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text = "* a full stomach can delay the onset for hours",
                             style = MaterialTheme.typography.caption,
                         )
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
                     Text(
                         text = "* heavy doses can have longer durations",
                         style = MaterialTheme.typography.caption

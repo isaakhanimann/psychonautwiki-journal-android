@@ -13,7 +13,7 @@ data class Ingestion(
     val time: Date,
     val administrationRoute: AdministrationRoute,
     val dose: Double?,
-    val isDoseAnEstimate: Boolean,
+    var isDoseAnEstimate: Boolean,
     val units: String?,
     var experienceId: Int,
     var notes: String?

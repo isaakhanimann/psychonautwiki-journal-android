@@ -68,6 +68,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
+    fun getIngestionWithExperienceFlow(id: Int) = experienceDao.getIngestionWithExperienceFlow(id)
     fun getIngestionWithCompanionFlow(id: Int) = experienceDao.getIngestionWithCompanionFlow(id)
     fun getExperienceWithIngestionsAndCompanionsFlow(experienceId: Int) =
         experienceDao.getExperienceWithIngestionsAndCompanionsFlow(experienceId)
