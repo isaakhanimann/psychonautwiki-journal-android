@@ -86,11 +86,15 @@ fun ExperienceScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(oneExperienceScreenModel.title)
                         IconButton(onClick = navigateToEditExperienceScreen) {
-                            Icon(Icons.Default.Edit, contentDescription = "Edit Experience")
+                            Icon(Icons.Default.Edit, contentDescription = "Edit Experience", modifier = Modifier.size(17.dp))
                         }
                     }
                 },
                 actions = {
+                    SentimentButton(
+                        sentiment = oneExperienceScreenModel.sentiment,
+                        saveSentiment = saveSentiment,
+                    )
                     val isFavorite = oneExperienceScreenModel.isFavorite
                     IconToggleButton(checked = isFavorite, onCheckedChange = saveIsFavorite) {
                         if (isFavorite) {
@@ -99,8 +103,6 @@ fun ExperienceScreen(
                             Icon(Icons.Outlined.StarOutline, contentDescription = "Is not Favorite")
                         }
                     }
-                    var isShowingDeleteDialog by remember { mutableStateOf(false) }
-
                 }
             )
         },
@@ -197,16 +199,6 @@ fun ExperienceScreen(
                 }
                 Divider()
             }
-            var isShowingSentimentMenu by remember { mutableStateOf(false) }
-            SentimentSection(
-                sentiment = oneExperienceScreenModel.sentiment,
-                isShowingEditSentiment = isShowingSentimentMenu,
-                show = { isShowingSentimentMenu = true },
-                dismiss = { isShowingSentimentMenu = false },
-                saveSentiment = saveSentiment,
-                modifier = Modifier.padding(start = horizontalPadding)
-            )
-            Divider()
             if (oneExperienceScreenModel.notes.isEmpty()) {
                 TextButton(
                     onClick = navigateToEditExperienceScreen,
