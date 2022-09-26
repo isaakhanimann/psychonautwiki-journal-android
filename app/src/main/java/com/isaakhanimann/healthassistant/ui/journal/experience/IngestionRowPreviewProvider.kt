@@ -2,7 +2,6 @@ package com.isaakhanimann.healthassistant.ui.journal.experience
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
@@ -24,7 +23,6 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<OneExperienceViewMo
                     units = "mg",
                     experienceId = 0,
                     notes = "This is a note",
-                    sentiment = Sentiment.SATISFIED
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "MDMA",
@@ -46,7 +44,6 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<OneExperienceViewMo
                     units = "µg",
                     experienceId = 0,
                     notes = null,
-                    sentiment = Sentiment.NEUTRAL
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "LSD",

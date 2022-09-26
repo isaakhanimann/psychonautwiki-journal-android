@@ -2,7 +2,6 @@ package com.isaakhanimann.healthassistant.ui.journal.experience.ingestion
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
@@ -24,7 +23,6 @@ class IngestionWithDurationAndExperienceProvider :
                     units = "mg",
                     experienceId = 0,
                     notes = "This is my note",
-                    sentiment = Sentiment.SATISFIED
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "Substance 1",

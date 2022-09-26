@@ -38,7 +38,6 @@ class JournalScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "MDMA",
@@ -61,7 +60,6 @@ class JournalScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Cocaine",
@@ -84,7 +82,6 @@ class JournalScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Ketamine",
@@ -117,7 +114,6 @@ class JournalScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "MDMA",
@@ -155,7 +151,6 @@ class JournalScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Cocaine",
@@ -178,7 +173,6 @@ class JournalScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Ketamine",
@@ -212,7 +206,6 @@ class JournalScreenPreviewProvider :
                                         units = "µg",
                                         experienceId = 0,
                                         notes = null,
-                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "LSD",
@@ -235,7 +228,6 @@ class JournalScreenPreviewProvider :
                                         units = "mg",
                                         experienceId = 0,
                                         notes = null,
-                                        sentiment = Sentiment.SATISFIED
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Cocaine",

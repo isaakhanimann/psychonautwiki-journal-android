@@ -49,28 +49,28 @@ fun AcceptConditionsScreen(
                     checked = checkedState0.value,
                     onCheckedChange = { checkedState0.value = it }
                 )
-                Text(text = "I acknowledge that I am the only one responsible for my actions, especially when deciding to use drugs")
+                Text(text = "I acknowledge that I am the only one responsible for my actions, especially when deciding to use drugs.")
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = checkedState1.value,
                     onCheckedChange = { checkedState1.value = it }
                 )
-                Text(text = "I'm going to use this app for mitigating the risks of my or somebody else’s substance use")
+                Text(text = "I'm going to use this app for mitigating the risks of my or somebody else’s substance use.")
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = checkedState2.value,
                     onCheckedChange = { checkedState2.value = it }
                 )
-                Text(text = "I acknowledge that the data in this app might be inaccurate or incomplete")
+                Text(text = "I acknowledge that the data in this app might be inaccurate or incomplete.")
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = checkedState3.value,
                     onCheckedChange = { checkedState3.value = it }
                 )
-                Text(text = "I’m going to seek professional help before attempting to self-medicate")
+                Text(text = "I’m going to seek professional help before attempting to self-medicate.")
             }
         }
         Text(text = "Journaling data in the app always stays on this device", style = MaterialTheme.typography.caption)

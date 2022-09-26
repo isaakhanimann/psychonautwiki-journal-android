@@ -18,8 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import java.text.SimpleDateFormat
@@ -51,10 +49,15 @@ fun IngestionRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            IngestionCircle(
-                substanceColor = ingestionWithCompanion.substanceCompanion!!.color,
-                sentiment = ingestion.sentiment
-            )
+            val isDarkTheme = isSystemInDarkTheme()
+            Surface(
+                shape = CircleShape,
+                color = ingestionWithCompanion.substanceCompanion!!.color.getComposeColor(
+                    isDarkTheme
+                ),
+                modifier = Modifier
+                    .size(40.dp)
+            ) {}
             Column(modifier = Modifier.weight(1f)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                     Text(text = ingestion.substanceName, style = MaterialTheme.typography.h6)
@@ -88,29 +91,6 @@ fun IngestionRow(
                     DotRow(doseClass = doseClass)
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun IngestionCircle(
-    substanceColor: SubstanceColor,
-    sentiment: Sentiment?
-) {
-    val isDarkTheme = isSystemInDarkTheme()
-    Surface(
-        shape = CircleShape,
-        color = substanceColor.getComposeColor(isDarkTheme),
-        modifier = Modifier
-            .size(40.dp)
-    ) {
-        if (sentiment != null) {
-            Icon(
-                imageVector = sentiment.icon,
-                contentDescription = sentiment.description,
-                modifier = Modifier.padding(5.dp),
-                tint = MaterialTheme.colors.onSurface
-            )
         }
     }
 }

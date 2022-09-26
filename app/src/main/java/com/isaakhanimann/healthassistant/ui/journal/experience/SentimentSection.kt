@@ -1,4 +1,4 @@
-package com.isaakhanimann.healthassistant.ui.journal.experience.ingestion
+package com.isaakhanimann.healthassistant.ui.journal.experience
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*

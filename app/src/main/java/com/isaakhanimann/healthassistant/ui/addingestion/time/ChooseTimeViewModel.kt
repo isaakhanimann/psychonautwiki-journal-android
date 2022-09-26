@@ -217,8 +217,7 @@ class ChooseTimeViewModel @Inject constructor(
                     isDoseAnEstimate = isEstimate,
                     units = units,
                     experienceId = newExperience.id,
-                    notes = note,
-                    sentiment = null
+                    notes = note
                 )
                 experienceRepo.insertIngestionExperienceAndCompanion(
                     ingestion = newIngestion,
@@ -235,8 +234,7 @@ class ChooseTimeViewModel @Inject constructor(
                     isDoseAnEstimate = isEstimate,
                     units = units,
                     experienceId = oldIdToUse,
-                    notes = note,
-                    sentiment = null
+                    notes = note
                 )
                 experienceRepo.insertIngestionAndCompanion(
                     ingestion = newIngestion,

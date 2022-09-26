@@ -28,7 +28,6 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -45,7 +44,6 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -62,7 +60,6 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -90,7 +87,6 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.VERY_SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -107,7 +103,6 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.NEUTRAL
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",

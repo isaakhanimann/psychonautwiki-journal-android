@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
@@ -49,11 +48,7 @@ fun OneIngestionScreen(
             deleteIngestion = viewModel::deleteIngestion,
             isShowingDialog = viewModel.isShowingDeleteDialog,
             showDialog = { viewModel.isShowingDeleteDialog = true },
-            dismissDialog = { viewModel.isShowingDeleteDialog = false },
-            isShowingEditSentiment = viewModel.isShowingSentimentMenu,
-            showSentimentMenu = viewModel::showEditSentimentDialog,
-            dismissSentimentMenu = viewModel::dismissEditSentimentDialog,
-            saveSentiment = viewModel::saveSentiment,
+            dismissDialog = { viewModel.isShowingDeleteDialog = false }
         )
     }
 }
@@ -77,11 +72,7 @@ fun OneIngestionScreenPreview(
             deleteIngestion = {},
             isShowingDialog = false,
             showDialog = {},
-            dismissDialog = {},
-            isShowingEditSentiment = false,
-            showSentimentMenu = {},
-            dismissSentimentMenu = {},
-            saveSentiment = {},
+            dismissDialog = {}
         )
     }
 }
@@ -97,11 +88,7 @@ fun OneIngestionScreen(
     deleteIngestion: () -> Unit,
     isShowingDialog: Boolean,
     showDialog: () -> Unit,
-    dismissDialog: () -> Unit,
-    isShowingEditSentiment: Boolean,
-    showSentimentMenu: () -> Unit,
-    dismissSentimentMenu: () -> Unit,
-    saveSentiment: (sentiment: Sentiment?) -> Unit
+    dismissDialog: () -> Unit
 ) {
     val ingestionWithCompanion = ingestionWithCompanionDurationAndExperience.ingestionWithCompanion
     val ingestion = ingestionWithCompanion.ingestion
@@ -216,15 +203,6 @@ fun OneIngestionScreen(
                     }
                 }
             }
-            Divider()
-            SentimentSection(
-                sentiment = ingestion.sentiment,
-                isShowingEditSentiment = isShowingEditSentiment,
-                show = showSentimentMenu,
-                dismiss = dismissSentimentMenu,
-                saveSentiment = saveSentiment,
-                modifier = Modifier.padding(start = horizontalPadding)
-            )
             Divider()
             ingestion.notes.let {
                 val constNote = it

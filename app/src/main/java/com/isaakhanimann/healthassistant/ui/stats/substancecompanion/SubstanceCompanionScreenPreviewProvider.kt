@@ -2,7 +2,6 @@ package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
@@ -35,7 +34,6 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            sentiment = Sentiment.SATISFIED
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
@@ -52,7 +50,6 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            sentiment = Sentiment.SATISFIED
                         )
                     )
                 ),
@@ -74,7 +71,6 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            sentiment = Sentiment.SATISFIED
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
@@ -91,7 +87,6 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            sentiment = Sentiment.SATISFIED
                         )
                     )
                 )

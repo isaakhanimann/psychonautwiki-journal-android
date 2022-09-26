@@ -37,7 +37,6 @@ class OneExperienceScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
-                            sentiment = Sentiment.SATISFIED
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "MDMA",
@@ -59,7 +58,6 @@ class OneExperienceScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
-                            sentiment = null
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Cocaine",
@@ -81,7 +79,6 @@ class OneExperienceScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
-                            sentiment = null
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Cocaine",

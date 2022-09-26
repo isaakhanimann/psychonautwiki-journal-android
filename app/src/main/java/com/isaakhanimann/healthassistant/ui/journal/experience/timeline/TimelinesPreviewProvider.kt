@@ -2,7 +2,6 @@ package com.isaakhanimann.healthassistant.ui.journal.experience.timeline
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
@@ -29,7 +28,6 @@ class TimelinesPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 1",
@@ -80,7 +78,6 @@ class TimelinesPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 1",
@@ -131,7 +128,6 @@ class TimelinesPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 2",
@@ -182,7 +178,6 @@ class TimelinesPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 3",
@@ -215,7 +210,6 @@ class TimelinesPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 1",
@@ -266,7 +260,6 @@ class TimelinesPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 2",
@@ -317,7 +310,6 @@ class TimelinesPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 3",
@@ -370,7 +362,6 @@ class TimelinesPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 1",
@@ -422,7 +413,6 @@ class TimelinesPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        sentiment = Sentiment.SATISFIED
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Substance 2",

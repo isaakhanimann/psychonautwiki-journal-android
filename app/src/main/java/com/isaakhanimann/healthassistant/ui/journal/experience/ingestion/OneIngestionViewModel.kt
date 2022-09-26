@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
@@ -27,27 +26,6 @@ class OneIngestionViewModel @Inject constructor(
 ) : ViewModel() {
 
     var isShowingDeleteDialog by mutableStateOf(false)
-
-    var isShowingSentimentMenu by mutableStateOf(false)
-
-    fun showEditSentimentDialog() {
-        isShowingSentimentMenu = true
-    }
-
-    fun dismissEditSentimentDialog() {
-        isShowingSentimentMenu = false
-    }
-
-    fun saveSentiment(sentiment: Sentiment?) {
-        val ingestion =
-            ingestionWithCompanionDurationAndExperience.value?.ingestionWithCompanion?.ingestion
-        if (ingestion != null) {
-            viewModelScope.launch {
-                ingestion.sentiment = sentiment
-                experienceRepo.update(ingestion)
-            }
-        }
-    }
 
     data class IngestionWithCompanionDurationAndExperience(
         val ingestionWithCompanion: IngestionWithCompanion,
