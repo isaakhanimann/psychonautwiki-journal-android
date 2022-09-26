@@ -46,7 +46,7 @@ fun AllTimelinesPreview(
 fun AllTimelines(
     ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>,
     modifier: Modifier = Modifier,
-    strokeWidth: Float = 8f,
+    strokeWidth: Float = 16f,
 ) {
     if (ingestionDurationPairs.isEmpty()) {
         Text(text = "Insufficient Data for Timeline")
@@ -78,6 +78,14 @@ fun AllTimelines(
             val pixelsPerSec = canvasWidth / model.widthInSeconds
             inset(left = 0f, top = 0f, right = 0f, bottom = 50f) {
                 val canvasHeightOuter = size.height
+                drawCurrentTime(
+                    startTime = model.startTime,
+                    timelineWidthInSeconds = model.widthInSeconds,
+                    currentTime = currentTime,
+                    pixelsPerSec = pixelsPerSec,
+                    isDarkTheme = isDarkTheme,
+                    canvasHeightOuter = canvasHeightOuter
+                )
                 model.ingestionDrawables.forEach { ingestionDrawable ->
                     drawIngestion(
                         ingestionDrawable = ingestionDrawable,
@@ -87,14 +95,6 @@ fun AllTimelines(
                         canvasHeightOuter = canvasHeightOuter
                     )
                 }
-                drawCurrentTime(
-                    startTime = model.startTime,
-                    timelineWidthInSeconds = model.widthInSeconds,
-                    currentTime = currentTime,
-                    pixelsPerSec = pixelsPerSec,
-                    isDarkTheme = isDarkTheme,
-                    canvasHeightOuter = canvasHeightOuter
-                )
             }
             drawAxis(
                 axisDrawable = model.axisDrawable,
@@ -131,7 +131,7 @@ fun DrawScope.drawIngestion(
             val canvasHeightInner = size.height
             drawCircle(
                 color = color,
-                radius = 13f,
+                radius = 18f,
                 center = Offset(x = startX, y = canvasHeightInner)
             )
         }
@@ -183,7 +183,7 @@ fun DrawScope.drawCurrentTime(
             color = color,
             start = Offset(x = timeStartX, y = canvasHeightOuter),
             end = Offset(x = timeStartX, y = 0f),
-            strokeWidth = 5f
+            strokeWidth = 8f
         )
     }
 }
