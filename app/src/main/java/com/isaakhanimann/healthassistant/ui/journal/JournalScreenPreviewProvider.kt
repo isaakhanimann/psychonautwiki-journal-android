@@ -19,7 +19,8 @@ class JournalScreenPreviewProvider :
                                 id = 0,
                                 title = "Festival",
                                 text = "Some notes",
-                                sentiment = Sentiment.SATISFIED
+                                sentiment = Sentiment.SATISFIED,
+                                isFavorite = true
                             ),
                             ingestionsWithCompanions = listOf(
                                 IngestionWithCompanion(
@@ -187,7 +188,7 @@ class JournalScreenPreviewProvider :
                                 id = 0,
                                 title = "Last day in Stockholm",
                                 text = "Some notes",
-                                sentiment = Sentiment.DISSATISFIED
+                                sentiment = null
                             ),
                             ingestionsWithCompanions = listOf(
                                 IngestionWithCompanion(

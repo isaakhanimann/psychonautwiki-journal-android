@@ -9,9 +9,9 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import java.util.*
 
-class IngestionRowPreviewProvider : PreviewParameterProvider<OneExperienceViewModel.IngestionElement> {
-    override val values: Sequence<OneExperienceViewModel.IngestionElement> = sequenceOf(
-        OneExperienceViewModel.IngestionElement(
+class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
+    override val values: Sequence<IngestionElement> = sequenceOf(
+        IngestionElement(
             dateText = null,
             ingestionWithCompanion = IngestionWithCompanion(
                 ingestion = Ingestion(
@@ -32,7 +32,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<OneExperienceViewMo
             roaDuration = null,
             doseClass = DoseClass.COMMON
         ),
-        OneExperienceViewModel.IngestionElement(
+        IngestionElement(
             dateText = null,
             ingestionWithCompanion = IngestionWithCompanion(
                 ingestion = Ingestion(

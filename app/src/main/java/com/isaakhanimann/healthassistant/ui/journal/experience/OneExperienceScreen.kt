@@ -9,15 +9,15 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
@@ -32,24 +32,16 @@ fun ExperienceScreen(
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
 ) {
-    viewModel.experienceWithIngestionsFlow.collectAsState().value?.also { experienceWithIngestions ->
+    viewModel.oneExperienceScreenModelFlow.collectAsState().value?.also { oneExperienceScreenModel ->
         ExperienceScreen(
-            experience = experienceWithIngestions.experience,
-            ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
-            cumulativeDoses = viewModel.cumulativeDosesFlow.collectAsState().value,
+            oneExperienceScreenModel = oneExperienceScreenModel,
             addIngestion = navigateToAddIngestionSearch,
             viewModel::deleteExperience,
             navigateToEditExperienceScreen,
             navigateToIngestionScreen,
             navigateBack,
-            isShowingDialog = viewModel.isShowingDeleteDialog,
-            showDialog = { viewModel.isShowingDeleteDialog = true },
-            dismissDialog = { viewModel.isShowingDeleteDialog = false },
-            isShowingSentimentMenu = viewModel.isShowingSentimentMenu,
-            showSentimentMenu = viewModel::showEditSentimentMenu,
-            dismissSentimentMenu = viewModel::dismissEditSentimentMenu,
             saveSentiment = viewModel::saveSentiment,
-            isShowingAddIngestionButton = viewModel.isShowingAddIngestionButtonFlow.collectAsState().value
+            saveIsFavorite = viewModel::saveIsFavorite
         )
     }
 }
@@ -60,64 +52,60 @@ fun ExperienceScreenPreview(
     @PreviewParameter(
         OneExperienceScreenPreviewProvider::class,
         limit = 1
-    ) allThatIsNeeded: OneExperienceScreenPreviewProvider.AllThatIsNeeded
+    ) oneExperienceScreenModel: OneExperienceScreenModel
 ) {
     HealthAssistantTheme {
         ExperienceScreen(
-            experience = allThatIsNeeded.experience,
-            ingestionElements = allThatIsNeeded.ingestionElements,
-            cumulativeDoses = allThatIsNeeded.cumulativeDoses,
+            oneExperienceScreenModel = oneExperienceScreenModel,
             addIngestion = {},
             deleteExperience = {},
             navigateToEditExperienceScreen = {},
             navigateToIngestionScreen = {},
             navigateBack = {},
-            isShowingDialog = false,
-            showDialog = {},
-            dismissDialog = {},
-            isShowingSentimentMenu = false,
-            showSentimentMenu = {},
-            dismissSentimentMenu = {},
             saveSentiment = {},
-            isShowingAddIngestionButton = true
+            saveIsFavorite = {}
         )
     }
 }
 
 @Composable
 fun ExperienceScreen(
-    experience: Experience,
-    ingestionElements: List<OneExperienceViewModel.IngestionElement>,
-    cumulativeDoses: List<OneExperienceViewModel.CumulativeDose>,
+    oneExperienceScreenModel: OneExperienceScreenModel,
     addIngestion: () -> Unit,
     deleteExperience: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
-    isShowingDialog: Boolean,
-    showDialog: () -> Unit,
-    dismissDialog: () -> Unit,
-    isShowingSentimentMenu: Boolean,
-    showSentimentMenu: () -> Unit,
-    dismissSentimentMenu: () -> Unit,
     saveSentiment: (sentiment: Sentiment?) -> Unit,
-    isShowingAddIngestionButton: Boolean
+    saveIsFavorite: (Boolean) -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(experience.title)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(oneExperienceScreenModel.title)
+                        IconButton(onClick = navigateToEditExperienceScreen) {
+                            Icon(Icons.Default.Edit, contentDescription = "Edit Experience")
+                        }
+                    }
                 },
                 actions = {
-                    IconButton(onClick = navigateToEditExperienceScreen) {
-                        Icon(Icons.Default.Edit, contentDescription = "Edit Experience")
+                    val isFavorite = oneExperienceScreenModel.isFavorite
+                    IconToggleButton(checked = isFavorite, onCheckedChange = saveIsFavorite) {
+                        if (isFavorite) {
+                            Icon(Icons.Filled.Star, contentDescription = "Is Favorite")
+                        } else {
+                            Icon(Icons.Outlined.StarOutline, contentDescription = "Is not Favorite")
+                        }
                     }
+                    var isShowingDeleteDialog by remember { mutableStateOf(false) }
+
                 }
             )
         },
         floatingActionButton = {
-            if (isShowingAddIngestionButton) {
+            if (oneExperienceScreenModel.isShowingAddIngestionButton) {
                 ExtendedFloatingActionButton(
                     onClick = addIngestion,
                     icon = {
@@ -137,7 +125,7 @@ fun ExperienceScreen(
         ) {
             val horizontalPadding = 10.dp
             Spacer(modifier = Modifier.height(10.dp))
-            val ingestionDurationPairs = ingestionElements.map {
+            val ingestionDurationPairs = oneExperienceScreenModel.ingestionElements.map {
                 Pair(
                     first = it.ingestionWithCompanion,
                     second = it.roaDuration
@@ -169,13 +157,13 @@ fun ExperienceScreen(
                 }
                 Divider()
             }
-            if (ingestionElements.isNotEmpty()) {
+            if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
                 Column(
                     horizontalAlignment = Alignment.Start,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Spacer(modifier = Modifier.height(5.dp))
-                    ingestionElements.forEach {
+                    oneExperienceScreenModel.ingestionElements.forEach {
                         if (it.dateText != null) {
                             Text(text = it.dateText)
                         }
@@ -193,7 +181,7 @@ fun ExperienceScreen(
                 Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
-            if (cumulativeDoses.isNotEmpty()) {
+            if (oneExperienceScreenModel.cumulativeDoses.isNotEmpty()) {
                 Column(
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
@@ -202,23 +190,24 @@ fun ExperienceScreen(
                         style = MaterialTheme.typography.subtitle1,
                         modifier = Modifier.padding(top = 10.dp)
                     )
-                    cumulativeDoses.forEach {
+                    oneExperienceScreenModel.cumulativeDoses.forEach {
                         CumulativeDoseRow(cumulativeDose = it, modifier = Modifier.fillMaxWidth())
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                 }
                 Divider()
             }
+            var isShowingSentimentMenu by remember { mutableStateOf(false) }
             SentimentSection(
-                sentiment = experience.sentiment,
+                sentiment = oneExperienceScreenModel.sentiment,
                 isShowingEditSentiment = isShowingSentimentMenu,
-                show = showSentimentMenu,
-                dismiss = dismissSentimentMenu,
+                show = { isShowingSentimentMenu = true },
+                dismiss = { isShowingSentimentMenu = false },
                 saveSentiment = saveSentiment,
                 modifier = Modifier.padding(start = horizontalPadding)
             )
             Divider()
-            if (experience.text.isEmpty()) {
+            if (oneExperienceScreenModel.notes.isEmpty()) {
                 TextButton(
                     onClick = navigateToEditExperienceScreen,
                     modifier = Modifier.padding(horizontal = 5.dp)
@@ -239,7 +228,10 @@ fun ExperienceScreen(
                         .fillMaxWidth()
                         .padding(start = horizontalPadding)
                 ) {
-                    Text(text = experience.text, modifier = Modifier.padding(vertical = 10.dp))
+                    Text(
+                        text = oneExperienceScreenModel.notes,
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     IconButton(onClick = navigateToEditExperienceScreen) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Notes")
@@ -247,8 +239,9 @@ fun ExperienceScreen(
                 }
             }
             Divider()
+            var isShowingDeleteDialog by remember { mutableStateOf(false) }
             TextButton(
-                onClick = showDialog,
+                onClick = { isShowingDeleteDialog = true },
                 modifier = Modifier.padding(horizontal = 5.dp)
             ) {
                 Text(
@@ -256,9 +249,9 @@ fun ExperienceScreen(
                     style = MaterialTheme.typography.caption
                 )
             }
-            if (isShowingDialog) {
+            if (isShowingDeleteDialog) {
                 AlertDialog(
-                    onDismissRequest = dismissDialog,
+                    onDismissRequest = { isShowingDeleteDialog = false },
                     title = {
                         Text(text = "Delete Experience?")
                     },
@@ -268,7 +261,7 @@ fun ExperienceScreen(
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                dismissDialog()
+                                isShowingDeleteDialog = false
                                 deleteExperience()
                                 navigateBack()
                             }
@@ -278,7 +271,7 @@ fun ExperienceScreen(
                     },
                     dismissButton = {
                         TextButton(
-                            onClick = dismissDialog
+                            onClick = { isShowingDeleteDialog = false }
                         ) {
                             Text("Cancel")
                         }
@@ -290,7 +283,7 @@ fun ExperienceScreen(
 }
 
 @Composable
-fun CumulativeDoseRow(cumulativeDose: OneExperienceViewModel.CumulativeDose, modifier: Modifier) {
+fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,

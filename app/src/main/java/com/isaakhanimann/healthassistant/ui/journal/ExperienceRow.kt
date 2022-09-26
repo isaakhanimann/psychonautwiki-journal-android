@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -18,9 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import java.text.SimpleDateFormat
@@ -50,7 +49,7 @@ fun ExperienceRow(
         ) {
             val ingestions = experienceWithIngestionsAndCompanions.ingestionsWithCompanions
             val experience = experienceWithIngestionsAndCompanions.experience
-            ExperienceCircle(ingestions = ingestions, experienceSentiment = experience.sentiment)
+            ExperienceCircle(ingestions = ingestions)
             Column {
                 Text(
                     text = experience.title,
@@ -80,22 +79,33 @@ fun ExperienceRow(
                 }
             }
         }
-        val dateText = remember(experienceWithIngestionsAndCompanions.sortDate) {
-            val formatter = SimpleDateFormat("dd MMM yy", Locale.getDefault())
-            formatter.format(experienceWithIngestionsAndCompanions.sortDate) ?: ""
+        Column(
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxHeight()
+        ) {
+            Row {
+                val experience = experienceWithIngestionsAndCompanions.experience
+                experience.sentiment?.let {
+                    Icon(imageVector = it.icon, contentDescription = it.description)
+                }
+                if (experience.isFavorite) {
+                    Icon(imageVector = Icons.Filled.Star, contentDescription = "Is Favorite")
+                }
+            }
+            val dateText = remember(experienceWithIngestionsAndCompanions.sortDate) {
+                val formatter = SimpleDateFormat("dd MMM yy", Locale.getDefault())
+                formatter.format(experienceWithIngestionsAndCompanions.sortDate) ?: ""
+            }
+            Text(text = dateText)
         }
-        Text(text = dateText)
     }
 }
 
 @Composable
-fun ExperienceCircle(
-    ingestions: List<IngestionWithCompanion>,
-    experienceSentiment: Sentiment?
-) {
+fun ExperienceCircle(ingestions: List<IngestionWithCompanion>) {
     val isDarkTheme = isSystemInDarkTheme()
-    val circleSize = 45.dp
-    val iconSize = 35.dp
+    val circleSize = 40.dp
     if (ingestions.size >= 2) {
         val brush = remember(ingestions) {
             val colors =
@@ -108,12 +118,7 @@ fun ExperienceCircle(
                 .size(circleSize)
                 .clip(CircleShape)
                 .background(brush),
-            contentAlignment = Alignment.Center
-        ) {
-            if (experienceSentiment != null) {
-                SentimentIcon(sentiment = experienceSentiment, size = iconSize)
-            }
-        }
+        ) {}
     } else if (ingestions.size == 1) {
         Box(
             modifier = Modifier
@@ -124,33 +129,13 @@ fun ExperienceCircle(
                         isDarkTheme
                     )
                 ),
-            contentAlignment = Alignment.Center
-        ) {
-            if (experienceSentiment != null) {
-                SentimentIcon(sentiment = experienceSentiment, size = iconSize)
-            }
-        }
+        ) {}
     } else {
         Box(
             modifier = Modifier
                 .size(circleSize)
                 .clip(CircleShape)
                 .background(Color.LightGray.copy(0.1f)),
-            contentAlignment = Alignment.Center
-        ) {
-            if (experienceSentiment != null) {
-                SentimentIcon(sentiment = experienceSentiment, size = iconSize)
-            }
-        }
+        ) {}
     }
-}
-
-@Composable
-fun SentimentIcon(sentiment: Sentiment, size: Dp) {
-    Icon(
-        imageVector = sentiment.icon,
-        contentDescription = sentiment.description,
-        tint = MaterialTheme.colors.onSurface,
-        modifier = Modifier.size(size)
-    )
 }

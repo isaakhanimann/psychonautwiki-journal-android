@@ -1,8 +1,5 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,36 +27,28 @@ class OneExperienceViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-
-    var isShowingDeleteDialog by mutableStateOf(false)
-
-    var isShowingSentimentMenu by mutableStateOf(false)
-
-    fun showEditSentimentMenu() {
-        isShowingSentimentMenu = true
-    }
-
-    fun dismissEditSentimentMenu() {
-        isShowingSentimentMenu = false
-    }
-
     fun saveSentiment(sentiment: Sentiment?) {
-        val experience = experienceWithIngestionsFlow.value?.experience
-        if (experience != null) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            val experience = experienceWithIngestionsFlow.firstOrNull()?.experience
+            if (experience != null) {
                 experience.sentiment = sentiment
-                experienceRepo.update(experience = experience)
+                experienceRepo.update(experience)
             }
         }
     }
 
-    val experienceWithIngestionsFlow =
+    fun saveIsFavorite(isFavorite: Boolean) {
+        viewModelScope.launch {
+            val experience = experienceWithIngestionsFlow.firstOrNull()?.experience
+            if (experience != null) {
+                experience.isFavorite = isFavorite
+                experienceRepo.update(experience)
+            }
+        }
+    }
+
+    private val experienceWithIngestionsFlow =
         experienceRepo.getExperienceWithIngestionsAndCompanionsFlow(experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!)
-            .stateIn(
-                initialValue = null,
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
 
     private val currentTimeFlow: Flow<Date> = flow {
         while (true) {
@@ -68,7 +57,7 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
-    val isShowingAddIngestionButtonFlow = experienceWithIngestionsFlow.combine(currentTimeFlow) { experienceWithIngestions, currentTime ->
+    private val isShowingAddIngestionButtonFlow = experienceWithIngestionsFlow.combine(currentTimeFlow) { experienceWithIngestions, currentTime ->
         val ingestionTimes = experienceWithIngestions?.ingestionsWithCompanions?.map { it.ingestion.time }
         val lastIngestionTime = ingestionTimes?.maxOrNull()
         val cal = Calendar.getInstance(TimeZone.getDefault())
@@ -76,11 +65,7 @@ class OneExperienceViewModel @Inject constructor(
         cal.add(Calendar.HOUR_OF_DAY, -hourLimitToSeparateIngestions)
         val limitAgo = cal.time
         return@combine limitAgo < lastIngestionTime
-    }.stateIn(
-        initialValue = false,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    }
 
     private val sortedIngestionsWithCompanionsFlow = experienceWithIngestionsFlow.map { experience ->
         experience?.ingestionsWithCompanions?.sortedBy { it.ingestion.time } ?: emptyList()
@@ -107,36 +92,13 @@ class OneExperienceViewModel @Inject constructor(
             }
         }
 
-    val ingestionElementsFlow = ingestionsWithAssociatedDataFlow.map {
+    private val ingestionElementsFlow = ingestionsWithAssociatedDataFlow.map {
         getIngestionElements(it)
-    }.stateIn(
-        initialValue = emptyList(),
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    }
 
-    val cumulativeDosesFlow = ingestionsWithAssociatedDataFlow.map {
+    private val cumulativeDosesFlow = ingestionsWithAssociatedDataFlow.map {
         getCumulativeDoses(it)
-    }.stateIn(
-        initialValue = emptyList(),
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
-
-    data class CumulativeDose(
-        val substanceName: String,
-        val cumulativeDose: Double,
-        val units: String?,
-        val isEstimate: Boolean,
-        val doseClass: DoseClass?
-    )
-
-    data class IngestionElement(
-        val dateText: String?,
-        val ingestionWithCompanion: IngestionWithCompanion,
-        val roaDuration: RoaDuration?,
-        val doseClass: DoseClass?
-    )
+    }
 
     private fun getIngestionElements(sortedIngestionsWith: List<IngestionWithAssociatedData>): List<IngestionElement> {
         return sortedIngestionsWith.mapIndexed { index, ingestionWith ->
@@ -181,6 +143,27 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
+    val oneExperienceScreenModelFlow: StateFlow<OneExperienceScreenModel?> = isShowingAddIngestionButtonFlow.combine(ingestionElementsFlow) { isShowingAddIngestion, ingestionElements ->
+        Pair(first = isShowingAddIngestion, second = ingestionElements)
+    }.combine(cumulativeDosesFlow) { pair, cumulatives ->
+        Pair(first = pair, second = cumulatives)
+    }.combine(experienceWithIngestionsFlow) { pair, experienceWithIngestions ->
+        val experience = experienceWithIngestions?.experience ?: return@combine null
+        return@combine OneExperienceScreenModel(
+            isFavorite = experience.isFavorite,
+            sentiment = experience.sentiment,
+            title = experience.title,
+            notes = experience.text,
+            isShowingAddIngestionButton = pair.first.first,
+            ingestionElements = pair.first.second,
+            cumulativeDoses = pair.second
+        )
+    }.stateIn(
+        initialValue = null,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
     private companion object {
         fun getCumulativeDoses(ingestions: List<IngestionWithAssociatedData>): List<CumulativeDose> {
             return ingestions.groupBy { it.ingestionWithCompanion.ingestion.substanceName }
@@ -210,3 +193,28 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 }
+
+data class OneExperienceScreenModel(
+    val isFavorite: Boolean,
+    val sentiment: Sentiment?,
+    val title: String,
+    val notes: String,
+    val isShowingAddIngestionButton: Boolean,
+    val ingestionElements: List<IngestionElement>,
+    val cumulativeDoses: List<CumulativeDose>
+)
+
+data class CumulativeDose(
+    val substanceName: String,
+    val cumulativeDose: Double,
+    val units: String?,
+    val isEstimate: Boolean,
+    val doseClass: DoseClass?
+)
+
+data class IngestionElement(
+    val dateText: String?,
+    val ingestionWithCompanion: IngestionWithCompanion,
+    val roaDuration: RoaDuration?,
+    val doseClass: DoseClass?
+)

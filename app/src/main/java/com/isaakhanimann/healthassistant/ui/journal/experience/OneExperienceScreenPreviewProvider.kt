@@ -1,36 +1,37 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.*
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.ui.utils.getDate
 
 class OneExperienceScreenPreviewProvider :
-    PreviewParameterProvider<OneExperienceScreenPreviewProvider.AllThatIsNeeded> {
+    PreviewParameterProvider<OneExperienceScreenModel> {
 
-    data class AllThatIsNeeded(
-        val experience: Experience,
-        val ingestionElements: List<OneExperienceViewModel.IngestionElement>,
-        val cumulativeDoses: List<OneExperienceViewModel.CumulativeDose>
-    )
-
-    override val values: Sequence<AllThatIsNeeded> = sequenceOf(
-        AllThatIsNeeded(
-            experience = Experience(
-                id = 0,
-                title = "Day at Lake Geneva",
-                text = "Some notes",
-                sentiment = Sentiment.SATISFIED
-            ),
+    override val values: Sequence<OneExperienceScreenModel> = sequenceOf(
+        OneExperienceScreenModel(
+            isFavorite = false,
+            sentiment = null,
+            title = "Day at Lake Geneva",
+            notes = "Some Notes",
+            isShowingAddIngestionButton = true,
             ingestionElements = listOf(
-                OneExperienceViewModel.IngestionElement(
+                IngestionElement(
                     dateText = "Sat, 19 Feb 2022",
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "MDMA",
-                            time = getDate(year = 2022, month = 2, day = 19, hourOfDay = 20, minute = 5)!!,
+                            time = getDate(
+                                year = 2022,
+                                month = 2,
+                                day = 19,
+                                hourOfDay = 20,
+                                minute = 5
+                            )!!,
                             administrationRoute = AdministrationRoute.ORAL,
                             dose = 90.0,
                             isDoseAnEstimate = false,
@@ -46,12 +47,18 @@ class OneExperienceScreenPreviewProvider :
                     roaDuration = null,
                     doseClass = DoseClass.COMMON
                 ),
-                OneExperienceViewModel.IngestionElement(
+                IngestionElement(
                     dateText = null,
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",
-                            time = getDate(year = 2022, month = 2, day = 19, hourOfDay = 23, minute = 5)!!,
+                            time = getDate(
+                                year = 2022,
+                                month = 2,
+                                day = 19,
+                                hourOfDay = 23,
+                                minute = 5
+                            )!!,
                             administrationRoute = AdministrationRoute.INSUFFLATED,
                             dose = 40.0,
                             isDoseAnEstimate = false,
@@ -67,12 +74,18 @@ class OneExperienceScreenPreviewProvider :
                     roaDuration = null,
                     doseClass = DoseClass.COMMON
                 ),
-                OneExperienceViewModel.IngestionElement(
+                IngestionElement(
                     dateText = "Sun, 20 Feb 2022",
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",
-                            time = getDate(year = 2022, month = 2, day = 20, hourOfDay = 1, minute = 15)!!,
+                            time = getDate(
+                                year = 2022,
+                                month = 2,
+                                day = 20,
+                                hourOfDay = 1,
+                                minute = 15
+                            )!!,
                             administrationRoute = AdministrationRoute.INSUFFLATED,
                             dose = 20.0,
                             isDoseAnEstimate = false,
@@ -90,7 +103,7 @@ class OneExperienceScreenPreviewProvider :
                 )
             ),
             cumulativeDoses = listOf(
-                OneExperienceViewModel.CumulativeDose(
+                CumulativeDose(
                     substanceName = "Cocaine",
                     cumulativeDose = 60.0,
                     units = "mg",

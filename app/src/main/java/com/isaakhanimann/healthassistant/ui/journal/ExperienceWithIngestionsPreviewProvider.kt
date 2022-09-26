@@ -15,7 +15,8 @@ class ExperienceWithIngestionsPreviewProvider :
                 id = 0,
                 title = "Day at Lake Geneva",
                 text = "Some notes",
-                sentiment = Sentiment.SATISFIED
+                sentiment = Sentiment.SATISFIED,
+                isFavorite = true
             ),
             ingestionsWithCompanions = listOf(
                 IngestionWithCompanion(
@@ -74,7 +75,8 @@ class ExperienceWithIngestionsPreviewProvider :
                 id = 0,
                 title = "This one has a very very very long title in case somebody wants to be creative with the naming.",
                 text = "Some notes",
-                sentiment = null
+                sentiment = null,
+                isFavorite = true
             ),
             ingestionsWithCompanions = listOf(
                 IngestionWithCompanion(

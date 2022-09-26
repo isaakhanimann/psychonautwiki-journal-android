@@ -11,5 +11,6 @@ data class Experience(
     var title: String,
     var text: String,
     val creationDate: Date = Date(),
-    var sentiment: Sentiment?
+    var sentiment: Sentiment?,
+    var isFavorite: Boolean = false
 )

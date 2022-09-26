@@ -22,7 +22,7 @@ import java.util.*
 
 @Preview
 @Composable
-fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionElement: OneExperienceViewModel.IngestionElement) {
+fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionElement: IngestionElement) {
     IngestionRow(
         ingestionElement = ingestionElement,
         modifier = Modifier.fillMaxWidth()
@@ -32,14 +32,15 @@ fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) in
 
 @Composable
 fun IngestionRow(
-    ingestionElement: OneExperienceViewModel.IngestionElement,
+    ingestionElement: IngestionElement,
     modifier: Modifier = Modifier,
 ) {
     val ingestionWithCompanion = ingestionElement.ingestionWithCompanion
     val ingestion = ingestionWithCompanion.ingestion
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = modifier
     ) {
         val isDarkTheme = isSystemInDarkTheme()
         Surface(
