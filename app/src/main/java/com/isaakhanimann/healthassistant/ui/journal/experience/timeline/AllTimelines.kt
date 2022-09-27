@@ -23,7 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import kotlinx.coroutines.delay
-import java.util.*
+import java.time.Duration
+import java.time.Instant
 
 
 @Preview(showBackground = true)
@@ -65,12 +66,12 @@ fun AllTimelines(
             }
         }
         var currentTime by remember {
-            mutableStateOf(Date())
+            mutableStateOf(Instant.now())
         }
         LaunchedEffect(key1 = currentTime) {
             val oneSec = 1000L
             delay(oneSec)
-            currentTime = Date()
+            currentTime = Instant.now()
         }
         Canvas(modifier = modifier) {
             val canvasWithLabelsHeight = size.height
@@ -167,16 +168,16 @@ fun DrawScope.drawIngestion(
 }
 
 fun DrawScope.drawCurrentTime(
-    startTime: Date,
+    startTime: Instant,
     timelineWidthInSeconds: Float,
-    currentTime: Date,
+    currentTime: Instant,
     pixelsPerSec: Float,
     isDarkTheme: Boolean,
     canvasHeightOuter: Float
 ) {
-    val endTime = Date(startTime.time + (timelineWidthInSeconds.toLong() * 1000))
-    if (startTime.before(currentTime) && endTime.after(currentTime)) {
-        val timeStartInSec = (currentTime.time - startTime.time) / 1000
+    val endTime = startTime.plusSeconds(timelineWidthInSeconds.toLong())
+    if (startTime.isBefore(currentTime) && endTime.isAfter(currentTime)) {
+        val timeStartInSec = Duration.between(startTime, currentTime).seconds
         val timeStartX = timeStartInSec * pixelsPerSec
         val color = if (isDarkTheme) Color.White else Color.Black
         drawLine(

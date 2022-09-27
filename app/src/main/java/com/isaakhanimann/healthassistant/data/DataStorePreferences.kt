@@ -6,17 +6,17 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.isaakhanimann.healthassistant.ui.utils.getInstant
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-val initialDate: Date get() {
-    val calendar: Calendar = Calendar.getInstance()
-    calendar.set(2022, 6, 18, 14, 0)
-    return calendar.time
+val initialDate: Instant get() {
+    return getInstant(2022, 6, 18, 14, 0)!!
 }
 
 @Singleton
@@ -26,11 +26,11 @@ class DataStorePreferences @Inject constructor(
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
     private val dateKey = longPreferencesKey("substancesDate")
 
-    val dateFlow: Flow<Date> = context.dataStore.data
+    val instantFlow: Flow<Instant> = context.dataStore.data
         .map { preferences ->
             val secSince = preferences[dateKey]
             if (secSince!=null) {
-                Date(secSince)
+                Instant.ofEpochSecond(secSince)
             } else {
                 initialDate
             }
@@ -38,7 +38,7 @@ class DataStorePreferences @Inject constructor(
 
     suspend fun resetDate() {
         context.dataStore.edit { preferences ->
-            preferences[dateKey] = initialDate.time
+            preferences[dateKey] = initialDate.epochSecond
         }
     }
 

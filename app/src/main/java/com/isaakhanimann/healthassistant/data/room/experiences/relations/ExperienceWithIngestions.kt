@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import java.util.*
+import java.time.Instant
 
 data class ExperienceWithIngestions(
     @Embedded val experience: Experience,
@@ -14,5 +14,5 @@ data class ExperienceWithIngestions(
         entityColumn = "experienceId"
     ) val ingestions: List<Ingestion>
 ) {
-    val sortDate: Date get() = ingestions.firstOrNull()?.time ?: experience.creationDate
+    val sortInstant: Instant get() = ingestions.firstOrNull()?.time ?: experience.creationDate
 }

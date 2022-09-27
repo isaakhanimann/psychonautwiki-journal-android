@@ -5,7 +5,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestio
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.ui.utils.getDate
+import com.isaakhanimann.healthassistant.ui.utils.getInstant
 
 class SubstanceCompanionScreenPreviewProvider :
     PreviewParameterProvider<Pair<SubstanceCompanion, List<IngestionsBurst>>> {
@@ -21,7 +21,7 @@ class SubstanceCompanionScreenPreviewProvider :
                     ingestions = listOf(
                         Ingestion(
                             substanceName = "Cocaine",
-                            time = getDate(
+                            time = getInstant(
                                 year = 2022,
                                 month = 7,
                                 day = 20,
@@ -37,7 +37,7 @@ class SubstanceCompanionScreenPreviewProvider :
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
-                            time = getDate(
+                            time = getInstant(
                                 year = 2022,
                                 month = 7,
                                 day = 20,
@@ -58,7 +58,7 @@ class SubstanceCompanionScreenPreviewProvider :
                     ingestions = listOf(
                         Ingestion(
                             substanceName = "Cocaine",
-                            time = getDate(
+                            time = getInstant(
                                 year = 2022,
                                 month = 7,
                                 day = 4,
@@ -74,7 +74,7 @@ class SubstanceCompanionScreenPreviewProvider :
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
-                            time = getDate(
+                            time = getInstant(
                                 year = 2022,
                                 month = 7,
                                 day = 4,

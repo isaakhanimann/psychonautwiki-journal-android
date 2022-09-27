@@ -14,10 +14,9 @@ import com.isaakhanimann.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.healthassistant.ui.utils.getTimeDifferenceText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.*
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @HiltViewModel
 class CheckInteractionsViewModel @Inject constructor(
@@ -63,8 +62,7 @@ class CheckInteractionsViewModel @Inject constructor(
                 interactionsToFilterOut = dangerousInteractions + unsafeInteractions,
                 categories = substance.categories
             )
-            val twoDaysInMs = 2.toDuration(DurationUnit.DAYS).inWholeMilliseconds
-            val twoDaysAgo = Date(System.currentTimeMillis() - twoDaysInMs)
+            val twoDaysAgo = Instant.now().minus(2, ChronoUnit.DAYS)
             latestIngestionsOfEverySubstanceSinceTwoDays =
                 experienceRepo.getLatestIngestionOfEverySubstanceSinceDate(twoDaysAgo)
             checkInteractionsAndMaybeShowAlert()
@@ -91,28 +89,28 @@ class CheckInteractionsViewModel @Inject constructor(
         } else {
             return
         }
-        val now = Date()
+        val now = Instant.now()
         val messages = dangerousIngestions.map { ingestion ->
             "Dangerous Interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
-                    fromDate = ingestion.time,
-                    toDate = now
+                    fromInstant = ingestion.time,
+                    toInstant = now
                 )
             } ago)."
         }.toMutableList()
         messages += unsafeIngestions.map { ingestion ->
             "Unsafe Interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
-                    fromDate = ingestion.time,
-                    toDate = now
+                    fromInstant = ingestion.time,
+                    toInstant = now
                 )
             } ago)."
         }
         messages += uncertainIngestions.map { ingestion ->
             "Uncertain Interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
-                    fromDate = ingestion.time,
-                    toDate = now
+                    fromInstant = ingestion.time,
+                    toInstant = now
                 )
             } ago)."
         }

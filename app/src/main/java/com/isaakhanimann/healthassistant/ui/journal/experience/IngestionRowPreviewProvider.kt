@@ -7,7 +7,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
-import java.util.*
+import java.time.Instant
 
 class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
     override val values: Sequence<IngestionElement> = sequenceOf(
@@ -16,7 +16,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
             ingestionWithCompanion = IngestionWithCompanion(
                 ingestion = Ingestion(
                     substanceName = "MDMA",
-                    time = Date(),
+                    time = Instant.now(),
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
                     isDoseAnEstimate = false,
@@ -37,7 +37,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
             ingestionWithCompanion = IngestionWithCompanion(
                 ingestion = Ingestion(
                     substanceName = "LSD",
-                    time = Date(),
+                    time = Instant.now(),
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = null,
                     isDoseAnEstimate = false,

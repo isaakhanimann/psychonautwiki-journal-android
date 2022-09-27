@@ -11,8 +11,11 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.Period
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,22 +33,20 @@ class StatsViewModel @Inject constructor(
     }
 
     private val startDateFlow = _optionFlow.map {
-        val cal = Calendar.getInstance(TimeZone.getDefault())
-        cal.time = Date()
-        it.subtractWholeRange(cal)
-        return@map cal.time
+        return@map Instant.now().minus(it.allBucketSizes)
     }
 
     private val startDateTextFlow = startDateFlow.map {
-        val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        formatter.format(it) ?: ""
+        val dateTime = LocalDateTime.ofInstant(it, ZoneId.systemDefault())
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+        return@map dateTime.format(formatter)
     }
 
     private val allExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
         experienceRepo.getSortedExperiencesWithIngestionsFlow()
     private val relevantExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
         allExperiencesSortedFlow.combine(startDateFlow) { experiences, startDate ->
-            return@combine experiences.takeWhile { it.sortDate > startDate }
+            return@combine experiences.takeWhile { it.sortInstant > startDate }
         }
 
     private val companionFlow = experienceRepo.getAllSubstanceCompanionsFlow()
@@ -53,12 +54,10 @@ class StatsViewModel @Inject constructor(
     private val experienceChartBucketsFlow: Flow<List<List<ColorCount>>> =
         relevantExperiencesSortedFlow.combine(optionFlow) { sortedExperiences, option ->
             var remainingExperiences = sortedExperiences
-            val cal = Calendar.getInstance(TimeZone.getDefault())
-            cal.time = Date()
             val buckets = mutableListOf<List<ExperienceWithIngestions>>()
             for (i in 0 until option.bucketCount) {
-                option.subtractBucketSize(cal)
-                val experiencesForBucket = remainingExperiences.takeWhile { it.sortDate > cal.time }
+                val startInstant = Instant.now().minus(option.oneBucketSize)
+                val experiencesForBucket = remainingExperiences.takeWhile { it.sortInstant > startInstant }
                 buckets.add(experiencesForBucket)
                 val numExperiences = experiencesForBucket.size
                 remainingExperiences =
@@ -185,66 +184,41 @@ enum class TimePickerOption {
         override val displayText = "7D"
         override val tabIndex = 0
         override val bucketCount = 7
-        override fun subtractBucketSize(cal: Calendar) {
-            cal.add(Calendar.DAY_OF_MONTH, -1)
-        }
-
-        override fun subtractWholeRange(cal: Calendar) {
-            cal.add(Calendar.WEEK_OF_YEAR, -1)
-        }
+        override val oneBucketSize: Period = Period.ofDays(1)
+        override val allBucketSizes: Period = Period.ofDays(7)
     },
     DAYS_30 {
         override val displayText = "30D"
         override val tabIndex = 1
         override val bucketCount = 30
-        override fun subtractBucketSize(cal: Calendar) {
-            cal.add(Calendar.DAY_OF_MONTH, -1)
-        }
-
-        override fun subtractWholeRange(cal: Calendar) {
-            cal.add(Calendar.MONTH, -1)
-        }
+        override val oneBucketSize: Period = Period.ofDays(1)
+        override val allBucketSizes: Period = Period.ofDays(30)
     },
     WEEKS_26 {
         override val displayText = "26W"
         override val tabIndex = 2
         override val bucketCount = 26
-        override fun subtractBucketSize(cal: Calendar) {
-            cal.add(Calendar.WEEK_OF_YEAR, -1)
-        }
-
-        override fun subtractWholeRange(cal: Calendar) {
-            cal.add(Calendar.WEEK_OF_YEAR, -26)
-        }
+        override val oneBucketSize: Period = Period.ofWeeks(1)
+        override val allBucketSizes: Period = Period.ofWeeks(26)
     },
     MONTHS_12 {
         override val displayText = "12M"
         override val tabIndex = 3
         override val bucketCount = 12
-        override fun subtractBucketSize(cal: Calendar) {
-            cal.add(Calendar.MONTH, -1)
-        }
-
-        override fun subtractWholeRange(cal: Calendar) {
-            cal.add(Calendar.YEAR, -1)
-        }
+        override val oneBucketSize: Period = Period.ofMonths(1)
+        override val allBucketSizes: Period = Period.ofMonths(12)
     },
     YEARS_10 {
         override val displayText = "10Y"
         override val tabIndex = 4
         override val bucketCount = 10
-        override fun subtractBucketSize(cal: Calendar) {
-            cal.add(Calendar.YEAR, -1)
-        }
-
-        override fun subtractWholeRange(cal: Calendar) {
-            cal.add(Calendar.YEAR, -10)
-        }
+        override val oneBucketSize: Period = Period.ofYears(1)
+        override val allBucketSizes: Period = Period.ofYears(10)
     };
 
     abstract val displayText: String
     abstract val tabIndex: Int
     abstract val bucketCount: Int
-    abstract fun subtractBucketSize(cal: Calendar)
-    abstract fun subtractWholeRange(cal: Calendar)
+    abstract val oneBucketSize: Period
+    abstract val allBucketSizes: Period
 }

@@ -1,13 +1,17 @@
 package com.isaakhanimann.healthassistant.ui.utils
 
-import java.util.*
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
-fun getDate(year: Int, month: Int, day: Int, hourOfDay: Int, minute: Int): Date? {
-    val cal = Calendar.getInstance(TimeZone.getDefault())
-    cal.set(Calendar.YEAR, year)
-    cal.set(Calendar.MONTH, month)
-    cal.set(Calendar.DAY_OF_MONTH, day)
-    cal.set(Calendar.HOUR_OF_DAY, hourOfDay)
-    cal.set(Calendar.MINUTE, minute)
-    return cal.time
+fun getInstant(year: Int, month: Int, day: Int, hourOfDay: Int, minute: Int): Instant? {
+    val dateTime = LocalDateTime.of(year, month, day, hourOfDay, minute)
+    return dateTime.atZone(ZoneId.systemDefault()).toInstant()
+}
+
+fun Instant.getStringOfPattern(pattern: String): String {
+    val dateTime = LocalDateTime.ofInstant(this, ZoneId.systemDefault())
+    val formatter = DateTimeFormatter.ofPattern(pattern)
+    return dateTime.format(formatter)
 }

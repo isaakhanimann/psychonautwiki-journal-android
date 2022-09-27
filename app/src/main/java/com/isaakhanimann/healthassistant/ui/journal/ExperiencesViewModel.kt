@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import java.util.*
+import java.time.ZoneId
 import javax.inject.Inject
 
 
@@ -27,10 +27,9 @@ class ExperiencesViewModel @Inject constructor(
 
     companion object {
         fun groupExperiencesByYear(experiencesWithIngestions: List<ExperienceWithIngestionsAndCompanions>): Map<String, List<ExperienceWithIngestionsAndCompanions>> {
-            val cal = Calendar.getInstance(TimeZone.getDefault())
             return experiencesWithIngestions.groupBy { out ->
-                cal.time = out.sortDate
-                cal.get(Calendar.YEAR).toString()
+                out.sortInstant.atZone(ZoneId.systemDefault()).year.toString()
+
             }
         }
     }

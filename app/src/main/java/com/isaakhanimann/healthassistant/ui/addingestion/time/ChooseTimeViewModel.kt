@@ -16,14 +16,17 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.Substance
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.*
+import com.isaakhanimann.healthassistant.ui.utils.getInstant
+import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.Instant
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
-const val hourLimitToSeparateIngestions = 12
+const val hourLimitToSeparateIngestions: Long = 12
 
 @HiltViewModel
 class ChooseTimeViewModel @Inject constructor(
@@ -33,14 +36,14 @@ class ChooseTimeViewModel @Inject constructor(
 ) : ViewModel() {
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
     val substance: Substance?
-    private val calendar = Calendar.getInstance()
+    private val zonedDateTime = Instant.now().atZone(ZoneId.systemDefault())
     val dateAndTimeFlow = MutableStateFlow(
         DateAndTime(
-            year = calendar.get(Calendar.YEAR),
-            month = calendar.get(Calendar.MONTH),
-            day = calendar.get(Calendar.DAY_OF_MONTH),
-            hour = calendar.get(Calendar.HOUR_OF_DAY),
-            minute = calendar.get(Calendar.MINUTE)
+            year = zonedDateTime.year,
+            month = zonedDateTime.monthValue,
+            day = zonedDateTime.dayOfMonth,
+            hour = zonedDateTime.hour,
+            minute = zonedDateTime.minute
         )
     )
 
@@ -48,18 +51,15 @@ class ChooseTimeViewModel @Inject constructor(
 
     private val experienceWithIngestionsToAddToFlow: Flow<ExperienceWithIngestions?> =
         sortedExperiencesFlow.combine(dateAndTimeFlow) { sortedExperiences, relevantDateFields ->
-            val selectedDate = relevantDateFields.currentlySelectedDate
+            val selectedInstant = relevantDateFields.currentlySelectedInstant
             return@combine sortedExperiences.firstOrNull { experience ->
                 val sortedIngestions = experience.ingestions.sortedBy { it.time }
                 val firstIngestionTime = sortedIngestions.firstOrNull()?.time
                 val lastIngestionTime = sortedIngestions.lastOrNull()?.time
-                val cal = Calendar.getInstance(TimeZone.getDefault())
-                cal.time = selectedDate
-                cal.add(Calendar.HOUR_OF_DAY, -hourLimitToSeparateIngestions)
-                val selectedDateMinusLimit = cal.time
-                cal.time = selectedDate
-                cal.add(Calendar.HOUR_OF_DAY, hourLimitToSeparateIngestions)
-                val selectedDatePlusLimit = cal.time
+                val selectedDateMinusLimit =
+                    selectedInstant.minus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
+                val selectedDatePlusLimit =
+                    selectedInstant.plus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
                 return@firstOrNull selectedDateMinusLimit < lastIngestionTime && selectedDatePlusLimit > firstIngestionTime
             }
         }
@@ -194,19 +194,19 @@ class ChooseTimeViewModel @Inject constructor(
         viewModelScope.launch {
             val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
             val oldIdToUse = experienceWithIngestionsToAddToFlow.firstOrNull()?.experience?.id
-            val userWantsToCreateANewExperience = !(userWantsToContinueSameExperienceFlow.firstOrNull() ?: true)
+            val userWantsToCreateANewExperience =
+                !(userWantsToContinueSameExperienceFlow.firstOrNull() ?: true)
             val substanceCompanion = SubstanceCompanion(
                 substanceName,
                 color = selectedColor
             )
-            val ingestionTime = dateAndTimeFlow.first().currentlySelectedDate
+            val ingestionTime = dateAndTimeFlow.first().currentlySelectedInstant
             if (userWantsToCreateANewExperience || oldIdToUse == null) {
-                val formatter = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
                 val newExperience = Experience(
                     id = newIdToUse,
-                    title = formatter.format(ingestionTime),
+                    title = ingestionTime.getStringOfPattern("dd MMMM yyyy"),
                     text = "",
-                    creationDate = Date(),
+                    creationDate = Instant.now(),
                     sentiment = null
                 )
                 val newIngestion = Ingestion(
@@ -252,20 +252,18 @@ data class DateAndTime(
     val hour: Int,
     val minute: Int,
 ) {
-    val currentlySelectedDate: Date
+    val currentlySelectedInstant: Instant
         get() {
-            val calendar = Calendar.getInstance()
-            calendar.set(year, month, day, hour, minute)
-            return calendar.time
+            return getInstant(year, month, day, hour, minute) ?: Instant.now()
         }
+
     val dateString: String
         get() {
-            val formatter = SimpleDateFormat("EEE dd MMM yyyy", Locale.getDefault())
-            return formatter.format(currentlySelectedDate) ?: "Unknown"
+            return currentlySelectedInstant.getStringOfPattern("EEE dd MMM yyyy")
         }
+
     val timeString: String
         get() {
-            val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
-            return formatter.format(currentlySelectedDate) ?: "Unknown"
+            return currentlySelectedInstant.getStringOfPattern("HH:mm")
         }
 }

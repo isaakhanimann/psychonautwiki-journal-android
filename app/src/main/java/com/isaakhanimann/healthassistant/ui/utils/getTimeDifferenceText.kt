@@ -1,12 +1,11 @@
 package com.isaakhanimann.healthassistant.ui.utils
 
-import java.util.*
-import kotlin.math.roundToInt
+import java.time.Duration
+import java.time.Instant
 
-fun getTimeDifferenceText(fromDate: Date, toDate: Date): String {
-    val diff: Long = toDate.time - fromDate.time
-    val seconds = diff / 1000.0
-    val minutes = seconds / 60
+fun getTimeDifferenceText(fromInstant: Instant, toInstant: Instant): String {
+    val diff = Duration.between(fromInstant, toInstant)
+    val minutes = diff.toMinutes().toFloat()
     val hours = minutes / 60
     val days = hours / 24
     val weeks = days / 7
@@ -23,6 +22,6 @@ fun getTimeDifferenceText(fromDate: Date, toDate: Date): String {
     } else if (hours > 1) {
         String.format("%.1f", hours) + " hours"
     } else {
-        minutes.roundToInt().toString() + " minutes"
+        "$minutes minutes"
     }
 }

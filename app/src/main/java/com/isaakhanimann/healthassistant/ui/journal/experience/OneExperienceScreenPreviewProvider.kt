@@ -7,7 +7,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
-import com.isaakhanimann.healthassistant.ui.utils.getDate
+import com.isaakhanimann.healthassistant.ui.utils.getInstant
 
 class OneExperienceScreenPreviewProvider :
     PreviewParameterProvider<OneExperienceScreenModel> {
@@ -25,7 +25,7 @@ class OneExperienceScreenPreviewProvider :
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "MDMA",
-                            time = getDate(
+                            time = getInstant(
                                 year = 2022,
                                 month = 2,
                                 day = 19,
@@ -52,7 +52,7 @@ class OneExperienceScreenPreviewProvider :
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",
-                            time = getDate(
+                            time = getInstant(
                                 year = 2022,
                                 month = 2,
                                 day = 19,
@@ -79,7 +79,7 @@ class OneExperienceScreenPreviewProvider :
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",
-                            time = getDate(
+                            time = getInstant(
                                 year = 2022,
                                 month = 2,
                                 day = 20,

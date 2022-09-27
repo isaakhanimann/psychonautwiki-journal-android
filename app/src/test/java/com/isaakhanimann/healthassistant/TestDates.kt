@@ -1,11 +1,14 @@
 package com.isaakhanimann.healthassistant
 
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AxisDrawable
-import com.isaakhanimann.healthassistant.ui.utils.getDate
+import com.isaakhanimann.healthassistant.ui.utils.getInstant
+import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import com.isaakhanimann.healthassistant.ui.utils.getTimeDifferenceText
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Test
-import java.util.*
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -15,44 +18,42 @@ import java.util.*
 class TestDates {
     @Test
     fun datesBetweenAreCorrect() {
-        val cal = Calendar.getInstance(TimeZone.getDefault())
-        cal.set(Calendar.HOUR_OF_DAY, 14)
-        cal.set(Calendar.MINUTE, 20)
-        val startTime = cal.time
-        cal.set(Calendar.HOUR_OF_DAY, 20)
-        cal.set(Calendar.MINUTE, 20)
-        val endTime = cal.time
-        val fullHours = AxisDrawable.getDatesBetween(startTime = startTime, endTime = endTime, stepSizeInHours = 1)
+        val startTime = getInstant(2022, 6, day = 5, hourOfDay = 14, minute = 20)!!
+        val endTime = getInstant(2022, 6, day = 5, hourOfDay = 20, minute = 20)!!
+        val fullHours = AxisDrawable.getInstantsBetween(
+            startTime = startTime,
+            endTime = endTime,
+            stepSizeInHours = 1
+        )
         assertEquals(6, fullHours.size)
     }
 
     @Test
-    fun dateCreation() {
-        assertNotNull(getDate(year = 2022, month = 7, day = 5, hourOfDay = 14, minute = 20))
-        assertNotNull(getDate(year = 2022, month = 7, day = 5, hourOfDay = 12, minute = 30))
-    }
-
-    @Test
     fun dateDifferences() {
-        val twoDaysInMs = 2*24*60*60*1000
-        val threeHours = 3*60*60*1000
-        val date = Date(Date().time - twoDaysInMs + threeHours)
-        val text = getTimeDifferenceText(fromDate = date, toDate = Date())
-        assertEquals("2 days", text)
+        val fromDate = Instant.now().minus(2, ChronoUnit.DAYS).plus(3, ChronoUnit.HOURS)
+        val text = getTimeDifferenceText(fromDate, Instant.now())
+        assertEquals("1,9 days", text)
     }
 
     @Test
     fun dateRange() {
-        val cal = Calendar.getInstance(TimeZone.getDefault())
-        val firstIngestionTime = getDate(year = 2022, month = 9, day = 23, hourOfDay = 14, minute = 20)!!
-        val lastIngestionTime = getDate(year = 2022, month = 9, day = 23, hourOfDay = 23, minute = 20)!!
-        val selectedDate = getDate(year = 2022, month = 9, day = 21, hourOfDay = 23, minute = 20)!!
-        cal.time = selectedDate
-        cal.add(Calendar.HOUR_OF_DAY, -12)
-        val selectedDateMinus12 = cal.time
-        cal.time = selectedDate
-        cal.add(Calendar.HOUR_OF_DAY, 12)
-        val selectedDatePlus12 = cal.time
-        assertFalse(selectedDateMinus12 < lastIngestionTime && selectedDatePlus12 > firstIngestionTime)
+        val firstIngestionTime =
+            getInstant(year = 2022, month = 9, day = 23, hourOfDay = 14, minute = 20)!!
+        val lastIngestionTime =
+            getInstant(year = 2022, month = 9, day = 23, hourOfDay = 23, minute = 20)!!
+        val selectedDate =
+            getInstant(year = 2022, month = 9, day = 21, hourOfDay = 23, minute = 20)!!
+        assertFalse(
+            selectedDate.minus(
+                12,
+                ChronoUnit.HOURS
+            ) < lastIngestionTime && selectedDate.plus(12, ChronoUnit.HOURS) > firstIngestionTime
+        )
+    }
+
+    @Test
+    fun testTimeZone() {
+        val instant = getInstant(year = 2022, month = 9, day = 23, hourOfDay = 9, minute = 20)!!
+        assertEquals("09:20", instant.getStringOfPattern("HH:mm"))
     }
 }

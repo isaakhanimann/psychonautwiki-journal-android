@@ -22,8 +22,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import java.text.SimpleDateFormat
-import java.util.*
+import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 
 @Preview(showBackground = true)
 @Composable
@@ -93,9 +92,8 @@ fun ExperienceRow(
                     Icon(imageVector = Icons.Filled.Star, contentDescription = "Is Favorite")
                 }
             }
-            val dateText = remember(experienceWithIngestionsAndCompanions.sortDate) {
-                val formatter = SimpleDateFormat("dd MMM yy", Locale.getDefault())
-                formatter.format(experienceWithIngestionsAndCompanions.sortDate) ?: ""
+            val dateText = remember(experienceWithIngestionsAndCompanions.sortInstant) {
+                experienceWithIngestionsAndCompanions.sortInstant.getStringOfPattern("dd MMM yy")
             }
             Text(text = dateText)
         }

@@ -9,7 +9,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.relations.Experie
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithExperience
 import kotlinx.coroutines.flow.Flow
-import java.util.*
+import java.time.Instant
 
 @Dao
 interface ExperienceDao {
@@ -22,14 +22,14 @@ interface ExperienceDao {
 
     @Query(
         "SELECT * FROM ingestion as i" +
-                " INNER JOIN (SELECT id, MAX(time) AS maxTime FROM ingestion WHERE time > :date GROUP BY substanceName) as sub" +
+                " INNER JOIN (SELECT id, MAX(time) AS maxTime FROM ingestion WHERE time > :instant GROUP BY substanceName) as sub" +
                 " ON i.id = sub.id AND i.time = sub.maxTime" +
                 " ORDER BY time DESC"
     )
-    suspend fun getLatestIngestionOfEverySubstanceSinceDate(date: Date): List<Ingestion>
+    suspend fun getLatestIngestionOfEverySubstanceSinceDate(instant: Instant): List<Ingestion>
 
-    @Query("SELECT * FROM ingestion WHERE time > :date")
-    suspend fun getIngestionsSinceDate(date: Date): List<Ingestion>
+    @Query("SELECT * FROM ingestion WHERE time > :instant")
+    suspend fun getIngestionsSinceDate(instant: Instant): List<Ingestion>
 
     @Query("SELECT * FROM ingestion")
     suspend fun getAllIngestions(): List<Ingestion>
@@ -69,8 +69,8 @@ interface ExperienceDao {
     fun getIngestionWithExperienceFlow(id: Int): Flow<IngestionWithExperience?>
 
     @Transaction
-    @Query("SELECT * FROM ingestion WHERE time > :fromDate AND time < :toDate")
-    fun getIngestionWithExperiencesFlow(fromDate: Date, toDate: Date): Flow<List<IngestionWithExperience>>
+    @Query("SELECT * FROM ingestion WHERE time > :fromInstant AND time < :toInstant")
+    fun getIngestionWithExperiencesFlow(fromInstant: Instant, toInstant: Instant): Flow<List<IngestionWithExperience>>
 
     @Query("SELECT * FROM ingestion WHERE id =:id")
     fun getIngestionFlow(id: Int): Flow<Ingestion?>

@@ -13,7 +13,8 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableStrin
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.*
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +29,7 @@ class EditIngestionViewModel @Inject constructor(
     var units by mutableStateOf("")
     var experienceId by mutableStateOf(1)
 
-    private val dateFlow = MutableStateFlow(Date())
+    private val dateFlow = MutableStateFlow(Instant.now())
 
     init {
         val id = state.get<Int>(INGESTION_ID_KEY)!!
@@ -45,13 +46,8 @@ class EditIngestionViewModel @Inject constructor(
     }
 
     val relevantExperiences: StateFlow<List<ExperienceOption>> = dateFlow.map {
-        val cal = Calendar.getInstance(TimeZone.getDefault())
-        cal.time = it
-        cal.add(Calendar.DAY_OF_YEAR, -2)
-        val fromDate = cal.time
-        cal.time = it
-        cal.add(Calendar.DAY_OF_YEAR, 2)
-        val toDate = cal.time
+        val fromDate = it.minus(2, ChronoUnit.DAYS)
+        val toDate = it.plus(2, ChronoUnit.DAYS)
         return@map experienceRepo.getIngestionsWithExperiencesFlow(fromDate, toDate).firstOrNull()
             ?: emptyList()
     }.map { list ->

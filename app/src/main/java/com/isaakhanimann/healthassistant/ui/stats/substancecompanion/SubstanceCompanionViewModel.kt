@@ -14,7 +14,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.*
+import java.time.Duration
+import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,9 +25,9 @@ class SubstanceCompanionViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    private val currentTimeFlow: Flow<Date> = flow {
+    private val currentTimeFlow: Flow<Instant> = flow {
         while (true) {
-            emit(Date())
+            emit(Instant.now())
             delay(timeMillis = 1000 * 10)
         }
     }
@@ -53,7 +54,7 @@ class SubstanceCompanionViewModel @Inject constructor(
             val firstIngestion =
                 sortedIngestions.firstOrNull() ?: return@combine emptyList<IngestionsBurst>()
             var diffTextToAdd =
-                getTimeDifferenceText(fromDate = firstIngestion.time, toDate = currentTime)
+                getTimeDifferenceText(fromInstant = firstIngestion.time, toInstant = currentTime)
             var currentIngestions: MutableList<Ingestion> = mutableListOf(firstIngestion)
             val allIngestionBursts: MutableList<IngestionsBurst> = mutableListOf()
             if (sortedIngestions.size == 1) {
@@ -65,7 +66,7 @@ class SubstanceCompanionViewModel @Inject constructor(
                 )
             }
             for (oneIngestion in sortedIngestions.takeLast(sortedIngestions.size - 1)) {
-                if (isDifferenceBig(fromDate = oneIngestion.time, toDate = lastDate)) {
+                if (isDifferenceBig(fromInstance = oneIngestion.time, toInstance = lastDate)) {
                     // finalize burst
                     allIngestionBursts.add(
                         IngestionsBurst(
@@ -74,7 +75,7 @@ class SubstanceCompanionViewModel @Inject constructor(
                         )
                     )
                     diffTextToAdd =
-                        getTimeDifferenceText(fromDate = oneIngestion.time, toDate = lastDate)
+                        getTimeDifferenceText(fromInstant = oneIngestion.time, toInstant = lastDate)
                     currentIngestions = mutableListOf(oneIngestion)
                     lastDate = oneIngestion.time
                 } else {
@@ -99,12 +100,9 @@ class SubstanceCompanionViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    private fun isDifferenceBig(fromDate: Date, toDate: Date): Boolean {
-        val diff: Long = toDate.time - fromDate.time
-        val seconds = diff / 1000.0
-        val minutes = seconds / 60
-        val hours = minutes / 60
-        return hours > 12
+    private fun isDifferenceBig(fromInstance: Instant, toInstance: Instant): Boolean {
+        val diff = Duration.between(fromInstance, toInstance)
+        return diff.toHours() > 12
     }
 
     private val companionsFlow = experienceRepo.getAllSubstanceCompanionsFlow()

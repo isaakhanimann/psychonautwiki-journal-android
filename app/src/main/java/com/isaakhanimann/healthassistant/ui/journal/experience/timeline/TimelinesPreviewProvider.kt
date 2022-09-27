@@ -9,7 +9,8 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
-import java.util.*
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
@@ -21,7 +22,7 @@ class TimelinesPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Substance 1",
-                        time = Date(Date().time - 4 * 60 * 60 * 1000),
+                        time = Instant.now().minus(4, ChronoUnit.HOURS),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -71,7 +72,7 @@ class TimelinesPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Substance 1",
-                        time = Date(Date().time - 3 * 60 * 60 * 1000),
+                        time = Instant.now().minus(3, ChronoUnit.HOURS),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 45.0,
                         isDoseAnEstimate = false,
@@ -121,7 +122,7 @@ class TimelinesPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Substance 2",
-                        time = Date(Date().time - 60 * 60 * 1000),
+                        time = Instant.now().minus(1, ChronoUnit.HOURS),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -171,7 +172,7 @@ class TimelinesPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Substance 3",
-                        time = Date(),
+                        time = Instant.now(),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -203,7 +204,7 @@ class TimelinesPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Substance 1",
-                        time = Date(Date().time - 3 * 60 * 60 * 1000),
+                        time = Instant.now().minus(3, ChronoUnit.HOURS),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 45.0,
                         isDoseAnEstimate = false,
@@ -253,7 +254,7 @@ class TimelinesPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Substance 2",
-                        time = Date(Date().time - 60 * 60 * 1000),
+                        time = Instant.now().minus(1, ChronoUnit.HOURS),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -303,7 +304,7 @@ class TimelinesPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Substance 3",
-                        time = Date(),
+                        time = Instant.now(),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -355,7 +356,7 @@ class TimelinesPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Substance 1",
-                        time = Date(Date().time - 20 * 60 * 60 * 1000),
+                        time = Instant.now().minus(20, ChronoUnit.MINUTES),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -406,7 +407,7 @@ class TimelinesPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Substance 2",
-                        time = Date(),
+                        time = Instant.now(),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,

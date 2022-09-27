@@ -5,7 +5,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.*
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.ui.utils.getDate
+import com.isaakhanimann.healthassistant.ui.utils.getInstant
 
 class JournalScreenPreviewProvider :
     PreviewParameterProvider<Map<String, List<ExperienceWithIngestionsAndCompanions>>> {
@@ -26,7 +26,7 @@ class JournalScreenPreviewProvider :
                                 IngestionWithCompanion(
                                     ingestion = Ingestion(
                                         substanceName = "MDMA",
-                                        time = getDate(
+                                        time = getInstant(
                                             year = 2022,
                                             month = 7,
                                             day = 5,
@@ -48,7 +48,7 @@ class JournalScreenPreviewProvider :
                                 IngestionWithCompanion(
                                     ingestion = Ingestion(
                                         substanceName = "Cocaine",
-                                        time = getDate(
+                                        time = getInstant(
                                             year = 2022,
                                             month = 7,
                                             day = 5,
@@ -70,7 +70,7 @@ class JournalScreenPreviewProvider :
                                 IngestionWithCompanion(
                                     ingestion = Ingestion(
                                         substanceName = "Ketamine",
-                                        time = getDate(
+                                        time = getInstant(
                                             year = 2022,
                                             month = 7,
                                             day = 5,
@@ -102,7 +102,7 @@ class JournalScreenPreviewProvider :
                                 IngestionWithCompanion(
                                     ingestion = Ingestion(
                                         substanceName = "MDMA",
-                                        time = getDate(
+                                        time = getInstant(
                                             year = 2022,
                                             month = 6,
                                             day = 21,
@@ -139,7 +139,7 @@ class JournalScreenPreviewProvider :
                                 IngestionWithCompanion(
                                     ingestion = Ingestion(
                                         substanceName = "Cocaine",
-                                        time = getDate(
+                                        time = getInstant(
                                             year = 2021,
                                             month = 9,
                                             day = 2,
@@ -161,7 +161,7 @@ class JournalScreenPreviewProvider :
                                 IngestionWithCompanion(
                                     ingestion = Ingestion(
                                         substanceName = "Ketamine",
-                                        time = getDate(
+                                        time = getInstant(
                                             year = 2021,
                                             month = 9,
                                             day = 2,
@@ -194,7 +194,7 @@ class JournalScreenPreviewProvider :
                                 IngestionWithCompanion(
                                     ingestion = Ingestion(
                                         substanceName = "LSD",
-                                        time = getDate(
+                                        time = getInstant(
                                             year = 2021,
                                             month = 7,
                                             day = 22,
@@ -216,7 +216,7 @@ class JournalScreenPreviewProvider :
                                 IngestionWithCompanion(
                                     ingestion = Ingestion(
                                         substanceName = "Cocaine",
-                                        time = getDate(
+                                        time = getInstant(
                                             year = 2021,
                                             month = 7,
                                             day = 22,

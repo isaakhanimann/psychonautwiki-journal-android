@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOn
-import java.util.*
+import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -59,8 +59,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getIngestionsWithExperiencesFlow(fromDate: Date, toDate: Date): Flow<List<IngestionWithExperience>> =
-        experienceDao.getIngestionWithExperiencesFlow(fromDate, toDate)
+    fun getIngestionsWithExperiencesFlow(fromInstant: Instant, toInstant: Instant): Flow<List<IngestionWithExperience>> =
+        experienceDao.getIngestionWithExperiencesFlow(fromInstant, toInstant)
             .flowOn(Dispatchers.IO)
             .conflate()
 
@@ -76,11 +76,11 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    suspend fun getLatestIngestionOfEverySubstanceSinceDate(date: Date): List<Ingestion> =
-        experienceDao.getLatestIngestionOfEverySubstanceSinceDate(date)
+    suspend fun getLatestIngestionOfEverySubstanceSinceDate(instant: Instant): List<Ingestion> =
+        experienceDao.getLatestIngestionOfEverySubstanceSinceDate(instant)
 
-    suspend fun getIngestionsSinceDate(date: Date): List<Ingestion> =
-        experienceDao.getIngestionsSinceDate(date)
+    suspend fun getIngestionsSinceDate(instant: Instant): List<Ingestion> =
+        experienceDao.getIngestionsSinceDate(instant)
 
     suspend fun getAllIngestions(): List<Ingestion> =
         experienceDao.getAllIngestions()

@@ -2,7 +2,7 @@ package com.isaakhanimann.healthassistant.data.room.experiences.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
+import java.time.Instant
 
 @Entity
 data class Experience(
@@ -10,7 +10,7 @@ data class Experience(
     val id: Int,
     var title: String,
     var text: String,
-    val creationDate: Date = Date(),
+    val creationDate: Instant = Instant.now(),
     var sentiment: Sentiment?,
     var isFavorite: Boolean = false
 )

@@ -16,8 +16,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,9 +53,9 @@ class OneExperienceViewModel @Inject constructor(
     private val experienceWithIngestionsFlow =
         experienceRepo.getExperienceWithIngestionsAndCompanionsFlow(experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!)
 
-    private val currentTimeFlow: Flow<Date> = flow {
+    private val currentTimeFlow: Flow<Instant> = flow {
         while (true) {
-            emit(Date())
+            emit(Instant.now())
             delay(timeMillis = 1000 * 10)
         }
     }
@@ -60,10 +63,7 @@ class OneExperienceViewModel @Inject constructor(
     private val isShowingAddIngestionButtonFlow = experienceWithIngestionsFlow.combine(currentTimeFlow) { experienceWithIngestions, currentTime ->
         val ingestionTimes = experienceWithIngestions?.ingestionsWithCompanions?.map { it.ingestion.time }
         val lastIngestionTime = ingestionTimes?.maxOrNull()
-        val cal = Calendar.getInstance(TimeZone.getDefault())
-        cal.time = currentTime
-        cal.add(Calendar.HOUR_OF_DAY, -hourLimitToSeparateIngestions)
-        val limitAgo = cal.time
+        val limitAgo = currentTime.minus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
         return@combine limitAgo < lastIngestionTime
     }
 
@@ -130,9 +130,10 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
-    private fun getFullDateText(date: Date): String {
-        val formatter = SimpleDateFormat("EEE, dd MMMM yyyy", Locale.getDefault())
-        return formatter.format(date)
+    private fun getFullDateText(instant: Instant): String {
+        val dateTime = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault())
+        val formatter = DateTimeFormatter.ofPattern("EEE, dd MMMM yyyy")
+        return dateTime.format(formatter)
     }
 
     fun deleteExperience() {

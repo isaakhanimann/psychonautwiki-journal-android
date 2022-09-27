@@ -5,7 +5,8 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.*
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import java.util.*
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 class ExperienceWithIngestionsPreviewProvider :
     PreviewParameterProvider<ExperienceWithIngestionsAndCompanions> {
@@ -22,7 +23,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "MDMA",
-                        time = Date(Date().time - 2 * 60 * 60 * 1000),
+                        time = Instant.now().minus(2, ChronoUnit.HOURS),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -38,7 +39,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
-                        time = Date(Date().time - 60 * 60 * 1000),
+                        time = Instant.now().minus(1, ChronoUnit.HOURS),
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 30.0,
                         isDoseAnEstimate = false,
@@ -54,7 +55,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
-                        time = Date(Date().time - 30 * 60 * 1000),
+                        time = Instant.now().minus(30, ChronoUnit.MINUTES),
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 20.0,
                         isDoseAnEstimate = false,
@@ -82,7 +83,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "MDMA",
-                        time = Date(),
+                        time = Instant.now(),
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -98,7 +99,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 IngestionWithCompanion(
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
-                        time = Date(),
+                        time = Instant.now(),
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 20.0,
                         isDoseAnEstimate = false,

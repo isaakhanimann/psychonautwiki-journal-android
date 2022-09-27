@@ -12,13 +12,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
-val Date.asTextWithDateAndTime: String get() {
-    val formatter = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
-    return formatter.format(this)
+val Instant.asTextWithDateAndTime: String get() {
+    val dateTime = LocalDateTime.ofInstant(this, ZoneId.systemDefault())
+    val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")
+    return dateTime.format(formatter)
 }
 
 @HiltViewModel
@@ -27,7 +31,7 @@ class SettingsViewModel @Inject constructor(
     private val substanceRepository: SubstanceRepository
 ) : ViewModel() {
 
-    val dateStringFlow = dataStorePreferences.dateFlow.mapNotNull { it.asTextWithDateAndTime }
+    val dateStringFlow = dataStorePreferences.instantFlow.mapNotNull { it.asTextWithDateAndTime }
 
     var isUpdating by mutableStateOf(false)
 

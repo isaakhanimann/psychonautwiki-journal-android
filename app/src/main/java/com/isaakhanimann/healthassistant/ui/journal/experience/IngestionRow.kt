@@ -17,8 +17,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
-import java.text.SimpleDateFormat
-import java.util.*
+import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 
 @Preview
 @Composable
@@ -55,8 +54,7 @@ fun IngestionRow(
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(text = ingestion.substanceName, style = MaterialTheme.typography.h6)
-                    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
-                    val timeString = formatter.format(ingestion.time) ?: "Unknown Time"
+                    val timeString = ingestion.time.getStringOfPattern("HH:mm")
                     Text(text = timeString)
                 }
                 Column(horizontalAlignment = Alignment.End) {

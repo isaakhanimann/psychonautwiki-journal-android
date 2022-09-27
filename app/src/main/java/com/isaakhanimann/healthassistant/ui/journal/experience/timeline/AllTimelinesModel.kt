@@ -8,9 +8,12 @@ import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.ingestio
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.ingestion.TimelineDrawable
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.ingestion.toFullTimeline
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.ingestion.toTotalTimeline
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.math.roundToInt
+import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
+import java.time.Duration
+import java.time.Instant
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+import kotlin.math.roundToLong
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -18,14 +21,14 @@ import kotlin.time.toDuration
 class AllTimelinesModel(
     ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>
 ) {
-    val startTime: Date
+    val startTime: Instant
     val widthInSeconds: Float
     val ingestionDrawables: List<IngestionDrawable>
     val axisDrawable: AxisDrawable
 
     init {
         startTime = ingestionDurationPairs.map { it.first.ingestion.time }
-            .reduce { acc, date -> if (acc.before(date)) acc else date }
+            .reduce { acc, date -> if (acc.isBefore(date)) acc else date }
         val ingestionDrawablesWithoutInsets = ingestionDurationPairs.map { pair ->
             val verticalHeightInPercent = getVerticalHeightInPercent(
                 ingestion = pair.first.ingestion,
@@ -113,54 +116,52 @@ class AllTimelinesModel(
 }
 
 data class AxisDrawable(
-    val startTime: Date,
+    val startTime: Instant,
     val widthInSeconds: Float
 ) {
     fun getFullHours(pixelsPerSec: Float, widthInPixels: Float): List<FullHour> {
         val widthInWholeHours = widthInSeconds.toLong().toDuration(DurationUnit.SECONDS).inWholeHours
         val widthPerHour = widthInPixels / widthInWholeHours
         val minWidthPerHour = 70.0
-        var stepSize = (minWidthPerHour / widthPerHour).roundToInt()
-        if (stepSize == 0) {
+        var stepSize = (minWidthPerHour / widthPerHour).roundToLong()
+        if (stepSize == 0.toLong()) {
             stepSize = 1
         }
-        val dates = getDatesBetween(
+        val dates = getInstantsBetween(
             startTime = startTime,
-            endTime = Date(startTime.time + (widthInSeconds.toLong() * 1000)),
+            endTime = startTime.plusSeconds(widthInSeconds.toLong()),
             stepSizeInHours = stepSize
         )
-        val formatter = SimpleDateFormat("HH", Locale.getDefault())
         return dates.map {
-            val distanceInSec = (it.time - startTime.time) / 1000
+            val distanceInSec = Duration.between(startTime, it).seconds
             FullHour(
                 distanceFromStart = distanceInSec * pixelsPerSec,
-                label = formatter.format(it) ?: "??"
+                label = it.getStringOfPattern("HH")
             )
         }
     }
 
     companion object {
-        fun getDatesBetween(startTime: Date, endTime: Date, stepSizeInHours: Int): List<Date> {
+        fun getInstantsBetween(startTime: Instant, endTime: Instant, stepSizeInHours: Long): List<Instant> {
             val firstDate = startTime.nearestFullHourInTheFuture()
-            val stepInMilliseconds = stepSizeInHours * 60 * 60 * 1000
-            val fullHours: MutableList<Date> = mutableListOf()
+            val fullHours: MutableList<Instant> = mutableListOf()
             var checkTime = firstDate
-            while (checkTime.before(endTime)) {
+            while (checkTime.isBefore(endTime)) {
                 fullHours.add(checkTime)
-                checkTime = Date(checkTime.time + stepInMilliseconds)
+                checkTime = checkTime.plus(stepSizeInHours, ChronoUnit.HOURS)
             }
             return fullHours.toList()
         }
     }
 }
 
-fun Date.nearestFullHourInTheFuture(): Date {
-    val cal = Calendar.getInstance(TimeZone.getDefault())
-    cal.time = this
-    cal.add(Calendar.HOUR_OF_DAY, 1)
-    cal.set(Calendar.MINUTE, 0)
-    cal.set(Calendar.SECOND, 0)
-    return cal.time
+fun Instant.nearestFullHourInTheFuture(): Instant {
+    val oneHourInFuture = this.plus(1, ChronoUnit.HOURS)
+    val dateTime = oneHourInFuture.atZone(ZoneId.systemDefault())
+    val seconds = dateTime.second
+    val minutes = dateTime.minute
+    val newDateTime = dateTime.minusMinutes(minutes.toLong()).minusSeconds(seconds.toLong())
+    return newDateTime.toInstant()
 }
 
 
@@ -170,7 +171,7 @@ data class FullHour(
 )
 
 class IngestionDrawable(
-    startTime: Date,
+    startTime: Instant,
     ingestionWithCompanion: IngestionWithCompanion,
     roaDuration: RoaDuration?,
     val verticalHeightInPercent: Float = 1f
@@ -181,8 +182,7 @@ class IngestionDrawable(
     var insetTimes = 0
 
     init {
-        ingestionPointDistanceFromStartInSeconds =
-            (ingestionWithCompanion.ingestion.time.time - startTime.time).toDuration(DurationUnit.MILLISECONDS).inWholeSeconds.toFloat()
+        ingestionPointDistanceFromStartInSeconds = java.time.Duration.between(startTime, ingestionWithCompanion.ingestion.time).seconds.toFloat()
         val full = roaDuration?.toFullTimeline()
         val total = roaDuration?.toTotalTimeline()
         timelineDrawable = full ?: total
