@@ -39,7 +39,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                 units = ingestion.units,
                 isDoseAnEstimate = ingestion.isDoseAnEstimate
             )
-        }
+        }.distinct()
         return@map AddIngestionSearchModel(routeSuggestions, doseSuggestions)
     }.stateIn(
         initialValue = AddIngestionSearchModel(
