@@ -58,7 +58,7 @@ fun AddIngestionSearchScreen(
         val screenHeight = LocalConfiguration.current.screenHeightDp.dp
         SuggestionsSection(
             searchModel = searchModel,
-            modifier = Modifier.heightIn(0.dp, screenHeight/2),
+            modifier = Modifier.heightIn(0.dp, screenHeight / 2),
             navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
             navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose
         )
@@ -82,7 +82,7 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
                 searchModel = addIngestionSearchModel,
                 navigateToCheckInteractionsSkipDose = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
                 navigateToCheckInteractionsSkipRoute = { _: String, _: AdministrationRoute -> },
-                modifier = Modifier.heightIn(0.dp, screenHeight/2)
+                modifier = Modifier.heightIn(0.dp, screenHeight / 2)
             )
         }
     }
@@ -107,7 +107,13 @@ fun SuggestionsSection(
             }
             items(searchModel.doseSuggestions) {
                 DoseSuggestion(doseSuggestionElement = it, onTap = {
-                    navigateToCheckInteractionsSkipDose(it.substanceName, it.administrationRoute, it.dose, it.units, it.isDoseAnEstimate)
+                    navigateToCheckInteractionsSkipDose(
+                        it.substanceName,
+                        it.administrationRoute,
+                        it.dose,
+                        it.units,
+                        it.isDoseAnEstimate
+                    )
                 })
                 Divider()
             }
@@ -124,7 +130,7 @@ fun RouteSuggestion(routeSuggestionElement: RouteSuggestionElement, onTap: () ->
         modifier = Modifier
             .clickable(onClick = onTap)
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .padding(horizontal = 6.dp, vertical = 5.dp)
     ) {
         ColorCircle(substanceColor = routeSuggestionElement.color)
         Text(
@@ -141,18 +147,22 @@ fun DoseSuggestion(doseSuggestionElement: DoseSuggestionElement, onTap: () -> Un
         modifier = Modifier
             .clickable(onClick = onTap)
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .padding(horizontal = 6.dp, vertical = 5.dp)
     ) {
         ColorCircle(substanceColor = doseSuggestionElement.color)
+        Text(
+            text = "${doseSuggestionElement.substanceName} ${doseSuggestionElement.administrationRoute.displayText}",
+        )
+        Spacer(modifier = Modifier.weight(1f))
         if (doseSuggestionElement.dose != null) {
             val isEstimateText = if (doseSuggestionElement.isDoseAnEstimate) "~" else ""
             val doseText = doseSuggestionElement.dose.toReadableString()
             Text(
-                text = "${doseSuggestionElement.substanceName} ${doseSuggestionElement.administrationRoute.displayText} $isEstimateText$doseText ${doseSuggestionElement.units}",
+                text = "$isEstimateText$doseText ${doseSuggestionElement.units}",
             )
         } else {
             Text(
-                text = "${doseSuggestionElement.substanceName} ${doseSuggestionElement.administrationRoute.displayText} Unknown Dose",
+                text = "Unknown Dose",
             )
         }
     }

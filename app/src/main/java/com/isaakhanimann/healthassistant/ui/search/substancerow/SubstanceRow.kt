@@ -45,10 +45,12 @@ fun SubstanceRow(
             text = substanceModel.name,
             style = MaterialTheme.typography.body1,
         )
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Row {
-                val commaSeparatedNames = substanceModel.commonNames.joinToString(separator = ", ")
-                Text(text = commaSeparatedNames, style = MaterialTheme.typography.caption)
+        if (substanceModel.commonNames.isNotEmpty()) {
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                Row {
+                    val commaSeparatedNames = substanceModel.commonNames.joinToString(separator = ", ")
+                    Text(text = commaSeparatedNames, style = MaterialTheme.typography.caption)
+                }
             }
         }
         FlowRow(
