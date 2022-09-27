@@ -87,34 +87,19 @@ fun SubstanceCompanionScreen(
             item {
                 Spacer(modifier = Modifier.height(6.dp))
                 if (tolerance != null || crossTolerances.isNotEmpty()) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        ColorPicker(
-                            selectedColor = substanceCompanion.color,
-                            onChangeOfColor = onChangeColor,
-                            alreadyUsedColors = alreadyUsedColors,
-                            otherColors = otherColors
-                        )
-                        Spacer(modifier = Modifier.width(5.dp))
-                        ToleranceSection(
-                            tolerance = tolerance,
-                            crossTolerances = crossTolerances,
-                            titleStyle = MaterialTheme.typography.subtitle1
-                        )
-                    }
-                } else {
-                    ColorPicker(
-                        selectedColor = substanceCompanion.color,
-                        onChangeOfColor = onChangeColor,
-                        alreadyUsedColors = alreadyUsedColors,
-                        otherColors = otherColors
+                    ToleranceSection(
+                        tolerance = tolerance,
+                        crossTolerances = crossTolerances,
+                        titleStyle = MaterialTheme.typography.subtitle1
                     )
                 }
+                Spacer(modifier = Modifier.height(5.dp))
+                ColorPicker(
+                    selectedColor = substanceCompanion.color,
+                    onChangeOfColor = onChangeColor,
+                    alreadyUsedColors = alreadyUsedColors,
+                    otherColors = otherColors
+                )
                 Spacer(modifier = Modifier.height(6.dp))
                 Divider()
                 Spacer(modifier = Modifier.height(6.dp))

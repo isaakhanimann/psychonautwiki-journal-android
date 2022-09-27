@@ -64,6 +64,7 @@ class SubstanceCompanionViewModel @Inject constructor(
                         ingestions = currentIngestions
                     )
                 )
+                currentIngestions = mutableListOf()
             }
             for (oneIngestion in sortedIngestions.takeLast(sortedIngestions.size - 1)) {
                 if (isDifferenceBig(fromInstance = oneIngestion.time, toInstance = lastDate)) {
