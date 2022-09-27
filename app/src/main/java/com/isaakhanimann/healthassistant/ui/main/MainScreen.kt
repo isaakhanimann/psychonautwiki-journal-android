@@ -14,12 +14,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.AcceptConditionsScreen
-import com.isaakhanimann.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.ChooseDoseScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.DoseGuideScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.interactions.CheckInteractionsScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.RouteExplanationScreen
+import com.isaakhanimann.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ChooseTimeScreen
 import com.isaakhanimann.healthassistant.ui.journal.JournalScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.ExperienceScreen
@@ -106,8 +106,23 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
     composable(NoArgumentRouter.VolumetricDosingRouter.route) { VolumetricDosingScreen() }
     composable(NoArgumentRouter.AddIngestionRouter.route) {
         AddIngestionSearchScreen(
-            navigateToCheckInteractions = {
-                navController.navigateToCheckInteractions(substanceName = it)
+            navigateToCheckInteractionsSkipNothing = {
+                navController.navigateToCheckInteractionsSkipNothing(substanceName = it)
+            },
+            navigateToCheckInteractionsSkipRoute = { substanceName, route ->
+                navController.navigateToCheckInteractionsSkipRoute(
+                    substanceName = substanceName,
+                    administrationRoute = route
+                )
+            },
+            navigateToCheckInteractionsSkipDose = { substanceName, route, dose, units, isEstimate ->
+                navController.navigateToCheckInteractionsSkipDose(
+                    substanceName = substanceName,
+                    administrationRoute = route,
+                    units = units,
+                    isEstimate = isEstimate,
+                    dose = dose
+                )
             }
         )
     }
@@ -201,18 +216,61 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
 
 fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
     navigation(
-        startDestination = ArgumentRouter.CheckInteractionsRouter.route,
+        startDestination = ArgumentRouter.CheckInteractionsRouterSkipNothing.route,
         route = "is not used"
     ) {
         composable(
-            ArgumentRouter.CheckInteractionsRouter.route,
-            arguments = ArgumentRouter.CheckInteractionsRouter.args
+            ArgumentRouter.CheckInteractionsRouterSkipNothing.route,
+            arguments = ArgumentRouter.CheckInteractionsRouterSkipNothing.args
         ) { backStackEntry ->
             CheckInteractionsScreen(
-                navigateToChooseRouteScreen = {
+                navigateToNext = {
                     val args = backStackEntry.arguments!!
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
                     navController.navigateToChooseRoute(substanceName = substanceName)
+                }
+            )
+        }
+        composable(
+            ArgumentRouter.CheckInteractionsRouterSkipRoute.route,
+            arguments = ArgumentRouter.CheckInteractionsRouterSkipRoute.args
+        ) { backStackEntry ->
+            CheckInteractionsScreen(
+                navigateToNext = {
+                    val args = backStackEntry.arguments!!
+                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    val route =
+                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+                    navController.navigateToChooseDose(substanceName, route)
+                }
+            )
+        }
+        composable(
+            ArgumentRouter.CheckInteractionsRouterSkipDose.route,
+            arguments = ArgumentRouter.CheckInteractionsRouterSkipDose.args
+        ) { backStackEntry ->
+            CheckInteractionsScreen(
+                navigateToNext = {
+                    val args = backStackEntry.arguments!!
+                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    val route =
+                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+                    val dose = args.getString(DOSE_KEY)?.toDoubleOrNull()
+                    val units = args.getString(UNITS_KEY)?.let {
+                        if (it == "null") {
+                            null
+                        } else {
+                            it
+                        }
+                    }
+                    val isEstimate = args.getBoolean(IS_ESTIMATE_KEY)
+                    navController.navigateToChooseTimeAndMaybeColor(
+                        substanceName,
+                        route,
+                        units,
+                        isEstimate = isEstimate,
+                        dose = dose
+                    )
                 }
             )
         }

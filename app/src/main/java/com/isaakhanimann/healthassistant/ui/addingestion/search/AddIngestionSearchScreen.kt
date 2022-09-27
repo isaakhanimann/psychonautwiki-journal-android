@@ -1,5 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.addingestion.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,31 +17,38 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.SearchScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 
 @Composable
 fun AddIngestionSearchScreen(
-    navigateToCheckInteractions: (substanceName: String) -> Unit,
+    navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
+    navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
 ) {
     AddIngestionSearchScreen(
-        navigateToCheckInteractions = navigateToCheckInteractions,
-        searchModel = viewModel.modelFlow.collectAsState().value
+        navigateToCheckInteractionsSkipNothing = navigateToCheckInteractionsSkipNothing,
+        searchModel = viewModel.modelFlow.collectAsState().value,
+        navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
+        navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose
     )
 }
 
 @Composable
 fun AddIngestionSearchScreen(
-    navigateToCheckInteractions: (substanceName: String) -> Unit,
+    navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
+    navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     searchModel: AddIngestionSearchModel
 ) {
     Column {
         LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
         SearchScreen(
             onSubstanceTap = {
-                navigateToCheckInteractions(it)
+                navigateToCheckInteractionsSkipNothing(it)
             },
             modifier = Modifier.weight(1f),
             isShowingSettings = false,
@@ -48,7 +56,9 @@ fun AddIngestionSearchScreen(
         )
         SuggestionsSection(
             searchModel = searchModel,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
+            navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose
         )
     }
 }
@@ -67,6 +77,8 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
             }
             SuggestionsSection(
                 searchModel = addIngestionSearchModel,
+                navigateToCheckInteractionsSkipDose = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
+                navigateToCheckInteractionsSkipRoute = { _: String, _: AdministrationRoute -> },
                 modifier = Modifier.weight(1f)
             )
         }
@@ -75,28 +87,37 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
 }
 
 @Composable
-fun SuggestionsSection(searchModel: AddIngestionSearchModel, modifier: Modifier) {
+fun SuggestionsSection(
+    searchModel: AddIngestionSearchModel,
+    navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    modifier: Modifier
+) {
     LazyColumn(modifier = modifier) {
         item {
             SectionTitle(title = "Quick Logging")
         }
         items(searchModel.routeSuggestions) {
-            RouteSuggestion(routeSuggestionElement = it)
+            RouteSuggestion(routeSuggestionElement = it, onTap = {
+                navigateToCheckInteractionsSkipRoute(it.substanceName, it.administrationRoute)
+            })
             Divider()
         }
         items(searchModel.doseSuggestions) {
-            DoseSuggestion(doseSuggestionElement = it)
+            DoseSuggestion(doseSuggestionElement = it, onTap = {
+                navigateToCheckInteractionsSkipDose(it.substanceName, it.administrationRoute, it.dose, it.units, it.isDoseAnEstimate)
+            })
             Divider()
         }
     }
 }
 
 @Composable
-fun RouteSuggestion(routeSuggestionElement: RouteSuggestionElement) {
+fun RouteSuggestion(routeSuggestionElement: RouteSuggestionElement, onTap: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+        modifier = Modifier.clickable(onClick = onTap).fillMaxWidth().padding(horizontal = 10.dp, vertical = 5.dp)
     ) {
         ColorCircle(substanceColor = routeSuggestionElement.color)
         Text(
@@ -106,11 +127,11 @@ fun RouteSuggestion(routeSuggestionElement: RouteSuggestionElement) {
 }
 
 @Composable
-fun DoseSuggestion(doseSuggestionElement: DoseSuggestionElement) {
+fun DoseSuggestion(doseSuggestionElement: DoseSuggestionElement, onTap: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+        modifier = Modifier.clickable(onClick = onTap).fillMaxWidth().padding(horizontal = 10.dp, vertical = 5.dp)
     ) {
         ColorCircle(substanceColor = doseSuggestionElement.color)
         if (doseSuggestionElement.dose != null) {

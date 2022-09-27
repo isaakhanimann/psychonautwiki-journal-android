@@ -21,7 +21,7 @@ import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceWithCatego
 
 @Composable
 fun CheckInteractionsScreen(
-    navigateToChooseRouteScreen: () -> Unit,
+    navigateToNext: () -> Unit,
     viewModel: CheckInteractionsViewModel = hiltViewModel()
 ) {
     CheckInteractionsScreen(
@@ -30,7 +30,7 @@ fun CheckInteractionsScreen(
         dangerousInteractions = viewModel.dangerousInteractions,
         unsafeInteractions = viewModel.unsafeInteractions,
         uncertainInteractions = viewModel.uncertainInteractions,
-        navigateToNext = navigateToChooseRouteScreen,
+        navigateToNext = navigateToNext,
         dismissAlert = {
             viewModel.isShowingAlert = false
         },
