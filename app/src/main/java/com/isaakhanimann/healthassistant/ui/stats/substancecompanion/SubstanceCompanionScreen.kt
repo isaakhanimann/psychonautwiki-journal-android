@@ -107,13 +107,14 @@ fun SubstanceCompanionScreen(
                             titleStyle = MaterialTheme.typography.subtitle1
                         )
                     }
+                } else {
+                    ColorPicker(
+                        selectedColor = substanceCompanion.color,
+                        onChangeOfColor = onChangeColor,
+                        alreadyUsedColors = alreadyUsedColors,
+                        otherColors = otherColors
+                    )
                 }
-                ColorPicker(
-                    selectedColor = substanceCompanion.color,
-                    onChangeOfColor = onChangeColor,
-                    alreadyUsedColors = alreadyUsedColors,
-                    otherColors = otherColors
-                )
                 Spacer(modifier = Modifier.height(6.dp))
                 Divider()
                 Spacer(modifier = Modifier.height(6.dp))

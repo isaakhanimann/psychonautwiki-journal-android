@@ -12,16 +12,20 @@ fun getTimeDifferenceText(fromInstant: Instant, toInstant: Instant): String {
     val months = weeks / 4
     val years = months / 12
     return if (years > 1) {
-        String.format("%.1f", years) + " years"
+        formatFloatToAtMostOneDecimal(years) + " years"
     } else if (months > 1) {
-        String.format("%.1f", months) + " months"
+        formatFloatToAtMostOneDecimal(months) + " months"
     } else if (weeks > 1) {
-        String.format("%.1f", weeks) + " weeks"
+        formatFloatToAtMostOneDecimal(weeks) + " weeks"
     } else if (days > 1) {
-        String.format("%.1f", days) + " days"
+        formatFloatToAtMostOneDecimal(days) + " days"
     } else if (hours > 1) {
-        String.format("%.1f", hours) + " hours"
+        formatFloatToAtMostOneDecimal(hours) + " hours"
     } else {
-        "$minutes minutes"
+        formatFloatToAtMostOneDecimal(minutes) + " minutes"
     }
+}
+
+private fun formatFloatToAtMostOneDecimal(value: Float): String {
+    return String.format("%.1f", value).removeSuffix(".0")
 }
