@@ -1,6 +1,7 @@
 package com.isaakhanimann.healthassistant.data.room.experiences
 
 import androidx.room.*
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
@@ -58,6 +59,9 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC LIMIT :limit")
     fun getSortedIngestionsFlow(substanceName: String, limit: Int): Flow<List<Ingestion>>
+
+    @Query("SELECT * FROM customsubstance")
+    fun getCustomSubstancesFlow(): Flow<List<CustomSubstance>>
 
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC")
     fun getSortedIngestionsFlow(substanceName: String): Flow<List<Ingestion>>
@@ -146,6 +150,15 @@ interface ExperienceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(substanceCompanion: SubstanceCompanion)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(customSubstance: CustomSubstance)
+
+    @Delete
+    suspend fun delete(customSubstance: CustomSubstance)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(customSubstance: CustomSubstance)
 
     @Delete
     suspend fun delete(substanceCompanion: SubstanceCompanion)

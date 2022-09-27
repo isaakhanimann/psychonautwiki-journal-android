@@ -30,10 +30,15 @@ sealed class NoArgumentRouter(val route: String) {
     object SaferSniffing : NoArgumentRouter(route = SAFER_SNIFFING_ROUTE)
     object SaferStimulants : NoArgumentRouter(route = SAFER_STIMULANTS_ROUTE)
     object AddIngestionRouter : NoArgumentRouter(route = ROUTE_START_ADD_INGESTIONS)
+    object AddCustomRouter : NoArgumentRouter(route = ROUTE_START_ADD_CUSTOM)
 }
 
 fun NavController.navigateToAddIngestion() {
     navigate(ROUTE_START_ADD_INGESTIONS)
+}
+
+fun NavController.navigateToAddCustom() {
+    navigate(ROUTE_START_ADD_CUSTOM)
 }
 
 fun NavController.dismissAddIngestionScreens() {

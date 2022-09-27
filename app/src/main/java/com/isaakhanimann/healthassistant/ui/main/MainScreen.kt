@@ -31,6 +31,8 @@ import com.isaakhanimann.healthassistant.ui.safer.SaferHallucinogensScreen
 import com.isaakhanimann.healthassistant.ui.safer.SaferUseScreen
 import com.isaakhanimann.healthassistant.ui.safer.VolumetricDosingScreen
 import com.isaakhanimann.healthassistant.ui.search.SearchScreen
+import com.isaakhanimann.healthassistant.ui.search.custom.AddCustomSubstance
+import com.isaakhanimann.healthassistant.ui.search.custom.EditCustomSubstance
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceScreen
@@ -104,6 +106,7 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
         )
     }
     composable(NoArgumentRouter.VolumetricDosingRouter.route) { VolumetricDosingScreen() }
+    composable(NoArgumentRouter.AddCustomRouter.route) { AddCustomSubstance(navigateBack = navController::popBackStack) }
     composable(NoArgumentRouter.AddIngestionRouter.route) {
         AddIngestionSearchScreen(
             navigateToCheckInteractionsSkipNothing = {
@@ -123,6 +126,9 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
                     isEstimate = isEstimate,
                     dose = dose
                 )
+            },
+            navigateToCustomSubstanceChooseRoute = { substanceName ->
+
             }
         )
     }
@@ -134,6 +140,12 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         arguments = ArgumentRouter.EditExperienceRouter.args
     ) {
         EditExperienceScreen(navigateBack = navController::popBackStack)
+    }
+    composable(
+        ArgumentRouter.EditCustomRouter.route,
+        arguments = ArgumentRouter.EditCustomRouter.args
+    ) {
+        EditCustomSubstance(navigateBack = navController::popBackStack)
     }
     composable(
         ArgumentRouter.ExperienceRouter.route,
@@ -202,7 +214,9 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
                 navController.navigateToSubstanceScreen(substanceName = it)
             },
             isShowingSettings = true,
-            navigateToSettings = navController::navigateToSettings
+            navigateToSettings = navController::navigateToSettings,
+            onCustomSubstanceTap = navController::navigateToEditCustomSubstance,
+            navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom,
         )
     }
     composable(TabRouter.SaferUse.route) {

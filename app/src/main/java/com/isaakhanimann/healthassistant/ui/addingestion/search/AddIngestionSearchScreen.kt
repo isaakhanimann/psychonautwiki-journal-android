@@ -28,13 +28,15 @@ fun AddIngestionSearchScreen(
     navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
     navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
 ) {
     AddIngestionSearchScreen(
         navigateToCheckInteractionsSkipNothing = navigateToCheckInteractionsSkipNothing,
         searchModel = viewModel.modelFlow.collectAsState().value,
         navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
-        navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose
+        navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose,
+        navigateToCustomSubstanceChooseRoute = navigateToCustomSubstanceChooseRoute
     )
 }
 
@@ -43,6 +45,7 @@ fun AddIngestionSearchScreen(
     navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
     navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
     searchModel: AddIngestionSearchModel
 ) {
     Column {
@@ -53,15 +56,19 @@ fun AddIngestionSearchScreen(
             },
             modifier = Modifier.weight(1f),
             isShowingSettings = false,
-            navigateToSettings = {}
+            navigateToSettings = {},
+            navigateToAddCustomSubstanceScreen = {},
+            onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
         )
         val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-        SuggestionsSection(
-            searchModel = searchModel,
-            modifier = Modifier.heightIn(0.dp, screenHeight / 2),
-            navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
-            navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose
-        )
+        if (searchModel.doseSuggestions.isNotEmpty() || searchModel.routeSuggestions.isNotEmpty()) {
+            SuggestionsSection(
+                searchModel = searchModel,
+                modifier = Modifier.heightIn(0.dp, screenHeight / 2),
+                navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
+                navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose
+            )
+        }
     }
 }
 

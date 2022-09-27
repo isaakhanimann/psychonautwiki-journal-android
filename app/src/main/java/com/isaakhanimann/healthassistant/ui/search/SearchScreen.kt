@@ -1,8 +1,10 @@
 package com.isaakhanimann.healthassistant.ui.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -25,8 +27,10 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel = hiltViewModel(),
     onSubstanceTap: (substanceName: String) -> Unit,
+    onCustomSubstanceTap: (substanceName: String) -> Unit,
     isShowingSettings: Boolean,
-    navigateToSettings: () -> Unit
+    navigateToSettings: () -> Unit,
+    navigateToAddCustomSubstanceScreen: () -> Unit,
 ) {
     Column(modifier = modifier) {
         SearchField(
@@ -55,18 +59,43 @@ fun SearchScreen(
                 Spacer(modifier = Modifier.width(2.dp))
             }
         }
-        val filteredSubstances = searchViewModel.filteredSubstances.collectAsState().value
-        if (filteredSubstances.isEmpty()) {
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                Text("None Found", modifier = Modifier.padding(10.dp))
+        val isShowingCustomSubstances =
+            searchViewModel.isShowingCustomSubstancesFlow.collectAsState().value
+        if (isShowingCustomSubstances) {
+            val customSubstances = searchViewModel.customSubstancesFlow.collectAsState().value
+            LazyColumn {
+                items(customSubstances) { customSubstance ->
+                    Text(
+                        text = customSubstance.name,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onCustomSubstanceTap(customSubstance.name)
+                            }
+                            .padding(horizontal = 6.dp, vertical = 6.dp),
+                    )
+                    Divider()
+                }
+                item {
+                    TextButton(onClick = navigateToAddCustomSubstanceScreen) {
+                        Text(text = "Add Custom Substance")
+                    }
+                }
             }
         } else {
-            LazyColumn {
-                items(filteredSubstances.size) { i ->
-                    val substance = filteredSubstances[i]
-                    SubstanceRow(substanceModel = substance, onTap = onSubstanceTap)
-                    if (i < filteredSubstances.size) {
-                        Divider()
+            val filteredSubstances = searchViewModel.filteredSubstances.collectAsState().value
+            if (filteredSubstances.isEmpty()) {
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Text("None Found", modifier = Modifier.padding(10.dp))
+                }
+            } else {
+                LazyColumn {
+                    items(filteredSubstances.size) { i ->
+                        val substance = filteredSubstances[i]
+                        SubstanceRow(substanceModel = substance, onTap = onSubstanceTap)
+                        if (i < filteredSubstances.size) {
+                            Divider()
+                        }
                     }
                 }
             }

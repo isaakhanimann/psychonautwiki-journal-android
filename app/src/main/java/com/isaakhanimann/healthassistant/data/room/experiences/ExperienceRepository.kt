@@ -1,5 +1,6 @@
 package com.isaakhanimann.healthassistant.data.room.experiences
 
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
@@ -59,6 +60,11 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
+    fun getCustomSubstancesFlow(): Flow<List<CustomSubstance>> =
+        experienceDao.getCustomSubstancesFlow()
+            .flowOn(Dispatchers.IO)
+            .conflate()
+
     fun getIngestionsWithExperiencesFlow(fromInstant: Instant, toInstant: Instant): Flow<List<IngestionWithExperience>> =
         experienceDao.getIngestionWithExperiencesFlow(fromInstant, toInstant)
             .flowOn(Dispatchers.IO)
@@ -93,6 +99,15 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     suspend fun update(substanceCompanion: SubstanceCompanion) =
         experienceDao.update(substanceCompanion)
+
+    suspend fun insert(customSubstance: CustomSubstance) =
+        experienceDao.insert(customSubstance)
+
+    suspend fun delete(customSubstance: CustomSubstance) =
+        experienceDao.delete(customSubstance)
+
+    suspend fun update(customSubstance: CustomSubstance) =
+        experienceDao.update(customSubstance)
 
     fun getSortedIngestionsWithSubstanceCompanionsFlow() =
         experienceDao.getSortedIngestionsWithSubstanceCompanionsFlow()

@@ -19,7 +19,9 @@ const val UNITS_KEY = "units"
 const val ROUTE_START_EXPERIENCES = "experiences/"
 const val ROUTE_START_INGESTIONS = "ingestions/"
 const val ROUTE_START_ADD_INGESTIONS = "addIngestions/"
+const val ROUTE_START_ADD_CUSTOM = "addCustom/"
 const val ROUTE_START_EDIT_EXPERIENCE = "editExperience/"
+const val ROUTE_START_EDIT_CUSTOM = "editCustom/"
 const val ROUTE_START_SUBSTANCES = "substances/"
 const val ROUTE_START_CHECK_INTERACTIONS_SKIP_NOTHING = "checkInteractionsSkipNothing/"
 const val ROUTE_START_CHECK_INTERACTIONS_SKIP_ROUTE = "checkInteractionsSkipRoute/"
@@ -44,6 +46,11 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     object EditExperienceRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_EXPERIENCE{$EXPERIENCE_ID_KEY}",
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
+    )
+
+    object EditCustomRouter : ArgumentRouter(
+        route = "$ROUTE_START_EDIT_CUSTOM{$SUBSTANCE_NAME_KEY}",
+        args = listOf(navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType })
     )
 
     object SubstanceRouter : ArgumentRouter(
@@ -127,6 +134,10 @@ fun NavController.navigateToEditExperience(experienceId: Int) {
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {
     navigate(ROUTE_START_SUBSTANCES + substanceName)
+}
+
+fun NavController.navigateToEditCustomSubstance(substanceName: String) {
+    navigate(ROUTE_START_EDIT_CUSTOM + substanceName)
 }
 
 fun NavController.navigateToSubstanceCompanionScreen(substanceName: String) {

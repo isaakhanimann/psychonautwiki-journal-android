@@ -22,6 +22,12 @@ class SearchViewModel @Inject constructor(
         substanceRepo.getAllSubstancesWithCategoriesFlow()
     private val allCategoriesFlow: Flow<List<Category>> = substanceRepo.getAllCategoriesFlow()
 
+    val customSubstancesFlow = experienceRepo.getCustomSubstancesFlow().stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
     private val recentlyUsedSubstancesFlow: Flow<List<SubstanceWithCategories>> =
         experienceRepo.getLastUsedSubstanceNamesFlow(limit = 100).map { lastUsedSubstanceNames ->
             lastUsedSubstanceNames.mapNotNull {
@@ -34,30 +40,38 @@ class SearchViewModel @Inject constructor(
     private val _searchTextFlow = MutableStateFlow("")
     val searchTextFlow = _searchTextFlow.asStateFlow()
 
-    private val _filtersFlow = MutableStateFlow(listOf("common"))
+    private val filtersFlow = MutableStateFlow(listOf("common"))
 
     private val youUsedChipName = "you-used"
+    private val customChipName = "custom"
 
     fun onFilterTapped(filterName: String) {
         viewModelScope.launch {
-            if (filterName == youUsedChipName) {
-                _isShowingYouUsedFlow.emit(_isShowingYouUsedFlow.value.not())
-            } else {
-                val filters = _filtersFlow.value.toMutableList()
-                if (filters.contains(filterName)) {
-                    filters.remove(filterName)
-                } else {
-                    filters.add(filterName)
+            when (filterName) {
+                youUsedChipName -> {
+                    isShowingYouUsedFlow.emit(isShowingYouUsedFlow.value.not())
                 }
-                _filtersFlow.emit(filters)
+                customChipName -> {
+                    isShowingCustomSubstancesFlow.emit(isShowingCustomSubstancesFlow.value.not())
+                }
+                else -> {
+                    val filters = filtersFlow.value.toMutableList()
+                    if (filters.contains(filterName)) {
+                        filters.remove(filterName)
+                    } else {
+                        filters.add(filterName)
+                    }
+                    filtersFlow.emit(filters)
+                }
             }
         }
     }
 
-    private val _isShowingYouUsedFlow = MutableStateFlow(false)
+    private val isShowingYouUsedFlow = MutableStateFlow(false)
+    val isShowingCustomSubstancesFlow = MutableStateFlow(false)
 
     val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> =
-        allCategoriesFlow.combine(_filtersFlow) { categories, filters ->
+        allCategoriesFlow.combine(filtersFlow) { categories, filters ->
             categories.map { category ->
                 val isActive = filters.contains(category.name)
                 CategoryChipModel(
@@ -66,13 +80,23 @@ class SearchViewModel @Inject constructor(
                     isActive = isActive
                 )
             }
-        }.combine(_isShowingYouUsedFlow) { chips, isShowingYouUsed ->
+        }.combine(isShowingYouUsedFlow) { chips, isShowingYouUsed ->
             val newChips = chips.toMutableList()
             newChips.add(
                 0, CategoryChipModel(
                     chipName = youUsedChipName,
                     color = Color.Magenta,
                     isActive = isShowingYouUsed
+                )
+            )
+            return@combine newChips
+        }.combine(isShowingCustomSubstancesFlow) { chips, isShowingCustom ->
+            val newChips = chips.toMutableList()
+            newChips.add(
+                0, CategoryChipModel(
+                    chipName = customChipName,
+                    color = Color.Cyan,
+                    isActive = isShowingCustom
                 )
             )
             return@combine newChips
@@ -85,7 +109,7 @@ class SearchViewModel @Inject constructor(
     private val allOrYouUsedSubstances =
         allSubstancesFlow.combine(recentlyUsedSubstancesFlow) { all, recents ->
             Pair(first = all, recents)
-        }.combine(_isShowingYouUsedFlow) { pair, isShowingYouUsed ->
+        }.combine(isShowingYouUsedFlow) { pair, isShowingYouUsed ->
             if (isShowingYouUsed) {
                 return@combine pair.second
             } else {
@@ -94,7 +118,7 @@ class SearchViewModel @Inject constructor(
         }
 
     val filteredSubstances =
-        allOrYouUsedSubstances.combine(_filtersFlow) { substances, filters ->
+        allOrYouUsedSubstances.combine(filtersFlow) { substances, filters ->
             substances.filter { substanceWithCategories ->
                 filters.all { substanceWithCategories.substance.categories.contains(it) }
             }
