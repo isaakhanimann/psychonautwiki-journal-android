@@ -49,6 +49,10 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
     fun getSortedIngestionsWithSubstanceCompanionsFlow(): Flow<List<IngestionWithCompanion>>
 
+    @Transaction
+    @Query("SELECT * FROM ingestion ORDER BY time DESC LIMIT :limit")
+    fun getSortedIngestionsWithSubstanceCompanionsFlow(limit: Int): Flow<List<IngestionWithCompanion>>
+
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
     fun getSortedIngestionsFlow(): Flow<List<Ingestion>>
 

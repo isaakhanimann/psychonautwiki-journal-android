@@ -14,7 +14,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.*
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.AcceptConditionsScreen
-import com.isaakhanimann.healthassistant.ui.addingestion.AddIngestionSearchScreen
+import com.isaakhanimann.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.ChooseDoseScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.DoseGuideScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.interactions.CheckInteractionsScreen
