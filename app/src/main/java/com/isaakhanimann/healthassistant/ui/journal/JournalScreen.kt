@@ -5,6 +5,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -21,12 +23,14 @@ import com.isaakhanimann.healthassistant.data.room.experiences.relations.Experie
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    experiencesViewModel: ExperiencesViewModel = hiltViewModel()
+    viewModel: JournalViewModel = hiltViewModel()
 ) {
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToAddIngestion = navigateToAddIngestion,
-        groupedExperiences = experiencesViewModel.experiencesGrouped.collectAsState().value,
+        groupedExperiences = viewModel.experiencesGrouped.collectAsState().value,
+        isFavorite = viewModel.isFavoriteFlow.collectAsState().value,
+        onChangeIsFavorite = viewModel::onChangeFavorite
     )
 }
 
@@ -41,6 +45,8 @@ fun ExperiencesScreenPreview(
         navigateToExperiencePopNothing = {},
         navigateToAddIngestion = {},
         groupedExperiences = groupedExperiences,
+        isFavorite = false,
+        onChangeIsFavorite = {}
     )
 }
 
@@ -49,11 +55,22 @@ fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
     groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
+    isFavorite: Boolean,
+    onChangeIsFavorite: (Boolean) -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Experiences") }
+                title = { Text(text = "Experiences") },
+                actions = {
+                    IconToggleButton(checked = isFavorite, onCheckedChange = onChangeIsFavorite) {
+                        if (isFavorite) {
+                            Icon(Icons.Filled.Star, contentDescription = "Is Favorite")
+                        } else {
+                            Icon(Icons.Outlined.StarOutline, contentDescription = "Is not Favorite")
+                        }
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -79,11 +96,20 @@ fun JournalScreen(
             )
             if (groupedExperiences.isEmpty()) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Column(
-                        modifier = Modifier.padding(horizontal = 20.dp),horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(text = "No Experiences Yet", style = MaterialTheme.typography.h5, textAlign = TextAlign.Center)
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(text = "Add your first ingestion.", style = MaterialTheme.typography.body1, textAlign = TextAlign.Center)
+                    if (isFavorite) {
+                        Column(
+                            modifier = Modifier.padding(horizontal = 20.dp),horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "No Favorites", style = MaterialTheme.typography.h5, textAlign = TextAlign.Center)
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(text = "Mark experiences as favorites to find them quickly.", style = MaterialTheme.typography.body1, textAlign = TextAlign.Center)
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier.padding(horizontal = 20.dp),horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "No Experiences Yet", style = MaterialTheme.typography.h5, textAlign = TextAlign.Center)
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(text = "Add your first ingestion.", style = MaterialTheme.typography.body1, textAlign = TextAlign.Center)
+                        }
                     }
                 }
             }
