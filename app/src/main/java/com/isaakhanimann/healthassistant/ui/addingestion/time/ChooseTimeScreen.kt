@@ -216,6 +216,7 @@ fun NoteSection(
                     isShowingSuggestions = false
                 }),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged { focusState ->

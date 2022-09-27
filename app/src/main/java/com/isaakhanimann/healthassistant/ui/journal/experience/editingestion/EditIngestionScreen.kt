@@ -3,6 +3,8 @@ package com.isaakhanimann.healthassistant.ui.journal.experience.editingestion
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,6 +12,8 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -107,18 +111,29 @@ fun EditIngestionScreen(
                 .padding(horizontal = 10.dp)
         ) {
             Spacer(modifier = Modifier.height(10.dp))
+            val focusManager = LocalFocusManager.current
             OutlinedTextField(
                 value = units,
                 onValueChange = onUnitsChange,
                 label = { Text(text = "Units") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardActions = KeyboardActions(onDone = {
+                    focusManager.clearFocus()
+                }),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
             )
             OutlinedTextField(
                 value = dose,
                 onValueChange = onDoseChange,
                 label = { Text(text = "Dose") },
                 trailingIcon = { Text(text = units) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardActions = KeyboardActions(onDone = {
+                    focusManager.clearFocus()
+                }),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(checked = isEstimate, onCheckedChange = onIsEstimateChange)
@@ -128,7 +143,12 @@ fun EditIngestionScreen(
                 value = note,
                 onValueChange = onNoteChange,
                 label = { Text(text = "Notes") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardActions = KeyboardActions(onDone = {
+                    focusManager.clearFocus()
+                }),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
             )
 
             var isShowingDropDownMenu by remember { mutableStateOf(false) }
