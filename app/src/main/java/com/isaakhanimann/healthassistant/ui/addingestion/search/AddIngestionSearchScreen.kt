@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -54,9 +55,10 @@ fun AddIngestionSearchScreen(
             isShowingSettings = false,
             navigateToSettings = {}
         )
+        val screenHeight = LocalConfiguration.current.screenHeightDp.dp
         SuggestionsSection(
             searchModel = searchModel,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.heightIn(0.dp, screenHeight/2),
             navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
             navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose
         )
@@ -75,11 +77,12 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
             ) {
                 Text(text = "Search Screen")
             }
+            val screenHeight = LocalConfiguration.current.screenHeightDp.dp
             SuggestionsSection(
                 searchModel = addIngestionSearchModel,
                 navigateToCheckInteractionsSkipDose = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
                 navigateToCheckInteractionsSkipRoute = { _: String, _: AdministrationRoute -> },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.heightIn(0.dp, screenHeight/2)
             )
         }
     }
@@ -93,23 +96,24 @@ fun SuggestionsSection(
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     modifier: Modifier
 ) {
-    LazyColumn(modifier = modifier) {
-        item {
-            SectionTitle(title = "Quick Logging")
-        }
-        items(searchModel.routeSuggestions) {
-            RouteSuggestion(routeSuggestionElement = it, onTap = {
-                navigateToCheckInteractionsSkipRoute(it.substanceName, it.administrationRoute)
-            })
-            Divider()
-        }
-        items(searchModel.doseSuggestions) {
-            DoseSuggestion(doseSuggestionElement = it, onTap = {
-                navigateToCheckInteractionsSkipDose(it.substanceName, it.administrationRoute, it.dose, it.units, it.isDoseAnEstimate)
-            })
-            Divider()
+    Column(modifier = modifier) {
+        SectionTitle(title = "Quick Logging")
+        LazyColumn {
+            items(searchModel.routeSuggestions) {
+                RouteSuggestion(routeSuggestionElement = it, onTap = {
+                    navigateToCheckInteractionsSkipRoute(it.substanceName, it.administrationRoute)
+                })
+                Divider()
+            }
+            items(searchModel.doseSuggestions) {
+                DoseSuggestion(doseSuggestionElement = it, onTap = {
+                    navigateToCheckInteractionsSkipDose(it.substanceName, it.administrationRoute, it.dose, it.units, it.isDoseAnEstimate)
+                })
+                Divider()
+            }
         }
     }
+
 }
 
 @Composable
@@ -117,7 +121,10 @@ fun RouteSuggestion(routeSuggestionElement: RouteSuggestionElement, onTap: () ->
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.clickable(onClick = onTap).fillMaxWidth().padding(horizontal = 10.dp, vertical = 5.dp)
+        modifier = Modifier
+            .clickable(onClick = onTap)
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp)
     ) {
         ColorCircle(substanceColor = routeSuggestionElement.color)
         Text(
@@ -131,7 +138,10 @@ fun DoseSuggestion(doseSuggestionElement: DoseSuggestionElement, onTap: () -> Un
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.clickable(onClick = onTap).fillMaxWidth().padding(horizontal = 10.dp, vertical = 5.dp)
+        modifier = Modifier
+            .clickable(onClick = onTap)
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 5.dp)
     ) {
         ColorCircle(substanceColor = doseSuggestionElement.color)
         if (doseSuggestionElement.dose != null) {
