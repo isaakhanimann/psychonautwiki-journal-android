@@ -5,7 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Launch
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -66,7 +66,7 @@ fun SaferInjectionLink() {
         uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL)
     }) {
         Icon(
-            Icons.Filled.Launch,
+            Icons.Default.OpenInBrowser,
             contentDescription = "Open Link",
             modifier = Modifier.size(ButtonDefaults.IconSize),
         )

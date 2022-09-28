@@ -7,7 +7,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Launch
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,7 +74,7 @@ fun RoaView(
                         modifier = Modifier
                             .clickable { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
                         Icon(
-                            Icons.Filled.Launch,
+                            Icons.Default.OpenInBrowser,
                             contentDescription = "Open Link",
                             modifier = Modifier.size(15.dp),
                             tint = MaterialTheme.colors.primary
@@ -93,7 +93,7 @@ fun RoaView(
                         modifier = Modifier
                             .clickable { uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL) }) {
                         Icon(
-                            Icons.Filled.Launch,
+                            Icons.Default.OpenInBrowser,
                             contentDescription = "Open Link",
                             modifier = Modifier.size(15.dp),
                             tint = MaterialTheme.colors.primary

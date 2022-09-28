@@ -5,8 +5,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Launch
 import androidx.compose.material.icons.filled.NavigateNext
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -140,7 +140,7 @@ fun CustomChooseDose(
                     val uriHandler = LocalUriHandler.current
                     TextButton(onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
                         Icon(
-                            Icons.Filled.Launch,
+                            Icons.Default.OpenInBrowser,
                             contentDescription = "Open Link"
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))

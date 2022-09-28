@@ -9,7 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.GppBad
-import androidx.compose.material.icons.filled.Launch
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -88,7 +88,7 @@ fun SubstanceScreen(
                 onClick = { uriHandler.openUri(substance.url) },
                 icon = {
                     Icon(
-                        Icons.Filled.Launch,
+                        Icons.Default.OpenInBrowser,
                         contentDescription = "Open Link"
                     )
                 },
@@ -130,7 +130,7 @@ fun SubstanceScreen(
                             val url = category.url
                             if (url != null) {
                                 Icon(
-                                    imageVector = Icons.Default.Launch,
+                                    imageVector = Icons.Default.OpenInBrowser,
                                     contentDescription = "Open Article",
                                     modifier = Modifier
                                         .clickable {

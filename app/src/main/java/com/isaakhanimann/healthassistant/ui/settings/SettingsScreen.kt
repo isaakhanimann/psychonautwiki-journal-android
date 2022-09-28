@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
-import androidx.compose.material.icons.filled.Launch
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.runtime.Composable
@@ -113,7 +113,7 @@ fun SettingsScreen(
                 uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
             }) {
                 Icon(
-                    Icons.Filled.Launch,
+                    Icons.Default.OpenInBrowser,
                     contentDescription = "Open Link",
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )

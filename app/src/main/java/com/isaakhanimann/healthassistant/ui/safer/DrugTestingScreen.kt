@@ -6,7 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Launch
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -182,7 +182,7 @@ fun TestingServiceItem(
             modifier = Modifier.width(IntrinsicSize.Max)
         )
         Icon(
-            imageVector = Icons.Default.Launch,
+            imageVector = Icons.Default.OpenInBrowser,
             contentDescription = "Open Link",
             modifier = Modifier.size(15.dp)
         )
