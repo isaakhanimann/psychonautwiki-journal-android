@@ -42,7 +42,7 @@ class SearchViewModel @Inject constructor(
 
     private val filtersFlow = MutableStateFlow(listOf("common"))
 
-    private val youUsedChipName = "you-used"
+    private val youUsedChipName = "used"
     private val customChipName = "custom"
 
     fun onFilterTapped(filterName: String) {

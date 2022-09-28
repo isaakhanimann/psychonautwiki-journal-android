@@ -95,7 +95,7 @@ fun SubstanceScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             val uriHandler = LocalUriHandler.current
-            Button(
+            OutlinedButton(
                 onClick = {
                     uriHandler.openUri(substance.url)
                 },
