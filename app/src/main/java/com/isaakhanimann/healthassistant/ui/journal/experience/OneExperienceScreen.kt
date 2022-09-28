@@ -166,11 +166,11 @@ fun ExperienceScreen(
             if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
                 Column(
                     horizontalAlignment = Alignment.Start,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
                         text = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern("EEE, dd MMM yyyy"),
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
                     )
                     oneExperienceScreenModel.ingestionElements.forEach {
                         IngestionRow(
@@ -180,11 +180,10 @@ fun ExperienceScreen(
                                     navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id)
                                 }
                                 .fillMaxWidth()
-                                .padding(vertical = 5.dp)
+                                .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
             if (oneExperienceScreenModel.cumulativeDoses.isNotEmpty()) {
