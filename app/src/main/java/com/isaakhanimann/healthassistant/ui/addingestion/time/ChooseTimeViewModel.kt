@@ -50,8 +50,8 @@ class ChooseTimeViewModel @Inject constructor(
             val selectedInstant = relevantDateFields.currentlySelectedInstant
             return@combine sortedExperiences.firstOrNull { experience ->
                 val sortedIngestions = experience.ingestions.sortedBy { it.time }
-                val firstIngestionTime = sortedIngestions.firstOrNull()?.time
-                val lastIngestionTime = sortedIngestions.lastOrNull()?.time
+                val firstIngestionTime = sortedIngestions.firstOrNull()?.time ?: return@firstOrNull false
+                val lastIngestionTime = sortedIngestions.lastOrNull()?.time ?: return@firstOrNull false
                 val selectedDateMinusLimit =
                     selectedInstant.minus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
                 val selectedDatePlusLimit =
