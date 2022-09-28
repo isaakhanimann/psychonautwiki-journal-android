@@ -4,10 +4,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 
-class StatsPreviewProvider : PreviewParameterProvider<StatsModel?> {
-    override val values: Sequence<StatsModel?> = sequenceOf(
+class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
+    override val values: Sequence<StatsModel> = sequenceOf(
         StatsModel(
             selectedOption = TimePickerOption.DAYS_7,
+            areThereAnyIngestions = true,
             startDateText = "22. June 2022",
             statItems = listOf(
                 StatItem(
@@ -107,7 +108,6 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel?> {
                     )
                 )
             ),
-        ),
-        null
+        )
     )
 }

@@ -44,6 +44,11 @@ class StatsViewModel @Inject constructor(
 
     private val allExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
         experienceRepo.getSortedExperiencesWithIngestionsFlow()
+
+    private val areThereAnyIngestionsFlow = allExperiencesSortedFlow.map { all ->
+        all.any { it.ingestions.isNotEmpty() }
+    }
+
     private val relevantExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
         allExperiencesSortedFlow.combine(startDateFlow) { experiences, startDate ->
             return@combine experiences.takeWhile { it.sortInstant > startDate }
@@ -58,7 +63,8 @@ class StatsViewModel @Inject constructor(
             var startInstant = Instant.now()
             for (i in 0 until option.bucketCount) {
                 startInstant = startInstant.minus(option.oneBucketSize)
-                val experiencesForBucket = remainingExperiences.takeWhile { it.sortInstant > startInstant }
+                val experiencesForBucket =
+                    remainingExperiences.takeWhile { it.sortInstant > startInstant }
                 buckets.add(experiencesForBucket)
                 val numExperiences = experiencesForBucket.size
                 remainingExperiences =
@@ -129,20 +135,29 @@ class StatsViewModel @Inject constructor(
         return TotalDose(dose = sumDose, units = units, isEstimate = isEstimate)
     }
 
-    val statsModelFlow: StateFlow<StatsModel?> =
+    val statsModelFlow: StateFlow<StatsModel> =
         optionFlow.combine(startDateTextFlow) { option, startDateText ->
             return@combine Pair(first = option, second = startDateText)
         }.combine(statsFlowItem) { pair, substanceStats ->
             return@combine Pair(first = pair, second = substanceStats)
+        }.combine(areThereAnyIngestionsFlow) { pair, areThere ->
+            return@combine Pair(first = pair, second = areThere)
         }.combine(experienceChartBucketsFlow) { pair, chartBuckets ->
             return@combine StatsModel(
-                selectedOption = pair.first.first,
-                startDateText = pair.first.second,
-                statItems = pair.second,
+                areThereAnyIngestions = pair.second,
+                selectedOption = pair.first.first.first,
+                startDateText = pair.first.first.second,
+                statItems = pair.first.second,
                 chartBuckets = chartBuckets
             )
         }.stateIn(
-            initialValue = null,
+            initialValue = StatsModel(
+                selectedOption = TimePickerOption.WEEKS_26,
+                areThereAnyIngestions = false,
+                startDateText = "",
+                statItems = emptyList(),
+                chartBuckets = emptyList()
+            ),
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000)
         )
@@ -150,6 +165,7 @@ class StatsViewModel @Inject constructor(
 
 data class StatsModel(
     val selectedOption: TimePickerOption,
+    val areThereAnyIngestions: Boolean,
     val startDateText: String,
     val statItems: List<StatItem>,
     val chartBuckets: List<List<ColorCount>>
@@ -183,6 +199,7 @@ data class TotalDose(
 enum class TimePickerOption {
     DAYS_7 {
         override val displayText = "7D"
+        override val longDisplayText = "Last Week"
         override val tabIndex = 0
         override val bucketCount = 7
         override val oneBucketSize: Period = Period.ofDays(1)
@@ -190,6 +207,7 @@ enum class TimePickerOption {
     },
     DAYS_30 {
         override val displayText = "30D"
+        override val longDisplayText = "Last Month"
         override val tabIndex = 1
         override val bucketCount = 30
         override val oneBucketSize: Period = Period.ofDays(1)
@@ -197,6 +215,7 @@ enum class TimePickerOption {
     },
     WEEKS_26 {
         override val displayText = "26W"
+        override val longDisplayText = "Half Year"
         override val tabIndex = 2
         override val bucketCount = 26
         override val oneBucketSize: Period = Period.ofWeeks(1)
@@ -204,6 +223,7 @@ enum class TimePickerOption {
     },
     MONTHS_12 {
         override val displayText = "12M"
+        override val longDisplayText = "Last Year"
         override val tabIndex = 3
         override val bucketCount = 12
         override val oneBucketSize: Period = Period.ofMonths(1)
@@ -211,6 +231,7 @@ enum class TimePickerOption {
     },
     YEARS_10 {
         override val displayText = "10Y"
+        override val longDisplayText = "10 Years"
         override val tabIndex = 4
         override val bucketCount = 10
         override val oneBucketSize: Period = Period.ofYears(1)
@@ -218,6 +239,7 @@ enum class TimePickerOption {
     };
 
     abstract val displayText: String
+    abstract val longDisplayText: String
     abstract val tabIndex: Int
     abstract val bucketCount: Int
     abstract val oneBucketSize: Period

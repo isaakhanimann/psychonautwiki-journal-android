@@ -37,7 +37,7 @@ fun StatsScreen(
 fun StatsPreview(
     @PreviewParameter(
         StatsPreviewProvider::class,
-    ) statsModel: StatsModel?
+    ) statsModel: StatsModel
 ) {
     StatsScreen(
         navigateToSubstanceCompanion = {},
@@ -50,15 +50,14 @@ fun StatsPreview(
 fun StatsScreen(
     navigateToSubstanceCompanion: (substanceName: String) -> Unit,
     onTapOption: (option: TimePickerOption) -> Unit,
-    statsModel: StatsModel?
+    statsModel: StatsModel
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    val startText = statsModel?.startDateText
-                    if (startText != null && statsModel.statItems.isNotEmpty()) {
-                        Text(text = "Statistics Since $startText")
+                    if (statsModel.areThereAnyIngestions) {
+                        Text(text = "Statistics Since ${statsModel.startDateText}")
                     } else {
                         Text(text = "Statistics")
                     }
@@ -67,20 +66,11 @@ fun StatsScreen(
             )
         }
     ) {
-        if (statsModel?.statItems?.isEmpty() != false) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Column(
-                        modifier = Modifier.padding(horizontal = 20.dp),horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(text = "Nothing to Show Yet", style = MaterialTheme.typography.h5, textAlign = TextAlign.Center)
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(text = "Start logging your ingestions to see an overview of your consumption pattern.", style = MaterialTheme.typography.body1, textAlign = TextAlign.Center)
-                    }
-                }
-            }
+        if (!statsModel.areThereAnyIngestions) {
+            EmptyScreenDisclaimer(
+                title = "Nothing to Show Yet",
+                description = "Start logging your ingestions to see an overview of your consumption pattern."
+            )
         } else {
             Column {
                 TabRow(selectedTabIndex = statsModel.selectedOption.tabIndex) {
@@ -92,76 +82,111 @@ fun StatsScreen(
                         )
                     }
                 }
-                val isDarkTheme = isSystemInDarkTheme()
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    item {
-                        Text(
-                            text = "Experiences",
-                            style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(start = 10.dp, top = 5.dp)
-                        )
-                        Text(
-                            text = "Substance counted once per experience",
-                            style = MaterialTheme.typography.caption,
-                            modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
-                        )
-                        BarChart(
-                            buckets = statsModel.chartBuckets,
-                            startDateText = statsModel.startDateText
-                        )
-                        Divider()
-                    }
-                    items(statsModel.statItems.size) { i ->
-                        val subStat = statsModel.statItems[i]
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    navigateToSubstanceCompanion(subStat.substanceName)
-                                }
-                                .padding(horizontal = 10.dp, vertical = 5.dp)
-                        ) {
-                            Surface(
-                                shape = CircleShape,
-                                color = subStat.color.getComposeColor(isDarkTheme),
-                                modifier = Modifier.size(25.dp)
-                            ) {}
-                            Column {
-                                Text(
-                                    text = subStat.substanceName,
-                                    fontWeight = FontWeight.ExtraBold
-                                )
-                                val addOn = if (subStat.experienceCount == 1) " experience" else " experiences"
-                                Text(
-                                    text = subStat.experienceCount.toString() + addOn,
-                                )
-                            }
-                            Spacer(modifier = Modifier.weight(1f))
-                            Column(horizontalAlignment = Alignment.End) {
-                                val cumulativeDose = subStat.totalDose
-                                if (cumulativeDose != null) {
-                                    Text(text = "total ${if (cumulativeDose.isEstimate) "~" else ""}${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
-                                } else {
-                                    Text(text = "total dose unknown")
-                                }
-                                subStat.routeCounts.forEach {
+                if (statsModel.statItems.isEmpty()){
+                    EmptyScreenDisclaimer(
+                        title = "No Ingestions Since ${statsModel.selectedOption.longDisplayText}",
+                        description = "Use a longer duration range to see statistics."
+                    )
+                } else {
+                    val isDarkTheme = isSystemInDarkTheme()
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        item {
+                            Text(
+                                text = "Experiences",
+                                style = MaterialTheme.typography.h6,
+                                modifier = Modifier.padding(start = 10.dp, top = 5.dp)
+                            )
+                            Text(
+                                text = "Substance counted once per experience",
+                                style = MaterialTheme.typography.caption,
+                                modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
+                            )
+                            BarChart(
+                                buckets = statsModel.chartBuckets,
+                                startDateText = statsModel.startDateText
+                            )
+                            Divider()
+                        }
+                        items(statsModel.statItems.size) { i ->
+                            val subStat = statsModel.statItems[i]
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        navigateToSubstanceCompanion(subStat.substanceName)
+                                    }
+                                    .padding(horizontal = 10.dp, vertical = 5.dp)
+                            ) {
+                                Surface(
+                                    shape = CircleShape,
+                                    color = subStat.color.getComposeColor(isDarkTheme),
+                                    modifier = Modifier.size(25.dp)
+                                ) {}
+                                Column {
                                     Text(
-                                        text = "${it.administrationRoute.displayText.lowercase()} ${it.count}x ",
+                                        text = subStat.substanceName,
+                                        fontWeight = FontWeight.ExtraBold
+                                    )
+                                    val addOn =
+                                        if (subStat.experienceCount == 1) " experience" else " experiences"
+                                    Text(
+                                        text = subStat.experienceCount.toString() + addOn,
                                     )
                                 }
-                            }
+                                Spacer(modifier = Modifier.weight(1f))
+                                Column(horizontalAlignment = Alignment.End) {
+                                    val cumulativeDose = subStat.totalDose
+                                    if (cumulativeDose != null) {
+                                        Text(text = "total ${if (cumulativeDose.isEstimate) "~" else ""}${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
+                                    } else {
+                                        Text(text = "total dose unknown")
+                                    }
+                                    subStat.routeCounts.forEach {
+                                        Text(
+                                            text = "${it.administrationRoute.displayText.lowercase()} ${it.count}x ",
+                                        )
+                                    }
+                                }
 
-                        }
-                        if (i < statsModel.statItems.size) {
-                            Divider()
+                            }
+                            if (i < statsModel.statItems.size) {
+                                Divider()
+                            }
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun EmptyScreenDisclaimer(title: String, description: String) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.h5,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.body1,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
