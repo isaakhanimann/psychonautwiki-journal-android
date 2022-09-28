@@ -17,11 +17,17 @@ class OneExperienceScreenPreviewProvider :
             isFavorite = false,
             sentiment = null,
             title = "Day at Lake Geneva",
+            firstIngestionTime = getInstant(
+                year = 2022,
+                month = 2,
+                day = 19,
+                hourOfDay = 20,
+                minute = 5
+            )!!,
             notes = "Some Notes",
             isShowingAddIngestionButton = true,
             ingestionElements = listOf(
                 IngestionElement(
-                    dateText = "Sat, 19 Feb 2022",
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "MDMA",
@@ -48,7 +54,6 @@ class OneExperienceScreenPreviewProvider :
                     doseClass = DoseClass.COMMON
                 ),
                 IngestionElement(
-                    dateText = null,
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",
@@ -75,7 +80,6 @@ class OneExperienceScreenPreviewProvider :
                     doseClass = DoseClass.COMMON
                 ),
                 IngestionElement(
-                    dateText = "Sun, 20 Feb 2022",
                     ingestionWithCompanion = IngestionWithCompanion(
                         ingestion = Ingestion(
                             substanceName = "Cocaine",

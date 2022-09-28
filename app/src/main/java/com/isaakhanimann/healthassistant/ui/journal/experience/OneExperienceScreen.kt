@@ -23,6 +23,7 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
+import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 
 @Composable
 fun ExperienceScreen(
@@ -36,7 +37,7 @@ fun ExperienceScreen(
         ExperienceScreen(
             oneExperienceScreenModel = oneExperienceScreenModel,
             addIngestion = navigateToAddIngestionSearch,
-            viewModel::deleteExperience,
+            deleteExperience = viewModel::deleteExperience,
             navigateToEditExperienceScreen,
             navigateToIngestionScreen,
             navigateBack,
@@ -168,10 +169,10 @@ fun ExperienceScreen(
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern("EEE, dd MMM yyyy"),
+                    )
                     oneExperienceScreenModel.ingestionElements.forEach {
-                        if (it.dateText != null) {
-                            Text(text = it.dateText)
-                        }
                         IngestionRow(
                             ingestionElement = it,
                             modifier = Modifier

@@ -17,9 +17,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -51,7 +48,11 @@ class OneExperienceViewModel @Inject constructor(
     }
 
     private val experienceWithIngestionsFlow =
-        experienceRepo.getExperienceWithIngestionsAndCompanionsFlow(experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!)
+        experienceRepo.getExperienceWithIngestionsAndCompanionsFlow(
+            experienceId = state.get<Int>(
+                EXPERIENCE_ID_KEY
+            )!!
+        )
 
     private val currentTimeFlow: Flow<Instant> = flow {
         while (true) {
@@ -60,16 +61,19 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
-    private val isShowingAddIngestionButtonFlow = experienceWithIngestionsFlow.combine(currentTimeFlow) { experienceWithIngestions, currentTime ->
-        val ingestionTimes = experienceWithIngestions?.ingestionsWithCompanions?.map { it.ingestion.time }
-        val lastIngestionTime = ingestionTimes?.maxOrNull()
-        val limitAgo = currentTime.minus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
-        return@combine limitAgo < lastIngestionTime
-    }
+    private val isShowingAddIngestionButtonFlow =
+        experienceWithIngestionsFlow.combine(currentTimeFlow) { experienceWithIngestions, currentTime ->
+            val ingestionTimes =
+                experienceWithIngestions?.ingestionsWithCompanions?.map { it.ingestion.time }
+            val lastIngestionTime = ingestionTimes?.maxOrNull()
+            val limitAgo = currentTime.minus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
+            return@combine limitAgo < lastIngestionTime
+        }
 
-    private val sortedIngestionsWithCompanionsFlow = experienceWithIngestionsFlow.map { experience ->
-        experience?.ingestionsWithCompanions?.sortedBy { it.ingestion.time } ?: emptyList()
-    }
+    private val sortedIngestionsWithCompanionsFlow =
+        experienceWithIngestionsFlow.map { experience ->
+            experience?.ingestionsWithCompanions?.sortedBy { it.ingestion.time } ?: emptyList()
+        }
 
     private data class IngestionWithAssociatedData(
         val ingestionWithCompanion: IngestionWithCompanion,
@@ -101,39 +105,18 @@ class OneExperienceViewModel @Inject constructor(
     }
 
     private fun getIngestionElements(sortedIngestionsWith: List<IngestionWithAssociatedData>): List<IngestionElement> {
-        return sortedIngestionsWith.mapIndexed { index, ingestionWith ->
-            val currentIngestionTime = ingestionWith.ingestionWithCompanion.ingestion.time
-            val currentIngestionTimeText = getFullDateText(currentIngestionTime)
-            val timeText = if (index == 0) {
-                currentIngestionTimeText
-            } else {
-                val previousIngestionTimeText =
-                    getFullDateText(sortedIngestionsWith[index - 1].ingestionWithCompanion.ingestion.time)
-                val isCurrentSameAsPrevious = previousIngestionTimeText == currentIngestionTimeText
-                if (isCurrentSameAsPrevious) {
-                    null
-                } else {
-                    currentIngestionTimeText
-                }
-            }
+        return sortedIngestionsWith.map { ingestionWith ->
             val doseClass =
                 ingestionWith.roaDose?.getDoseClass(
                     ingestionWith.ingestionWithCompanion.ingestion.dose,
                     ingestionUnits = ingestionWith.ingestionWithCompanion.ingestion.units
                 )
             IngestionElement(
-                dateText = timeText,
                 ingestionWithCompanion = ingestionWith.ingestionWithCompanion,
                 roaDuration = ingestionWith.roaDuration,
                 doseClass = doseClass
             )
         }
-    }
-
-    private fun getFullDateText(instant: Instant): String {
-        val dateTime = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault())
-        val formatter = DateTimeFormatter.ofPattern("EEE, dd MMMM yyyy")
-        return dateTime.format(formatter)
     }
 
     fun deleteExperience() {
@@ -144,26 +127,28 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
-    val oneExperienceScreenModelFlow: StateFlow<OneExperienceScreenModel?> = isShowingAddIngestionButtonFlow.combine(ingestionElementsFlow) { isShowingAddIngestion, ingestionElements ->
-        Pair(first = isShowingAddIngestion, second = ingestionElements)
-    }.combine(cumulativeDosesFlow) { pair, cumulatives ->
-        Pair(first = pair, second = cumulatives)
-    }.combine(experienceWithIngestionsFlow) { pair, experienceWithIngestions ->
-        val experience = experienceWithIngestions?.experience ?: return@combine null
-        return@combine OneExperienceScreenModel(
-            isFavorite = experience.isFavorite,
-            sentiment = experience.sentiment,
-            title = experience.title,
-            notes = experience.text,
-            isShowingAddIngestionButton = pair.first.first,
-            ingestionElements = pair.first.second,
-            cumulativeDoses = pair.second
+    val oneExperienceScreenModelFlow: StateFlow<OneExperienceScreenModel?> =
+        isShowingAddIngestionButtonFlow.combine(ingestionElementsFlow) { isShowingAddIngestion, ingestionElements ->
+            Pair(first = isShowingAddIngestion, second = ingestionElements)
+        }.combine(cumulativeDosesFlow) { pair, cumulativeDoses ->
+            Pair(first = pair, second = cumulativeDoses)
+        }.combine(experienceWithIngestionsFlow) { pair, experienceWithIngestions ->
+            val experience = experienceWithIngestions?.experience ?: return@combine null
+            return@combine OneExperienceScreenModel(
+                isFavorite = experience.isFavorite,
+                sentiment = experience.sentiment,
+                title = experience.title,
+                firstIngestionTime = experienceWithIngestions.sortInstant,
+                notes = experience.text,
+                isShowingAddIngestionButton = pair.first.first,
+                ingestionElements = pair.first.second,
+                cumulativeDoses = pair.second
+            )
+        }.stateIn(
+            initialValue = null,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
         )
-    }.stateIn(
-        initialValue = null,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
 
     private companion object {
         fun getCumulativeDoses(ingestions: List<IngestionWithAssociatedData>): List<CumulativeDose> {
@@ -199,6 +184,7 @@ data class OneExperienceScreenModel(
     val isFavorite: Boolean,
     val sentiment: Sentiment?,
     val title: String,
+    val firstIngestionTime: Instant,
     val notes: String,
     val isShowingAddIngestionButton: Boolean,
     val ingestionElements: List<IngestionElement>,
@@ -214,7 +200,6 @@ data class CumulativeDose(
 )
 
 data class IngestionElement(
-    val dateText: String?,
     val ingestionWithCompanion: IngestionWithCompanion,
     val roaDuration: RoaDuration?,
     val doseClass: DoseClass?

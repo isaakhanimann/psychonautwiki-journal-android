@@ -12,7 +12,6 @@ import java.time.Instant
 class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
     override val values: Sequence<IngestionElement> = sequenceOf(
         IngestionElement(
-            dateText = null,
             ingestionWithCompanion = IngestionWithCompanion(
                 ingestion = Ingestion(
                     substanceName = "MDMA",
@@ -33,7 +32,6 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
             doseClass = DoseClass.COMMON
         ),
         IngestionElement(
-            dateText = null,
             ingestionWithCompanion = IngestionWithCompanion(
                 ingestion = Ingestion(
                     substanceName = "LSD",
