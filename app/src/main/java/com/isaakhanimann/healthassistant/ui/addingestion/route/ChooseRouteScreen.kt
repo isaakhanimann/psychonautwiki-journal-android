@@ -8,27 +8,22 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 
 @Composable
 fun ChooseRouteScreen(
     navigateToChooseDose: (administrationRoute: AdministrationRoute) -> Unit,
-    navigateToChooseTimeAndMaybeColor: (administrationRoute: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToRouteExplanationScreen: () -> Unit,
     viewModel: ChooseRouteViewModel = hiltViewModel()
 ) {
@@ -54,17 +49,13 @@ fun ChooseRouteScreen(
         },
         dismissInjectionDialog = {
             viewModel.isShowingInjectionDialog = false
-        },
-        sortedIngestions = viewModel.sortedIngestionsFlow.collectAsState().value,
-        navigateToChooseTimeAndMaybeColor = navigateToChooseTimeAndMaybeColor
+        }
     )
 }
 
 @Preview
 @Composable
-fun ChooseRouteScreenPreview(
-    @PreviewParameter(RouteIngestionsPreviewProvider::class) ingestions: List<ChooseRouteViewModel.IngestionSuggestion>,
-) {
+fun ChooseRouteScreenPreview() {
     val pwRoutes = listOf(AdministrationRoute.INSUFFLATED, AdministrationRoute.ORAL)
     val otherRoutes = AdministrationRoute.values().filter { route ->
         !pwRoutes.contains(route)
@@ -79,9 +70,7 @@ fun ChooseRouteScreenPreview(
         navigateToRouteExplanationScreen = {},
         isShowingInjectionDialog = false,
         navigateWithCurrentRoute = {},
-        dismissInjectionDialog = {},
-        sortedIngestions = ingestions,
-        navigateToChooseTimeAndMaybeColor = { _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> }
+        dismissInjectionDialog = {}
     )
 }
 
@@ -96,9 +85,7 @@ fun ChooseRouteScreen(
     isShowingInjectionDialog: Boolean,
     navigateWithCurrentRoute: () -> Unit,
     dismissInjectionDialog: () -> Unit,
-    sortedIngestions: List<ChooseRouteViewModel.IngestionSuggestion>,
-    navigateToChooseTimeAndMaybeColor: (administrationRoute: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
-    ) {
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -207,64 +194,11 @@ fun ChooseRouteScreen(
                                 RouteBox(route = route, titleStyle = MaterialTheme.typography.h4)
                             }
                         }
-                        if (sortedIngestions.isNotEmpty()) {
-                            Text(text = "Copy Earlier Ingestion", style = MaterialTheme.typography.subtitle2)
-                            sortedIngestions.forEach {
-                                IngestionRowInChooseRoute(
-                                    ingestion = it,
-                                    navigateToEnd = {
-                                        navigateToChooseTimeAndMaybeColor(
-                                            it.administrationRoute,
-                                            it.dose,
-                                            it.units,
-                                            it.isDoseAnEstimate
-                                        )
-                                    }
-                                )
-                            }
-                        }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun IngestionRowInChooseRoute(ingestion: ChooseRouteViewModel.IngestionSuggestion, navigateToEnd: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .clickable(onClick = navigateToEnd)
-            .fillMaxWidth()
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(10.dp)
-        ) {
-            Icon(imageVector = Icons.Default.History, contentDescription = "History")
-            Spacer(modifier = Modifier.width(12.dp))
-            val textStyle = MaterialTheme.typography.h5
-            Text(
-                text = ingestion.administrationRoute.displayText,
-                style = textStyle
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            if (ingestion.dose != null) {
-                val isEstimateText = if (ingestion.isDoseAnEstimate) "~" else ""
-                val doseText = ingestion.dose.toReadableString()
-                Text(
-                    text = "$isEstimateText$doseText ${ingestion.units}",
-                    style = textStyle
-                )
-            } else {
-                Text(
-                    text = "Unknown Dose",
-                    style = textStyle
-                )
-            }
-        }
-    }
-
 }
 
 @Preview

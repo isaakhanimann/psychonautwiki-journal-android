@@ -302,15 +302,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     )
                 },
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
-                navigateToChooseTimeAndMaybeColor = { administrationRoute, dose, units, isEstimate ->
-                    navController.navigateToChooseTimeAndMaybeColor(
-                        substanceName = substanceName,
-                        administrationRoute = administrationRoute,
-                        units = units,
-                        isEstimate = isEstimate,
-                        dose = dose
-                    )
-                }
             )
         }
         composable(
