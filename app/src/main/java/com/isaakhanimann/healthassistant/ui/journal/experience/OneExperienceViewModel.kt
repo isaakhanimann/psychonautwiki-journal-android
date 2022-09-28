@@ -47,12 +47,10 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
+    private val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
+
     private val experienceWithIngestionsFlow =
-        experienceRepo.getExperienceWithIngestionsAndCompanionsFlow(
-            experienceId = state.get<Int>(
-                EXPERIENCE_ID_KEY
-            )!!
-        )
+        experienceRepo.getExperienceWithIngestionsAndCompanionsFlow(experienceId)
 
     private val currentTimeFlow: Flow<Instant> = flow {
         while (true) {
@@ -65,7 +63,7 @@ class OneExperienceViewModel @Inject constructor(
         experienceWithIngestionsFlow.combine(currentTimeFlow) { experienceWithIngestions, currentTime ->
             val ingestionTimes =
                 experienceWithIngestions?.ingestionsWithCompanions?.map { it.ingestion.time }
-            val lastIngestionTime = ingestionTimes?.maxOrNull()
+            val lastIngestionTime = ingestionTimes?.maxOrNull() ?: return@combine false
             val limitAgo = currentTime.minus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
             return@combine limitAgo < lastIngestionTime
         }
