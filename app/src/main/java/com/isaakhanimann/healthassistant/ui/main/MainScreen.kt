@@ -16,8 +16,10 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.AcceptConditionsScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.ChooseDoseScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.DoseGuideScreen
+import com.isaakhanimann.healthassistant.ui.addingestion.dose.custom.CustomChooseDose
 import com.isaakhanimann.healthassistant.ui.addingestion.interactions.CheckInteractionsScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.ChooseRouteScreen
+import com.isaakhanimann.healthassistant.ui.addingestion.route.CustomChooseRouteScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.RouteExplanationScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ChooseTimeScreen
@@ -127,9 +129,7 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
                     dose = dose
                 )
             },
-            navigateToCustomSubstanceChooseRoute = { substanceName ->
-
-            }
+            navigateToCustomSubstanceChooseRoute = navController::navigateToChooseCustomRoute
         )
     }
 }
@@ -302,6 +302,42 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     )
                 },
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
+            )
+        }
+        composable(
+            ArgumentRouter.CustomChooseRouteRouter.route,
+            arguments = ArgumentRouter.CustomChooseRouteRouter.args
+        ) { backStackEntry ->
+            val args = backStackEntry.arguments!!
+            val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+            CustomChooseRouteScreen(
+                onRouteTap = { administrationRoute ->
+                    navController.navigateToChooseDoseCustom(
+                        substanceName = substanceName,
+                        administrationRoute = administrationRoute,
+                    )
+                }
+            )
+        }
+        composable(
+            ArgumentRouter.CustomChooseDoseRouter.route,
+            arguments = ArgumentRouter.CustomChooseDoseRouter.args
+        ) { backStackEntry ->
+            CustomChooseDose(
+                navigateToChooseTimeAndMaybeColor = { units, isEstimate, dose ->
+                    val args = backStackEntry.arguments!!
+                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    val route =
+                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+                    navController.navigateToChooseTimeAndMaybeColor(
+                        substanceName = substanceName,
+                        administrationRoute = route,
+                        units = units,
+                        isEstimate = isEstimate,
+                        dose = dose,
+                    )
+                },
+                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing
             )
         }
         composable(

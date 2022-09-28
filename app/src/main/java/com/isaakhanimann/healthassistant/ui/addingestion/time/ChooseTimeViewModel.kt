@@ -13,8 +13,6 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.data.substances.classes.Substance
-import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.*
 import com.isaakhanimann.healthassistant.ui.utils.getInstant
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
@@ -30,12 +28,10 @@ const val hourLimitToSeparateIngestions: Long = 12
 
 @HiltViewModel
 class ChooseTimeViewModel @Inject constructor(
-    substanceRepo: SubstanceRepository,
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
-    val substance: Substance?
     private val zonedDateTime = Instant.now().atZone(ZoneId.systemDefault())
     val dateAndTimeFlow = MutableStateFlow(
         DateAndTime(
@@ -128,7 +124,6 @@ class ChooseTimeViewModel @Inject constructor(
     }
 
     init {
-        substance = substanceRepo.getSubstance(substanceName)
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         dose = state.get<String>(DOSE_KEY)?.toDoubleOrNull()
@@ -140,7 +135,6 @@ class ChooseTimeViewModel @Inject constructor(
             }
         }
         isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)!!
-        assert(substance != null)
         viewModelScope.launch {
             val allCompanions = experienceRepo.getAllSubstanceCompanionsFlow().first()
             val thisCompanion = allCompanions.firstOrNull { it.substanceName == substanceName }

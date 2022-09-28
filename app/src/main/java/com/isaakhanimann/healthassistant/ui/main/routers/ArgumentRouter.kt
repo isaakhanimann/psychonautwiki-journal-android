@@ -22,6 +22,8 @@ const val ROUTE_START_ADD_INGESTIONS = "addIngestions/"
 const val ROUTE_START_ADD_CUSTOM = "addCustom/"
 const val ROUTE_START_EDIT_EXPERIENCE = "editExperience/"
 const val ROUTE_START_EDIT_CUSTOM = "editCustom/"
+const val ROUTE_START_CHOOSE_ROUTE_CUSTOM = "chooseRouteCustom/"
+const val ROUTE_START_CHOOSE_DOSE_CUSTOM = "chooseDoseCustom/"
 const val ROUTE_START_SUBSTANCES = "substances/"
 const val ROUTE_START_CHECK_INTERACTIONS_SKIP_NOTHING = "checkInteractionsSkipNothing/"
 const val ROUTE_START_CHECK_INTERACTIONS_SKIP_ROUTE = "checkInteractionsSkipRoute/"
@@ -51,6 +53,19 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     object EditCustomRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_CUSTOM{$SUBSTANCE_NAME_KEY}",
         args = listOf(navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType })
+    )
+
+    object CustomChooseRouteRouter : ArgumentRouter(
+        route = "$ROUTE_START_CHOOSE_ROUTE_CUSTOM{$SUBSTANCE_NAME_KEY}",
+        args = listOf(navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType })
+    )
+
+    object CustomChooseDoseRouter : ArgumentRouter(
+        route = "$ROUTE_START_CHOOSE_DOSE_CUSTOM{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}",
+        args = listOf(
+            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
+            navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType }
+        )
     )
 
     object SubstanceRouter : ArgumentRouter(
@@ -140,6 +155,10 @@ fun NavController.navigateToEditCustomSubstance(substanceName: String) {
     navigate(ROUTE_START_EDIT_CUSTOM + substanceName)
 }
 
+fun NavController.navigateToChooseCustomRoute(substanceName: String) {
+    navigate(ROUTE_START_CHOOSE_ROUTE_CUSTOM + substanceName)
+}
+
 fun NavController.navigateToSubstanceCompanionScreen(substanceName: String) {
     navigate(ROUTE_START_SUBSTANCE_COMPANION + substanceName)
 }
@@ -157,6 +176,13 @@ fun NavController.navigateToChooseDose(
     administrationRoute: AdministrationRoute
 ) {
     navigate("$ROUTE_START_CHOOSE_DOSE$substanceName/${administrationRoute.name}")
+}
+
+fun NavController.navigateToChooseDoseCustom(
+    substanceName: String,
+    administrationRoute: AdministrationRoute
+) {
+    navigate("$ROUTE_START_CHOOSE_DOSE_CUSTOM$substanceName/${administrationRoute.name}")
 }
 
 fun NavController.navigateToCheckInteractionsSkipRoute(
