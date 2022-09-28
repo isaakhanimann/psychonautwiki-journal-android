@@ -129,7 +129,19 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
                     dose = dose
                 )
             },
-            navigateToCustomSubstanceChooseRoute = navController::navigateToChooseCustomRoute
+            navigateToCustomSubstanceChooseRoute = navController::navigateToChooseCustomRoute,
+            navigateToChooseTime = { substanceName, route, dose, units, isEstimate ->
+                navController.navigateToChooseTimeAndMaybeColor(
+                    substanceName = substanceName,
+                    administrationRoute = route,
+                    units = units,
+                    isEstimate = isEstimate,
+                    dose = dose
+                )
+            },
+            navigateToCustomDose = { substanceName, route ->
+                navController.navigateToChooseDoseCustom(substanceName, route)
+            }
         )
     }
 }

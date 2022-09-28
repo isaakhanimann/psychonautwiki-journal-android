@@ -1,6 +1,5 @@
 package com.isaakhanimann.healthassistant.ui.addingestion.search
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
@@ -27,16 +27,20 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableStrin
 fun AddIngestionSearchScreen(
     navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
     navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
 ) {
     AddIngestionSearchScreen(
         navigateToCheckInteractionsSkipNothing = navigateToCheckInteractionsSkipNothing,
-        searchModel = viewModel.modelFlow.collectAsState().value,
         navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
+        navigateToCustomDose = navigateToCustomDose,
         navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose,
-        navigateToCustomSubstanceChooseRoute = navigateToCustomSubstanceChooseRoute
+        navigateToCustomSubstanceChooseRoute = navigateToCustomSubstanceChooseRoute,
+        navigateToChooseTime = navigateToChooseTime,
+        previousSubstances = viewModel.previousSubstanceRows.collectAsState().value,
     )
 }
 
@@ -44,9 +48,11 @@ fun AddIngestionSearchScreen(
 fun AddIngestionSearchScreen(
     navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
     navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
-    searchModel: AddIngestionSearchModel
+    previousSubstances: List<PreviousSubstance>
 ) {
     Column {
         LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
@@ -61,12 +67,14 @@ fun AddIngestionSearchScreen(
             onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
         )
         val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-        if (searchModel.doseSuggestions.isNotEmpty() || searchModel.routeSuggestions.isNotEmpty()) {
+        if (previousSubstances.isNotEmpty()) {
             SuggestionsSection(
-                searchModel = searchModel,
+                previousSubstances = previousSubstances,
                 modifier = Modifier.heightIn(0.dp, screenHeight / 2),
                 navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
-                navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose
+                navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose,
+                navigateToChooseTime = navigateToChooseTime,
+                navigateToCustomDose = navigateToCustomDose
             )
         }
     }
@@ -74,7 +82,7 @@ fun AddIngestionSearchScreen(
 
 @Preview
 @Composable
-fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider::class) addIngestionSearchModel: AddIngestionSearchModel) {
+fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider::class) previousSubstances: List<PreviousSubstance>) {
     Scaffold {
         Column(modifier = Modifier.fillMaxSize()) {
             Surface(
@@ -86,9 +94,11 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
             }
             val screenHeight = LocalConfiguration.current.screenHeightDp.dp
             SuggestionsSection(
-                searchModel = addIngestionSearchModel,
+                previousSubstances = previousSubstances,
                 navigateToCheckInteractionsSkipDose = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
                 navigateToCheckInteractionsSkipRoute = { _: String, _: AdministrationRoute -> },
+                navigateToChooseTime = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
+                navigateToCustomDose = { _: String, _: AdministrationRoute -> },
                 modifier = Modifier.heightIn(0.dp, screenHeight / 2)
             )
         }
@@ -98,81 +108,89 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
 
 @Composable
 fun SuggestionsSection(
-    searchModel: AddIngestionSearchModel,
+    previousSubstances: List<PreviousSubstance>,
     navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     modifier: Modifier
 ) {
     Column(modifier = modifier) {
         SectionTitle(title = "Quick Logging")
         LazyColumn {
-            items(searchModel.routeSuggestions) {
-                RouteSuggestion(routeSuggestionElement = it, onTap = {
-                    navigateToCheckInteractionsSkipRoute(it.substanceName, it.administrationRoute)
-                })
-                Divider()
-            }
-            items(searchModel.doseSuggestions) {
-                DoseSuggestion(doseSuggestionElement = it, onTap = {
-                    navigateToCheckInteractionsSkipDose(
-                        it.substanceName,
-                        it.administrationRoute,
-                        it.dose,
-                        it.units,
-                        it.isDoseAnEstimate
-                    )
-                })
+            items(previousSubstances) { substanceRow ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 6.dp, vertical = 5.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        ColorCircle(substanceColor = substanceRow.color)
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = substanceRow.substanceName,
+                        )
+                    }
+                    substanceRow.routesWithDoses.forEach { routeWithDoses ->
+                        Row {
+                            OutlinedButton(onClick = {
+                                if (substanceRow.isCustom) {
+                                    navigateToCustomDose(
+                                        substanceRow.substanceName,
+                                        routeWithDoses.route
+                                    )
+                                } else {
+                                    navigateToCheckInteractionsSkipRoute(
+                                        substanceRow.substanceName,
+                                        routeWithDoses.route
+                                    )
+                                }
+                            }) {
+                                Text(text = routeWithDoses.route.displayText)
+                            }
+                            Spacer(modifier = Modifier.width(5.dp))
+                            FlowRow(mainAxisSpacing = 5.dp) {
+                                routeWithDoses.doses.forEach { previousDose ->
+                                    OutlinedButton(onClick = {
+                                        if (substanceRow.isCustom) {
+                                            navigateToChooseTime(
+                                                substanceRow.substanceName,
+                                                routeWithDoses.route,
+                                                previousDose.dose,
+                                                previousDose.unit,
+                                                previousDose.isEstimate
+                                            )
+                                        } else {
+                                            navigateToCheckInteractionsSkipDose(
+                                                substanceRow.substanceName,
+                                                routeWithDoses.route,
+                                                previousDose.dose,
+                                                previousDose.unit,
+                                                previousDose.isEstimate
+                                            )
+                                        }
+                                    }) {
+                                        if (previousDose.dose != null) {
+                                            val estimate =
+                                                if (previousDose.isEstimate) "~" else ""
+                                            Text(text = "$estimate${previousDose.dose.toReadableString()} ${previousDose.unit ?: ""}")
+                                        } else {
+                                            Text(text = "Unknown Dose")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 Divider()
             }
         }
     }
 
-}
-
-@Composable
-fun RouteSuggestion(routeSuggestionElement: RouteSuggestionElement, onTap: () -> Unit) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable(onClick = onTap)
-            .fillMaxWidth()
-            .padding(horizontal = 6.dp, vertical = 5.dp)
-    ) {
-        ColorCircle(substanceColor = routeSuggestionElement.color)
-        Text(
-            text = routeSuggestionElement.substanceName + " " + routeSuggestionElement.administrationRoute.displayText,
-        )
-    }
-}
-
-@Composable
-fun DoseSuggestion(doseSuggestionElement: DoseSuggestionElement, onTap: () -> Unit) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable(onClick = onTap)
-            .fillMaxWidth()
-            .padding(horizontal = 6.dp, vertical = 5.dp)
-    ) {
-        ColorCircle(substanceColor = doseSuggestionElement.color)
-        Text(
-            text = "${doseSuggestionElement.substanceName} ${doseSuggestionElement.administrationRoute.displayText}",
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        if (doseSuggestionElement.dose != null) {
-            val isEstimateText = if (doseSuggestionElement.isDoseAnEstimate) "~" else ""
-            val doseText = doseSuggestionElement.dose.toReadableString()
-            Text(
-                text = "$isEstimateText$doseText ${doseSuggestionElement.units}",
-            )
-        } else {
-            Text(
-                text = "Unknown Dose",
-            )
-        }
-    }
 }
 
 @Composable
