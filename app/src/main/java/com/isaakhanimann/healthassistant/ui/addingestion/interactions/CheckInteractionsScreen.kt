@@ -1,6 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.addingestion.interactions
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
@@ -123,10 +125,12 @@ fun CheckInteractionsScreen(
                 val verticalSpaceBetween = 1.dp
                 val verticalPaddingInside = 4.dp
                 val style = MaterialTheme.typography.h6
-
-                Column(modifier = Modifier.padding(horizontal = 5.dp, vertical = 5.dp)) {
+                LazyColumn(modifier = Modifier.padding(horizontal = 5.dp)) {
+                    item {
+                        Spacer(modifier = Modifier.height(5.dp))
+                    }
                     if (dangerousInteractions.isNotEmpty()) {
-                        dangerousInteractions.forEach {
+                        items(dangerousInteractions) {
                             InteractionRow(
                                 text = it,
                                 interactionType = InteractionType.DANGEROUS,
@@ -137,18 +141,17 @@ fun CheckInteractionsScreen(
                         }
                     }
                     if (unsafeInteractions.isNotEmpty()) {
-                        unsafeInteractions.forEach {
+                        items(unsafeInteractions) {
                             InteractionRow(
                                 text = it, interactionType = InteractionType.UNSAFE,
                                 verticalSpaceBetween = verticalSpaceBetween,
                                 verticalPaddingInside = verticalPaddingInside,
                                 textStyle = style
                             )
-
                         }
                     }
                     if (uncertainInteractions.isNotEmpty()) {
-                        uncertainInteractions.forEach {
+                        items(uncertainInteractions) {
                             InteractionRow(
                                 text = it, interactionType = InteractionType.UNCERTAIN,
                                 verticalSpaceBetween = verticalSpaceBetween,
@@ -157,11 +160,13 @@ fun CheckInteractionsScreen(
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(3.dp))
-                    Text(
-                        text = "Check the PsychonautWiki article for explanations",
-                        style = MaterialTheme.typography.caption,
-                    )
+                    item {
+                        Text(
+                            text = "Check the PsychonautWiki article for explanations",
+                            style = MaterialTheme.typography.caption,
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                    }
                 }
             }
             if (isShowingAlert && alertInteractionType != null) {
