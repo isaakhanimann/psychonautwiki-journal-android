@@ -50,9 +50,9 @@ fun RoaDurationView(
         val total = roaDuration.total
         val colorTimeLine = MaterialTheme.colors.primary
         val colorTransparent = colorTimeLine.copy(alpha = 0.1f)
-        val strokeWidth = 8f
+        val strokeWidth = 13f
         val strokeWidthThick = 40f
-        val ingestionDotRadius = 10f
+        val ingestionDotRadius = 13f
         val onset = roaDuration.onset
         val comeup = roaDuration.comeup
         val peak = roaDuration.peak
