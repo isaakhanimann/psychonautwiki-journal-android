@@ -10,7 +10,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.Launch
-import androidx.compose.material.icons.filled.Verified
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -103,19 +102,15 @@ fun SubstanceScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             val titleStyle = MaterialTheme.typography.subtitle2
-            Row(modifier = Modifier.padding(vertical = 5.dp)) {
-                if (substance.isApproved) {
-                    Icon(imageVector = Icons.Default.Verified, contentDescription = "Verified")
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = "PsychonautWiki article is approved")
-                } else {
+            if (!substance.isApproved) {
+                Row(modifier = Modifier.padding(top = 5.dp)) {
                     Icon(imageVector = Icons.Default.GppBad, contentDescription = "Verified")
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(text = "Info is not approved")
                 }
             }
             if (substance.summary != null) {
-                Text(text = "Summary", style = titleStyle)
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(text = substance.summary)
                 val categories = substanceWithCategories.categories
                 Spacer(modifier = Modifier.height(5.dp))
@@ -291,7 +286,7 @@ fun BulletPoints(points: List<String>) {
                         .padding(top = 7.dp)
                         .size(7.dp)
                 ) {}
-                Spacer(modifier = Modifier.width(5.dp))
+                Spacer(modifier = Modifier.width(6.dp))
                 Text(text = it)
             }
         }
