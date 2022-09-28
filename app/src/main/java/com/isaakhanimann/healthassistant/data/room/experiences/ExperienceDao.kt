@@ -121,6 +121,30 @@ interface ExperienceDao {
     @Delete
     suspend fun deleteIngestion(ingestion: Ingestion)
 
+    @Transaction
+    suspend fun deleteEverything() {
+        deleteAllIngestions()
+        deleteAllExperiences()
+        deleteAllSubstanceCompanions()
+        deleteAllCustomSubstances()
+    }
+
+    @Transaction
+    @Query("DELETE FROM ingestion")
+    suspend fun deleteAllIngestions()
+
+    @Transaction
+    @Query("DELETE FROM experience")
+    suspend fun deleteAllExperiences()
+
+    @Transaction
+    @Query("DELETE FROM substancecompanion")
+    suspend fun deleteAllSubstanceCompanions()
+
+    @Transaction
+    @Query("DELETE FROM customsubstance")
+    suspend fun deleteAllCustomSubstances()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(ingestion: Ingestion)
 

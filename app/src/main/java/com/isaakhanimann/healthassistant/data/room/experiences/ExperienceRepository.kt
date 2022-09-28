@@ -39,6 +39,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
         substanceCompanion
     )
 
+    suspend fun deleteEverything() = experienceDao.deleteEverything()
+
     suspend fun delete(ingestion: Ingestion) = experienceDao.deleteIngestion(ingestion)
 
     suspend fun delete(experience: Experience) =

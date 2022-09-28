@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.DataStorePreferences
+import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,19 +17,20 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 
-val Instant.asTextWithDateAndTime: String get() {
-    val dateTime = LocalDateTime.ofInstant(this, ZoneId.systemDefault())
-    val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")
-    return dateTime.format(formatter)
-}
+val Instant.asTextWithDateAndTime: String
+    get() {
+        val dateTime = LocalDateTime.ofInstant(this, ZoneId.systemDefault())
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")
+        return dateTime.format(formatter)
+    }
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     dataStorePreferences: DataStorePreferences,
-    private val substanceRepository: SubstanceRepository
+    private val substanceRepository: SubstanceRepository,
+    private val experienceRepository: ExperienceRepository
 ) : ViewModel() {
 
     val dateStringFlow = dataStorePreferences.instantFlow.mapNotNull { it.asTextWithDateAndTime }
@@ -57,6 +59,12 @@ class SettingsViewModel @Inject constructor(
             withContext(Dispatchers.Main) {
                 isUpdating = false
             }
+        }
+    }
+
+    fun deleteEverything() {
+        viewModelScope.launch {
+            experienceRepository.deleteEverything()
         }
     }
 }

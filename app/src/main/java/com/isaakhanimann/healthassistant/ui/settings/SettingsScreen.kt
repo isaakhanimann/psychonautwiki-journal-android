@@ -1,21 +1,21 @@
 package com.isaakhanimann.healthassistant.ui.settings
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.QuestionAnswer
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.initialDate
 
@@ -23,6 +23,7 @@ import com.isaakhanimann.healthassistant.data.initialDate
 @Composable
 fun SettingsPreview() {
     SettingsScreen(
+        deleteEverything = {},
         updateSubstances = { _: () -> Unit, _: () -> Unit -> run {} },
         resetSubstances = {},
         isUpdating = false,
@@ -38,6 +39,7 @@ fun SettingsScreen(
 ) {
     SettingsScreen(
         navigateToFAQ,
+        deleteEverything = settingsViewModel::deleteEverything,
         updateSubstances = settingsViewModel::updateSubstances,
         resetSubstances = settingsViewModel::resetSubstances,
         isUpdating = settingsViewModel.isUpdating,
@@ -48,6 +50,7 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreen(
     navigateToFAQ: () -> Unit,
+    deleteEverything: () -> Unit,
     updateSubstances: (onSuccess: () -> Unit, onError: () -> Unit) -> Unit,
     resetSubstances: () -> Unit,
     isUpdating: Boolean,
@@ -58,7 +61,7 @@ fun SettingsScreen(
             title = { Text(text = "Settings") },
         )
     }) {
-        Column(modifier = Modifier.padding(10.dp)) {
+        Column {
 //            Text(text = "Last Substance Update", style = MaterialTheme.typography.caption)
 //            Text(date, style = MaterialTheme.typography.h6)
 //            val context = LocalContext.current
@@ -110,8 +113,8 @@ fun SettingsScreen(
             val uriHandler = LocalUriHandler.current
             TextButton(
                 onClick = {
-                uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
-            }) {
+                    uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
+                }) {
                 Icon(
                     Icons.Default.OpenInBrowser,
                     contentDescription = "Open Link",
@@ -158,6 +161,55 @@ fun SettingsScreen(
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text("Source Code")
                 Spacer(modifier = Modifier.weight(1f))
+            }
+            Divider()
+            val context = LocalContext.current
+            var isShowingDeleteDialog by remember { mutableStateOf(false) }
+            TextButton(
+                onClick = {
+                    isShowingDeleteDialog = true
+                }) {
+                Icon(
+                    Icons.Filled.DeleteForever,
+                    contentDescription = "Delete",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Delete Everything")
+                Spacer(modifier = Modifier.weight(1f))
+            }
+            if (isShowingDeleteDialog) {
+                AlertDialog(
+                    onDismissRequest = { isShowingDeleteDialog = false },
+                    title = {
+                        Text(text = "Delete Everything?")
+                    },
+                    text = {
+                        Text("This will delete all your experiences, ingestions and custom substances.")
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                isShowingDeleteDialog = false
+                                deleteEverything()
+                                Toast.makeText(
+                                    context,
+                                    "Everything Deleted",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        ) {
+                            Text("Delete")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { isShowingDeleteDialog = false }
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
+                )
             }
             Divider()
         }
