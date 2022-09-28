@@ -21,7 +21,7 @@ fun AddCustomSubstance(
     navigateBack: () -> Unit,
     viewModel: AddCustomViewModel = hiltViewModel()
 ) {
-    AddCustomSubstance(
+    AddOrEditCustomSubstance(
         name = viewModel.name,
         units = viewModel.units,
         description = viewModel.description,
@@ -32,27 +32,51 @@ fun AddCustomSubstance(
             viewModel.onDoneTap()
             navigateBack()
         },
-        isDoneEnabled = viewModel.isValid
+        isDoneEnabled = viewModel.isValid,
+        title = "Add Custom Substance"
     )
 }
+
+@Composable
+fun EditCustomSubstance(
+    navigateBack: () -> Unit,
+    viewModel: EditCustomViewModel = hiltViewModel()
+) {
+    AddOrEditCustomSubstance(
+        name = viewModel.name,
+        units = viewModel.units,
+        description = viewModel.description,
+        onNameChange = { viewModel.name = it },
+        onUnitsChange = { viewModel.units = it },
+        onDescriptionChange = { viewModel.description = it },
+        onDoneTap = {
+            viewModel.onDoneTap()
+            navigateBack()
+        },
+        isDoneEnabled = viewModel.isValid,
+        title = "Edit Custom Substance"
+    )
+}
+
 
 @Preview
 @Composable
 fun AddCustomSubstancePreview() {
-    AddCustomSubstance(
+    AddOrEditCustomSubstance(
         name = "Medication",
         units = "mg",
-        description = "My medication has a very long description to see how the text fits into the textfield, to make sure it looks good.",
+        description = "My medication has a very long description to see how the text fits into the text field, to make sure it looks good.",
         onNameChange = {},
         onUnitsChange = {},
         onDescriptionChange = {},
         onDoneTap = {},
-        isDoneEnabled = true
+        isDoneEnabled = true,
+        title = "Add Custom Substance"
     )
 }
 
 @Composable
-fun AddCustomSubstance(
+fun AddOrEditCustomSubstance(
     name: String,
     units: String,
     description: String,
@@ -60,12 +84,13 @@ fun AddCustomSubstance(
     onUnitsChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
     onDoneTap: () -> Unit,
-    isDoneEnabled: Boolean
+    isDoneEnabled: Boolean,
+    title: String
 ) {
     val context = LocalContext.current
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "Add Custom Substance") })
+            TopAppBar(title = { Text(text = title) })
         },
         floatingActionButton = {
             if (isDoneEnabled) {
