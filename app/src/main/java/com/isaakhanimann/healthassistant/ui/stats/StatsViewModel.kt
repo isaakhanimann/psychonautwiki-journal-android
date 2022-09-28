@@ -55,8 +55,9 @@ class StatsViewModel @Inject constructor(
         relevantExperiencesSortedFlow.combine(optionFlow) { sortedExperiences, option ->
             var remainingExperiences = sortedExperiences
             val buckets = mutableListOf<List<ExperienceWithIngestions>>()
+            var startInstant = Instant.now()
             for (i in 0 until option.bucketCount) {
-                val startInstant = Instant.now().minus(option.oneBucketSize)
+                startInstant = startInstant.minus(option.oneBucketSize)
                 val experiencesForBucket = remainingExperiences.takeWhile { it.sortInstant > startInstant }
                 buckets.add(experiencesForBucket)
                 val numExperiences = experiencesForBucket.size
