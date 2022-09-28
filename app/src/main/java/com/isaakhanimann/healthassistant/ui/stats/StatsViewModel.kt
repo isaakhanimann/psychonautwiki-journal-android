@@ -218,24 +218,25 @@ enum class TimePickerOption {
         override val longDisplayText = "Half Year"
         override val tabIndex = 2
         override val bucketCount = 26
-        override val oneBucketSize: Period = Period.ofWeeks(1)
-        override val allBucketSizes: Period = Period.ofWeeks(26)
+        override val oneBucketSize: Period =
+            Period.ofDays(7) // the max time unit that can be used for subtraction is days
+        override val allBucketSizes: Period = Period.ofDays(7 * bucketCount)
     },
     MONTHS_12 {
         override val displayText = "12M"
         override val longDisplayText = "Last Year"
         override val tabIndex = 3
         override val bucketCount = 12
-        override val oneBucketSize: Period = Period.ofMonths(1)
-        override val allBucketSizes: Period = Period.ofMonths(12)
+        override val oneBucketSize: Period = Period.ofDays(30)
+        override val allBucketSizes: Period = Period.ofDays(30 * bucketCount)
     },
     YEARS_10 {
         override val displayText = "10Y"
         override val longDisplayText = "10 Years"
         override val tabIndex = 4
         override val bucketCount = 10
-        override val oneBucketSize: Period = Period.ofYears(1)
-        override val allBucketSizes: Period = Period.ofYears(10)
+        override val oneBucketSize: Period = Period.ofDays(365)
+        override val allBucketSizes: Period = Period.ofDays(365 * bucketCount)
     };
 
     abstract val displayText: String
