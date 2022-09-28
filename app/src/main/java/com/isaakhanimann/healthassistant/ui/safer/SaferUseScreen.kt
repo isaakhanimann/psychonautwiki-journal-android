@@ -44,7 +44,7 @@ fun SaferUseScreen(
         ) {
             val titleStyle = MaterialTheme.typography.h6
             Text(text = "1. Research", style = titleStyle)
-            Text(text = "In advance research the duration, subjective effects and potential adverse effects which the substance or combination of substances are likely to produce. Read the info in here and also the PsychonautWiki Article. Its best to cross-reference with other sources (Tripsit, Erowid, Wikipedia, Bluelight, Reddit, etc ). There is no rush.")
+            Text(text = "In advance research the duration, subjective effects and potential adverse effects which the substance or combination of substances are likely to produce. Read the info in here and also the PsychonautWiki article. Its best to cross-reference with other sources (Tripsit, Erowid, Wikipedia, Bluelight, Reddit, etc ). There is no rush.")
             Text(text = "2. Testing", style = titleStyle)
             Text(text = "Test your substance with anonymous and free drug testing services. If not available in your country use reagent testing kits. Times change. Producers change. Don‘t trust your dealer. Its better to have a tested stash instead of relying on a source spontaneously.")
             Button(onClick = navigateToDrugTestingScreen) {

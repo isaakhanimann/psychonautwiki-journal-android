@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,14 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.ParagraphStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextIndent
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.ui.search.CategoryModel
@@ -30,7 +26,6 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substancerow.CategoryChipStatic
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
-import kotlin.text.Typography
 
 @Composable
 fun SubstanceScreen(
@@ -178,18 +173,7 @@ fun SubstanceScreen(
             if (substance.saferUse.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Safer Use", style = titleStyle)
-                val paragraphStyle = ParagraphStyle(textIndent = TextIndent(restLine = 15.sp))
-                Text(
-                    buildAnnotatedString {
-                        substance.saferUse.forEach {
-                            withStyle(style = paragraphStyle) {
-                                append(Typography.bullet)
-                                append("\t\t")
-                                append(it)
-                            }
-                        }
-                    }
-                )
+                BulletPoints(points = substance.saferUse)
                 Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
@@ -260,22 +244,11 @@ fun SubstanceScreen(
             if (substance.toxicities.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Toxicity", style = titleStyle)
-                val paragraphStyle = ParagraphStyle(textIndent = TextIndent(restLine = 15.sp))
-                Text(
-                    buildAnnotatedString {
-                        if (substance.toxicities.size == 1) {
-                            append(substance.toxicities.first())
-                        } else {
-                            substance.toxicities.forEach {
-                                withStyle(style = paragraphStyle) {
-                                    append(Typography.bullet)
-                                    append("\t\t")
-                                    append(it)
-                                }
-                            }
-                        }
-                    }
-                )
+                if (substance.toxicities.size == 1) {
+                    Text(substance.toxicities.firstOrNull() ?: "")
+                } else {
+                    BulletPoints(points = substance.toxicities)
+                }
                 Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
@@ -304,6 +277,25 @@ fun SubstanceScreen(
                     Text(text = "Volumetric Liquid Dosing")
                 }
                 Divider()
+            }
+        }
+    }
+}
+
+@Composable
+fun BulletPoints(points: List<String>) {
+    Column {
+        points.forEach {
+            Row(verticalAlignment = Alignment.Top) {
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colors.onBackground,
+                    modifier = Modifier
+                        .padding(top = 7.dp)
+                        .size(7.dp)
+                ) {}
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(text = it)
             }
         }
     }
