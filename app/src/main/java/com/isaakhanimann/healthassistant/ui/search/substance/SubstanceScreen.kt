@@ -77,10 +77,23 @@ fun SubstanceScreen(
     substanceWithCategories: SubstanceWithCategories
 ) {
     val substance = substanceWithCategories.substance
+    val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(substance.name) }
+            )
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { uriHandler.openUri(substance.url) },
+                icon = {
+                    Icon(
+                        Icons.Filled.Launch,
+                        contentDescription = "Open Link"
+                    )
+                },
+                text = { Text("More Info") },
             )
         }
     ) {
@@ -89,28 +102,12 @@ fun SubstanceScreen(
                 .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            val uriHandler = LocalUriHandler.current
-            OutlinedButton(
-                onClick = {
-                    uriHandler.openUri(substance.url)
-                },
-                modifier = Modifier.padding(vertical = 5.dp)
-            ) {
-                Icon(
-                    Icons.Filled.Launch,
-                    contentDescription = "Open Link",
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(
-                    "Read Article (Recommended)"
-                )
-            }
             val titleStyle = MaterialTheme.typography.subtitle2
-            Row(modifier = Modifier.padding(bottom = 5.dp)) {
+            Row(modifier = Modifier.padding(vertical = 5.dp)) {
                 if (substance.isApproved) {
                     Icon(imageVector = Icons.Default.Verified, contentDescription = "Verified")
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = "Info is approved")
+                    Text(text = "PsychonautWiki article is approved")
                 } else {
                     Icon(imageVector = Icons.Default.GppBad, contentDescription = "Verified")
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
