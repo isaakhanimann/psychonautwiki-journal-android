@@ -64,7 +64,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                                         unit = ingestionWithCompanion.ingestion.units,
                                         isEstimate = ingestionWithCompanion.ingestion.isDoseAnEstimate
                                     )
-                                }.distinct()
+                                }.distinct().take(4)
                             )
                         }
                 )
