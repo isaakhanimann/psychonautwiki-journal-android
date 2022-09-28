@@ -7,7 +7,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -21,6 +21,7 @@ fun AddCustomSubstance(
     navigateBack: () -> Unit,
     viewModel: AddCustomViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     AddOrEditCustomSubstance(
         name = viewModel.name,
         units = viewModel.units,
@@ -30,10 +31,17 @@ fun AddCustomSubstance(
         onDescriptionChange = { viewModel.description = it },
         onDoneTap = {
             viewModel.onDoneTap()
+            Toast.makeText(
+                context,
+                "Custom Substance Added",
+                Toast.LENGTH_SHORT
+            ).show()
             navigateBack()
         },
         isDoneEnabled = viewModel.isValid,
-        title = "Add Custom Substance"
+        title = "Add Custom Substance",
+        isShowingDelete = false,
+        deleteAndNavigate = {}
     )
 }
 
@@ -54,7 +62,12 @@ fun EditCustomSubstance(
             navigateBack()
         },
         isDoneEnabled = viewModel.isValid,
-        title = "Edit Custom Substance"
+        title = "Edit Custom Substance",
+        isShowingDelete = true,
+        deleteAndNavigate = {
+            viewModel.deleteCustomSubstance()
+            navigateBack()
+        }
     )
 }
 
@@ -71,7 +84,9 @@ fun AddCustomSubstancePreview() {
         onDescriptionChange = {},
         onDoneTap = {},
         isDoneEnabled = true,
-        title = "Add Custom Substance"
+        title = "Add Custom Substance",
+        isShowingDelete = false,
+        deleteAndNavigate = {}
     )
 }
 
@@ -85,9 +100,10 @@ fun AddOrEditCustomSubstance(
     onDescriptionChange: (String) -> Unit,
     onDoneTap: () -> Unit,
     isDoneEnabled: Boolean,
-    title: String
+    title: String,
+    isShowingDelete: Boolean,
+    deleteAndNavigate: () -> Unit
 ) {
-    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(text = title) })
@@ -95,14 +111,7 @@ fun AddOrEditCustomSubstance(
         floatingActionButton = {
             if (isDoneEnabled) {
                 ExtendedFloatingActionButton(
-                    onClick = {
-                        onDoneTap()
-                        Toast.makeText(
-                            context,
-                            "Custom Substance Added",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    },
+                    onClick = onDoneTap,
                     icon = {
                         Icon(
                             Icons.Filled.Done,
@@ -156,6 +165,39 @@ fun AddOrEditCustomSubstance(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 modifier = Modifier.fillMaxWidth()
             )
+            if (isShowingDelete) {
+                var isShowingDeleteDialog by remember { mutableStateOf(false) }
+                TextButton(
+                    onClick = { isShowingDeleteDialog = true },
+                ) {
+                    Text("Delete Substance", style = MaterialTheme.typography.caption)
+                }
+                if (isShowingDeleteDialog) {
+                    AlertDialog(
+                        onDismissRequest = { isShowingDeleteDialog = false },
+                        title = {
+                            Text(text = "Delete Substance?")
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    isShowingDeleteDialog = false
+                                    deleteAndNavigate()
+                                }
+                            ) {
+                                Text("Delete")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(
+                                onClick = { isShowingDeleteDialog = false }
+                            ) {
+                                Text("Cancel")
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 }

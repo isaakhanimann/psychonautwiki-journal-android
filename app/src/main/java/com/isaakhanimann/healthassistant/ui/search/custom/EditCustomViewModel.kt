@@ -20,6 +20,7 @@ class EditCustomViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
+    var originalName = ""
     var name by mutableStateOf("")
     var units by mutableStateOf("")
     var description by mutableStateOf("")
@@ -29,7 +30,9 @@ class EditCustomViewModel @Inject constructor(
     init {
         val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
         viewModelScope.launch {
-            val customSubstance = experienceRepo.getCustomSubstanceFlow(substanceName).firstOrNull() ?: return@launch
+            val customSubstance =
+                experienceRepo.getCustomSubstanceFlow(substanceName).firstOrNull() ?: return@launch
+            originalName = customSubstance.name
             name = customSubstance.name
             units = customSubstance.units
             description = customSubstance.description
@@ -44,6 +47,12 @@ class EditCustomViewModel @Inject constructor(
                 description
             )
             experienceRepo.insert(customSubstance)
+        }
+    }
+
+    fun deleteCustomSubstance() {
+        viewModelScope.launch {
+            experienceRepo.delete(CustomSubstance(name = originalName, units, description))
         }
     }
 }
