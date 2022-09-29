@@ -121,10 +121,7 @@ fun SearchField(
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(15.dp)
-                    .size(24.dp)
+                contentDescription = "Search",
             )
         },
         trailingIcon = {
@@ -136,10 +133,7 @@ fun SearchField(
                 ) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(15.dp)
-                            .size(24.dp)
+                        contentDescription = "Close",
                     )
                 }
             } else if (isShowingSettings) {
