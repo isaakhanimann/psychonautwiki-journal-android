@@ -268,8 +268,7 @@ fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Text(
                     text = route.description,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.caption
+                    textAlign = TextAlign.Center
                 )
             }
         }

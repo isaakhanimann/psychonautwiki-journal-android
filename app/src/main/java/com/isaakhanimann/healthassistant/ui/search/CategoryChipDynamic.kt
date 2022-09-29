@@ -40,7 +40,7 @@ fun CategoryChipDynamic(
             .clip(shape = CircleShape)
             .background(color = categoryChipModel.color.copy(alpha = 0.2f))
             .clickable(onClick = onClick)
-            .padding(vertical = 2.dp, horizontal = 8.dp)
+            .padding(vertical = 3.dp, horizontal = 8.dp)
 
     ) {
         if (categoryChipModel.isActive) {

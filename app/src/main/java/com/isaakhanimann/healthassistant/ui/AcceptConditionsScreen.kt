@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -73,7 +72,7 @@ fun AcceptConditionsScreen(
                 Text(text = "I’m going to seek professional help before attempting to self-medicate.")
             }
         }
-        Text(text = "Journaling data in the app always stays on this device", style = MaterialTheme.typography.caption)
+        Text(text = "Journaling data in the app always stays on this device")
         Button(onClick = onTapAccept, enabled = allIsChecked) {
             Text(text = "Continue")
         }

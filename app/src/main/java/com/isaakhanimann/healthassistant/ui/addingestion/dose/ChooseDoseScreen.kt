@@ -191,10 +191,7 @@ fun ChooseDoseScreen(
                 }
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = administrationRoute.displayText + " " + substanceName + " Dosage",
-                        style = MaterialTheme.typography.subtitle2
-                    )
+                    Text(text = administrationRoute.displayText + " " + substanceName)
                     Spacer(modifier = Modifier.height(5.dp))
                     if (roaDose != null) {
                         RoaDoseView(
@@ -212,7 +209,6 @@ fun ChooseDoseScreen(
                             Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
                             Text(
                                 text = "There is no dosage info for this administration route. Research dosages somewhere else.",
-                                style = MaterialTheme.typography.subtitle2
                             )
                         }
                     }
@@ -221,7 +217,7 @@ fun ChooseDoseScreen(
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     val focusManager = LocalFocusManager.current
-                    val textStyle = MaterialTheme.typography.h3
+                    val textStyle = MaterialTheme.typography.h6
                     OutlinedTextField(
                         value = doseText,
                         onValueChange = onChangeDoseText,
@@ -239,7 +235,8 @@ fun ChooseDoseScreen(
                             focusManager.clearFocus()
                         }),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        singleLine = true
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     PurityCalculation(

@@ -13,8 +13,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.google.accompanist.flowlayout.FlowRow
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 
 @Preview
 @Composable
@@ -96,9 +96,9 @@ fun ColorDialog(
         text = {
             Column {
                 if (otherColors.isEmpty()) {
-                    Text(text = "No Unused Colors", style = MaterialTheme.typography.subtitle1)
+                    Text(text = "No Unused Colors")
                 } else {
-                    Text(text = "Not Yet Used", style = MaterialTheme.typography.subtitle1)
+                    Text(text = "Not Yet Used")
                     Spacer(modifier = Modifier.height(2.dp))
                     CircleColorButtons(colors = otherColors) {
                         onChangeOfColor(it)
@@ -107,7 +107,7 @@ fun ColorDialog(
                 }
                 if (alreadyUsedColors.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "Already Used", style = MaterialTheme.typography.subtitle1)
+                    Text(text = "Already Used")
                     Spacer(modifier = Modifier.height(2.dp))
                     CircleColorButtons(colors = alreadyUsedColors) {
                         onChangeOfColor(it)

@@ -192,7 +192,6 @@ fun ExperienceScreen(
                 ) {
                     Text(
                         text = "Cumulative Dose",
-                        style = MaterialTheme.typography.subtitle1,
                         modifier = Modifier.padding(top = 10.dp)
                     )
                     oneExperienceScreenModel.cumulativeDoses.forEach {
@@ -286,10 +285,7 @@ fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
     ) {
         Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.h6)
         Column(horizontalAlignment = Alignment.End) {
-            Text(
-                text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units,
-                style = MaterialTheme.typography.subtitle1
-            )
+            Text(text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units)
             val doseClass = cumulativeDose.doseClass
             if (doseClass != null) {
                 DotRow(doseClass = doseClass)

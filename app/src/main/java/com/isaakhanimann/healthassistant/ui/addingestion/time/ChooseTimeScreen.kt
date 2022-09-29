@@ -210,7 +210,7 @@ fun NoteSection(
             OutlinedTextField(
                 value = note,
                 onValueChange = onNoteChange,
-                label = { Text(text = "Notes", style = MaterialTheme.typography.subtitle1) },
+                label = { Text(text = "Notes") },
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
                     isShowingSuggestions = false

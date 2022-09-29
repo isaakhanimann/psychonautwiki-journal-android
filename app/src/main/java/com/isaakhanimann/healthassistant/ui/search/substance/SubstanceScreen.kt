@@ -101,7 +101,7 @@ fun SubstanceScreen(
                 .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            val titleStyle = MaterialTheme.typography.subtitle2
+            val titleStyle = MaterialTheme.typography.body1
             if (!substance.isApproved) {
                 Row(modifier = Modifier.padding(top = 5.dp)) {
                     Icon(imageVector = Icons.Default.GppBad, contentDescription = "Verified")

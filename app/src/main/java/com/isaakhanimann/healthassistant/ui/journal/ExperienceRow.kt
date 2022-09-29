@@ -5,12 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,28 +53,25 @@ fun ExperienceRow(
             Column {
                 Text(
                     text = experience.title,
-                    style = MaterialTheme.typography.h5,
+                    style = MaterialTheme.typography.h6,
                 )
-                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                        val substanceNames = remember(ingestions) {
-                            ingestions.map { it.ingestion.substanceName }.distinct()
-                                .joinToString(separator = ", ")
-                        }
-                        if (substanceNames.isNotEmpty()) {
-                            Text(text = substanceNames, style = MaterialTheme.typography.subtitle1)
-                        } else {
-                            Text(
-                                text = "No substance yet",
-                                style = MaterialTheme.typography.subtitle1
-                            )
-                        }
-                        if (experience.text.isNotBlank()) {
-                            Icon(
-                                Icons.Outlined.StickyNote2,
-                                contentDescription = "Experience has notes"
-                            )
-                        }
+                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    val substanceNames = remember(ingestions) {
+                        ingestions.map { it.ingestion.substanceName }.distinct()
+                            .joinToString(separator = ", ")
+                    }
+                    if (substanceNames.isNotEmpty()) {
+                        Text(text = substanceNames)
+                    } else {
+                        Text(
+                            text = "No substance yet",
+                        )
+                    }
+                    if (experience.text.isNotBlank()) {
+                        Icon(
+                            Icons.Outlined.StickyNote2,
+                            contentDescription = "Experience has notes"
+                        )
                     }
                 }
             }

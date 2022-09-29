@@ -35,7 +35,7 @@ fun InteractionsView(
     if (interactions != null) {
         if (interactions.dangerous.isNotEmpty() || interactions.unsafe.isNotEmpty() || interactions.uncertain.isNotEmpty()) {
             Column {
-                val titleStyle = MaterialTheme.typography.subtitle2
+                val titleStyle = MaterialTheme.typography.body1
                 Text(text = "Interactions", style = titleStyle)
                 Spacer(modifier = Modifier.height(2.dp))
                 if (interactions.dangerous.isNotEmpty()) {
@@ -55,10 +55,7 @@ fun InteractionsView(
                     }
                 }
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "Check the PsychonautWiki article for explanations",
-                    style = MaterialTheme.typography.caption
-                )
+                Text(text = "Check the PsychonautWiki article for explanations")
                 Divider(modifier = Modifier.padding(top = 8.dp))
             }
         }

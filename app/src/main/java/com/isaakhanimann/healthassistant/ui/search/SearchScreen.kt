@@ -44,7 +44,7 @@ fun SearchScreen(
         val categories = searchViewModel.chipCategoriesFlow.collectAsState().value
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.padding(top = 4.dp)
+            modifier = Modifier.padding(vertical = 6.dp)
         ) {
             item {
                 Spacer(modifier = Modifier.width(2.dp))

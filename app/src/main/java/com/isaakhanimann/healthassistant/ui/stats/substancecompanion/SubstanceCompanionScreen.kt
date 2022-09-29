@@ -90,7 +90,7 @@ fun SubstanceCompanionScreen(
                     ToleranceSection(
                         tolerance = tolerance,
                         crossTolerances = crossTolerances,
-                        titleStyle = MaterialTheme.typography.subtitle1
+                        titleStyle = MaterialTheme.typography.h6
                     )
                 }
                 Spacer(modifier = Modifier.height(5.dp))

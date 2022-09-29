@@ -128,9 +128,10 @@ fun SuggestionsSection(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         ColorCircle(substanceColor = substanceRow.color)
-                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = substanceRow.substanceName,
+                            style = MaterialTheme.typography.h6
                         )
                     }
                     substanceRow.routesWithDoses.forEach { routeWithDoses ->

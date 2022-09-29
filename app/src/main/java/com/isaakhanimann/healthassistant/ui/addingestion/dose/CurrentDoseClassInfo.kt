@@ -51,7 +51,7 @@ fun CurrentDoseClassInfo(currentDoseClass: DoseClass?, roaDose: RoaDose) {
             Text(
                 text = text,
                 color = doseColor,
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h6
             )
         }
         if (isShowingDoseClassDialog) {

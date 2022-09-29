@@ -11,7 +11,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -101,7 +100,6 @@ fun StatsScreen(
                             )
                             Text(
                                 text = "Substance counted once per experience",
-                                style = MaterialTheme.typography.caption,
                                 modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
                             )
                             BarChart(
@@ -130,7 +128,7 @@ fun StatsScreen(
                                 Column {
                                     Text(
                                         text = subStat.substanceName,
-                                        fontWeight = FontWeight.ExtraBold
+                                        style = MaterialTheme.typography.h6
                                     )
                                     val addOn =
                                         if (subStat.experienceCount == 1) " experience" else " experiences"

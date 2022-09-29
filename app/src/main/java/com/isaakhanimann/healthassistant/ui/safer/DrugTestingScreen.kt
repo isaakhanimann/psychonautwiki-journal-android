@@ -177,7 +177,6 @@ fun TestingServiceItem(
         )
         Text(
             text = city,
-            style = MaterialTheme.typography.subtitle1,
             maxLines = 1,
             modifier = Modifier.width(IntrinsicSize.Max)
         )

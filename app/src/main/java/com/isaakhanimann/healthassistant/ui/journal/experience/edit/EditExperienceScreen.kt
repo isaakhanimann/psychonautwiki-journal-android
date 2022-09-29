@@ -90,7 +90,7 @@ fun EditExperienceScreen(
                 onValueChange = onChangeOfEnteredTitle,
                 textStyle = MaterialTheme.typography.h5,
                 maxLines = 2,
-                label = { Text(text = "Title", style = MaterialTheme.typography.subtitle1) },
+                label = { Text(text = "Title") },
                 isError = !isEnteredTitleOk,
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -99,7 +99,7 @@ fun EditExperienceScreen(
             OutlinedTextField(
                 value = text,
                 onValueChange = onTextChange,
-                label = { Text(text = "Notes", style = MaterialTheme.typography.subtitle1) },
+                label = { Text(text = "Notes") },
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 modifier = Modifier.weight(1f).fillMaxWidth()

@@ -25,7 +25,7 @@ fun ToleranceSectionPreview() {
             "dopamine",
             "stimulant"
         ),
-        titleStyle = MaterialTheme.typography.subtitle2
+        titleStyle = MaterialTheme.typography.h6
     )
 }
 
@@ -56,7 +56,6 @@ fun ToleranceSection(
                             if (tolerance.full != null) {
                                 Text(
                                     text = "full",
-                                    style = MaterialTheme.typography.subtitle2,
                                     modifier = Modifier.width(labelWidth)
                                 )
                                 Text(text = tolerance.full)
@@ -68,7 +67,6 @@ fun ToleranceSection(
                             if (tolerance.half != null) {
                                 Text(
                                     text = "half",
-                                    style = MaterialTheme.typography.subtitle2,
                                     modifier = Modifier.width(labelWidth)
                                 )
                                 Text(text = tolerance.half)
@@ -80,7 +78,6 @@ fun ToleranceSection(
                             if (tolerance.zero != null) {
                                 Text(
                                     text = "zero",
-                                    style = MaterialTheme.typography.subtitle2,
                                     modifier = Modifier.width(labelWidth)
                                 )
                                 Text(text = tolerance.zero)

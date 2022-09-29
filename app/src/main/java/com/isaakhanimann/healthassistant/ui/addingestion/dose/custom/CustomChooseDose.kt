@@ -150,10 +150,7 @@ fun CustomChooseDose(
                 }
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = administrationRoute.displayText + " " + substanceName + " Dosage",
-                        style = MaterialTheme.typography.subtitle2
-                    )
+                    Text(text = administrationRoute.displayText + " " + substanceName + " Dosage")
 
                     Spacer(modifier = Modifier.height(10.dp))
                     val focusManager = LocalFocusManager.current

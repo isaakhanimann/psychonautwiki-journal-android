@@ -94,7 +94,7 @@ fun ExpandableContainer(
             .padding(vertical = 5.dp),
         verticalArrangement = Arrangement.Center,
     ) {
-        Text(text = title, style = MaterialTheme.typography.subtitle1)
+        Text(text = title)
         AnimatedVisibility(visible = isContentVisible) {
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 content()

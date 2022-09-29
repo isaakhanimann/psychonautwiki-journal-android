@@ -37,7 +37,7 @@ fun ClassSection(
             ) {
                 if (psychoactiveClasses.isNotEmpty()) {
                     Column {
-                        Text(text = "Psychoactive", style = MaterialTheme.typography.subtitle2)
+                        Text(text = "Psychoactive")
                         psychoactiveClasses.forEach {
                             Text(text = it)
                         }
@@ -45,7 +45,7 @@ fun ClassSection(
                 }
                 if (chemicalClasses.isNotEmpty()) {
                     Column {
-                        Text(text = "Chemical", style = MaterialTheme.typography.subtitle2)
+                        Text(text = "Chemical")
                         chemicalClasses.forEach {
                             Text(text = it)
                         }

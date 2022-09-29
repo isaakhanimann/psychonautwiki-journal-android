@@ -161,10 +161,7 @@ fun CheckInteractionsScreen(
                         }
                     }
                     item {
-                        Text(
-                            text = "Check the PsychonautWiki article for explanations",
-                            style = MaterialTheme.typography.caption,
-                        )
+                        Text(text = "Check the PsychonautWiki article for explanations")
                         Spacer(modifier = Modifier.height(5.dp))
                     }
                 }
@@ -189,7 +186,7 @@ fun CheckInteractionsScreen(
                         }
                     },
                     text = {
-                        Text(text = alertText, style = MaterialTheme.typography.subtitle1)
+                        Text(text = alertText)
                     },
                     buttons = {
                         Row(

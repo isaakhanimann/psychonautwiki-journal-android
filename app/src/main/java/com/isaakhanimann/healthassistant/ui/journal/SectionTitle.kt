@@ -25,8 +25,7 @@ fun SectionTitle(title: String) {
         Text(
             color = MaterialTheme.colors.primary,
             text = title,
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
         )
     }
 }

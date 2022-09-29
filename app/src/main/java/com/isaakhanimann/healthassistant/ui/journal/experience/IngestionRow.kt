@@ -61,15 +61,9 @@ fun IngestionRow(
                     ingestion.dose?.also {
                         val isEstimateText = if (ingestion.isDoseAnEstimate) "~" else ""
                         val doseText = it.toReadableString()
-                        Text(
-                            text = "${ingestion.administrationRoute.displayText} $isEstimateText$doseText ${ingestion.units}",
-                            style = MaterialTheme.typography.subtitle1
-                        )
+                        Text(text = "${ingestion.administrationRoute.displayText} $isEstimateText$doseText ${ingestion.units}")
                     } ?: run {
-                        Text(
-                            text = "${ingestion.administrationRoute.displayText} Unknown Dose",
-                            style = MaterialTheme.typography.subtitle1
-                        )
+                        Text(text = "${ingestion.administrationRoute.displayText} Unknown Dose")
                     }
                     val doseClass = ingestionElement.doseClass
                     if (doseClass != null) {

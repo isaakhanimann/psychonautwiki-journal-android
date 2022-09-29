@@ -22,17 +22,14 @@ fun PurityCalculation(
 ) {
     Column(horizontalAlignment = Alignment.Start) {
         val focusManager = LocalFocusManager.current
-        val textStyle = MaterialTheme.typography.h6
         OutlinedTextField(
             value = purityText,
             onValueChange = onPurityChange,
-            textStyle = textStyle,
-            label = { Text("Purity", style = textStyle) },
+            label = { Text("Purity") },
             isError = !isValidPurity,
             trailingIcon = {
                 Text(
                     text = "%",
-                    style = textStyle,
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
             },
@@ -47,7 +44,6 @@ fun PurityCalculation(
             Text(
                 text = "Purity must be between 1 and 100%",
                 color = MaterialTheme.colors.error,
-                style = MaterialTheme.typography.caption,
             )
         }
         if (convertedDoseAndUnitText != null) {
@@ -57,7 +53,7 @@ fun PurityCalculation(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Converted Amount")
-                Text(text = convertedDoseAndUnitText, style = MaterialTheme.typography.h5)
+                Text(text = convertedDoseAndUnitText)
             }
         }
     }
