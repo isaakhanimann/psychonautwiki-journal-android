@@ -100,7 +100,7 @@ fun SubstanceScreen(
                 .padding(horizontal = 10.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            val titleStyle = MaterialTheme.typography.body1
+            val titleStyle = MaterialTheme.typography.h6
             if (!substance.isApproved) {
                 Row(modifier = Modifier.padding(top = 5.dp)) {
                     Icon(imageVector = Icons.Default.GppBad, contentDescription = "Verified")
@@ -221,7 +221,8 @@ fun SubstanceScreen(
             }
             Spacer(modifier = Modifier.height(5.dp))
             InteractionsView(
-                interactions = substance.interactions
+                interactions = substance.interactions,
+                titleStyle = titleStyle
             )
             ToleranceSection(
                 tolerance = substance.tolerance,

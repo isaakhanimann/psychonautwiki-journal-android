@@ -24,18 +24,19 @@ import com.isaakhanimann.healthassistant.data.substances.classes.Interactions
 @Composable
 fun InteractionsPreview(@PreviewParameter(InteractionsPreviewProvider::class) interactions: Interactions) {
     InteractionsView(
-        interactions
+        interactions,
+        titleStyle = MaterialTheme.typography.h6
     )
 }
 
 @Composable
 fun InteractionsView(
     interactions: Interactions?,
+    titleStyle: TextStyle
 ) {
     if (interactions != null) {
         if (interactions.dangerous.isNotEmpty() || interactions.unsafe.isNotEmpty() || interactions.uncertain.isNotEmpty()) {
             Column {
-                val titleStyle = MaterialTheme.typography.body1
                 Text(text = "Interactions", style = titleStyle)
                 Spacer(modifier = Modifier.height(2.dp))
                 if (interactions.dangerous.isNotEmpty()) {

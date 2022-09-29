@@ -11,6 +11,7 @@ interface SubstanceRepositoryInterface {
     fun getAllSubstancesWithCategoriesFlow(): Flow<List<SubstanceWithCategories>>
     fun getAllCategoriesFlow(): Flow<List<Category>>
     fun getSubstance(substanceName: String): Substance?
+    fun getCategory(categoryName: String): Category?
     fun getSubstanceWithCategories(substanceName: String): SubstanceWithCategories?
     suspend fun getAllInteractions(
         type: InteractionType,

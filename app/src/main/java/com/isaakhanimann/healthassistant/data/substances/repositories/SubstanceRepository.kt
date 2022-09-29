@@ -110,6 +110,10 @@ class SubstanceRepository @Inject constructor(
         return substanceFile.substancesMap[substanceName]
     }
 
+    override fun getCategory(categoryName: String): Category? {
+        return substanceFile.categories.firstOrNull { it.name == categoryName }
+    }
+
     override fun getSubstanceWithCategories(substanceName: String): SubstanceWithCategories? {
         val substance =
             substanceFile.substances.firstOrNull { it.name == substanceName } ?: return null

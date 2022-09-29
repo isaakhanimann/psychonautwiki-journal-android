@@ -38,6 +38,7 @@ import com.isaakhanimann.healthassistant.ui.search.custom.EditCustomSubstance
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceScreen
+import com.isaakhanimann.healthassistant.ui.search.substance.category.CategoryScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.DoseExplanationScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.DurationExplanationScreen
 import com.isaakhanimann.healthassistant.ui.settings.SettingsScreen
@@ -152,6 +153,12 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         arguments = ArgumentRouter.EditExperienceRouter.args
     ) {
         EditExperienceScreen(navigateBack = navController::popBackStack)
+    }
+    composable(
+        ArgumentRouter.CategoryRouter.route,
+        arguments = ArgumentRouter.CategoryRouter.args
+    ) {
+        CategoryScreen()
     }
     composable(
         ArgumentRouter.EditCustomRouter.route,
