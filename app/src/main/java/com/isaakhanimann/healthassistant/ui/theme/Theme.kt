@@ -12,7 +12,9 @@ private val DarkColorPalette = darkColors(
     primaryVariant = Color(0xFF0069cb),
     secondary = Color(0xFF0A84FF),
     onPrimary = Color.White,
-    onSecondary = Color.White
+    onSecondary = Color.White,
+    surface = Color(0xFF2C2C2E),
+    onSurface = Color.White
 )
 
 private val LightColorPalette = lightColors(

@@ -56,7 +56,6 @@ fun StatsScreen(
         topBar = {
             JournalTopAppBar(
                 title = if (statsModel.areThereAnyIngestions) "Statistics Since ${statsModel.startDateText}" else "Statistics",
-                elevation = 0.dp
             )
         }
     ) {
@@ -99,6 +98,7 @@ fun StatsScreen(
                             )
                             Text(
                                 text = "Substance counted once per experience",
+                                color = MaterialTheme.colors.onBackground.copy(ContentAlpha.medium),
                                 modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
                             )
                             BarChart(
