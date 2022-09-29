@@ -1,6 +1,7 @@
 package com.isaakhanimann.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,22 +9,24 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.flowlayout.FlowRow
+import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
-import com.isaakhanimann.healthassistant.ui.search.CategoryModel
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
-import com.isaakhanimann.healthassistant.ui.search.substancerow.CategoryChipStatic
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
@@ -35,6 +38,7 @@ fun SubstanceScreen(
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
+    navigateToCategoryScreen: (categoryName: String) -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
     SubstanceScreen(
@@ -44,6 +48,7 @@ fun SubstanceScreen(
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
+        navigateToCategoryScreen = navigateToCategoryScreen,
         substanceWithCategories = viewModel.substanceWithCategories
     )
 }
@@ -61,6 +66,7 @@ fun SubstanceScreenPreview(
             navigateToSaferSniffingScreen = {},
             navigateToSaferStimulantsScreen = {},
             navigateToVolumetricDosingScreen = {},
+            navigateToCategoryScreen = {},
             substanceWithCategories = substanceWithCategories
         )
     }
@@ -74,6 +80,7 @@ fun SubstanceScreen(
     navigateToSaferSniffingScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
+    navigateToCategoryScreen: (categoryName: String) -> Unit,
     substanceWithCategories: SubstanceWithCategories
 ) {
     val substance = substanceWithCategories.substance
@@ -113,36 +120,12 @@ fun SubstanceScreen(
                 Text(text = substance.summary)
                 val categories = substanceWithCategories.categories
                 Spacer(modifier = Modifier.height(5.dp))
-                categories.forEach { category ->
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            CategoryChipStatic(
-                                categoryModel = CategoryModel(
-                                    name = category.name,
-                                    color = category.color
-                                )
-                            )
-                            val url = category.url
-                            if (url != null) {
-                                Icon(
-                                    imageVector = Icons.Default.OpenInBrowser,
-                                    contentDescription = "Open Article",
-                                    modifier = Modifier
-                                        .clickable {
-                                            uriHandler.openUri(url)
-                                        }
-                                        .size(15.dp)
-                                )
-                            }
-                        }
-                        Text(text = category.description, style = MaterialTheme.typography.caption)
+                FlowRow(mainAxisSpacing = 5.dp, crossAxisSpacing = 5.dp) {
+                    categories.forEach { category ->
+                        CategoryChipFromSubstanceScreen(category, navigateToCategoryScreen)
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
                 }
+                Spacer(modifier = Modifier.height(5.dp))
                 Divider()
             }
             if (substance.effectsSummary != null) {
@@ -290,5 +273,28 @@ fun BulletPoints(points: List<String>) {
                 Text(text = it)
             }
         }
+    }
+}
+
+@Composable
+fun CategoryChipFromSubstanceScreen(
+    category: Category,
+    navigateToCategoryScreen: (categoryName: String) -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clickable {
+                navigateToCategoryScreen(category.name)
+            }
+            .clip(shape = CircleShape)
+            .background(color = category.color.copy(alpha = 0.2f))
+            .padding(vertical = 4.dp, horizontal = 10.dp)
+
+    ) {
+        Text(text = category.name)
+        Spacer(modifier = Modifier.width(3.dp))
+        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Go to", modifier = Modifier.size(20.dp))
     }
 }
