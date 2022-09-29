@@ -28,6 +28,7 @@ import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCa
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
@@ -104,7 +105,7 @@ fun SubstanceScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(horizontal = 10.dp)
+                .padding(horizontal = horizontalPadding)
                 .verticalScroll(rememberScrollState())
         ) {
             val titleStyle = MaterialTheme.typography.h6

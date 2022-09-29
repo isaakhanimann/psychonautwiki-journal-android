@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.PurityCalculation
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.UnknownDoseDialog
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
@@ -127,7 +128,6 @@ fun CustomChooseDose(
                     .fillMaxHeight(),
                 horizontalAlignment = Alignment.Start,
             ) {
-                val horizontalPadding = 10.dp
                 if (administrationRoute == AdministrationRoute.INSUFFLATED) {
                     TextButton(onClick = navigateToSaferSniffingScreen) {
                         Text(text = "Safer Sniffing")
@@ -162,7 +162,7 @@ fun CustomChooseDose(
                             Text(
                                 text = units,
                                 style = textStyle,
-                                modifier = Modifier.padding(horizontal = 10.dp)
+                                modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
                         },
                         keyboardActions = KeyboardActions(onDone = {

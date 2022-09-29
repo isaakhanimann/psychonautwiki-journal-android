@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 
 @Composable
 fun PurityCalculation(
@@ -30,7 +30,7 @@ fun PurityCalculation(
             trailingIcon = {
                 Text(
                     text = "%",
-                    modifier = Modifier.padding(horizontal = 10.dp)
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
                 )
             },
             keyboardActions = KeyboardActions(onDone = {

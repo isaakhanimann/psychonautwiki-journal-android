@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.ui.search.substancerow.SubstanceRow
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 
 @Composable
 fun SearchScreen(
@@ -47,7 +48,7 @@ fun SearchScreen(
             modifier = Modifier.padding(vertical = 6.dp)
         ) {
             item {
-                Spacer(modifier = Modifier.width(2.dp))
+                Spacer(modifier = Modifier.width(4.dp))
             }
             items(categories.size) {
                 val categoryChipModel = categories[it]
@@ -56,7 +57,7 @@ fun SearchScreen(
                 }
             }
             item {
-                Spacer(modifier = Modifier.width(2.dp))
+                Spacer(modifier = Modifier.width(4.dp))
             }
         }
         val isShowingCustomSubstances =
@@ -72,7 +73,7 @@ fun SearchScreen(
                             .clickable {
                                 onCustomSubstanceTap(customSubstance.name)
                             }
-                            .padding(horizontal = 6.dp, vertical = 6.dp),
+                            .padding(horizontal = horizontalPadding, vertical = 6.dp),
                     )
                     Divider()
                 }

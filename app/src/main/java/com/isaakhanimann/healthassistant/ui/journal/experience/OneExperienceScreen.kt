@@ -23,6 +23,7 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 
@@ -126,7 +127,6 @@ fun ExperienceScreen(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
         ) {
-            val horizontalPadding = 10.dp
             Spacer(modifier = Modifier.height(10.dp))
             val ingestionDurationPairs = oneExperienceScreenModel.ingestionElements.map {
                 Pair(

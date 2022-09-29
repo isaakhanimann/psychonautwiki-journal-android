@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 
 @Composable
@@ -22,6 +23,6 @@ fun JournalTopAppBar(
         actions = actions,
         backgroundColor = MaterialTheme.colors.surface,
         contentColor = MaterialTheme.colors.onSurface,
-        elevation = elevation
+        elevation = 0.dp
     )
 }

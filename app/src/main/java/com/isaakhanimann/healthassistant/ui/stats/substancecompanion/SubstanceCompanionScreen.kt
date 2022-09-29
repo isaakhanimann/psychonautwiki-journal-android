@@ -21,6 +21,7 @@ import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ColorPicker
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 
@@ -128,7 +129,7 @@ fun IngestionRow(ingestion: Ingestion) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 4.dp),
+            .padding(horizontal = horizontalPadding, vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ingestion.dose?.also {

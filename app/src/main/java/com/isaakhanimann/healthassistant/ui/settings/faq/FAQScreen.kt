@@ -11,6 +11,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
@@ -24,7 +25,7 @@ fun FAQScreen() {
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 10.dp)
+                .padding(horizontal = horizontalPadding)
         ) {
             Spacer(modifier = Modifier.height(10.dp))
             ExpandableContainer(

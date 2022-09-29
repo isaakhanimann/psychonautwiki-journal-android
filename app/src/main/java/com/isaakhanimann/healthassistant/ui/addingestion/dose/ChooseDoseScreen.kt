@@ -23,6 +23,7 @@ import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
@@ -170,7 +171,6 @@ fun ChooseDoseScreen(
                     .fillMaxHeight(),
                 horizontalAlignment = Alignment.Start,
             ) {
-                val horizontalPadding = 10.dp
                 if (administrationRoute == AdministrationRoute.INSUFFLATED) {
                     TextButton(onClick = navigateToSaferSniffingScreen) {
                         Text(text = "Safer Sniffing")
@@ -227,7 +227,7 @@ fun ChooseDoseScreen(
                             Text(
                                 text = roaDose?.units ?: "",
                                 style = textStyle,
-                                modifier = Modifier.padding(horizontal = 10.dp)
+                                modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
                         },
                         keyboardActions = KeyboardActions(onDone = {

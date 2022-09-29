@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.ui.stats.EmptyScreenDisclaimer
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
@@ -69,7 +70,7 @@ fun CategoryScreen(category: Category?) {
             Text(
                 text = category.description,
                 textAlign = TextAlign.Justify,
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
+                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 10.dp)
             )
         }
     }

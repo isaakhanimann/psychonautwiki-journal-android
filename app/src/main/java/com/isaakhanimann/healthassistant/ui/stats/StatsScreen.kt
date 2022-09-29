@@ -17,6 +17,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
+import com.isaakhanimann.healthassistant.ui.theme.lightGray
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
@@ -68,8 +70,8 @@ fun StatsScreen(
             Column {
                 TabRow(
                     selectedTabIndex = statsModel.selectedOption.tabIndex,
-                    backgroundColor = MaterialTheme.colors.surface,
-                    contentColor = MaterialTheme.colors.onSurface
+                    backgroundColor = lightGray(isSystemInDarkTheme()),
+                    contentColor = MaterialTheme.colors.onSurface,
                 ) {
                     TimePickerOption.values().forEachIndexed { index, option ->
                         Tab(
@@ -117,7 +119,7 @@ fun StatsScreen(
                                     .clickable {
                                         navigateToSubstanceCompanion(subStat.substanceName)
                                     }
-                                    .padding(horizontal = 10.dp, vertical = 5.dp)
+                                    .padding(horizontal = horizontalPadding, vertical = 5.dp)
                             ) {
                                 Surface(
                                     shape = CircleShape,

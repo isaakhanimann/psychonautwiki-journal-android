@@ -29,11 +29,13 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
         exit = slideOutVertically(targetOffsetY = { it }),
         content = {
             BottomAppBar(
-                contentPadding = PaddingValues(horizontal = 0.dp)
+                contentPadding = PaddingValues(horizontal = 0.dp),
+                elevation = 0.dp
             ) {
                 BottomNavigation(
                     backgroundColor = MaterialTheme.colors.surface,
                     contentColor = MaterialTheme.colors.onSurface,
+                    elevation = 0.dp
                 ) {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route

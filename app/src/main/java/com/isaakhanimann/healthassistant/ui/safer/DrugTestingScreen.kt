@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
@@ -164,7 +165,7 @@ fun TestingServiceItem(
             .clickable {
                 uriHandler.openUri(url)
             }
-            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .padding(horizontal = horizontalPadding, vertical = 5.dp)
             .fillMaxWidth()
     ) {
         Text(

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.ui.search.CategoryModel
 import com.isaakhanimann.healthassistant.ui.search.SubstanceModel
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 
 @Preview(showBackground = true)
 @Composable
@@ -39,7 +40,7 @@ fun SubstanceRow(
             .clickable {
                 onTap(substanceModel.name)
             }
-            .padding(horizontal = 6.dp, vertical = 6.dp),
+            .padding(horizontal = horizontalPadding, vertical = 6.dp),
     ) {
         Text(
             text = substanceModel.name,
