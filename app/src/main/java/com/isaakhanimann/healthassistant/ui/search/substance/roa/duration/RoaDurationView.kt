@@ -235,7 +235,6 @@ fun GridText(
     navigateToDurationExplanationScreen: () -> Unit,
 ) {
     Column {
-        val durationTextStyle = MaterialTheme.typography.caption
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -250,37 +249,31 @@ fun GridText(
                 if (total != null) {
                     Text(
                         text = "total",
-                        style = durationTextStyle
                     )
                 }
                 if (onset != null) {
                     Text(
                         "onset",
-                        style = durationTextStyle
                     )
                 }
                 if (comeup != null) {
                     Text(
                         "comeup",
-                        style = durationTextStyle
                     )
                 }
                 if (peak != null) {
                     Text(
                         "peak",
-                        style = durationTextStyle
                     )
                 }
                 if (offset != null) {
                     Text(
                         "offset",
-                        style = durationTextStyle
                     )
                 }
                 if (afterglow != null) {
                     Text(
                         "after effects",
-                        style = durationTextStyle
                     )
                 }
             }
@@ -288,37 +281,31 @@ fun GridText(
                 if (total != null) {
                     Text(
                         text = total.text,
-                        style = durationTextStyle
                     )
                 }
                 if (onset != null) {
                     Text(
                         roaDuration.onset.text + if (isOralRoute) " *" else "",
-                        style = durationTextStyle
                     )
                 }
                 if (comeup != null) {
                     Text(
                         roaDuration.comeup.text,
-                        style = durationTextStyle
                     )
                 }
                 if (peak != null) {
                     Text(
                         roaDuration.peak.text,
-                        style = durationTextStyle
                     )
                 }
                 if (offset != null) {
                     Text(
                         roaDuration.offset.text,
-                        style = durationTextStyle
                     )
                 }
                 if (roaDuration.afterglow != null) {
                     Text(
                         roaDuration.afterglow.text,
-                        style = durationTextStyle
                     )
                 }
             }
@@ -334,7 +321,6 @@ fun GridText(
         if (isOralRoute) {
             Text(
                 text = "* a full stomach can delay the onset for hours",
-                style = durationTextStyle
             )
         }
     }
