@@ -20,10 +20,10 @@ fun SectionTitlePreview() {
 fun SectionTitle(title: String) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colors.primary.copy(alpha = 0.2f)
+        color = MaterialTheme.colors.surface
     ) {
         Text(
-            color = MaterialTheme.colors.primary,
+            color = MaterialTheme.colors.onSurface,
             text = title,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
         )

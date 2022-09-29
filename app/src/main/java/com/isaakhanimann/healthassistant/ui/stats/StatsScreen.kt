@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
 @Composable
@@ -53,14 +54,8 @@ fun StatsScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    if (statsModel.areThereAnyIngestions) {
-                        Text(text = "Statistics Since ${statsModel.startDateText}")
-                    } else {
-                        Text(text = "Statistics")
-                    }
-                },
+            JournalTopAppBar(
+                title = if (statsModel.areThereAnyIngestions) "Statistics Since ${statsModel.startDateText}" else "Statistics",
                 elevation = 0.dp
             )
         }
@@ -72,7 +67,11 @@ fun StatsScreen(
             )
         } else {
             Column {
-                TabRow(selectedTabIndex = statsModel.selectedOption.tabIndex) {
+                TabRow(
+                    selectedTabIndex = statsModel.selectedOption.tabIndex,
+                    backgroundColor = MaterialTheme.colors.surface,
+                    contentColor = MaterialTheme.colors.onSurface
+                ) {
                     TimePickerOption.values().forEachIndexed { index, option ->
                         Tab(
                             text = { Text(option.displayText) },
@@ -81,7 +80,7 @@ fun StatsScreen(
                         )
                     }
                 }
-                if (statsModel.statItems.isEmpty()){
+                if (statsModel.statItems.isEmpty()) {
                     EmptyScreenDisclaimer(
                         title = "No Ingestions Since ${statsModel.selectedOption.longDisplayText}",
                         description = "Use a longer duration range to see statistics."

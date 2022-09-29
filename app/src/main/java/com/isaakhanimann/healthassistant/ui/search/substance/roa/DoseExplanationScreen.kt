@@ -6,23 +6,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
 fun DoseExplanationScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = "Dosage Classification")
-                }
-            )
+            JournalTopAppBar(title = "Dosage Classification")
         }
     ) {
         Column(

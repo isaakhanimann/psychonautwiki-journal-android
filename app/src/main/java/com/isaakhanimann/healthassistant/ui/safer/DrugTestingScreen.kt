@@ -16,15 +16,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
 fun DrugTestingScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Drug Testing Services") }
-            )
+            JournalTopAppBar(title = "Drug Testing Services")
         }
     ) {
         Column(

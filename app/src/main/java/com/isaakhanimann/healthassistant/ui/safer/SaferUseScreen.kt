@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
@@ -30,9 +31,7 @@ fun SaferUseScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Safer Use") }
-            )
+            JournalTopAppBar(title = "Safer Use")
         }
     ) {
         Column(

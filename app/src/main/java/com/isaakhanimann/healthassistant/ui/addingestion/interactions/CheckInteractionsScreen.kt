@@ -19,6 +19,7 @@ import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.ui.search.substance.InteractionRow
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceWithCategoriesPreviewProvider
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
 @Composable
@@ -93,7 +94,7 @@ fun CheckInteractionsScreen(
 ) {
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Check Interactions With $substanceName") }) },
+        topBar = { JournalTopAppBar(title = "Check Interactions With $substanceName") },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = navigateToNext,

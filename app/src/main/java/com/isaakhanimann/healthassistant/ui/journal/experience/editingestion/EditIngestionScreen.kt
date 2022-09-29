@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
 @Composable
@@ -88,9 +89,7 @@ fun EditIngestionScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Edit Ingestion") }
-            )
+            JournalTopAppBar(title = "Edit Ingestion")
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(

@@ -5,20 +5,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
 fun SaferStimulantsScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Safer Stimulants Use") },
-            )
+            JournalTopAppBar(title = "Safer Stimulants Use")
         },
     ) {
         Column(
@@ -28,7 +26,8 @@ fun SaferStimulantsScreen() {
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(10.dp))
-            Text(text = """
+            Text(
+                text = """
                 Consider how long you want to stay awake. Don't suppress your need for sleep.
                 
                 Drink enough non-alcoholic drinks (3 - 5 dl per hour) and take breaks in the fresh air.
@@ -40,7 +39,8 @@ fun SaferStimulantsScreen() {
                 Take vitamin C and D and minerals (iron, calcium and magnesium) with frequent use.
                 
                 It is better not to wear headgear (danger of overheating).
-            """.trimIndent())
+            """.trimIndent()
+            )
             Spacer(modifier = Modifier.height(10.dp))
         }
     }

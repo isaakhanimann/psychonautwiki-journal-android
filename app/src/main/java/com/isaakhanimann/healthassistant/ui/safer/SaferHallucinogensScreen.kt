@@ -3,20 +3,24 @@ package com.isaakhanimann.healthassistant.ui.safer
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.search.substance.BulletPoints
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
 fun SaferHallucinogensScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Safer Hallucinogens") },
+            JournalTopAppBar(
+                title = "Safer Hallucinogens",
             )
         },
     ) {

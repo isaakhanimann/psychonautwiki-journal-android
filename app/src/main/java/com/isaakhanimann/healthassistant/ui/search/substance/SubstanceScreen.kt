@@ -25,6 +25,7 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substancerow.CategoryChipStatic
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
 fun SubstanceScreen(
@@ -79,9 +80,7 @@ fun SubstanceScreen(
     val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(substance.name) }
-            )
+            JournalTopAppBar(title = substance.name)
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(

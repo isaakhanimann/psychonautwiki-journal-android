@@ -2,7 +2,10 @@ package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -18,6 +21,7 @@ import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ColorPicker
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 
 @Composable
@@ -74,9 +78,7 @@ fun SubstanceCompanionScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = substanceCompanion.substanceName) },
-            )
+            JournalTopAppBar(title = substanceCompanion.substanceName)
         }
     ) {
         LazyColumn(

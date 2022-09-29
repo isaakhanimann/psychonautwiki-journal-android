@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.initialDate
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
@@ -57,9 +58,7 @@ fun SettingsScreen(
     date: String
 ) {
     Scaffold(topBar = {
-        TopAppBar(
-            title = { Text(text = "Settings") },
-        )
+        JournalTopAppBar(title = "Settings")
     }) {
         Column {
 //            Text(text = "Last Substance Update", style = MaterialTheme.typography.caption)

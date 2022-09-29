@@ -2,12 +2,16 @@ package com.isaakhanimann.healthassistant.ui.addingestion.route
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
@@ -19,9 +23,7 @@ fun CustomChooseRouteScreenPreview() {
 fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Choose Route") },
-            )
+            JournalTopAppBar(title = "Choose Route")
         }
     ) {
         Column {

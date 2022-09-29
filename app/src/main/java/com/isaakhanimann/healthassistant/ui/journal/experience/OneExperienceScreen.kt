@@ -23,6 +23,7 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 
 @Composable
@@ -82,20 +83,15 @@ fun ExperienceScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(oneExperienceScreenModel.title)
-                        IconButton(onClick = navigateToEditExperienceScreen) {
-                            Icon(
-                                Icons.Default.Edit,
-                                contentDescription = "Edit Experience",
-                                modifier = Modifier.size(17.dp)
-                            )
-                        }
-                    }
-                },
+            JournalTopAppBar(
+                title = oneExperienceScreenModel.title,
                 actions = {
+                    IconButton(onClick = navigateToEditExperienceScreen) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "Edit Experience",
+                        )
+                    }
                     SentimentButton(
                         sentiment = oneExperienceScreenModel.sentiment,
                         saveSentiment = saveSentiment,

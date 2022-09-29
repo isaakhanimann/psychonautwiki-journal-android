@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
 @Composable
@@ -110,7 +111,7 @@ fun ChooseTimeScreen(
     isChecked: Boolean,
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Choose Ingestion Time") }) },
+        topBar = { JournalTopAppBar(title = "Choose Ingestion Time") },
         floatingActionButton = {
             AnimatedVisibility(
                 visible = !isLoadingColor,

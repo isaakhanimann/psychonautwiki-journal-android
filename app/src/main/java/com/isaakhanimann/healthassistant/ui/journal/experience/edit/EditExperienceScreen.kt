@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
 @Composable
@@ -58,9 +59,7 @@ fun EditExperienceScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Edit Experience") }
-            )
+            JournalTopAppBar(title = "Edit Experience")
         },
         floatingActionButton = {
             if (isEnteredTitleOk) {

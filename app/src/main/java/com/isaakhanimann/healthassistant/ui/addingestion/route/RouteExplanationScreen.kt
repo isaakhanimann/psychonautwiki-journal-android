@@ -13,16 +13,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.search.substance.ArticleLink
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
 fun RouteExplanationScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = "Routes of Administration")
-                },
+            JournalTopAppBar(
+                title = "Routes of Administration",
                 actions = {
                     ArticleLink(url = AdministrationRoute.psychonautWikiArticleURL)
                 }

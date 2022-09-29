@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.PurityCalculation
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.UnknownDoseDialog
+import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
 fun CustomChooseDose(
@@ -103,11 +104,7 @@ fun CustomChooseDose(
     units: String
 ) {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Choose Dose") }
-            )
-        },
+        topBar = { JournalTopAppBar(title = "Choose Dose") },
         floatingActionButton = {
             if (isValidDose) {
                 ExtendedFloatingActionButton(
