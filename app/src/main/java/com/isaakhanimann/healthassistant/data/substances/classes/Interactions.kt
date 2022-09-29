@@ -4,15 +4,15 @@ import androidx.compose.ui.graphics.Color
 
 enum class InteractionType {
     DANGEROUS {
-        override val color = Color(0xffff293e)
+        override val color = Color(0xffFF4B33)
         override val dangerCount = 3
     },
     UNSAFE {
-        override val color = Color(0xFFff7d29)
+        override val color = Color(0xFFFFB433)
         override val dangerCount = 2
     },
     UNCERTAIN {
-        override val color = Color(0xffffea29)
+        override val color = Color(0xffFBFF33)
         override val dangerCount = 1
     };
 
