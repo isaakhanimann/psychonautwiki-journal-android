@@ -27,6 +27,7 @@ class ChooseDoseViewModel @Inject constructor(
     var isEstimate by mutableStateOf(false)
     var doseText by mutableStateOf("")
     var purityText by mutableStateOf("100")
+    var units by mutableStateOf("")
     private val purity: Double?
         get() {
             val p = purityText.toDoubleOrNull()
@@ -63,6 +64,7 @@ class ChooseDoseViewModel @Inject constructor(
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         roaDose = substance.getRoa(administrationRoute)?.roaDose
+        units = roaDose?.units ?: ""
     }
 
 }

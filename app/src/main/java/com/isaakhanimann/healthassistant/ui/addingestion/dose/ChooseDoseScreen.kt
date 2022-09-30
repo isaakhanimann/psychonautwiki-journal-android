@@ -50,7 +50,7 @@ fun ChooseDoseScreen(
         },
         navigateToNext = {
             navigateToChooseTimeAndMaybeColor(
-                viewModel.roaDose?.units,
+                viewModel.units,
                 viewModel.isEstimate,
                 viewModel.dose
             )
@@ -68,7 +68,10 @@ fun ChooseDoseScreen(
             viewModel.purityText = it
         },
         isValidPurity = viewModel.isPurityValid,
-        convertedDoseAndUnitText = viewModel.rawDoseWithUnit
+        convertedDoseAndUnitText = viewModel.rawDoseWithUnit,
+        isShowingUnitsField = viewModel.roaDose?.units?.isBlank() ?: true,
+        units = viewModel.units,
+        onChangeOfUnits = {viewModel.units = it}
     )
 }
 
@@ -95,7 +98,10 @@ fun ChooseDoseScreenPreview(
         purityText = "20",
         onPurityChange = {},
         isValidPurity = true,
-        convertedDoseAndUnitText = "25 mg"
+        convertedDoseAndUnitText = "25 mg",
+        isShowingUnitsField = false,
+        units = "mg",
+        onChangeOfUnits = {}
     )
 }
 
@@ -120,7 +126,10 @@ fun ChooseDoseScreenPreview2() {
         purityText = "20",
         onPurityChange = {},
         isValidPurity = true,
-        convertedDoseAndUnitText = "25 mg"
+        convertedDoseAndUnitText = "25 mg",
+        isShowingUnitsField = false,
+        units = "mg",
+        onChangeOfUnits = {}
     )
 }
 
@@ -143,7 +152,10 @@ fun ChooseDoseScreen(
     purityText: String,
     onPurityChange: (purity: String) -> Unit,
     isValidPurity: Boolean,
-    convertedDoseAndUnitText: String?
+    convertedDoseAndUnitText: String?,
+    isShowingUnitsField: Boolean,
+    units: String,
+    onChangeOfUnits: (units: String) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -236,6 +248,31 @@ fun ChooseDoseScreen(
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
+                    if (isShowingUnitsField) {
+                        OutlinedTextField(
+                            value = units,
+                            onValueChange = onChangeOfUnits,
+                            label = { Text("Units") },
+                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                            OutlinedButton(onClick = { onChangeOfUnits("µg") }) {
+                                Text(text = "µg")
+                            }
+                            OutlinedButton(onClick = { onChangeOfUnits("mg") }) {
+                                Text(text = "mg")
+                            }
+                            OutlinedButton(onClick = { onChangeOfUnits("g") }) {
+                                Text(text = "g")
+                            }
+                            OutlinedButton(onClick = { onChangeOfUnits("ml") }) {
+                                Text(text = "ml")
+                            }
+                        }
+                    }
                     Spacer(modifier = Modifier.height(10.dp))
                     PurityCalculation(
                         purityText = purityText,
