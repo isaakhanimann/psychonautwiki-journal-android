@@ -3,6 +3,7 @@ package com.isaakhanimann.healthassistant.ui.settings
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.initialDate
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
@@ -113,7 +115,9 @@ fun SettingsScreen(
             TextButton(
                 onClick = {
                     uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
-                }) {
+                },
+                modifier = Modifier.padding(horizontal = horizontalPadding)
+            ) {
                 Icon(
                     Icons.Default.OpenInBrowser,
                     contentDescription = "Open Link",
@@ -124,7 +128,10 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.weight(1f))
             }
             Divider()
-            TextButton(onClick = navigateToFAQ) {
+            TextButton(
+                onClick = navigateToFAQ,
+                modifier = Modifier.padding(horizontal = horizontalPadding)
+            ) {
                 Icon(
                     Icons.Outlined.QuestionAnswer,
                     contentDescription = "Frequently Asked Questions",
@@ -135,9 +142,12 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.weight(1f))
             }
             Divider()
-            TextButton(onClick = {
-                uriHandler.openUri("https://t.me/isaakhanimann")
-            }) {
+            TextButton(
+                onClick = {
+                    uriHandler.openUri("https://t.me/isaakhanimann")
+                },
+                modifier = Modifier.padding(horizontal = horizontalPadding)
+            ) {
                 Icon(
                     Icons.Outlined.ContactSupport,
                     contentDescription = "Contact Support",
@@ -151,7 +161,9 @@ fun SettingsScreen(
             TextButton(
                 onClick = {
                     uriHandler.openUri("https://github.com/isaakhanimann/HealthAssistant")
-                }) {
+                },
+                modifier = Modifier.padding(horizontal = horizontalPadding)
+            ) {
                 Icon(
                     Icons.Filled.Code,
                     contentDescription = "Open Source Code",
@@ -167,7 +179,9 @@ fun SettingsScreen(
             TextButton(
                 onClick = {
                     isShowingDeleteDialog = true
-                }) {
+                },
+                modifier = Modifier.padding(horizontal = horizontalPadding)
+            ) {
                 Icon(
                     Icons.Filled.DeleteForever,
                     contentDescription = "Delete",

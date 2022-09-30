@@ -3,7 +3,6 @@ package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ColorPicker
+import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
@@ -88,16 +88,19 @@ fun SubstanceCompanionScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                Spacer(modifier = Modifier.height(6.dp))
                 if (tolerance != null || crossTolerances.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "Tolerance", style = MaterialTheme.typography.h6)
-                    ToleranceSection(
-                        tolerance = tolerance,
-                        crossTolerances = crossTolerances
-                    )
+                    Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()) {
+                        SectionTitle(title = "Tolerance")
+                        ToleranceSection(
+                            tolerance = tolerance,
+                            crossTolerances = crossTolerances,
+                            modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(5.dp))
+                SectionTitle(title = "${substanceCompanion.substanceName} Color")
+                Spacer(modifier = Modifier.height(6.dp))
                 ColorPicker(
                     selectedColor = substanceCompanion.color,
                     onChangeOfColor = onChangeColor,
@@ -105,7 +108,7 @@ fun SubstanceCompanionScreen(
                     otherColors = otherColors
                 )
                 Spacer(modifier = Modifier.height(6.dp))
-                Divider()
+                SectionTitle(title = "History")
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(text = "Now")
                 Spacer(modifier = Modifier.height(4.dp))
