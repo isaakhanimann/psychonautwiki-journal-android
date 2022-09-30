@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -87,12 +88,11 @@ fun EditExperienceScreen(
             OutlinedTextField(
                 value = enteredTitle,
                 onValueChange = onChangeOfEnteredTitle,
-                textStyle = MaterialTheme.typography.h5,
-                maxLines = 2,
+                singleLine = true,
                 label = { Text(text = "Title") },
                 isError = !isEnteredTitleOk,
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, capitalization = KeyboardCapitalization.Words),
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
@@ -100,7 +100,7 @@ fun EditExperienceScreen(
                 onValueChange = onTextChange,
                 label = { Text(text = "Notes") },
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, capitalization = KeyboardCapitalization.Sentences),
                 modifier = Modifier.weight(1f).fillMaxWidth()
             )
         }
