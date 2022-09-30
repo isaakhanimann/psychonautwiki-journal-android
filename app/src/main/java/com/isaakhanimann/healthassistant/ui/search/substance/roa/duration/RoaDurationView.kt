@@ -51,9 +51,9 @@ fun RoaDurationView(
         val total = roaDuration.total
         val colorTimeLine = MaterialTheme.colors.primary
         val colorTransparent = colorTimeLine.copy(alpha = 0.1f)
-        val strokeWidth = 10f
+        val strokeWidth = 8f
         val strokeWidthThick = 40f
-        val ingestionDotRadius = 12f
+        val ingestionDotRadius = 10f
         val onset = roaDuration.onset
         val comeup = roaDuration.comeup
         val peak = roaDuration.peak
@@ -94,7 +94,7 @@ fun RoaDurationView(
                         val start1 =
                             onsetInterpol?.times(pixelsPerSec) ?: dottedLineWidths
                         val pathEffect = PathEffect.dashPathEffect(
-                            floatArrayOf(20f, 30f)
+                            floatArrayOf(10f, 20f)
                         )
                         drawLine(
                             start = Offset(x = 0f, y = canvasHeight),
