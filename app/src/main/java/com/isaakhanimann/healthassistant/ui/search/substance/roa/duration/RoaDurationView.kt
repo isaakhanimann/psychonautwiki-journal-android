@@ -44,9 +44,10 @@ fun RoaDurationView(
     navigateToDurationExplanationScreen: () -> Unit,
     roaDuration: RoaDuration,
     maxDurationInSeconds: Float?,
-    isOralRoute: Boolean
+    isOralRoute: Boolean,
+    modifier: Modifier = Modifier
 ) {
-    Column {
+    Column(modifier = modifier) {
         val total = roaDuration.total
         val colorTimeLine = MaterialTheme.colors.primary
         val colorTransparent = colorTimeLine.copy(alpha = 0.1f)

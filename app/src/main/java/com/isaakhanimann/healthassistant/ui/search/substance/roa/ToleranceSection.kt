@@ -1,12 +1,14 @@
 package com.isaakhanimann.healthassistant.ui.search.substance.roa
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
@@ -25,7 +27,6 @@ fun ToleranceSectionPreview() {
             "dopamine",
             "stimulant"
         ),
-        titleStyle = MaterialTheme.typography.h6
     )
 }
 
@@ -33,12 +34,9 @@ fun ToleranceSectionPreview() {
 fun ToleranceSection(
     tolerance: Tolerance?,
     crossTolerances: List<String>,
-    titleStyle: TextStyle
 ) {
     if (tolerance != null || crossTolerances.isNotEmpty()) {
         Column {
-            Spacer(modifier = Modifier.height(5.dp))
-            Text(text = "Tolerance", style = titleStyle)
             if (tolerance != null) {
                 val labelWidth = 40.dp
                 Row(verticalAlignment = Alignment.CenterVertically) {

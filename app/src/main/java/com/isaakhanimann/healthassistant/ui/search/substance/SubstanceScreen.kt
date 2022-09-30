@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
+import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
@@ -105,59 +106,61 @@ fun SubstanceScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(horizontal = horizontalPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            val titleStyle = MaterialTheme.typography.h6
             if (!substance.isApproved) {
-                Row(modifier = Modifier.padding(top = 5.dp)) {
+                Row(modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)) {
                     Icon(imageVector = Icons.Default.GppBad, contentDescription = "Verified")
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(text = "Info is not approved")
                 }
             }
             if (substance.summary != null) {
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = substance.summary)
+                VerticalSpace()
+                Text(
+                    text = substance.summary,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
                 val categories = substanceWithCategories.categories
-                Spacer(modifier = Modifier.height(5.dp))
-                FlowRow(mainAxisSpacing = 5.dp, crossAxisSpacing = 5.dp) {
+                VerticalSpace()
+                FlowRow(
+                    mainAxisSpacing = 5.dp,
+                    crossAxisSpacing = 5.dp,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
                     categories.forEach { category ->
                         CategoryChipFromSubstanceScreen(category, navigateToCategoryScreen)
                     }
                 }
-                Spacer(modifier = Modifier.height(5.dp))
-                Divider()
+                VerticalSpace()
             }
             if (substance.effectsSummary != null) {
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Effects", style = titleStyle)
-                Text(text = substance.effectsSummary)
-                Spacer(modifier = Modifier.height(5.dp))
-                Divider()
+                SectionTitle(title = "Effects")
+                VerticalSpace()
+                Text(text = substance.effectsSummary, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
             }
             if (substance.generalRisks != null && substance.longtermRisks != null) {
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Risks", style = titleStyle)
-                Text(text = substance.generalRisks)
-                Text(text = "Long-term", style = titleStyle)
-                Text(text = substance.longtermRisks)
-                Spacer(modifier = Modifier.height(5.dp))
-                Divider()
+                SectionTitle(title = "Risks")
+                VerticalSpace()
+                Text(text = substance.generalRisks, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
+                SectionTitle(title = "Long-term")
+                VerticalSpace()
+                Text(text = substance.longtermRisks, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
             }
             if (substance.saferUse.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Safer Use", style = titleStyle)
-                BulletPoints(points = substance.saferUse)
-                Spacer(modifier = Modifier.height(5.dp))
-                Divider()
+                SectionTitle(title = "Safer Use")
+                VerticalSpace()
+                BulletPoints(points = substance.saferUse, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
             }
             if (substance.dosageRemark != null) {
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Dosage Remark", style = titleStyle)
-                Text(text = substance.dosageRemark)
-                Spacer(modifier = Modifier.height(5.dp))
-                Divider()
+                SectionTitle(title = "Dosage Remark")
+                VerticalSpace()
+                Text(text = substance.dosageRemark, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
             }
             val maxDuration = remember(substance.roas) {
                 substance.roas.mapNotNull {
@@ -201,39 +204,44 @@ fun SubstanceScreen(
                     maxDurationInSeconds = maxDuration
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                Divider()
             }
             Spacer(modifier = Modifier.height(5.dp))
-            InteractionsView(
-                interactions = substance.interactions,
-                titleStyle = titleStyle
-            )
-            ToleranceSection(
-                tolerance = substance.tolerance,
-                crossTolerances = substance.crossTolerances,
-                titleStyle
-            )
+            val interactions = substance.interactions
+            if (interactions != null) {
+                if (interactions.dangerous.isNotEmpty() || interactions.unsafe.isNotEmpty() || interactions.uncertain.isNotEmpty()) {
+                    SectionTitle(title = "Interactions")
+                    InteractionsView(interactions = substance.interactions)
+                }
+            }
             if (substance.tolerance != null || substance.crossTolerances.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(5.dp))
-                Divider()
+                SectionTitle(title = "Tolerance")
+                VerticalSpace()
+                ToleranceSection(
+                    tolerance = substance.tolerance,
+                    crossTolerances = substance.crossTolerances
+                )
+                VerticalSpace()
             }
             if (substance.toxicities.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Toxicity", style = titleStyle)
+                SectionTitle(title = "Toxicity")
+                VerticalSpace()
                 if (substance.toxicities.size == 1) {
-                    Text(substance.toxicities.firstOrNull() ?: "")
+                    Text(substance.toxicities.firstOrNull() ?: "", modifier = Modifier.padding(horizontal = horizontalPadding))
                 } else {
-                    BulletPoints(points = substance.toxicities)
+                    BulletPoints(points = substance.toxicities, modifier = Modifier.padding(horizontal = horizontalPadding))
                 }
-                Spacer(modifier = Modifier.height(5.dp))
-                Divider()
+                VerticalSpace()
             }
             if (substance.addictionPotential != null) {
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Addiction Potential", style = titleStyle)
-                Text(substance.addictionPotential)
-                Spacer(modifier = Modifier.height(5.dp))
-                Divider()
+                SectionTitle(title = "Addiction Potential")
+                VerticalSpace()
+                Text(substance.addictionPotential, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
+            }
+            val firstRoa = substance.roas.firstOrNull()
+            val useVolumetric = firstRoa?.roaDose?.shouldDefinitelyUseVolumetricDosing == true
+            if (substance.isHallucinogen || substance.isStimulant || useVolumetric) {
+                SectionTitle(title = "See Also")
             }
             if (substance.isHallucinogen) {
                 TextButton(onClick = navigateToSaferHallucinogensScreen) {
@@ -247,8 +255,7 @@ fun SubstanceScreen(
                 }
                 Divider()
             }
-            val firstRoa = substance.roas.firstOrNull()
-            if (firstRoa?.roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
+            if (useVolumetric) {
                 TextButton(onClick = navigateToVolumetricDosingScreen) {
                     Text(text = "Volumetric Liquid Dosing")
                 }
@@ -259,8 +266,8 @@ fun SubstanceScreen(
 }
 
 @Composable
-fun BulletPoints(points: List<String>) {
-    Column {
+fun BulletPoints(points: List<String>, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         points.forEach {
             Row(verticalAlignment = Alignment.Top) {
                 Surface(
@@ -275,6 +282,11 @@ fun BulletPoints(points: List<String>) {
             }
         }
     }
+}
+
+@Composable
+fun VerticalSpace() {
+    Spacer(modifier = Modifier.height(5.dp))
 }
 
 @Composable
@@ -296,6 +308,10 @@ fun CategoryChipFromSubstanceScreen(
     ) {
         Text(text = category.name)
         Spacer(modifier = Modifier.width(3.dp))
-        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = "Go to", modifier = Modifier.size(20.dp))
+        Icon(
+            imageVector = Icons.Default.ChevronRight,
+            contentDescription = "Go to",
+            modifier = Modifier.size(20.dp)
+        )
     }
 }

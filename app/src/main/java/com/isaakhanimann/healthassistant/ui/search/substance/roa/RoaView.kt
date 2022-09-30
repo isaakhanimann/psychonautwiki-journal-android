@@ -17,9 +17,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.Roa
+import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
+import com.isaakhanimann.healthassistant.ui.search.substance.VerticalSpace
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDurationView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaPreviewProvider
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 
 
 @Preview
@@ -53,75 +56,75 @@ fun RoaView(
     val isSomethingDefined = !(isEveryDoseNull && isEveryDurationNull)
     if (isSomethingDefined) {
         Column {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Bottom,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = roa.route.displayText, style = MaterialTheme.typography.h6)
-                if (roa.route == AdministrationRoute.INSUFFLATED) {
-                    Text(
-                        "Safer Sniffing",
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.button,
-                        modifier = Modifier
-                            .clickable(onClick = navigateToSaferSniffingScreen)
+            SectionTitle(title = roa.route.displayText)
+            VerticalSpace()
+            if (roa.route == AdministrationRoute.INSUFFLATED) {
+                Text(
+                    "Safer Sniffing",
+                    color = MaterialTheme.colors.primary,
+                    style = MaterialTheme.typography.button,
+                    modifier = Modifier
+                        .clickable(onClick = navigateToSaferSniffingScreen)
+                        .padding(horizontal = horizontalPadding)
+                )
+            } else if (roa.route == AdministrationRoute.RECTAL) {
+                val uriHandler = LocalUriHandler.current
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }
+                        .padding(horizontal = horizontalPadding)) {
+                    Icon(
+                        Icons.Default.OpenInBrowser,
+                        contentDescription = "Open Link",
+                        modifier = Modifier.size(15.dp),
+                        tint = MaterialTheme.colors.primary
                     )
-                } else if (roa.route == AdministrationRoute.RECTAL) {
-                    val uriHandler = LocalUriHandler.current
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .clickable { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
-                        Icon(
-                            Icons.Default.OpenInBrowser,
-                            contentDescription = "Open Link",
-                            modifier = Modifier.size(15.dp),
-                            tint = MaterialTheme.colors.primary
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(
-                            "Safer Plugging",
-                            color = MaterialTheme.colors.primary,
-                            style = MaterialTheme.typography.button
-                        )
-                    }
-                } else if (roa.route.isInjectionMethod) {
-                    val uriHandler = LocalUriHandler.current
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .clickable { uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL) }) {
-                        Icon(
-                            Icons.Default.OpenInBrowser,
-                            contentDescription = "Open Link",
-                            modifier = Modifier.size(15.dp),
-                            tint = MaterialTheme.colors.primary
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(
-                            "Safer Injection",
-                            color = MaterialTheme.colors.primary,
-                            style = MaterialTheme.typography.button
-                        )
-                    }
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(
+                        "Safer Plugging",
+                        color = MaterialTheme.colors.primary,
+                        style = MaterialTheme.typography.button
+                    )
+                }
+            } else if (roa.route.isInjectionMethod) {
+                val uriHandler = LocalUriHandler.current
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable { uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL) }
+                        .padding(horizontal = horizontalPadding)) {
+                    Icon(
+                        Icons.Default.OpenInBrowser,
+                        contentDescription = "Open Link",
+                        modifier = Modifier.size(15.dp),
+                        tint = MaterialTheme.colors.primary
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(
+                        "Safer Injection",
+                        color = MaterialTheme.colors.primary,
+                        style = MaterialTheme.typography.button
+                    )
                 }
             }
             if (!isEveryDoseNull && roaDose != null) {
-                Text(text = "Dosage")
+                Text(text = "Dosage", modifier = Modifier.padding(horizontal = horizontalPadding))
                 RoaDoseView(
                     roaDose = roaDose,
-                    navigateToDosageExplanationScreen = navigateToDosageExplanationScreen
+                    navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
                 )
-                Spacer(modifier = Modifier.height(5.dp))
+                VerticalSpace()
             }
             if (!isEveryDurationNull && roaDuration != null) {
-                Text(text = "Duration")
+                Text(text = "Duration", modifier = Modifier.padding(horizontal = horizontalPadding))
                 RoaDurationView(
                     roaDuration = roaDuration,
                     maxDurationInSeconds = maxDurationInSeconds,
                     isOralRoute = roa.route == AdministrationRoute.ORAL,
-                    navigateToDurationExplanationScreen = navigateToDurationExplanationScreen
+                    navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
                 )
             }
         }

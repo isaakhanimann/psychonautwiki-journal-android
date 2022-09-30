@@ -90,10 +90,11 @@ fun SubstanceCompanionScreen(
             item {
                 Spacer(modifier = Modifier.height(6.dp))
                 if (tolerance != null || crossTolerances.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(text = "Tolerance", style = MaterialTheme.typography.h6)
                     ToleranceSection(
                         tolerance = tolerance,
-                        crossTolerances = crossTolerances,
-                        titleStyle = MaterialTheme.typography.h6
+                        crossTolerances = crossTolerances
                     )
                 }
                 Spacer(modifier = Modifier.height(5.dp))

@@ -34,12 +34,13 @@ fun RoaDoseViewPreview(
 fun RoaDoseView(
     roaDose: RoaDose,
     navigateToDosageExplanationScreen: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val lightMaxOrCommonMin = roaDose.light?.max ?: roaDose.common?.min
     val commonMaxOrStrongMin = roaDose.common?.max ?: roaDose.strong?.min
     val strongMaxOrHeavy = roaDose.strong?.max ?: roaDose.heavy
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
