@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.BulletPoints
 import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
+import com.isaakhanimann.healthassistant.ui.search.substance.VerticalSpace
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
@@ -41,6 +42,7 @@ fun SaferHallucinogensScreen() {
                 ),
                 modifier = Modifier.padding(horizontal = horizontalPadding)
             )
+            VerticalSpace()
             SectionText(text = "Once the user has become intimately familiar with their substance of choice, it is up to them as an individual whether they would be comfortable tripping in a less controlled environment such as out in nature, social gatherings, parties, raves, etc. However, it should be noted that tripping in these settings entails considerably more physical and legal risk.")
             SectionTitle("Set (State of Mind)")
             SectionText(
@@ -79,6 +81,7 @@ fun SaferHallucinogensScreen() {
                 ),
                 modifier = Modifier.padding(horizontal = horizontalPadding)
             )
+            VerticalSpace()
             SectionTitle("Aborting Trips")
             SectionText(
                 text = """

@@ -1,22 +1,20 @@
 package com.isaakhanimann.healthassistant.ui.safer
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
+import com.isaakhanimann.healthassistant.ui.search.substance.VerticalSpace
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
@@ -53,6 +51,20 @@ Determining an optimal route of administration is highly dependent on the substa
             AdministrationRoute.values().filter { !it.isInjectionMethod }.forEach {
                 SectionTitle(it.displayText)
                 SectionText(it.articleText)
+                if (it == AdministrationRoute.RECTAL) {
+                    Button(
+                        onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) },
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.OpenInBrowser,
+                            contentDescription = "Open Link",
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Safer Plugging")
+                    }
+                    VerticalSpace()
+                }
             }
             AdministrationRoute.values().filter { it.isInjectionMethod }.forEach {
                 SectionTitle(it.displayText)

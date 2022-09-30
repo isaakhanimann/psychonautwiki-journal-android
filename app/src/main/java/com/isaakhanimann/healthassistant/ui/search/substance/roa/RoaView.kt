@@ -59,6 +59,25 @@ fun RoaView(
         Column {
             SectionTitle(title = roa.route.displayText)
             VerticalSpace()
+            if (!isEveryDoseNull && roaDose != null) {
+                Text(text = "Dosage", modifier = Modifier.padding(horizontal = horizontalPadding))
+                RoaDoseView(
+                    roaDose = roaDose,
+                    navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
+                VerticalSpace()
+            }
+            if (!isEveryDurationNull && roaDuration != null) {
+                Text(text = "Duration", modifier = Modifier.padding(horizontal = horizontalPadding))
+                RoaDurationView(
+                    roaDuration = roaDuration,
+                    maxDurationInSeconds = maxDurationInSeconds,
+                    isOralRoute = roa.route == AdministrationRoute.ORAL,
+                    navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
+            }
             val uriHandler = LocalUriHandler.current
             if (roa.route == AdministrationRoute.INSUFFLATED) {
                 TextButton(
@@ -91,25 +110,6 @@ fun RoaView(
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text("Safer Injection")
                 }
-            }
-            if (!isEveryDoseNull && roaDose != null) {
-                Text(text = "Dosage", modifier = Modifier.padding(horizontal = horizontalPadding))
-                RoaDoseView(
-                    roaDose = roaDose,
-                    navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
-            }
-            if (!isEveryDurationNull && roaDuration != null) {
-                Text(text = "Duration", modifier = Modifier.padding(horizontal = horizontalPadding))
-                RoaDurationView(
-                    roaDuration = roaDuration,
-                    maxDurationInSeconds = maxDurationInSeconds,
-                    isOralRoute = roa.route == AdministrationRoute.ORAL,
-                    navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
             }
         }
     }
