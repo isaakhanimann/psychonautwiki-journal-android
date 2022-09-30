@@ -25,9 +25,9 @@ class AddCustomViewModel @Inject constructor(
     fun onDoneTap() {
         viewModelScope.launch {
             val customSubstance = CustomSubstance(
-                name,
-                units,
-                description
+                name = name,
+                units = units,
+                description = description
             )
             experienceRepo.insert(customSubstance)
         }

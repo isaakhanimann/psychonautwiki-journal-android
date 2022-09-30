@@ -69,6 +69,7 @@ fun SearchScreen(
                 items(customSubstances) { customSubstance ->
                     Text(
                         text = customSubstance.name,
+                        style = MaterialTheme.typography.h6,
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
@@ -79,7 +80,10 @@ fun SearchScreen(
                     Divider()
                 }
                 item {
-                    TextButton(onClick = navigateToAddCustomSubstanceScreen) {
+                    TextButton(
+                        onClick = navigateToAddCustomSubstanceScreen,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    ) {
                         Text(text = "Add Custom Substance")
                     }
                 }
@@ -150,7 +154,10 @@ fun SearchField(
             }
         },
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, capitalization = KeyboardCapitalization.Words),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done,
+            capitalization = KeyboardCapitalization.Words
+        ),
         singleLine = true,
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = MaterialTheme.colors.surface

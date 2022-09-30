@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.R
@@ -42,7 +43,7 @@ fun AcceptConditionsScreen(
             contentDescription = "PsychonautWiki eye",
             modifier = Modifier.fillMaxWidth(0.4f)
         )
-        Column(horizontalAlignment = Alignment.Start) {
+        Column(horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = checkedState0.value,
@@ -72,7 +73,7 @@ fun AcceptConditionsScreen(
                 Text(text = "I’m going to seek professional help before attempting to self-medicate.")
             }
         }
-        Text(text = "Journaling data in the app always stays on this device")
+        Text(text = "Journaling data always stays on this device", textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 15.dp))
         Button(onClick = onTapAccept, enabled = allIsChecked) {
             Text(text = "Continue")
         }

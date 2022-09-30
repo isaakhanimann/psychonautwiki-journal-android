@@ -169,10 +169,12 @@ fun AddOrEditCustomSubstance(
             )
             if (isShowingDelete) {
                 var isShowingDeleteDialog by remember { mutableStateOf(false) }
-                TextButton(
+                Spacer(modifier = Modifier.height(10.dp))
+                OutlinedButton(
                     onClick = { isShowingDeleteDialog = true },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Delete Substance", style = MaterialTheme.typography.caption)
+                    Text("Delete Substance")
                 }
                 if (isShowingDeleteDialog) {
                     AlertDialog(

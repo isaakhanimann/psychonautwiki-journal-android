@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class CustomSubstance(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val name: String,
     var units: String,
     var description: String,
