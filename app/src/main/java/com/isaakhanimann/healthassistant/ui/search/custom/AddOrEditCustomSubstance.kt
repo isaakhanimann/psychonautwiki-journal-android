@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -131,7 +132,7 @@ fun AddOrEditCustomSubstance(
                 onValueChange = onNameChange,
                 label = { Text("Name") },
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, capitalization = KeyboardCapitalization.Words),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -163,7 +164,7 @@ fun AddOrEditCustomSubstance(
                 onValueChange = onDescriptionChange,
                 label = { Text("Description") },
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, capitalization = KeyboardCapitalization.Sentences),
                 modifier = Modifier.fillMaxWidth()
             )
             if (isShowingDelete) {

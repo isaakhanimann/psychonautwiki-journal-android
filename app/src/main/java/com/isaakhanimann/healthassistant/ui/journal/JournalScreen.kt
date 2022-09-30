@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -84,7 +85,10 @@ fun JournalScreen(
             JournalTopAppBar(
                 title = "Experiences",
                 actions = {
-                    IconToggleButton(checked = isFavoriteEnabled, onCheckedChange = onChangeIsFavorite) {
+                    IconToggleButton(
+                        checked = isFavoriteEnabled,
+                        onCheckedChange = onChangeIsFavorite
+                    ) {
                         if (isFavoriteEnabled) {
                             Icon(Icons.Filled.Star, contentDescription = "Is Favorite")
                         } else {
@@ -150,8 +154,14 @@ fun JournalScreen(
                         label = { Text(text = "Search by title") },
                         modifier = Modifier.fillMaxWidth(),
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        singleLine = true
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            capitalization = KeyboardCapitalization.Sentences
+                        ),
+                        singleLine = true,
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = MaterialTheme.colors.surface
+                        )
                     )
                 }
                 ExperiencesList(

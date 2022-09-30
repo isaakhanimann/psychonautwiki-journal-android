@@ -151,6 +151,9 @@ fun SearchField(
         },
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, capitalization = KeyboardCapitalization.Words),
-        singleLine = true
+        singleLine = true,
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.surface
+        )
     )
 }
