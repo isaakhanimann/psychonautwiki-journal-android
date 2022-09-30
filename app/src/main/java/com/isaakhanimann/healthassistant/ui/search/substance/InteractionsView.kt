@@ -84,6 +84,7 @@ fun InteractionRowSubstanceScreen(
                         imageVector = Icons.Outlined.WarningAmber,
                         contentDescription = "Warning",
                         tint = Color.Black,
+                        modifier = Modifier.size(17.dp)
                     )
                 }
             }
