@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,7 +41,7 @@ fun ToleranceSection(
                 val labelWidth = 40.dp
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     ArrowDown(
-                        strokeWidth = 4f,
+                        strokeWidth = 2f,
                         fractionWhenHeadStarts = 9f/10,
                         width = 5.dp,
                         height = 30.dp
@@ -50,33 +49,33 @@ fun ToleranceSection(
                     Spacer(modifier = Modifier.width(5.dp))
                     Column {
                         Row(
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             if (tolerance.full != null) {
                                 Text(
-                                    text = "full",
+                                    text = "full:",
                                     modifier = Modifier.width(labelWidth)
                                 )
                                 Text(text = tolerance.full)
                             }
                         }
                         Row(
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             if (tolerance.half != null) {
                                 Text(
-                                    text = "half",
+                                    text = "half:",
                                     modifier = Modifier.width(labelWidth)
                                 )
                                 Text(text = tolerance.half)
                             }
                         }
                         Row(
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             if (tolerance.zero != null) {
                                 Text(
-                                    text = "zero",
+                                    text = "zero:",
                                     modifier = Modifier.width(labelWidth)
                                 )
                                 Text(text = tolerance.zero)
@@ -84,7 +83,7 @@ fun ToleranceSection(
                         }
                     }
                 }
-                Text(text = "zero is the time until tolerance is like the first time", style = MaterialTheme.typography.caption)
+                Text(text = "zero is the time until tolerance is like the first time")
             }
             if (crossTolerances.isNotEmpty()) {
                 val names = crossTolerances.map { it }.distinct()
