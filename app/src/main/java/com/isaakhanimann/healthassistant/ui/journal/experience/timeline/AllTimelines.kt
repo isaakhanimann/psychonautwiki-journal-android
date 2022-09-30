@@ -5,6 +5,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -47,7 +48,7 @@ fun AllTimelinesPreview(
 fun AllTimelines(
     ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>,
     modifier: Modifier = Modifier,
-    strokeWidth: Float = 16f,
+    strokeWidth: Float = 10f,
 ) {
     if (ingestionDurationPairs.isEmpty()) {
         Text(text = "Insufficient Data for Timeline")
@@ -57,12 +58,13 @@ fun AllTimelines(
         }
         val isDarkTheme = isSystemInDarkTheme()
         val density = LocalDensity.current
+        val labelSize = MaterialTheme.typography.body1.fontSize
         val textPaint = remember(density) {
             Paint().apply {
                 color =
                     if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
                 textAlign = Paint.Align.CENTER
-                textSize = density.run { 40f }
+                textSize = density.run { labelSize.toPx() }
             }
         }
         var currentTime by remember {
@@ -75,9 +77,10 @@ fun AllTimelines(
         }
         Canvas(modifier = modifier) {
             val canvasWithLabelsHeight = size.height
+            val labelsHeight = labelSize.toPx() + 5f
             val canvasWidth = size.width
             val pixelsPerSec = canvasWidth / model.widthInSeconds
-            inset(left = 0f, top = 0f, right = 0f, bottom = 50f) {
+            inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight) {
                 val canvasHeightOuter = size.height
                 drawCurrentTime(
                     startTime = model.startTime,
@@ -132,7 +135,7 @@ fun DrawScope.drawIngestion(
             val canvasHeightInner = size.height
             drawCircle(
                 color = color,
-                radius = 18f,
+                radius = 10f,
                 center = Offset(x = startX, y = canvasHeightInner)
             )
         }

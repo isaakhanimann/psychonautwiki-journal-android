@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
@@ -157,17 +158,12 @@ fun ExperienceScreen(
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                 }
-                Divider()
             }
             if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
                 Column(
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(
-                        text = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern("EEE, dd MMM yyyy"),
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
+                    SectionTitle(title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern("EEE, dd MMM yyyy"))
                     oneExperienceScreenModel.ingestionElements.forEach {
                         IngestionRow(
                             ingestionElement = it,

@@ -150,14 +150,14 @@ fun EditIngestionScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
-
+            Spacer(modifier = Modifier.height(10.dp))
             var isShowingDropDownMenu by remember { mutableStateOf(false) }
             Box(
                 modifier = Modifier
                     .wrapContentSize(Alignment.TopEnd)
             ) {
                 val selectedOption = experiences.firstOrNull { it.id == selectedExperienceId }
-                TextButton(onClick = { isShowingDropDownMenu = true }) {
+                OutlinedButton(onClick = { isShowingDropDownMenu = true }, modifier = Modifier.fillMaxWidth()) {
                     Text(text = if (selectedOption?.title != null) "Part of " + selectedOption.title else "Part of Unknown Experience")
                 }
                 DropdownMenu(
@@ -179,10 +179,11 @@ fun EditIngestionScreen(
 
 
             var isShowingDeleteDialog by remember { mutableStateOf(false) }
-            TextButton(
+            OutlinedButton(
                 onClick = { isShowingDeleteDialog = true },
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Delete Ingestion", style = MaterialTheme.typography.caption)
+                Text("Delete Ingestion")
             }
             if (isShowingDeleteDialog) {
                 AlertDialog(

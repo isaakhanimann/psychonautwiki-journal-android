@@ -247,8 +247,8 @@ fun ChooseDoseScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text("Is Estimate")
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                        Text("Dose is an estimate")
                     }
                     if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
                         TextButton(onClick = navigateToVolumetricDosingScreen) {
