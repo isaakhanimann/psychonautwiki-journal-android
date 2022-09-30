@@ -87,7 +87,7 @@ fun BarChart(buckets: List<List<ColorCount>>, startDateText: String) {
                     cap = StrokeCap.Round
                 )
                 // bottom line
-                val tickHeight = 12f
+                val tickHeight = 6f
                 val numBuckets = buckets.size
                 val spaceBetweenTicks = canvasWidthWithoutLabel / numBuckets
                 val numSpacers = numBuckets + 1
