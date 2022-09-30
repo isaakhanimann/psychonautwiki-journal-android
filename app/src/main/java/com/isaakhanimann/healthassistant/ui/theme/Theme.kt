@@ -27,14 +27,6 @@ private val LightColorPalette = lightColors(
     surface = Color(0xFFF2F2F7)
 )
 
-fun lightGray(isDarkTheme: Boolean): Color {
-    return if (isDarkTheme) {
-        Color(0xff3A3A3C)
-    } else {
-        Color(0xffE5E5EA)
-    }
-}
-
 val horizontalPadding = 10.dp
 
 @Composable

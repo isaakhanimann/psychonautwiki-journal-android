@@ -34,9 +34,10 @@ fun ToleranceSectionPreview() {
 fun ToleranceSection(
     tolerance: Tolerance?,
     crossTolerances: List<String>,
+    modifier: Modifier = Modifier
 ) {
     if (tolerance != null || crossTolerances.isNotEmpty()) {
-        Column {
+        Column(modifier) {
             if (tolerance != null) {
                 val labelWidth = 40.dp
                 Row(verticalAlignment = Alignment.CenterVertically) {

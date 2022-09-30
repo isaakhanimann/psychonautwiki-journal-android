@@ -6,8 +6,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 
 
 @Composable
@@ -15,7 +13,6 @@ fun JournalTopAppBar(
     title: String,
     navigationIcon: @Composable (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
-    elevation: Dp = AppBarDefaults.TopAppBarElevation
 ) {
     TopAppBar(
         title = { Text(text = title) },
@@ -23,6 +20,6 @@ fun JournalTopAppBar(
         actions = actions,
         backgroundColor = MaterialTheme.colors.surface,
         contentColor = MaterialTheme.colors.onSurface,
-        elevation = 0.dp
+        elevation = AppBarDefaults.TopAppBarElevation
     )
 }

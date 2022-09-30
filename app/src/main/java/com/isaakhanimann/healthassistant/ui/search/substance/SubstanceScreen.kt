@@ -218,7 +218,8 @@ fun SubstanceScreen(
                 VerticalSpace()
                 ToleranceSection(
                     tolerance = substance.tolerance,
-                    crossTolerances = substance.crossTolerances
+                    crossTolerances = substance.crossTolerances,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
                 )
                 VerticalSpace()
             }
@@ -245,19 +246,19 @@ fun SubstanceScreen(
             }
             if (substance.isHallucinogen) {
                 TextButton(onClick = navigateToSaferHallucinogensScreen) {
-                    Text(text = "Safer Hallucinogen Use")
+                    Text(text = "Safer Hallucinogen Use", modifier = Modifier.padding(horizontal = horizontalPadding))
                 }
                 Divider()
             }
             if (substance.isStimulant) {
                 TextButton(onClick = navigateToSaferStimulantsScreen) {
-                    Text(text = "Safer Stimulant Use")
+                    Text(text = "Safer Stimulant Use", modifier = Modifier.padding(horizontal = horizontalPadding))
                 }
                 Divider()
             }
             if (useVolumetric) {
                 TextButton(onClick = navigateToVolumetricDosingScreen) {
-                    Text(text = "Volumetric Liquid Dosing")
+                    Text(text = "Volumetric Liquid Dosing", modifier = Modifier.padding(horizontal = horizontalPadding))
                 }
                 Divider()
             }

@@ -1,6 +1,5 @@
 package com.isaakhanimann.healthassistant.ui.journal
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -11,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.theme.lightGray
 
 @Preview
 @Composable
@@ -23,7 +21,7 @@ fun SectionTitlePreview() {
 fun SectionTitle(title: String) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = lightGray(isSystemInDarkTheme()),
+        color = MaterialTheme.colors.surface
     ) {
         Text(
             color = MaterialTheme.colors.onSurface,
