@@ -164,35 +164,35 @@ fun ExperienceScreen(
                     horizontalAlignment = Alignment.Start,
                 ) {
                     SectionTitle(title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern("EEE, dd MMM yyyy"))
-                    oneExperienceScreenModel.ingestionElements.forEach {
+                    oneExperienceScreenModel.ingestionElements.forEachIndexed { index, ingestionElement ->
                         IngestionRow(
-                            ingestionElement = it,
+                            ingestionElement = ingestionElement,
                             modifier = Modifier
                                 .clickable {
-                                    navigateToIngestionScreen(it.ingestionWithCompanion.ingestion.id)
+                                    navigateToIngestionScreen(ingestionElement.ingestionWithCompanion.ingestion.id)
                                 }
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
+                        if (index < oneExperienceScreenModel.ingestionElements.size-1) {
+                            Divider()
+                        }
                     }
                 }
-                Divider()
             }
-            if (oneExperienceScreenModel.cumulativeDoses.isNotEmpty()) {
-                Column(
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                ) {
-                    Text(
-                        text = "Cumulative Dose",
-                        modifier = Modifier.padding(top = 10.dp)
-                    )
-                    oneExperienceScreenModel.cumulativeDoses.forEach {
-                        CumulativeDoseRow(cumulativeDose = it, modifier = Modifier.fillMaxWidth())
+            val cumulativeDoses = oneExperienceScreenModel.cumulativeDoses
+            if (cumulativeDoses.isNotEmpty()) {
+                SectionTitle(title = "Cumulative Dose")
+                cumulativeDoses.forEachIndexed { index, cumulativeDose ->
+                    CumulativeDoseRow(cumulativeDose = cumulativeDose, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp, horizontal = horizontalPadding))
+                    if (index < cumulativeDoses.size-1) {
+                        Divider()
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
                 }
-                Divider()
             }
+            SectionTitle(title = "Notes")
             if (oneExperienceScreenModel.notes.isEmpty()) {
                 TextButton(
                     onClick = navigateToEditExperienceScreen,
@@ -224,7 +224,6 @@ fun ExperienceScreen(
                     }
                 }
             }
-            Divider()
             var isShowingDeleteDialog by remember { mutableStateOf(false) }
             TextButton(
                 onClick = { isShowingDeleteDialog = true },

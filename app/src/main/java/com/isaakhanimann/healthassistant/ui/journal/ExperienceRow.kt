@@ -10,7 +10,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -66,12 +65,6 @@ fun ExperienceRow(
                     } else {
                         Text(
                             text = "No substance yet",
-                        )
-                    }
-                    if (experience.text.isNotBlank()) {
-                        Icon(
-                            Icons.Outlined.StickyNote2,
-                            contentDescription = "Experience has notes"
                         )
                     }
                 }
