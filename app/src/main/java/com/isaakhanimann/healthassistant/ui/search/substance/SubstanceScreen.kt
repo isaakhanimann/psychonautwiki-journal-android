@@ -299,10 +299,10 @@ fun CategoryChipFromSubstanceScreen(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .clip(shape = CircleShape)
             .clickable {
                 navigateToCategoryScreen(category.name)
             }
-            .clip(shape = CircleShape)
             .background(color = category.color.copy(alpha = 0.2f))
             .padding(vertical = 4.dp, horizontal = 10.dp)
 

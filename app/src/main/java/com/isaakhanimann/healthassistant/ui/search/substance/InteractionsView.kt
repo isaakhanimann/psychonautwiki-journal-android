@@ -13,8 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -62,8 +60,7 @@ fun InteractionsView(interactions: Interactions) {
 fun InteractionRowSubstanceScreen(
     text: String,
     interactionType: InteractionType,
-    verticalPaddingInside: Dp = 2.dp,
-    textStyle: TextStyle = MaterialTheme.typography.body1
+    verticalPaddingInside: Dp = 2.dp
 ) {
     Surface(
         modifier = Modifier
@@ -78,9 +75,7 @@ fun InteractionRowSubstanceScreen(
             Text(
                 text = text,
                 textAlign = TextAlign.Center,
-                color = Color.Black,
-                style = textStyle,
-                fontWeight = FontWeight.SemiBold
+                color = Color.Black
             )
             Spacer(modifier = Modifier.weight(1f))
             LazyRow {

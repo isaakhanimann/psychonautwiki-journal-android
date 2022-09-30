@@ -1,17 +1,16 @@
-package com.isaakhanimann.healthassistant.ui.search.substance.roa
+package com.isaakhanimann.healthassistant.ui.safer
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
-import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
+import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
+import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
@@ -25,19 +24,15 @@ fun DoseExplanationScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = horizontalPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
+            SectionText(
                 text = "The range and intensity of the effects of a substance depends on upon a number of factors. These include route of administration, dosage, set and setting, and personal and environmental factors.\n" +
                         "Effective doses can be divided into five categories: threshold, light, common, strong, and heavy."
             )
-            Spacer(modifier = Modifier.height(5.dp))
             DoseClass.values().forEach {
-                Text(text = it.name, style = MaterialTheme.typography.h6)
-                Text(text = it.description)
-                Spacer(modifier = Modifier.height(5.dp))
+                SectionTitle(it.name)
+                SectionText(it.description)
             }
         }
     }

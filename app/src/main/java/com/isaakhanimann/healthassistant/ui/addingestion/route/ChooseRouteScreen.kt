@@ -9,11 +9,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -275,3 +277,21 @@ fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
         }
     }
 }
+
+
+@Composable
+fun SaferInjectionLink() {
+    val uriHandler = LocalUriHandler.current
+    TextButton(onClick = {
+        uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL)
+    }) {
+        Icon(
+            Icons.Default.OpenInBrowser,
+            contentDescription = "Open Link",
+            modifier = Modifier.size(ButtonDefaults.IconSize),
+        )
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+        Text("Safer Injection Guide")
+    }
+}
+

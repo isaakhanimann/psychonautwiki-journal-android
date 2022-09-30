@@ -1,15 +1,16 @@
 package com.isaakhanimann.healthassistant.ui.search.substance.roa
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,54 +59,37 @@ fun RoaView(
         Column {
             SectionTitle(title = roa.route.displayText)
             VerticalSpace()
+            val uriHandler = LocalUriHandler.current
             if (roa.route == AdministrationRoute.INSUFFLATED) {
-                Text(
-                    "Safer Sniffing",
-                    color = MaterialTheme.colors.primary,
-                    style = MaterialTheme.typography.button,
-                    modifier = Modifier
-                        .clickable(onClick = navigateToSaferSniffingScreen)
-                        .padding(horizontal = horizontalPadding)
-                )
+                TextButton(
+                    onClick = navigateToSaferSniffingScreen,
+                    modifier = Modifier.padding(horizontal = 5.dp)
+                ) {
+                    Text("Safer Sniffing")
+                }
             } else if (roa.route == AdministrationRoute.RECTAL) {
-                val uriHandler = LocalUriHandler.current
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clickable { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }
-                        .padding(horizontal = horizontalPadding)) {
+                TextButton(
+                    onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) },
+                    modifier = Modifier.padding(horizontal = 5.dp)
+                ) {
                     Icon(
                         Icons.Default.OpenInBrowser,
                         contentDescription = "Open Link",
-                        modifier = Modifier.size(15.dp),
-                        tint = MaterialTheme.colors.primary
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(
-                        "Safer Plugging",
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.button
-                    )
+                    Text("Safer Plugging")
                 }
             } else if (roa.route.isInjectionMethod) {
-                val uriHandler = LocalUriHandler.current
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clickable { uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL) }
-                        .padding(horizontal = horizontalPadding)) {
+                TextButton(
+                    onClick = { uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL) },
+                    modifier = Modifier.padding(horizontal = 5.dp)
+                ) {
                     Icon(
                         Icons.Default.OpenInBrowser,
                         contentDescription = "Open Link",
-                        modifier = Modifier.size(15.dp),
-                        tint = MaterialTheme.colors.primary
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(
-                        "Safer Injection",
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.button
-                    )
+                    Text("Safer Injection")
                 }
             }
             if (!isEveryDoseNull && roaDose != null) {
