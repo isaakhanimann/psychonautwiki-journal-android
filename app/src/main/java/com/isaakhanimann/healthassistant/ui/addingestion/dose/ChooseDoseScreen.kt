@@ -57,7 +57,7 @@ fun ChooseDoseScreen(
         },
         useUnknownDoseAndNavigate = {
             navigateToChooseTimeAndMaybeColor(
-                viewModel.roaDose?.units,
+                viewModel.units,
                 false,
                 null
             )
@@ -200,6 +200,12 @@ fun ChooseDoseScreen(
                     }
                     Divider()
                 }
+                if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
+                    TextButton(onClick = navigateToVolumetricDosingScreen) {
+                        Text(text = "Use Volumetric Liquid Dosing")
+                    }
+                    Divider()
+                }
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     Spacer(modifier = Modifier.height(10.dp))
                     if (roaDose != null) {
@@ -236,7 +242,7 @@ fun ChooseDoseScreen(
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
-                                text = roaDose?.units ?: "",
+                                text = units,
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
@@ -286,11 +292,6 @@ fun ChooseDoseScreen(
                     ) {
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                         Text("Dose is an estimate")
-                    }
-                    if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
-                        TextButton(onClick = navigateToVolumetricDosingScreen) {
-                            Text(text = "Use Volumetric Liquid Dosing")
-                        }
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
