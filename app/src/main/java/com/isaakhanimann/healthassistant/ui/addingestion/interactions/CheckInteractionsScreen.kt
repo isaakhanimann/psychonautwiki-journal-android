@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
@@ -15,8 +14,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -26,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceWithCategoriesPreviewProvider
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
@@ -132,8 +131,7 @@ fun CheckInteractionsScreen(
             } else {
                 val verticalSpaceBetween = 1.dp
                 val verticalPaddingInside = 4.dp
-                val style = MaterialTheme.typography.h6
-                LazyColumn(modifier = Modifier.padding(horizontal = 5.dp)) {
+                LazyColumn {
                     item {
                         Spacer(modifier = Modifier.height(5.dp))
                     }
@@ -144,7 +142,6 @@ fun CheckInteractionsScreen(
                                 interactionType = InteractionType.DANGEROUS,
                                 verticalSpaceBetween = verticalSpaceBetween,
                                 verticalPaddingInside = verticalPaddingInside,
-                                textStyle = style
                             )
                         }
                     }
@@ -154,7 +151,6 @@ fun CheckInteractionsScreen(
                                 text = it, interactionType = InteractionType.UNSAFE,
                                 verticalSpaceBetween = verticalSpaceBetween,
                                 verticalPaddingInside = verticalPaddingInside,
-                                textStyle = style
                             )
                         }
                     }
@@ -164,12 +160,11 @@ fun CheckInteractionsScreen(
                                 text = it, interactionType = InteractionType.UNCERTAIN,
                                 verticalSpaceBetween = verticalSpaceBetween,
                                 verticalPaddingInside = verticalPaddingInside,
-                                textStyle = style
                             )
                         }
                     }
                     item {
-                        Text(text = "Check the PsychonautWiki article for explanations")
+                        Text(text = "Check the PsychonautWiki article for explanations", style = MaterialTheme.typography.caption, modifier = Modifier.padding(horizontal = horizontalPadding))
                         Spacer(modifier = Modifier.height(5.dp))
                     }
                 }
@@ -187,7 +182,6 @@ fun CheckInteractionsScreen(
                             Icon(
                                 imageVector = Icons.Default.Warning,
                                 contentDescription = "Warning",
-                                tint = alertInteractionType.color
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                             Text(text = title, style = MaterialTheme.typography.h6)
@@ -220,26 +214,24 @@ fun InteractionRow(
     text: String,
     interactionType: InteractionType,
     verticalSpaceBetween: Dp = 1.dp,
-    verticalPaddingInside: Dp = 2.dp,
-    textStyle: TextStyle = MaterialTheme.typography.body1
+    verticalPaddingInside: Dp = 2.dp
 ) {
     Surface(
         modifier = Modifier
             .padding(vertical = verticalSpaceBetween)
             .fillMaxWidth(),
-        shape = RoundedCornerShape(2.dp),
+        shape = RectangleShape,
         color = interactionType.color
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 5.dp, vertical = verticalPaddingInside),
+            modifier = Modifier.padding(horizontal = horizontalPadding, vertical = verticalPaddingInside),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = text,
                 textAlign = TextAlign.Center,
                 color = Color.Black,
-                style = textStyle,
-                fontWeight = FontWeight.SemiBold
+                style = MaterialTheme.typography.h6,
             )
             Spacer(modifier = Modifier.weight(1f))
             LazyRow {

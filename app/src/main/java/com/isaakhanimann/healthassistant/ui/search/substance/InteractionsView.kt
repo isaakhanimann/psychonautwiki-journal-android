@@ -2,7 +2,10 @@ package com.isaakhanimann.healthassistant.ui.search.substance
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.runtime.Composable
@@ -32,24 +35,22 @@ fun InteractionsView(interactions: Interactions) {
     Column {
         if (interactions.dangerous.isNotEmpty()) {
             interactions.dangerous.forEach {
-                InteractionRowDividers(text = it, interactionType = InteractionType.DANGEROUS)
-                Divider()
+                InteractionRowSubstanceScreen(text = it, interactionType = InteractionType.DANGEROUS)
             }
         }
         if (interactions.unsafe.isNotEmpty()) {
             interactions.unsafe.forEach {
-                InteractionRowDividers(text = it, interactionType = InteractionType.UNSAFE)
-                Divider()
+                InteractionRowSubstanceScreen(text = it, interactionType = InteractionType.UNSAFE)
             }
         }
         if (interactions.uncertain.isNotEmpty()) {
             interactions.uncertain.forEach {
-                InteractionRowDividers(text = it, interactionType = InteractionType.UNCERTAIN)
-                Divider()
+                InteractionRowSubstanceScreen(text = it, interactionType = InteractionType.UNCERTAIN)
             }
         }
         Text(
             text = "Check the PsychonautWiki article for explanations",
+            style = MaterialTheme.typography.caption,
             modifier = Modifier.padding(horizontal = horizontalPadding)
         )
         VerticalSpace()
@@ -58,7 +59,7 @@ fun InteractionsView(interactions: Interactions) {
 }
 
 @Composable
-fun InteractionRowDividers(
+fun InteractionRowSubstanceScreen(
     text: String,
     interactionType: InteractionType,
     verticalPaddingInside: Dp = 2.dp,
@@ -66,7 +67,7 @@ fun InteractionRowDividers(
 ) {
     Surface(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth().padding(bottom = 1.dp),
         shape = RectangleShape,
         color = interactionType.color
     ) {
