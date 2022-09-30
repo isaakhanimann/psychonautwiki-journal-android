@@ -168,6 +168,10 @@ fun TestingServiceItem(
             .padding(horizontal = horizontalPadding, vertical = 5.dp)
             .fillMaxWidth()
     ) {
+        Icon(
+            imageVector = Icons.Default.OpenInBrowser,
+            contentDescription = "Open Link"
+        )
         Text(
             text = name,
             maxLines = 1,
@@ -179,11 +183,6 @@ fun TestingServiceItem(
             text = city,
             maxLines = 1,
             modifier = Modifier.width(IntrinsicSize.Max)
-        )
-        Icon(
-            imageVector = Icons.Default.OpenInBrowser,
-            contentDescription = "Open Link",
-            modifier = Modifier.size(15.dp)
         )
     }
 }
