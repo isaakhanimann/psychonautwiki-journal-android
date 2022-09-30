@@ -2,7 +2,6 @@ package com.isaakhanimann.healthassistant.ui.search.substance
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WarningAmber
@@ -56,46 +55,6 @@ fun InteractionsView(interactions: Interactions) {
         VerticalSpace()
     }
 
-}
-
-@Composable
-fun InteractionRow(
-    text: String,
-    interactionType: InteractionType,
-    verticalSpaceBetween: Dp = 1.dp,
-    verticalPaddingInside: Dp = 2.dp,
-    textStyle: TextStyle = MaterialTheme.typography.body1
-) {
-    Surface(
-        modifier = Modifier
-            .padding(vertical = verticalSpaceBetween)
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(2.dp),
-        color = interactionType.color
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 5.dp, vertical = verticalPaddingInside),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = text,
-                textAlign = TextAlign.Center,
-                color = Color.Black,
-                style = textStyle,
-                fontWeight = FontWeight.SemiBold
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            LazyRow {
-                items(interactionType.dangerCount) {
-                    Icon(
-                        imageVector = Icons.Outlined.WarningAmber,
-                        contentDescription = "Warning",
-                        tint = Color.Black,
-                    )
-                }
-            }
-        }
-    }
 }
 
 @Composable

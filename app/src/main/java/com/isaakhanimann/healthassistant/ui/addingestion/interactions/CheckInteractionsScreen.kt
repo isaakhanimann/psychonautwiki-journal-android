@@ -2,22 +2,29 @@ package com.isaakhanimann.healthassistant.ui.addingestion.interactions
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
-import com.isaakhanimann.healthassistant.ui.search.substance.InteractionRow
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceWithCategoriesPreviewProvider
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
@@ -94,7 +101,7 @@ fun CheckInteractionsScreen(
 ) {
 
     Scaffold(
-        topBar = { JournalTopAppBar(title = "Check Interactions With $substanceName") },
+        topBar = { JournalTopAppBar(title = "$substanceName Interactions") },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = navigateToNext,
@@ -203,6 +210,46 @@ fun CheckInteractionsScreen(
                         }
                     }
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun InteractionRow(
+    text: String,
+    interactionType: InteractionType,
+    verticalSpaceBetween: Dp = 1.dp,
+    verticalPaddingInside: Dp = 2.dp,
+    textStyle: TextStyle = MaterialTheme.typography.body1
+) {
+    Surface(
+        modifier = Modifier
+            .padding(vertical = verticalSpaceBetween)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(2.dp),
+        color = interactionType.color
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 5.dp, vertical = verticalPaddingInside),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                textAlign = TextAlign.Center,
+                color = Color.Black,
+                style = textStyle,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            LazyRow {
+                items(interactionType.dangerCount) {
+                    Icon(
+                        imageVector = Icons.Outlined.WarningAmber,
+                        contentDescription = "Warning",
+                        tint = Color.Black,
+                    )
+                }
             }
         }
     }

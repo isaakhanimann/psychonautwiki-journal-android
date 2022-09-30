@@ -147,7 +147,7 @@ fun ChooseDoseScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Choose Dose")
+            JournalTopAppBar(title = "$substanceName ${administrationRoute.displayText} Dose")
         },
         floatingActionButton = {
             if (isValidDose) {
@@ -190,7 +190,9 @@ fun ChooseDoseScreen(
                 }
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = administrationRoute.displayText + " " + substanceName)
+                    if (roaDose != null) {
+                        CurrentDoseClassInfo(currentDoseClass, roaDose)
+                    }
                     Spacer(modifier = Modifier.height(5.dp))
                     if (roaDose != null) {
                         RoaDoseView(
@@ -210,9 +212,6 @@ fun ChooseDoseScreen(
                                 text = "There is no dosage info for this administration route. Research dosages somewhere else.",
                             )
                         }
-                    }
-                    if (roaDose != null) {
-                        CurrentDoseClassInfo(currentDoseClass, roaDose)
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     val focusManager = LocalFocusManager.current
@@ -248,7 +247,7 @@ fun ChooseDoseScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text("Is Estimate", style = MaterialTheme.typography.h6)
+                        Text("Is Estimate")
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                     }
                     if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
