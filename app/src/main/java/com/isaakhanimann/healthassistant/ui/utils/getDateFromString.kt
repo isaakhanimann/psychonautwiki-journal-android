@@ -15,3 +15,8 @@ fun Instant.getStringOfPattern(pattern: String): String {
     val formatter = DateTimeFormatter.ofPattern(pattern)
     return dateTime.format(formatter)
 }
+
+fun LocalDateTime.getStringOfPattern(pattern: String): String {
+    val formatter = DateTimeFormatter.ofPattern(pattern)
+    return this.format(formatter)
+}

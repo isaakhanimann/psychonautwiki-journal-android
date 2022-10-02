@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
+import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
+import java.time.LocalDateTime
 
 
 @Composable
@@ -71,7 +73,7 @@ fun ChooseTimeScreenPreview() {
         createAndSaveIngestion = {},
         onSubmitDate = { _: Int, _: Int, _: Int -> },
         onSubmitTime = { _: Int, _: Int -> },
-        dateAndTime = DateAndTime(year = 2022, month = 2, day = 19, hour = 7, minute = 7),
+        dateAndTime = LocalDateTime.now(),
         dismissAddIngestionScreens = {},
         isLoadingColor = false,
         isShowingColorPicker = true,
@@ -96,7 +98,7 @@ fun ChooseTimeScreen(
     createAndSaveIngestion: () -> Unit,
     onSubmitDate: (Int, Int, Int) -> Unit,
     onSubmitTime: (Int, Int) -> Unit,
-    dateAndTime: DateAndTime,
+    dateAndTime: LocalDateTime,
     dismissAddIngestionScreens: () -> Unit,
     isLoadingColor: Boolean,
     isShowingColorPicker: Boolean,
@@ -163,18 +165,18 @@ fun ChooseTimeScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     DatePickerButton(
-                        day = dateAndTime.day,
-                        month = dateAndTime.month,
+                        day = dateAndTime.dayOfMonth,
+                        month = dateAndTime.monthValue,
                         year = dateAndTime.year,
                         onSubmitDate = onSubmitDate,
-                        dateString = dateAndTime.dateString,
+                        dateString = dateAndTime.getStringOfPattern("EEE dd MMM yyyy"),
                         modifier = Modifier.fillMaxWidth()
                     )
                     TimePickerButton(
                         hour = dateAndTime.hour,
                         minute = dateAndTime.minute,
                         onSubmitTime = onSubmitTime,
-                        timeString = dateAndTime.timeString,
+                        timeString = dateAndTime.getStringOfPattern("HH:mm"),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }

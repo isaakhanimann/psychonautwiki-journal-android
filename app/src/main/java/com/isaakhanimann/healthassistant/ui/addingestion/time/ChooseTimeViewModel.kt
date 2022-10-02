@@ -14,12 +14,12 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.main.routers.*
-import com.isaakhanimann.healthassistant.ui.utils.getInstant
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -32,26 +32,19 @@ class ChooseTimeViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
-    private val zonedDateTime = Instant.now().atZone(ZoneId.systemDefault())
-    val dateAndTimeFlow = MutableStateFlow(
-        DateAndTime(
-            year = zonedDateTime.year,
-            month = zonedDateTime.monthValue,
-            day = zonedDateTime.dayOfMonth,
-            hour = zonedDateTime.hour,
-            minute = zonedDateTime.minute
-        )
-    )
+    val dateAndTimeFlow = MutableStateFlow(LocalDateTime.now())
 
     private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()
 
     private val experienceWithIngestionsToAddToFlow: Flow<ExperienceWithIngestions?> =
-        sortedExperiencesFlow.combine(dateAndTimeFlow) { sortedExperiences, relevantDateFields ->
-            val selectedInstant = relevantDateFields.currentlySelectedInstant
+        sortedExperiencesFlow.combine(dateAndTimeFlow) { sortedExperiences, dateAndTime ->
+            val selectedInstant = dateAndTime.atZone(ZoneId.systemDefault()).toInstant()
             return@combine sortedExperiences.firstOrNull { experience ->
                 val sortedIngestions = experience.ingestions.sortedBy { it.time }
-                val firstIngestionTime = sortedIngestions.firstOrNull()?.time ?: return@firstOrNull false
-                val lastIngestionTime = sortedIngestions.lastOrNull()?.time ?: return@firstOrNull false
+                val firstIngestionTime =
+                    sortedIngestions.firstOrNull()?.time ?: return@firstOrNull false
+                val lastIngestionTime =
+                    sortedIngestions.lastOrNull()?.time ?: return@firstOrNull false
                 val selectedDateMinusLimit =
                     selectedInstant.minus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
                 val selectedDatePlusLimit =
@@ -156,30 +149,28 @@ class ChooseTimeViewModel @Inject constructor(
         val minute = dateAndTimeFlow.value.minute
         viewModelScope.launch {
             dateAndTimeFlow.emit(
-                DateAndTime(
-                    day = newDay,
-                    month = newMonth,
-                    year = newYear,
-                    hour = hour,
-                    minute = minute
-                )
+                LocalDateTime.now()
+                    .withYear(newYear)
+                    .withMonth(newMonth)
+                    .withDayOfMonth(newDay)
+                    .withHour(hour)
+                    .withMinute(minute)
             )
         }
     }
 
     fun onSubmitTime(newHour: Int, newMinute: Int) {
         val year = dateAndTimeFlow.value.year
-        val month = dateAndTimeFlow.value.month
-        val day = dateAndTimeFlow.value.day
+        val month = dateAndTimeFlow.value.monthValue
+        val day = dateAndTimeFlow.value.dayOfMonth
         viewModelScope.launch {
             dateAndTimeFlow.emit(
-                DateAndTime(
-                    day = day,
-                    month = month,
-                    year = year,
-                    hour = newHour,
-                    minute = newMinute
-                )
+                LocalDateTime.now()
+                    .withYear(year)
+                    .withMonth(month)
+                    .withDayOfMonth(day)
+                    .withHour(newHour)
+                    .withMinute(newMinute)
             )
         }
     }
@@ -194,7 +185,7 @@ class ChooseTimeViewModel @Inject constructor(
                 substanceName,
                 color = selectedColor
             )
-            val ingestionTime = dateAndTimeFlow.first().currentlySelectedInstant
+            val ingestionTime = dateAndTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
             if (userWantsToCreateANewExperience || oldIdToUse == null) {
                 val newExperience = Experience(
                     id = newIdToUse,
@@ -237,27 +228,4 @@ class ChooseTimeViewModel @Inject constructor(
             }
         }
     }
-}
-
-data class DateAndTime(
-    val year: Int,
-    val month: Int,
-    val day: Int,
-    val hour: Int,
-    val minute: Int,
-) {
-    val currentlySelectedInstant: Instant
-        get() {
-            return getInstant(year, month, day, hour, minute) ?: Instant.now()
-        }
-
-    val dateString: String
-        get() {
-            return currentlySelectedInstant.getStringOfPattern("EEE dd MMM yyyy")
-        }
-
-    val timeString: String
-        get() {
-            return currentlySelectedInstant.getStringOfPattern("HH:mm")
-        }
 }

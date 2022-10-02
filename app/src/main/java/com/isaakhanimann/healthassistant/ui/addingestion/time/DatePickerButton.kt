@@ -21,8 +21,8 @@ fun DatePickerButton(
     val datePickerDialog = DatePickerDialog(
         context,
         { _: DatePicker, newYear: Int, newMonth: Int, newDay: Int ->
-            onSubmitDate(newDay, newMonth, newYear)
-        }, year, month, day
+            onSubmitDate(newDay, newMonth + 1, newYear)
+        }, year, month - 1, day
     )
     OutlinedButton(onClick = datePickerDialog::show, modifier = modifier) {
         Text(dateString)
