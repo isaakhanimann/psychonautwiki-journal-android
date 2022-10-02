@@ -1,5 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.addingestion.dose.custom
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -181,6 +182,7 @@ fun CustomChooseDose(
                     Spacer(modifier = Modifier.height(10.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
                     ) {
                         Text("Is Estimate", style = MaterialTheme.typography.h6)
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)

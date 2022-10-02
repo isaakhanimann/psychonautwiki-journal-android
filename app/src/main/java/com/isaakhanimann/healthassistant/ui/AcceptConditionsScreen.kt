@@ -1,6 +1,7 @@
 package com.isaakhanimann.healthassistant.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
@@ -37,35 +38,53 @@ fun AcceptConditionsScreen(
         val checkedState3 = remember { mutableStateOf(false) }
         val allIsChecked =
             checkedState0.value && checkedState1.value && checkedState2.value && checkedState3.value
-        val painter = if (allIsChecked) painterResource(R.drawable.eye_open) else painterResource(R.drawable.eye_closed)
+        val painter =
+            if (allIsChecked) painterResource(R.drawable.eye_open) else painterResource(R.drawable.eye_closed)
         Image(
             painter = painter,
             contentDescription = "PsychonautWiki eye",
             modifier = Modifier.fillMaxWidth(0.4f)
         )
-        Column(horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.spacedBy(5.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable {
+                    checkedState0.value = checkedState0.value.not()
+                }) {
                 Checkbox(
                     checked = checkedState0.value,
                     onCheckedChange = { checkedState0.value = it }
                 )
                 Text(text = "I acknowledge that I am the only one responsible for my actions, especially when deciding to use drugs.")
             }
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable {
+                    checkedState1.value = checkedState1.value.not()
+                }) {
                 Checkbox(
                     checked = checkedState1.value,
                     onCheckedChange = { checkedState1.value = it }
                 )
                 Text(text = "I'm going to use this app for mitigating the risks of my or somebody else’s substance use.")
             }
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable {
+                    checkedState2.value = checkedState2.value.not()
+                }
+            ) {
                 Checkbox(
                     checked = checkedState2.value,
                     onCheckedChange = { checkedState2.value = it }
                 )
                 Text(text = "I acknowledge that the data in this app might be inaccurate or incomplete.")
             }
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable {
+                    checkedState3.value = checkedState3.value.not()
+                }) {
                 Checkbox(
                     checked = checkedState3.value,
                     onCheckedChange = { checkedState3.value = it }
@@ -73,7 +92,11 @@ fun AcceptConditionsScreen(
                 Text(text = "I’m going to seek professional help before attempting to self-medicate.")
             }
         }
-        Text(text = "Journaling data always stays on this device", textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 15.dp))
+        Text(
+            text = "Journaling data always stays on this device",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 15.dp)
+        )
         Button(onClick = onTapAccept, enabled = allIsChecked) {
             Text(text = "Continue")
         }

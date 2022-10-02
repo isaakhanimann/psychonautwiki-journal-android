@@ -1,5 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.addingestion.dose
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -289,6 +290,9 @@ fun ChooseDoseScreen(
                     Spacer(modifier = Modifier.height(10.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable {
+                            onChangeIsEstimate(isEstimate.not())
+                        }
                     ) {
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                         Text("Dose is an estimate")

@@ -186,7 +186,9 @@ fun ChooseTimeScreen(
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 if (experienceTitleToAddTo != null) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable { check(isChecked.not()) }) {
                         Checkbox(checked = isChecked, onCheckedChange = check)
                         Text(text = "Add to $experienceTitleToAddTo")
                     }
@@ -217,7 +219,10 @@ fun NoteSection(
                     focusManager.clearFocus()
                     isShowingSuggestions = false
                 }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, capitalization = KeyboardCapitalization.Sentences),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    capitalization = KeyboardCapitalization.Sentences
+                ),
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()

@@ -1,6 +1,7 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience.editingestion
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -136,7 +137,9 @@ fun EditIngestionScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable { onIsEstimateChange(isEstimate.not()) }) {
                 Checkbox(checked = isEstimate, onCheckedChange = onIsEstimateChange)
                 Text("Dose is an estimate")
             }
@@ -148,7 +151,10 @@ fun EditIngestionScreen(
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
                 }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, capitalization = KeyboardCapitalization.Sentences),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    capitalization = KeyboardCapitalization.Sentences
+                ),
                 singleLine = true
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -158,7 +164,10 @@ fun EditIngestionScreen(
                     .wrapContentSize(Alignment.TopEnd)
             ) {
                 val selectedOption = experiences.firstOrNull { it.id == selectedExperienceId }
-                OutlinedButton(onClick = { isShowingDropDownMenu = true }, modifier = Modifier.fillMaxWidth()) {
+                OutlinedButton(
+                    onClick = { isShowingDropDownMenu = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Text(text = if (selectedOption?.title != null) "Part of " + selectedOption.title else "Part of Unknown Experience")
                 }
                 DropdownMenu(
