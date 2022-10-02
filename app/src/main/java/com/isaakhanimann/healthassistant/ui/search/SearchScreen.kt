@@ -92,7 +92,14 @@ fun SearchScreen(
             val filteredSubstances = searchViewModel.filteredSubstances.collectAsState().value
             if (filteredSubstances.isEmpty()) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Text("None Found", modifier = Modifier.padding(10.dp))
+                    val activeCategoryNames = categories.filter { it.isActive }.map { it.chipName }
+                    if (activeCategoryNames.isEmpty()) {
+                        Text("None found", modifier = Modifier.padding(10.dp))
+
+                    } else {
+                        val names = activeCategoryNames.joinToString(separator = ", ")
+                        Text("None found in $names", modifier = Modifier.padding(10.dp))
+                    }
                 }
             } else {
                 LazyColumn {
