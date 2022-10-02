@@ -19,9 +19,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.healthassistant.ui.addingestion.time.DatePickerButton
+import com.isaakhanimann.healthassistant.ui.addingestion.time.TimePickerButton
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
+import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
+import java.time.LocalDateTime
 
 
 @Composable
@@ -46,7 +50,9 @@ fun EditIngestionScreen(
         onDone = {
             viewModel.onDoneTap()
             navigateBack()
-        }
+        },
+        localDateTime = viewModel.localDateTimeFlow.collectAsState().value,
+        onTimeChange = viewModel::onChangeTime
     )
 }
 
@@ -68,7 +74,9 @@ fun EditIngestionScreenPreview() {
             onChangeId = {},
             navigateBack = {},
             deleteIngestion = {},
-            onDone = {}
+            onDone = {},
+            localDateTime = LocalDateTime.now(),
+            onTimeChange = {}
         )
     }
 }
@@ -88,7 +96,9 @@ fun EditIngestionScreen(
     onChangeId: (Int) -> Unit,
     navigateBack: () -> Unit,
     deleteIngestion: () -> Unit,
-    onDone: () -> Unit
+    onDone: () -> Unit,
+    localDateTime: LocalDateTime,
+    onTimeChange: (LocalDateTime) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -142,6 +152,23 @@ fun EditIngestionScreen(
                 modifier = Modifier.clickable { onIsEstimateChange(isEstimate.not()) }) {
                 Checkbox(checked = isEstimate, onCheckedChange = onIsEstimateChange)
                 Text("Dose is an estimate")
+            }
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                DatePickerButton(
+                    localDateTime = localDateTime,
+                    onChange = onTimeChange,
+                    dateString = localDateTime.getStringOfPattern("EEE dd MMM yyyy"),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                TimePickerButton(
+                    localDateTime = localDateTime,
+                    onChange = onTimeChange,
+                    timeString = localDateTime.getStringOfPattern("HH:mm"),
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
             OutlinedTextField(
                 value = note,

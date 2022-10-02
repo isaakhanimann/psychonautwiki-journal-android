@@ -10,7 +10,7 @@ data class Ingestion(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val substanceName: String,
-    val time: Instant,
+    var time: Instant,
     val administrationRoute: AdministrationRoute,
     var dose: Double?,
     var isDoseAnEstimate: Boolean,

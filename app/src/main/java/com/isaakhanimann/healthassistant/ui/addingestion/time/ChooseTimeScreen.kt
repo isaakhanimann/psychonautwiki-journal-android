@@ -1,6 +1,5 @@
 package com.isaakhanimann.healthassistant.ui.addingestion.time
 
-import android.app.TimePickerDialog
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -38,12 +37,11 @@ fun ChooseTimeScreen(
     dismissAddIngestionScreens: () -> Unit,
     viewModel: ChooseTimeViewModel = hiltViewModel()
 ) {
-    val dateAndTime = viewModel.dateAndTimeFlow.collectAsState().value
+    val localDateTime = viewModel.localDateTimeFlow.collectAsState().value
     ChooseTimeScreen(
         createAndSaveIngestion = viewModel::createAndSaveIngestion,
-        onSubmitDate = viewModel::onSubmitDate,
-        onSubmitTime = viewModel::onSubmitTime,
-        dateAndTime = dateAndTime,
+        onChangeDateOrTime = viewModel::onChangeDateOrTime,
+        localDateTime = localDateTime,
         dismissAddIngestionScreens = dismissAddIngestionScreens,
         isLoadingColor = viewModel.isLoadingColor,
         isShowingColorPicker = viewModel.isShowingColorPicker,
@@ -71,9 +69,8 @@ fun ChooseTimeScreenPreview() {
     }
     ChooseTimeScreen(
         createAndSaveIngestion = {},
-        onSubmitDate = { _: Int, _: Int, _: Int -> },
-        onSubmitTime = { _: Int, _: Int -> },
-        dateAndTime = LocalDateTime.now(),
+        onChangeDateOrTime = {},
+        localDateTime = LocalDateTime.now(),
         dismissAddIngestionScreens = {},
         isLoadingColor = false,
         isShowingColorPicker = true,
@@ -96,9 +93,8 @@ fun ChooseTimeScreenPreview() {
 @Composable
 fun ChooseTimeScreen(
     createAndSaveIngestion: () -> Unit,
-    onSubmitDate: (Int, Int, Int) -> Unit,
-    onSubmitTime: (Int, Int) -> Unit,
-    dateAndTime: LocalDateTime,
+    onChangeDateOrTime: (LocalDateTime) -> Unit,
+    localDateTime: LocalDateTime,
     dismissAddIngestionScreens: () -> Unit,
     isLoadingColor: Boolean,
     isShowingColorPicker: Boolean,
@@ -165,18 +161,15 @@ fun ChooseTimeScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     DatePickerButton(
-                        day = dateAndTime.dayOfMonth,
-                        month = dateAndTime.monthValue,
-                        year = dateAndTime.year,
-                        onSubmitDate = onSubmitDate,
-                        dateString = dateAndTime.getStringOfPattern("EEE dd MMM yyyy"),
+                        localDateTime = localDateTime,
+                        onChange = onChangeDateOrTime,
+                        dateString = localDateTime.getStringOfPattern("EEE dd MMM yyyy"),
                         modifier = Modifier.fillMaxWidth()
                     )
                     TimePickerButton(
-                        hour = dateAndTime.hour,
-                        minute = dateAndTime.minute,
-                        onSubmitTime = onSubmitTime,
-                        timeString = dateAndTime.getStringOfPattern("HH:mm"),
+                        localDateTime = localDateTime,
+                        onChange = onChangeDateOrTime,
+                        timeString = localDateTime.getStringOfPattern("HH:mm"),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -260,25 +253,5 @@ fun NoteSection(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun TimePickerButton(
-    hour: Int,
-    minute: Int,
-    onSubmitTime: (Int, Int) -> Unit,
-    timeString: String,
-    modifier: Modifier = Modifier
-) {
-    val context = LocalContext.current
-    val timePickerDialog = TimePickerDialog(
-        context,
-        { _, newHour: Int, newMinute: Int ->
-            onSubmitTime(newHour, newMinute)
-        }, hour, minute, false
-    )
-    OutlinedButton(onClick = timePickerDialog::show, modifier = modifier) {
-        Text(timeString)
     }
 }

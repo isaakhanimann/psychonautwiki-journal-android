@@ -20,3 +20,11 @@ fun LocalDateTime.getStringOfPattern(pattern: String): String {
     val formatter = DateTimeFormatter.ofPattern(pattern)
     return this.format(formatter)
 }
+
+fun Instant.getLocalDateTime(): LocalDateTime {
+    return LocalDateTime.ofInstant(this, ZoneId.systemDefault())
+}
+
+fun LocalDateTime.getInstant(): Instant {
+    return this.atZone(ZoneId.systemDefault()).toInstant()
+}

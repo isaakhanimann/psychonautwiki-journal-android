@@ -14,6 +14,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.main.routers.*
+import com.isaakhanimann.healthassistant.ui.utils.getInstant
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -32,13 +33,13 @@ class ChooseTimeViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
-    val dateAndTimeFlow = MutableStateFlow(LocalDateTime.now())
+    val localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
 
     private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()
 
     private val experienceWithIngestionsToAddToFlow: Flow<ExperienceWithIngestions?> =
-        sortedExperiencesFlow.combine(dateAndTimeFlow) { sortedExperiences, dateAndTime ->
-            val selectedInstant = dateAndTime.atZone(ZoneId.systemDefault()).toInstant()
+        sortedExperiencesFlow.combine(localDateTimeFlow) { sortedExperiences, localDateTime ->
+            val selectedInstant = localDateTime.getInstant()
             return@combine sortedExperiences.firstOrNull { experience ->
                 val sortedIngestions = experience.ingestions.sortedBy { it.time }
                 val firstIngestionTime =
@@ -144,33 +145,10 @@ class ChooseTimeViewModel @Inject constructor(
         }
     }
 
-    fun onSubmitDate(newDay: Int, newMonth: Int, newYear: Int) {
-        val hour = dateAndTimeFlow.value.hour
-        val minute = dateAndTimeFlow.value.minute
+    fun onChangeDateOrTime(newLocalDateTime: LocalDateTime) {
         viewModelScope.launch {
-            dateAndTimeFlow.emit(
-                LocalDateTime.now()
-                    .withYear(newYear)
-                    .withMonth(newMonth)
-                    .withDayOfMonth(newDay)
-                    .withHour(hour)
-                    .withMinute(minute)
-            )
-        }
-    }
-
-    fun onSubmitTime(newHour: Int, newMinute: Int) {
-        val year = dateAndTimeFlow.value.year
-        val month = dateAndTimeFlow.value.monthValue
-        val day = dateAndTimeFlow.value.dayOfMonth
-        viewModelScope.launch {
-            dateAndTimeFlow.emit(
-                LocalDateTime.now()
-                    .withYear(year)
-                    .withMonth(month)
-                    .withDayOfMonth(day)
-                    .withHour(newHour)
-                    .withMinute(newMinute)
+            localDateTimeFlow.emit(
+                newLocalDateTime
             )
         }
     }
@@ -185,7 +163,7 @@ class ChooseTimeViewModel @Inject constructor(
                 substanceName,
                 color = selectedColor
             )
-            val ingestionTime = dateAndTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+            val ingestionTime = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
             if (userWantsToCreateANewExperience || oldIdToUse == null) {
                 val newExperience = Experience(
                     id = newIdToUse,

@@ -10,10 +10,12 @@ import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceReposit
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.ui.main.routers.INGESTION_ID_KEY
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
+import com.isaakhanimann.healthassistant.ui.utils.getInstant
+import com.isaakhanimann.healthassistant.ui.utils.getLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.time.Instant
+import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -28,8 +30,7 @@ class EditIngestionViewModel @Inject constructor(
     var dose by mutableStateOf("")
     var units by mutableStateOf("")
     var experienceId by mutableStateOf(1)
-
-    private val dateFlow = MutableStateFlow(Instant.now())
+    var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
 
     init {
         val id = state.get<Int>(INGESTION_ID_KEY)!!
@@ -41,13 +42,20 @@ class EditIngestionViewModel @Inject constructor(
             experienceId = ing.experienceId
             dose = ing.dose?.toReadableString() ?: ""
             units = ing.units ?: ""
-            dateFlow.emit(ing.time)
+            localDateTimeFlow.emit(ing.time.getLocalDateTime())
         }
     }
 
-    val relevantExperiences: StateFlow<List<ExperienceOption>> = dateFlow.map {
-        val fromDate = it.minus(2, ChronoUnit.DAYS)
-        val toDate = it.plus(2, ChronoUnit.DAYS)
+    fun onChangeTime(newLocalDateTime: LocalDateTime) {
+        viewModelScope.launch {
+            localDateTimeFlow.emit(newLocalDateTime)
+        }
+    }
+
+    val relevantExperiences: StateFlow<List<ExperienceOption>> = localDateTimeFlow.map {
+        val selectedInstant = it.getInstant()
+        val fromDate = selectedInstant.minus(2, ChronoUnit.DAYS)
+        val toDate = selectedInstant.plus(2, ChronoUnit.DAYS)
         return@map experienceRepo.getIngestionsWithExperiencesFlow(fromDate, toDate).firstOrNull()
             ?: emptyList()
     }.map { list ->
@@ -62,12 +70,14 @@ class EditIngestionViewModel @Inject constructor(
 
     fun onDoneTap() {
         viewModelScope.launch {
+            val selectedInstant = localDateTimeFlow.firstOrNull()?.getInstant() ?: return@launch
             ingestion?.let {
                 it.notes = note
                 it.isDoseAnEstimate = isEstimate
                 it.experienceId = experienceId
                 it.dose = dose.toDoubleOrNull()
                 it.units = units
+                it.time = selectedInstant
                 experienceRepo.update(it)
             }
         }
