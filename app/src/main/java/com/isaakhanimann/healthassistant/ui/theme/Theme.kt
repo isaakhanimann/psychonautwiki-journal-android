@@ -10,21 +10,21 @@ import androidx.compose.ui.unit.dp
 
 private val DarkColorPalette = darkColors(
     primary = Color(0xFF0A84FF),
-    primaryVariant = Color(0xFF0069cb),
     secondary = Color(0xFF0A84FF),
+    background = Color(0xFF00060D),
+    surface = Color(0xFF001933),
     onPrimary = Color.White,
     onSecondary = Color.White,
-    surface = Color(0xFF2C2C2E),
-    onSurface = Color.White
+    onSurface = Color.White,
 )
 
 private val LightColorPalette = lightColors(
     primary = Color(0xFF007AFF),
-    primaryVariant = Color(0xFF0069cb),
     secondary = Color(0xFF007AFF),
+    background = Color(0xFFF7FBFF),
+    surface = Color(0xFFDEEEFF),
     onPrimary = Color.White,
     onSecondary = Color.White,
-    surface = Color(0xFFF2F2F7)
 )
 
 val horizontalPadding = 10.dp
