@@ -1,6 +1,5 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -50,7 +49,7 @@ fun ExperienceScreen(
     }
 }
 
-@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Preview
 @Composable
 fun ExperienceScreenPreview(
     @PreviewParameter(

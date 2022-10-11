@@ -7,6 +7,9 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationRange
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationUnits
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.utils.getInstant
 
 class OneExperienceScreenPreviewProvider :
@@ -50,7 +53,38 @@ class OneExperienceScreenPreviewProvider :
                             color = SubstanceColor.PINK
                         )
                     ),
-                    roaDuration = null,
+                    roaDuration = RoaDuration(
+                        onset = DurationRange(
+                            min = 30f,
+                            max = 45f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        comeup = DurationRange(
+                            min = 15f,
+                            max = 30f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        peak = DurationRange(
+                            min = 1.5f,
+                            max = 2.5f,
+                            units = DurationUnits.HOURS
+                        ),
+                        offset = DurationRange(
+                            min = 1f,
+                            max = 1.5f,
+                            units = DurationUnits.HOURS
+                        ),
+                        total = DurationRange(
+                            min = 3f,
+                            max = 6f,
+                            units = DurationUnits.HOURS
+                        ),
+                        afterglow = DurationRange(
+                            min = 12f,
+                            max = 48f,
+                            units = DurationUnits.HOURS
+                        )
+                    ),
                     doseClass = DoseClass.COMMON
                 ),
                 IngestionElement(
@@ -76,7 +110,34 @@ class OneExperienceScreenPreviewProvider :
                             color = SubstanceColor.BLUE
                         )
                     ),
-                    roaDuration = null,
+                    roaDuration = RoaDuration(
+                        onset = DurationRange(
+                            min = 1f,
+                            max = 10f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        comeup = DurationRange(
+                            min = 5f,
+                            max = 15f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        peak = DurationRange(
+                            min = 15f,
+                            max = 30f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        offset = DurationRange(
+                            min = 10f,
+                            max = 30f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        total = DurationRange(
+                            min = 10f,
+                            max = 90f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        afterglow = null
+                    ),
                     doseClass = DoseClass.COMMON
                 ),
                 IngestionElement(
@@ -102,7 +163,34 @@ class OneExperienceScreenPreviewProvider :
                             color = SubstanceColor.BLUE
                         )
                     ),
-                    roaDuration = null,
+                    roaDuration = RoaDuration(
+                        onset = DurationRange(
+                            min = 1f,
+                            max = 10f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        comeup = DurationRange(
+                            min = 5f,
+                            max = 15f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        peak = DurationRange(
+                            min = 15f,
+                            max = 30f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        offset = DurationRange(
+                            min = 10f,
+                            max = 30f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        total = DurationRange(
+                            min = 10f,
+                            max = 90f,
+                            units = DurationUnits.MINUTES
+                        ),
+                        afterglow = null
+                    ),
                     doseClass = DoseClass.LIGHT
                 )
             ),

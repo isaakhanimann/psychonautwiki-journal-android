@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
+import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
@@ -40,11 +41,13 @@ fun StatsPreview(
         StatsPreviewProvider::class,
     ) statsModel: StatsModel
 ) {
-    StatsScreen(
-        navigateToSubstanceCompanion = {},
-        onTapOption = {},
-        statsModel = statsModel
-    )
+    HealthAssistantTheme {
+        StatsScreen(
+            navigateToSubstanceCompanion = {},
+            onTapOption = {},
+            statsModel = statsModel
+        )
+    }
 }
 
 @Composable
