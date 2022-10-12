@@ -21,6 +21,7 @@ import com.isaakhanimann.healthassistant.ui.addingestion.time.ColorPicker
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
+import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
@@ -49,22 +50,24 @@ fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionScreenPreviewP
     val otherColors = SubstanceColor.values().filter { color ->
         !alreadyUsedColors.contains(color)
     }
-    SubstanceCompanionScreen(
-        substanceCompanion = pair.first,
-        ingestionBursts = pair.second,
-        onChangeColor = {},
-        alreadyUsedColors = alreadyUsedColors,
-        otherColors = otherColors,
-        tolerance = Tolerance(
-            full = "with prolonged use",
-            half = "two weeks",
-            zero = "1 month"
-        ),
-        crossTolerances = listOf(
-            "dopamine",
-            "stimulant"
-        ),
-    )
+    HealthAssistantTheme {
+        SubstanceCompanionScreen(
+            substanceCompanion = pair.first,
+            ingestionBursts = pair.second,
+            onChangeColor = {},
+            alreadyUsedColors = alreadyUsedColors,
+            otherColors = otherColors,
+            tolerance = Tolerance(
+                full = "with prolonged use",
+                half = "two weeks",
+                zero = "1 month"
+            ),
+            crossTolerances = listOf(
+                "dopamine",
+                "stimulant"
+            ),
+        )
+    }
 }
 
 @Composable
@@ -89,12 +92,18 @@ fun SubstanceCompanionScreen(
         ) {
             item {
                 if (tolerance != null || crossTolerances.isNotEmpty()) {
-                    Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()) {
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         SectionTitle(title = "Tolerance")
                         ToleranceSection(
                             tolerance = tolerance,
                             crossTolerances = crossTolerances,
-                            modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)
+                            modifier = Modifier.padding(
+                                vertical = 5.dp,
+                                horizontal = horizontalPadding
+                            )
                         )
                     }
                 }

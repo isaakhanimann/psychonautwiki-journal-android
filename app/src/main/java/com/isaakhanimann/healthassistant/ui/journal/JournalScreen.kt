@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.ui.stats.EmptyScreenDisclaimer
+import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
@@ -55,17 +56,19 @@ fun ExperiencesScreenPreview(
         JournalScreenPreviewProvider::class,
     ) groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
 ) {
-    JournalScreen(
-        navigateToExperiencePopNothing = {},
-        navigateToAddIngestion = {},
-        groupedExperiences = groupedExperiences,
-        isFavoriteEnabled = false,
-        onChangeIsFavorite = {},
-        searchText = "",
-        onChangeSearchText = {},
-        isSearchEnabled = true,
-        onChangeIsSearchEnabled = {}
-    )
+    HealthAssistantTheme {
+        JournalScreen(
+            navigateToExperiencePopNothing = {},
+            navigateToAddIngestion = {},
+            groupedExperiences = groupedExperiences,
+            isFavoriteEnabled = false,
+            onChangeIsFavorite = {},
+            searchText = "",
+            onChangeSearchText = {},
+            isSearchEnabled = true,
+            onChangeIsSearchEnabled = {}
+        )
+    }
 }
 
 @Composable
