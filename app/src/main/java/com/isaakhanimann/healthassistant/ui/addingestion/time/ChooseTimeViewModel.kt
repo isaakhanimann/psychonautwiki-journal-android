@@ -170,7 +170,6 @@ class ChooseTimeViewModel @Inject constructor(
                     title = ingestionTime.getStringOfPattern("dd MMMM yyyy"),
                     text = "",
                     creationDate = Instant.now(),
-                    sentiment = null
                 )
                 val newIngestion = Ingestion(
                     substanceName = substanceName,

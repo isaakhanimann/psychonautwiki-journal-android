@@ -18,7 +18,6 @@ class OneExperienceScreenPreviewProvider :
     override val values: Sequence<OneExperienceScreenModel> = sequenceOf(
         OneExperienceScreenModel(
             isFavorite = false,
-            sentiment = null,
             title = "Day at Lake Geneva",
             firstIngestionTime = getInstant(
                 year = 2022,

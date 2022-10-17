@@ -1,7 +1,10 @@
 package com.isaakhanimann.healthassistant.ui.journal
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.*
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
@@ -16,7 +19,6 @@ class ExperienceWithIngestionsPreviewProvider :
                 id = 0,
                 title = "Day at Lake Geneva",
                 text = "Some notes",
-                sentiment = Sentiment.SATISFIED,
                 isFavorite = true
             ),
             ingestionsWithCompanions = listOf(
@@ -76,7 +78,6 @@ class ExperienceWithIngestionsPreviewProvider :
                 id = 0,
                 title = "This one has a very very very long title in case somebody wants to be creative with the naming.",
                 text = "Some notes",
-                sentiment = null,
                 isFavorite = true
             ),
             ingestionsWithCompanions = listOf(

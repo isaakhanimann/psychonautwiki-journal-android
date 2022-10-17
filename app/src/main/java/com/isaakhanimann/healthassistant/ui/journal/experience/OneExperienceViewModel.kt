@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
@@ -26,16 +25,6 @@ class OneExperienceViewModel @Inject constructor(
     private val substanceRepo: SubstanceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-
-    fun saveSentiment(sentiment: Sentiment?) {
-        viewModelScope.launch {
-            val experience = experienceWithIngestionsFlow.firstOrNull()?.experience
-            if (experience != null) {
-                experience.sentiment = sentiment
-                experienceRepo.update(experience)
-            }
-        }
-    }
 
     fun saveIsFavorite(isFavorite: Boolean) {
         viewModelScope.launch {
@@ -134,7 +123,6 @@ class OneExperienceViewModel @Inject constructor(
             val experience = experienceWithIngestions?.experience ?: return@combine null
             return@combine OneExperienceScreenModel(
                 isFavorite = experience.isFavorite,
-                sentiment = experience.sentiment,
                 title = experience.title,
                 firstIngestionTime = experienceWithIngestions.sortInstant,
                 notes = experience.text,
@@ -180,7 +168,6 @@ class OneExperienceViewModel @Inject constructor(
 
 data class OneExperienceScreenModel(
     val isFavorite: Boolean,
-    val sentiment: Sentiment?,
     val title: String,
     val firstIngestionTime: Instant,
     val notes: String,

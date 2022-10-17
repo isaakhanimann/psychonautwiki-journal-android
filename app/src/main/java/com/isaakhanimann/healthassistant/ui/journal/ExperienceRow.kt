@@ -75,14 +75,8 @@ fun ExperienceRow(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxHeight()
         ) {
-            Row {
-                val experience = experienceWithIngestionsAndCompanions.experience
-                experience.sentiment?.let {
-                    Icon(imageVector = it.icon, contentDescription = it.description)
-                }
-                if (experience.isFavorite) {
-                    Icon(imageVector = Icons.Filled.Star, contentDescription = "Is Favorite")
-                }
+            if (experienceWithIngestionsAndCompanions.experience.isFavorite) {
+                Icon(imageVector = Icons.Filled.Star, contentDescription = "Is Favorite")
             }
             val dateText = remember(experienceWithIngestionsAndCompanions.sortInstant) {
                 experienceWithIngestionsAndCompanions.sortInstant.getStringOfPattern("dd MMM yy")

@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Sentiment
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
@@ -43,7 +42,6 @@ fun ExperienceScreen(
             navigateToEditExperienceScreen,
             navigateToIngestionScreen,
             navigateBack,
-            saveSentiment = viewModel::saveSentiment,
             saveIsFavorite = viewModel::saveIsFavorite
         )
     }
@@ -65,7 +63,6 @@ fun ExperienceScreenPreview(
             navigateToEditExperienceScreen = {},
             navigateToIngestionScreen = {},
             navigateBack = {},
-            saveSentiment = {},
             saveIsFavorite = {}
         )
     }
@@ -79,7 +76,6 @@ fun ExperienceScreen(
     navigateToEditExperienceScreen: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
-    saveSentiment: (sentiment: Sentiment?) -> Unit,
     saveIsFavorite: (Boolean) -> Unit
 ) {
     Scaffold(
@@ -93,10 +89,6 @@ fun ExperienceScreen(
                             contentDescription = "Edit Experience",
                         )
                     }
-                    SentimentButton(
-                        sentiment = oneExperienceScreenModel.sentiment,
-                        saveSentiment = saveSentiment,
-                    )
                     val isFavorite = oneExperienceScreenModel.isFavorite
                     IconToggleButton(checked = isFavorite, onCheckedChange = saveIsFavorite) {
                         if (isFavorite) {
