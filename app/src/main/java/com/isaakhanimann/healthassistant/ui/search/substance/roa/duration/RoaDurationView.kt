@@ -16,7 +16,7 @@ import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 @Preview(showBackground = true)
 @Composable
 fun RoaDurationPreview(
-    @PreviewParameter(RoaDurationPreviewProvider::class, limit = 1) roaDuration: RoaDuration
+    @PreviewParameter(RoaDurationPreviewProvider::class) roaDuration: RoaDuration
 ) {
     HealthAssistantTheme {
         RoaDurationView(roaDuration = roaDuration, isOralRoute = true)
@@ -46,6 +46,7 @@ fun RoaDurationView(
             if (onset != null) {
                 Surface(shape = RoundedCornerShape(cornerRadius)) {
                     Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(
                             horizontal = shapePaddingHorizontal,
                             vertical = shapePaddingVertical
@@ -61,6 +62,7 @@ fun RoaDurationView(
             if (comeup != null) {
                 Surface(shape = RoundedCornerShape(cornerRadius)) {
                     Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(
                             horizontal = shapePaddingHorizontal,
                             vertical = shapePaddingVertical
@@ -74,6 +76,7 @@ fun RoaDurationView(
             if (peak != null) {
                 Surface(shape = RoundedCornerShape(cornerRadius)) {
                     Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(
                             horizontal = shapePaddingHorizontal,
                             vertical = shapePaddingVertical
@@ -87,6 +90,7 @@ fun RoaDurationView(
             if (offset != null) {
                 Surface(shape = RoundedCornerShape(cornerRadius)) {
                     Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(
                             horizontal = shapePaddingHorizontal,
                             vertical = shapePaddingVertical

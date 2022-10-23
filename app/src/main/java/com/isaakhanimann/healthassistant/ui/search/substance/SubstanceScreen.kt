@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +26,7 @@ import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDurationView
+import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDurationsChart
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
@@ -206,39 +206,8 @@ fun SubstanceScreen(
             if (roasWithDurationsDefined.isNotEmpty()) {
                 SectionTitle(title = "Duration", onInfoClick = navigateToDurationExplanationScreen)
                 VerticalSpace()
-                val maxDuration = remember(roasWithDurationsDefined) {
-                    substance.roas.mapNotNull {
-                        val duration = it.roaDuration ?: return@mapNotNull null
-                        val maxTotal = duration.total?.maxInSec
-                        val maxOnset = duration.onset?.maxInSec
-                        val maxComeup = duration.comeup?.maxInSec
-                        val maxPeak = duration.peak?.maxInSec
-                        val maxOffset = duration.offset?.maxInSec
-                        val maxTimeline =
-                            if (maxOnset != null && maxComeup != null && maxPeak != null && maxOffset != null) {
-                                maxOnset + maxComeup + maxPeak + maxOffset
-                            } else {
-                                val partialSum = ((maxOnset ?: 0f) + (maxComeup ?: 0f) + (maxPeak
-                                    ?: 0f) + (maxOffset ?: 0f)).times(1.1f)
-                                if (partialSum == 0f) {
-                                    null
-                                } else {
-                                    partialSum
-                                }
-                            }
-                        if (maxTotal == null && maxTimeline == null) {
-                            return@mapNotNull null
-                        } else if (maxTotal != null && maxTimeline != null) {
-                            if (maxTotal > maxTimeline) {
-                                return@mapNotNull maxTotal
-                            } else {
-                                return@mapNotNull maxTimeline
-                            }
-                        } else {
-                            return@mapNotNull maxTotal ?: maxTimeline
-                        }
-                    }.maxOrNull()
-                }
+                RoaDurationsChart(roas = roasWithDurationsDefined)
+                Divider()
                 roasWithDurationsDefined.forEachIndexed { index, roa ->
                     Column(
                         modifier = Modifier.padding(
