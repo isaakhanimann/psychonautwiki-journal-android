@@ -1,14 +1,12 @@
 package com.isaakhanimann.healthassistant.ui.search.substance.roa.dose
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,14 +24,12 @@ fun RoaDoseViewPreview(
 ) {
     RoaDoseView(
         roaDose = roaDose,
-        navigateToDosageExplanationScreen = {}
     )
 }
 
 @Composable
 fun RoaDoseView(
     roaDose: RoaDose,
-    navigateToDosageExplanationScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val lightMaxOrCommonMin = roaDose.light?.max ?: roaDose.common?.min
@@ -108,15 +104,6 @@ fun RoaDoseView(
             Text("-", color = heavyColor)
             Text("heavy", style = MaterialTheme.typography.caption, color = heavyColor)
         }
-        Column(horizontalAlignment = Alignment.End) {
-            Text(text = roaDose.units ?: "")
-            Icon(
-                Icons.Outlined.Info,
-                contentDescription = "Dosage Info",
-                Modifier
-                    .size(ButtonDefaults.IconSize)
-                    .clickable(onClick = navigateToDosageExplanationScreen)
-            )
-        }
+        Text(text = roaDose.units ?: "")
     }
 }

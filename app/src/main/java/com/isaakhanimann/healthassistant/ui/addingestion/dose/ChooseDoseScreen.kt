@@ -30,13 +30,11 @@ import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 @Composable
 fun ChooseDoseScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
-    navigateToDoseGuideScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
     ChooseDoseScreen(
-        navigateToDoseGuideScreen = navigateToDoseGuideScreen,
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         substanceName = viewModel.substance.name,
@@ -82,7 +80,6 @@ fun ChooseDoseScreenPreview(
     @PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDose,
 ) {
     ChooseDoseScreen(
-        navigateToDoseGuideScreen = {},
         navigateToVolumetricDosingScreen = {},
         navigateToSaferSniffingScreen = {},
         substanceName = "Example Substance",
@@ -110,7 +107,6 @@ fun ChooseDoseScreenPreview(
 @Composable
 fun ChooseDoseScreenPreview2() {
     ChooseDoseScreen(
-        navigateToDoseGuideScreen = {},
         navigateToVolumetricDosingScreen = {},
         navigateToSaferSniffingScreen = {},
         substanceName = "Example Substance",
@@ -136,7 +132,6 @@ fun ChooseDoseScreenPreview2() {
 
 @Composable
 fun ChooseDoseScreen(
-    navigateToDoseGuideScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     substanceName: String,
@@ -214,10 +209,7 @@ fun ChooseDoseScreen(
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                     if (roaDose != null) {
-                        RoaDoseView(
-                            roaDose = roaDose,
-                            navigateToDosageExplanationScreen = navigateToDoseGuideScreen
-                        )
+                        RoaDoseView(roaDose = roaDose)
                     } else {
                         Row(
                             verticalAlignment = Alignment.CenterVertically

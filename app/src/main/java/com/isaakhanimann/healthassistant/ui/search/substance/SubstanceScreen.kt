@@ -1,12 +1,9 @@
 package com.isaakhanimann.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
@@ -23,11 +20,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
+import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
+import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
@@ -134,34 +133,6 @@ fun SubstanceScreen(
                 }
                 VerticalSpace()
             }
-            if (substance.effectsSummary != null) {
-                SectionTitle(title = "Effects")
-                VerticalSpace()
-                Text(text = substance.effectsSummary, modifier = Modifier.padding(horizontal = horizontalPadding))
-                VerticalSpace()
-            }
-            if (substance.generalRisks != null && substance.longtermRisks != null) {
-                SectionTitle(title = "Risks")
-                VerticalSpace()
-                Text(text = substance.generalRisks, modifier = Modifier.padding(horizontal = horizontalPadding))
-                VerticalSpace()
-                SectionTitle(title = "Long-term")
-                VerticalSpace()
-                Text(text = substance.longtermRisks, modifier = Modifier.padding(horizontal = horizontalPadding))
-                VerticalSpace()
-            }
-            if (substance.saferUse.isNotEmpty()) {
-                SectionTitle(title = "Safer Use")
-                VerticalSpace()
-                BulletPoints(points = substance.saferUse, modifier = Modifier.padding(horizontal = horizontalPadding))
-                VerticalSpace()
-            }
-            if (substance.dosageRemark != null) {
-                SectionTitle(title = "Dosage Remark")
-                VerticalSpace()
-                Text(text = substance.dosageRemark, modifier = Modifier.padding(horizontal = horizontalPadding))
-                VerticalSpace()
-            }
             val maxDuration = remember(substance.roas) {
                 substance.roas.mapNotNull {
                     val duration = it.roaDuration ?: return@mapNotNull null
@@ -195,6 +166,40 @@ fun SubstanceScreen(
                     }
                 }.maxOrNull()
             }
+            val roasWithDosesDefined = substance.roas.filter { roa ->
+                val roaDose = roa.roaDose
+                val isEveryDoseNull =
+                    roaDose?.threshold == null && roaDose?.light == null && roaDose?.common == null && roaDose?.strong == null && roaDose?.heavy == null
+                return@filter !isEveryDoseNull
+            }
+            if (substance.dosageRemark != null || roasWithDosesDefined.isNotEmpty()) {
+                SectionTitle(title = "Dosage", onInfoClick = navigateToDosageExplanationScreen)
+                if (substance.dosageRemark != null) {
+                    VerticalSpace()
+                    Text(text = substance.dosageRemark, modifier = Modifier.padding(horizontal = horizontalPadding))
+                    VerticalSpace()
+                    Divider()
+                }
+                roasWithDosesDefined.forEach { roa ->
+                    Column(modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            RouteColorCircle(roa.route)
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(text = roa.route.displayText)
+                        }
+                        if (roa.roaDose == null) {
+                            Text(text = "No dosage info")
+                        } else {
+                            RoaDoseView(roaDose = roa.roaDose)
+                        }
+                    }
+                    Divider()
+                }
+            }
+            SectionTitle(title = "Duration")
+            VerticalSpace()
             substance.roas.forEach { roa ->
                 RoaView(
                     navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
@@ -233,6 +238,28 @@ fun SubstanceScreen(
                 }
                 VerticalSpace()
             }
+            if (substance.effectsSummary != null) {
+                SectionTitle(title = "Effects")
+                VerticalSpace()
+                Text(text = substance.effectsSummary, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
+            }
+            if (substance.generalRisks != null && substance.longtermRisks != null) {
+                SectionTitle(title = "Risks")
+                VerticalSpace()
+                Text(text = substance.generalRisks, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
+                SectionTitle(title = "Long-term")
+                VerticalSpace()
+                Text(text = substance.longtermRisks, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
+            }
+            if (substance.saferUse.isNotEmpty()) {
+                SectionTitle(title = "Safer Use")
+                VerticalSpace()
+                BulletPoints(points = substance.saferUse, modifier = Modifier.padding(horizontal = horizontalPadding))
+                VerticalSpace()
+            }
             if (substance.addictionPotential != null) {
                 SectionTitle(title = "Addiction Potential")
                 VerticalSpace()
@@ -264,6 +291,17 @@ fun SubstanceScreen(
             }
         }
     }
+}
+
+@Composable
+fun RouteColorCircle(administrationRoute: AdministrationRoute) {
+    val isDarkTheme = isSystemInDarkTheme()
+    Surface(
+        shape = CircleShape,
+        color = administrationRoute.getComposeColor(isDarkTheme),
+        modifier = Modifier
+            .size(20.dp)
+    ) {}
 }
 
 @Composable

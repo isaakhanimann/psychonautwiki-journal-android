@@ -376,7 +376,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     )
                 },
                 navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
-                navigateToDoseGuideScreen = navController::navigateToDosageGuideScreen,
                 navigateToSaferSniffingScreen = navController::navigateToSaferSniffing
             )
         }

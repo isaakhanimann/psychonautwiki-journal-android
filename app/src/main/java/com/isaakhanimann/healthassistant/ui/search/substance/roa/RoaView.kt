@@ -63,7 +63,6 @@ fun RoaView(
                 Text(text = "Dosage", modifier = Modifier.padding(horizontal = horizontalPadding))
                 RoaDoseView(
                     roaDose = roaDose,
-                    navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 )
                 VerticalSpace()
