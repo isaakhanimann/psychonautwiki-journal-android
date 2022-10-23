@@ -171,6 +171,32 @@ fun SubstanceScreen(
                     }
                 }
             }
+            if (substance.tolerance != null || substance.crossTolerances.isNotEmpty()) {
+                SectionTitle(title = "Tolerance")
+                VerticalSpace()
+                ToleranceSection(
+                    tolerance = substance.tolerance,
+                    crossTolerances = substance.crossTolerances,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
+                VerticalSpace()
+            }
+            if (substance.toxicities.isNotEmpty()) {
+                SectionTitle(title = "Toxicity")
+                VerticalSpace()
+                if (substance.toxicities.size == 1) {
+                    Text(
+                        substance.toxicities.firstOrNull() ?: "",
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
+                } else {
+                    BulletPoints(
+                        points = substance.toxicities,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
+                }
+                VerticalSpace()
+            }
             val roasWithDurationsDefined = substance.roas.filter { roa ->
                 val roaDuration = roa.roaDuration
                 val isEveryDurationNull =
@@ -249,32 +275,6 @@ fun SubstanceScreen(
                     SectionTitle(title = "Interactions")
                     InteractionsView(interactions = substance.interactions)
                 }
-            }
-            if (substance.tolerance != null || substance.crossTolerances.isNotEmpty()) {
-                SectionTitle(title = "Tolerance")
-                VerticalSpace()
-                ToleranceSection(
-                    tolerance = substance.tolerance,
-                    crossTolerances = substance.crossTolerances,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
-            }
-            if (substance.toxicities.isNotEmpty()) {
-                SectionTitle(title = "Toxicity")
-                VerticalSpace()
-                if (substance.toxicities.size == 1) {
-                    Text(
-                        substance.toxicities.firstOrNull() ?: "",
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
-                } else {
-                    BulletPoints(
-                        points = substance.toxicities,
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
-                }
-                VerticalSpace()
             }
             if (substance.effectsSummary != null) {
                 SectionTitle(title = "Effects")
