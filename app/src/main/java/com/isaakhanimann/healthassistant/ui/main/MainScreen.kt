@@ -192,7 +192,6 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
             navigateToDurationExplanationScreen = navController::navigateToDurationExplanationScreen,
             navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
-            navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
             navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
             navigateToCategoryScreen = navController::navigateToCategoryScreen,
             navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen

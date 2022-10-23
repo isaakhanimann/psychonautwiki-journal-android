@@ -24,9 +24,9 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
-import com.isaakhanimann.healthassistant.ui.search.substance.roa.RoaView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
+import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDurationView
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
@@ -37,7 +37,6 @@ fun SubstanceScreen(
     navigateToDurationExplanationScreen: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
-    navigateToSaferSniffingScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
@@ -46,7 +45,6 @@ fun SubstanceScreen(
         navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
         navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
         navigateToSaferHallucinogensScreen = navigateToSaferHallucinogensScreen,
-        navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
         navigateToCategoryScreen = navigateToCategoryScreen,
@@ -64,7 +62,6 @@ fun SubstanceScreenPreview(
             navigateToDosageExplanationScreen = {},
             navigateToDurationExplanationScreen = {},
             navigateToSaferHallucinogensScreen = {},
-            navigateToSaferSniffingScreen = {},
             navigateToSaferStimulantsScreen = {},
             navigateToVolumetricDosingScreen = {},
             navigateToCategoryScreen = {},
@@ -78,7 +75,6 @@ fun SubstanceScreen(
     navigateToDosageExplanationScreen: () -> Unit,
     navigateToDurationExplanationScreen: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
-    navigateToSaferSniffingScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
@@ -133,39 +129,6 @@ fun SubstanceScreen(
                 }
                 VerticalSpace()
             }
-            val maxDuration = remember(substance.roas) {
-                substance.roas.mapNotNull {
-                    val duration = it.roaDuration ?: return@mapNotNull null
-                    val maxTotal = duration.total?.maxInSec
-                    val maxOnset = duration.onset?.maxInSec
-                    val maxComeup = duration.comeup?.maxInSec
-                    val maxPeak = duration.peak?.maxInSec
-                    val maxOffset = duration.offset?.maxInSec
-                    val maxTimeline =
-                        if (maxOnset != null && maxComeup != null && maxPeak != null && maxOffset != null) {
-                            maxOnset + maxComeup + maxPeak + maxOffset
-                        } else {
-                            val partialSum = ((maxOnset ?: 0f) + (maxComeup ?: 0f) + (maxPeak
-                                ?: 0f) + (maxOffset ?: 0f)).times(1.1f)
-                            if (partialSum == 0f) {
-                                null
-                            } else {
-                                partialSum
-                            }
-                        }
-                    if (maxTotal == null && maxTimeline == null) {
-                        return@mapNotNull null
-                    } else if (maxTotal != null && maxTimeline != null) {
-                        if (maxTotal > maxTimeline) {
-                            return@mapNotNull maxTotal
-                        } else {
-                            return@mapNotNull maxTimeline
-                        }
-                    } else {
-                        return@mapNotNull maxTotal ?: maxTimeline
-                    }
-                }.maxOrNull()
-            }
             val roasWithDosesDefined = substance.roas.filter { roa ->
                 val roaDose = roa.roaDose
                 val isEveryDoseNull =
@@ -208,19 +171,77 @@ fun SubstanceScreen(
                     }
                 }
             }
-            SectionTitle(title = "Duration")
-            VerticalSpace()
-            substance.roas.forEach { roa ->
-                RoaView(
-                    navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
-                    navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
-                    navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
-                    roa = roa,
-                    maxDurationInSeconds = maxDuration
-                )
-                Spacer(modifier = Modifier.height(5.dp))
+            val roasWithDurationsDefined = substance.roas.filter { roa ->
+                val roaDuration = roa.roaDuration
+                val isEveryDurationNull =
+                    roaDuration?.onset == null && roaDuration?.comeup == null && roaDuration?.peak == null && roaDuration?.offset == null && roaDuration?.total == null
+                return@filter !isEveryDurationNull
             }
-            Spacer(modifier = Modifier.height(5.dp))
+            if (roasWithDurationsDefined.isNotEmpty()) {
+                SectionTitle(title = "Duration", onInfoClick = navigateToDurationExplanationScreen)
+                VerticalSpace()
+                val maxDuration = remember(roasWithDurationsDefined) {
+                    substance.roas.mapNotNull {
+                        val duration = it.roaDuration ?: return@mapNotNull null
+                        val maxTotal = duration.total?.maxInSec
+                        val maxOnset = duration.onset?.maxInSec
+                        val maxComeup = duration.comeup?.maxInSec
+                        val maxPeak = duration.peak?.maxInSec
+                        val maxOffset = duration.offset?.maxInSec
+                        val maxTimeline =
+                            if (maxOnset != null && maxComeup != null && maxPeak != null && maxOffset != null) {
+                                maxOnset + maxComeup + maxPeak + maxOffset
+                            } else {
+                                val partialSum = ((maxOnset ?: 0f) + (maxComeup ?: 0f) + (maxPeak
+                                    ?: 0f) + (maxOffset ?: 0f)).times(1.1f)
+                                if (partialSum == 0f) {
+                                    null
+                                } else {
+                                    partialSum
+                                }
+                            }
+                        if (maxTotal == null && maxTimeline == null) {
+                            return@mapNotNull null
+                        } else if (maxTotal != null && maxTimeline != null) {
+                            if (maxTotal > maxTimeline) {
+                                return@mapNotNull maxTotal
+                            } else {
+                                return@mapNotNull maxTimeline
+                            }
+                        } else {
+                            return@mapNotNull maxTotal ?: maxTimeline
+                        }
+                    }.maxOrNull()
+                }
+                roasWithDurationsDefined.forEachIndexed { index, roa ->
+                    Column(
+                        modifier = Modifier.padding(
+                            vertical = 5.dp,
+                            horizontal = horizontalPadding
+                        )
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            RouteColorCircle(roa.route)
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(text = roa.route.displayText)
+                        }
+                        val roaDuration = roa.roaDuration
+                        if (roaDuration == null) {
+                            Text(text = "No duration info")
+                        } else {
+                            RoaDurationView(
+                                roaDuration = roaDuration,
+                                isOralRoute = roa.route == AdministrationRoute.ORAL,
+                            )
+                        }
+                    }
+                    if (index < roasWithDurationsDefined.size - 1) {
+                        Divider()
+                    }
+                }
+            }
             val interactions = substance.interactions
             if (interactions != null) {
                 if (interactions.dangerous.isNotEmpty() || interactions.unsafe.isNotEmpty() || interactions.uncertain.isNotEmpty()) {

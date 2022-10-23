@@ -2,21 +2,22 @@ package com.isaakhanimann.healthassistant.data.substances.classes.roa
 
 enum class DurationUnits(val text: String) {
     SECONDS("seconds") {
-        override val inSecondsMultiplier: Int
-            get() = 1
+        override val inSecondsMultiplier = 1
+        override val shortText = "s"
     },
     MINUTES("minutes") {
-        override val inSecondsMultiplier: Int
-            get() = 60
+        override val inSecondsMultiplier = 60
+        override val shortText = "m"
     },
     HOURS("hours") {
-        override val inSecondsMultiplier: Int
-            get() = 3600
+        override val inSecondsMultiplier = 3600
+        override val shortText = "h"
     },
     DAYS("days") {
-        override val inSecondsMultiplier: Int
-            get() = 86400
+        override val inSecondsMultiplier = 86400
+        override val shortText = "d"
     };
 
     abstract val inSecondsMultiplier: Int
+    abstract val shortText: String
 }

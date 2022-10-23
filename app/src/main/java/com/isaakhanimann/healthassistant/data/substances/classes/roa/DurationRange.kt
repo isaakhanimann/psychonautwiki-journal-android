@@ -8,7 +8,7 @@ data class DurationRange(
     val text
         get() = "${min.toString().removeSuffix(".0")}-${
             max.toString().removeSuffix(".0")
-        } ${units?.text ?: ""}"
+        }${units?.shortText ?: ""}"
 
     val minInSec: Float? = if (units != null) min?.times(units.inSecondsMultiplier) else null
     val maxInSec: Float? = if (units != null) max?.times(units.inSecondsMultiplier) else null
