@@ -231,6 +231,7 @@ fun SubstanceScreen(
                         if (roaDuration == null) {
                             Text(text = "No duration info")
                         } else {
+                            Spacer(modifier = Modifier.height(3.dp))
                             RoaDurationView(
                                 roaDuration = roaDuration,
                                 isOralRoute = roa.route == AdministrationRoute.ORAL,

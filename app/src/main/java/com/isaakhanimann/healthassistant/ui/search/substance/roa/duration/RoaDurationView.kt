@@ -1,23 +1,26 @@
 package com.isaakhanimann.healthassistant.ui.search.substance.roa.duration
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
+import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 
 @Preview(showBackground = true)
 @Composable
 fun RoaDurationPreview(
     @PreviewParameter(RoaDurationPreviewProvider::class, limit = 1) roaDuration: RoaDuration
 ) {
-    RoaDurationView(roaDuration = roaDuration, isOralRoute = true)
+    HealthAssistantTheme {
+        RoaDurationView(roaDuration = roaDuration, isOralRoute = true)
+    }
 }
 
 @Composable
@@ -37,38 +40,69 @@ fun RoaDurationView(
             val comeup = roaDuration.comeup
             val peak = roaDuration.peak
             val offset = roaDuration.offset
+            val shapePaddingHorizontal = 7.dp
+            val shapePaddingVertical = 2.dp
+            val cornerRadius = 5.dp
             if (onset != null) {
-                Column {
-                    Text(
-                        onset.text + if (isOralRoute) "*" else "",
-                    )
-                    Text("onset")
+                Surface(shape = RoundedCornerShape(cornerRadius)) {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = shapePaddingHorizontal,
+                            vertical = shapePaddingVertical
+                        )
+                    ) {
+                        Text(
+                            onset.text + if (isOralRoute) "*" else "",
+                        )
+                        Text("onset")
+                    }
                 }
-                Text("-")
             }
             if (comeup != null) {
-                Column {
-                    Text(comeup.text)
-                    Text("comeup")
+                Surface(shape = RoundedCornerShape(cornerRadius)) {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = shapePaddingHorizontal,
+                            vertical = shapePaddingVertical
+                        )
+                    ) {
+                        Text(comeup.text)
+                        Text("comeup")
+                    }
                 }
-                Text("-")
             }
             if (peak != null) {
-                Column {
-                    Text(peak.text)
-                    Text("peak")
+                Surface(shape = RoundedCornerShape(cornerRadius)) {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = shapePaddingHorizontal,
+                            vertical = shapePaddingVertical
+                        )
+                    ) {
+                        Text(peak.text)
+                        Text("peak")
+                    }
                 }
-                Text("-")
             }
             if (offset != null) {
-                Column {
-                    Text(offset.text)
-                    Text("offset")
+                Surface(shape = RoundedCornerShape(cornerRadius)) {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = shapePaddingHorizontal,
+                            vertical = shapePaddingVertical
+                        )
+                    ) {
+                        Text(offset.text)
+                        Text("offset")
+                    }
                 }
             }
         }
         if (total != null || afterglow != null) {
-            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 if (total != null) {
                     Text("total: ${total.text}")
                 }
