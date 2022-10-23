@@ -176,12 +176,20 @@ fun SubstanceScreen(
                 SectionTitle(title = "Dosage", onInfoClick = navigateToDosageExplanationScreen)
                 if (substance.dosageRemark != null) {
                     VerticalSpace()
-                    Text(text = substance.dosageRemark, modifier = Modifier.padding(horizontal = horizontalPadding))
+                    Text(
+                        text = substance.dosageRemark,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
                     VerticalSpace()
                     Divider()
                 }
-                roasWithDosesDefined.forEach { roa ->
-                    Column(modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)) {
+                roasWithDosesDefined.forEachIndexed { index, roa ->
+                    Column(
+                        modifier = Modifier.padding(
+                            vertical = 5.dp,
+                            horizontal = horizontalPadding
+                        )
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
@@ -195,7 +203,9 @@ fun SubstanceScreen(
                             RoaDoseView(roaDose = roa.roaDose)
                         }
                     }
-                    Divider()
+                    if (index < roasWithDosesDefined.size - 1) {
+                        Divider()
+                    }
                 }
             }
             SectionTitle(title = "Duration")
@@ -232,38 +242,59 @@ fun SubstanceScreen(
                 SectionTitle(title = "Toxicity")
                 VerticalSpace()
                 if (substance.toxicities.size == 1) {
-                    Text(substance.toxicities.firstOrNull() ?: "", modifier = Modifier.padding(horizontal = horizontalPadding))
+                    Text(
+                        substance.toxicities.firstOrNull() ?: "",
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
                 } else {
-                    BulletPoints(points = substance.toxicities, modifier = Modifier.padding(horizontal = horizontalPadding))
+                    BulletPoints(
+                        points = substance.toxicities,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
                 }
                 VerticalSpace()
             }
             if (substance.effectsSummary != null) {
                 SectionTitle(title = "Effects")
                 VerticalSpace()
-                Text(text = substance.effectsSummary, modifier = Modifier.padding(horizontal = horizontalPadding))
+                Text(
+                    text = substance.effectsSummary,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
                 VerticalSpace()
             }
             if (substance.generalRisks != null && substance.longtermRisks != null) {
                 SectionTitle(title = "Risks")
                 VerticalSpace()
-                Text(text = substance.generalRisks, modifier = Modifier.padding(horizontal = horizontalPadding))
+                Text(
+                    text = substance.generalRisks,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
                 VerticalSpace()
                 SectionTitle(title = "Long-term")
                 VerticalSpace()
-                Text(text = substance.longtermRisks, modifier = Modifier.padding(horizontal = horizontalPadding))
+                Text(
+                    text = substance.longtermRisks,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
                 VerticalSpace()
             }
             if (substance.saferUse.isNotEmpty()) {
                 SectionTitle(title = "Safer Use")
                 VerticalSpace()
-                BulletPoints(points = substance.saferUse, modifier = Modifier.padding(horizontal = horizontalPadding))
+                BulletPoints(
+                    points = substance.saferUse,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
                 VerticalSpace()
             }
             if (substance.addictionPotential != null) {
                 SectionTitle(title = "Addiction Potential")
                 VerticalSpace()
-                Text(substance.addictionPotential, modifier = Modifier.padding(horizontal = horizontalPadding))
+                Text(
+                    substance.addictionPotential,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
                 VerticalSpace()
             }
             val firstRoa = substance.roas.firstOrNull()
@@ -273,19 +304,28 @@ fun SubstanceScreen(
             }
             if (substance.isHallucinogen) {
                 TextButton(onClick = navigateToSaferHallucinogensScreen) {
-                    Text(text = "Safer Hallucinogen Use", modifier = Modifier.padding(horizontal = horizontalPadding))
+                    Text(
+                        text = "Safer Hallucinogen Use",
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
                 }
                 Divider()
             }
             if (substance.isStimulant) {
                 TextButton(onClick = navigateToSaferStimulantsScreen) {
-                    Text(text = "Safer Stimulant Use", modifier = Modifier.padding(horizontal = horizontalPadding))
+                    Text(
+                        text = "Safer Stimulant Use",
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
                 }
                 Divider()
             }
             if (useVolumetric) {
                 TextButton(onClick = navigateToVolumetricDosingScreen) {
-                    Text(text = "Volumetric Liquid Dosing", modifier = Modifier.padding(horizontal = horizontalPadding))
+                    Text(
+                        text = "Volumetric Liquid Dosing",
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
                 }
                 Divider()
             }
