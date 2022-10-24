@@ -8,8 +8,6 @@ import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 class TimelinesPreviewProvider :
     PreviewParameterProvider<List<DataForOneEffectLine>> {
@@ -133,8 +131,8 @@ class TimelinesPreviewProvider :
                     peak = null,
                     offset = null,
                     total = DurationRange(
-                        min = 3.toDuration(DurationUnit.HOURS).inWholeSeconds.toFloat(),
-                        max = 5.toDuration(DurationUnit.HOURS).inWholeSeconds.toFloat(),
+                        min = 3f,
+                        max = 5f,
                         units = DurationUnits.HOURS
                     ),
                     afterglow = null
