@@ -15,7 +15,8 @@ interface TimelineDrawable {
         height: Float,
         startX: Float,
         pixelsPerSec: Float,
-        color: Color
+        color: Color,
+        strokeWidth: Float
     )
 
     fun drawTimeLineShape(
@@ -52,10 +53,9 @@ data class FullTimeline(
         height: Float,
         startX: Float,
         pixelsPerSec: Float,
-        color: Color
+        color: Color,
+        strokeWidth: Float
     ) {
-
-        val strokeWidth = 5f
         drawScope.drawPath(
             path = Path().apply {
                 val weight = 0.5f
@@ -86,7 +86,7 @@ data class FullTimeline(
         height: Float,
         startX: Float,
         pixelsPerSec: Float,
-        color: Color
+        color: Color,
     ) {
         drawScope.drawPath(
             path = Path().apply {
@@ -140,7 +140,8 @@ data class TotalTimeline(
         height: Float,
         startX: Float,
         pixelsPerSec: Float,
-        color: Color
+        color: Color,
+        strokeWidth: Float
     ) {
         drawScope.drawPath(
             path = Path().apply {
@@ -163,7 +164,7 @@ data class TotalTimeline(
             },
             color = color,
             style = Stroke(
-                width = 5f,
+                width = strokeWidth,
                 cap = StrokeCap.Round,
                 pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 30f))
             )

@@ -45,7 +45,7 @@ fun AllTimelinesPreview(
 fun AllTimelines(
     dataForEffectLines: List<DataForOneEffectLine>,
     modifier: Modifier = Modifier,
-    strokeWidth: Float = 10f,
+    strokeWidth: Float = 13f,
 ) {
     if (dataForEffectLines.isEmpty()) {
         Text(text = "Insufficient Data for Timeline")
@@ -132,7 +132,7 @@ fun DrawScope.drawIngestion(
             val canvasHeightInner = size.height
             drawCircle(
                 color = color,
-                radius = 10f,
+                radius = 17f,
                 center = Offset(x = startX, y = canvasHeightInner)
             )
         }
@@ -144,7 +144,8 @@ fun DrawScope.drawIngestion(
                     height = canvasHeightInner,
                     startX = startX,
                     pixelsPerSec = pixelsPerSec,
-                    color = color
+                    color = color,
+                    strokeWidth = strokeWidth
                 )
             }
             timelineDrawable.drawTimeLineShape(
