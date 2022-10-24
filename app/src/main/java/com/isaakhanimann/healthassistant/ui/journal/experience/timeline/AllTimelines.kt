@@ -47,7 +47,6 @@ fun AllTimelinesPreview(
 fun AllTimelines(
     dataForEffectLines: List<DataForOneEffectLine>,
     modifier: Modifier = Modifier,
-    strokeWidth: Float = 13f,
 ) {
     if (dataForEffectLines.isEmpty()) {
         Text(text = "Insufficient Data for Timeline")
@@ -86,7 +85,6 @@ fun AllTimelines(
                         ingestionDrawable = ingestionDrawable,
                         isDarkTheme = isDarkTheme,
                         pixelsPerSec = pixelsPerSec,
-                        strokeWidth = strokeWidth,
                         canvasHeightOuter = canvasHeightOuter
                     )
                 }
@@ -114,15 +112,14 @@ fun DrawScope.drawIngestion(
     ingestionDrawable: IngestionDrawable,
     isDarkTheme: Boolean,
     pixelsPerSec: Float,
-    strokeWidth: Float,
     canvasHeightOuter: Float
 ) {
     val color = ingestionDrawable.color.getComposeColor(isDarkTheme)
     val startX =
         ingestionDrawable.ingestionPointDistanceFromStartInSeconds * pixelsPerSec
-    val verticalInsetForLine = strokeWidth / 2
+    val verticalInsetForLine = AllTimelinesModel.strokeWidth / 2
     val topInset =
-        (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * strokeWidth)
+        (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * AllTimelinesModel.strokeWidth)
     inset(
         left = 0f,
         top = topInset,
@@ -147,7 +144,6 @@ fun DrawScope.drawIngestion(
                     startX = startX,
                     pixelsPerSec = pixelsPerSec,
                     color = color,
-                    strokeWidth = strokeWidth
                 )
             }
             timelineDrawable.drawTimeLineShape(

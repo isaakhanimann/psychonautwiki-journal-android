@@ -5,13 +5,13 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelinesModel
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelinesModel.Companion.shapeAlpha
 
-data class FullTimeline(
+
+data class OnsetComeupPeakTotalTimeline(
     val onset: FullDurationRange,
     val comeup: FullDurationRange,
     val peak: FullDurationRange,
-    val offset: FullDurationRange,
+    val total: FullDurationRange,
 ) : TimelineDrawable {
 
     fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float> {
@@ -23,7 +23,7 @@ data class FullTimeline(
     }
 
     override val widthInSeconds: Float =
-        onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds + offset.maxInSeconds
+        total.maxInSeconds
 
     override fun drawTimeLine(
         drawScope: DrawScope,
@@ -32,25 +32,31 @@ data class FullTimeline(
         pixelsPerSec: Float,
         color: Color,
     ) {
+        val weight = 0.5f
+        val onsetEndX =
+            startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+        val comeupEndX =
+            onsetEndX + (comeup.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+        val peakEndX =
+            comeupEndX + (peak.interpolateAtValueInSeconds(weight) * pixelsPerSec)
         drawScope.drawPath(
             path = Path().apply {
-                val weight = 0.5f
-                val onsetEndX =
-                    startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
-                val comeupEndX =
-                    onsetEndX + (comeup.interpolateAtValueInSeconds(weight) * pixelsPerSec)
-                val peakEndX =
-                    comeupEndX + (peak.interpolateAtValueInSeconds(weight) * pixelsPerSec)
-                val offsetEndX =
-                    peakEndX + (offset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
                 moveTo(x = startX, y = height)
                 lineTo(x = onsetEndX, y = height)
                 lineTo(x = comeupEndX, y = 0f)
                 lineTo(x = peakEndX, y = 0f)
-                lineTo(x = offsetEndX, y = height)
             },
             color = color,
             style = AllTimelinesModel.normalStroke
+        )
+        drawScope.drawPath(
+            path = Path().apply {
+                moveTo(x = peakEndX, y = 0f)
+                val offsetEndX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
+                lineTo(x = offsetEndX, y = height)
+            },
+            color = color,
+            style = AllTimelinesModel.dottedStroke
         )
     }
 
@@ -68,8 +74,7 @@ data class FullTimeline(
                 val comeupEndMinX = onsetStartMinX + (comeup.minInSeconds * pixelsPerSec)
                 val peakEndMaxX =
                     startX + ((onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds) * pixelsPerSec)
-                val offsetEndMaxX =
-                    peakEndMaxX + (offset.maxInSeconds * pixelsPerSec)
+                val offsetEndMaxX = total.maxInSeconds * pixelsPerSec
                 moveTo(onsetStartMinX, height)
                 lineTo(x = comeupEndMinX, y = 0f)
                 lineTo(x = peakEndMaxX, y = 0f)
@@ -81,29 +86,29 @@ data class FullTimeline(
                 val peakEndMinX =
                     startX + ((onset.minInSeconds + comeup.minInSeconds + peak.minInSeconds) * pixelsPerSec)
                 val offsetEndMinX =
-                    peakEndMinX + (offset.minInSeconds * pixelsPerSec)
+                    total.minInSeconds * pixelsPerSec
                 lineTo(x = offsetEndMinX, y = height)
                 lineTo(x = peakEndMinX, y = 0f)
                 lineTo(x = comeupEndMaxX, y = 0f)
                 lineTo(x = onsetStartMaxX, y = height)
                 close()
             },
-            color = color.copy(alpha = shapeAlpha)
+            color = color.copy(alpha = AllTimelinesModel.shapeAlpha)
         )
     }
 }
 
-fun RoaDuration.toFullTimeline(): FullTimeline? {
+fun RoaDuration.toOnsetComeupPeakTotalTimeline(): OnsetComeupPeakTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
     val fullPeak = peak?.toFullDurationRange()
-    val fullOffset = offset?.toFullDurationRange()
-    return if (fullOnset != null && fullComeup != null && fullPeak != null && fullOffset != null) {
-        FullTimeline(
+    val fullTotal = total?.toFullDurationRange()
+    return if (fullOnset != null && fullComeup != null && fullPeak != null && fullTotal != null) {
+        OnsetComeupPeakTotalTimeline(
             onset = fullOnset,
             comeup = fullComeup,
             peak = fullPeak,
-            offset = fullOffset
+            total = fullTotal
         )
     } else {
         null

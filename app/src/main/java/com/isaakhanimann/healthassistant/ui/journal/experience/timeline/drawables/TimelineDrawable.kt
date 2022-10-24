@@ -10,7 +10,6 @@ interface TimelineDrawable {
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
-        strokeWidth: Float
     )
 
     fun drawTimeLineShape(

@@ -2,10 +2,7 @@ package com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawabl
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.endSmoothLineTo
@@ -22,7 +19,6 @@ data class TotalTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
-        strokeWidth: Float
     ) {
         drawScope.drawPath(
             path = Path().apply {
@@ -44,11 +40,7 @@ data class TotalTimeline(
                 )
             },
             color = color,
-            style = Stroke(
-                width = strokeWidth,
-                cap = StrokeCap.Round,
-                pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 30f))
-            )
+            style = AllTimelinesModel.dottedStroke
         )
     }
 

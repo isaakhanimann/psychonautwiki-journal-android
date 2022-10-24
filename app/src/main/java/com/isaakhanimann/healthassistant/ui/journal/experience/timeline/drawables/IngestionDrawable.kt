@@ -17,9 +17,11 @@ class IngestionDrawable(
     var insetTimes = 0
 
     init {
-        ingestionPointDistanceFromStartInSeconds = Duration.between(startTimeGraph, ingestionTime).seconds.toFloat()
+        ingestionPointDistanceFromStartInSeconds =
+            Duration.between(startTimeGraph, ingestionTime).seconds.toFloat()
         val full = roaDuration?.toFullTimeline()
+        val onsetComeupPeakTotal = roaDuration?.toOnsetComeupPeakTotalTimeline()
         val total = roaDuration?.toTotalTimeline()
-        timelineDrawable = full ?: total
+        timelineDrawable = full ?: onsetComeupPeakTotal ?: total
     }
 }

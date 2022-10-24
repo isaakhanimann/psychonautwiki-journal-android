@@ -1,5 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience.timeline
 
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.FullTimeline
@@ -84,5 +87,15 @@ class AllTimelinesModel(
         }
 
         const val shapeAlpha = 0.1f
+        const val strokeWidth = 13f
+        val normalStroke = Stroke(
+            width = strokeWidth,
+            cap = StrokeCap.Round,
+        )
+        val dottedStroke = Stroke(
+            width = strokeWidth,
+            cap = StrokeCap.Round,
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 30f))
+        )
     }
 }
