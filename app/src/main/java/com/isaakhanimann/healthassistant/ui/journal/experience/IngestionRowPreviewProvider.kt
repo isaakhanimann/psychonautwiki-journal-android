@@ -2,7 +2,7 @@ package com.isaakhanimann.healthassistant.ui.journal.experience
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
@@ -25,7 +25,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "MDMA",
-                    color = SubstanceColor.PINK
+                    color = AdaptiveColor.PINK
                 )
             ),
             roaDuration = null,
@@ -45,7 +45,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "LSD",
-                    color = SubstanceColor.BLUE
+                    color = AdaptiveColor.BLUE
                 )
             ),
             roaDuration = null,

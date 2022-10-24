@@ -2,7 +2,7 @@ package com.isaakhanimann.healthassistant.ui.journal.experience
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
@@ -49,7 +49,7 @@ class OneExperienceScreenPreviewProvider :
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "MDMA",
-                            color = SubstanceColor.PINK
+                            color = AdaptiveColor.PINK
                         )
                     ),
                     roaDuration = RoaDuration(
@@ -106,7 +106,7 @@ class OneExperienceScreenPreviewProvider :
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Cocaine",
-                            color = SubstanceColor.BLUE
+                            color = AdaptiveColor.BLUE
                         )
                     ),
                     roaDuration = RoaDuration(
@@ -159,7 +159,7 @@ class OneExperienceScreenPreviewProvider :
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Cocaine",
-                            color = SubstanceColor.BLUE
+                            color = AdaptiveColor.BLUE
                         )
                     ),
                     roaDuration = RoaDuration(

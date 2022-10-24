@@ -1,7 +1,7 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience.timeline
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
@@ -49,7 +49,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
-                color = SubstanceColor.BLUE,
+                color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(4, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
@@ -86,7 +86,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 0.5f,
-                color = SubstanceColor.BLUE,
+                color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(3, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
@@ -123,7 +123,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
-                color = SubstanceColor.RED,
+                color = AdaptiveColor.RED,
                 startTime = Instant.now().minus(1, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
@@ -140,7 +140,7 @@ class TimelinesPreviewProvider :
                     afterglow = null
                 ),
                 height = 1f,
-                color = SubstanceColor.ORANGE,
+                color = AdaptiveColor.ORANGE,
                 startTime = Instant.now()
             )
         ),
@@ -179,7 +179,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
-                color = SubstanceColor.BLUE,
+                color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(3, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
@@ -216,7 +216,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
-                color = SubstanceColor.ORANGE,
+                color = AdaptiveColor.ORANGE,
                 startTime = Instant.now().minus(1, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
@@ -253,7 +253,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
-                color = SubstanceColor.GREEN,
+                color = AdaptiveColor.GREEN,
                 startTime = Instant.now()
             )
         ),
@@ -292,7 +292,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
-                color = SubstanceColor.BLUE,
+                color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(20, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
@@ -329,7 +329,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
-                color = SubstanceColor.GREEN,
+                color = AdaptiveColor.GREEN,
                 startTime = Instant.now()
             )
         )

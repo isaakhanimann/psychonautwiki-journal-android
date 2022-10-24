@@ -1,6 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience.timeline
 
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.ingestion.FullTimeline
@@ -152,7 +152,7 @@ data class FullHour(
 
 class IngestionDrawable(
     startTimeGraph: Instant,
-    val color: SubstanceColor,
+    val color: AdaptiveColor,
     ingestionTime: Instant,
     roaDuration: RoaDuration?,
     val height: Float = 1f

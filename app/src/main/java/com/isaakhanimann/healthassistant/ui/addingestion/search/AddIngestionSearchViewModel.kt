@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.CustomSubstance
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
@@ -74,7 +74,7 @@ class AddIngestionSearchViewModel @Inject constructor(
 }
 
 data class PreviousSubstance(
-    val color: SubstanceColor,
+    val color: AdaptiveColor,
     val substanceName: String,
     val isCustom: Boolean,
     val routesWithDoses: List<RouteWithDoses>

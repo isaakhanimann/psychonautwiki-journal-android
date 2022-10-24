@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
@@ -63,8 +63,8 @@ fun ChooseTimeScreen(
 @Preview
 @Composable
 fun ChooseTimeScreenPreview() {
-    val alreadyUsedColors = listOf(SubstanceColor.BLUE, SubstanceColor.PINK)
-    val otherColors = SubstanceColor.values().filter { color ->
+    val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK)
+    val otherColors = AdaptiveColor.values().filter { color ->
         !alreadyUsedColors.contains(color)
     }
     ChooseTimeScreen(
@@ -74,7 +74,7 @@ fun ChooseTimeScreenPreview() {
         dismissAddIngestionScreens = {},
         isLoadingColor = false,
         isShowingColorPicker = true,
-        selectedColor = SubstanceColor.BLUE,
+        selectedColor = AdaptiveColor.BLUE,
         onChangeColor = {},
         alreadyUsedColors = alreadyUsedColors,
         otherColors = otherColors,
@@ -98,10 +98,10 @@ fun ChooseTimeScreen(
     dismissAddIngestionScreens: () -> Unit,
     isLoadingColor: Boolean,
     isShowingColorPicker: Boolean,
-    selectedColor: SubstanceColor,
-    onChangeColor: (SubstanceColor) -> Unit,
-    alreadyUsedColors: List<SubstanceColor>,
-    otherColors: List<SubstanceColor>,
+    selectedColor: AdaptiveColor,
+    onChangeColor: (AdaptiveColor) -> Unit,
+    alreadyUsedColors: List<AdaptiveColor>,
+    otherColors: List<AdaptiveColor>,
     previousNotes: List<String>,
     note: String,
     onNoteChange: (String) -> Unit,

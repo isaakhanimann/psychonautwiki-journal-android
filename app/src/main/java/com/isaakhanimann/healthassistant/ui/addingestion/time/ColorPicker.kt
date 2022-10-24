@@ -14,17 +14,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 
 @Preview
 @Composable
 fun ColorPickerPreview() {
-    val alreadyUsedColors = listOf(SubstanceColor.BLUE, SubstanceColor.PINK)
-    val otherColors = SubstanceColor.values().filter { color ->
+    val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK)
+    val otherColors = AdaptiveColor.values().filter { color ->
         !alreadyUsedColors.contains(color)
     }
     ColorPicker(
-        selectedColor = SubstanceColor.BLUE,
+        selectedColor = AdaptiveColor.BLUE,
         onChangeOfColor = {},
         alreadyUsedColors,
         otherColors
@@ -33,10 +33,10 @@ fun ColorPickerPreview() {
 
 @Composable
 fun ColorPicker(
-    selectedColor: SubstanceColor,
-    onChangeOfColor: (SubstanceColor) -> Unit,
-    alreadyUsedColors: List<SubstanceColor>,
-    otherColors: List<SubstanceColor>
+    selectedColor: AdaptiveColor,
+    onChangeOfColor: (AdaptiveColor) -> Unit,
+    alreadyUsedColors: List<AdaptiveColor>,
+    otherColors: List<AdaptiveColor>
 ) {
     val isDarkTheme = isSystemInDarkTheme()
     var isColorPickerVisible by remember {
@@ -69,8 +69,8 @@ fun ColorPicker(
 @Preview
 @Composable
 fun ColorDialogPreview() {
-    val alreadyUsedColors = listOf(SubstanceColor.BLUE, SubstanceColor.PINK)
-    val otherColors = SubstanceColor.values().filter { color ->
+    val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK)
+    val otherColors = AdaptiveColor.values().filter { color ->
         !alreadyUsedColors.contains(color)
     }
     ColorDialog(
@@ -84,9 +84,9 @@ fun ColorDialogPreview() {
 @Composable
 fun ColorDialog(
     dismiss: () -> Unit,
-    onChangeOfColor: (SubstanceColor) -> Unit,
-    alreadyUsedColors: List<SubstanceColor>,
-    otherColors: List<SubstanceColor>
+    onChangeOfColor: (AdaptiveColor) -> Unit,
+    alreadyUsedColors: List<AdaptiveColor>,
+    otherColors: List<AdaptiveColor>
 ) {
     AlertDialog(
         onDismissRequest = dismiss,
@@ -129,8 +129,8 @@ fun ColorDialog(
 
 @Composable
 fun CircleColorButtons(
-    colors: List<SubstanceColor>,
-    onTapOnColor: (SubstanceColor) -> Unit
+    colors: List<AdaptiveColor>,
+    onTapOnColor: (AdaptiveColor) -> Unit
 ) {
     val isDarkTheme = isSystemInDarkTheme()
     val spacing = 4.dp

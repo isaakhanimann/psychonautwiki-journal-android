@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
@@ -134,7 +134,7 @@ fun ExperienceScreen(
                             allIngestions = elements.map { it.ingestionWithCompanion.ingestion }
                         ),
                         color = oneElement.ingestionWithCompanion.substanceCompanion?.color
-                            ?: SubstanceColor.RED,
+                            ?: AdaptiveColor.RED,
                         startTime = oneElement.ingestionWithCompanion.ingestion.time
                     )
                 }
@@ -280,7 +280,7 @@ fun ExperienceScreen(
 data class DataForOneEffectLine(
     val roaDuration: RoaDuration?,
     val height: Float,
-    val color: SubstanceColor,
+    val color: AdaptiveColor,
     val startTime: Instant
 )
 

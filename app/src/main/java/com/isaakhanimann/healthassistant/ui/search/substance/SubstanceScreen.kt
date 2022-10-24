@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,13 +24,15 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
+import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDurationView
-import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDurationsChart
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
+import java.time.Instant
 
 @Composable
 fun SubstanceScreen(
@@ -206,7 +209,24 @@ fun SubstanceScreen(
             if (roasWithDurationsDefined.isNotEmpty()) {
                 SectionTitle(title = "Duration", onInfoClick = navigateToDurationExplanationScreen)
                 VerticalSpace()
-                RoaDurationsChart(roas = roasWithDurationsDefined)
+                val dataForEffectLines = remember(roasWithDurationsDefined) {
+                    roasWithDurationsDefined.map { roa ->
+                        DataForOneEffectLine(
+                            roaDuration = roa.roaDuration,
+                            height = 1f,
+                            color = roa.route.color,
+                            startTime = Instant.now()
+                        )
+                    }
+                }
+                AllTimelines(
+                    dataForEffectLines = dataForEffectLines,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .padding(horizontal = horizontalPadding)
+                )
+                VerticalSpace()
                 Divider()
                 roasWithDurationsDefined.forEachIndexed { index, roa ->
                     Column(
@@ -329,7 +349,7 @@ fun RouteColorCircle(administrationRoute: AdministrationRoute) {
     val isDarkTheme = isSystemInDarkTheme()
     Surface(
         shape = CircleShape,
-        color = administrationRoute.getComposeColor(isDarkTheme),
+        color = administrationRoute.color.getComposeColor(isDarkTheme),
         modifier = Modifier
             .size(20.dp)
     ) {}

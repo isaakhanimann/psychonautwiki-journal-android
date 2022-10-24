@@ -1,14 +1,14 @@
 package com.isaakhanimann.healthassistant.ui.addingestion.search
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 
 class AddIngestionSearchScreenProvider : PreviewParameterProvider<List<PreviousSubstance>> {
     override val values: Sequence<List<PreviousSubstance>> = sequenceOf(
         listOf(
             PreviousSubstance(
-                color = SubstanceColor.PINK,
+                color = AdaptiveColor.PINK,
                 substanceName = "MDMA",
                 isCustom = false,
                 routesWithDoses = listOf(
@@ -35,7 +35,7 @@ class AddIngestionSearchScreenProvider : PreviewParameterProvider<List<PreviousS
                 )
             ),
             PreviousSubstance(
-                color = SubstanceColor.BLUE,
+                color = AdaptiveColor.BLUE,
                 substanceName = "Amphetamine",
                 isCustom = false,
                 routesWithDoses = listOf(

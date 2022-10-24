@@ -2,7 +2,7 @@ package com.isaakhanimann.healthassistant.data.room.experiences.entities
 
 import androidx.compose.ui.graphics.Color
 
-enum class SubstanceColor {
+enum class AdaptiveColor {
     RED {
         override fun getComposeColor(isDarkTheme: Boolean): Color {
             return if (isDarkTheme) {

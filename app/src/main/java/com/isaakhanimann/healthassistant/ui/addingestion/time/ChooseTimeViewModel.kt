@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
@@ -72,7 +72,7 @@ class ChooseTimeViewModel @Inject constructor(
 
     var isLoadingColor by mutableStateOf(true)
     var isShowingColorPicker by mutableStateOf(false)
-    var selectedColor by mutableStateOf(SubstanceColor.BLUE)
+    var selectedColor by mutableStateOf(AdaptiveColor.BLUE)
     var note by mutableStateOf("")
 
     val previousNotesFlow: StateFlow<List<String>> =
@@ -92,7 +92,7 @@ class ChooseTimeViewModel @Inject constructor(
 
     private val companionFlow = experienceRepo.getAllSubstanceCompanionsFlow()
 
-    val alreadyUsedColorsFlow: StateFlow<List<SubstanceColor>> =
+    val alreadyUsedColorsFlow: StateFlow<List<AdaptiveColor>> =
         companionFlow.map { companions ->
             companions.map { it.color }.distinct()
         }.stateIn(
@@ -101,9 +101,9 @@ class ChooseTimeViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    val otherColorsFlow: StateFlow<List<SubstanceColor>> =
+    val otherColorsFlow: StateFlow<List<AdaptiveColor>> =
         alreadyUsedColorsFlow.map { alreadyUsedColors ->
-            SubstanceColor.values().filter {
+            AdaptiveColor.values().filter {
                 !alreadyUsedColors.contains(it)
             }
         }.stateIn(
@@ -136,8 +136,8 @@ class ChooseTimeViewModel @Inject constructor(
             if (thisCompanion == null) {
                 isShowingColorPicker = true
                 val alreadyUsedColors = allCompanions.map { it.color }
-                val otherColors = SubstanceColor.values().filter { !alreadyUsedColors.contains(it) }
-                selectedColor = otherColors.randomOrNull() ?: SubstanceColor.values().random()
+                val otherColors = AdaptiveColor.values().filter { !alreadyUsedColors.contains(it) }
+                selectedColor = otherColors.randomOrNull() ?: AdaptiveColor.values().random()
             } else {
                 selectedColor = thisCompanion.color
             }

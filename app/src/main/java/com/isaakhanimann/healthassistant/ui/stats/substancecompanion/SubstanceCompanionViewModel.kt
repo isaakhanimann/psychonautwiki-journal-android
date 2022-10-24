@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.healthassistant.ui.main.routers.SUBSTANCE_NAME_KEY
@@ -108,7 +108,7 @@ class SubstanceCompanionViewModel @Inject constructor(
 
     private val companionsFlow = experienceRepo.getAllSubstanceCompanionsFlow()
 
-    val alreadyUsedColorsFlow: StateFlow<List<SubstanceColor>> =
+    val alreadyUsedColorsFlow: StateFlow<List<AdaptiveColor>> =
         companionsFlow.map { companions ->
             companions.map { it.color }.distinct()
         }.stateIn(
@@ -117,9 +117,9 @@ class SubstanceCompanionViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    val otherColorsFlow: StateFlow<List<SubstanceColor>> =
+    val otherColorsFlow: StateFlow<List<AdaptiveColor>> =
         alreadyUsedColorsFlow.map { alreadyUsedColors ->
-            SubstanceColor.values().filter {
+            AdaptiveColor.values().filter {
                 !alreadyUsedColors.contains(it)
             }
         }.stateIn(
@@ -129,7 +129,7 @@ class SubstanceCompanionViewModel @Inject constructor(
         )
 
 
-    fun updateColor(color: SubstanceColor) {
+    fun updateColor(color: AdaptiveColor) {
         viewModelScope.launch {
             thisCompanionFlow.value?.let {
                 it.color = color

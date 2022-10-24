@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ColorPicker
@@ -46,8 +46,8 @@ fun SubstanceCompanionScreen(
 @Preview
 @Composable
 fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionScreenPreviewProvider::class) pair: Pair<SubstanceCompanion, List<IngestionsBurst>>) {
-    val alreadyUsedColors = listOf(SubstanceColor.BLUE, SubstanceColor.PINK)
-    val otherColors = SubstanceColor.values().filter { color ->
+    val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK)
+    val otherColors = AdaptiveColor.values().filter { color ->
         !alreadyUsedColors.contains(color)
     }
     HealthAssistantTheme {
@@ -74,9 +74,9 @@ fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionScreenPreviewP
 fun SubstanceCompanionScreen(
     substanceCompanion: SubstanceCompanion,
     ingestionBursts: List<IngestionsBurst>,
-    onChangeColor: (SubstanceColor) -> Unit,
-    alreadyUsedColors: List<SubstanceColor>,
-    otherColors: List<SubstanceColor>,
+    onChangeColor: (AdaptiveColor) -> Unit,
+    alreadyUsedColors: List<AdaptiveColor>,
+    otherColors: List<AdaptiveColor>,
     tolerance: Tolerance?,
     crossTolerances: List<String>
 ) {

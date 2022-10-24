@@ -5,5 +5,5 @@ import java.util.*
 data class SubstanceLastUsed(
     val substanceName: String,
     val lastUsed: Date,
-    val color: SubstanceColor
+    val color: AdaptiveColor
 )

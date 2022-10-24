@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.SearchScreen
@@ -128,7 +128,7 @@ fun SuggestionsSection(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        ColorCircle(substanceColor = substanceRow.color)
+                        ColorCircle(adaptiveColor = substanceRow.color)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = substanceRow.substanceName,
@@ -196,11 +196,11 @@ fun SuggestionsSection(
 }
 
 @Composable
-fun ColorCircle(substanceColor: SubstanceColor) {
+fun ColorCircle(adaptiveColor: AdaptiveColor) {
     val isDarkTheme = isSystemInDarkTheme()
     Surface(
         shape = CircleShape,
-        color = substanceColor.getComposeColor(isDarkTheme),
+        color = adaptiveColor.getComposeColor(isDarkTheme),
         modifier = Modifier
             .size(25.dp)
     ) {}

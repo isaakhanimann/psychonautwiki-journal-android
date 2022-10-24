@@ -1,7 +1,6 @@
 package com.isaakhanimann.healthassistant.data.substances
 
-import androidx.compose.ui.graphics.Color
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 
 enum class AdministrationRoute {
     ORAL {
@@ -11,9 +10,7 @@ enum class AdministrationRoute {
             """Oral administration is the most common route of administration for most substance classes. This route allows a substance to be absorbed through blood vessels lining the stomach and intestines. The onset is generally slower than other methods of ingestion as it must undergo first-pass metabolism through the liver (may vary greatly between individual substances). Additionally, the absorption and overall duration are generally longer as well.
 This method can also have a greater propensity for nausea and gastrointestinal discomfort."""
         override val isInjectionMethod = false
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.BLUE.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.BLUE
     },
     SUBLINGUAL {
         override val displayText = "Sublingual"
@@ -24,9 +21,7 @@ This route causes the substance to be absorbed through the large lingual artery 
 It also circumvents first-pass metabolism of certain substances which can be absorbed via sublingual and buccal administration but not oral administration (e.g. 25x-NBOMe, 25x-NBOH).
 Caustic compounds, such as the freebase form of amine-containing substance, should not be used sublingually because they can severely burn the inside of one's mouth."""
         override val isInjectionMethod = false
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.INDIGO.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.INDIGO
     },
     BUCCAL {
         override val displayText = "Buccal"
@@ -36,9 +31,7 @@ Caustic compounds, such as the freebase form of amine-containing substance, shou
 This route is commonly employed when ingesting potent psychedelics such as 25I-NBOMe, DOM, LSD, and other substances distributed on blotter paper. Potent clandestine manufactured benzodiazepines like alprazolam and etizolam are also sometimes distributed on blotters.
 Like sublingual absorption, the substance is largely absorbed through the lingual artery, but is also absorbed through the gum lining. This method is used when chewing plant leaves such as khat, kratom, salvia divinorum, and sometimes tobacco (snus)."""
         override val isInjectionMethod = false
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.CYAN.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.CYAN
     },
     INSUFFLATED {
         override val displayText = "Insufflated"
@@ -51,9 +44,7 @@ Insufflation is common with substances such as cocaine and ketamine. It is also 
 Frequent insufflation of some substances can damage one's mucous membranes, induce bleeding, damage the nostril's cartilage and lining, burn the throat, and cause other trauma to the nasal passage and sinus area. To reduce damage, it is recommended to grind the substance completely before use and alternate nostrils. It can also cause or exacerbate nasal congestion.
 Also, sharing snorting equipment (straws, banknotes, bullets, etc) has been linked to the transmission of hepatitis C. In one study, the University of Tennessee Medical Center researches warned that other blood-borne diseases such as HIV, the AIDS-causing virus, could be transmitted as well."""
         override val isInjectionMethod = false
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.PURPLE.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.PURPLE
     },
     RECTAL {
         override val displayText = "Rectal"
@@ -63,9 +54,7 @@ Also, sharing snorting equipment (straws, banknotes, bullets, etc) has been link
 This is due to a large amount of arteries located in the rectum; thus rectal administration is often superior to other methods despite social stigma. Caustic substances such as 4-FA or phenibut hydrochloride should not be plugged because they can burn the interior rectum resulting in a considerable amount of gastrointestinal distress.
 Rectal administration can involve either the insertion of a low-volume solution into the rectum, using a syringe or pipette, or by placing a pill or gelatin capsule containing the active substance. The latter form is known as a suppository, and is common in medicine when the gastrointestinal tract cannot support oral medicine."""
         override val isInjectionMethod = false
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.PINK.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.PINK
     },
     TRANSDERMAL {
         override val displayText = "Transdermal"
@@ -73,9 +62,7 @@ Rectal administration can involve either the insertion of a low-volume solution 
         override val articleText =
             """Transdermal is a route of administration where active ingredients are delivered across the skin for systemic distribution. Examples include transdermal patches used for medicine delivery for opioids such as fentanyl and transdermal implants used for medical or anesthetic purposes. This route is typically not observed in non-medical or recreational contexts due to the manufacturing requirements."""
         override val isInjectionMethod = false
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.BROWN.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.BROWN
     },
     SUBCUTANEOUS {
         override val displayText = "Subcutaneous"
@@ -83,9 +70,7 @@ Rectal administration can involve either the insertion of a low-volume solution 
         override val articleText =
             """Subcutaneous administration (also known as skin popping) refers to a drug being injected into the subcutis, the layer of skin directly below the dermis and epidermis. Subcutaneous administration is relatively uncommon among psychonautics, as many people are not trained how to do it or would rather use a different route of administration which they are more familiar with."""
         override val isInjectionMethod = true
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.TEAL .getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.TEAL
     },
     INTRAMUSCULAR {
         override val displayText = "Intramuscular"
@@ -93,9 +78,7 @@ Rectal administration can involve either the insertion of a low-volume solution 
         override val articleText =
             """Intramuscular administration refers to a drug being injected into the muscle tissue using a hypodermic needle. This method is very similar to the intravenous route, but is often more painful with a decreased onset and absorption. Some drugs (such as ketamine) are commonly administered via this route. Like intravenous administration, intramuscular injection must be taken with precaution, using sterilized unused needles and not leaving any residual air bubbles in the reservoir."""
         override val isInjectionMethod = true
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.MINT.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.MINT
     },
     INTRAVENOUS {
         override val displayText = "Intravenous"
@@ -105,9 +88,7 @@ Rectal administration can involve either the insertion of a low-volume solution 
 Sterilized, unused needles and a high purity substance with little to no adulterant are required to avoid damage to the circulatory system. Making sure no air bubbles are present in the reservoir before the plunger is released is also of dire importance as air bubbles in the bloodstream can easily be lethal.
 This route is strongly associated with substances such as heroin and cocaine, but can be employed with almost any pure substance."""
         override val isInjectionMethod = true
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.RED.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.RED
     },
     SMOKED {
         override val displayText = "Smoked"
@@ -131,9 +112,7 @@ Due to the higher level of temperature control, vaporization is often a more eff
 Smoking a substance that should be vaporized leads to a blast of heat that may burn off the active ingredient or ignite the substance itself, both of which are wasteful and incorrect.
 Ethnobotanist Daniel Siebert cautions that inhaling hot air can be irritating and potentially damaging to the lungs. Vapor produced by a heat gun needs to be cooled by running it through a water pipe or cooling chamber before inhalation."""
         override val isInjectionMethod = false
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.GREEN.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.GREEN
     },
     INHALED {
         override val displayText = "Inhaled"
@@ -143,17 +122,14 @@ Ethnobotanist Daniel Siebert cautions that inhaling hot air can be irritating an
 Inhalants do not require an external heat source to produce psychoactive vapors that can then be inhaled through various methods depending on the substance used. Inhaled substances are absorbed very rapidly and lead to an almost instantaneous absorption of the substance and passage through the blood brain barrier.
 Many substances can be inhaled to achieve an altered state of consciousness, however, some substances used for this purpose produce highly negative physical and neurotoxic effects including solvents like toluene (see toluene toxicity) often found in glue, acetone often found in nail polish, and gasoline., and number of gases intended for household or industrial use including butane gas sold as lighter gas refill."""
         override val isInjectionMethod = false
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return SubstanceColor.YELLOW.getComposeColor(isDarkTheme)
-        }
+        override val color = AdaptiveColor.YELLOW
     };
 
     abstract val displayText: String
     abstract val description: String
     abstract val articleText: String
     abstract val isInjectionMethod: Boolean
-
-    abstract fun getComposeColor(isDarkTheme: Boolean): Color
+    abstract val color: AdaptiveColor
 
     companion object {
         const val psychonautWikiArticleURL =

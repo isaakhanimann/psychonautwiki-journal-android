@@ -3,7 +3,7 @@ package com.isaakhanimann.healthassistant.ui.journal
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
@@ -44,7 +44,7 @@ class JournalScreenPreviewProvider :
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "MDMA",
-                                        color = SubstanceColor.PINK
+                                        color = AdaptiveColor.PINK
                                     )
                                 ),
                                 IngestionWithCompanion(
@@ -66,7 +66,7 @@ class JournalScreenPreviewProvider :
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Cocaine",
-                                        color = SubstanceColor.BLUE
+                                        color = AdaptiveColor.BLUE
                                     )
                                 ),
                                 IngestionWithCompanion(
@@ -88,7 +88,7 @@ class JournalScreenPreviewProvider :
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Ketamine",
-                                        color = SubstanceColor.MINT
+                                        color = AdaptiveColor.MINT
                                     )
                                 )
                             )
@@ -119,7 +119,7 @@ class JournalScreenPreviewProvider :
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "MDMA",
-                                        color = SubstanceColor.PINK
+                                        color = AdaptiveColor.PINK
                                     )
                                 )
                             )
@@ -155,7 +155,7 @@ class JournalScreenPreviewProvider :
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Cocaine",
-                                        color = SubstanceColor.BLUE
+                                        color = AdaptiveColor.BLUE
                                     )
                                 ),
                                 IngestionWithCompanion(
@@ -177,7 +177,7 @@ class JournalScreenPreviewProvider :
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Ketamine",
-                                        color = SubstanceColor.MINT
+                                        color = AdaptiveColor.MINT
                                     )
                                 )
 
@@ -209,7 +209,7 @@ class JournalScreenPreviewProvider :
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "LSD",
-                                        color = SubstanceColor.PURPLE
+                                        color = AdaptiveColor.PURPLE
                                     )
                                 ),
                                 IngestionWithCompanion(
@@ -231,7 +231,7 @@ class JournalScreenPreviewProvider :
                                     ),
                                     substanceCompanion = SubstanceCompanion(
                                         substanceName = "Cocaine",
-                                        color = SubstanceColor.BLUE
+                                        color = AdaptiveColor.BLUE
                                     )
                                 )
                             )
