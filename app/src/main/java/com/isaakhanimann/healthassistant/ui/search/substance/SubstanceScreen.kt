@@ -9,8 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +22,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
+import com.isaakhanimann.healthassistant.ui.addingestion.time.TimePickerButton
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
@@ -32,7 +32,9 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDur
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
-import java.time.Instant
+import com.isaakhanimann.healthassistant.ui.utils.getInstant
+import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
+import java.time.LocalDateTime
 
 @Composable
 fun SubstanceScreen(
@@ -208,14 +210,27 @@ fun SubstanceScreen(
             }
             if (roasWithDurationsDefined.isNotEmpty()) {
                 SectionTitle(title = "Duration", onInfoClick = navigateToDurationExplanationScreen)
-                VerticalSpace()
-                val dataForEffectLines = remember(roasWithDurationsDefined) {
+                var ingestionTime by remember { mutableStateOf(LocalDateTime.now()) }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
+                    Text("Ingestion Time:")
+                    Spacer(modifier = Modifier.width(10.dp))
+                    TimePickerButton(
+                        localDateTime = ingestionTime,
+                        onChange = { ingestionTime = it },
+                        timeString = ingestionTime.getStringOfPattern("HH:mm"),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                val dataForEffectLines = remember(roasWithDurationsDefined, ingestionTime) {
                     roasWithDurationsDefined.map { roa ->
                         DataForOneEffectLine(
                             roaDuration = roa.roaDuration,
                             height = 1f,
                             color = roa.route.color,
-                            startTime = Instant.now()
+                            startTime = ingestionTime.getInstant()
                         )
                     }
                 }
