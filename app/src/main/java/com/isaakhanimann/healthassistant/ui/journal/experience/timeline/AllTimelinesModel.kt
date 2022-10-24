@@ -3,6 +3,10 @@ package com.isaakhanimann.healthassistant.ui.journal.experience.timeline
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.FullTimeline
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.TimelineDrawable
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.toFullTimeline
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.toTotalTimeline
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import java.time.Duration
 import java.time.Instant
