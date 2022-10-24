@@ -1,41 +1,22 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience.timeline
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
-import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
+import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class TimelinesPreviewProvider :
-    PreviewParameterProvider<List<Pair<IngestionWithCompanion, RoaDuration>>> {
-    override val values: Sequence<List<Pair<IngestionWithCompanion, RoaDuration>>> = sequenceOf(
+    PreviewParameterProvider<List<DataForOneEffectLine>> {
+    override val values: Sequence<List<DataForOneEffectLine>> = sequenceOf(
         listOf(
-            Pair(
-                IngestionWithCompanion(
-                    ingestion = Ingestion(
-                        substanceName = "Substance 1",
-                        time = Instant.now().minus(4, ChronoUnit.HOURS),
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 90.0,
-                        isDoseAnEstimate = false,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Substance 1",
-                        color = SubstanceColor.BLUE
-                    )
-                ),
-                RoaDuration(
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
                         max = 40f,
@@ -66,26 +47,13 @@ class TimelinesPreviewProvider :
                         max = 48f,
                         units = DurationUnits.HOURS
                     )
-                )
-            ),
-            Pair(
-                IngestionWithCompanion(
-                    ingestion = Ingestion(
-                        substanceName = "Substance 1",
-                        time = Instant.now().minus(3, ChronoUnit.HOURS),
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 45.0,
-                        isDoseAnEstimate = false,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Substance 1",
-                        color = SubstanceColor.BLUE
-                    )
                 ),
-                RoaDuration(
+                height = 1f,
+                color = SubstanceColor.BLUE,
+                startTime = Instant.now().minus(4, ChronoUnit.HOURS)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
                         max = 40f,
@@ -116,26 +84,13 @@ class TimelinesPreviewProvider :
                         max = 48f,
                         units = DurationUnits.HOURS
                     )
-                )
-            ),
-            Pair(
-                IngestionWithCompanion(
-                    ingestion = Ingestion(
-                        substanceName = "Substance 2",
-                        time = Instant.now().minus(1, ChronoUnit.HOURS),
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 90.0,
-                        isDoseAnEstimate = false,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Substance 2",
-                        color = SubstanceColor.RED
-                    )
                 ),
-                RoaDuration(
+                height = 0.5f,
+                color = SubstanceColor.BLUE,
+                startTime = Instant.now().minus(3, ChronoUnit.HOURS)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
                         max = 40f,
@@ -166,26 +121,13 @@ class TimelinesPreviewProvider :
                         max = 48f,
                         units = DurationUnits.HOURS
                     )
-                )
-            ),
-            Pair(
-                IngestionWithCompanion(
-                    ingestion = Ingestion(
-                        substanceName = "Substance 3",
-                        time = Instant.now(),
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 90.0,
-                        isDoseAnEstimate = false,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Substance 3",
-                        color = SubstanceColor.ORANGE
-                    )
                 ),
-                RoaDuration(
+                height = 1f,
+                color = SubstanceColor.RED,
+                startTime = Instant.now().minus(1, ChronoUnit.HOURS)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
                     onset = null,
                     comeup = null,
                     peak = null,
@@ -196,28 +138,15 @@ class TimelinesPreviewProvider :
                         units = DurationUnits.HOURS
                     ),
                     afterglow = null
-                )
+                ),
+                height = 1f,
+                color = SubstanceColor.ORANGE,
+                startTime = Instant.now()
             )
         ),
         listOf(
-            Pair(
-                IngestionWithCompanion(
-                    ingestion = Ingestion(
-                        substanceName = "Substance 1",
-                        time = Instant.now().minus(3, ChronoUnit.HOURS),
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 45.0,
-                        isDoseAnEstimate = false,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Substance 1",
-                        color = SubstanceColor.BLUE
-                    )
-                ),
-                RoaDuration(
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
                         max = 40f,
@@ -248,26 +177,13 @@ class TimelinesPreviewProvider :
                         max = 48f,
                         units = DurationUnits.HOURS
                     )
-                )
-            ),
-            Pair(
-                IngestionWithCompanion(
-                    ingestion = Ingestion(
-                        substanceName = "Substance 2",
-                        time = Instant.now().minus(1, ChronoUnit.HOURS),
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 90.0,
-                        isDoseAnEstimate = false,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Substance 2",
-                        color = SubstanceColor.ORANGE
-                    )
                 ),
-                RoaDuration(
+                height = 1f,
+                color = SubstanceColor.BLUE,
+                startTime = Instant.now().minus(3, ChronoUnit.HOURS)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
                         max = 40f,
@@ -298,26 +214,13 @@ class TimelinesPreviewProvider :
                         max = 48f,
                         units = DurationUnits.HOURS
                     )
-                )
-            ),
-            Pair(
-                IngestionWithCompanion(
-                    ingestion = Ingestion(
-                        substanceName = "Substance 3",
-                        time = Instant.now(),
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 90.0,
-                        isDoseAnEstimate = false,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Substance 3",
-                        color = SubstanceColor.GREEN
-                    )
                 ),
-                RoaDuration(
+                height = 1f,
+                color = SubstanceColor.ORANGE,
+                startTime = Instant.now().minus(1, ChronoUnit.HOURS)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
                         max = 40f,
@@ -348,29 +251,15 @@ class TimelinesPreviewProvider :
                         max = 48f,
                         units = DurationUnits.HOURS
                     )
-                )
+                ),
+                height = 1f,
+                color = SubstanceColor.GREEN,
+                startTime = Instant.now()
             )
         ),
         listOf(
-            Pair(
-                IngestionWithCompanion(
-                    ingestion = Ingestion(
-                        substanceName = "Substance 1",
-                        time = Instant.now().minus(20, ChronoUnit.MINUTES),
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 90.0,
-                        isDoseAnEstimate = false,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Substance 1",
-                        color = SubstanceColor.BLUE
-                    )
-                ),
-
-                RoaDuration(
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
                         max = 40f,
@@ -401,26 +290,13 @@ class TimelinesPreviewProvider :
                         max = 48f,
                         units = DurationUnits.HOURS
                     )
-                )
-            ),
-            Pair(
-                IngestionWithCompanion(
-                    ingestion = Ingestion(
-                        substanceName = "Substance 2",
-                        time = Instant.now(),
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 90.0,
-                        isDoseAnEstimate = false,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Substance 2",
-                        color = SubstanceColor.GREEN
-                    )
                 ),
-                RoaDuration(
+                height = 1f,
+                color = SubstanceColor.BLUE,
+                startTime = Instant.now().minus(20, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
                         max = 40f,
@@ -451,8 +327,11 @@ class TimelinesPreviewProvider :
                         max = 48f,
                         units = DurationUnits.HOURS
                     )
-                )
-            ),
+                ),
+                height = 1f,
+                color = SubstanceColor.GREEN,
+                startTime = Instant.now()
+            )
         )
     )
 }

@@ -21,8 +21,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
+import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
@@ -33,10 +32,10 @@ import java.time.Instant
 fun AllTimelinesPreview(
     @PreviewParameter(
         TimelinesPreviewProvider::class,
-    ) ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>
+    ) dataForEffectLines: List<DataForOneEffectLine>
 ) {
     AllTimelines(
-        ingestionDurationPairs = ingestionDurationPairs,
+        dataForEffectLines = dataForEffectLines,
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
@@ -46,15 +45,15 @@ fun AllTimelinesPreview(
 
 @Composable
 fun AllTimelines(
-    ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>,
+    dataForEffectLines: List<DataForOneEffectLine>,
     modifier: Modifier = Modifier,
     strokeWidth: Float = 10f,
 ) {
-    if (ingestionDurationPairs.isEmpty()) {
+    if (dataForEffectLines.isEmpty()) {
         Text(text = "Insufficient Data for Timeline")
     } else {
-        val model: AllTimelinesModel = remember(ingestionDurationPairs) {
-            AllTimelinesModel(ingestionDurationPairs)
+        val model: AllTimelinesModel = remember(dataForEffectLines) {
+            AllTimelinesModel(dataForEffectLines)
         }
         val isDarkTheme = isSystemInDarkTheme()
         val density = LocalDensity.current
@@ -123,7 +122,7 @@ fun DrawScope.drawIngestion(
         ingestionDrawable.ingestionPointDistanceFromStartInSeconds * pixelsPerSec
     val verticalInsetForLine = strokeWidth / 2
     val topInset =
-        (canvasHeightOuter * (1f - ingestionDrawable.verticalHeightInPercent)) + (ingestionDrawable.insetTimes * strokeWidth)
+        (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * strokeWidth)
     inset(
         left = 0f,
         top = topInset,

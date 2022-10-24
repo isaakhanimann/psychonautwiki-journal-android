@@ -1,9 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience.timeline
 
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
-import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
+import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.ingestion.FullTimeline
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.ingestion.TimelineDrawable
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.ingestion.toFullTimeline
@@ -19,7 +18,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 class AllTimelinesModel(
-    ingestionDurationPairs: List<Pair<IngestionWithCompanion, RoaDuration?>>
+    dataForLines: List<DataForOneEffectLine>
 ) {
     val startTime: Instant
     val widthInSeconds: Float
@@ -27,17 +26,15 @@ class AllTimelinesModel(
     val axisDrawable: AxisDrawable
 
     init {
-        startTime = ingestionDurationPairs.map { it.first.ingestion.time }
+        startTime = dataForLines.map { it.startTime }
             .reduce { acc, date -> if (acc.isBefore(date)) acc else date }
-        val ingestionDrawablesWithoutInsets = ingestionDurationPairs.map { pair ->
-            val verticalHeightInPercent = getVerticalHeightInPercent(
-                ingestion = pair.first.ingestion,
-                allIngestions = ingestionDurationPairs.map { it.first.ingestion })
+        val ingestionDrawablesWithoutInsets = dataForLines.map { dataForOneLine ->
             IngestionDrawable(
-                startTime = startTime,
-                ingestionWithCompanion = pair.first,
-                roaDuration = pair.second,
-                verticalHeightInPercent = verticalHeightInPercent
+                startTimeGraph = startTime,
+                color = dataForOneLine.color,
+                ingestionTime = dataForOneLine.startTime,
+                roaDuration = dataForOneLine.roaDuration,
+                height = dataForOneLine.height
             )
         }
         ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)
@@ -57,23 +54,6 @@ class AllTimelinesModel(
     }
 
     companion object {
-        fun getVerticalHeightInPercent(
-            ingestion: Ingestion,
-            allIngestions: List<Ingestion>
-        ): Float {
-            val max = allIngestions
-                .filter { it.substanceName == ingestion.substanceName }
-                .mapNotNull { it.dose }
-                .maxOrNull()
-            return ingestion.dose.let { doseSnap ->
-                if (max == null || doseSnap == null) {
-                    1f
-                } else {
-                    doseSnap.div(max).toFloat()
-                }
-            }
-        }
-
         private fun updateInsets(ingestionDrawables: List<IngestionDrawable>): List<IngestionDrawable> {
             val results = mutableListOf<IngestionDrawable>()
             for (i in ingestionDrawables.indices) {
@@ -97,7 +77,7 @@ class AllTimelinesModel(
                 ingestionDrawable.timelineDrawable as? FullTimeline ?: return 0
             val otherFullTimelinePeakRangesWithSameHeight: List<ClosedRange<Float>> =
                 otherDrawables
-                    .filter { it.verticalHeightInPercent == ingestionDrawable.verticalHeightInPercent }
+                    .filter { it.height == ingestionDrawable.height }
                     .mapNotNull {
                         val full = it.timelineDrawable as? FullTimeline ?: return@mapNotNull null
                         return@mapNotNull full.getPeakDurationRangeInSeconds(startDurationInSeconds = it.ingestionPointDistanceFromStartInSeconds)
@@ -171,21 +151,20 @@ data class FullHour(
 )
 
 class IngestionDrawable(
-    startTime: Instant,
-    ingestionWithCompanion: IngestionWithCompanion,
+    startTimeGraph: Instant,
+    val color: SubstanceColor,
+    ingestionTime: Instant,
     roaDuration: RoaDuration?,
-    val verticalHeightInPercent: Float = 1f
+    val height: Float = 1f
 ) {
-    val color: SubstanceColor
     val ingestionPointDistanceFromStartInSeconds: Float
     val timelineDrawable: TimelineDrawable?
     var insetTimes = 0
 
     init {
-        ingestionPointDistanceFromStartInSeconds = Duration.between(startTime, ingestionWithCompanion.ingestion.time).seconds.toFloat()
+        ingestionPointDistanceFromStartInSeconds = Duration.between(startTimeGraph, ingestionTime).seconds.toFloat()
         val full = roaDuration?.toFullTimeline()
         val total = roaDuration?.toTotalTimeline()
         timelineDrawable = full ?: total
-        color = ingestionWithCompanion.substanceCompanion!!.color
     }
 }

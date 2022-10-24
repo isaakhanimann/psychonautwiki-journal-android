@@ -17,7 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceColor
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
@@ -25,6 +28,7 @@ import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
+import java.time.Instant
 
 @Composable
 fun ExperienceScreen(
@@ -120,23 +124,32 @@ fun ExperienceScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(10.dp))
-            val ingestionDurationPairs = oneExperienceScreenModel.ingestionElements.map {
-                Pair(
-                    first = it.ingestionWithCompanion,
-                    second = it.roaDuration
-                )
+            val elements = oneExperienceScreenModel.ingestionElements
+            val effectTimelines = remember(elements) {
+                elements.map { oneElement ->
+                    return@map DataForOneEffectLine(
+                        roaDuration = oneElement.roaDuration,
+                        height = getHeightBetween0And1(
+                            ingestion = oneElement.ingestionWithCompanion.ingestion,
+                            allIngestions = elements.map { it.ingestionWithCompanion.ingestion }
+                        ),
+                        color = oneElement.ingestionWithCompanion.substanceCompanion?.color
+                            ?: SubstanceColor.RED,
+                        startTime = oneElement.ingestionWithCompanion.ingestion.time
+                    )
+                }
             }
-            if (ingestionDurationPairs.isNotEmpty()) {
+            if (effectTimelines.isNotEmpty()) {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     AllTimelines(
-                        ingestionDurationPairs = ingestionDurationPairs,
+                        dataForEffectLines = effectTimelines,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
                             .padding(bottom = 5.dp)
                     )
                     val showOralOnsetDisclaimer =
-                        ingestionDurationPairs.any { it.first.ingestion.administrationRoute == AdministrationRoute.ORAL }
+                        elements.any { it.ingestionWithCompanion.ingestion.administrationRoute == AdministrationRoute.ORAL }
                     if (showOralOnsetDisclaimer) {
                         Text(
                             text = "* a full stomach can delay the onset for hours",
@@ -154,7 +167,11 @@ fun ExperienceScreen(
                 Column(
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    SectionTitle(title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern("EEE, dd MMM yyyy"))
+                    SectionTitle(
+                        title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern(
+                            "EEE, dd MMM yyyy"
+                        )
+                    )
                     oneExperienceScreenModel.ingestionElements.forEachIndexed { index, ingestionElement ->
                         IngestionRow(
                             ingestionElement = ingestionElement,
@@ -165,7 +182,7 @@ fun ExperienceScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
-                        if (index < oneExperienceScreenModel.ingestionElements.size-1) {
+                        if (index < oneExperienceScreenModel.ingestionElements.size - 1) {
                             Divider()
                         }
                     }
@@ -175,10 +192,12 @@ fun ExperienceScreen(
             if (cumulativeDoses.isNotEmpty()) {
                 SectionTitle(title = "Cumulative Dose")
                 cumulativeDoses.forEachIndexed { index, cumulativeDose ->
-                    CumulativeDoseRow(cumulativeDose = cumulativeDose, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 5.dp, horizontal = horizontalPadding))
-                    if (index < cumulativeDoses.size-1) {
+                    CumulativeDoseRow(
+                        cumulativeDose = cumulativeDose, modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 5.dp, horizontal = horizontalPadding)
+                    )
+                    if (index < cumulativeDoses.size - 1) {
                         Divider()
                     }
                 }
@@ -254,6 +273,30 @@ fun ExperienceScreen(
                     }
                 )
             }
+        }
+    }
+}
+
+data class DataForOneEffectLine(
+    val roaDuration: RoaDuration?,
+    val height: Float,
+    val color: SubstanceColor,
+    val startTime: Instant
+)
+
+fun getHeightBetween0And1(
+    ingestion: Ingestion,
+    allIngestions: List<Ingestion>
+): Float {
+    val max = allIngestions
+        .filter { it.substanceName == ingestion.substanceName }
+        .mapNotNull { it.dose }
+        .maxOrNull()
+    return ingestion.dose.let { doseSnap ->
+        if (max == null || doseSnap == null) {
+            1f
+        } else {
+            doseSnap.div(max).toFloat()
         }
     }
 }
