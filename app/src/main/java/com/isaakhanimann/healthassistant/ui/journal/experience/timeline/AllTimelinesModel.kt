@@ -72,8 +72,9 @@ class AllTimelinesModel(
                 otherDrawables
                     .filter { it.height == ingestionDrawable.height }
                     .mapNotNull {
-                        val full = it.timelineDrawable as? FullTimeline ?: return@mapNotNull null
-                        return@mapNotNull full.getPeakDurationRangeInSeconds(startDurationInSeconds = it.ingestionPointDistanceFromStartInSeconds)
+                        return@mapNotNull it.timelineDrawable?.getPeakDurationRangeInSeconds(
+                            startDurationInSeconds = it.ingestionPointDistanceFromStartInSeconds
+                        )
                     }
             val currentRange =
                 currentFullTimeline.getPeakDurationRangeInSeconds(startDurationInSeconds = ingestionDrawable.ingestionPointDistanceFromStartInSeconds)

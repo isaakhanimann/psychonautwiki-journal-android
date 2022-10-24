@@ -21,4 +21,6 @@ interface TimelineDrawable {
     )
 
     val widthInSeconds: Float
+
+    fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float>?
 }

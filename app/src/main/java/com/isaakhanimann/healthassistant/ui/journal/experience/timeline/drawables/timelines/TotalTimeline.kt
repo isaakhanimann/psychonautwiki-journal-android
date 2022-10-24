@@ -5,9 +5,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelinesModel
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.FullDurationRange
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.TimelineDrawable
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.toFullDurationRange
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.endSmoothLineTo
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.startSmoothLineTo
 
@@ -16,6 +14,7 @@ data class TotalTimeline(
     val weight: Float = 0.5f,
     val percentSmoothness: Float = 0.5f,
 ) : TimelineDrawable {
+
     override fun drawTimeLine(
         drawScope: DrawScope,
         height: Float,
@@ -83,6 +82,9 @@ data class TotalTimeline(
     }
 
     override val widthInSeconds: Float = total.maxInSeconds
+    override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float>? {
+        return null
+    }
 }
 
 fun RoaDuration.toTotalTimeline(): TotalTimeline? {

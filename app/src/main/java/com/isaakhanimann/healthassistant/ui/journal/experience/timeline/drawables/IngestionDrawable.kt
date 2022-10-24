@@ -3,6 +3,7 @@ package com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawabl
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.timelines.toFullTimeline
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.timelines.toOnsetComeupPeakTimeline
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.timelines.toOnsetComeupPeakTotalTimeline
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.timelines.toTotalTimeline
 import java.time.Duration
@@ -25,6 +26,7 @@ class IngestionDrawable(
         val full = roaDuration?.toFullTimeline()
         val onsetComeupPeakTotal = roaDuration?.toOnsetComeupPeakTotalTimeline()
         val total = roaDuration?.toTotalTimeline()
-        timelineDrawable = full ?: onsetComeupPeakTotal ?: total
+        val onsetComeupPeak = roaDuration?.toOnsetComeupPeakTimeline()
+        timelineDrawable = full ?: onsetComeupPeakTotal ?: total ?: onsetComeupPeak
     }
 }

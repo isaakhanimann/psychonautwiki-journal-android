@@ -5,10 +5,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelinesModel
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.FullDurationRange
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.TimelineDrawable
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.toFullDurationRange
-
 
 data class OnsetComeupPeakTotalTimeline(
     val onset: FullDurationRange,
@@ -17,7 +14,7 @@ data class OnsetComeupPeakTotalTimeline(
     val total: FullDurationRange,
 ) : TimelineDrawable {
 
-    fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float> {
+    override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float> {
         val startRange =
             startDurationInSeconds + onset.interpolateAtValueInSeconds(0.5f) + comeup.interpolateAtValueInSeconds(
                 0.5f
