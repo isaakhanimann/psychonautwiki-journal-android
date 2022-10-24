@@ -1,4 +1,4 @@
-package com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables
+package com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.timelines
 
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationRange
 

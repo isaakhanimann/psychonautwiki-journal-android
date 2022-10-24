@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.AxisDrawable
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.FullTimeline
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.IngestionDrawable
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.timelines.FullTimeline
 import java.time.Instant
 import kotlin.time.Duration.Companion.hours
 

@@ -1,10 +1,13 @@
-package com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables
+package com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.timelines
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelinesModel
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.FullDurationRange
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.TimelineDrawable
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.toFullDurationRange
 
 
 data class OnsetComeupPeakTotalTimeline(
