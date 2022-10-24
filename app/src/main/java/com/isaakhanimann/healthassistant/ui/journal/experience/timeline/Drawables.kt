@@ -1,6 +1,5 @@
 package com.isaakhanimann.healthassistant.ui.journal.experience.timeline
 
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
@@ -55,48 +54,30 @@ data class FullTimeline(
         pixelsPerSec: Float,
         color: Color
     ) {
-        val weight = 0.5f
-        val onsetEndX =
-            startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
-        val comeupEndX =
-            onsetEndX + (comeup.interpolateAtValueInSeconds(weight) * pixelsPerSec)
-        val peakEndX =
-            comeupEndX + (peak.interpolateAtValueInSeconds(weight) * pixelsPerSec)
-        val offsetEndX =
-            peakEndX + (offset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
-        val point0 = Offset(x = startX, y = height)
-        val point1 = Offset(x = onsetEndX, y = height)
-        val point2 = Offset(x = comeupEndX, y = 0f)
-        val point3 = Offset(x = peakEndX, y = 0f)
-        val point4 = Offset(x = offsetEndX, y = height)
+
         val strokeWidth = 5f
-        drawScope.drawLine(
+        drawScope.drawPath(
+            path = Path().apply {
+                val weight = 0.5f
+                val onsetEndX =
+                    startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+                val comeupEndX =
+                    onsetEndX + (comeup.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+                val peakEndX =
+                    comeupEndX + (peak.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+                val offsetEndX =
+                    peakEndX + (offset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+                moveTo(x = startX, y = height)
+                lineTo(x = onsetEndX, y = height)
+                lineTo(x = comeupEndX, y = 0f)
+                lineTo(x = peakEndX, y = 0f)
+                lineTo(x = offsetEndX, y = height)
+            },
             color = color,
-            start = point0,
-            end = point1,
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round
-        )
-        drawScope.drawLine(
-            color = color,
-            start = point1,
-            end = point2,
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round
-        )
-        drawScope.drawLine(
-            color = color,
-            start = point2,
-            end = point3,
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round
-        )
-        drawScope.drawLine(
-            color = color,
-            start = point3,
-            end = point4,
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round
+            style = Stroke(
+                width = strokeWidth,
+                cap = StrokeCap.Round,
+            )
         )
     }
 
