@@ -25,6 +25,33 @@ class TimelinesPreviewProvider :
                         max = 30f,
                         units = DurationUnits.MINUTES
                     ),
+                    peak = null,
+                    offset = null,
+                    total = DurationRange(
+                        min = 3f,
+                        max = 5f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = null
+                ),
+                height = 1f,
+                color = AdaptiveColor.BLUE,
+                startTime = Instant.now().minus(4, ChronoUnit.HOURS)
+            )
+        ),
+        listOf(
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
                     peak = DurationRange(
                         min = 1.5f,
                         max = 2f,
