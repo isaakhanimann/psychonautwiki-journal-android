@@ -41,13 +41,13 @@ class AllTimelinesModel(
             )
         }
         ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)
-        val max = ingestionDrawables.map {
+        val max = ingestionDrawables.maxOfOrNull {
             if (it.timelineDrawable != null) {
                 it.timelineDrawable.widthInSeconds + it.ingestionPointDistanceFromStartInSeconds
             } else {
                 it.ingestionPointDistanceFromStartInSeconds
             }
-        }.maxOrNull()
+        }
         widthInSeconds = if (max == null || max == 0f) {
             5.hours.inWholeSeconds.toFloat()
         } else {
@@ -74,7 +74,7 @@ class AllTimelinesModel(
             }
         }
 
-        fun updateInsets(ingestionDrawables: List<IngestionDrawable>): List<IngestionDrawable> {
+        private fun updateInsets(ingestionDrawables: List<IngestionDrawable>): List<IngestionDrawable> {
             val results = mutableListOf<IngestionDrawable>()
             for (i in ingestionDrawables.indices) {
                 val currentDrawable = ingestionDrawables[i]
@@ -182,7 +182,7 @@ class IngestionDrawable(
     var insetTimes = 0
 
     init {
-        ingestionPointDistanceFromStartInSeconds = java.time.Duration.between(startTime, ingestionWithCompanion.ingestion.time).seconds.toFloat()
+        ingestionPointDistanceFromStartInSeconds = Duration.between(startTime, ingestionWithCompanion.ingestion.time).seconds.toFloat()
         val full = roaDuration?.toFullTimeline()
         val total = roaDuration?.toTotalTimeline()
         timelineDrawable = full ?: total
