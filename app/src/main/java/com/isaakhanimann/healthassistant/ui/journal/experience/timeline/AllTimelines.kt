@@ -11,10 +11,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
@@ -141,29 +139,20 @@ fun DrawScope.drawIngestion(
         ingestionDrawable.timelineDrawable?.let { timelineDrawable ->
             inset(vertical = verticalInsetForLine) {
                 val canvasHeightInner = size.height
-                drawPath(
-                    path = timelineDrawable.getStrokePath(
-                        pixelsPerSec = pixelsPerSec,
-                        height = canvasHeightInner,
-                        startX = startX
-                    ),
-                    color = color,
-                    style = Stroke(
-                        width = strokeWidth,
-                        cap = StrokeCap.Round,
-                        pathEffect = if (timelineDrawable.isDotted) PathEffect.dashPathEffect(
-                            floatArrayOf(20f, 30f)
-                        ) else null
-                    )
+                timelineDrawable.drawTimeLine(
+                    drawScope = this,
+                    height = canvasHeightInner,
+                    startX = startX,
+                    pixelsPerSec = pixelsPerSec,
+                    color = color
                 )
             }
-            drawPath(
-                path = timelineDrawable.getFillPath(
-                    pixelsPerSec = pixelsPerSec,
-                    height = ingestionHeight,
-                    startX = startX
-                ),
-                color = color.copy(alpha = 0.1f)
+            timelineDrawable.drawTimeLineShape(
+                drawScope = this,
+                height = ingestionHeight,
+                startX = startX,
+                pixelsPerSec = pixelsPerSec,
+                color = color
             )
         }
     }
