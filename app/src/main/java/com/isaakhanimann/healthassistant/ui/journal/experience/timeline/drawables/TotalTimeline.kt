@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.endSmoothLineTo
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.startSmoothLineTo
 
@@ -82,7 +83,7 @@ data class TotalTimeline(
                 )
                 close()
             },
-            color = color.copy(alpha = 0.1f)
+            color = color.copy(alpha = AllTimelinesModel.shapeAlpha)
         )
     }
 

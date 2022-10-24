@@ -20,6 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.AxisDrawable
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.IngestionDrawable
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
