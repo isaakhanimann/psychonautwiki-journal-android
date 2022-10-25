@@ -150,31 +150,16 @@ fun SubstanceScreen(
             if (substance.dosageRemark != null || roasWithDosesDefined.isNotEmpty()) {
                 CollapsibleSection(title = "Dosage") {
                     Column {
-                        VerticalSpace()
                         if (substance.dosageRemark != null) {
+                            VerticalSpace()
                             Text(
                                 text = substance.dosageRemark,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
+                            VerticalSpace()
+                            Divider()
                         }
-                        Text(
-                            text = doseDisclaimer,
-                            modifier = Modifier.padding(horizontal = horizontalPadding)
-                        )
-                        TextButton(
-                            onClick = navigateToDosageExplanationScreen,
-                            modifier = Modifier.padding(horizontal = horizontalPadding)
-                        ) {
-                            Icon(
-                                Icons.Outlined.Info,
-                                contentDescription = "Info",
-                                modifier = Modifier.size(ButtonDefaults.IconSize)
-                            )
-                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text("Dosage Classification")
-                        }
-                        Divider()
-                        roasWithDosesDefined.forEachIndexed { index, roa ->
+                        roasWithDosesDefined.forEach { roa ->
                             Column(
                                 modifier = Modifier.padding(
                                     vertical = 5.dp,
@@ -194,9 +179,24 @@ fun SubstanceScreen(
                                     RoaDoseView(roaDose = roa.roaDose)
                                 }
                             }
-                            if (index < roasWithDosesDefined.size - 1) {
-                                Divider()
-                            }
+                            Divider()
+                        }
+                        VerticalSpace()
+                        Text(
+                            text = doseDisclaimer,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        )
+                        TextButton(
+                            onClick = navigateToDosageExplanationScreen,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        ) {
+                            Icon(
+                                Icons.Outlined.Info,
+                                contentDescription = "Info",
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text("Dosage Classification")
                         }
                     }
                 }
