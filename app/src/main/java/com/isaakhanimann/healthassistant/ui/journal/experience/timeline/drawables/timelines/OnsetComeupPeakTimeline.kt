@@ -57,15 +57,22 @@ data class OnsetComeupPeakTimeline(
     ) {
         drawScope.drawPath(
             path = Path().apply {
-                val onsetStartMinX = startX + (onset.minInSeconds * pixelsPerSec)
-                val comeupEndMinX = onsetStartMinX + (comeup.minInSeconds * pixelsPerSec)
-                moveTo(onsetStartMinX, height)
+                val onsetEndMinX = startX + (onset.minInSeconds * pixelsPerSec)
+                val comeupEndMinX = onsetEndMinX + (comeup.minInSeconds * pixelsPerSec)
+                moveTo(onsetEndMinX, height)
                 lineTo(x = comeupEndMinX, y = 0f)
-                val onsetStartMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
+                val onsetEndMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
                 val comeupEndMaxX =
-                    onsetStartMaxX + (comeup.maxInSeconds * pixelsPerSec)
+                    onsetEndMaxX + (comeup.maxInSeconds * pixelsPerSec)
                 lineTo(x = comeupEndMaxX, y = 0f)
-                lineTo(x = onsetStartMaxX, y = height)
+                val peakEndMaxX = comeupEndMaxX + (peak.maxInSeconds * pixelsPerSec)
+                val peakEndMinX = comeupEndMinX + (peak.minInSeconds * pixelsPerSec)
+                lineTo(x = peakEndMaxX, y = 0f)
+                lineTo(x = peakEndMaxX, y = AllTimelinesModel.shapeWidth)
+                lineTo(x = peakEndMinX, y = AllTimelinesModel.shapeWidth)
+                lineTo(x = peakEndMinX, y = 0f)
+                lineTo(x = comeupEndMaxX, y = 0f)
+                lineTo(x = onsetEndMaxX, y = height)
                 close()
             },
             color = color.copy(alpha = AllTimelinesModel.shapeAlpha)
