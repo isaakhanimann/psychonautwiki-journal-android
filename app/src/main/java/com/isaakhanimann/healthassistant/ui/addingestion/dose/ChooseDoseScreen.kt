@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDose
+import com.isaakhanimann.healthassistant.ui.doseDisclaimer
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
@@ -70,7 +71,7 @@ fun ChooseDoseScreen(
         convertedDoseAndUnitText = viewModel.rawDoseWithUnit,
         isShowingUnitsField = viewModel.roaDose?.units?.isBlank() ?: true,
         units = viewModel.units,
-        onChangeOfUnits = {viewModel.units = it}
+        onChangeOfUnits = { viewModel.units = it }
     )
 }
 
@@ -204,6 +205,7 @@ fun ChooseDoseScreen(
                 }
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     Spacer(modifier = Modifier.height(10.dp))
+                    Text(text = doseDisclaimer)
                     if (roaDose != null) {
                         CurrentDoseClassInfo(currentDoseClass, roaDose)
                     }
@@ -257,7 +259,10 @@ fun ChooseDoseScreen(
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
-                        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
                             OutlinedButton(onClick = { onChangeOfUnits("µg") }) {
                                 Text(text = "µg")
                             }

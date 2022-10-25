@@ -23,6 +23,7 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.ui.addingestion.time.TimePickerButton
+import com.isaakhanimann.healthassistant.ui.doseDisclaimer
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
@@ -151,6 +152,10 @@ fun SubstanceScreen(
                     VerticalSpace()
                     Text(
                         text = substance.dosageRemark,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
+                    Text(
+                        text = doseDisclaimer,
                         modifier = Modifier.padding(horizontal = horizontalPadding)
                     )
                     VerticalSpace()
