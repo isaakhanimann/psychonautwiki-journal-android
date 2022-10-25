@@ -8,7 +8,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,17 +19,17 @@ import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
-fun CategoryChipDynamicPreview(
+fun CategoryChipDeletePreview(
     @PreviewParameter(CategoryChipPreviewProvider::class) categoryChipModel: CategoryChipModel
 ) {
-    CategoryChipDynamic(
+    CategoryChipDelete(
         categoryChipModel = categoryChipModel,
         onClick = {}
     )
 }
 
 @Composable
-fun CategoryChipDynamic(
+fun CategoryChipDelete(
     categoryChipModel: CategoryChipModel,
     onClick: () -> Unit
 ) {
@@ -43,14 +43,12 @@ fun CategoryChipDynamic(
             .padding(vertical = 3.dp, horizontal = 8.dp)
 
     ) {
-        if (categoryChipModel.isActive) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "CheckMark",
-                Modifier.size(ButtonDefaults.IconSize)
-            )
-            Spacer(Modifier.width(3.dp))
-        }
+        Icon(
+            imageVector = Icons.Default.Clear,
+            contentDescription = "Remove",
+            Modifier.size(ButtonDefaults.IconSize)
+        )
+        Spacer(Modifier.width(3.dp))
         Text(text = categoryChipModel.chipName)
     }
 }

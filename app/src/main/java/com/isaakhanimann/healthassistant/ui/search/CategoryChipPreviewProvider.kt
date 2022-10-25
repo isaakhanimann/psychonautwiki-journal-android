@@ -9,11 +9,6 @@ class CategoryChipPreviewProvider : PreviewParameterProvider<CategoryChipModel> 
             chipName = "common",
             color = Color.Blue,
             isActive = true,
-        ),
-        CategoryChipModel(
-            chipName = "common",
-            color = Color.Blue,
-            isActive = false,
         )
     )
 }

@@ -9,11 +9,11 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -37,23 +37,27 @@ fun SearchScreen(
             onChange = {
                 searchViewModel.filterSubstances(searchText = it)
             },
+            categories = searchViewModel.chipCategoriesFlow.collectAsState().value,
+            onFilterTapped = searchViewModel::onFilterTapped
         )
-        val categories = searchViewModel.chipCategoriesFlow.collectAsState().value
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.padding(vertical = 6.dp)
-        ) {
-            item {
-                Spacer(modifier = Modifier.width(4.dp))
-            }
-            items(categories.size) {
-                val categoryChipModel = categories[it]
-                CategoryChipDynamic(categoryChipModel = categoryChipModel) {
-                    searchViewModel.onFilterTapped(filterName = categoryChipModel.chipName)
+        val activeFilters = searchViewModel.chipCategoriesFlow.collectAsState().value.filter { it.isActive }
+        if (activeFilters.isNotEmpty()) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+                modifier = Modifier.padding(vertical = 6.dp)
+            ) {
+                item {
+                    Spacer(modifier = Modifier.width(4.dp))
                 }
-            }
-            item {
-                Spacer(modifier = Modifier.width(4.dp))
+                items(activeFilters.size) {
+                    val categoryChipModel = activeFilters[it]
+                    CategoryChipDelete(categoryChipModel = categoryChipModel) {
+                        searchViewModel.onFilterTapped(filterName = categoryChipModel.chipName)
+                    }
+                }
+                item {
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
             }
         }
         val isShowingCustomSubstances =
@@ -87,7 +91,7 @@ fun SearchScreen(
             val filteredSubstances = searchViewModel.filteredSubstances.collectAsState().value
             if (filteredSubstances.isEmpty()) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    val activeCategoryNames = categories.filter { it.isActive }.map { it.chipName }
+                    val activeCategoryNames = activeFilters.filter { it.isActive }.map { it.chipName }
                     if (activeCategoryNames.isEmpty()) {
                         Text("None found", modifier = Modifier.padding(10.dp))
 
@@ -114,7 +118,9 @@ fun SearchScreen(
 @Composable
 fun SearchField(
     searchText: String,
-    onChange: (String) -> Unit,
+    onChange: (searchText: String) -> Unit,
+    categories: List<CategoryChipModel>,
+    onFilterTapped: (filterName: String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     TextField(
@@ -141,6 +147,49 @@ fun SearchField(
                         Icons.Default.Close,
                         contentDescription = "Close",
                     )
+                }
+            } else {
+                var isExpanded by remember { mutableStateOf(false) }
+                val activeFilters = categories.filter { it.isActive }
+                IconButton(
+                    onClick = { isExpanded = true },
+                ) {
+                    BadgedBox(
+                        badge = {
+                            if (activeFilters.isNotEmpty()) {
+                                Badge { Text(activeFilters.size.toString()) }
+                            }
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.FilterList,
+                            contentDescription = "Filter"
+                        )
+                    }
+                }
+                DropdownMenu(
+                    expanded = isExpanded,
+                    onDismissRequest = { isExpanded = false }
+                ) {
+                    categories.forEach { categoryChipModel ->
+                        DropdownMenuItem(
+                            onClick = {
+                                onFilterTapped(categoryChipModel.chipName)
+                            },
+                        ) {
+                            if (categoryChipModel.isActive) {
+                                Icon(
+                                    Icons.Filled.Check,
+                                    contentDescription = "Check",
+                                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                                )
+                            } else {
+                                Spacer(Modifier.size(ButtonDefaults.IconSize))
+                            }
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(categoryChipModel.chipName)
+                        }
+                    }
                 }
             }
         },

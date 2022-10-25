@@ -214,8 +214,6 @@ fun EditIngestionScreen(
                     }
                 }
             }
-
-
             var isShowingDeleteDialog by remember { mutableStateOf(false) }
             OutlinedButton(
                 onClick = { isShowingDeleteDialog = true },
