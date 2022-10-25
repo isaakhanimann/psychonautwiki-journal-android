@@ -24,38 +24,35 @@ class CheckInteractionsViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle,
 ) : ViewModel() {
-    val substanceName: String
+    val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
+    val substance = substanceRepo.getSubstance(substanceName)!!
+    val dangerousInteractions = substance.interactions?.dangerous ?: emptyList()
+    val unsafeInteractions = substance.interactions?.unsafe ?: emptyList()
+    val uncertainInteractions = substance.interactions?.uncertain ?: emptyList()
+
     var isSearchingForInteractions by mutableStateOf(true)
-    var dangerousInteractions: List<String> by mutableStateOf(listOf())
-    var unsafeInteractions: List<String> by mutableStateOf(listOf())
-    var uncertainInteractions: List<String> by mutableStateOf(listOf())
     var isShowingAlert by mutableStateOf(false)
     var alertInteractionType by mutableStateOf<InteractionType?>(null)
     var alertText by mutableStateOf("")
     private var latestIngestionsOfEverySubstanceSinceTwoDays: List<Ingestion> = emptyList()
 
     init {
-        substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
-        val substance = substanceRepo.getSubstance(substanceName)!!
-        dangerousInteractions = substance.interactions?.dangerous ?: emptyList()
-        unsafeInteractions = substance.interactions?.unsafe ?: emptyList()
-        uncertainInteractions = substance.interactions?.uncertain ?: emptyList()
         viewModelScope.launch {
-            dangerousInteractions = substanceRepo.getAllInteractions(
+            val foundDangerous = substanceRepo.getAllInteractions(
                 type = InteractionType.DANGEROUS,
                 substanceName = substanceName,
                 originalInteractions = substance.interactions?.dangerous ?: emptyList(),
                 interactionsToFilterOut = emptyList(),
                 categories = substance.categories
             )
-            unsafeInteractions = substanceRepo.getAllInteractions(
+            val foundUnsafe = substanceRepo.getAllInteractions(
                 type = InteractionType.UNSAFE,
                 substanceName = substanceName,
                 originalInteractions = substance.interactions?.unsafe ?: emptyList(),
                 interactionsToFilterOut = dangerousInteractions,
                 categories = substance.categories
             )
-            uncertainInteractions = substanceRepo.getAllInteractions(
+            val foundUncertain = substanceRepo.getAllInteractions(
                 type = InteractionType.UNCERTAIN,
                 substanceName = substanceName,
                 originalInteractions = substance.interactions?.uncertain ?: emptyList(),
@@ -65,20 +62,28 @@ class CheckInteractionsViewModel @Inject constructor(
             val twoDaysAgo = Instant.now().minus(2, ChronoUnit.DAYS)
             latestIngestionsOfEverySubstanceSinceTwoDays =
                 experienceRepo.getLatestIngestionOfEverySubstanceSinceDate(twoDaysAgo)
-            checkInteractionsAndMaybeShowAlert()
+            checkInteractionsAndMaybeShowAlert(
+                dangerous = foundDangerous,
+                unsafe = foundUnsafe,
+                uncertain = foundUncertain
+            )
             isSearchingForInteractions = false
         }
     }
 
-    private fun checkInteractionsAndMaybeShowAlert() {
+    private fun checkInteractionsAndMaybeShowAlert(
+        dangerous: List<String>,
+        unsafe: List<String>,
+        uncertain: List<String>,
+    ) {
         val dangerousIngestions = getIngestionsWithInteraction(
-            interactions = dangerousInteractions
+            interactions = dangerous
         ).sortedByDescending { it.time }
         val unsafeIngestions = getIngestionsWithInteraction(
-            interactions = unsafeInteractions
+            interactions = unsafe
         )
         val uncertainIngestions = getIngestionsWithInteraction(
-            interactions = uncertainInteractions
+            interactions = uncertain
         )
         alertInteractionType = if (dangerousIngestions.isNotEmpty()) {
             InteractionType.DANGEROUS
