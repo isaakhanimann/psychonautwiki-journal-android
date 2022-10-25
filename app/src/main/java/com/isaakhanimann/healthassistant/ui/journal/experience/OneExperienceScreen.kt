@@ -143,6 +143,7 @@ fun ExperienceScreen(
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     AllTimelines(
                         dataForEffectLines = effectTimelines,
+                        isShowingCurrentTime = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)

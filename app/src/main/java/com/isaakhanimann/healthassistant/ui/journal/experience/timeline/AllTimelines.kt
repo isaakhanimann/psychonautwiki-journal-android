@@ -36,6 +36,7 @@ fun AllTimelinesPreview(
 ) {
     AllTimelines(
         dataForEffectLines = dataForEffectLines,
+        isShowingCurrentTime = true,
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
@@ -46,6 +47,7 @@ fun AllTimelinesPreview(
 @Composable
 fun AllTimelines(
     dataForEffectLines: List<DataForOneEffectLine>,
+    isShowingCurrentTime: Boolean,
     modifier: Modifier = Modifier,
 ) {
     if (dataForEffectLines.isEmpty()) {
@@ -88,14 +90,16 @@ fun AllTimelines(
                         canvasHeightOuter = canvasHeightOuter
                     )
                 }
-                drawCurrentTime(
-                    startTime = model.startTime,
-                    timelineWidthInSeconds = model.widthInSeconds,
-                    currentTime = currentTime,
-                    pixelsPerSec = pixelsPerSec,
-                    isDarkTheme = isDarkTheme,
-                    canvasHeightOuter = canvasHeightOuter
-                )
+                if (isShowingCurrentTime) {
+                    drawCurrentTime(
+                        startTime = model.startTime,
+                        timelineWidthInSeconds = model.widthInSeconds,
+                        currentTime = currentTime,
+                        pixelsPerSec = pixelsPerSec,
+                        isDarkTheme = isDarkTheme,
+                        canvasHeightOuter = canvasHeightOuter
+                    )
+                }
             }
             drawAxis(
                 axisDrawable = model.axisDrawable,

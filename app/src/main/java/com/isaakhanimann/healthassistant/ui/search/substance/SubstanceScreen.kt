@@ -237,6 +237,7 @@ fun SubstanceScreen(
                 }
                 AllTimelines(
                     dataForEffectLines = dataForEffectLines,
+                    isShowingCurrentTime = false,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
