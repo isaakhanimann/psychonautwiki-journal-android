@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -160,7 +161,18 @@ fun SubstanceScreen(
                             text = doseDisclaimer,
                             modifier = Modifier.padding(horizontal = horizontalPadding)
                         )
-                        VerticalSpace()
+                        TextButton(
+                            onClick = navigateToDosageExplanationScreen,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        ) {
+                            Icon(
+                                Icons.Outlined.Info,
+                                contentDescription = "Info",
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text("Dosage Classification")
+                        }
                         Divider()
                         roasWithDosesDefined.forEachIndexed { index, roa ->
                             Column(
