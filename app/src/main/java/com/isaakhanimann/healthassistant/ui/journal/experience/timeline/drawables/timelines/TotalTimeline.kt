@@ -6,8 +6,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.TimelineDrawable
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.endSmoothLineTo
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.startSmoothLineTo
 
 data class TotalTimeline(
     val total: FullDurationRange,
@@ -28,13 +26,13 @@ data class TotalTimeline(
                 val totalX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
                 moveTo(startX, height)
                 endSmoothLineTo(
-                    percentSmoothness = percentSmoothness,
+                    smoothnessBetween0And1 = percentSmoothness,
                     startX = startX,
                     endX = startX + (totalMinX / 2),
                     endY = 0f
                 )
                 startSmoothLineTo(
-                    percentSmoothness = percentSmoothness,
+                    smoothnessBetween0And1 = percentSmoothness,
                     startX = startX + (totalMinX / 2),
                     startY = 0f,
                     endX = startX + totalX,
@@ -60,7 +58,7 @@ data class TotalTimeline(
                 val totalMaxX = total.maxInSeconds * pixelsPerSec
                 moveTo(x = startX + (totalMinX / 2), y = 0f)
                 startSmoothLineTo(
-                    percentSmoothness = percentSmoothness,
+                    smoothnessBetween0And1 = percentSmoothness,
                     startX = startX + (totalMinX / 2),
                     startY = 0f,
                     endX = startX + totalMaxX,
@@ -70,7 +68,7 @@ data class TotalTimeline(
                 // path bottom back
                 lineTo(x = startX + totalMinX, y = height)
                 endSmoothLineTo(
-                    percentSmoothness = percentSmoothness,
+                    smoothnessBetween0And1 = percentSmoothness,
                     startX = startX + totalMinX,
                     endX = startX + (totalMinX / 2),
                     endY = 0f

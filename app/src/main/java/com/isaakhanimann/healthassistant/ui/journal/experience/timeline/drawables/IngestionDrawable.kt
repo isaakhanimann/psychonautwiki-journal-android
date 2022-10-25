@@ -23,10 +23,11 @@ class IngestionDrawable(
         val full = roaDuration?.toFullTimeline()
         val onsetComeupPeakTotal = roaDuration?.toOnsetComeupPeakTotalTimeline()
         val onsetComeupTotal = roaDuration?.toOnsetComeupTotalTimeline()
+        val onsetTotal = roaDuration?.toOnsetTotalTimeline()
         val total = roaDuration?.toTotalTimeline()
         val onsetComeupPeak = roaDuration?.toOnsetComeupPeakTimeline()
         val onsetComeup = roaDuration?.toOnsetComeupTimeline()
         timelineDrawable =
-            full ?: onsetComeupPeakTotal ?: onsetComeupTotal ?: total ?: onsetComeupPeak ?: onsetComeup
+            full ?: onsetComeupPeakTotal ?: onsetComeupTotal ?: onsetTotal ?: total ?: onsetComeupPeak ?: onsetComeup
     }
 }

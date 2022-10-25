@@ -7,9 +7,8 @@ import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.TimelineDrawable
 
-data class OnsetComeupTotalTimeline(
+data class OnsetTotalTimeline(
     val onset: FullDurationRange,
-    val comeup: FullDurationRange,
     val total: FullDurationRange,
 ) : TimelineDrawable {
 
@@ -20,6 +19,8 @@ data class OnsetComeupTotalTimeline(
     override val widthInSeconds: Float =
         total.maxInSeconds
 
+    val weight = 0.5f
+
     override fun drawTimeLine(
         drawScope: DrawScope,
         height: Float,
@@ -27,29 +28,31 @@ data class OnsetComeupTotalTimeline(
         pixelsPerSec: Float,
         color: Color,
     ) {
-        val weight = 0.5f
         val onsetEndX =
             startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
-        val comeupEndX =
-            onsetEndX + (comeup.interpolateAtValueInSeconds(weight) * pixelsPerSec)
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = startX, y = height)
                 lineTo(x = onsetEndX, y = height)
-                lineTo(x = comeupEndX, y = 0f)
             },
             color = color,
             style = AllTimelinesModel.normalStroke
         )
         drawScope.drawPath(
             path = Path().apply {
-                moveTo(x = comeupEndX, y = 0f)
-                val offsetEndX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
+                moveTo(x = onsetEndX, y = height)
+                val totalX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
+                endSmoothLineTo(
+                    smoothnessBetween0And1 = 0.5f,
+                    startX = onsetEndX,
+                    endX = totalX / 2f,
+                    endY = 0f
+                )
                 startSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
-                    startX = comeupEndX,
+                    startX = totalX / 2f,
                     startY = 0f,
-                    endX = offsetEndX,
+                    endX = totalX,
                     endY = height
                 )
             },
@@ -67,33 +70,41 @@ data class OnsetComeupTotalTimeline(
     ) {
         drawScope.drawPath(
             path = Path().apply {
-                val onsetStartMinX = startX + (onset.minInSeconds * pixelsPerSec)
-                val comeupEndMinX = onsetStartMinX + (comeup.minInSeconds * pixelsPerSec)
-                val offsetEndMaxX = total.maxInSeconds * pixelsPerSec
-                val onsetStartMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
-                val comeupEndMaxX =
-                    onsetStartMaxX + (comeup.maxInSeconds * pixelsPerSec)
-                val offsetEndMinX =
+                val onsetEndMinX = startX + (onset.minInSeconds * pixelsPerSec)
+                val onsetEndMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
+                val totalX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
+                val totalMinX =
                     total.minInSeconds * pixelsPerSec
-                moveTo(onsetStartMinX, height)
-                lineTo(x = comeupEndMinX, y = 0f)
-                lineTo(x = comeupEndMaxX, y = 0f)
-                startSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = comeupEndMaxX,
-                    startY = 0f,
-                    endX = offsetEndMaxX,
-                    endY = height
-                )
-                lineTo(x = offsetEndMinX, y = height)
+                val totalMaxX =
+                    total.maxInSeconds * pixelsPerSec
+                moveTo(onsetEndMinX, height)
                 endSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
-                    startX = offsetEndMinX,
-                    endX = comeupEndMinX,
+                    startX = onsetEndMinX,
+                    endX = totalX/2,
                     endY = 0f
                 )
-                lineTo(x = comeupEndMaxX, y = 0f)
-                lineTo(x = onsetStartMaxX, y = height)
+                startSmoothLineTo(
+                    smoothnessBetween0And1 = 0.5f,
+                    startX = totalX/2,
+                    startY = 0f,
+                    endX = totalMaxX,
+                    endY = height
+                )
+                lineTo(x = totalMinX, y = height)
+                endSmoothLineTo(
+                    smoothnessBetween0And1 = 0.5f,
+                    startX = totalMinX,
+                    endX = totalX/2,
+                    endY = 0f
+                )
+                startSmoothLineTo(
+                    smoothnessBetween0And1 = 0.5f,
+                    startX = totalX/2,
+                    startY = 0f,
+                    endX = onsetEndMaxX,
+                    endY = height
+                )
                 close()
             },
             color = color.copy(alpha = AllTimelinesModel.shapeAlpha)
@@ -101,14 +112,12 @@ data class OnsetComeupTotalTimeline(
     }
 }
 
-fun RoaDuration.toOnsetComeupTotalTimeline(): OnsetComeupTotalTimeline? {
+fun RoaDuration.toOnsetTotalTimeline(): OnsetTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
-    val fullComeup = comeup?.toFullDurationRange()
     val fullTotal = total?.toFullDurationRange()
-    return if (fullOnset != null && fullComeup != null && fullTotal != null) {
-        OnsetComeupTotalTimeline(
+    return if (fullOnset != null && fullTotal != null) {
+        OnsetTotalTimeline(
             onset = fullOnset,
-            comeup = fullComeup,
             total = fullTotal
         )
     } else {
