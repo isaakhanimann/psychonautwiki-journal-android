@@ -21,10 +21,11 @@ fun FAQScreen() {
         topBar = {
             JournalTopAppBar(title = "FAQ")
         }
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
                 .padding(horizontal = horizontalPadding)
         ) {
             Spacer(modifier = Modifier.height(10.dp))

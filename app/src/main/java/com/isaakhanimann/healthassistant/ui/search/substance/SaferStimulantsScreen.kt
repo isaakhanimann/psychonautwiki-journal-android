@@ -19,10 +19,11 @@ fun SaferStimulantsScreen() {
         topBar = {
             JournalTopAppBar(title = "Safer Stimulants Use")
         },
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(padding)
                 .padding(horizontal = horizontalPadding)
                 .verticalScroll(rememberScrollState())
         ) {

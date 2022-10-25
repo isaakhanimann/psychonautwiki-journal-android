@@ -1,9 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.journal
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -123,10 +120,10 @@ fun JournalScreen(
                 text = { Text("Ingestion") },
             )
         }
-    ) {
+    ) { padding ->
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().padding(padding)
         ) {
             Column {
                 if (isSearchEnabled) {

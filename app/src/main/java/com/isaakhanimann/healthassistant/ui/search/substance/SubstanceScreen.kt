@@ -103,10 +103,11 @@ fun SubstanceScreen(
                 text = { Text("More Info") },
             )
         }
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
         ) {
             if (!substance.isApproved) {
                 Row(modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)) {

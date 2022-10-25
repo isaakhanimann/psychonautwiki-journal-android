@@ -76,9 +76,9 @@ fun EditExperienceScreen(
                 )
             }
         }
-    ) {
+    ) { padding ->
         Column(
-            modifier = Modifier
+            modifier = Modifier.padding(padding)
                 .padding(10.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

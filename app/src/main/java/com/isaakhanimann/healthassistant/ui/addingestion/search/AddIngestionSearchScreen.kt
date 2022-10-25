@@ -62,8 +62,6 @@ fun AddIngestionSearchScreen(
                 navigateToCheckInteractionsSkipNothing(it)
             },
             modifier = Modifier.weight(1f),
-            isShowingSettings = false,
-            navigateToSettings = {},
             navigateToAddCustomSubstanceScreen = {},
             onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
         )
@@ -84,8 +82,10 @@ fun AddIngestionSearchScreen(
 @Preview
 @Composable
 fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider::class) previousSubstances: List<PreviousSubstance>) {
-    Scaffold {
-        Column(modifier = Modifier.fillMaxSize()) {
+    Scaffold { padding ->
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)) {
             Surface(
                 color = Color.Blue, modifier = Modifier
                     .weight(1f)

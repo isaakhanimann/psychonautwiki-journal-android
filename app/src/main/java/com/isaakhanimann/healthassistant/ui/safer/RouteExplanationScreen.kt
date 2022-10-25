@@ -37,11 +37,12 @@ fun RouteExplanationScreen() {
                 text = { Text("Article") },
             )
         }
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
         ) {
             SectionText(
                 text = """A route of administration is the method in which a psychoactive substance is delivered into the body.

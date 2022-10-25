@@ -11,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -30,8 +29,6 @@ fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel(),
     onSubstanceTap: (substanceName: String) -> Unit,
     onCustomSubstanceTap: (substanceName: String) -> Unit,
-    isShowingSettings: Boolean,
-    navigateToSettings: () -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
 ) {
     Column(modifier = modifier) {
@@ -40,8 +37,6 @@ fun SearchScreen(
             onChange = {
                 searchViewModel.filterSubstances(searchText = it)
             },
-            isShowingSettings = isShowingSettings,
-            navigateToSettings = navigateToSettings
         )
         val categories = searchViewModel.chipCategoriesFlow.collectAsState().value
         LazyRow(
@@ -120,8 +115,6 @@ fun SearchScreen(
 fun SearchField(
     searchText: String,
     onChange: (String) -> Unit,
-    isShowingSettings: Boolean,
-    navigateToSettings: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     TextField(
@@ -147,15 +140,6 @@ fun SearchField(
                     Icon(
                         Icons.Default.Close,
                         contentDescription = "Close",
-                    )
-                }
-            } else if (isShowingSettings) {
-                IconButton(
-                    onClick = navigateToSettings,
-                ) {
-                    Icon(
-                        Icons.Filled.Settings,
-                        contentDescription = "Navigate to Settings"
                     )
                 }
             }

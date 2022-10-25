@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -28,7 +29,8 @@ fun SaferUsePreview() {
         navigateToVolumetricDosingScreen = {},
         navigateToDosageGuideScreen = {},
         navigateToDosageClassificationScreen = {},
-        navigateToRouteExplanationScreen = {}
+        navigateToRouteExplanationScreen = {},
+        navigateToSettings = {}
     )
 }
 
@@ -39,16 +41,25 @@ fun SaferUseScreen(
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToDosageGuideScreen: () -> Unit,
     navigateToDosageClassificationScreen: () -> Unit,
-    navigateToRouteExplanationScreen: () -> Unit
+    navigateToRouteExplanationScreen: () -> Unit,
+    navigateToSettings: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Safer Use")
+            JournalTopAppBar(title = "Safer Use", actions = {
+                IconButton(
+                    onClick = navigateToSettings
+                ) {
+                    Icon(Icons.Filled.Settings, contentDescription = "Settings")
+
+                }
+            })
         }
-    ) {
+    ) { padding ->
         Column(
             Modifier
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
         ) {
             SectionTitle(title = "1. Research")
             SectionText(text = "In advance research the duration, subjective effects and potential adverse effects which the substance or combination of substances are likely to produce.\nRead the info in here and also the PsychonautWiki article. Its best to cross-reference with other sources (Tripsit, Erowid, Wikipedia, Bluelight, Reddit, etc). There is no rush.")

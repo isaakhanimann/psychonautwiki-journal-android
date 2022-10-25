@@ -2,6 +2,7 @@ package com.isaakhanimann.healthassistant.ui.search.substance.roa
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -19,11 +20,12 @@ fun DurationExplanationScreen() {
         topBar = {
             JournalTopAppBar(title = "Duration Classifications")
         }
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
         ) {
             SectionText(
                 text = "Duration refers to the length of time over which the subjective effects of a psychoactive substance manifest themselves.\n" +

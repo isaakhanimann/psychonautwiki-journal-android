@@ -44,10 +44,12 @@ fun SettingsScreen(
     navigateToFAQ: () -> Unit,
     deleteEverything: () -> Unit,
 ) {
-    Scaffold(topBar = {
-        JournalTopAppBar(title = "Settings")
-    }) {
-        Column {
+    Scaffold(
+        topBar = {
+            JournalTopAppBar(title = "Settings")
+        }
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding)) {
             val uriHandler = LocalUriHandler.current
             TextButton(
                 onClick = {

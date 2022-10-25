@@ -121,8 +121,8 @@ fun CustomChooseDose(
                 )
             }
         }
-    ) {
-        Column {
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding)) {
             LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
             Column(
                 modifier = Modifier

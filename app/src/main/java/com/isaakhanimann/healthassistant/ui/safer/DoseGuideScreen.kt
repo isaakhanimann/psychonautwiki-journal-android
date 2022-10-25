@@ -47,11 +47,12 @@ fun DoseGuideScreen(
                 text = { Text("Article") },
             )
         }
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
         ) {
 
             SectionText(

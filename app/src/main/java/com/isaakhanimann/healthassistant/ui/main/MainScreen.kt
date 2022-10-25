@@ -226,8 +226,6 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             onSubstanceTap = {
                 navController.navigateToSubstanceScreen(substanceName = it)
             },
-            isShowingSettings = true,
-            navigateToSettings = navController::navigateToSettings,
             onCustomSubstanceTap = navController::navigateToEditCustomSubstance,
             navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom,
         )
@@ -239,7 +237,8 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
             navigateToDosageGuideScreen = navController::navigateToDosageGuideScreen,
             navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreen,
-            navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen
+            navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
+            navigateToSettings = navController::navigateToSettings
         )
     }
 }

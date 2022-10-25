@@ -116,10 +116,11 @@ fun EditIngestionScreen(
                 text = { Text("Done") }
             )
         }
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
                 .padding(horizontal = horizontalPadding)
         ) {
             Spacer(modifier = Modifier.height(10.dp))

@@ -66,11 +66,11 @@ fun CategoryScreen(category: Category?) {
                     )
                 }
             }
-        ) {
+        ) { padding ->
             Text(
                 text = category.description,
                 textAlign = TextAlign.Justify,
-                modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 10.dp)
+                modifier = Modifier.padding(padding).padding(horizontal = horizontalPadding, vertical = 10.dp)
             )
         }
     }

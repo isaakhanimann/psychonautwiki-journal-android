@@ -17,8 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
@@ -118,10 +118,10 @@ fun ExperienceScreen(
                 )
             }
         }
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()).padding(padding)
         ) {
             Spacer(modifier = Modifier.height(10.dp))
             val elements = oneExperienceScreenModel.ingestionElements

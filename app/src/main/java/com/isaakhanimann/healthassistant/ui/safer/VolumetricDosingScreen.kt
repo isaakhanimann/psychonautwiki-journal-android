@@ -40,10 +40,11 @@ fun VolumetricDosingScreen() {
                 text = { Text("More Info") },
             )
         }
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(padding)
                 .padding(horizontal = horizontalPadding)
                 .verticalScroll(rememberScrollState())
         ) {

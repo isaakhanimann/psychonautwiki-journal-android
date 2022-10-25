@@ -13,8 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ColorPicker
@@ -84,10 +84,11 @@ fun SubstanceCompanionScreen(
         topBar = {
             JournalTopAppBar(title = substanceCompanion.substanceName)
         }
-    ) {
+    ) { padding ->
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {

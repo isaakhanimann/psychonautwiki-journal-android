@@ -62,14 +62,14 @@ fun StatsScreen(
                 title = if (statsModel.areThereAnyIngestions) "Statistics Since ${statsModel.startDateText}" else "Statistics",
             )
         }
-    ) {
+    ) { padding ->
         if (!statsModel.areThereAnyIngestions) {
             EmptyScreenDisclaimer(
                 title = "Nothing to Show Yet",
                 description = "Start logging your ingestions to see an overview of your consumption pattern."
             )
         } else {
-            Column {
+            Column(modifier = Modifier.padding(padding)) {
                 TabRow(
                     selectedTabIndex = statsModel.selectedOption.tabIndex,
                     backgroundColor = MaterialTheme.colors.surface,

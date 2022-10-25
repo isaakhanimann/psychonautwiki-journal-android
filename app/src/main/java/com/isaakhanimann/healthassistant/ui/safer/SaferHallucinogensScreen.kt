@@ -24,11 +24,12 @@ fun SaferHallucinogensScreen() {
                 title = "Safer Hallucinogens",
             )
         },
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
         ) {
             SectionText(text = "The information below is exclusively tailored for the use and experimentation with hallucinogens such as psychedelics, dissociatives, and deliriants.")
             SectionTitle("Setting")

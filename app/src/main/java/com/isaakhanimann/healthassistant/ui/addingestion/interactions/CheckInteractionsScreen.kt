@@ -113,8 +113,8 @@ fun CheckInteractionsScreen(
                 text = { Text("Next") },
             )
         }
-    ) {
-        Column {
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding)) {
             LinearProgressIndicator(progress = 0.33f, modifier = Modifier.fillMaxWidth())
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())

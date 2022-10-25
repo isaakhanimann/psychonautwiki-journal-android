@@ -138,8 +138,8 @@ fun ChooseTimeScreen(
                 )
             }
         }
-    ) {
-        Column {
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding)) {
             LinearProgressIndicator(progress = 0.9f, modifier = Modifier.fillMaxWidth())
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

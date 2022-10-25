@@ -124,8 +124,8 @@ fun AddOrEditCustomSubstance(
                 )
             }
         }
-    ) {
-        Column(modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp)) {
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding).padding(horizontal = 5.dp, vertical = 10.dp)) {
             val focusManager = LocalFocusManager.current
             OutlinedTextField(
                 value = name,

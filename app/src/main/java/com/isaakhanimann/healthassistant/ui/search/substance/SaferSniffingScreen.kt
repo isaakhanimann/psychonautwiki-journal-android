@@ -21,11 +21,12 @@ fun SaferSniffingScreen() {
         topBar = {
             JournalTopAppBar(title = "Safer Sniffing")
         },
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
         ) {
             SectionText(
                 text = """

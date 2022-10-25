@@ -26,9 +26,9 @@ fun DrugTestingScreen() {
         topBar = {
             JournalTopAppBar(title = "Drug Testing Services")
         }
-    ) {
+    ) { padding ->
         Column(
-            Modifier.verticalScroll(rememberScrollState())
+            Modifier.verticalScroll(rememberScrollState()).padding(padding)
         ) {
             SectionTitle(title = "Austria")
             TestingServiceItem(
