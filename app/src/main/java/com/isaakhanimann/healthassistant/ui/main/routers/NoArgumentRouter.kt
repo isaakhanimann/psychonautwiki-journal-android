@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 
 
 const val FAQ_ROUTE = "faqRoute"
+const val EXPLAIN_TIMELINE_ROUTE = "explainTimeline"
 const val SETTINGS_ROUTE = "settings"
 const val DOSAGE_EXPLANATION_ROUTE = "dosageExplanation"
 const val DURATION_EXPLANATION_ROUTE = "durationExplanation"
@@ -19,6 +20,7 @@ const val STATS_ROUTE = "stats"
 sealed class NoArgumentRouter(val route: String) {
     object StatsRouter : NoArgumentRouter(route = STATS_ROUTE)
     object FAQRouter : NoArgumentRouter(route = FAQ_ROUTE)
+    object ExplainTimelineRouter : NoArgumentRouter(route = EXPLAIN_TIMELINE_ROUTE)
     object SettingsRouter : NoArgumentRouter(route = SETTINGS_ROUTE)
     object DosageExplanationRouter : NoArgumentRouter(route = DOSAGE_EXPLANATION_ROUTE)
     object DurationExplanationRouter : NoArgumentRouter(route = DURATION_EXPLANATION_ROUTE)
@@ -39,6 +41,10 @@ fun NavController.navigateToAddIngestion() {
 
 fun NavController.navigateToAddCustom() {
     navigate(ROUTE_START_ADD_CUSTOM)
+}
+
+fun NavController.navigateToExplainTimeline() {
+    navigate(EXPLAIN_TIMELINE_ROUTE)
 }
 
 fun NavController.dismissAddIngestionScreens() {

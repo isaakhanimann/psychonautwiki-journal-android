@@ -3,11 +3,17 @@ package com.isaakhanimann.healthassistant.ui.journal.experience.timeline
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -37,6 +43,7 @@ fun AllTimelinesPreview(
     AllTimelines(
         dataForEffectLines = dataForEffectLines,
         isShowingCurrentTime = true,
+        navigateToExplainTimeline = {},
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
@@ -48,6 +55,7 @@ fun AllTimelinesPreview(
 fun AllTimelines(
     dataForEffectLines: List<DataForOneEffectLine>,
     isShowingCurrentTime: Boolean,
+    navigateToExplainTimeline: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (dataForEffectLines.isEmpty()) {
@@ -75,39 +83,47 @@ fun AllTimelines(
             delay(oneSec)
             currentTime = Instant.now()
         }
-        Canvas(modifier = modifier) {
-            val canvasWithLabelsHeight = size.height
-            val labelsHeight = labelSize.toPx() + 5f
-            val canvasWidth = size.width
-            val pixelsPerSec = canvasWidth / model.widthInSeconds
-            inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight) {
-                val canvasHeightOuter = size.height
-                model.ingestionDrawables.forEach { ingestionDrawable ->
-                    drawIngestion(
-                        ingestionDrawable = ingestionDrawable,
-                        isDarkTheme = isDarkTheme,
-                        pixelsPerSec = pixelsPerSec,
-                        canvasHeightOuter = canvasHeightOuter
-                    )
+        Box(contentAlignment = Alignment.TopEnd) {
+            Canvas(modifier = modifier) {
+                val canvasWithLabelsHeight = size.height
+                val labelsHeight = labelSize.toPx() + 5f
+                val canvasWidth = size.width
+                val pixelsPerSec = canvasWidth / model.widthInSeconds
+                inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight) {
+                    val canvasHeightOuter = size.height
+                    model.ingestionDrawables.forEach { ingestionDrawable ->
+                        drawIngestion(
+                            ingestionDrawable = ingestionDrawable,
+                            isDarkTheme = isDarkTheme,
+                            pixelsPerSec = pixelsPerSec,
+                            canvasHeightOuter = canvasHeightOuter
+                        )
+                    }
+                    if (isShowingCurrentTime) {
+                        drawCurrentTime(
+                            startTime = model.startTime,
+                            timelineWidthInSeconds = model.widthInSeconds,
+                            currentTime = currentTime,
+                            pixelsPerSec = pixelsPerSec,
+                            isDarkTheme = isDarkTheme,
+                            canvasHeightOuter = canvasHeightOuter
+                        )
+                    }
                 }
-                if (isShowingCurrentTime) {
-                    drawCurrentTime(
-                        startTime = model.startTime,
-                        timelineWidthInSeconds = model.widthInSeconds,
-                        currentTime = currentTime,
-                        pixelsPerSec = pixelsPerSec,
-                        isDarkTheme = isDarkTheme,
-                        canvasHeightOuter = canvasHeightOuter
-                    )
-                }
+                drawAxis(
+                    axisDrawable = model.axisDrawable,
+                    pixelsPerSec = pixelsPerSec,
+                    canvasWidth = canvasWidth,
+                    canvasHeight = canvasWithLabelsHeight,
+                    textPaint = textPaint
+                )
             }
-            drawAxis(
-                axisDrawable = model.axisDrawable,
-                pixelsPerSec = pixelsPerSec,
-                canvasWidth = canvasWidth,
-                canvasHeight = canvasWithLabelsHeight,
-                textPaint = textPaint
-            )
+            IconButton(onClick = navigateToExplainTimeline) {
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = "Timeline Disclaimer"
+                )
+            }
         }
     }
 }

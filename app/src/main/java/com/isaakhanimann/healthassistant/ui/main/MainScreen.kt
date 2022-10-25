@@ -25,6 +25,7 @@ import com.isaakhanimann.healthassistant.ui.journal.JournalScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.ExperienceScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.edit.EditExperienceScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.editingestion.EditIngestionScreen
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.healthassistant.ui.main.routers.*
 import com.isaakhanimann.healthassistant.ui.safer.*
 import com.isaakhanimann.healthassistant.ui.search.SearchScreen
@@ -88,6 +89,7 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
         )
     }
     composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+    composable(NoArgumentRouter.ExplainTimelineRouter.route) { ExplainTimelineScreen() }
     composable(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
     composable(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
     composable(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
@@ -166,9 +168,8 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
     ) {
         val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
         ExperienceScreen(
-            navigateToAddIngestionSearch = {
-                navController.navigateToAddIngestion()
-            },
+            navigateToAddIngestionSearch = navController::navigateToAddIngestion,
+            navigateToExplainTimeline = navController::navigateToExplainTimeline,
             navigateToEditExperienceScreen = {
                 navController.navigateToEditExperience(experienceId)
             },
@@ -193,6 +194,7 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToDurationExplanationScreen = navController::navigateToDurationExplanationScreen,
             navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
             navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
+            navigateToExplainTimeline = navController::navigateToExplainTimeline,
             navigateToCategoryScreen = navController::navigateToCategoryScreen,
             navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen
         )

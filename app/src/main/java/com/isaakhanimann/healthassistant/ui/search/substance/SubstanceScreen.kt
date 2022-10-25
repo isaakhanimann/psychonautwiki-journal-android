@@ -43,6 +43,7 @@ fun SubstanceScreen(
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
+    navigateToExplainTimeline: () -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
@@ -53,6 +54,7 @@ fun SubstanceScreen(
         navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
         navigateToCategoryScreen = navigateToCategoryScreen,
+        navigateToExplainTimeline = navigateToExplainTimeline,
         substanceWithCategories = viewModel.substanceWithCategories
     )
 }
@@ -69,6 +71,7 @@ fun SubstanceScreenPreview(
             navigateToSaferHallucinogensScreen = {},
             navigateToSaferStimulantsScreen = {},
             navigateToVolumetricDosingScreen = {},
+            navigateToExplainTimeline = {},
             navigateToCategoryScreen = {},
             substanceWithCategories = substanceWithCategories
         )
@@ -82,6 +85,7 @@ fun SubstanceScreen(
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
+    navigateToExplainTimeline: () -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     substanceWithCategories: SubstanceWithCategories
 ) {
@@ -238,6 +242,7 @@ fun SubstanceScreen(
                 AllTimelines(
                     dataForEffectLines = dataForEffectLines,
                     isShowingCurrentTime = false,
+                    navigateToExplainTimeline = navigateToExplainTimeline,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
@@ -264,10 +269,7 @@ fun SubstanceScreen(
                             Text(text = "No duration info")
                         } else {
                             Spacer(modifier = Modifier.height(3.dp))
-                            RoaDurationView(
-                                roaDuration = roaDuration,
-                                isOralRoute = roa.route == AdministrationRoute.ORAL,
-                            )
+                            RoaDurationView(roaDuration = roaDuration)
                         }
                     }
                     if (index < roasWithDurationsDefined.size - 1) {

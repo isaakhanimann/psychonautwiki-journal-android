@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
@@ -35,6 +34,7 @@ fun ExperienceScreen(
     viewModel: OneExperienceViewModel = hiltViewModel(),
     navigateToAddIngestionSearch: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
+    navigateToExplainTimeline: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
 ) {
@@ -43,9 +43,10 @@ fun ExperienceScreen(
             oneExperienceScreenModel = oneExperienceScreenModel,
             addIngestion = navigateToAddIngestionSearch,
             deleteExperience = viewModel::deleteExperience,
-            navigateToEditExperienceScreen,
-            navigateToIngestionScreen,
-            navigateBack,
+            navigateToEditExperienceScreen = navigateToEditExperienceScreen,
+            navigateToExplainTimeline = navigateToExplainTimeline,
+            navigateToIngestionScreen = navigateToIngestionScreen,
+            navigateBack = navigateBack,
             saveIsFavorite = viewModel::saveIsFavorite
         )
     }
@@ -65,6 +66,7 @@ fun ExperienceScreenPreview(
             addIngestion = {},
             deleteExperience = {},
             navigateToEditExperienceScreen = {},
+            navigateToExplainTimeline = {},
             navigateToIngestionScreen = {},
             navigateBack = {},
             saveIsFavorite = {}
@@ -78,6 +80,7 @@ fun ExperienceScreen(
     addIngestion: () -> Unit,
     deleteExperience: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
+    navigateToExplainTimeline: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
     saveIsFavorite: (Boolean) -> Unit
@@ -121,7 +124,8 @@ fun ExperienceScreen(
     ) { padding ->
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState()).padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(padding)
         ) {
             Spacer(modifier = Modifier.height(10.dp))
             val elements = oneExperienceScreenModel.ingestionElements
@@ -144,22 +148,10 @@ fun ExperienceScreen(
                     AllTimelines(
                         dataForEffectLines = effectTimelines,
                         isShowingCurrentTime = true,
+                        navigateToExplainTimeline = navigateToExplainTimeline,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
-                            .padding(bottom = 5.dp)
-                    )
-                    val showOralOnsetDisclaimer =
-                        elements.any { it.ingestionWithCompanion.ingestion.administrationRoute == AdministrationRoute.ORAL }
-                    if (showOralOnsetDisclaimer) {
-                        Text(
-                            text = "* a full stomach can delay the onset for hours",
-                            style = MaterialTheme.typography.caption,
-                        )
-                    }
-                    Text(
-                        text = "* heavy doses can have longer durations",
-                        style = MaterialTheme.typography.caption
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                 }

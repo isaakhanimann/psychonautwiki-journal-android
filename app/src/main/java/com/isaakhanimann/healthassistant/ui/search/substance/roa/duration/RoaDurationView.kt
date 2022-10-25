@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.healthassistant.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 
@@ -19,15 +20,12 @@ fun RoaDurationPreview(
     @PreviewParameter(RoaDurationPreviewProvider::class) roaDuration: RoaDuration
 ) {
     HealthAssistantTheme {
-        RoaDurationView(roaDuration = roaDuration, isOralRoute = true)
+        RoaDurationView(roaDuration = roaDuration)
     }
 }
 
 @Composable
-fun RoaDurationView(
-    roaDuration: RoaDuration,
-    isOralRoute: Boolean
-) {
+fun RoaDurationView(roaDuration: RoaDuration) {
     Column {
         val total = roaDuration.total
         val afterglow = roaDuration.afterglow
@@ -40,67 +38,10 @@ fun RoaDurationView(
             val comeup = roaDuration.comeup
             val peak = roaDuration.peak
             val offset = roaDuration.offset
-            val shapePaddingHorizontal = 7.dp
-            val shapePaddingVertical = 2.dp
-            val cornerRadius = 5.dp
-            if (onset != null) {
-                Surface(shape = RoundedCornerShape(cornerRadius)) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(
-                            horizontal = shapePaddingHorizontal,
-                            vertical = shapePaddingVertical
-                        )
-                    ) {
-                        Text(
-                            onset.text + if (isOralRoute) "*" else "",
-                        )
-                        Text("onset")
-                    }
-                }
-            }
-            if (comeup != null) {
-                Surface(shape = RoundedCornerShape(cornerRadius)) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(
-                            horizontal = shapePaddingHorizontal,
-                            vertical = shapePaddingVertical
-                        )
-                    ) {
-                        Text(comeup.text)
-                        Text("comeup")
-                    }
-                }
-            }
-            if (peak != null) {
-                Surface(shape = RoundedCornerShape(cornerRadius)) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(
-                            horizontal = shapePaddingHorizontal,
-                            vertical = shapePaddingVertical
-                        )
-                    ) {
-                        Text(peak.text)
-                        Text("peak")
-                    }
-                }
-            }
-            if (offset != null) {
-                Surface(shape = RoundedCornerShape(cornerRadius)) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(
-                            horizontal = shapePaddingHorizontal,
-                            vertical = shapePaddingVertical
-                        )
-                    ) {
-                        Text(offset.text)
-                        Text("offset")
-                    }
-                }
-            }
+            TimeSurface(durationRange = onset, name = "onset")
+            TimeSurface(durationRange = comeup, name = "comeup")
+            TimeSurface(durationRange = peak, name = "peak")
+            TimeSurface(durationRange = offset, name = "offset")
         }
         if (total != null || afterglow != null) {
             Row(
@@ -115,10 +56,23 @@ fun RoaDurationView(
                 }
             }
         }
-        if (isOralRoute) {
-            Text(
-                text = "* a full stomach can delay the onset for hours",
-            )
+    }
+}
+
+@Composable
+fun TimeSurface(durationRange: DurationRange?, name: String) {
+    if (durationRange != null) {
+        Surface(shape = RoundedCornerShape(5.dp)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(
+                    horizontal = 7.dp,
+                    vertical = 2.dp
+                )
+            ) {
+                Text(durationRange.text)
+                Text(name)
+            }
         }
     }
 }
