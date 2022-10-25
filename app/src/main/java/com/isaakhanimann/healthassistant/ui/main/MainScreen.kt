@@ -35,7 +35,6 @@ import com.isaakhanimann.healthassistant.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.category.CategoryScreen
-import com.isaakhanimann.healthassistant.ui.search.substance.roa.DurationExplanationScreen
 import com.isaakhanimann.healthassistant.ui.settings.SettingsScreen
 import com.isaakhanimann.healthassistant.ui.settings.faq.FAQScreen
 import com.isaakhanimann.healthassistant.ui.stats.StatsScreen
@@ -95,7 +94,6 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
     composable(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
     composable(NoArgumentRouter.SettingsRouter.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
     composable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
-    composable(NoArgumentRouter.DurationExplanationRouter.route) { DurationExplanationScreen() }
     composable(NoArgumentRouter.AdministrationRouteExplanationRouter.route) { RouteExplanationScreen() }
     composable(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
     composable(NoArgumentRouter.DosageGuideRouter.route) {
@@ -191,7 +189,6 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
     ) {
         SubstanceScreen(
             navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
-            navigateToDurationExplanationScreen = navController::navigateToDurationExplanationScreen,
             navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
             navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
             navigateToExplainTimeline = navController::navigateToExplainTimeline,

@@ -43,7 +43,6 @@ import java.time.LocalDateTime
 @Composable
 fun SubstanceScreen(
     navigateToDosageExplanationScreen: () -> Unit,
-    navigateToDurationExplanationScreen: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
@@ -53,7 +52,6 @@ fun SubstanceScreen(
 ) {
     SubstanceScreen(
         navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
-        navigateToDurationExplanationScreen = navigateToDurationExplanationScreen,
         navigateToSaferHallucinogensScreen = navigateToSaferHallucinogensScreen,
         navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
@@ -71,7 +69,6 @@ fun SubstanceScreenPreview(
     HealthAssistantTheme {
         SubstanceScreen(
             navigateToDosageExplanationScreen = {},
-            navigateToDurationExplanationScreen = {},
             navigateToSaferHallucinogensScreen = {},
             navigateToSaferStimulantsScreen = {},
             navigateToVolumetricDosingScreen = {},
@@ -85,7 +82,6 @@ fun SubstanceScreenPreview(
 @Composable
 fun SubstanceScreen(
     navigateToDosageExplanationScreen: () -> Unit,
-    navigateToDurationExplanationScreen: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,

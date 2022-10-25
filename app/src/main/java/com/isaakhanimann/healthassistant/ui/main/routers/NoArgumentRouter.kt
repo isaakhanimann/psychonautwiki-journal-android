@@ -7,7 +7,6 @@ const val FAQ_ROUTE = "faqRoute"
 const val EXPLAIN_TIMELINE_ROUTE = "explainTimeline"
 const val SETTINGS_ROUTE = "settings"
 const val DOSAGE_EXPLANATION_ROUTE = "dosageExplanation"
-const val DURATION_EXPLANATION_ROUTE = "durationExplanation"
 const val ADMINISTRATION_ROUTE_EXPLANATION_ROUTE = "administrationRouteExplanation"
 const val DOSAGE_GUIDE_ROUTE = "dosageGuide"
 const val VOLUMETRIC_DOSING_ROUTE = "volumetricDosing"
@@ -23,7 +22,6 @@ sealed class NoArgumentRouter(val route: String) {
     object ExplainTimelineRouter : NoArgumentRouter(route = EXPLAIN_TIMELINE_ROUTE)
     object SettingsRouter : NoArgumentRouter(route = SETTINGS_ROUTE)
     object DosageExplanationRouter : NoArgumentRouter(route = DOSAGE_EXPLANATION_ROUTE)
-    object DurationExplanationRouter : NoArgumentRouter(route = DURATION_EXPLANATION_ROUTE)
     object AdministrationRouteExplanationRouter : NoArgumentRouter(route = ADMINISTRATION_ROUTE_EXPLANATION_ROUTE)
     object DosageGuideRouter : NoArgumentRouter(route = DOSAGE_GUIDE_ROUTE)
     object VolumetricDosingRouter : NoArgumentRouter(route = VOLUMETRIC_DOSING_ROUTE)
@@ -73,10 +71,6 @@ fun NavController.navigateToSettings() {
 
 fun NavController.navigateToDosageExplanationScreen() {
     navigate(DOSAGE_EXPLANATION_ROUTE)
-}
-
-fun NavController.navigateToDurationExplanationScreen() {
-    navigate(DURATION_EXPLANATION_ROUTE)
 }
 
 fun NavController.navigateToAdministrationRouteExplanationScreen() {
