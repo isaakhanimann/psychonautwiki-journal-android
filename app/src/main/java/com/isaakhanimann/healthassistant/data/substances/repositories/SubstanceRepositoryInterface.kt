@@ -7,9 +7,9 @@ import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCa
 import kotlinx.coroutines.flow.Flow
 
 interface SubstanceRepositoryInterface {
-    fun getAllSubstances(): Flow<List<Substance>>
-    fun getAllSubstancesWithCategoriesFlow(): Flow<List<SubstanceWithCategories>>
-    fun getAllCategoriesFlow(): Flow<List<Category>>
+    fun getAllSubstances(): List<Substance>
+    fun getAllSubstancesWithCategories(): List<SubstanceWithCategories>
+    fun getAllCategories(): List<Category>
     fun getSubstance(substanceName: String): Substance?
     fun getCategory(categoryName: String): Category?
     fun getSubstanceWithCategories(substanceName: String): SubstanceWithCategories?

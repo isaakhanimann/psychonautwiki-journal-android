@@ -1,10 +1,7 @@
 package com.isaakhanimann.healthassistant.ui.settings
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
@@ -17,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.data.initialDate
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
@@ -27,10 +24,6 @@ import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 fun SettingsPreview() {
     SettingsScreen(
         deleteEverything = {},
-        updateSubstances = { _: () -> Unit, _: () -> Unit -> run {} },
-        resetSubstances = {},
-        isUpdating = false,
-        date = "14 Jan 2022 15:35",
         navigateToFAQ = {}
     )
 }
@@ -42,11 +35,7 @@ fun SettingsScreen(
 ) {
     SettingsScreen(
         navigateToFAQ,
-        deleteEverything = settingsViewModel::deleteEverything,
-        updateSubstances = settingsViewModel::updateSubstances,
-        resetSubstances = settingsViewModel::resetSubstances,
-        isUpdating = settingsViewModel.isUpdating,
-        date = settingsViewModel.dateStringFlow.collectAsState(initial = initialDate.asTextWithDateAndTime).value
+        deleteEverything = settingsViewModel::deleteEverything
     )
 }
 
@@ -54,63 +43,11 @@ fun SettingsScreen(
 fun SettingsScreen(
     navigateToFAQ: () -> Unit,
     deleteEverything: () -> Unit,
-    updateSubstances: (onSuccess: () -> Unit, onError: () -> Unit) -> Unit,
-    resetSubstances: () -> Unit,
-    isUpdating: Boolean,
-    date: String
 ) {
     Scaffold(topBar = {
         JournalTopAppBar(title = "Settings")
     }) {
         Column {
-//            Text(text = "Last Substance Update", style = MaterialTheme.typography.caption)
-//            Text(date, style = MaterialTheme.typography.h6)
-//            val context = LocalContext.current
-//            Row(verticalAlignment = Alignment.CenterVertically) {
-//                TextButton(
-//                    onClick = {
-//                        updateSubstances(
-//                            {
-//                                Toast.makeText(
-//                                    context, "Update Success",
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//                            },
-//                            {
-//                                Toast.makeText(
-//                                    context, "Try Again Later",
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//                            }
-//                        )
-//                    },
-//                    enabled = !isUpdating
-//                ) {
-//                    Icon(
-//                        Icons.Filled.Update,
-//                        contentDescription = "Update Substances",
-//                        modifier = Modifier.size(ButtonDefaults.IconSize)
-//                    )
-//                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-//                    Text("Update")
-//                }
-//                TextButton(
-//                    onClick = resetSubstances,
-//                    enabled = !isUpdating
-//                ) {
-//                    Icon(
-//                        Icons.Filled.Restore,
-//                        contentDescription = "Reset Substances",
-//                        modifier = Modifier.size(ButtonDefaults.IconSize)
-//                    )
-//                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-//                    Text("Reset")
-//                }
-//                if (isUpdating) {
-//                    CircularProgressIndicator()
-//                }
-//            }
-//            Divider()
             val uriHandler = LocalUriHandler.current
             TextButton(
                 onClick = {
@@ -225,6 +162,12 @@ fun SettingsScreen(
                 )
             }
             Divider()
+            Text(
+                text = "Last Substance Update: 25. October 2022",
+                modifier = Modifier
+                    .padding(horizontal = horizontalPadding, vertical = 10.dp)
+                    .fillMaxWidth()
+            )
         }
     }
 }

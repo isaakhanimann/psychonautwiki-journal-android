@@ -4,7 +4,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,10 +16,6 @@ class SearchViewModel @Inject constructor(
     experienceRepo: ExperienceRepository,
     substanceRepo: SubstanceRepository
 ) : ViewModel() {
-
-    private val allSubstancesFlow: Flow<List<SubstanceWithCategories>> =
-        substanceRepo.getAllSubstancesWithCategoriesFlow()
-    private val allCategoriesFlow: Flow<List<Category>> = substanceRepo.getAllCategoriesFlow()
 
     val customSubstancesFlow = experienceRepo.getCustomSubstancesFlow().stateIn(
         initialValue = emptyList(),
@@ -71,8 +66,8 @@ class SearchViewModel @Inject constructor(
     val isShowingCustomSubstancesFlow = MutableStateFlow(false)
 
     val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> =
-        allCategoriesFlow.combine(filtersFlow) { categories, filters ->
-            categories.map { category ->
+        filtersFlow.map { filters ->
+            substanceRepo.getAllCategories().map { category ->
                 val isActive = filters.contains(category.name)
                 CategoryChipModel(
                     chipName = category.name,
@@ -107,13 +102,11 @@ class SearchViewModel @Inject constructor(
         )
 
     private val allOrYouUsedSubstances =
-        allSubstancesFlow.combine(recentlyUsedSubstancesFlow) { all, recents ->
-            Pair(first = all, recents)
-        }.combine(isShowingYouUsedFlow) { pair, isShowingYouUsed ->
+        recentlyUsedSubstancesFlow.combine(isShowingYouUsedFlow) { recents, isShowingYouUsed ->
             if (isShowingYouUsed) {
-                return@combine pair.second
+                return@combine recents
             } else {
-                return@combine pair.first
+                return@combine substanceRepo.getAllSubstancesWithCategories()
             }
         }
 
