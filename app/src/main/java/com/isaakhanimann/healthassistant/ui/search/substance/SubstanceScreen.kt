@@ -1,6 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -9,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.outlined.ExpandLess
+import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +28,6 @@ import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.healthassistant.ui.addingestion.time.TimePickerButton
 import com.isaakhanimann.healthassistant.ui.doseDisclaimer
-import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
@@ -139,6 +142,7 @@ fun SubstanceScreen(
                     }
                 }
                 VerticalSpace()
+                Divider()
             }
             val roasWithDosesDefined = substance.roas.filter { roa ->
                 val roaDose = roa.roaDose
@@ -147,70 +151,82 @@ fun SubstanceScreen(
                 return@filter !isEveryDoseNull
             }
             if (substance.dosageRemark != null || roasWithDosesDefined.isNotEmpty()) {
-                SectionTitle(title = "Dosage", onInfoClick = navigateToDosageExplanationScreen)
-                VerticalSpace()
-                if (substance.dosageRemark != null) {
-                    Text(
-                        text = substance.dosageRemark,
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
-                }
-                Text(
-                    text = doseDisclaimer,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
-                Divider()
-                roasWithDosesDefined.forEachIndexed { index, roa ->
-                    Column(
-                        modifier = Modifier.padding(
-                            vertical = 5.dp,
-                            horizontal = horizontalPadding
+                CollapsibleSection(title = "Dosage") {
+                    Column {
+                        VerticalSpace()
+                        if (substance.dosageRemark != null) {
+                            Text(
+                                text = substance.dosageRemark,
+                                modifier = Modifier.padding(horizontal = horizontalPadding)
+                            )
+                        }
+                        Text(
+                            text = doseDisclaimer,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
                         )
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            RouteColorCircle(roa.route)
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(text = roa.route.displayText)
-                        }
-                        if (roa.roaDose == null) {
-                            Text(text = "No dosage info")
-                        } else {
-                            RoaDoseView(roaDose = roa.roaDose)
-                        }
-                    }
-                    if (index < roasWithDosesDefined.size - 1) {
+                        VerticalSpace()
                         Divider()
+                        roasWithDosesDefined.forEachIndexed { index, roa ->
+                            Column(
+                                modifier = Modifier.padding(
+                                    vertical = 5.dp,
+                                    horizontal = horizontalPadding
+                                )
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    RouteColorCircle(roa.route)
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(text = roa.route.displayText)
+                                }
+                                if (roa.roaDose == null) {
+                                    Text(text = "No dosage info")
+                                } else {
+                                    RoaDoseView(roaDose = roa.roaDose)
+                                }
+                            }
+                            if (index < roasWithDosesDefined.size - 1) {
+                                Divider()
+                            }
+                        }
                     }
                 }
+                Divider()
             }
             if (substance.tolerance != null || substance.crossTolerances.isNotEmpty()) {
-                SectionTitle(title = "Tolerance")
-                VerticalSpace()
-                ToleranceSection(
-                    tolerance = substance.tolerance,
-                    crossTolerances = substance.crossTolerances,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
+                CollapsibleSection(title = "Tolerance") {
+                    Column {
+                        VerticalSpace()
+                        ToleranceSection(
+                            tolerance = substance.tolerance,
+                            crossTolerances = substance.crossTolerances,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        )
+                        VerticalSpace()
+                    }
+                }
+                Divider()
             }
             if (substance.toxicities.isNotEmpty()) {
-                SectionTitle(title = "Toxicity")
-                VerticalSpace()
-                if (substance.toxicities.size == 1) {
-                    Text(
-                        substance.toxicities.firstOrNull() ?: "",
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
-                } else {
-                    BulletPoints(
-                        points = substance.toxicities,
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
+                CollapsibleSection(title = "Toxicity") {
+                    Column {
+                        VerticalSpace()
+                        if (substance.toxicities.size == 1) {
+                            Text(
+                                substance.toxicities.firstOrNull() ?: "",
+                                modifier = Modifier.padding(horizontal = horizontalPadding)
+                            )
+                        } else {
+                            BulletPoints(
+                                points = substance.toxicities,
+                                modifier = Modifier.padding(horizontal = horizontalPadding)
+                            )
+                        }
+                        VerticalSpace()
+                    }
                 }
-                VerticalSpace()
+                Divider()
             }
             val roasWithDurationsDefined = substance.roas.filter { roa ->
                 val roaDuration = roa.roaDuration
@@ -219,148 +235,178 @@ fun SubstanceScreen(
                 return@filter !isEveryDurationNull
             }
             if (roasWithDurationsDefined.isNotEmpty()) {
-                SectionTitle(title = "Duration", onInfoClick = navigateToDurationExplanationScreen)
-                var ingestionTime by remember { mutableStateOf(LocalDateTime.now()) }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                ) {
-                    Text("Ingestion Time:")
-                    Spacer(modifier = Modifier.width(10.dp))
-                    TimePickerButton(
-                        localDateTime = ingestionTime,
-                        onChange = { ingestionTime = it },
-                        timeString = ingestionTime.getStringOfPattern("HH:mm"),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                val dataForEffectLines = remember(roasWithDurationsDefined, ingestionTime) {
-                    roasWithDurationsDefined.map { roa ->
-                        DataForOneEffectLine(
-                            roaDuration = roa.roaDuration,
-                            height = 1f,
-                            color = roa.route.color,
-                            startTime = ingestionTime.getInstant()
-                        )
-                    }
-                }
-                AllTimelines(
-                    dataForEffectLines = dataForEffectLines,
-                    isShowingCurrentTime = false,
-                    navigateToExplainTimeline = navigateToExplainTimeline,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
-                Divider()
-                roasWithDurationsDefined.forEachIndexed { index, roa ->
-                    Column(
-                        modifier = Modifier.padding(
-                            vertical = 5.dp,
-                            horizontal = horizontalPadding
-                        )
-                    ) {
+                CollapsibleSection(title = "Duration") {
+                    Column {
+                        var ingestionTime by remember { mutableStateOf(LocalDateTime.now()) }
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
                         ) {
-                            RouteColorCircle(roa.route)
+                            Text("Ingestion Time:")
                             Spacer(modifier = Modifier.width(10.dp))
-                            Text(text = roa.route.displayText)
+                            TimePickerButton(
+                                localDateTime = ingestionTime,
+                                onChange = { ingestionTime = it },
+                                timeString = ingestionTime.getStringOfPattern("HH:mm"),
+                                modifier = Modifier.fillMaxWidth()
+                            )
                         }
-                        val roaDuration = roa.roaDuration
-                        if (roaDuration == null) {
-                            Text(text = "No duration info")
-                        } else {
-                            Spacer(modifier = Modifier.height(3.dp))
-                            RoaDurationView(roaDuration = roaDuration)
+                        val dataForEffectLines = remember(roasWithDurationsDefined, ingestionTime) {
+                            roasWithDurationsDefined.map { roa ->
+                                DataForOneEffectLine(
+                                    roaDuration = roa.roaDuration,
+                                    height = 1f,
+                                    color = roa.route.color,
+                                    startTime = ingestionTime.getInstant()
+                                )
+                            }
                         }
-                    }
-                    if (index < roasWithDurationsDefined.size - 1) {
+                        AllTimelines(
+                            dataForEffectLines = dataForEffectLines,
+                            isShowingCurrentTime = false,
+                            navigateToExplainTimeline = navigateToExplainTimeline,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .padding(horizontal = horizontalPadding)
+                        )
+                        VerticalSpace()
                         Divider()
+                        roasWithDurationsDefined.forEachIndexed { index, roa ->
+                            Column(
+                                modifier = Modifier.padding(
+                                    vertical = 5.dp,
+                                    horizontal = horizontalPadding
+                                )
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    RouteColorCircle(roa.route)
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(text = roa.route.displayText)
+                                }
+                                val roaDuration = roa.roaDuration
+                                if (roaDuration == null) {
+                                    Text(text = "No duration info")
+                                } else {
+                                    Spacer(modifier = Modifier.height(3.dp))
+                                    RoaDurationView(roaDuration = roaDuration)
+                                }
+                            }
+                            if (index < roasWithDurationsDefined.size - 1) {
+                                Divider()
+                            }
+                        }
                     }
                 }
+                Divider()
             }
             val interactions = substance.interactions
             if (interactions != null) {
                 if (interactions.dangerous.isNotEmpty() || interactions.unsafe.isNotEmpty() || interactions.uncertain.isNotEmpty()) {
-                    SectionTitle(title = "Interactions")
-                    InteractionsView(interactions = substance.interactions)
+                    CollapsibleSection(title = "Interactions") {
+                        InteractionsView(interactions = substance.interactions)
+                    }
                 }
+                Divider()
             }
             if (substance.effectsSummary != null) {
-                SectionTitle(title = "Effects")
-                VerticalSpace()
-                Text(
-                    text = substance.effectsSummary,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
+                CollapsibleSection(title = "Effects") {
+                    Column {
+                        VerticalSpace()
+                        Text(
+                            text = substance.effectsSummary,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        )
+                        VerticalSpace()
+                    }
+                }
+                Divider()
             }
             if (substance.generalRisks != null && substance.longtermRisks != null) {
-                SectionTitle(title = "Risks")
-                VerticalSpace()
-                Text(
-                    text = substance.generalRisks,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
-                SectionTitle(title = "Long-term")
-                VerticalSpace()
-                Text(
-                    text = substance.longtermRisks,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
+                CollapsibleSection(title = "Risks") {
+                    Column {
+                        VerticalSpace()
+                        Text(
+                            text = substance.generalRisks,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        )
+                        VerticalSpace()
+                    }
+                }
+                Divider()
+                CollapsibleSection(title = "Long-term") {
+                    Column {
+                        VerticalSpace()
+                        Text(
+                            text = substance.longtermRisks,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        )
+                        VerticalSpace()
+                    }
+                }
+                Divider()
             }
             if (substance.saferUse.isNotEmpty()) {
-                SectionTitle(title = "Safer Use")
-                VerticalSpace()
-                BulletPoints(
-                    points = substance.saferUse,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
+                CollapsibleSection(title = "Safer Use") {
+                    Column {
+                        VerticalSpace()
+                        BulletPoints(
+                            points = substance.saferUse,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        )
+                        VerticalSpace()
+                    }
+                }
+                Divider()
             }
             if (substance.addictionPotential != null) {
-                SectionTitle(title = "Addiction Potential")
-                VerticalSpace()
-                Text(
-                    substance.addictionPotential,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                VerticalSpace()
+                CollapsibleSection(title = "Addiction Potential") {
+                    Column {
+                        VerticalSpace()
+                        Text(
+                            substance.addictionPotential,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        )
+                        VerticalSpace()
+                    }
+                }
+                Divider()
             }
             val firstRoa = substance.roas.firstOrNull()
             val useVolumetric = firstRoa?.roaDose?.shouldDefinitelyUseVolumetricDosing == true
             if (substance.isHallucinogen || substance.isStimulant || useVolumetric) {
-                SectionTitle(title = "See Also")
-            }
-            if (substance.isHallucinogen) {
-                TextButton(onClick = navigateToSaferHallucinogensScreen) {
-                    Text(
-                        text = "Safer Hallucinogen Use",
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
-                }
-                Divider()
-            }
-            if (substance.isStimulant) {
-                TextButton(onClick = navigateToSaferStimulantsScreen) {
-                    Text(
-                        text = "Safer Stimulant Use",
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
-                }
-                Divider()
-            }
-            if (useVolumetric) {
-                TextButton(onClick = navigateToVolumetricDosingScreen) {
-                    Text(
-                        text = "Volumetric Liquid Dosing",
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
+                CollapsibleSection(title = "See Also") {
+                    Column {
+                        if (substance.isHallucinogen) {
+                            TextButton(onClick = navigateToSaferHallucinogensScreen) {
+                                Text(
+                                    text = "Safer Hallucinogen Use",
+                                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                                )
+                            }
+                            Divider()
+                        }
+                        if (substance.isStimulant) {
+                            TextButton(onClick = navigateToSaferStimulantsScreen) {
+                                Text(
+                                    text = "Safer Stimulant Use",
+                                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                                )
+                            }
+                            Divider()
+                        }
+                        if (useVolumetric) {
+                            TextButton(onClick = navigateToVolumetricDosingScreen) {
+                                Text(
+                                    text = "Volumetric Liquid Dosing",
+                                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                                )
+                            }
+                            Divider()
+                        }
+                    }
                 }
                 Divider()
             }
@@ -401,6 +447,66 @@ fun BulletPoints(points: List<String>, modifier: Modifier = Modifier) {
 @Composable
 fun VerticalSpace() {
     Spacer(modifier = Modifier.height(5.dp))
+}
+
+@Composable
+fun CollapsibleSection(title: String, content: @Composable () -> Unit) {
+    Column {
+        var isExpanded by remember { mutableStateOf(false) }
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colors.surface
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clickable { isExpanded = !isExpanded }
+                    .padding(horizontal = horizontalPadding, vertical = 8.dp)
+            ) {
+                Text(
+                    color = MaterialTheme.colors.onSurface,
+                    text = title,
+                    style = MaterialTheme.typography.h6
+                )
+                if (isExpanded) {
+                    Icon(
+                        imageVector = Icons.Outlined.ExpandLess,
+                        contentDescription = "Expand Less",
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Outlined.ExpandMore,
+                        contentDescription = "Expand More",
+                    )
+                }
+
+            }
+        }
+        val expandTransition = remember {
+            expandVertically(
+                expandFrom = Alignment.Top,
+                animationSpec = tween(300)
+            ) + fadeIn(
+                animationSpec = tween(300)
+            )
+        }
+        val collapseTransition = remember {
+            shrinkVertically(
+                shrinkTowards = Alignment.Top,
+                animationSpec = tween(300)
+            ) + fadeOut(
+                animationSpec = tween(300)
+            )
+        }
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = expandTransition,
+            exit = collapseTransition
+        ) {
+            content()
+        }
+    }
 }
 
 @Composable
