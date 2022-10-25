@@ -148,19 +148,19 @@ fun SubstanceScreen(
             }
             if (substance.dosageRemark != null || roasWithDosesDefined.isNotEmpty()) {
                 SectionTitle(title = "Dosage", onInfoClick = navigateToDosageExplanationScreen)
+                VerticalSpace()
                 if (substance.dosageRemark != null) {
-                    VerticalSpace()
                     Text(
                         text = substance.dosageRemark,
                         modifier = Modifier.padding(horizontal = horizontalPadding)
                     )
-                    Text(
-                        text = doseDisclaimer,
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
-                    VerticalSpace()
-                    Divider()
                 }
+                Text(
+                    text = doseDisclaimer,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                )
+                VerticalSpace()
+                Divider()
                 roasWithDosesDefined.forEachIndexed { index, roa ->
                     Column(
                         modifier = Modifier.padding(
