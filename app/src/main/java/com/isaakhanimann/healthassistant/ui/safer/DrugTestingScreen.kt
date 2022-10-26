@@ -16,7 +16,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.healthassistant.ui.journal.experience.CardWithTitle
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
@@ -35,7 +34,7 @@ fun DrugTestingScreen() {
                 .padding(padding)
                 .padding(horizontal = horizontalPadding)
         ) {
-            CardWithTitle(title = "Austria") {
+            CardWithTesting(title = "Austria") {
                 TestingServiceItem(
                     name = "Drogenarbeit Z6",
                     city = "Innsbruck",
@@ -47,8 +46,14 @@ fun DrugTestingScreen() {
                     city = "Vienna",
                     url = "https://checkit.wien/drug-checking-2/"
                 )
+                Divider()
+                TestingServiceItem(
+                    name = "Triptalks",
+                    city = "Graz",
+                    url = "https://triptalks.at"
+                )
             }
-            CardWithTitle(title = "Belgium") {
+            CardWithTesting(title = "Belgium") {
                 TestingServiceItem(
                     name = "Modus Vivendi",
                     city = "Saint-Gilles",
@@ -61,14 +66,14 @@ fun DrugTestingScreen() {
                     url = "https://www.exaequo.be"
                 )
             }
-            CardWithTitle(title = "Canada") {
+            CardWithTesting(title = "Canada") {
                 TestingServiceItem(
                     name = "Get Your Drugs Tested",
                     city = "Vancouver",
                     url = "http://www.vch.ca/public-health/harm-reduction/overdose-prevention-response/drug-checking"
                 )
             }
-            CardWithTitle(title = "France") {
+            CardWithTesting(title = "France") {
                 TestingServiceItem(
                     name = "Asso Michel - CAARUD Médiane",
                     city = "Dunkerque",
@@ -87,28 +92,28 @@ fun DrugTestingScreen() {
                     url = "http://www.leswadscmsea.fr"
                 )
             }
-            CardWithTitle(title = "Italy") {
+            CardWithTesting(title = "Italy") {
                 TestingServiceItem(
                     name = "Neutravel Project",
                     city = "Torino",
                     url = "https://www.neutravel.net/drug-checking"
                 )
             }
-            CardWithTitle(title = "Netherlands") {
+            CardWithTesting(title = "Netherlands") {
                 TestingServiceItem(
                     name = "33 locations",
                     city = "See Map",
                     url = "https://www.drugs-test.nl/en/testlocations/"
                 )
             }
-            CardWithTitle(title = "Spain") {
+            CardWithTesting(title = "Spain") {
                 TestingServiceItem(
                     name = "Energy Control",
                     city = "Various locations",
                     url = "https://energycontrol.org/servicio-de-analisis/"
                 )
             }
-            CardWithTitle(title = "Switzerland") {
+            CardWithTesting(title = "Switzerland") {
                 TestingServiceItem(
                     name = "DIBS / Safer Dance Basel",
                     city = "Basel",
@@ -139,6 +144,13 @@ fun DrugTestingScreen() {
                     url = "https://www.gassenarbeit.ch/angebote/dilu"
                 )
             }
+            CardWithTesting(title = "United Kingdom") {
+                TestingServiceItem(
+                    name = "The Loop",
+                    city = "Bristol",
+                    url = "https://wearetheloop.org"
+                )
+            }
             val uriHandler = LocalUriHandler.current
             TextButton(onClick = {
                 uriHandler.openUri("https://t.me/isaakhanimann")
@@ -149,6 +161,27 @@ fun DrugTestingScreen() {
                     textDecoration = TextDecoration.Underline
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun CardWithTesting(
+    title: String,
+    content: @Composable () -> Unit
+) {
+    Card(modifier = Modifier.padding(vertical = 5.dp)) {
+        Column(
+            Modifier.padding(vertical = 5.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+            Divider()
+            content()
         }
     }
 }
@@ -188,7 +221,7 @@ fun TestingServiceItem(
             text = name,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.weight(1f)
         )
         Text(
