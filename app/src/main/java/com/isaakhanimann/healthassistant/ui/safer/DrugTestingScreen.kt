@@ -156,7 +156,7 @@ fun DrugTestingScreen() {
                 uriHandler.openUri("https://t.me/isaakhanimann")
             }) {
                 Text(
-                    "Contact support if a service is missing",
+                    "Report missing service",
                     style = MaterialTheme.typography.bodySmall,
                     textDecoration = TextDecoration.Underline
                 )
