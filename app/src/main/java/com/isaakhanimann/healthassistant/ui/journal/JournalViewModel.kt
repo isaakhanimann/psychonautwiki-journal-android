@@ -4,14 +4,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.ZoneId
 import javax.inject.Inject
 
 
@@ -49,7 +47,7 @@ class JournalViewModel @Inject constructor(
         }
     }
 
-    val experiencesGrouped = experienceRepo.getSortedExperiencesWithIngestionsAndCompanionsFlow()
+    val experiences = experienceRepo.getSortedExperiencesWithIngestionsAndCompanionsFlow()
         .combine(searchTextFlow) { experiencesWithIngestions, searchText ->
             Pair(first = experiencesWithIngestions, second = searchText)
         }
@@ -79,21 +77,12 @@ class JournalViewModel @Inject constructor(
                     }
                 }
             }
-            return@combine groupExperiencesByYear(experiencesWithIngestions = filtered)
+            return@combine filtered
         }
         .stateIn(
-            initialValue = emptyMap(),
+            initialValue = emptyList(),
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000)
         )
-
-    companion object {
-        fun groupExperiencesByYear(experiencesWithIngestions: List<ExperienceWithIngestionsAndCompanions>): Map<String, List<ExperienceWithIngestionsAndCompanions>> {
-            return experiencesWithIngestions.groupBy { out ->
-                out.sortInstant.atZone(ZoneId.systemDefault()).year.toString()
-
-            }
-        }
-    }
 
 }

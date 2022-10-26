@@ -2,6 +2,7 @@ package com.isaakhanimann.healthassistant.ui.journal
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -37,7 +38,7 @@ fun JournalScreen(
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToAddIngestion = navigateToAddIngestion,
-        groupedExperiences = viewModel.experiencesGrouped.collectAsState().value,
+        experiences = viewModel.experiences.collectAsState().value,
         isFavoriteEnabled = viewModel.isFavoriteEnabledFlow.collectAsState().value,
         onChangeIsFavorite = viewModel::onChangeFavorite,
         searchText = viewModel.searchTextFlow.collectAsState().value,
@@ -52,13 +53,13 @@ fun JournalScreen(
 fun ExperiencesScreenPreview(
     @PreviewParameter(
         JournalScreenPreviewProvider::class,
-    ) groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
+    ) experiences: List<ExperienceWithIngestionsAndCompanions>,
 ) {
     HealthAssistantTheme {
         JournalScreen(
             navigateToExperiencePopNothing = {},
             navigateToAddIngestion = {},
-            groupedExperiences = groupedExperiences,
+            experiences = experiences,
             isFavoriteEnabled = false,
             onChangeIsFavorite = {},
             searchText = "",
@@ -74,7 +75,7 @@ fun ExperiencesScreenPreview(
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
+    experiences: List<ExperienceWithIngestionsAndCompanions>,
     isFavoriteEnabled: Boolean,
     onChangeIsFavorite: (Boolean) -> Unit,
     searchText: String,
@@ -125,7 +126,9 @@ fun JournalScreen(
     ) { padding ->
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize().padding(padding)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
         ) {
             Column {
                 if (isSearchEnabled) {
@@ -163,12 +166,22 @@ fun JournalScreen(
                         singleLine = true
                     )
                 }
-                ExperiencesList(
-                    groupedExperiences = groupedExperiences,
-                    navigateToExperiencePopNothing = navigateToExperiencePopNothing,
-                )
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    if (experiences.isNotEmpty()) {
+                        item { Divider() }
+                    }
+                    items(experiences) { experienceWithIngestions ->
+                        ExperienceRow(
+                            experienceWithIngestions,
+                            navigateToExperienceScreen = {
+                                navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
+                            },
+                        )
+                        Divider()
+                    }
+                }
             }
-            if (groupedExperiences.isEmpty()) {
+            if (experiences.isEmpty()) {
                 if (isSearchEnabled && searchText.isNotEmpty()) {
                     if (isFavoriteEnabled) {
                         EmptyScreenDisclaimer(
@@ -193,32 +206,6 @@ fun JournalScreen(
                             description = "Add your first ingestion."
                         )
                     }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ExperiencesList(
-    groupedExperiences: Map<String, List<ExperienceWithIngestionsAndCompanions>>,
-    navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
-) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        groupedExperiences.forEach { (year, experiencesInYear) ->
-            item {
-                SectionTitle(title = year)
-            }
-            items(experiencesInYear.size) { i ->
-                val experienceWithIngestions = experiencesInYear[i]
-                ExperienceRow(
-                    experienceWithIngestions,
-                    navigateToExperienceScreen = {
-                        navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
-                    },
-                )
-                if (i < experiencesInYear.size) {
-                    Divider()
                 }
             }
         }
