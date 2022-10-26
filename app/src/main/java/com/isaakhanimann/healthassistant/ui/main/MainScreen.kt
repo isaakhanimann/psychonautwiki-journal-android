@@ -23,7 +23,6 @@ import com.isaakhanimann.healthassistant.ui.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.CustomChooseRouteScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ChooseTimeScreen
-import com.isaakhanimann.healthassistant.ui.journal.ExperienceRow
 import com.isaakhanimann.healthassistant.ui.journal.JournalScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.ExperienceScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.edit.EditExperienceScreen
@@ -64,7 +63,7 @@ fun MainScreen(
                     val currentExperience = viewModel.currentExperienceFlow.collectAsState().value
                     if (currentExperience != null && isShowingBottomBar) {
                         Divider()
-                        ExperienceRow(
+                        CurrentExperienceRow(
                             experienceWithIngestionsAndCompanions = currentExperience,
                             navigateToExperienceScreen = {
                                 navController.navigateToExperiencePopNothing(experienceId = currentExperience.experience.id)
