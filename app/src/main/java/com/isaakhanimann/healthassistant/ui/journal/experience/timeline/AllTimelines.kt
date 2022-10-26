@@ -6,12 +6,12 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,7 +66,7 @@ fun AllTimelines(
         }
         val isDarkTheme = isSystemInDarkTheme()
         val density = LocalDensity.current
-        val labelSize = MaterialTheme.typography.body1.fontSize
+        val labelSize = MaterialTheme.typography.bodyLarge.fontSize
         val textPaint = remember(density) {
             Paint().apply {
                 color =

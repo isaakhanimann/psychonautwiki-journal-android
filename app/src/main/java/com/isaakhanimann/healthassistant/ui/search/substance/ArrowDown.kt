@@ -3,7 +3,7 @@ package com.isaakhanimann.healthassistant.ui.search.substance
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -21,7 +21,7 @@ fun ArrowDown(
     width: Dp = 6.dp,
     height: Dp = 20.dp
 ) {
-    val color = MaterialTheme.colors.onBackground
+    val color = MaterialTheme.colorScheme.onBackground
     Canvas(
         modifier = Modifier
             .width(width)

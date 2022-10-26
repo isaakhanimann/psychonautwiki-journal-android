@@ -6,6 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -17,6 +18,7 @@ import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
 import com.isaakhanimann.healthassistant.ui.search.substance.VerticalSpace
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun RouteExplanationScreen() {

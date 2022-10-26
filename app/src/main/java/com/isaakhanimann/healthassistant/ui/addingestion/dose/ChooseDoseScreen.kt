@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -131,6 +132,7 @@ fun ChooseDoseScreenPreview2() {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseDoseScreen(
     navigateToVolumetricDosingScreen: () -> Unit,
@@ -228,7 +230,7 @@ fun ChooseDoseScreen(
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                     val focusManager = LocalFocusManager.current
-                    val textStyle = MaterialTheme.typography.h6
+                    val textStyle = MaterialTheme.typography.titleLarge
                     OutlinedTextField(
                         value = doseText,
                         onValueChange = onChangeDoseText,

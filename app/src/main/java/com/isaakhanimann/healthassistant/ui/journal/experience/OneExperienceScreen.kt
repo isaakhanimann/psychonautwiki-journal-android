@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,6 +75,7 @@ fun ExperienceScreenPreview(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExperienceScreen(
     oneExperienceScreenModel: OneExperienceScreenModel,
@@ -234,7 +236,7 @@ fun ExperienceScreen(
             ) {
                 Text(
                     "Delete Experience",
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
             if (isShowingDeleteDialog) {
@@ -301,7 +303,7 @@ fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.h6)
+        Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.titleLarge)
         Column(horizontalAlignment = Alignment.End) {
             Text(text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units)
             val doseClass = cumulativeDose.doseClass

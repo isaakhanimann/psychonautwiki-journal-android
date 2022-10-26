@@ -4,9 +4,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -91,7 +91,7 @@ fun ColorDialog(
     AlertDialog(
         onDismissRequest = dismiss,
         title = {
-            Text(text = "Pick a Color", style = MaterialTheme.typography.h6)
+            Text(text = "Pick a Color", style = MaterialTheme.typography.titleLarge)
         },
         text = {
             Column {
@@ -116,7 +116,7 @@ fun ColorDialog(
                 }
             }
         },
-        buttons = {
+        confirmButton = {
             TextButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = dismiss

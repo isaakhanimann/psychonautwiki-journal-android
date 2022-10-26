@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -40,7 +41,8 @@ fun SearchScreen(
             categories = searchViewModel.chipCategoriesFlow.collectAsState().value,
             onFilterTapped = searchViewModel::onFilterTapped
         )
-        val activeFilters = searchViewModel.chipCategoriesFlow.collectAsState().value.filter { it.isActive }
+        val activeFilters =
+            searchViewModel.chipCategoriesFlow.collectAsState().value.filter { it.isActive }
         if (activeFilters.isNotEmpty()) {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -68,7 +70,7 @@ fun SearchScreen(
                 items(customSubstances) { customSubstance ->
                     Text(
                         text = customSubstance.name,
-                        style = MaterialTheme.typography.h6,
+                        style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
@@ -90,15 +92,13 @@ fun SearchScreen(
         } else {
             val filteredSubstances = searchViewModel.filteredSubstances.collectAsState().value
             if (filteredSubstances.isEmpty()) {
-                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    val activeCategoryNames = activeFilters.filter { it.isActive }.map { it.chipName }
-                    if (activeCategoryNames.isEmpty()) {
-                        Text("None found", modifier = Modifier.padding(10.dp))
+                val activeCategoryNames = activeFilters.filter { it.isActive }.map { it.chipName }
+                if (activeCategoryNames.isEmpty()) {
+                    Text("None found", modifier = Modifier.padding(10.dp))
 
-                    } else {
-                        val names = activeCategoryNames.joinToString(separator = ", ")
-                        Text("None found in $names", modifier = Modifier.padding(10.dp))
-                    }
+                } else {
+                    val names = activeCategoryNames.joinToString(separator = ", ")
+                    Text("None found in $names", modifier = Modifier.padding(10.dp))
                 }
             } else {
                 LazyColumn {
@@ -115,6 +115,7 @@ fun SearchScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchField(
     searchText: String,
@@ -173,22 +174,16 @@ fun SearchField(
                 ) {
                     categories.forEach { categoryChipModel ->
                         DropdownMenuItem(
-                            onClick = {
-                                onFilterTapped(categoryChipModel.chipName)
-                            },
-                        ) {
-                            if (categoryChipModel.isActive) {
+                            text = { Text(categoryChipModel.chipName) },
+                            onClick = { onFilterTapped(categoryChipModel.chipName) },
+                            leadingIcon = {
                                 Icon(
                                     Icons.Filled.Check,
                                     contentDescription = "Check",
                                     modifier = Modifier.size(ButtonDefaults.IconSize)
                                 )
-                            } else {
-                                Spacer(Modifier.size(ButtonDefaults.IconSize))
                             }
-                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text(categoryChipModel.chipName)
-                        }
+                        )
                     }
                 }
             }
@@ -198,9 +193,6 @@ fun SearchField(
             imeAction = ImeAction.Done,
             capitalization = KeyboardCapitalization.Words
         ),
-        singleLine = true,
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.surface
-        )
+        singleLine = true
     )
 }

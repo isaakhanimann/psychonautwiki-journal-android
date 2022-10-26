@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,11 +57,11 @@ fun RoaDoseView(
             )
         ) {
             Text(text = roaDose.threshold?.toReadableString() ?: "..")
-            Text("thresh  ", style = MaterialTheme.typography.caption)
+            Text("thresh  ", style = MaterialTheme.typography.bodySmall)
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("-", color = lightColor)
-            Text("light", style = MaterialTheme.typography.caption, color = lightColor)
+            Text("light", style = MaterialTheme.typography.bodySmall, color = lightColor)
         }
         Text(
             text = lightMaxOrCommonMin?.toReadableString() ?: "..", modifier = Modifier.textBrush(
@@ -74,7 +74,7 @@ fun RoaDoseView(
         )
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("-", color = commonColor)
-            Text("common", style = MaterialTheme.typography.caption, color = commonColor)
+            Text("common", style = MaterialTheme.typography.bodySmall, color = commonColor)
         }
         Text(
             text = commonMaxOrStrongMin?.toReadableString() ?: "..",
@@ -88,7 +88,7 @@ fun RoaDoseView(
         )
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("-", color = strongColor)
-            Text("strong", style = MaterialTheme.typography.caption, color = strongColor)
+            Text("strong", style = MaterialTheme.typography.bodySmall, color = strongColor)
         }
         Text(
             text = strongMaxOrHeavy?.toReadableString() ?: "..",
@@ -102,7 +102,7 @@ fun RoaDoseView(
         )
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("-", color = heavyColor)
-            Text("heavy", style = MaterialTheme.typography.caption, color = heavyColor)
+            Text("heavy", style = MaterialTheme.typography.bodySmall, color = heavyColor)
         }
         Text(text = roaDose.units ?: "")
     }

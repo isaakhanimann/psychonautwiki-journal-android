@@ -3,12 +3,9 @@ package com.isaakhanimann.healthassistant.ui.safer
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -18,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun VolumetricDosingScreen() {

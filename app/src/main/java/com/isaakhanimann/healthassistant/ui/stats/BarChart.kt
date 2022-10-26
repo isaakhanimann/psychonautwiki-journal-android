@@ -5,12 +5,9 @@ import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -25,7 +22,7 @@ import androidx.compose.ui.unit.dp
 fun BarChart(buckets: List<List<ColorCount>>, startDateText: String) {
     Column {
         val isDarkTheme = isSystemInDarkTheme()
-        val tickColor = MaterialTheme.colors.onSurface.copy(alpha = 0.20f)
+        val tickColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.20f)
         Canvas(
             modifier = Modifier
                 .padding(horizontal = 10.dp)
@@ -140,24 +137,22 @@ fun BarChart(buckets: List<List<ColorCount>>, startDateText: String) {
                 }
             }
         }
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 5.dp, vertical = 5.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                val style = MaterialTheme.typography.caption
-                Text(
-                    text = startDateText,
-                    style = style,
-                )
-                Text(
-                    text = "Now",
-                    style = style,
-                )
-            }
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 5.dp, vertical = 5.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            val style = MaterialTheme.typography.bodySmall
+            Text(
+                text = startDateText,
+                style = style,
+            )
+            Text(
+                text = "Now",
+                style = style,
+            )
         }
     }
 }

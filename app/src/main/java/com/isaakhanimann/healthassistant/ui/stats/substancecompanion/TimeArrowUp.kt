@@ -5,8 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +24,7 @@ fun TimeArrowUpPreview() {
 
 @Composable
 fun TimeArrowUp(timeText: String) {
-    val color = MaterialTheme.colors.onBackground
+    val color = MaterialTheme.colorScheme.onBackground
     val strokeWidth = 4f
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Canvas(

@@ -2,8 +2,9 @@ package com.isaakhanimann.healthassistant.ui.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,6 +43,7 @@ import com.isaakhanimann.healthassistant.ui.settings.faq.FAQScreen
 import com.isaakhanimann.healthassistant.ui.stats.StatsScreen
 import com.isaakhanimann.healthassistant.ui.stats.substancecompanion.SubstanceCompanionScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel()

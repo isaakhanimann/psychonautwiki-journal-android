@@ -2,12 +2,12 @@ package com.isaakhanimann.healthassistant.ui.journal
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +25,7 @@ fun SectionTitlePreview() {
 fun SectionTitle(title: String, onInfoClick: (() -> Unit)? = null) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colors.surface
+        color = MaterialTheme.colorScheme.surface
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -33,7 +33,7 @@ fun SectionTitle(title: String, onInfoClick: (() -> Unit)? = null) {
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)
         ) {
             Text(
-                color = MaterialTheme.colors.onSurface,
+                color = MaterialTheme.colorScheme.onSurface,
                 text = title,
             )
             if (onInfoClick != null) {

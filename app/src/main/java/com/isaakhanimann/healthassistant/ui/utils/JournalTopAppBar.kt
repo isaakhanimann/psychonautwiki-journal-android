@@ -1,13 +1,13 @@
 package com.isaakhanimann.healthassistant.ui.utils
 
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JournalTopAppBar(
     title: String,
@@ -16,10 +16,9 @@ fun JournalTopAppBar(
 ) {
     TopAppBar(
         title = { Text(text = title) },
-        navigationIcon = navigationIcon,
-        actions = actions,
-        backgroundColor = MaterialTheme.colors.surface,
-        contentColor = MaterialTheme.colors.onSurface,
-        elevation = AppBarDefaults.TopAppBarElevation
+        navigationIcon = {
+            navigationIcon?.invoke()
+        },
+        actions = actions
     )
 }

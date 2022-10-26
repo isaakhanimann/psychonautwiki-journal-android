@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,6 +81,7 @@ fun SubstanceScreenPreview(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubstanceScreen(
     navigateToDosageExplanationScreen: () -> Unit,
@@ -443,7 +445,7 @@ fun BulletPoints(points: List<String>, modifier: Modifier = Modifier) {
             Row(verticalAlignment = Alignment.Top) {
                 Surface(
                     shape = CircleShape,
-                    color = MaterialTheme.colors.onBackground,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .padding(top = 7.dp)
                         .size(7.dp)
@@ -466,7 +468,7 @@ fun CollapsibleSection(title: String, content: @Composable () -> Unit) {
         var isExpanded by remember { mutableStateOf(false) }
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colors.surface
+            color = MaterialTheme.colorScheme.surface
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -476,9 +478,9 @@ fun CollapsibleSection(title: String, content: @Composable () -> Unit) {
                     .padding(horizontal = horizontalPadding, vertical = 8.dp)
             ) {
                 Text(
-                    color = MaterialTheme.colors.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface,
                     text = title,
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.titleLarge
                 )
                 if (isExpanded) {
                     Icon(

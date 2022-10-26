@@ -7,6 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +20,7 @@ import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun DrugTestingScreen() {
@@ -133,7 +135,7 @@ fun DrugTestingScreen() {
             }) {
                 Text(
                     "Contact support if a service is missing",
-                    style = MaterialTheme.typography.caption,
+                    style = MaterialTheme.typography.bodySmall,
                     textDecoration = TextDecoration.Underline
                 )
             }
@@ -176,7 +178,7 @@ fun TestingServiceItem(
             text = name,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.weight(1f)
         )
         Text(

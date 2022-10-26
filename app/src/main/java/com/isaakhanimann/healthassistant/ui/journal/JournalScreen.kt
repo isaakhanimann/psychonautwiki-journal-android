@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -68,6 +69,7 @@ fun ExperiencesScreenPreview(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
@@ -158,10 +160,7 @@ fun JournalScreen(
                             keyboardType = KeyboardType.Text,
                             capitalization = KeyboardCapitalization.Sentences
                         ),
-                        singleLine = true,
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colors.surface
-                        )
+                        singleLine = true
                     )
                 }
                 ExperiencesList(

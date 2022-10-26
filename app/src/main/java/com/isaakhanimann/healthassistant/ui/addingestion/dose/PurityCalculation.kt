@@ -3,9 +3,10 @@ package com.isaakhanimann.healthassistant.ui.addingestion.dose
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,6 +14,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PurityCalculation(
     purityText: String,
@@ -43,7 +45,7 @@ fun PurityCalculation(
         if (!isValidPurity) {
             Text(
                 text = "Purity must be between 1 and 100%",
-                color = MaterialTheme.colors.error,
+                color = MaterialTheme.colorScheme.error,
             )
         }
         if (convertedDoseAndUnitText != null) {

@@ -9,8 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.WarningAmber
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -89,6 +89,7 @@ fun CheckInteractionsScreenPreview2() {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CheckInteractionsScreen(
     substanceName: String,
@@ -103,7 +104,6 @@ fun CheckInteractionsScreen(
     uncertainInteractions: List<String>,
     navigateToNext: () -> Unit
 ) {
-
     Scaffold(
         topBar = { JournalTopAppBar(title = "$substanceName Interactions") },
         floatingActionButton = {
@@ -125,13 +125,11 @@ fun CheckInteractionsScreen(
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
             if (dangerousInteractions.isEmpty() && unsafeInteractions.isEmpty() && uncertainInteractions.isEmpty()) {
-                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "No interactions found... check other sources.")
-                    }
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "No interactions found... check other sources.")
                 }
             } else {
                 val verticalSpaceBetween = 1.dp
@@ -188,13 +186,13 @@ fun CheckInteractionsScreen(
                                 contentDescription = "Warning",
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text(text = title, style = MaterialTheme.typography.h6)
+                            Text(text = title, style = MaterialTheme.typography.titleLarge)
                         }
                     },
                     text = {
                         Text(text = alertText)
                     },
-                    buttons = {
+                    confirmButton = {
                         Row(
                             modifier = Modifier.padding(all = 8.dp),
                             horizontalArrangement = Arrangement.Center
@@ -238,7 +236,7 @@ fun InteractionRow(
                 text = text,
                 textAlign = TextAlign.Center,
                 color = Color.Black,
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.titleLarge,
             )
             Spacer(modifier = Modifier.weight(1f))
             LazyRow {

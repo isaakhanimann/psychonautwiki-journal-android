@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.QuestionAnswer
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +40,7 @@ fun SettingsScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     navigateToFAQ: () -> Unit,

@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,6 +88,7 @@ fun CustomChooseDosePreview() {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomChooseDose(
     navigateToSaferSniffingScreen: () -> Unit,
@@ -152,7 +154,7 @@ fun CustomChooseDose(
 
                     Spacer(modifier = Modifier.height(10.dp))
                     val focusManager = LocalFocusManager.current
-                    val textStyle = MaterialTheme.typography.h3
+                    val textStyle = MaterialTheme.typography.displaySmall
                     OutlinedTextField(
                         value = doseText,
                         onValueChange = onChangeDoseText,
@@ -184,7 +186,7 @@ fun CustomChooseDose(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
                     ) {
-                        Text("Is Estimate", style = MaterialTheme.typography.h6)
+                        Text("Is Estimate", style = MaterialTheme.typography.titleLarge)
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                     }
                     Spacer(modifier = Modifier.weight(1f))

@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -79,6 +80,7 @@ fun AddIngestionSearchScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider::class) previousSubstances: List<PreviousSubstance>) {
@@ -132,7 +134,7 @@ fun SuggestionsSection(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = substanceRow.substanceName,
-                            style = MaterialTheme.typography.h6
+                            style = MaterialTheme.typography.titleLarge
                         )
                     }
                     substanceRow.routesWithDoses.forEach { routeWithDoses ->

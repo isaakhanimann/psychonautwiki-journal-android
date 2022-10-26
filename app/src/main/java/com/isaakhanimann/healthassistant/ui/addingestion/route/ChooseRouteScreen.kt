@@ -11,8 +11,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -77,6 +77,7 @@ fun ChooseRouteScreenPreview() {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseRouteScreen(
     shouldShowOther: Boolean,
@@ -154,7 +155,7 @@ fun ChooseRouteScreen(
                                     ) {
                                         RouteBox(
                                             route = route,
-                                            titleStyle = MaterialTheme.typography.h6
+                                            titleStyle = MaterialTheme.typography.titleLarge
                                         )
                                     }
                                 }
@@ -181,8 +182,11 @@ fun ChooseRouteScreen(
                                 .fillMaxWidth()
                                 .weight(5f)
                         ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text(text = "Other Routes", style = MaterialTheme.typography.h4)
+                            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                Text(
+                                    text = "Other Routes",
+                                    style = MaterialTheme.typography.headlineMedium
+                                )
                             }
                         }
                         pwRoutes.forEach { route ->
@@ -194,7 +198,10 @@ fun ChooseRouteScreen(
                                     .fillMaxWidth()
                                     .weight(5f)
                             ) {
-                                RouteBox(route = route, titleStyle = MaterialTheme.typography.h4)
+                                RouteBox(
+                                    route = route,
+                                    titleStyle = MaterialTheme.typography.headlineMedium
+                                )
                             }
                         }
                     }
@@ -226,7 +233,7 @@ fun InjectionDialog(
             ) {
                 Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning")
                 Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                Text(text = "Safer Injection", style = MaterialTheme.typography.h5)
+                Text(text = "Safer Injection", style = MaterialTheme.typography.headlineSmall)
             }
         },
         text = {
@@ -261,19 +268,17 @@ fun InjectionDialog(
 
 @Composable
 fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
-    Box(contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+        Column {
             Text(
                 text = route.displayText,
                 textAlign = TextAlign.Center,
                 style = titleStyle
             )
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                Text(
-                    text = route.description,
-                    textAlign = TextAlign.Center
-                )
-            }
+            Text(
+                text = route.description,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

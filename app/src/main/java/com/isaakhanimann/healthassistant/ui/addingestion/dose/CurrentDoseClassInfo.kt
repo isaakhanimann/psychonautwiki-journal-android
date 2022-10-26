@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,7 +52,7 @@ fun CurrentDoseClassInfo(currentDoseClass: DoseClass?, roaDose: RoaDose) {
             Text(
                 text = text,
                 color = doseColor,
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.titleLarge
             )
         }
         if (isShowingDoseClassDialog) {
@@ -60,26 +61,21 @@ fun CurrentDoseClassInfo(currentDoseClass: DoseClass?, roaDose: RoaDose) {
                 title = {
                     Text(
                         text = "${currentDoseClass.name} DOSAGE",
-                        style = MaterialTheme.typography.h6,
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 },
                 text = {
                     Text(
                         text = currentDoseClass.description,
-                        style = if (currentDoseClass==DoseClass.HEAVY) MaterialTheme.typography.caption else MaterialTheme.typography.body1
+                        style = if (currentDoseClass == DoseClass.HEAVY) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyLarge
                     )
                 },
-                buttons = {
-                    Row(
-                        modifier = Modifier.padding(all = 8.dp),
-                        horizontalArrangement = Arrangement.Center
+                confirmButton = {
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { isShowingDoseClassDialog = false }
                     ) {
-                        TextButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = { isShowingDoseClassDialog = false }
-                        ) {
-                            Text("Dismiss")
-                        }
+                        Text("Dismiss")
                     }
                 },
             )

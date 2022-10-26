@@ -4,7 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -31,14 +31,11 @@ fun BottomBar(navController: NavController, bottomBarState: MutableState<Boolean
             BottomAppBar(
                 contentPadding = PaddingValues(horizontal = 0.dp),
             ) {
-                BottomNavigation(
-                    backgroundColor = MaterialTheme.colors.surface,
-                    contentColor = MaterialTheme.colors.onSurface,
-                ) {
+                NavigationBar {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route
                     items.forEach { item ->
-                        BottomNavigationItem(
+                        NavigationBarItem(
                             icon = { Icon(item.icon, contentDescription = null) },
                             label = { Text(stringResource(item.resourceId)) },
                             selected = currentRoute == item.route,

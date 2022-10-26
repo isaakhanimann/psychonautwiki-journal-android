@@ -2,10 +2,7 @@ package com.isaakhanimann.healthassistant.ui.addingestion.route
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,6 +16,7 @@ fun CustomChooseRouteScreenPreview() {
     CustomChooseRouteScreen(onRouteTap = {})
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
     Scaffold(
@@ -52,7 +50,7 @@ fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
                             ) {
                                 RouteBox(
                                     route = route,
-                                    titleStyle = MaterialTheme.typography.h6
+                                    titleStyle = MaterialTheme.typography.titleLarge
                                 )
                             }
                         }

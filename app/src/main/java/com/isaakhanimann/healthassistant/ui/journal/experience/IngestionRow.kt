@@ -5,9 +5,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,7 +53,7 @@ fun IngestionRow(
         Column {
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(text = ingestion.substanceName, style = MaterialTheme.typography.h6)
+                    Text(text = ingestion.substanceName, style = MaterialTheme.typography.titleLarge)
                     val timeString = ingestion.time.getStringOfPattern("EEE HH:mm")
                     Text(text = timeString)
                 }
@@ -73,7 +73,7 @@ fun IngestionRow(
             }
             val note = ingestion.notes
             if (!note.isNullOrBlank()) {
-                Text(text = note, style = MaterialTheme.typography.caption)
+                Text(text = note, style = MaterialTheme.typography.bodySmall)
             }
         }
     }
@@ -90,7 +90,7 @@ fun DotRow(doseClass: DoseClass) {
                     .padding(horizontal = horizontalPadding)
                     .size(dotSize)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colors.onBackground)
+                    .background(MaterialTheme.colorScheme.onBackground)
             )
         }
         val numEmpty = DoseClass.values().size - doseClass.numDots
@@ -100,7 +100,7 @@ fun DotRow(doseClass: DoseClass) {
                     .padding(horizontal = horizontalPadding)
                     .size(dotSize)
                     .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.colors.onBackground, CircleShape)
+                    .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
             )
         }
     }

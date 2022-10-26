@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
             HealthAssistantTheme {
                 val systemUiController = rememberSystemUiController()
                 val useDarkIcons = !isSystemInDarkTheme()
-                val color = MaterialTheme.colors.surface
+                val color = MaterialTheme.colorScheme.surface
                 DisposableEffect(systemUiController, useDarkIcons) {
                     systemUiController.setSystemBarsColor(
                         color = color,
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     MainScreen()
                 }

@@ -3,9 +3,9 @@ package com.isaakhanimann.healthassistant.ui.addingestion.dose
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +33,7 @@ fun UnknownDoseDialog(
             ) {
                 Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning")
                 Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                Text(text = "Unknown Danger", style = MaterialTheme.typography.h5)
+                Text(text = "Unknown Danger", style = MaterialTheme.typography.headlineSmall)
             }
         },
         text = {

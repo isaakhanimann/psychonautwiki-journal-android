@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,6 +50,7 @@ fun EditExperienceScreenPreview() {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditExperienceScreen(
     enteredTitle: String,

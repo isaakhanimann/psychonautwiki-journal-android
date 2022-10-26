@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +50,7 @@ fun StatsPreview(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsScreen(
     navigateToSubstanceCompanion: (substanceName: String) -> Unit,
@@ -72,8 +73,7 @@ fun StatsScreen(
             Column(modifier = Modifier.padding(padding)) {
                 TabRow(
                     selectedTabIndex = statsModel.selectedOption.tabIndex,
-                    backgroundColor = MaterialTheme.colors.surface,
-                    contentColor = MaterialTheme.colors.onSurface,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
                 ) {
                     TimePickerOption.values().forEachIndexed { index, option ->
                         Tab(
@@ -97,12 +97,11 @@ fun StatsScreen(
                         item {
                             Text(
                                 text = "Experiences",
-                                style = MaterialTheme.typography.h6,
+                                style = MaterialTheme.typography.titleLarge,
                                 modifier = Modifier.padding(start = 10.dp, top = 5.dp)
                             )
                             Text(
                                 text = "Substance counted once per experience",
-                                color = MaterialTheme.colors.onBackground.copy(ContentAlpha.medium),
                                 modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
                             )
                             BarChart(
@@ -131,7 +130,7 @@ fun StatsScreen(
                                 Column {
                                     Text(
                                         text = subStat.substanceName,
-                                        style = MaterialTheme.typography.h6
+                                        style = MaterialTheme.typography.titleLarge
                                     )
                                     val addOn =
                                         if (subStat.experienceCount == 1) " experience" else " experiences"
@@ -172,23 +171,20 @@ fun EmptyScreenDisclaimer(title: String, description: String) {
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.h5,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = description,
-                    style = MaterialTheme.typography.body1,
-                    textAlign = TextAlign.Center
-                )
-            }
+        Column(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = description,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
