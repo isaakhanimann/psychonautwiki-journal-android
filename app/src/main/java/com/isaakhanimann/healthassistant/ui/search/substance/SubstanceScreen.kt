@@ -314,7 +314,10 @@ fun SubstanceScreen(
             if (interactions != null) {
                 if (interactions.dangerous.isNotEmpty() || interactions.unsafe.isNotEmpty() || interactions.uncertain.isNotEmpty()) {
                     CollapsibleSection(title = "Interactions") {
-                        InteractionsView(interactions = substance.interactions)
+                        InteractionsView(
+                            interactions = substance.interactions,
+                            substanceURL = substance.url
+                        )
                     }
                 }
                 Divider()

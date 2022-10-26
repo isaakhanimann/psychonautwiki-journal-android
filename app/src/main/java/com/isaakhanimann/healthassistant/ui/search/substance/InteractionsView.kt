@@ -2,17 +2,16 @@ package com.isaakhanimann.healthassistant.ui.search.substance
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -25,15 +24,18 @@ import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 @Preview
 @Composable
 fun InteractionsPreview(@PreviewParameter(InteractionsPreviewProvider::class) interactions: Interactions) {
-    InteractionsView(interactions)
+    InteractionsView(interactions, substanceURL = "")
 }
 
 @Composable
-fun InteractionsView(interactions: Interactions) {
+fun InteractionsView(interactions: Interactions, substanceURL: String) {
     Column {
         if (interactions.dangerous.isNotEmpty()) {
             interactions.dangerous.forEach {
-                InteractionRowSubstanceScreen(text = it, interactionType = InteractionType.DANGEROUS)
+                InteractionRowSubstanceScreen(
+                    text = it,
+                    interactionType = InteractionType.DANGEROUS
+                )
             }
         }
         if (interactions.unsafe.isNotEmpty()) {
@@ -43,17 +45,30 @@ fun InteractionsView(interactions: Interactions) {
         }
         if (interactions.uncertain.isNotEmpty()) {
             interactions.uncertain.forEach {
-                InteractionRowSubstanceScreen(text = it, interactionType = InteractionType.UNCERTAIN)
+                InteractionRowSubstanceScreen(
+                    text = it,
+                    interactionType = InteractionType.UNCERTAIN
+                )
             }
         }
-        Text(
-            text = "Check the PsychonautWiki article for explanations",
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.padding(horizontal = horizontalPadding)
-        )
-        VerticalSpace()
+        InteractionExplanationButton(substanceURL = substanceURL)
     }
+}
 
+@Composable
+fun InteractionExplanationButton(substanceURL: String) {
+    val uriHandler = LocalUriHandler.current
+    TextButton(onClick = {
+        val interactionURL = "$substanceURL#Dangerous_interactions"
+        uriHandler.openUri(interactionURL)
+    }) {
+        Icon(
+            Icons.Default.OpenInBrowser,
+            contentDescription = "Open Link"
+        )
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+        Text("Interaction Explanations")
+    }
 }
 
 @Composable
@@ -64,12 +79,16 @@ fun InteractionRowSubstanceScreen(
 ) {
     Surface(
         modifier = Modifier
-            .fillMaxWidth().padding(bottom = 1.dp),
+            .fillMaxWidth()
+            .padding(bottom = 1.dp),
         shape = RectangleShape,
         color = interactionType.color
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = horizontalPadding, vertical = verticalPaddingInside),
+            modifier = Modifier.padding(
+                horizontal = horizontalPadding,
+                vertical = verticalPaddingInside
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(

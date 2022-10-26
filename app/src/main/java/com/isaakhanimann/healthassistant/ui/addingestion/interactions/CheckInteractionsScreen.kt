@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.classes.InteractionType
 import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCategories
+import com.isaakhanimann.healthassistant.ui.search.substance.InteractionExplanationButton
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceWithCategoriesPreviewProvider
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
@@ -35,6 +36,7 @@ fun CheckInteractionsScreen(
 ) {
     CheckInteractionsScreen(
         substanceName = viewModel.substanceName,
+        substanceUrl = viewModel.substance.url,
         isSearchingForInteractions = viewModel.isSearchingForInteractions,
         dangerousInteractions = viewModel.dangerousInteractions,
         unsafeInteractions = viewModel.unsafeInteractions,
@@ -54,6 +56,7 @@ fun CheckInteractionsScreen(
 fun CheckInteractionsScreenPreview(@PreviewParameter(SubstanceWithCategoriesPreviewProvider::class) substanceWithCategories: SubstanceWithCategories) {
     CheckInteractionsScreen(
         substanceName = "LSD",
+        substanceUrl = "",
         isSearchingForInteractions = true,
         dangerousInteractions = substanceWithCategories.substance.interactions?.dangerous
             ?: emptyList(),
@@ -73,6 +76,7 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstanceWithCategoriesPrev
 fun CheckInteractionsScreenPreview2() {
     CheckInteractionsScreen(
         substanceName = "MDMA",
+        substanceUrl = "",
         isSearchingForInteractions = true,
         dangerousInteractions = emptyList(),
         unsafeInteractions = emptyList(),
@@ -88,6 +92,7 @@ fun CheckInteractionsScreenPreview2() {
 @Composable
 fun CheckInteractionsScreen(
     substanceName: String,
+    substanceUrl: String,
     isSearchingForInteractions: Boolean,
     isShowingAlert: Boolean,
     dismissAlert: () -> Unit,
@@ -164,8 +169,7 @@ fun CheckInteractionsScreen(
                         }
                     }
                     item {
-                        Text(text = "Check the PsychonautWiki article for explanations", style = MaterialTheme.typography.caption, modifier = Modifier.padding(horizontal = horizontalPadding))
-                        Spacer(modifier = Modifier.height(5.dp))
+                        InteractionExplanationButton(substanceURL = substanceUrl)
                     }
                 }
             }
@@ -224,7 +228,10 @@ fun InteractionRow(
         color = interactionType.color
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = horizontalPadding, vertical = verticalPaddingInside),
+            modifier = Modifier.padding(
+                horizontal = horizontalPadding,
+                vertical = verticalPaddingInside
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
