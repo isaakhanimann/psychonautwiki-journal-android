@@ -4,12 +4,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.BulletPoints
 import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
 import com.isaakhanimann.healthassistant.ui.search.substance.VerticalSpace
@@ -34,7 +35,8 @@ fun SaferHallucinogensScreen() {
                 .padding(padding)
         ) {
             SectionText(text = "The information below is exclusively tailored for the use and experimentation with hallucinogens such as psychedelics, dissociatives, and deliriants.")
-            SectionTitle("Setting")
+            val titleStyle = MaterialTheme.typography.titleMedium
+            Text("Setting", style = titleStyle)
             SectionText(text = "Choosing a suitable place to experience the effects of a hallucinogen is extremely important and plays a major role in determining the outcome of the experience. The ideal place for an inexperienced user is a familiar, safe, indoor environment over which they have full control and is devoid of factors that can negatively influence one's mental state. In order to prepare a proper setting for hallucinogens, it is advised to take the following steps:")
             BulletPoints(
                 points = listOf(
@@ -47,7 +49,7 @@ fun SaferHallucinogensScreen() {
             )
             VerticalSpace()
             SectionText(text = "Once the user has become intimately familiar with their substance of choice, it is up to them as an individual whether they would be comfortable tripping in a less controlled environment such as out in nature, social gatherings, parties, raves, etc. However, it should be noted that tripping in these settings entails considerably more physical and legal risk.")
-            SectionTitle("Set (State of Mind)")
+            Text("Set (State of Mind)", style = titleStyle)
             SectionText(
                 text = """
                 The user's set or state of mind in plays a major role in determining the outcome of a trip. Hallucinogens amplify one's current state of mind, mood and outlook: a positive mindset will likely become more positive and a negative one will become even more negative. As a result, hallucinogens should generally be avoided during acutely stressful or negative periods of life. Users should be fully aware of the ways in which hallucinogens, particularly psychedelics, are able to force one to face their internal problems that they may not be psychologically prepared to handle at that time.
@@ -56,14 +58,14 @@ fun SaferHallucinogensScreen() {
                 Additionally, the user must understand that the experience of tripping is often ungraspable, meaning that one should accept being unable to understand or express the full scope of what is happening during the experience. The user should embrace the fact that their thought processes, although potentially more lucid in some ways, will be unavoidably impaired along with fine motor control, conversational skills, and situational awareness. The user should be sure to frequently remind themselves that these effects are normal and, most importantly, temporary.
             """.trimIndent()
             )
-            SectionTitle("Bodily State")
+            Text("Bodily State", style = titleStyle)
             SectionText(
                 text = """
                 The user's current bodily condition is just as important as one's mood and mindset when going into a trip. If one feels tired, sick or injured, these sensations will manifest as amplified versions of the same conditions which, when combined with possible body load, may easily detract from or ruin the experience.
                 Instead of tripping while stressed, tired, sick or injured, one should wait for a more suitable opportunity. This will drastically lower the chances of having a negative or unfulfilling experience.
                 """.trimIndent()
             )
-            SectionTitle("Trip Sitters")
+            Text("Trip Sitters", style = titleStyle)
             SectionText(
                 text = """
                 When using hallucinogens, a trip sitter is strongly recommended to be present, particularly if one is inexperienced with the substance. It is the trip sitter's responsibility to assist the individual or group by maintaining a calm and grounded frame of mind. This can be accomplished by simply watching over the trippers and calmly reassuring them if they experience any anxiety or stress, while also preventing them from coming to any harm. There is an obvious correlation between the name "trip sitter" and "baby sitter": this is because trip sitting often feels like babysitting and it is a responsibility that must be taken every bit as seriously.
@@ -71,7 +73,7 @@ fun SaferHallucinogensScreen() {
                 Once the user becomes familiar with a substance, it becomes a personal choice as to whether or not they feel comfortable enough to trip without a sitter. It is also advised to use trip sitters when taking high doses or a dose one has never taken before. It should be remembered that having friends around while tripping is the best way to avoid potential psychological, medical, or legal consequences.
                 """.trimIndent()
             )
-            SectionTitle("Anchors")
+            Text("Anchors", style = titleStyle)
             SectionText(text = "In the context of hallucinogen use, an anchor is an activity or physical object which keeps the user grounded during the heavy distortion of a person's sense of time, space, memory, and sense of self. At higher dosages, this can result in extreme disorientation and confusion. Anchors are often used to counteract this and maintain one's concept of the current situation as it is within reality.")
             SectionText(text = "Examples of anchors include:")
             BulletPoints(
@@ -85,7 +87,7 @@ fun SaferHallucinogensScreen() {
                 modifier = Modifier.padding(horizontal = horizontalPadding)
             )
             VerticalSpace()
-            SectionTitle("Aborting Trips")
+            Text("Aborting Trips", style = titleStyle)
             SectionText(
                 text = """
                 Hallucinogens have the potential to become overwhelming and push the user into a paranoid or dreadful mood, particularly if they are inexperienced or in an inappropriate set and setting.

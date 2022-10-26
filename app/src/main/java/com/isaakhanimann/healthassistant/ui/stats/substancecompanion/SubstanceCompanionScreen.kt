@@ -2,10 +2,7 @@ package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -19,7 +16,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestio
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.healthassistant.data.substances.classes.Tolerance
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ColorPicker
-import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
+import com.isaakhanimann.healthassistant.ui.journal.experience.CardWithTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSection
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
@@ -90,16 +87,21 @@ fun SubstanceCompanionScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(padding)
+                .padding(horizontal = horizontalPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
+                CardWithTitle(title = "${substanceCompanion.substanceName} Color") {
+                    ColorPicker(
+                        selectedColor = substanceCompanion.color,
+                        onChangeOfColor = onChangeColor,
+                        alreadyUsedColors = alreadyUsedColors,
+                        otherColors = otherColors
+                    )
+                }
                 if (tolerance != null || crossTolerances.isNotEmpty()) {
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        SectionTitle(title = "Tolerance")
+                    CardWithTitle(title = "Tolerance") {
                         ToleranceSection(
                             tolerance = tolerance,
                             crossTolerances = crossTolerances,
@@ -110,20 +112,8 @@ fun SubstanceCompanionScreen(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(5.dp))
-                SectionTitle(title = "${substanceCompanion.substanceName} Color")
-                Spacer(modifier = Modifier.height(6.dp))
-                ColorPicker(
-                    selectedColor = substanceCompanion.color,
-                    onChangeOfColor = onChangeColor,
-                    alreadyUsedColors = alreadyUsedColors,
-                    otherColors = otherColors
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                SectionTitle(title = "History")
-                Spacer(modifier = Modifier.height(6.dp))
+                Text(text = "History", style = MaterialTheme.typography.headlineMedium)
                 Text(text = "Now")
-                Spacer(modifier = Modifier.height(4.dp))
             }
             ingestionBursts.forEach { burst ->
                 item {

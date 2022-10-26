@@ -21,7 +21,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
@@ -128,8 +127,8 @@ fun ExperienceScreen(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
+                .padding(horizontal = horizontalPadding)
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
             val elements = oneExperienceScreenModel.ingestionElements
             val effectTimelines = remember(elements) {
                 elements.map { oneElement ->
@@ -146,27 +145,31 @@ fun ExperienceScreen(
                 }
             }
             if (effectTimelines.isNotEmpty()) {
-                Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
-                    AllTimelines(
-                        dataForEffectLines = effectTimelines,
-                        isShowingCurrentTime = true,
-                        navigateToExplainTimeline = navigateToExplainTimeline,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
+                Card {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = horizontalPadding,
+                            vertical = 10.dp
+                        )
+                    ) {
+                        AllTimelines(
+                            dataForEffectLines = effectTimelines,
+                            isShowingCurrentTime = true,
+                            navigateToExplainTimeline = navigateToExplainTimeline,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                        )
+                    }
                 }
             }
             if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                ) {
-                    SectionTitle(
-                        title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern(
-                            "EEE, dd MMM yyyy"
-                        )
+                TitleAboveCard(
+                    title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern(
+                        "EEE, dd MMM yyyy"
                     )
+                )
+                Card {
                     oneExperienceScreenModel.ingestionElements.forEachIndexed { index, ingestionElement ->
                         IngestionRow(
                             ingestionElement = ingestionElement,
@@ -185,47 +188,54 @@ fun ExperienceScreen(
             }
             val cumulativeDoses = oneExperienceScreenModel.cumulativeDoses
             if (cumulativeDoses.isNotEmpty()) {
-                SectionTitle(title = "Cumulative Dose")
-                cumulativeDoses.forEachIndexed { index, cumulativeDose ->
-                    CumulativeDoseRow(
-                        cumulativeDose = cumulativeDose, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 5.dp, horizontal = horizontalPadding)
-                    )
-                    if (index < cumulativeDoses.size - 1) {
-                        Divider()
+                TitleAboveCard(title = "Cumulative Dose")
+                Card {
+                    cumulativeDoses.forEachIndexed { index, cumulativeDose ->
+                        CumulativeDoseRow(
+                            cumulativeDose = cumulativeDose, modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 5.dp, horizontal = horizontalPadding)
+                        )
+                        if (index < cumulativeDoses.size - 1) {
+                            Divider()
+                        }
                     }
                 }
             }
-            SectionTitle(title = "Notes")
-            if (oneExperienceScreenModel.notes.isEmpty()) {
-                TextButton(
-                    onClick = navigateToEditExperienceScreen,
-                    modifier = Modifier.padding(horizontal = 5.dp)
-                ) {
-                    Icon(
-                        Icons.Filled.Edit,
-                        contentDescription = "Edit",
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Add Notes")
-                }
-            } else {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = horizontalPadding)
-                ) {
-                    Text(
-                        text = oneExperienceScreenModel.notes,
-                        modifier = Modifier.padding(vertical = 10.dp)
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    IconButton(onClick = navigateToEditExperienceScreen) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Notes")
+            TitleAboveCard(title = "Notes")
+            Card {
+                if (oneExperienceScreenModel.notes.isEmpty()) {
+                    TextButton(
+                        onClick = navigateToEditExperienceScreen,
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    ) {
+                        Icon(
+                            Icons.Filled.Edit,
+                            contentDescription = "Edit",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Add Notes")
+                    }
+                } else {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = horizontalPadding)
+                    ) {
+                        Text(
+                            text = oneExperienceScreenModel.notes,
+                            modifier = Modifier.padding(vertical = 10.dp)
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        IconButton(onClick = navigateToEditExperienceScreen) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit Notes"
+                            )
+                        }
                     }
                 }
             }
@@ -270,6 +280,15 @@ fun ExperienceScreen(
             }
         }
     }
+}
+
+@Composable
+fun TitleAboveCard(title: String) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.padding(top = 5.dp)
+    )
 }
 
 data class DataForOneEffectLine(

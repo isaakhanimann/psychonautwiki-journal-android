@@ -13,9 +13,9 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.ui.journal.SectionTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
 import com.isaakhanimann.healthassistant.ui.search.substance.VerticalSpace
+import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,6 +45,7 @@ fun RouteExplanationScreen() {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
+                .padding(horizontal = horizontalPadding)
         ) {
             SectionText(
                 text = """A route of administration is the method in which a psychoactive substance is delivered into the body.
@@ -52,7 +53,7 @@ The route through which a substance is administered can greatly impact its poten
 Determining an optimal route of administration is highly dependent on the substance consumed, its desired duration and potency and side effects, and one's personal comfort level."""
             )
             AdministrationRoute.values().filter { !it.isInjectionMethod }.forEach {
-                SectionTitle(it.displayText)
+                Text(text = it.displayText, style = MaterialTheme.typography.titleMedium)
                 SectionText(it.articleText)
                 if (it == AdministrationRoute.RECTAL) {
                     Button(
@@ -70,7 +71,7 @@ Determining an optimal route of administration is highly dependent on the substa
                 }
             }
             AdministrationRoute.values().filter { it.isInjectionMethod }.forEach {
-                SectionTitle(it.displayText)
+                Text(text = it.displayText, style = MaterialTheme.typography.titleMedium)
                 SectionText(it.articleText)
             }
         }
