@@ -101,8 +101,8 @@ fun DrugTestingScreen() {
             }
             CardWithTesting(title = "Netherlands") {
                 TestingServiceItem(
-                    name = "33 locations",
-                    city = "See Map",
+                    name = "Drugs-test",
+                    city = "33 locations",
                     url = "https://www.drugs-test.nl/en/testlocations/"
                 )
             }
