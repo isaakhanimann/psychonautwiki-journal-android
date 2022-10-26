@@ -1,6 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.main
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,6 +23,7 @@ import com.isaakhanimann.healthassistant.ui.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.route.CustomChooseRouteScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.healthassistant.ui.addingestion.time.ChooseTimeScreen
+import com.isaakhanimann.healthassistant.ui.journal.ExperienceRow
 import com.isaakhanimann.healthassistant.ui.journal.JournalScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.ExperienceScreen
 import com.isaakhanimann.healthassistant.ui.journal.experience.edit.EditExperienceScreen
@@ -42,9 +45,9 @@ import com.isaakhanimann.healthassistant.ui.stats.substancecompanion.SubstanceCo
 
 @Composable
 fun MainScreen(
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel()
+    viewModel: MainScreenViewModel = hiltViewModel()
 ) {
-    if (mainScreenViewModel.isAcceptedFlow.collectAsState().value) {
+    if (viewModel.isAcceptedFlow.collectAsState().value) {
         val navController = rememberNavController()
         val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -57,10 +60,22 @@ fun MainScreen(
         bottomBarState.value = isShowingBottomBar
         Scaffold(
             bottomBar = {
-                BottomBar(
-                    navController = navController,
-                    bottomBarState = bottomBarState
-                )
+                Column {
+                    val currentExperience = viewModel.currentExperienceFlow.collectAsState().value
+                    if (currentExperience != null && isShowingBottomBar) {
+                        Divider()
+                        ExperienceRow(
+                            experienceWithIngestionsAndCompanions = currentExperience,
+                            navigateToExperienceScreen = {
+                                navController.navigateToExperiencePopNothing(experienceId = currentExperience.experience.id)
+                            }
+                        )
+                    }
+                    BottomBar(
+                        navController = navController,
+                        bottomBarState = bottomBarState
+                    )
+                }
             }
         ) { innerPadding ->
             NavHost(
@@ -75,7 +90,7 @@ fun MainScreen(
             }
         }
     } else {
-        AcceptConditionsScreen(onTapAccept = mainScreenViewModel::accept)
+        AcceptConditionsScreen(onTapAccept = viewModel::accept)
     }
 }
 

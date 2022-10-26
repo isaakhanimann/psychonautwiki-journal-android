@@ -1,6 +1,6 @@
 package com.isaakhanimann.healthassistant
 
-import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AxisDrawable
+import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.healthassistant.ui.utils.getInstant
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import com.isaakhanimann.healthassistant.ui.utils.getTimeDifferenceText
