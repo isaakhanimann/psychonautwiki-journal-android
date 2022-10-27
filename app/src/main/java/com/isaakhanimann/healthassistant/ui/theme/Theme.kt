@@ -75,6 +75,7 @@ private val DarkColors = darkColorScheme(
 )
 
 val horizontalPadding = 10.dp
+val verticalPaddingCards = 3.dp
 
 @Composable
 fun HealthAssistantTheme(

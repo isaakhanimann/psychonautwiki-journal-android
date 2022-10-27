@@ -37,6 +37,7 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseVie
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDurationView
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
+import com.isaakhanimann.healthassistant.ui.theme.verticalPaddingCards
 import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getInstant
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
@@ -117,31 +118,53 @@ fun SubstanceScreen(
                 .padding(padding)
         ) {
             if (!substance.isApproved) {
-                Row(modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)) {
-                    Icon(imageVector = Icons.Default.GppBad, contentDescription = "Verified")
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = "Info is not approved")
+                Card(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = verticalPaddingCards
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier.padding(
+                            vertical = 5.dp,
+                            horizontal = horizontalPadding
+                        )
+                    ) {
+                        Icon(imageVector = Icons.Default.GppBad, contentDescription = "Verified")
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Info is not approved")
+                    }
                 }
             }
             if (substance.summary != null) {
                 VerticalSpace()
-                Text(
-                    text = substance.summary,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                )
-                val categories = substanceWithCategories.categories
-                VerticalSpace()
-                FlowRow(
-                    mainAxisSpacing = 5.dp,
-                    crossAxisSpacing = 5.dp,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                Card(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = verticalPaddingCards
+                    )
                 ) {
-                    categories.forEach { category ->
-                        CategoryChipFromSubstanceScreen(category, navigateToCategoryScreen)
+                    Column(
+                        modifier = Modifier
+                            .padding(
+                                horizontal = horizontalPadding,
+                                vertical = 10.dp
+                            )
+                            .fillMaxWidth()
+                    ) {
+                        Text(text = substance.summary)
+                        val categories = substanceWithCategories.categories
+                        VerticalSpace()
+                        FlowRow(
+                            mainAxisSpacing = 5.dp,
+                            crossAxisSpacing = 5.dp,
+                        ) {
+                            categories.forEach { category ->
+                                CategoryChipFromSubstanceScreen(category, navigateToCategoryScreen)
+                            }
+                        }
                     }
                 }
-                VerticalSpace()
-                Divider()
             }
             val roasWithDosesDefined = substance.roas.filter { roa ->
                 val roaDose = roa.roaDose
@@ -151,22 +174,16 @@ fun SubstanceScreen(
             }
             if (substance.dosageRemark != null || roasWithDosesDefined.isNotEmpty()) {
                 CollapsibleSection(title = "Dosage") {
-                    Column {
+                    Column(Modifier.padding(horizontal = horizontalPadding)) {
                         if (substance.dosageRemark != null) {
                             VerticalSpace()
-                            Text(
-                                text = substance.dosageRemark,
-                                modifier = Modifier.padding(horizontal = horizontalPadding)
-                            )
+                            Text(text = substance.dosageRemark)
                             VerticalSpace()
                             Divider()
                         }
                         roasWithDosesDefined.forEach { roa ->
                             Column(
-                                modifier = Modifier.padding(
-                                    vertical = 5.dp,
-                                    horizontal = horizontalPadding
-                                )
+                                modifier = Modifier.padding(vertical = 5.dp)
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
@@ -184,14 +201,8 @@ fun SubstanceScreen(
                             Divider()
                         }
                         VerticalSpace()
-                        Text(
-                            text = doseDisclaimer,
-                            modifier = Modifier.padding(horizontal = horizontalPadding)
-                        )
-                        TextButton(
-                            onClick = navigateToDosageExplanationScreen,
-                            modifier = Modifier.padding(horizontal = horizontalPadding)
-                        ) {
+                        Text(text = doseDisclaimer)
+                        TextButton(onClick = navigateToDosageExplanationScreen) {
                             Icon(
                                 Icons.Outlined.Info,
                                 contentDescription = "Info",
@@ -202,7 +213,6 @@ fun SubstanceScreen(
                         }
                     }
                 }
-                Divider()
             }
             if (substance.tolerance != null || substance.crossTolerances.isNotEmpty()) {
                 CollapsibleSection(title = "Tolerance") {
@@ -216,7 +226,6 @@ fun SubstanceScreen(
                         VerticalSpace()
                     }
                 }
-                Divider()
             }
             if (substance.toxicities.isNotEmpty()) {
                 CollapsibleSection(title = "Toxicity") {
@@ -236,7 +245,6 @@ fun SubstanceScreen(
                         VerticalSpace()
                     }
                 }
-                Divider()
             }
             val roasWithDurationsDefined = substance.roas.filter { roa ->
                 val roaDuration = roa.roaDuration
@@ -246,11 +254,10 @@ fun SubstanceScreen(
             }
             if (roasWithDurationsDefined.isNotEmpty()) {
                 CollapsibleSection(title = "Duration") {
-                    Column {
+                    Column(Modifier.padding(horizontal = horizontalPadding, vertical = 5.dp)) {
                         var ingestionTime by remember { mutableStateOf(LocalDateTime.now()) }
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = horizontalPadding)
                         ) {
                             Text("Ingestion Time:")
                             Spacer(modifier = Modifier.width(10.dp))
@@ -261,6 +268,7 @@ fun SubstanceScreen(
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
+                        VerticalSpace()
                         val dataForEffectLines = remember(roasWithDurationsDefined, ingestionTime) {
                             roasWithDurationsDefined.map { roa ->
                                 DataForOneEffectLine(
@@ -278,15 +286,13 @@ fun SubstanceScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)
-                                .padding(horizontal = horizontalPadding)
                         )
-                        VerticalSpace()
+                        Spacer(modifier = Modifier.height(10.dp))
                         Divider()
                         roasWithDurationsDefined.forEachIndexed { index, roa ->
                             Column(
                                 modifier = Modifier.padding(
                                     vertical = 5.dp,
-                                    horizontal = horizontalPadding
                                 )
                             ) {
                                 Row(
@@ -310,7 +316,6 @@ fun SubstanceScreen(
                         }
                     }
                 }
-                Divider()
             }
             val interactions = substance.interactions
             if (interactions != null) {
@@ -322,7 +327,6 @@ fun SubstanceScreen(
                         )
                     }
                 }
-                Divider()
             }
             if (substance.effectsSummary != null) {
                 CollapsibleSection(title = "Effects") {
@@ -335,7 +339,6 @@ fun SubstanceScreen(
                         VerticalSpace()
                     }
                 }
-                Divider()
             }
             if (substance.generalRisks != null && substance.longtermRisks != null) {
                 CollapsibleSection(title = "Risks") {
@@ -348,7 +351,6 @@ fun SubstanceScreen(
                         VerticalSpace()
                     }
                 }
-                Divider()
                 CollapsibleSection(title = "Long-term") {
                     Column {
                         VerticalSpace()
@@ -359,7 +361,6 @@ fun SubstanceScreen(
                         VerticalSpace()
                     }
                 }
-                Divider()
             }
             if (substance.saferUse.isNotEmpty()) {
                 CollapsibleSection(title = "Safer Use") {
@@ -372,7 +373,6 @@ fun SubstanceScreen(
                         VerticalSpace()
                     }
                 }
-                Divider()
             }
             if (substance.addictionPotential != null) {
                 CollapsibleSection(title = "Addiction Potential") {
@@ -385,7 +385,6 @@ fun SubstanceScreen(
                         VerticalSpace()
                     }
                 }
-                Divider()
             }
             val firstRoa = substance.roas.firstOrNull()
             val useVolumetric = firstRoa?.roaDose?.shouldDefinitelyUseVolumetricDosing == true
@@ -421,7 +420,6 @@ fun SubstanceScreen(
                         }
                     }
                 }
-                Divider()
             }
         }
     }
@@ -464,38 +462,40 @@ fun VerticalSpace() {
 
 @Composable
 fun CollapsibleSection(title: String, content: @Composable () -> Unit) {
-    Column {
+    Card(
+        modifier = Modifier.padding(
+            horizontal = horizontalPadding,
+            vertical = verticalPaddingCards
+        )
+    ) {
         var isExpanded by remember { mutableStateOf(false) }
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.surface
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { isExpanded = !isExpanded }
+                .padding(horizontal = horizontalPadding, vertical = 8.dp)
+                .fillMaxWidth()
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .clickable { isExpanded = !isExpanded }
-                    .padding(horizontal = horizontalPadding, vertical = 8.dp)
-            ) {
-                Text(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    text = title,
-                    style = MaterialTheme.typography.titleLarge
+            Text(
+                color = MaterialTheme.colorScheme.onSurface,
+                text = title,
+                style = MaterialTheme.typography.titleMedium
+            )
+            if (isExpanded) {
+                Icon(
+                    imageVector = Icons.Outlined.ExpandLess,
+                    contentDescription = "Expand Less",
                 )
-                if (isExpanded) {
-                    Icon(
-                        imageVector = Icons.Outlined.ExpandLess,
-                        contentDescription = "Expand Less",
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Outlined.ExpandMore,
-                        contentDescription = "Expand More",
-                    )
-                }
-
+            } else {
+                Icon(
+                    imageVector = Icons.Outlined.ExpandMore,
+                    contentDescription = "Expand More",
+                )
             }
+
         }
+        Divider()
         val expandTransition = remember {
             expandVertically(
                 expandFrom = Alignment.Top,
