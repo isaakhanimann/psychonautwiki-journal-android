@@ -138,11 +138,13 @@ fun SearchField(
             )
         },
         trailingIcon = {
+            val endPaddingIcon = 5.dp
             if (searchText != "") {
                 IconButton(
                     onClick = {
                         onChange("")
-                    }
+                    },
+                    modifier = Modifier.padding(end = endPaddingIcon)
                 ) {
                     Icon(
                         Icons.Default.Close,
@@ -154,6 +156,7 @@ fun SearchField(
                 val activeFilters = categories.filter { it.isActive }
                 IconButton(
                     onClick = { isExpanded = true },
+                    modifier = Modifier.padding(end = endPaddingIcon)
                 ) {
                     BadgedBox(
                         badge = {
@@ -177,11 +180,13 @@ fun SearchField(
                             text = { Text(categoryChipModel.chipName) },
                             onClick = { onFilterTapped(categoryChipModel.chipName) },
                             leadingIcon = {
-                                Icon(
-                                    Icons.Filled.Check,
-                                    contentDescription = "Check",
-                                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                                )
+                                if (categoryChipModel.isActive) {
+                                    Icon(
+                                        Icons.Filled.Check,
+                                        contentDescription = "Check",
+                                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                                    )
+                                }
                             }
                         )
                     }
