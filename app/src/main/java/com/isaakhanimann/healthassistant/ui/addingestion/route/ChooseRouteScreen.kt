@@ -269,7 +269,7 @@ fun InjectionDialog(
 @Composable
 fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-        Column {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = route.displayText,
                 textAlign = TextAlign.Center,
