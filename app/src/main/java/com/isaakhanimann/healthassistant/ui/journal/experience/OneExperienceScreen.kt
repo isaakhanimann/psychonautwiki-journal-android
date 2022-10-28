@@ -25,7 +25,6 @@ import com.isaakhanimann.healthassistant.ui.journal.experience.timeline.AllTimel
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import java.time.Instant
 
@@ -88,8 +87,8 @@ fun ExperienceScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(
-                title = oneExperienceScreenModel.title,
+            TopAppBar(
+                title = { Text(oneExperienceScreenModel.title) },
                 actions = {
                     IconButton(onClick = navigateToEditExperienceScreen) {
                         Icon(

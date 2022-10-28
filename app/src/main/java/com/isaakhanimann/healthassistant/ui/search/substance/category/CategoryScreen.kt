@@ -15,7 +15,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.classes.Category
 import com.isaakhanimann.healthassistant.ui.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
 fun CategoryScreen(
@@ -49,7 +48,7 @@ fun CategoryScreen(category: Category?) {
     } else {
         val uriHandler = LocalUriHandler.current
         Scaffold(
-            topBar = { JournalTopAppBar(title = category.name.replaceFirstChar { it.uppercase() }) },
+            topBar = { TopAppBar(title = { Text(category.name.replaceFirstChar { it.uppercase() }) }) },
             floatingActionButton = {
                 if (category.url != null) {
                     ExtendedFloatingActionButton(
@@ -68,7 +67,9 @@ fun CategoryScreen(category: Category?) {
             Text(
                 text = category.description,
                 textAlign = TextAlign.Justify,
-                modifier = Modifier.padding(padding).padding(horizontal = horizontalPadding, vertical = 10.dp)
+                modifier = Modifier
+                    .padding(padding)
+                    .padding(horizontal = horizontalPadding, vertical = 10.dp)
             )
         }
     }

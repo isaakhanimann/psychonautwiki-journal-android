@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,7 +14,6 @@ import com.isaakhanimann.healthassistant.ui.search.substance.BulletPoints
 import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
 import com.isaakhanimann.healthassistant.ui.search.substance.VerticalSpace
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -25,8 +21,8 @@ import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 fun ExplainTimelineScreen() {
     Scaffold(
         topBar = {
-            JournalTopAppBar(
-                title = "Timeline Info",
+            TopAppBar(
+                title = { Text("Timeline Info") },
             )
         },
     ) { padding ->
@@ -68,8 +64,10 @@ fun ExplainTimelineScreen() {
                     Text(text = "Offset", style = titleStyle)
                     SectionText(text = "The offset phase can be defined as the amount of time in between the conclusion of the peak and shifting into a sober state. This is colloquially referred to as \"coming down.\"")
                     Text(text = "After Effects", style = titleStyle)
-                    SectionText(text = "The after effects can be defined as any residual effects which may remain after the experience has reached its conclusion. This is colloquially known as a \"hangover\" or an \"afterglow\" depending on the substance and usage.\n" +
-                            "The after effects are not included as part of the total duration.")
+                    SectionText(
+                        text = "The after effects can be defined as any residual effects which may remain after the experience has reached its conclusion. This is colloquially known as a \"hangover\" or an \"afterglow\" depending on the substance and usage.\n" +
+                                "The after effects are not included as part of the total duration."
+                    )
                 }
             }
         }

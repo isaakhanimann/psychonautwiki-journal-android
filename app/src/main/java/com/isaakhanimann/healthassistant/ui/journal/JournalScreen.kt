@@ -27,7 +27,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.ui.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
 fun JournalScreen(
@@ -85,8 +84,8 @@ fun JournalScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(
-                title = "Experiences",
+            TopAppBar(
+                title = { Text("Experiences") },
                 actions = {
                     IconToggleButton(
                         checked = isFavoriteEnabled,

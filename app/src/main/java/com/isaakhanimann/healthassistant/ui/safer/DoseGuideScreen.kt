@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
@@ -34,7 +33,7 @@ fun DoseGuideScreen(
     val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Dosage Guide")
+            TopAppBar(title = { Text("Dosage Guide") })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(

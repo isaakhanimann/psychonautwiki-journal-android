@@ -26,7 +26,6 @@ import com.isaakhanimann.healthassistant.data.substances.classes.SubstanceWithCa
 import com.isaakhanimann.healthassistant.ui.search.substance.InteractionExplanationButton
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceWithCategoriesPreviewProvider
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
 @Composable
@@ -105,7 +104,7 @@ fun CheckInteractionsScreen(
     navigateToNext: () -> Unit
 ) {
     Scaffold(
-        topBar = { JournalTopAppBar(title = "$substanceName Interactions") },
+        topBar = { TopAppBar(title = { Text("$substanceName Interactions") }) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = navigateToNext,

@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
@@ -21,7 +20,7 @@ fun CustomChooseRouteScreenPreview() {
 fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Choose Route")
+            TopAppBar(title = { Text("Choose Route") })
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {

@@ -16,7 +16,6 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
 import com.isaakhanimann.healthassistant.ui.search.substance.VerticalSpace
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -25,7 +24,7 @@ fun RouteExplanationScreen() {
     val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Routes of Administration")
+            TopAppBar(title = { Text("Routes of Administration") })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(

@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
@@ -48,7 +47,7 @@ fun SettingsScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Settings")
+            TopAppBar(title = { Text("Settings") })
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {

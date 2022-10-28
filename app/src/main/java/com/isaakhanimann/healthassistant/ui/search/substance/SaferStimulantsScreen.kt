@@ -6,12 +6,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -19,7 +19,7 @@ import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 fun SaferStimulantsScreen() {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Safer Stimulants Use")
+            TopAppBar(title = { Text("Safer Stimulants Use") })
         },
     ) { padding ->
         Column(

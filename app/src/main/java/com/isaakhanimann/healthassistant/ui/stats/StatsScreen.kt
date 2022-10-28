@@ -19,7 +19,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
 @Composable
@@ -59,8 +58,8 @@ fun StatsScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(
-                title = if (statsModel.areThereAnyIngestions) "Statistics Since ${statsModel.startDateText}" else "Statistics",
+            TopAppBar(
+                title = { Text(if (statsModel.areThereAnyIngestions) "Statistics Since ${statsModel.startDateText}" else "Statistics") }
             )
         }
     ) { padding ->

@@ -17,7 +17,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
 fun AddCustomSubstance(
@@ -110,7 +109,7 @@ fun AddOrEditCustomSubstance(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = title)
+            TopAppBar(title = { Text(title) })
         },
         floatingActionButton = {
             if (isDoneEnabled) {
@@ -127,14 +126,19 @@ fun AddOrEditCustomSubstance(
             }
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding).padding(horizontal = 5.dp, vertical = 10.dp)) {
+        Column(modifier = Modifier
+            .padding(padding)
+            .padding(horizontal = 5.dp, vertical = 10.dp)) {
             val focusManager = LocalFocusManager.current
             OutlinedTextField(
                 value = name,
                 onValueChange = onNameChange,
                 label = { Text("Name") },
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, capitalization = KeyboardCapitalization.Words),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    capitalization = KeyboardCapitalization.Words
+                ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -147,7 +151,10 @@ fun AddOrEditCustomSubstance(
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
-            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 OutlinedButton(onClick = { onUnitsChange("µg") }) {
                     Text(text = "µg")
                 }
@@ -166,7 +173,10 @@ fun AddOrEditCustomSubstance(
                 onValueChange = onDescriptionChange,
                 label = { Text("Description") },
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, capitalization = KeyboardCapitalization.Sentences),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    capitalization = KeyboardCapitalization.Sentences
+                ),
                 modifier = Modifier.fillMaxWidth()
             )
             if (isShowingDelete) {

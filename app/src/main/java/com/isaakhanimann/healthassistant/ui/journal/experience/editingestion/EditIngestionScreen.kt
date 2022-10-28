@@ -24,7 +24,6 @@ import com.isaakhanimann.healthassistant.ui.addingestion.time.DatePickerButton
 import com.isaakhanimann.healthassistant.ui.addingestion.time.TimePickerButton
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
 
@@ -104,7 +103,7 @@ fun EditIngestionScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Edit Ingestion")
+            TopAppBar(title = { Text("Edit Ingestion") })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(

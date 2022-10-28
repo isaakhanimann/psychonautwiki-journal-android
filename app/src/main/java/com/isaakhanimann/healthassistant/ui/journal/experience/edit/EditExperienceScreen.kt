@@ -16,7 +16,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 
 @Composable
@@ -62,7 +61,7 @@ fun EditExperienceScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Edit Experience")
+            TopAppBar(title = { Text("Edit Experience") })
         },
         floatingActionButton = {
             if (isEnteredTitleOk) {
@@ -80,7 +79,8 @@ fun EditExperienceScreen(
         }
     ) { padding ->
         Column(
-            modifier = Modifier.padding(padding)
+            modifier = Modifier
+                .padding(padding)
                 .padding(10.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,7 +94,10 @@ fun EditExperienceScreen(
                 label = { Text(text = "Title") },
                 isError = !isEnteredTitleOk,
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, capitalization = KeyboardCapitalization.Words),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    capitalization = KeyboardCapitalization.Words
+                ),
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
@@ -102,8 +105,13 @@ fun EditExperienceScreen(
                 onValueChange = onTextChange,
                 label = { Text(text = "Notes") },
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done, capitalization = KeyboardCapitalization.Sentences),
-                modifier = Modifier.weight(1f).fillMaxWidth()
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    capitalization = KeyboardCapitalization.Sentences
+                ),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
             )
         }
     }

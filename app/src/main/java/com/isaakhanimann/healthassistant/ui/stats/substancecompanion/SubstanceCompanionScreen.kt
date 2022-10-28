@@ -21,7 +21,6 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.ToleranceSectio
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 
 @Composable
@@ -81,7 +80,7 @@ fun SubstanceCompanionScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = substanceCompanion.substanceName)
+            TopAppBar(title = { Text(substanceCompanion.substanceName) })
         }
     ) { padding ->
         LazyColumn(

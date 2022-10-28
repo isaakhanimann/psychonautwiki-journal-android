@@ -22,7 +22,6 @@ import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.PurityCalculation
 import com.isaakhanimann.healthassistant.ui.addingestion.dose.UnknownDoseDialog
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
 fun CustomChooseDose(
@@ -108,7 +107,7 @@ fun CustomChooseDose(
     units: String
 ) {
     Scaffold(
-        topBar = { JournalTopAppBar(title = "Choose Dose") },
+        topBar = { TopAppBar(title = { Text("Choose Dose") }) },
         floatingActionButton = {
             if (isValidDose) {
                 ExtendedFloatingActionButton(

@@ -13,7 +13,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -22,8 +21,8 @@ fun VolumetricDosingScreen() {
     val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
-            JournalTopAppBar(
-                title = "Volumetric Liquid Dosing"
+            TopAppBar(
+                title = { Text("Volumetric Liquid Dosing") }
             )
         },
         floatingActionButton = {

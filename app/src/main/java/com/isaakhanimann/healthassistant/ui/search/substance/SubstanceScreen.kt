@@ -38,7 +38,6 @@ import com.isaakhanimann.healthassistant.ui.search.substance.roa.duration.RoaDur
 import com.isaakhanimann.healthassistant.ui.theme.HealthAssistantTheme
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
 import com.isaakhanimann.healthassistant.ui.theme.verticalPaddingCards
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getInstant
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
@@ -97,7 +96,7 @@ fun SubstanceScreen(
     val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = substance.name)
+            TopAppBar(title = { Text(substance.name) })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(

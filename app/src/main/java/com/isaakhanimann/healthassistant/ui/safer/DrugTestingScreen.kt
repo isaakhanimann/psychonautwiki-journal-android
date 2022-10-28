@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -25,7 +24,7 @@ import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 fun DrugTestingScreen() {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Drug Testing Services")
+            TopAppBar(title = { Text("Drug Testing Services") })
         }
     ) { padding ->
         Column(

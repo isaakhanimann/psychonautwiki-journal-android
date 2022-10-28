@@ -28,7 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.room.experiences.entities.AdaptiveColor
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 import com.isaakhanimann.healthassistant.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
 
@@ -112,7 +111,7 @@ fun ChooseTimeScreen(
     isChecked: Boolean,
 ) {
     Scaffold(
-        topBar = { JournalTopAppBar(title = "Choose Ingestion Time") },
+        topBar = { TopAppBar(title = { Text("Choose Ingestion Time") }) },
         floatingActionButton = {
             AnimatedVisibility(
                 visible = !isLoadingColor,

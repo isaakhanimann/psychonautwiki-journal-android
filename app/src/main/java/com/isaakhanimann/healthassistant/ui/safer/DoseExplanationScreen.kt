@@ -5,17 +5,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.isaakhanimann.healthassistant.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -23,7 +19,7 @@ import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 fun DoseExplanationScreen() {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Dosage Classification")
+            TopAppBar(title = { Text("Dosage Classification") })
         }
     ) { padding ->
         Column(

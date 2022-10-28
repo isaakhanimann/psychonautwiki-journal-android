@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.data.substances.AdministrationRoute
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
 fun ChooseRouteScreen(
@@ -92,10 +91,10 @@ fun ChooseRouteScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(
-                title = "Choose Route",
-                navigationIcon = if (shouldShowOther && pwRoutes.isNotEmpty()) {
-                    {
+            TopAppBar(
+                title = {Text("Choose Route")},
+                navigationIcon = {
+                    if (shouldShowOther && pwRoutes.isNotEmpty()) {
                         IconButton(onClick = { onChangeShowOther(false) }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
@@ -103,7 +102,7 @@ fun ChooseRouteScreen(
                             )
                         }
                     }
-                } else null,
+                },
                 actions = {
                     IconButton(onClick = navigateToRouteExplanationScreen) {
                         Icon(

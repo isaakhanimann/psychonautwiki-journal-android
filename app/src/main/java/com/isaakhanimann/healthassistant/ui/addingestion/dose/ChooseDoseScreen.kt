@@ -27,7 +27,6 @@ import com.isaakhanimann.healthassistant.ui.doseDisclaimer
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.healthassistant.ui.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Composable
 fun ChooseDoseScreen(
@@ -158,7 +157,7 @@ fun ChooseDoseScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "$substanceName ${administrationRoute.displayText} Dose")
+            TopAppBar(title = { Text("$substanceName ${administrationRoute.displayText} Dose") })
         },
         floatingActionButton = {
             if (isValidDose) {

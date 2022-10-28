@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.isaakhanimann.healthassistant.ui.journal.experience.CardWithTitle
 import com.isaakhanimann.healthassistant.ui.search.substance.SectionText
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import com.isaakhanimann.healthassistant.ui.utils.JournalTopAppBar
 
 @Preview
 @Composable
@@ -47,14 +46,17 @@ fun SaferUseScreen(
 ) {
     Scaffold(
         topBar = {
-            JournalTopAppBar(title = "Safer Use", actions = {
-                IconButton(
-                    onClick = navigateToSettings
-                ) {
-                    Icon(Icons.Filled.Settings, contentDescription = "Settings")
+            TopAppBar(
+                title = { Text("Safer Use") },
+                actions = {
+                    IconButton(
+                        onClick = navigateToSettings
+                    ) {
+                        Icon(Icons.Filled.Settings, contentDescription = "Settings")
 
+                    }
                 }
-            })
+            )
         }
     ) { padding ->
         Column(
