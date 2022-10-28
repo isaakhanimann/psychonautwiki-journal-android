@@ -129,7 +129,7 @@ fun StatsScreen(
                                 Column {
                                     Text(
                                         text = subStat.substanceName,
-                                        style = MaterialTheme.typography.titleLarge
+                                        style = MaterialTheme.typography.titleMedium
                                     )
                                     val addOn =
                                         if (subStat.experienceCount == 1) " experience" else " experiences"

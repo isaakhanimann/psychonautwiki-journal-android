@@ -37,11 +37,11 @@ fun SubstanceRow(
             .clickable {
                 onTap(substanceModel.name)
             }
-            .padding(horizontal = horizontalPadding, vertical = 6.dp),
+            .padding(horizontal = horizontalPadding, vertical = 3.dp),
     ) {
         Text(
             text = substanceModel.name,
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleMedium,
         )
         if (substanceModel.commonNames.isNotEmpty()) {
             val commaSeparatedNames = substanceModel.commonNames.joinToString(separator = ", ")
@@ -50,7 +50,7 @@ fun SubstanceRow(
         FlowRow(
             mainAxisSpacing = 3.dp,
             crossAxisSpacing = 3.dp,
-            modifier = Modifier.padding(vertical = 5.dp)
+            modifier = Modifier.padding(vertical = 3.dp)
         ) {
             substanceModel.categories.forEach {
                 CategoryChipStatic(categoryModel = it)

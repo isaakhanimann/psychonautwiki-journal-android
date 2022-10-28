@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
@@ -38,7 +39,7 @@ fun ExperienceRow(
             }
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
-            .padding(horizontal = horizontalPadding, vertical = 8.dp),
+            .padding(horizontal = horizontalPadding, vertical = 5.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -53,20 +54,18 @@ fun ExperienceRow(
             Column {
                 Text(
                     text = experience.title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                    val substanceNames = remember(ingestions) {
-                        ingestions.map { it.ingestion.substanceName }.distinct()
-                            .joinToString(separator = ", ")
-                    }
-                    if (substanceNames.isNotEmpty()) {
-                        Text(text = substanceNames)
-                    } else {
-                        Text(
-                            text = "No substance yet",
-                        )
-                    }
+                val substanceNames = remember(ingestions) {
+                    ingestions.map { it.ingestion.substanceName }.distinct()
+                        .joinToString(separator = ", ")
+                }
+                if (substanceNames.isNotEmpty()) {
+                    Text(text = substanceNames)
+                } else {
+                    Text(
+                        text = "No substance yet",
+                    )
                 }
             }
         }
@@ -87,9 +86,8 @@ fun ExperienceRow(
 }
 
 @Composable
-fun ExperienceCircle(ingestions: List<IngestionWithCompanion>) {
+fun ExperienceCircle(ingestions: List<IngestionWithCompanion>, circleSize: Dp = 35.dp) {
     val isDarkTheme = isSystemInDarkTheme()
-    val circleSize = 40.dp
     if (ingestions.size >= 2) {
         val brush = remember(ingestions) {
             val colors =
