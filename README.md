@@ -3,10 +3,6 @@
 Health Assistant is an android app to make recreational drug users safer. The aim is to provide features that are attractive to users as well as useful from a harm-reduction perspective.
 This app is built natively with [Jetpack Compose](https://developer.android.com/jetpack/compose).
 
-### Status: 🚧 In progress
-
-This app is still in under development, and some features are not yet implemented.
-
 💻 Requirements
 ------------
 To try out this app, clone this repository and open the root directory in [Android Studio](https://developer.android.com/studio).
