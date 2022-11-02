@@ -1,5 +1,6 @@
 package com.isaakhanimann.healthassistant.ui.settings
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,25 +21,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
-import java.io.BufferedReader
 
 @Preview
 @Composable
 fun SettingsPreview() {
     SettingsScreen(
         deleteEverything = {},
-        navigateToFAQ = {}
+        navigateToFAQ = {},
+        importFile = {}
     )
 }
 
 @Composable
 fun SettingsScreen(
-    settingsViewModel: SettingsViewModel = hiltViewModel(),
+    viewModel: SettingsViewModel = hiltViewModel(),
     navigateToFAQ: () -> Unit
 ) {
     SettingsScreen(
         navigateToFAQ,
-        deleteEverything = settingsViewModel::deleteEverything
+        deleteEverything = viewModel::deleteEverything,
+        importFile = viewModel::importFile
     )
 }
 
@@ -47,6 +49,7 @@ fun SettingsScreen(
 fun SettingsScreen(
     navigateToFAQ: () -> Unit,
     deleteEverything: () -> Unit,
+    importFile: (uri: Uri?) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -54,21 +57,16 @@ fun SettingsScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            val context = LocalContext.current
-            val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { result ->
-                if (result==null) return@rememberLauncherForActivityResult
-                val item = context.contentResolver.openInputStream(result) ?: return@rememberLauncherForActivityResult
-                val reader = BufferedReader(item.reader())
-                val text = reader.readText()
-                println(text)
-                reader.close()
-                item.close()
-            }
+            val launcher =
+                rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { result ->
+                    importFile(result)
+                }
             TextButton(
                 onClick = {
-                launcher.launch("*/*")
-            },
-            modifier = Modifier.padding(horizontal = horizontalPadding)) {
+                    launcher.launch("*/*")
+                },
+                modifier = Modifier.padding(horizontal = horizontalPadding)
+            ) {
                 Text("Open file")
             }
             Divider()
@@ -152,6 +150,7 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.weight(1f))
             }
             if (isShowingDeleteDialog) {
+                val context = LocalContext.current
                 AlertDialog(
                     onDismissRequest = { isShowingDeleteDialog = false },
                     title = {
