@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 
@@ -21,7 +23,11 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun exportFile(uri: Uri?) {
-        fileSystemConnection.saveTextInUri(uri, text = "Success. This text was written successfully")
+        viewModelScope.launch {
+            val ingestions = experienceRepository.getAllIngestions()
+            val jsonList = Json.encodeToString(ingestions)
+            fileSystemConnection.saveTextInUri(uri, text = jsonList)
+        }
     }
 
     fun deleteEverything() {
