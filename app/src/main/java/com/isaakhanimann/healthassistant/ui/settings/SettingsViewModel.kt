@@ -50,11 +50,3 @@ class SettingsViewModel @Inject constructor(
         }
     }
 }
-
-@Serializable
-data class JournalExport(
-    val ingestions: List<Ingestion>,
-    val experiences: List<Experience>,
-    val substanceCompanions: List<SubstanceCompanion>,
-    val customSubstances: List<CustomSubstance>
-)
