@@ -1,6 +1,8 @@
 package com.isaakhanimann.healthassistant.ui.settings
 
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -18,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.healthassistant.ui.theme.horizontalPadding
+import java.io.BufferedReader
 
 @Preview
 @Composable
@@ -51,6 +54,24 @@ fun SettingsScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
+            val context = LocalContext.current
+            val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { result ->
+                if (result==null) return@rememberLauncherForActivityResult
+                val item = context.contentResolver.openInputStream(result) ?: return@rememberLauncherForActivityResult
+                val reader = BufferedReader(item.reader())
+                val text = reader.readText()
+                println(text)
+                reader.close()
+                item.close()
+            }
+            TextButton(
+                onClick = {
+                launcher.launch("*/*")
+            },
+            modifier = Modifier.padding(horizontal = horizontalPadding)) {
+                Text("Open file")
+            }
+            Divider()
             val uriHandler = LocalUriHandler.current
             TextButton(
                 onClick = {
@@ -114,7 +135,6 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.weight(1f))
             }
             Divider()
-            val context = LocalContext.current
             var isShowingDeleteDialog by remember { mutableStateOf(false) }
             TextButton(
                 onClick = {
