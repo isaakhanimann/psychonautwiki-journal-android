@@ -18,4 +18,13 @@ class FileSystemConnection @Inject constructor(
         input.close()
         return inputAsString
     }
+
+    fun saveTextInUri(uri: Uri?, text: String) {
+        if (uri == null) return
+        val output = context.contentResolver.openOutputStream(uri) ?: return
+        output.bufferedWriter().use { it.write(text) }
+        output.close()
+    }
+
+
 }

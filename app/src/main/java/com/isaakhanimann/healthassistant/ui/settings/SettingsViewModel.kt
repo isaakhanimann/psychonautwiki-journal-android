@@ -20,6 +20,10 @@ class SettingsViewModel @Inject constructor(
         println(text)
     }
 
+    fun exportFile(uri: Uri?) {
+        fileSystemConnection.saveTextInUri(uri, text = "Success. This text was written successfully")
+    }
+
     fun deleteEverything() {
         viewModelScope.launch {
             experienceRepository.deleteEverything()

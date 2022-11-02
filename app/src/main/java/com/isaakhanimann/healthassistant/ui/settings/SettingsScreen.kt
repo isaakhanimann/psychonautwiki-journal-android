@@ -28,7 +28,8 @@ fun SettingsPreview() {
     SettingsScreen(
         deleteEverything = {},
         navigateToFAQ = {},
-        importFile = {}
+        importFile = {},
+        exportFile = {}
     )
 }
 
@@ -40,7 +41,8 @@ fun SettingsScreen(
     SettingsScreen(
         navigateToFAQ,
         deleteEverything = viewModel::deleteEverything,
-        importFile = viewModel::importFile
+        importFile = viewModel::importFile,
+        exportFile = viewModel::exportFile
     )
 }
 
@@ -49,7 +51,8 @@ fun SettingsScreen(
 fun SettingsScreen(
     navigateToFAQ: () -> Unit,
     deleteEverything: () -> Unit,
-    importFile: (uri: Uri?) -> Unit
+    importFile: (uri: Uri?) -> Unit,
+    exportFile: (uri: Uri?) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -57,17 +60,34 @@ fun SettingsScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            val launcher =
+            val launcherImport =
                 rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { result ->
                     importFile(result)
                 }
             TextButton(
                 onClick = {
-                    launcher.launch("*/*")
+                    launcherImport.launch("*/*")
                 },
                 modifier = Modifier.padding(horizontal = horizontalPadding)
             ) {
-                Text("Open file")
+                Text("Import file")
+            }
+            Divider()
+            val launcherExport =
+                rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.CreateDocument(
+                        mimeType = "application/json"
+                    )
+                ) { uri ->
+                    exportFile(uri)
+                }
+            TextButton(
+                onClick = {
+                    launcherExport.launch("Test.json")
+                },
+                modifier = Modifier.padding(horizontal = horizontalPadding)
+            ) {
+                Text("Export file")
             }
             Divider()
             val uriHandler = LocalUriHandler.current
