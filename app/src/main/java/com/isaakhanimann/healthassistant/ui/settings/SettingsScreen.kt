@@ -7,14 +7,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Code
-import androidx.compose.material.icons.filled.DeleteForever
-import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.outlined.ContactSupport
-import androidx.compose.material.icons.outlined.QuestionAnswer
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,13 +61,8 @@ fun SettingsScreen(
                 rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { result ->
                     importFile(result)
                 }
-            TextButton(
-                onClick = {
-                    launcherImport.launch("*/*")
-                },
-                modifier = Modifier.padding(horizontal = horizontalPadding)
-            ) {
-                Text("Import file")
+            SettingsButton(imageVector = Icons.Outlined.FileDownload, text = "Import File") {
+                launcherImport.launch("*/*")
             }
             Divider()
             val launcherExport =
@@ -81,93 +73,36 @@ fun SettingsScreen(
                 ) { uri ->
                     exportFile(uri)
                 }
-            TextButton(
-                onClick = {
-                    launcherExport.launch("Journal.json")
-                },
-                modifier = Modifier.padding(horizontal = horizontalPadding)
-            ) {
-                Text("Export file")
+            SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
+                launcherExport.launch("Journal.json")
             }
             Divider()
             val uriHandler = LocalUriHandler.current
-            TextButton(
-                onClick = {
-                    uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
-                },
-                modifier = Modifier.padding(horizontal = horizontalPadding)
+            SettingsButton(
+                imageVector = Icons.Outlined.OpenInBrowser,
+                text = "Responsible Drug Use"
             ) {
-                Icon(
-                    Icons.Default.OpenInBrowser,
-                    contentDescription = "Open Link",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Responsible Drug Use")
-                Spacer(modifier = Modifier.weight(1f))
+                uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
             }
             Divider()
-            TextButton(
-                onClick = navigateToFAQ,
-                modifier = Modifier.padding(horizontal = horizontalPadding)
-            ) {
-                Icon(
-                    Icons.Outlined.QuestionAnswer,
-                    contentDescription = "Frequently Asked Questions",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("FAQ")
-                Spacer(modifier = Modifier.weight(1f))
+            SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
+                navigateToFAQ()
             }
             Divider()
-            TextButton(
-                onClick = {
-                    uriHandler.openUri("https://t.me/isaakhanimann")
-                },
-                modifier = Modifier.padding(horizontal = horizontalPadding)
+            SettingsButton(
+                imageVector = Icons.Outlined.ContactSupport,
+                text = "Question / Feedback / Bug Report"
             ) {
-                Icon(
-                    Icons.Outlined.ContactSupport,
-                    contentDescription = "Contact Support",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Question / Feedback / Bug Report")
-                Spacer(modifier = Modifier.weight(1f))
+                uriHandler.openUri("https://t.me/isaakhanimann")
             }
             Divider()
-            TextButton(
-                onClick = {
-                    uriHandler.openUri("https://github.com/isaakhanimann/HealthAssistant")
-                },
-                modifier = Modifier.padding(horizontal = horizontalPadding)
-            ) {
-                Icon(
-                    Icons.Filled.Code,
-                    contentDescription = "Open Source Code",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Source Code")
-                Spacer(modifier = Modifier.weight(1f))
+            SettingsButton(imageVector = Icons.Outlined.Code, text = "Source Code") {
+                uriHandler.openUri("https://github.com/isaakhanimann/HealthAssistant")
             }
             Divider()
             var isShowingDeleteDialog by remember { mutableStateOf(false) }
-            TextButton(
-                onClick = {
-                    isShowingDeleteDialog = true
-                },
-                modifier = Modifier.padding(horizontal = horizontalPadding)
-            ) {
-                Icon(
-                    Icons.Filled.DeleteForever,
-                    contentDescription = "Delete",
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Delete Everything")
-                Spacer(modifier = Modifier.weight(1f))
+            SettingsButton(imageVector = Icons.Outlined.DeleteForever, text = "Delete Everything") {
+                isShowingDeleteDialog = true
             }
             if (isShowingDeleteDialog) {
                 val context = LocalContext.current
@@ -211,5 +146,22 @@ fun SettingsScreen(
                     .fillMaxWidth()
             )
         }
+    }
+}
+
+@Composable
+fun SettingsButton(imageVector: ImageVector, text: String, onClick: () -> Unit) {
+    TextButton(
+        onClick = onClick,
+        modifier = Modifier.padding(horizontal = horizontalPadding)
+    ) {
+        Icon(
+            imageVector,
+            contentDescription = imageVector.name,
+            modifier = Modifier.size(ButtonDefaults.IconSize)
+        )
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+        Text(text)
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
