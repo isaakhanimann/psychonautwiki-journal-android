@@ -83,7 +83,7 @@ fun SettingsScreen(
                 }
             TextButton(
                 onClick = {
-                    launcherExport.launch("Test.json")
+                    launcherExport.launch("Journal.json")
                 },
                 modifier = Modifier.padding(horizontal = horizontalPadding)
             ) {
