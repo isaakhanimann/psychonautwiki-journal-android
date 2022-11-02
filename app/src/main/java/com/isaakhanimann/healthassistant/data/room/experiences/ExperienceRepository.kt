@@ -7,6 +7,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.entities.Substanc
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithExperience
+import com.isaakhanimann.healthassistant.ui.settings.JournalExport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
@@ -30,6 +31,10 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
         experience,
         substanceCompanion
     )
+
+    suspend fun insertEverything(
+        journalExport: JournalExport
+    ) = experienceDao.insertEverything(journalExport)
 
     suspend fun insertIngestionAndCompanion(
         ingestion: Ingestion,
@@ -103,6 +108,15 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getAllIngestions(): List<Ingestion> =
         experienceDao.getAllIngestions()
 
+    suspend fun getAllExperiences(): List<Experience> =
+        experienceDao.getAllExperiences()
+
+    suspend fun getAllCustomSubstances(): List<CustomSubstance> =
+        experienceDao.getAllCustomSubstances()
+
+    suspend fun getAllSubstanceCompanions(): List<SubstanceCompanion> =
+        experienceDao.getAllSubstanceCompanions()
+
     suspend fun insert(substanceCompanion: SubstanceCompanion) =
         experienceDao.insert(substanceCompanion)
 
@@ -146,7 +160,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getAllSubstanceCompanionsFlow() = experienceDao.getAllSubstanceCompanions()
+    fun getAllSubstanceCompanionsFlow() = experienceDao.getAllSubstanceCompanionsFlow()
         .flowOn(Dispatchers.IO)
         .conflate()
 

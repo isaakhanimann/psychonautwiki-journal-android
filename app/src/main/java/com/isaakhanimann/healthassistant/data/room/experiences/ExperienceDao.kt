@@ -9,6 +9,7 @@ import com.isaakhanimann.healthassistant.data.room.experiences.relations.Experie
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.healthassistant.data.room.experiences.relations.IngestionWithExperience
+import com.isaakhanimann.healthassistant.ui.settings.JournalExport
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
@@ -34,6 +35,15 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM ingestion")
     suspend fun getAllIngestions(): List<Ingestion>
+
+    @Query("SELECT * FROM experience")
+    suspend fun getAllExperiences(): List<Experience>
+
+    @Query("SELECT * FROM customsubstance")
+    suspend fun getAllCustomSubstances(): List<CustomSubstance>
+
+    @Query("SELECT * FROM substancecompanion")
+    suspend fun getAllSubstanceCompanions(): List<SubstanceCompanion>
 
     @Query("SELECT DISTINCT substanceName FROM ingestion ORDER BY time DESC LIMIT :limit")
     fun getLastUsedSubstanceNamesFlow(limit: Int): Flow<List<String>>
@@ -164,6 +174,16 @@ interface ExperienceDao {
     }
 
     @Transaction
+    suspend fun insertEverything(
+        journalExport: JournalExport
+    ) {
+        journalExport.experiences.forEach { insert(it) }
+        journalExport.ingestions.forEach { insert(it) }
+        journalExport.substanceCompanions.forEach { insert(it) }
+        journalExport.customSubstances.forEach { insert(it) }
+    }
+
+    @Transaction
     suspend fun insertIngestionAndCompanion(
         ingestion: Ingestion,
         substanceCompanion: SubstanceCompanion
@@ -201,5 +221,5 @@ interface ExperienceDao {
     fun getSubstanceCompanionFlow(substanceName: String): Flow<SubstanceCompanion?>
 
     @Query("SELECT * FROM substancecompanion")
-    fun getAllSubstanceCompanions(): Flow<List<SubstanceCompanion>>
+    fun getAllSubstanceCompanionsFlow(): Flow<List<SubstanceCompanion>>
 }
