@@ -87,7 +87,7 @@ class AllTimelinesModel(
             return insetTimes
         }
 
-        const val shapeAlpha = 0.1f
+        const val shapeAlpha = 0.3f
         const val strokeWidth = 13f
         const val shapeWidth = 3 * strokeWidth
         val normalStroke = Stroke(
