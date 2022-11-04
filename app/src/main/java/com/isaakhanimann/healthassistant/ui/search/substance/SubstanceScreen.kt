@@ -2,7 +2,6 @@ package com.isaakhanimann.healthassistant.ui.search.substance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -11,8 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.outlined.ExpandLess
-import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -459,67 +456,6 @@ fun VerticalSpace() {
     Spacer(modifier = Modifier.height(5.dp))
 }
 
-@Composable
-fun CollapsibleSection(title: String, content: @Composable () -> Unit) {
-    Card(
-        modifier = Modifier.padding(
-            horizontal = horizontalPadding,
-            vertical = verticalPaddingCards
-        )
-    ) {
-        var isExpanded by remember { mutableStateOf(false) }
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .clickable { isExpanded = !isExpanded }
-                .padding(horizontal = horizontalPadding, vertical = 8.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                color = MaterialTheme.colorScheme.onSurface,
-                text = title,
-                style = MaterialTheme.typography.titleMedium
-            )
-            if (isExpanded) {
-                Icon(
-                    imageVector = Icons.Outlined.ExpandLess,
-                    contentDescription = "Expand Less",
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Outlined.ExpandMore,
-                    contentDescription = "Expand More",
-                )
-            }
-
-        }
-        Divider()
-        val expandTransition = remember {
-            expandVertically(
-                expandFrom = Alignment.Top,
-                animationSpec = tween(300)
-            ) + fadeIn(
-                animationSpec = tween(300)
-            )
-        }
-        val collapseTransition = remember {
-            shrinkVertically(
-                shrinkTowards = Alignment.Top,
-                animationSpec = tween(300)
-            ) + fadeOut(
-                animationSpec = tween(300)
-            )
-        }
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = expandTransition,
-            exit = collapseTransition
-        ) {
-            content()
-        }
-    }
-}
 
 @Composable
 fun CategoryChipFromSubstanceScreen(
