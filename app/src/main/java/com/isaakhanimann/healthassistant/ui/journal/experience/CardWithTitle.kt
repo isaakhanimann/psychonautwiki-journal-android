@@ -25,7 +25,7 @@ fun CardWithTitle(
                 vertical = innerPaddingVertical
             )
         ) {
-            Text(text = title, style = MaterialTheme.typography.titleLarge)
+            Text(text = title, style = MaterialTheme.typography.titleMedium)
             content()
         }
     }
