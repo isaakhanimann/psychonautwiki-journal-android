@@ -4,13 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.healthassistant.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.CustomSubstance
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Experience
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.healthassistant.data.room.experiences.entities.SubstanceCompanion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -20,18 +15,28 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val experienceRepository: ExperienceRepository,
-    private val fileSystemConnection: FileSystemConnection
-    ) : ViewModel() {
+    private val fileSystemConnection: FileSystemConnection,
+    private val toastManager: ToastManager
+) : ViewModel() {
 
-    fun importFile(uri: Uri?) {
+    fun importFile(uri: Uri) {
         viewModelScope.launch {
-            val text = fileSystemConnection.getTextFromUri(uri) ?: return@launch
-            val journalExport = Json.decodeFromString<JournalExport>(text)
-            experienceRepository.insertEverything(journalExport)
+            val text = fileSystemConnection.getTextFromUri(uri)
+            if (text == null) {
+                toastManager.showToast("File Not Found")
+            } else {
+                try {
+                    val journalExport = Json.decodeFromString<JournalExport>(text)
+                    experienceRepository.insertEverything(journalExport)
+                    toastManager.showToast("Import Successful")
+                } catch (_: Exception) {
+                    toastManager.showToast("Decoding File Failed")
+                }
+            }
         }
     }
 
-    fun exportFile(uri: Uri?) {
+    fun exportFile(uri: Uri) {
         viewModelScope.launch {
             val journalExport = JournalExport(
                 ingestions = experienceRepository.getAllIngestions(),
@@ -39,8 +44,14 @@ class SettingsViewModel @Inject constructor(
                 substanceCompanions = experienceRepository.getAllSubstanceCompanions(),
                 customSubstances = experienceRepository.getAllCustomSubstances()
             )
-            val jsonList = Json.encodeToString(journalExport)
-            fileSystemConnection.saveTextInUri(uri, text = jsonList)
+            try {
+                val jsonList = Json.encodeToString(journalExport)
+                fileSystemConnection.saveTextInUri(uri, text = jsonList)
+                toastManager.showToast("Export Successful")
+            } catch (_: Exception) {
+                toastManager.showToast("Export Failed")
+            }
+
         }
     }
 

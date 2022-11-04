@@ -48,8 +48,8 @@ fun SettingsScreen(
 fun SettingsScreen(
     navigateToFAQ: () -> Unit,
     deleteEverything: () -> Unit,
-    importFile: (uri: Uri?) -> Unit,
-    exportFile: (uri: Uri?) -> Unit
+    importFile: (uri: Uri) -> Unit,
+    exportFile: (uri: Uri) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -57,26 +57,6 @@ fun SettingsScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            val launcherImport =
-                rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { result ->
-                    importFile(result)
-                }
-            SettingsButton(imageVector = Icons.Outlined.FileDownload, text = "Import File") {
-                launcherImport.launch("*/*")
-            }
-            Divider()
-            val launcherExport =
-                rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.CreateDocument(
-                        mimeType = "application/json"
-                    )
-                ) { uri ->
-                    exportFile(uri)
-                }
-            SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
-                launcherExport.launch("Journal.json")
-            }
-            Divider()
             val uriHandler = LocalUriHandler.current
             SettingsButton(
                 imageVector = Icons.Outlined.OpenInBrowser,
@@ -98,6 +78,88 @@ fun SettingsScreen(
             Divider()
             SettingsButton(imageVector = Icons.Outlined.Code, text = "Source Code") {
                 uriHandler.openUri("https://github.com/isaakhanimann/HealthAssistant")
+            }
+            Divider()
+            var isShowingExportDialog by remember { mutableStateOf(false) }
+            SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
+                isShowingExportDialog = true
+            }
+            if (isShowingExportDialog) {
+                val launcherExport =
+                    rememberLauncherForActivityResult(
+                        contract = ActivityResultContracts.CreateDocument(
+                            mimeType = "application/json"
+                        )
+                    ) { uri ->
+                        if (uri != null) {
+                            exportFile(uri)
+                        }
+                    }
+                AlertDialog(
+                    onDismissRequest = { isShowingExportDialog = false },
+                    title = {
+                        Text(text = "Export?")
+                    },
+                    text = {
+                        Text("This will export all your data from the app into a file so you can send it to someone or import it again on a new phone")
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                isShowingExportDialog = false
+                                launcherExport.launch("Journal.json")
+                            }
+                        ) {
+                            Text("Export")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { isShowingExportDialog = false }
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
+                )
+            }
+            Divider()
+            var isShowingImportDialog by remember { mutableStateOf(false) }
+            SettingsButton(imageVector = Icons.Outlined.FileDownload, text = "Import File") {
+                isShowingImportDialog = true
+            }
+            val launcherImport =
+                rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
+                    if (uri != null) {
+                        importFile(uri)
+                    }
+                }
+            if (isShowingImportDialog) {
+                AlertDialog(
+                    onDismissRequest = { isShowingImportDialog = false },
+                    title = {
+                        Text(text = "Import File?")
+                    },
+                    text = {
+                        Text("Import a file that was exported before. Note that this won't delete the data that you already have in the app, so consider deleting everything first.")
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                isShowingImportDialog = false
+                                launcherImport.launch("*/*")
+                            }
+                        ) {
+                            Text("Import")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { isShowingImportDialog = false }
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
+                )
             }
             Divider()
             var isShowingDeleteDialog by remember { mutableStateOf(false) }

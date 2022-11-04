@@ -11,19 +11,26 @@ import javax.inject.Singleton
 class FileSystemConnection @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    fun getTextFromUri(uri: Uri?): String? {
-        if (uri == null) return null
-        val input = context.contentResolver.openInputStream(uri) ?: return null
-        val inputAsString = input.bufferedReader().use { it.readText() }
-        input.close()
-        return inputAsString
+    fun getTextFromUri(uri: Uri): String? {
+        try {
+            val input = context.contentResolver.openInputStream(uri) ?: return null
+            val inputAsString = input.bufferedReader().use { it.readText() }
+            input.close()
+            return inputAsString
+        } catch (e: Exception) {
+            return null
+        }
     }
 
-    fun saveTextInUri(uri: Uri?, text: String) {
-        if (uri == null) return
-        val output = context.contentResolver.openOutputStream(uri) ?: return
-        output.bufferedWriter().use { it.write(text) }
-        output.close()
+    fun saveTextInUri(uri: Uri, text: String) {
+        try {
+            val output = context.contentResolver.openOutputStream(uri) ?: return
+            output.bufferedWriter().use { it.write(text) }
+            output.close()
+        } catch (_: Exception) {
+            throw Exception("Failed To Save")
+        }
+
     }
 
 
