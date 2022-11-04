@@ -89,18 +89,16 @@ fun StatsScreen(
                     )
                 } else {
                     val isDarkTheme = isSystemInDarkTheme()
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        item {
+                    Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 10.dp)) {
+                        Column {
                             Text(
                                 text = "Experiences",
-                                style = MaterialTheme.typography.titleLarge,
+                                style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.padding(start = 10.dp, top = 5.dp)
                             )
                             Text(
                                 text = "Substance counted once per experience",
+                                style = MaterialTheme.typography.bodySmall,
                                 modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
                             )
                             BarChart(
@@ -108,53 +106,55 @@ fun StatsScreen(
                                 startDateText = statsModel.startDateText
                             )
                             Divider()
-                        }
-                        items(statsModel.statItems.size) { i ->
-                            val subStat = statsModel.statItems[i]
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        navigateToSubstanceCompanion(subStat.substanceName)
-                                    }
-                                    .padding(horizontal = horizontalPadding, vertical = 5.dp)
-                            ) {
-                                Surface(
-                                    shape = CircleShape,
-                                    color = subStat.color.getComposeColor(isDarkTheme),
-                                    modifier = Modifier.size(25.dp)
-                                ) {}
-                                Column {
-                                    Text(
-                                        text = subStat.substanceName,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                    val addOn =
-                                        if (subStat.experienceCount == 1) " experience" else " experiences"
-                                    Text(
-                                        text = subStat.experienceCount.toString() + addOn,
-                                    )
-                                }
-                                Spacer(modifier = Modifier.weight(1f))
-                                Column(horizontalAlignment = Alignment.End) {
-                                    val cumulativeDose = subStat.totalDose
-                                    if (cumulativeDose != null) {
-                                        Text(text = "total ${if (cumulativeDose.isEstimate) "~" else ""}${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
-                                    } else {
-                                        Text(text = "total dose unknown")
-                                    }
-                                    subStat.routeCounts.forEach {
-                                        Text(
-                                            text = "${it.administrationRoute.displayText.lowercase()} ${it.count}x ",
-                                        )
-                                    }
-                                }
+                            LazyColumn {
+                                items(statsModel.statItems.size) { i ->
+                                    val subStat = statsModel.statItems[i]
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                navigateToSubstanceCompanion(subStat.substanceName)
+                                            }
+                                            .padding(horizontal = horizontalPadding, vertical = 5.dp)
+                                    ) {
+                                        Surface(
+                                            shape = CircleShape,
+                                            color = subStat.color.getComposeColor(isDarkTheme),
+                                            modifier = Modifier.size(25.dp)
+                                        ) {}
+                                        Column {
+                                            Text(
+                                                text = subStat.substanceName,
+                                                style = MaterialTheme.typography.titleMedium
+                                            )
+                                            val addOn =
+                                                if (subStat.experienceCount == 1) " experience" else " experiences"
+                                            Text(
+                                                text = subStat.experienceCount.toString() + addOn,
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Column(horizontalAlignment = Alignment.End) {
+                                            val cumulativeDose = subStat.totalDose
+                                            if (cumulativeDose != null) {
+                                                Text(text = "total ${if (cumulativeDose.isEstimate) "~" else ""}${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
+                                            } else {
+                                                Text(text = "total dose unknown")
+                                            }
+                                            subStat.routeCounts.forEach {
+                                                Text(
+                                                    text = "${it.administrationRoute.displayText.lowercase()} ${it.count}x ",
+                                                )
+                                            }
+                                        }
 
-                            }
-                            if (i < statsModel.statItems.size) {
-                                Divider()
+                                    }
+                                    if (i < statsModel.statItems.size-1) {
+                                        Divider()
+                                    }
+                                }
                             }
                         }
                     }
