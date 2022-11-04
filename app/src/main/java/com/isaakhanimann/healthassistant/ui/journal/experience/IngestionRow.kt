@@ -53,7 +53,7 @@ fun IngestionRow(
         Column {
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(text = ingestion.substanceName, style = MaterialTheme.typography.titleLarge)
+                    Text(text = ingestion.substanceName, style = MaterialTheme.typography.titleMedium)
                     val timeString = ingestion.time.getStringOfPattern("EEE HH:mm")
                     Text(text = timeString)
                 }

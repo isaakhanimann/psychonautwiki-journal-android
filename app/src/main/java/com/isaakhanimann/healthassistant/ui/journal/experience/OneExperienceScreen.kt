@@ -143,8 +143,9 @@ fun ExperienceScreen(
                     )
                 }
             }
+            val verticalCardPadding = 4.dp
             if (effectTimelines.isNotEmpty()) {
-                Card {
+                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     Column(
                         modifier = Modifier.padding(
                             horizontal = horizontalPadding,
@@ -163,12 +164,15 @@ fun ExperienceScreen(
                 }
             }
             if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
-                TitleAboveCard(
-                    title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern(
-                        "EEE, dd MMM yyyy"
+                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                    CardTitle(
+                        title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern(
+                            "EEE, dd MMM yyyy"
+                        )
                     )
-                )
-                Card {
+                    if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
+                        Divider()
+                    }
                     oneExperienceScreenModel.ingestionElements.forEachIndexed { index, ingestionElement ->
                         IngestionRow(
                             ingestionElement = ingestionElement,
@@ -187,8 +191,8 @@ fun ExperienceScreen(
             }
             val cumulativeDoses = oneExperienceScreenModel.cumulativeDoses
             if (cumulativeDoses.isNotEmpty()) {
-                TitleAboveCard(title = "Cumulative Dose")
-                Card {
+                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                    CardTitle(title = "Cumulative Dose")
                     cumulativeDoses.forEachIndexed { index, cumulativeDose ->
                         CumulativeDoseRow(
                             cumulativeDose = cumulativeDose, modifier = Modifier
@@ -201,8 +205,8 @@ fun ExperienceScreen(
                     }
                 }
             }
-            TitleAboveCard(title = "Notes")
-            Card {
+            Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                CardTitle(title = "Notes")
                 if (oneExperienceScreenModel.notes.isEmpty()) {
                     TextButton(
                         onClick = navigateToEditExperienceScreen,
@@ -282,11 +286,11 @@ fun ExperienceScreen(
 }
 
 @Composable
-fun TitleAboveCard(title: String) {
+fun CardTitle(title: String) {
     Text(
         text = title,
         style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(top = 5.dp)
+        modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 5.dp)
     )
 }
 
@@ -321,7 +325,7 @@ fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.titleLarge)
+        Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.titleMedium)
         Column(horizontalAlignment = Alignment.End) {
             Text(text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units)
             val doseClass = cumulativeDose.doseClass
