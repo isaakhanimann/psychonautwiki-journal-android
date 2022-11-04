@@ -38,7 +38,6 @@ fun CurrentDoseClassInfo(currentDoseClass: DoseClass?, roaDose: RoaDose) {
             Icon(
                 Icons.Outlined.Info,
                 contentDescription = "Info",
-                modifier = Modifier.size(25.dp),
                 tint = doseColor
             )
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
@@ -52,7 +51,7 @@ fun CurrentDoseClassInfo(currentDoseClass: DoseClass?, roaDose: RoaDose) {
             Text(
                 text = text,
                 color = doseColor,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleSmall
             )
         }
         if (isShowingDoseClassDialog) {

@@ -154,7 +154,7 @@ fun ChooseRouteScreen(
                                     ) {
                                         RouteBox(
                                             route = route,
-                                            titleStyle = MaterialTheme.typography.titleLarge
+                                            titleStyle = MaterialTheme.typography.headlineMedium
                                         )
                                     }
                                 }

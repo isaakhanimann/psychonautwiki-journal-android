@@ -176,40 +176,15 @@ fun ChooseDoseScreen(
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight(),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                if (administrationRoute == AdministrationRoute.INSUFFLATED) {
-                    TextButton(onClick = navigateToSaferSniffingScreen) {
-                        Text(text = "Safer Sniffing")
-                    }
-                    Divider()
-                } else if (administrationRoute == AdministrationRoute.RECTAL) {
-                    val uriHandler = LocalUriHandler.current
-                    TextButton(onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
-                        Icon(
-                            Icons.Default.OpenInBrowser,
-                            contentDescription = "Open Link"
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Safer Plugging")
-                    }
-                    Divider()
-                }
-                if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
-                    TextButton(onClick = navigateToVolumetricDosingScreen) {
-                        Text(text = "Use Volumetric Liquid Dosing")
-                    }
-                    Divider()
-                }
-                Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
-                    Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(4.dp))
+            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    )
+                ) {
                     Text(text = doseDisclaimer)
-                    if (roaDose != null) {
-                        CurrentDoseClassInfo(currentDoseClass, roaDose)
-                    }
                     Spacer(modifier = Modifier.height(5.dp))
                     if (roaDose != null) {
                         RoaDoseView(roaDose = roaDose)
@@ -227,9 +202,20 @@ fun ChooseDoseScreen(
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
+                }
+            }
+            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    )
+                ) {
+                    if (roaDose != null) {
+                        CurrentDoseClassInfo(currentDoseClass, roaDose)
+                    }
                     val focusManager = LocalFocusManager.current
-                    val textStyle = MaterialTheme.typography.titleLarge
+                    val textStyle = MaterialTheme.typography.titleMedium
                     OutlinedTextField(
                         value = doseText,
                         onValueChange = onChangeDoseText,
@@ -278,14 +264,6 @@ fun ChooseDoseScreen(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    PurityCalculation(
-                        purityText = purityText,
-                        onPurityChange = onPurityChange,
-                        convertedDoseAndUnitText = convertedDoseAndUnitText,
-                        isValidPurity = isValidPurity
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.clickable {
@@ -295,20 +273,55 @@ fun ChooseDoseScreen(
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                         Text("Dose is an estimate")
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
-                    TextButton(
-                        onClick = { isShowingUnknownDoseDialog = true },
-                    ) {
-                        Text("Use Unknown Dose")
-                    }
-                    if (isShowingUnknownDoseDialog) {
-                        UnknownDoseDialog(
-                            useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
-                            dismiss = { isShowingUnknownDoseDialog = false }
-                        )
-                    }
                 }
+            }
+            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    )
+                ) {
+                    PurityCalculation(
+                        purityText = purityText,
+                        onPurityChange = onPurityChange,
+                        convertedDoseAndUnitText = convertedDoseAndUnitText,
+                        isValidPurity = isValidPurity
+                    )
+                }
+            }
+            if (administrationRoute == AdministrationRoute.INSUFFLATED) {
+                TextButton(onClick = navigateToSaferSniffingScreen) {
+                    Text(text = "Safer Sniffing")
+                }
+            } else if (administrationRoute == AdministrationRoute.RECTAL) {
+                val uriHandler = LocalUriHandler.current
+                TextButton(onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
+                    Icon(
+                        Icons.Default.OpenInBrowser,
+                        contentDescription = "Open Link"
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Safer Plugging")
+                }
+            }
+            if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
+                TextButton(onClick = navigateToVolumetricDosingScreen) {
+                    Text(text = "Use Volumetric Liquid Dosing")
+                }
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
+            TextButton(
+                onClick = { isShowingUnknownDoseDialog = true },
+            ) {
+                Text("Use Unknown Dose")
+            }
+            if (isShowingUnknownDoseDialog) {
+                UnknownDoseDialog(
+                    useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
+                    dismiss = { isShowingUnknownDoseDialog = false }
+                )
             }
         }
     }

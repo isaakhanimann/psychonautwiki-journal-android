@@ -119,9 +119,10 @@ fun CheckInteractionsScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            LinearProgressIndicator(progress = 0.33f, modifier = Modifier.fillMaxWidth())
             if (isSearchingForInteractions) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            } else {
+                LinearProgressIndicator(progress = 0.33f, modifier = Modifier.fillMaxWidth())
             }
             if (dangerousInteractions.isEmpty() && unsafeInteractions.isEmpty() && uncertainInteractions.isEmpty()) {
                 Box(
@@ -235,7 +236,7 @@ fun InteractionRow(
                 text = text,
                 textAlign = TextAlign.Center,
                 color = Color.Black,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
             )
             Spacer(modifier = Modifier.weight(1f))
             LazyRow {
