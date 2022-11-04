@@ -2,6 +2,7 @@ package com.isaakhanimann.healthassistant.ui.stats.substancecompanion
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -91,13 +92,22 @@ fun SubstanceCompanionScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                CardWithTitle(title = "${substanceCompanion.substanceName} Color") {
-                    ColorPicker(
-                        selectedColor = substanceCompanion.color,
-                        onChangeOfColor = onChangeColor,
-                        alreadyUsedColors = alreadyUsedColors,
-                        otherColors = otherColors
-                    )
+                Card(modifier = Modifier.padding(vertical = 5.dp)) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(
+                            horizontal = 10.dp,
+                            vertical = 5.dp
+                        )
+                    ) {
+                        Text(text = "Color", style = MaterialTheme.typography.titleMedium)
+                        ColorPicker(
+                            selectedColor = substanceCompanion.color,
+                            onChangeOfColor = onChangeColor,
+                            alreadyUsedColors = alreadyUsedColors,
+                            otherColors = otherColors
+                        )
+                    }
                 }
                 if (tolerance != null || crossTolerances.isNotEmpty()) {
                     CardWithTitle(title = "Tolerance") {
@@ -111,18 +121,19 @@ fun SubstanceCompanionScreen(
                         )
                     }
                 }
-                Text(text = "History", style = MaterialTheme.typography.headlineMedium)
                 Text(text = "Now")
             }
-            ingestionBursts.forEach { burst ->
-                item {
-                    TimeArrowUp(timeText = burst.timeUntil)
-                    Divider()
-                }
-                items(burst.ingestions.size) { i ->
-                    val ingestion = burst.ingestions[i]
-                    IngestionRow(ingestion = ingestion)
-                    Divider()
+            items(ingestionBursts) { burst ->
+                TimeArrowUp(timeText = burst.timeUntil)
+                Card(modifier = Modifier.padding(vertical = 5.dp)) {
+                    Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
+                        burst.ingestions.forEachIndexed { index, ingestion ->
+                            IngestionRow(ingestion = ingestion)
+                            if (index < burst.ingestions.size - 1) {
+                                Divider()
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -134,7 +145,7 @@ fun IngestionRow(ingestion: Ingestion) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = horizontalPadding, vertical = 4.dp),
+            .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ingestion.dose?.also {

@@ -206,7 +206,6 @@ fun ExperienceScreen(
                 }
             }
             Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                CardTitle(title = "Notes")
                 if (oneExperienceScreenModel.notes.isEmpty()) {
                     TextButton(
                         onClick = navigateToEditExperienceScreen,
@@ -221,6 +220,7 @@ fun ExperienceScreen(
                         Text("Add Notes")
                     }
                 } else {
+                    CardTitle(title = "Notes")
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
