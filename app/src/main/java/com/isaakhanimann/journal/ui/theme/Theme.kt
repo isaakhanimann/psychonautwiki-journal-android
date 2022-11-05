@@ -1,11 +1,11 @@
 package com.isaakhanimann.journal.ui.theme
 
 
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
 
@@ -79,16 +79,18 @@ val verticalPaddingCards = 3.dp
 
 @Composable
 fun JournalTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColors
+    val isDarkTheme = isSystemInDarkTheme()
+    val useDynamic = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val colorScheme = if (useDynamic) {
+        val context = LocalContext.current
+        if (isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else {
-        LightColors
+        if (isDarkTheme) DarkColors else LightColors
     }
     MaterialTheme(
-        colorScheme = colors,
+        colorScheme = colorScheme,
         content = content
     )
 }
