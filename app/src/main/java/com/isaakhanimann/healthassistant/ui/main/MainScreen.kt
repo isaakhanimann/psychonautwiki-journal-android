@@ -39,7 +39,7 @@ import com.isaakhanimann.healthassistant.ui.search.substance.SaferStimulantsScre
 import com.isaakhanimann.healthassistant.ui.search.substance.SubstanceScreen
 import com.isaakhanimann.healthassistant.ui.search.substance.category.CategoryScreen
 import com.isaakhanimann.healthassistant.ui.settings.SettingsScreen
-import com.isaakhanimann.healthassistant.ui.settings.faq.FAQScreen
+import com.isaakhanimann.healthassistant.ui.settings.FAQScreen
 import com.isaakhanimann.healthassistant.ui.stats.StatsScreen
 import com.isaakhanimann.healthassistant.ui.stats.substancecompanion.SubstanceCompanionScreen
 
