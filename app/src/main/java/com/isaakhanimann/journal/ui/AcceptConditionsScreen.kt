@@ -1,10 +1,8 @@
 package com.isaakhanimann.journal.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
@@ -13,9 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.journal.R
 
 @Preview
 @Composable
@@ -38,13 +38,13 @@ fun AcceptConditionsScreen(
         val checkedState3 = remember { mutableStateOf(false) }
         val allIsChecked =
             checkedState0.value && checkedState1.value && checkedState2.value && checkedState3.value
-//        val painter =
-//            if (allIsChecked) painterResource(R.drawable.eye_open) else painterResource(R.drawable.eye_closed)
-//        Image(
-//            painter = painter,
-//            contentDescription = "PsychonautWiki eye",
-//            modifier = Modifier.fillMaxWidth(0.4f)
-//        )
+        val painter =
+            if (allIsChecked) painterResource(R.drawable.eye_open) else painterResource(R.drawable.eye_closed)
+        Image(
+            painter = painter,
+            contentDescription = "PsychonautWiki eye",
+            modifier = Modifier.fillMaxWidth(0.4f)
+        )
         Column(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(5.dp)
