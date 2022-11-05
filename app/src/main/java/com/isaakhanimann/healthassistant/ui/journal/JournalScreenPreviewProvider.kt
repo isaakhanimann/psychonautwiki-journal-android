@@ -20,7 +20,14 @@ class JournalScreenPreviewProvider :
                         id = 0,
                         title = "Festival",
                         text = "Some notes",
-                        isFavorite = true
+                        isFavorite = true,
+                        sortDate = getInstant(
+                            year = 2022,
+                            month = 7,
+                            day = 5,
+                            hourOfDay = 14,
+                            minute = 20
+                        )!!,
                     ),
                     ingestionsWithCompanions = listOf(
                         IngestionWithCompanion(
@@ -96,6 +103,13 @@ class JournalScreenPreviewProvider :
                         id = 0,
                         title = "Bachelor Party",
                         text = "Some notes",
+                        sortDate = getInstant(
+                            year = 2022,
+                            month = 6,
+                            day = 21,
+                            hourOfDay = 12,
+                            minute = 20
+                        )!!,
                     ),
                     ingestionsWithCompanions = listOf(
                         IngestionWithCompanion(
@@ -127,6 +141,13 @@ class JournalScreenPreviewProvider :
                         id = 0,
                         title = "Liam's Birthday",
                         text = "Some notes",
+                        sortDate = getInstant(
+                            year = 2021,
+                            month = 9,
+                            day = 2,
+                            hourOfDay = 18,
+                            minute = 13
+                        )!!,
                     ),
                     ingestionsWithCompanions = listOf(
                         IngestionWithCompanion(
@@ -180,7 +201,14 @@ class JournalScreenPreviewProvider :
                     experience = Experience(
                         id = 0,
                         title = "Last day in Stockholm",
-                        text = "Some notes"
+                        text = "Some notes",
+                        sortDate = getInstant(
+                            year = 2021,
+                            month = 7,
+                            day = 22,
+                            hourOfDay = 18,
+                            minute = 13
+                        )!!
                     ),
                     ingestionsWithCompanions = listOf(
                         IngestionWithCompanion(

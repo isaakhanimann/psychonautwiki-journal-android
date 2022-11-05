@@ -13,5 +13,6 @@ data class Experience(
     var title: String,
     var text: String,
     @Serializable(with=InstantSerializer::class) val creationDate: Instant = Instant.now(),
+    @Serializable(with=InstantSerializer::class) val sortDate: Instant,
     var isFavorite: Boolean = false
 )
