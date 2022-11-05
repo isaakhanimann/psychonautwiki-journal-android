@@ -7,11 +7,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HealthAssistant">
+        android:theme="@style/Theme.Journal">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.HealthAssistant">
+            android:theme="@style/Theme.Journal">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
