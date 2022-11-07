@@ -80,6 +80,10 @@ fun SettingsScreen(
                 uriHandler.openUri("https://github.com/isaakhanimann/HealthAssistant")
             }
             Divider()
+            SettingsButton(imageVector = Icons.Outlined.VolunteerActivism, text = "Donate") {
+                uriHandler.openUri("https://www.buymeacoffee.com/isaakhanimann")
+            }
+            Divider()
             var isShowingExportDialog by remember { mutableStateOf(false) }
             SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
                 isShowingExportDialog = true
