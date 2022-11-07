@@ -3,11 +3,12 @@ package com.isaakhanimann.journal.ui.addingestion.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
+import com.isaakhanimann.journal.ui.settings.CombinationSettingsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddIngestionSearchViewModel @Inject constructor(
     experienceRepo: ExperienceRepository,
-    val substanceRepo: SubstanceRepository
+    val substanceRepo: SubstanceRepository,
+    private val comboStorage: CombinationSettingsStorage,
 ) : ViewModel() {
 
     private val last100Ingestions =
@@ -34,6 +36,12 @@ class AddIngestionSearchViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000)
         )
+
+    val shouldSkipInteractionsFlow = comboStorage.skipFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     private fun getPreviousSubstances(
         ingestions: List<IngestionWithCompanion>,

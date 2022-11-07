@@ -157,6 +157,12 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
             },
             navigateToCustomDose = { substanceName, route ->
                 navController.navigateToChooseDoseCustom(substanceName, route)
+            },
+            navigateToDose = { substanceName, route ->
+                navController.navigateToChooseDose(substanceName, route)
+            },
+            navigateToChooseRoute = { substanceName ->
+                navController.navigateToChooseRoute(substanceName)
             }
         )
     }

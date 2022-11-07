@@ -28,7 +28,9 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun AddIngestionSearchScreen(
     navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
+    navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
@@ -37,11 +39,14 @@ fun AddIngestionSearchScreen(
 ) {
     AddIngestionSearchScreen(
         navigateToCheckInteractionsSkipNothing = navigateToCheckInteractionsSkipNothing,
+        navigateToChooseRoute = navigateToChooseRoute,
         navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
         navigateToCustomDose = navigateToCustomDose,
         navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose,
         navigateToCustomSubstanceChooseRoute = navigateToCustomSubstanceChooseRoute,
         navigateToChooseTime = navigateToChooseTime,
+        navigateToDose = navigateToDose,
+        shouldSkipInteractions = viewModel.shouldSkipInteractionsFlow.collectAsState().value,
         previousSubstances = viewModel.previousSubstanceRows.collectAsState().value,
     )
 }
@@ -49,34 +54,52 @@ fun AddIngestionSearchScreen(
 @Composable
 fun AddIngestionSearchScreen(
     navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
+    navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
+    shouldSkipInteractions: Boolean,
     previousSubstances: List<PreviousSubstance>
 ) {
     Column {
         LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
+        val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+        if (previousSubstances.isNotEmpty()) {
+            if (shouldSkipInteractions) {
+                SuggestionsSection(
+                    previousSubstances = previousSubstances,
+                    modifier = Modifier.heightIn(0.dp, screenHeight / 2),
+                    onRouteChosen = navigateToDose,
+                    onDoseChosen = navigateToChooseTime,
+                    onDoseOfCustomSubstanceChosen = navigateToChooseTime,
+                    onRouteOfCustomSubstanceChosen = navigateToCustomDose
+                )
+            } else {
+                SuggestionsSection(
+                    previousSubstances = previousSubstances,
+                    modifier = Modifier.heightIn(0.dp, screenHeight / 2),
+                    onRouteChosen = navigateToCheckInteractionsSkipRoute,
+                    onDoseChosen = navigateToCheckInteractionsSkipDose,
+                    onDoseOfCustomSubstanceChosen = navigateToChooseTime,
+                    onRouteOfCustomSubstanceChosen = navigateToCustomDose
+                )
+            }
+        }
         SearchScreen(
             onSubstanceTap = {
-                navigateToCheckInteractionsSkipNothing(it)
+                if (shouldSkipInteractions) {
+                    navigateToChooseRoute(it)
+                } else {
+                    navigateToCheckInteractionsSkipNothing(it)
+                }
             },
             modifier = Modifier.weight(1f),
             navigateToAddCustomSubstanceScreen = {},
             onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
         )
-        val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-        if (previousSubstances.isNotEmpty()) {
-            SuggestionsSection(
-                previousSubstances = previousSubstances,
-                modifier = Modifier.heightIn(0.dp, screenHeight / 2),
-                navigateToCheckInteractionsSkipRoute = navigateToCheckInteractionsSkipRoute,
-                navigateToCheckInteractionsSkipDose = navigateToCheckInteractionsSkipDose,
-                navigateToChooseTime = navigateToChooseTime,
-                navigateToCustomDose = navigateToCustomDose
-            )
-        }
     }
 }
 
@@ -90,6 +113,15 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
                 .fillMaxSize()
                 .padding(padding)
         ) {
+            val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+            SuggestionsSection(
+                previousSubstances = previousSubstances,
+                onDoseChosen = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
+                onRouteChosen = { _: String, _: AdministrationRoute -> },
+                onDoseOfCustomSubstanceChosen = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
+                onRouteOfCustomSubstanceChosen = { _: String, _: AdministrationRoute -> },
+                modifier = Modifier.heightIn(0.dp, screenHeight / 2)
+            )
             Surface(
                 color = Color.Blue, modifier = Modifier
                     .weight(1f)
@@ -97,15 +129,6 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
             ) {
                 Text(text = "Search Screen")
             }
-            val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-            SuggestionsSection(
-                previousSubstances = previousSubstances,
-                navigateToCheckInteractionsSkipDose = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
-                navigateToCheckInteractionsSkipRoute = { _: String, _: AdministrationRoute -> },
-                navigateToChooseTime = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
-                navigateToCustomDose = { _: String, _: AdministrationRoute -> },
-                modifier = Modifier.heightIn(0.dp, screenHeight / 2)
-            )
         }
     }
 
@@ -114,10 +137,10 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
 @Composable
 fun SuggestionsSection(
     previousSubstances: List<PreviousSubstance>,
-    navigateToCheckInteractionsSkipRoute: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
-    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
-    navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
+    onRouteChosen: (substanceName: String, route: AdministrationRoute) -> Unit,
+    onDoseChosen: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    onDoseOfCustomSubstanceChosen: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    onRouteOfCustomSubstanceChosen: (substanceName: String, route: AdministrationRoute) -> Unit,
     modifier: Modifier
 ) {
     Card(modifier = modifier, shape = RectangleShape) {
@@ -148,12 +171,12 @@ fun SuggestionsSection(
                         Row {
                             OutlinedButton(onClick = {
                                 if (substanceRow.isCustom) {
-                                    navigateToCustomDose(
+                                    onRouteOfCustomSubstanceChosen(
                                         substanceRow.substanceName,
                                         routeWithDoses.route
                                     )
                                 } else {
-                                    navigateToCheckInteractionsSkipRoute(
+                                    onRouteChosen(
                                         substanceRow.substanceName,
                                         routeWithDoses.route
                                     )
@@ -166,7 +189,7 @@ fun SuggestionsSection(
                                 routeWithDoses.doses.forEach { previousDose ->
                                     OutlinedButton(onClick = {
                                         if (substanceRow.isCustom) {
-                                            navigateToChooseTime(
+                                            onDoseOfCustomSubstanceChosen(
                                                 substanceRow.substanceName,
                                                 routeWithDoses.route,
                                                 previousDose.dose,
@@ -174,7 +197,7 @@ fun SuggestionsSection(
                                                 previousDose.isEstimate
                                             )
                                         } else {
-                                            navigateToCheckInteractionsSkipDose(
+                                            onDoseChosen(
                                                 substanceRow.substanceName,
                                                 routeWithDoses.route,
                                                 previousDose.dose,
