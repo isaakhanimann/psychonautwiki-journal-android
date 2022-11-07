@@ -12,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -88,18 +87,23 @@ fun AddIngestionSearchScreen(
                 )
             }
         }
-        SearchScreen(
-            onSubstanceTap = {
-                if (shouldSkipInteractions) {
-                    navigateToChooseRoute(it)
-                } else {
-                    navigateToCheckInteractionsSkipNothing(it)
-                }
-            },
-            modifier = Modifier.weight(1f),
-            navigateToAddCustomSubstanceScreen = {},
-            onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
-        )
+        Card(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = horizontalPadding)
+        ) {
+            SearchScreen(
+                onSubstanceTap = {
+                    if (shouldSkipInteractions) {
+                        navigateToChooseRoute(it)
+                    } else {
+                        navigateToCheckInteractionsSkipNothing(it)
+                    }
+                },
+                navigateToAddCustomSubstanceScreen = {},
+                onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
+            )
+        }
     }
 }
 
@@ -143,7 +147,9 @@ fun SuggestionsSection(
     onRouteOfCustomSubstanceChosen: (substanceName: String, route: AdministrationRoute) -> Unit,
     modifier: Modifier
 ) {
-    Card(modifier = modifier, shape = RectangleShape) {
+    Card(
+        modifier = modifier.padding(horizontal = horizontalPadding, vertical = 6.dp),
+    ) {
         Text(
             text = "Quick Logging",
             style = MaterialTheme.typography.titleMedium,
