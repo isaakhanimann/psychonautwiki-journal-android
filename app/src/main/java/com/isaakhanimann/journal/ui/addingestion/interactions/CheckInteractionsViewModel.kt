@@ -41,21 +41,21 @@ class CheckInteractionsViewModel @Inject constructor(
             val foundDangerous = substanceRepo.getAllInteractions(
                 type = InteractionType.DANGEROUS,
                 substanceName = substanceName,
-                originalInteractions = substance.interactions?.dangerous ?: emptyList(),
+                originalInteractions = dangerousInteractions,
                 interactionsToFilterOut = emptyList(),
                 categories = substance.categories
             )
             val foundUnsafe = substanceRepo.getAllInteractions(
                 type = InteractionType.UNSAFE,
                 substanceName = substanceName,
-                originalInteractions = substance.interactions?.unsafe ?: emptyList(),
+                originalInteractions = unsafeInteractions,
                 interactionsToFilterOut = dangerousInteractions,
                 categories = substance.categories
             )
             val foundUncertain = substanceRepo.getAllInteractions(
                 type = InteractionType.UNCERTAIN,
                 substanceName = substanceName,
-                originalInteractions = substance.interactions?.uncertain ?: emptyList(),
+                originalInteractions = uncertainInteractions,
                 interactionsToFilterOut = dangerousInteractions + unsafeInteractions,
                 categories = substance.categories
             )
@@ -144,7 +144,7 @@ class CheckInteractionsViewModel @Inject constructor(
                     option = RegexOption.IGNORE_CASE
                 ).matches(ingestion.substanceName)
             }.any { it }
-            interactions.contains(ingestion.substanceName) || isSubstanceInDangerClass || isWildCardMatch
+            return@filter interactions.contains(ingestion.substanceName) || isSubstanceInDangerClass || isWildCardMatch
         }
     }
 }
