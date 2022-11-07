@@ -37,6 +37,7 @@ import com.isaakhanimann.journal.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.journal.ui.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.journal.ui.search.substance.SubstanceScreen
 import com.isaakhanimann.journal.ui.search.substance.category.CategoryScreen
+import com.isaakhanimann.journal.ui.settings.CombinationSettingsScreen
 import com.isaakhanimann.journal.ui.settings.FAQScreen
 import com.isaakhanimann.journal.ui.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.stats.StatsScreen
@@ -102,11 +103,17 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
         )
     }
     composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+    composable(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
     composable(NoArgumentRouter.ExplainTimelineRouter.route) { ExplainTimelineScreen() }
     composable(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
     composable(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
     composable(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
-    composable(NoArgumentRouter.SettingsRouter.route) { SettingsScreen(navigateToFAQ = navController::navigateToFAQ) }
+    composable(NoArgumentRouter.SettingsRouter.route) {
+        SettingsScreen(
+            navigateToFAQ = navController::navigateToFAQ,
+            navigateToComboSettings = navController::navigateToComboSettings
+        )
+    }
     composable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
     composable(NoArgumentRouter.AdministrationRouteExplanationRouter.route) { RouteExplanationScreen() }
     composable(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }

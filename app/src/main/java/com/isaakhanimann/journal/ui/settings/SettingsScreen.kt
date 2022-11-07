@@ -25,6 +25,7 @@ fun SettingsPreview() {
     SettingsScreen(
         deleteEverything = {},
         navigateToFAQ = {},
+        navigateToComboSettings = {},
         importFile = {},
         exportFile = {}
     )
@@ -33,10 +34,12 @@ fun SettingsPreview() {
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
-    navigateToFAQ: () -> Unit
+    navigateToFAQ: () -> Unit,
+    navigateToComboSettings: () -> Unit
 ) {
     SettingsScreen(
-        navigateToFAQ,
+        navigateToFAQ = navigateToFAQ,
+        navigateToComboSettings = navigateToComboSettings,
         deleteEverything = viewModel::deleteEverything,
         importFile = viewModel::importFile,
         exportFile = viewModel::exportFile
@@ -47,6 +50,7 @@ fun SettingsScreen(
 @Composable
 fun SettingsScreen(
     navigateToFAQ: () -> Unit,
+    navigateToComboSettings: () -> Unit,
     deleteEverything: () -> Unit,
     importFile: (uri: Uri) -> Unit,
     exportFile: (uri: Uri) -> Unit
@@ -57,6 +61,13 @@ fun SettingsScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
+            SettingsButton(
+                imageVector = Icons.Outlined.WarningAmber,
+                text = "Combination Settings"
+            ) {
+                navigateToComboSettings()
+            }
+            Divider()
             val uriHandler = LocalUriHandler.current
             SettingsButton(
                 imageVector = Icons.Outlined.OpenInBrowser,
