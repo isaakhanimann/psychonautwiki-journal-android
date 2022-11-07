@@ -8,7 +8,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.settings.CombinationSettingsStorage
+import com.isaakhanimann.journal.ui.settings.combinations.CombinationSettingsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class AddIngestionSearchViewModel @Inject constructor(
     experienceRepo: ExperienceRepository,
     val substanceRepo: SubstanceRepository,
-    private val comboStorage: CombinationSettingsStorage,
+    comboStorage: CombinationSettingsStorage,
 ) : ViewModel() {
 
     private val last100Ingestions =
@@ -37,7 +37,7 @@ class AddIngestionSearchViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    val shouldSkipInteractionsFlow = comboStorage.skipFlow.stateIn(
+    val shouldSkipInteractionsFlow = comboStorage.skipInteractor.flow.stateIn(
         initialValue = false,
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)

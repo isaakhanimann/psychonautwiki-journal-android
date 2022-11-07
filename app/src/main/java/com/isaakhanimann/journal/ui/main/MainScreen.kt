@@ -37,7 +37,7 @@ import com.isaakhanimann.journal.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.journal.ui.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.journal.ui.search.substance.SubstanceScreen
 import com.isaakhanimann.journal.ui.search.substance.category.CategoryScreen
-import com.isaakhanimann.journal.ui.settings.CombinationSettingsScreen
+import com.isaakhanimann.journal.ui.settings.combinations.CombinationSettingsScreen
 import com.isaakhanimann.journal.ui.settings.FAQScreen
 import com.isaakhanimann.journal.ui.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.stats.StatsScreen
