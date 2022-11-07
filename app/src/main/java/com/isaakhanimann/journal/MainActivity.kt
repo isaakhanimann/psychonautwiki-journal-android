@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
             JournalTheme {
                 val systemUiController = rememberSystemUiController()
                 val useDarkIcons = !isSystemInDarkTheme()
-                val systemBarColors = MaterialTheme.colorScheme.background
+                val systemBarColors = NavigationBarDefaults.containerColor
                 DisposableEffect(systemUiController, useDarkIcons) {
                     systemUiController.setSystemBarsColor(
                         color = systemBarColors,
