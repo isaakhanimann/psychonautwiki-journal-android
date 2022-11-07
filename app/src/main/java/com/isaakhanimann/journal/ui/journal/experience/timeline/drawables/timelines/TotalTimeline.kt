@@ -9,7 +9,7 @@ import com.isaakhanimann.journal.ui.journal.experience.timeline.drawables.Timeli
 
 data class TotalTimeline(
     val total: FullDurationRange,
-    val weight: Float = 0.5f,
+    val totalWeight: Float,
     val percentSmoothness: Float = 0.5f,
 ) : TimelineDrawable {
 
@@ -23,7 +23,7 @@ data class TotalTimeline(
         drawScope.drawPath(
             path = Path().apply {
                 val totalMinX = total.minInSeconds * pixelsPerSec
-                val totalX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
+                val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
                 moveTo(startX, height)
                 endSmoothLineTo(
                     smoothnessBetween0And1 = percentSmoothness,
@@ -85,10 +85,10 @@ data class TotalTimeline(
     }
 }
 
-fun RoaDuration.toTotalTimeline(): TotalTimeline? {
+fun RoaDuration.toTotalTimeline(totalWeight: Float): TotalTimeline? {
     val fullTotal = total?.toFullDurationRange()
     return if (fullTotal != null) {
-        TotalTimeline(total = fullTotal)
+        TotalTimeline(total = fullTotal, totalWeight = totalWeight)
     } else {
         null
     }

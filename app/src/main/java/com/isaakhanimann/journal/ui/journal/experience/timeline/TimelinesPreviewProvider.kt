@@ -27,6 +27,7 @@ class TimelinesPreviewProvider :
                     afterglow = null
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(4, ChronoUnit.HOURS)
             )
@@ -50,6 +51,7 @@ class TimelinesPreviewProvider :
                     afterglow = null
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(4, ChronoUnit.HOURS)
             )
@@ -73,6 +75,7 @@ class TimelinesPreviewProvider :
                     afterglow = null
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(4, ChronoUnit.HOURS)
             )
@@ -100,6 +103,7 @@ class TimelinesPreviewProvider :
                     afterglow = null
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(4, ChronoUnit.HOURS)
             )
@@ -131,6 +135,7 @@ class TimelinesPreviewProvider :
                     afterglow = null
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(4, ChronoUnit.HOURS)
             )
@@ -158,6 +163,7 @@ class TimelinesPreviewProvider :
                     afterglow = null
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(4, ChronoUnit.HOURS)
             )
@@ -197,6 +203,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(4, ChronoUnit.HOURS)
             ),
@@ -234,6 +241,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 0.5f,
+                horizontalWeight = 0.25f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(3, ChronoUnit.HOURS)
             ),
@@ -271,6 +279,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.RED,
                 startTime = Instant.now().minus(1, ChronoUnit.HOURS)
             ),
@@ -288,6 +297,7 @@ class TimelinesPreviewProvider :
                     afterglow = null
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.ORANGE,
                 startTime = Instant.now()
             )
@@ -327,6 +337,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(3, ChronoUnit.HOURS)
             ),
@@ -364,6 +375,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.ORANGE,
                 startTime = Instant.now().minus(1, ChronoUnit.HOURS)
             ),
@@ -401,6 +413,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.GREEN,
                 startTime = Instant.now()
             )
@@ -440,6 +453,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
                 startTime = Instant.now().minus(20, ChronoUnit.MINUTES)
             ),
@@ -477,6 +491,7 @@ class TimelinesPreviewProvider :
                     )
                 ),
                 height = 1f,
+                horizontalWeight = 0.5f,
                 color = AdaptiveColor.GREEN,
                 startTime = Instant.now()
             )

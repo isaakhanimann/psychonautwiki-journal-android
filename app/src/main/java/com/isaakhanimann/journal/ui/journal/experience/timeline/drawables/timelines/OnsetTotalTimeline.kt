@@ -10,6 +10,7 @@ import com.isaakhanimann.journal.ui.journal.experience.timeline.drawables.Timeli
 data class OnsetTotalTimeline(
     val onset: FullDurationRange,
     val total: FullDurationRange,
+    val totalWeight: Float
 ) : TimelineDrawable {
 
     override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float>? {
@@ -19,8 +20,6 @@ data class OnsetTotalTimeline(
     override val widthInSeconds: Float =
         total.maxInSeconds
 
-    val weight = 0.5f
-
     override fun drawTimeLine(
         drawScope: DrawScope,
         height: Float,
@@ -28,8 +27,9 @@ data class OnsetTotalTimeline(
         pixelsPerSec: Float,
         color: Color,
     ) {
+        val onsetWeight = 0.5f
         val onsetEndX =
-            startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+            startX + (onset.interpolateAtValueInSeconds(onsetWeight) * pixelsPerSec)
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = startX, y = height)
@@ -41,7 +41,7 @@ data class OnsetTotalTimeline(
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = onsetEndX, y = height)
-                val totalX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
+                val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
                 endSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
                     startX = onsetEndX,
@@ -72,7 +72,7 @@ data class OnsetTotalTimeline(
             path = Path().apply {
                 val onsetEndMinX = startX + (onset.minInSeconds * pixelsPerSec)
                 val onsetEndMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
-                val totalX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
+                val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
                 val totalMinX =
                     total.minInSeconds * pixelsPerSec
                 val totalMaxX =
@@ -112,13 +112,14 @@ data class OnsetTotalTimeline(
     }
 }
 
-fun RoaDuration.toOnsetTotalTimeline(): OnsetTotalTimeline? {
+fun RoaDuration.toOnsetTotalTimeline(totalWeight: Float): OnsetTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullTotal = total?.toFullDurationRange()
     return if (fullOnset != null && fullTotal != null) {
         OnsetTotalTimeline(
             onset = fullOnset,
-            total = fullTotal
+            total = fullTotal,
+            totalWeight = totalWeight
         )
     } else {
         null

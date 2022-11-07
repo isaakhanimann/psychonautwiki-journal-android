@@ -270,6 +270,7 @@ fun SubstanceScreen(
                                 DataForOneEffectLine(
                                     roaDuration = roa.roaDuration,
                                     height = 1f,
+                                    horizontalWeight = 0.5f,
                                     color = roa.route.color,
                                     startTime = ingestionTime.getInstant()
                                 )

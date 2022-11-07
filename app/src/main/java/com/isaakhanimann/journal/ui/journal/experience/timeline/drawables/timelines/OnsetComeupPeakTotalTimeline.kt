@@ -12,6 +12,7 @@ data class OnsetComeupPeakTotalTimeline(
     val comeup: FullDurationRange,
     val peak: FullDurationRange,
     val total: FullDurationRange,
+    val peakAndTotalWeight: Float,
 ) : TimelineDrawable {
 
     override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float> {
@@ -19,7 +20,7 @@ data class OnsetComeupPeakTotalTimeline(
             startDurationInSeconds + onset.interpolateAtValueInSeconds(0.5f) + comeup.interpolateAtValueInSeconds(
                 0.5f
             )
-        return startRange..(startRange + peak.interpolateAtValueInSeconds(0.5f))
+        return startRange..(startRange + peak.interpolateAtValueInSeconds(peakAndTotalWeight))
     }
 
     override val widthInSeconds: Float =
@@ -32,13 +33,13 @@ data class OnsetComeupPeakTotalTimeline(
         pixelsPerSec: Float,
         color: Color,
     ) {
-        val weight = 0.5f
+        val onsetAndComeupWeight = 0.5f
         val onsetEndX =
-            startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+            startX + (onset.interpolateAtValueInSeconds(onsetAndComeupWeight) * pixelsPerSec)
         val comeupEndX =
-            onsetEndX + (comeup.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+            onsetEndX + (comeup.interpolateAtValueInSeconds(onsetAndComeupWeight) * pixelsPerSec)
         val peakEndX =
-            comeupEndX + (peak.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+            comeupEndX + (peak.interpolateAtValueInSeconds(peakAndTotalWeight) * pixelsPerSec)
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = startX, y = height)
@@ -52,7 +53,7 @@ data class OnsetComeupPeakTotalTimeline(
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = peakEndX, y = 0f)
-                val offsetEndX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
+                val offsetEndX = total.interpolateAtValueInSeconds(peakAndTotalWeight) * pixelsPerSec
                 lineTo(x = offsetEndX, y = height)
             },
             color = color,
@@ -98,7 +99,7 @@ data class OnsetComeupPeakTotalTimeline(
     }
 }
 
-fun RoaDuration.toOnsetComeupPeakTotalTimeline(): OnsetComeupPeakTotalTimeline? {
+fun RoaDuration.toOnsetComeupPeakTotalTimeline(peakAndTotalWeight: Float): OnsetComeupPeakTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
     val fullPeak = peak?.toFullDurationRange()
@@ -108,7 +109,8 @@ fun RoaDuration.toOnsetComeupPeakTotalTimeline(): OnsetComeupPeakTotalTimeline? 
             onset = fullOnset,
             comeup = fullComeup,
             peak = fullPeak,
-            total = fullTotal
+            total = fullTotal,
+            peakAndTotalWeight = peakAndTotalWeight
         )
     } else {
         null

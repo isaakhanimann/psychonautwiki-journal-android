@@ -27,7 +27,8 @@ class AllTimelinesModel(
                 color = dataForOneLine.color,
                 ingestionTime = dataForOneLine.startTime,
                 roaDuration = dataForOneLine.roaDuration,
-                height = dataForOneLine.height
+                height = dataForOneLine.height,
+                peakAndOffsetWeight = dataForOneLine.horizontalWeight
             )
         }
         ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)

@@ -137,6 +137,8 @@ fun ExperienceScreen(
                             ingestion = oneElement.ingestionWithCompanion.ingestion,
                             allIngestions = elements.map { it.ingestionWithCompanion.ingestion }
                         ),
+                        horizontalWeight = ((oneElement.doseClass?.numDots?.toFloat()
+                            ?: 3f) - 1f) / 4f,
                         color = oneElement.ingestionWithCompanion.substanceCompanion?.color
                             ?: AdaptiveColor.RED,
                         startTime = oneElement.ingestionWithCompanion.ingestion.time
@@ -299,6 +301,7 @@ fun CardTitle(title: String) {
 data class DataForOneEffectLine(
     val roaDuration: RoaDuration?,
     val height: Float,
+    val horizontalWeight: Float,
     val color: AdaptiveColor,
     val startTime: Instant
 )

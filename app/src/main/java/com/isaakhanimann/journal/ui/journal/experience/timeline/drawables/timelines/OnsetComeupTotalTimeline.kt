@@ -11,6 +11,7 @@ data class OnsetComeupTotalTimeline(
     val onset: FullDurationRange,
     val comeup: FullDurationRange,
     val total: FullDurationRange,
+    val totalWeight: Float
 ) : TimelineDrawable {
 
     override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float>? {
@@ -27,11 +28,11 @@ data class OnsetComeupTotalTimeline(
         pixelsPerSec: Float,
         color: Color,
     ) {
-        val weight = 0.5f
+        val onsetAndComeupWeight = 0.5f
         val onsetEndX =
-            startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+            startX + (onset.interpolateAtValueInSeconds(onsetAndComeupWeight) * pixelsPerSec)
         val comeupEndX =
-            onsetEndX + (comeup.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+            onsetEndX + (comeup.interpolateAtValueInSeconds(onsetAndComeupWeight) * pixelsPerSec)
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = startX, y = height)
@@ -44,7 +45,7 @@ data class OnsetComeupTotalTimeline(
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = comeupEndX, y = 0f)
-                val offsetEndX = total.interpolateAtValueInSeconds(weight) * pixelsPerSec
+                val offsetEndX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
                 startSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
                     startX = comeupEndX,
@@ -101,7 +102,7 @@ data class OnsetComeupTotalTimeline(
     }
 }
 
-fun RoaDuration.toOnsetComeupTotalTimeline(): OnsetComeupTotalTimeline? {
+fun RoaDuration.toOnsetComeupTotalTimeline(totalWeight: Float): OnsetComeupTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
     val fullTotal = total?.toFullDurationRange()
@@ -109,7 +110,8 @@ fun RoaDuration.toOnsetComeupTotalTimeline(): OnsetComeupTotalTimeline? {
         OnsetComeupTotalTimeline(
             onset = fullOnset,
             comeup = fullComeup,
-            total = fullTotal
+            total = fullTotal,
+            totalWeight = totalWeight
         )
     } else {
         null
