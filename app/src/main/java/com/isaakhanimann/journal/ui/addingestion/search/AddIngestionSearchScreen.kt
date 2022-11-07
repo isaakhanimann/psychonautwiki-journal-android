@@ -67,6 +67,7 @@ fun AddIngestionSearchScreen(
         LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
         val screenHeight = LocalConfiguration.current.screenHeightDp.dp
         if (previousSubstances.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
             if (shouldSkipInteractions) {
                 SuggestionsSection(
                     previousSubstances = previousSubstances,
@@ -87,6 +88,7 @@ fun AddIngestionSearchScreen(
                 )
             }
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Card(
             modifier = Modifier
                 .weight(1f)
@@ -148,7 +150,7 @@ fun SuggestionsSection(
     modifier: Modifier
 ) {
     Card(
-        modifier = modifier.padding(horizontal = horizontalPadding, vertical = 6.dp),
+        modifier = modifier.padding(horizontal = horizontalPadding),
     ) {
         Text(
             text = "Quick Logging",

@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CombinationSettingsViewModel @Inject constructor(
-    private val comboStorage: CombinationSettingsStorage,
+    comboStorage: CombinationSettingsStorage,
 ) : ViewModel() {
 
     val skipViewModelInteraction = SubstanceViewModelInteraction(
@@ -24,23 +24,5 @@ class CombinationSettingsViewModel @Inject constructor(
             scope = viewModelScope,
             booleanInteraction = it
         )
-    }
-}
-
-class SubstanceViewModelInteraction(
-    private val scope: CoroutineScope,
-    private val booleanInteraction: BooleanInteraction
-) {
-    val name = booleanInteraction.name
-    val stateFlow = booleanInteraction.flow.stateIn(
-        initialValue = false,
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
-
-    fun toggle() {
-        scope.launch {
-            booleanInteraction.toggle()
-        }
     }
 }

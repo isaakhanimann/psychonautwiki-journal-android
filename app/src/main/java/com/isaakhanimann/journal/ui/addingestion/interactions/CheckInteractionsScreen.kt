@@ -177,8 +177,8 @@ fun CheckInteractionsScreen(
                     title = {
                         val title = when (alertInteractionType) {
                             InteractionType.DANGEROUS -> "Dangerous Interaction!"
-                            InteractionType.UNSAFE -> "Unsafe Interaction!"
-                            InteractionType.UNCERTAIN -> "Uncertain Interaction!"
+                            InteractionType.UNSAFE -> "Unsafe Interaction"
+                            InteractionType.UNCERTAIN -> "Uncertain Interaction"
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(

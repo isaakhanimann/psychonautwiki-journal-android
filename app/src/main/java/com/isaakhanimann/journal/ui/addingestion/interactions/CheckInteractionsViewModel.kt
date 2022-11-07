@@ -11,8 +11,10 @@ import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.substances.classes.InteractionType
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.settings.combinations.CombinationSettingsStorage
 import com.isaakhanimann.journal.ui.utils.getTimeDifferenceText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class CheckInteractionsViewModel @Inject constructor(
     private val substanceRepo: SubstanceRepository,
     private val experienceRepo: ExperienceRepository,
+    private val combinationSettingsStorage: CombinationSettingsStorage,
     state: SavedStateHandle,
 ) : ViewModel() {
     val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
@@ -71,7 +74,7 @@ class CheckInteractionsViewModel @Inject constructor(
         }
     }
 
-    private fun checkInteractionsAndMaybeShowAlert(
+    private suspend fun checkInteractionsAndMaybeShowAlert(
         dangerous: List<String>,
         unsafe: List<String>,
         uncertain: List<String>,
@@ -85,15 +88,22 @@ class CheckInteractionsViewModel @Inject constructor(
         val uncertainIngestions = getIngestionsWithInteraction(
             interactions = uncertain
         )
-        alertInteractionType = if (dangerousIngestions.isNotEmpty()) {
-            InteractionType.DANGEROUS
-        } else if (unsafeIngestions.isNotEmpty()) {
-            InteractionType.UNSAFE
-        } else if (uncertainIngestions.isNotEmpty()) {
-            InteractionType.UNCERTAIN
-        } else {
-            return
-        }
+        val enabledExtraInteractions =
+            combinationSettingsStorage.substanceInteractors.filter { it.flow.first() }
+                .map { it.name }
+        val dangerousExtras = enabledExtraInteractions.filter { dangerous.contains(it) }
+        val unsafeExtras = enabledExtraInteractions.filter { unsafe.contains(it) }
+        val uncertainExtras = enabledExtraInteractions.filter { uncertain.contains(it) }
+        alertInteractionType =
+            if (dangerousIngestions.isNotEmpty() || dangerousExtras.isNotEmpty()) {
+                InteractionType.DANGEROUS
+            } else if (unsafeIngestions.isNotEmpty() || unsafeExtras.isNotEmpty()) {
+                InteractionType.UNSAFE
+            } else if (uncertainIngestions.isNotEmpty() || uncertainExtras.isNotEmpty()) {
+                InteractionType.UNCERTAIN
+            } else {
+                return
+            }
         val now = Instant.now()
         val messages = dangerousIngestions.map { ingestion ->
             "Dangerous Interaction with ${ingestion.substanceName} (taken ${
@@ -103,6 +113,9 @@ class CheckInteractionsViewModel @Inject constructor(
                 )
             } ago)."
         }.toMutableList()
+        messages += dangerousExtras.map { extra ->
+            "Dangerous Interaction with $extra."
+        }
         messages += unsafeIngestions.map { ingestion ->
             "Unsafe Interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
@@ -111,6 +124,9 @@ class CheckInteractionsViewModel @Inject constructor(
                 )
             } ago)."
         }
+        messages += unsafeExtras.map { extra ->
+            "Unsafe Interaction with $extra."
+        }
         messages += uncertainIngestions.map { ingestion ->
             "Uncertain Interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
@@ -118,6 +134,9 @@ class CheckInteractionsViewModel @Inject constructor(
                     toInstant = now
                 )
             } ago)."
+        }
+        messages += uncertainExtras.map { extra ->
+            "Uncertain Interaction with $extra."
         }
         alertText = messages.distinct().joinToString(separator = "\n")
         isShowingAlert = true
