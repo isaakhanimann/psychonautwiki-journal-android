@@ -146,11 +146,13 @@ fun ExperienceScreen(
             val verticalCardPadding = 4.dp
             if (effectTimelines.isNotEmpty()) {
                 Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                    CardTitle(title = "Effect Timeline")
                     Column(
-                        modifier = Modifier.padding(
-                            horizontal = horizontalPadding,
-                            vertical = 10.dp
-                        )
+                        modifier = Modifier
+                            .padding(
+                                horizontal = horizontalPadding,
+                            )
+                            .padding(bottom = 10.dp, top = 3.dp)
                     ) {
                         AllTimelines(
                             dataForEffectLines = effectTimelines,
