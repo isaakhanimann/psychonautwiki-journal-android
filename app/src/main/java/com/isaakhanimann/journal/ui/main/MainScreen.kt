@@ -2,7 +2,6 @@ package com.isaakhanimann.journal.ui.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -38,8 +37,8 @@ import com.isaakhanimann.journal.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.journal.ui.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.journal.ui.search.substance.SubstanceScreen
 import com.isaakhanimann.journal.ui.search.substance.category.CategoryScreen
-import com.isaakhanimann.journal.ui.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.settings.FAQScreen
+import com.isaakhanimann.journal.ui.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.stats.StatsScreen
 import com.isaakhanimann.journal.ui.stats.substancecompanion.SubstanceCompanionScreen
 
@@ -64,7 +63,6 @@ fun MainScreen(
                 Column {
                     val currentExperience = viewModel.currentExperienceFlow.collectAsState().value
                     if (currentExperience != null && isShowingBottomBar) {
-                        Divider()
                         CurrentExperienceRow(
                             experienceWithIngestionsAndCompanions = currentExperience,
                             navigateToExperienceScreen = {
