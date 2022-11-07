@@ -126,10 +126,39 @@ fun SaferUseScreen(
                 }
                 VerticalSpace()
             }
+            val uriHandler = LocalUriHandler.current
             CollapsibleSection(title = "5. Combinations") {
                 SaferText(text = "Don’t combine drugs, including Alcohol, without research on the combo. The most common cause of substance-related deaths is the combination of depressants (such as opiates, benzodiazepines, or alcohol) with other depressants.")
+                Button(
+                    onClick = {
+                        uriHandler.openUri("https://combi-checker.ch")
+                    },
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
+                    Icon(
+                        Icons.Default.OpenInBrowser,
+                        contentDescription = "Open Link",
+                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Swiss Combination Checker")
+                }
+                Button(
+                    onClick = {
+                        uriHandler.openUri("https://combo.tripsit.me")
+                    },
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
+                    Icon(
+                        Icons.Default.OpenInBrowser,
+                        contentDescription = "Open Link",
+                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Tripsit Combination Checker")
+                }
+                VerticalSpace()
             }
-            val uriHandler = LocalUriHandler.current
             CollapsibleSection(title = "6. Administration Routes") {
                 SaferText(text = "Don’t share snorting equipment (straws, banknotes, bullets) to avoid blood-borne diseases such as Hepatitis C that can be transmitted through blood amounts so small you can’t notice. Injection is the the most dangerous route of administration and highly advised against. If you are determined to inject, don’t share injection materials and refer to the safer injection guide.")
                 Button(
