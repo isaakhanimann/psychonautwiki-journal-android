@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.BuildConfig
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Preview
@@ -63,7 +64,7 @@ fun SettingsScreen(
         Column(modifier = Modifier.padding(padding)) {
             SettingsButton(
                 imageVector = Icons.Outlined.WarningAmber,
-                text = "Combination Settings"
+                text = "Interaction Settings"
             ) {
                 navigateToComboSettings()
             }
@@ -216,12 +217,14 @@ fun SettingsScreen(
                 )
             }
             Divider()
-            Text(
-                text = "Last Substance Update: 25. October 2022",
-                modifier = Modifier
-                    .padding(horizontal = horizontalPadding, vertical = 10.dp)
-                    .fillMaxWidth()
-            )
+            Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
+                Text(
+                    text = "Version " + BuildConfig.VERSION_NAME,
+                )
+                Text(
+                    text = "Last Substance Update: 25. October 2022",
+                )
+            }
         }
     }
 }
