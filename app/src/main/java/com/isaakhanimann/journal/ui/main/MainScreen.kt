@@ -15,6 +15,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -104,33 +106,33 @@ fun MainScreen(
 }
 
 fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
-    composable(NoArgumentRouter.StatsRouter.route) {
+    horizontalTransitionComposable(NoArgumentRouter.StatsRouter.route) {
         StatsScreen(
             navigateToSubstanceCompanion = {
                 navController.navigateToSubstanceCompanionScreen(it)
             }
         )
     }
-    composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
-    composable(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
-    composable(NoArgumentRouter.ExplainTimelineRouter.route) { ExplainTimelineScreen() }
-    composable(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
-    composable(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
-    composable(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
-    composable(NoArgumentRouter.SettingsRouter.route) {
+    horizontalTransitionComposable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+    horizontalTransitionComposable(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
+    horizontalTransitionComposable(NoArgumentRouter.ExplainTimelineRouter.route) { ExplainTimelineScreen() }
+    horizontalTransitionComposable(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
+    horizontalTransitionComposable(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
+    horizontalTransitionComposable(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
+    horizontalTransitionComposable(NoArgumentRouter.SettingsRouter.route) {
         SettingsScreen(
             navigateToFAQ = navController::navigateToFAQ,
             navigateToComboSettings = navController::navigateToComboSettings
         )
     }
-    composable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
-    composable(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
+    horizontalTransitionComposable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
+    horizontalTransitionComposable(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
         RouteExplanationScreen(
             navigateToURL = navController::navigateToURLScreen
         )
     }
-    composable(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
-    composable(NoArgumentRouter.DosageGuideRouter.route) {
+    horizontalTransitionComposable(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
+    horizontalTransitionComposable(NoArgumentRouter.DosageGuideRouter.route) {
         DoseGuideScreen(
             navigateToDoseClassification = navController::navigateToDosageExplanationScreen,
             navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreen,
@@ -139,12 +141,12 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
             }
         )
     }
-    composable(NoArgumentRouter.VolumetricDosingRouter.route) {
+    horizontalTransitionComposable(NoArgumentRouter.VolumetricDosingRouter.route) {
         VolumetricDosingScreen(
             navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLScreen("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
     }
-    composable(NoArgumentRouter.AddCustomRouter.route) { AddCustomSubstance(navigateBack = navController::popBackStack) }
-    composable(NoArgumentRouter.AddIngestionRouter.route) {
+    horizontalTransitionComposable(NoArgumentRouter.AddCustomRouter.route) { AddCustomSubstance(navigateBack = navController::popBackStack) }
+    horizontalTransitionComposable(NoArgumentRouter.AddIngestionRouter.route) {
         AddIngestionSearchScreen(
             navigateToCheckInteractionsSkipNothing = {
                 navController.navigateToCheckInteractionsSkipNothing(substanceName = it)
@@ -188,25 +190,25 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
 }
 
 fun NavGraphBuilder.argumentGraph(navController: NavController) {
-    composable(
+    horizontalTransitionComposable(
         ArgumentRouter.EditExperienceRouter.route,
         arguments = ArgumentRouter.EditExperienceRouter.args
     ) {
         EditExperienceScreen(navigateBack = navController::popBackStack)
     }
-    composable(
+    horizontalTransitionComposable(
         ArgumentRouter.CategoryRouter.route,
         arguments = ArgumentRouter.CategoryRouter.args
     ) {
         CategoryScreen(navigateToURL = navController::navigateToURLScreen)
     }
-    composable(
+    horizontalTransitionComposable(
         ArgumentRouter.EditCustomRouter.route,
         arguments = ArgumentRouter.EditCustomRouter.args
     ) {
         EditCustomSubstance(navigateBack = navController::popBackStack)
     }
-    composable(
+    horizontalTransitionComposable(
         ArgumentRouter.ExperienceRouter.route,
         arguments = ArgumentRouter.ExperienceRouter.args
     ) {
@@ -223,39 +225,15 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateBack = navController::popBackStack
         )
     }
-    composable(
+    horizontalTransitionComposable(
         ArgumentRouter.IngestionRouter.route,
         arguments = ArgumentRouter.IngestionRouter.args
     ) {
         EditIngestionScreen(navigateBack = navController::popBackStack)
     }
-    composable(
+    horizontalTransitionComposable(
         route = ArgumentRouter.SubstanceRouter.route,
         arguments = ArgumentRouter.SubstanceRouter.args,
-        exitTransition = {
-            slideOutHorizontally(
-                targetOffsetX = { -300 },
-                animationSpec = tween(300)
-            ) + fadeOut(animationSpec = tween(300))
-        },
-        popEnterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { 300 },
-                animationSpec = tween(300)
-            ) + fadeIn(animationSpec = tween(300))
-        },
-        enterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { 300 },
-                animationSpec = tween(300)
-            ) + fadeIn(animationSpec = tween(300))
-        },
-        popExitTransition = {
-            slideOutHorizontally(
-                targetOffsetX = { 300 },
-                animationSpec = tween(300)
-            ) + fadeOut(animationSpec = tween(300))
-        }
     ) {
         SubstanceScreen(
             navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
@@ -267,7 +245,7 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToArticle = navController::navigateToURLScreen
         )
     }
-    composable(
+    horizontalTransitionComposable(
         ArgumentRouter.URLRouter.route,
         arguments = ArgumentRouter.URLRouter.args
     ) { backStackEntry ->
@@ -275,7 +253,7 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         val url = args.getString(URL_KEY)!!
         UrlScreen(url = url)
     }
-    composable(
+    horizontalTransitionComposable(
         ArgumentRouter.SubstanceCompanionRouter.route,
         arguments = ArgumentRouter.SubstanceCompanionRouter.args
     ) {
@@ -284,7 +262,7 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
 }
 
 fun NavGraphBuilder.tabGraph(navController: NavController) {
-    composable(TabRouter.Journal.route) {
+    tabScreenComposable(TabRouter.Journal.route) {
         JournalScreen(
             navigateToExperiencePopNothing = {
                 navController.navigateToExperiencePopNothing(experienceId = it)
@@ -292,37 +270,14 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             navigateToAddIngestion = navController::navigateToAddIngestion
         )
     }
-    composable(TabRouter.Statistics.route) {
+    tabScreenComposable(TabRouter.Statistics.route) {
         StatsScreen(
             navigateToSubstanceCompanion = {
                 navController.navigateToSubstanceCompanionScreen(substanceName = it)
             }
         )
     }
-    composable(route = TabRouter.Search.route,
-        enterTransition = { EnterTransition.None },
-        exitTransition = {
-            if(targetState.destination.route == ArgumentRouter.SubstanceRouter.route) {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeOut(animationSpec = tween(300))
-            } else {
-                null
-            }
-        },
-        popEnterTransition = {
-            if(initialState.destination.route == ArgumentRouter.SubstanceRouter.route) {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeIn(animationSpec = tween(300))
-            } else {
-                null
-            }
-        },
-        popExitTransition = { ExitTransition.None }
-    ) {
+    tabScreenComposable(route = TabRouter.Search.route) {
         SearchScreen(
             onSubstanceTap = {
                 navController.navigateToSubstanceScreen(substanceName = it)
@@ -331,7 +286,7 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom,
         )
     }
-    composable(TabRouter.SaferUse.route) {
+    tabScreenComposable(TabRouter.SaferUse.route) {
         SaferUseScreen(
             navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen,
             navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
@@ -350,7 +305,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         startDestination = ArgumentRouter.CheckInteractionsRouterSkipNothing.route,
         route = "is not used"
     ) {
-        composable(
+        horizontalTransitionComposable(
             ArgumentRouter.CheckInteractionsRouterSkipNothing.route,
             arguments = ArgumentRouter.CheckInteractionsRouterSkipNothing.args
         ) { backStackEntry ->
@@ -363,7 +318,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        composable(
+        horizontalTransitionComposable(
             ArgumentRouter.CheckInteractionsRouterSkipRoute.route,
             arguments = ArgumentRouter.CheckInteractionsRouterSkipRoute.args
         ) { backStackEntry ->
@@ -378,7 +333,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        composable(
+        horizontalTransitionComposable(
             ArgumentRouter.CheckInteractionsRouterSkipDose.route,
             arguments = ArgumentRouter.CheckInteractionsRouterSkipDose.args
         ) { backStackEntry ->
@@ -408,7 +363,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        composable(
+        horizontalTransitionComposable(
             ArgumentRouter.ChooseRouteRouter.route,
             arguments = ArgumentRouter.ChooseRouteRouter.args
         ) { backStackEntry ->
@@ -425,7 +380,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        composable(
+        horizontalTransitionComposable(
             ArgumentRouter.CustomChooseRouteRouter.route,
             arguments = ArgumentRouter.CustomChooseRouteRouter.args
         ) { backStackEntry ->
@@ -440,7 +395,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 }
             )
         }
-        composable(
+        horizontalTransitionComposable(
             ArgumentRouter.CustomChooseDoseRouter.route,
             arguments = ArgumentRouter.CustomChooseDoseRouter.args
         ) { backStackEntry ->
@@ -462,7 +417,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        composable(
+        horizontalTransitionComposable(
             ArgumentRouter.ChooseDoseRouter.route,
             arguments = ArgumentRouter.ChooseDoseRouter.args
         ) { backStackEntry ->
@@ -485,7 +440,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        composable(
+        horizontalTransitionComposable(
             ArgumentRouter.ChooseTimeRouter.route,
             arguments = ArgumentRouter.ChooseTimeRouter.args
         ) {
@@ -495,3 +450,73 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         }
     }
 }
+
+
+fun NavGraphBuilder.tabScreenComposable(
+    route: String,
+    content: @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
+) {
+    composable(
+        route = route,
+        enterTransition = { EnterTransition.None },
+        exitTransition = {
+            if (targetState.destination.route == ArgumentRouter.SubstanceRouter.route) {
+                slideOutHorizontally(
+                    targetOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            } else {
+                null
+            }
+        },
+        popEnterTransition = {
+            if (initialState.destination.route == ArgumentRouter.SubstanceRouter.route) {
+                slideInHorizontally(
+                    initialOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeIn(animationSpec = tween(300))
+            } else {
+                null
+            }
+        },
+        popExitTransition = { ExitTransition.None },
+        content = content
+    )
+}
+
+fun NavGraphBuilder.horizontalTransitionComposable(
+    route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
+    content: @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
+) {
+    composable(
+        route = route,
+        arguments = arguments,
+        exitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { -300 },
+                animationSpec = tween(300)
+            ) + fadeOut(animationSpec = tween(300))
+        },
+        popEnterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { 300 },
+                animationSpec = tween(300)
+            ) + fadeIn(animationSpec = tween(300))
+        },
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { 300 },
+                animationSpec = tween(300)
+            ) + fadeIn(animationSpec = tween(300))
+        },
+        popExitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { 300 },
+                animationSpec = tween(300)
+            ) + fadeOut(animationSpec = tween(300))
+        },
+        content = content
+    )
+}
+
