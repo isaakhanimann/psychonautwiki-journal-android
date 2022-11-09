@@ -110,7 +110,7 @@ fun CustomChooseDose(
     units: String
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Choose Dose") }) },
+        topBar = { TopAppBar(title = { Text(administrationRoute.displayText + " " + substanceName + " Dosage") }) },
         floatingActionButton = {
             if (isValidDose) {
                 ExtendedFloatingActionButton(
@@ -128,34 +128,16 @@ fun CustomChooseDose(
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight(),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                if (administrationRoute == AdministrationRoute.INSUFFLATED) {
-                    TextButton(onClick = navigateToSaferSniffingScreen) {
-                        Text(text = "Safer Sniffing")
-                    }
-                    Divider()
-                } else if (administrationRoute == AdministrationRoute.RECTAL) {
-                    TextButton(onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) }) {
-                        Icon(
-                            Icons.Outlined.Article,
-                            contentDescription = "Open Link"
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Safer Plugging")
-                    }
-                    Divider()
-                }
-                Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = administrationRoute.displayText + " " + substanceName + " Dosage")
-
-                    Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(4.dp))
+            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    )
+                ) {
                     val focusManager = LocalFocusManager.current
-                    val textStyle = MaterialTheme.typography.displaySmall
+                    val textStyle = MaterialTheme.typography.titleMedium
                     OutlinedTextField(
                         value = doseText,
                         onValueChange = onChangeDoseText,
@@ -173,37 +155,59 @@ fun CustomChooseDose(
                             focusManager.clearFocus()
                         }),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        singleLine = true
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
+                    ) {
+                        Text("Is Estimate", style = MaterialTheme.typography.titleMedium)
+                        Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                    }
+                }
+            }
+            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    )
+                ) {
                     PurityCalculation(
                         purityText = purityText,
                         onPurityChange = onPurityChange,
                         convertedDoseAndUnitText = convertedDoseAndUnitText,
                         isValidPurity = isValidPurity
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
-                    ) {
-                        Text("Is Estimate", style = MaterialTheme.typography.titleLarge)
-                        Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
-                    TextButton(
-                        onClick = { isShowingUnknownDoseDialog = true },
-                    ) {
-                        Text("Use Unknown Dose")
-                    }
-                    if (isShowingUnknownDoseDialog) {
-                        UnknownDoseDialog(
-                            useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
-                            dismiss = { isShowingUnknownDoseDialog = false }
-                        )
-                    }
                 }
+            }
+            if (administrationRoute == AdministrationRoute.INSUFFLATED) {
+                TextButton(onClick = navigateToSaferSniffingScreen) {
+                    Text(text = "Safer Sniffing")
+                }
+            } else if (administrationRoute == AdministrationRoute.RECTAL) {
+                TextButton(onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) }) {
+                    Icon(
+                        Icons.Outlined.Article,
+                        contentDescription = "Open Link"
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Safer Plugging")
+                }
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
+            TextButton(
+                onClick = { isShowingUnknownDoseDialog = true },
+            ) {
+                Text("Use Unknown Dose")
+            }
+            if (isShowingUnknownDoseDialog) {
+                UnknownDoseDialog(
+                    useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
+                    dismiss = { isShowingUnknownDoseDialog = false }
+                )
             }
         }
     }

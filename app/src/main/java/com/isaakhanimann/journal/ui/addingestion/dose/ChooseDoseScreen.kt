@@ -270,12 +270,10 @@ fun ChooseDoseScreen(
                     }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable {
-                            onChangeIsEstimate(isEstimate.not())
-                        }
+                        modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
                     ) {
+                        Text("Is Estimate", style = MaterialTheme.typography.titleMedium)
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
-                        Text("Dose is an estimate")
                     }
                 }
             }
