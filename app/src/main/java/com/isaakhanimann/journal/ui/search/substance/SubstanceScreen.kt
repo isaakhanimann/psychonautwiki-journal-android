@@ -16,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -46,6 +45,7 @@ fun SubstanceScreen(
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
+    navigateToArticle: () -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
@@ -56,6 +56,7 @@ fun SubstanceScreen(
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
         navigateToCategoryScreen = navigateToCategoryScreen,
         navigateToExplainTimeline = navigateToExplainTimeline,
+        navigateToArticle = navigateToArticle,
         substanceWithCategories = viewModel.substanceWithCategories
     )
 }
@@ -72,6 +73,7 @@ fun SubstanceScreenPreview(
             navigateToSaferStimulantsScreen = {},
             navigateToVolumetricDosingScreen = {},
             navigateToExplainTimeline = {},
+            navigateToArticle = {},
             navigateToCategoryScreen = {},
             substanceWithCategories = substanceWithCategories
         )
@@ -86,18 +88,18 @@ fun SubstanceScreen(
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
+    navigateToArticle: () -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     substanceWithCategories: SubstanceWithCategories
 ) {
     val substance = substanceWithCategories.substance
-    val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(substance.name) })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { uriHandler.openUri(substance.url) },
+                onClick = { navigateToArticle() },
                 icon = {
                     Icon(
                         Icons.Default.OpenInBrowser,

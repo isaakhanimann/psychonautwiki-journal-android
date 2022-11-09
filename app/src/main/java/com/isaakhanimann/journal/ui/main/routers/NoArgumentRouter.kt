@@ -15,9 +15,11 @@ const val SAFER_HALLUCINOGENS_ROUTE = "saferHallucinogens"
 const val SAFER_SNIFFING_ROUTE = "saferSniffing"
 const val SAFER_STIMULANTS_ROUTE = "saferStimulants"
 const val STATS_ROUTE = "stats"
+const val ARTICLE_ROUTE = "pwArticle"
 const val COMBO_SETTINGS_ROUTE = "combinationSettings"
 
 sealed class NoArgumentRouter(val route: String) {
+    object ArticleRouter : NoArgumentRouter(route = ARTICLE_ROUTE)
     object StatsRouter : NoArgumentRouter(route = STATS_ROUTE)
     object CombinationSettingsRouter : NoArgumentRouter(route = COMBO_SETTINGS_ROUTE)
     object FAQRouter : NoArgumentRouter(route = FAQ_ROUTE)
@@ -33,6 +35,10 @@ sealed class NoArgumentRouter(val route: String) {
     object SaferStimulants : NoArgumentRouter(route = SAFER_STIMULANTS_ROUTE)
     object AddIngestionRouter : NoArgumentRouter(route = ROUTE_START_ADD_INGESTIONS)
     object AddCustomRouter : NoArgumentRouter(route = ROUTE_START_ADD_CUSTOM)
+}
+
+fun NavController.navigateToArticle() {
+    navigate(ARTICLE_ROUTE)
 }
 
 fun NavController.navigateToAddIngestion() {

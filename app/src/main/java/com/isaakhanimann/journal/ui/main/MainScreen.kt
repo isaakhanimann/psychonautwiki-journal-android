@@ -35,11 +35,12 @@ import com.isaakhanimann.journal.ui.search.custom.AddCustomSubstance
 import com.isaakhanimann.journal.ui.search.custom.EditCustomSubstance
 import com.isaakhanimann.journal.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.journal.ui.search.substance.SaferStimulantsScreen
+import com.isaakhanimann.journal.ui.search.substance.SubstanceArticleScreen
 import com.isaakhanimann.journal.ui.search.substance.SubstanceScreen
 import com.isaakhanimann.journal.ui.search.substance.category.CategoryScreen
-import com.isaakhanimann.journal.ui.settings.combinations.CombinationSettingsScreen
 import com.isaakhanimann.journal.ui.settings.FAQScreen
 import com.isaakhanimann.journal.ui.settings.SettingsScreen
+import com.isaakhanimann.journal.ui.settings.combinations.CombinationSettingsScreen
 import com.isaakhanimann.journal.ui.stats.StatsScreen
 import com.isaakhanimann.journal.ui.stats.substancecompanion.SubstanceCompanionScreen
 
@@ -103,6 +104,7 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
         )
     }
     composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+    composable(NoArgumentRouter.ArticleRouter.route) { SubstanceArticleScreen() }
     composable(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
     composable(NoArgumentRouter.ExplainTimelineRouter.route) { ExplainTimelineScreen() }
     composable(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
@@ -220,7 +222,8 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
             navigateToExplainTimeline = navController::navigateToExplainTimeline,
             navigateToCategoryScreen = navController::navigateToCategoryScreen,
-            navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen
+            navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
+            navigateToArticle = navController::navigateToArticle
         )
     }
     composable(
