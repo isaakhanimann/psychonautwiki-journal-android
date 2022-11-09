@@ -70,13 +70,6 @@ fun SettingsScreen(
             }
             Divider()
             val uriHandler = LocalUriHandler.current
-            SettingsButton(
-                imageVector = Icons.Outlined.OpenInBrowser,
-                text = "Responsible Drug Use"
-            ) {
-                uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
-            }
-            Divider()
             SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
                 navigateToFAQ()
             }
@@ -89,7 +82,7 @@ fun SettingsScreen(
             }
             Divider()
             SettingsButton(imageVector = Icons.Outlined.Code, text = "Source Code") {
-                uriHandler.openUri("https://github.com/isaakhanimann/HealthAssistant")
+                uriHandler.openUri("https://github.com/isaakhanimann/psychonautwiki-journal-android")
             }
             Divider()
             SettingsButton(imageVector = Icons.Outlined.VolunteerActivism, text = "Donate") {

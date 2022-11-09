@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -25,11 +24,15 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Preview
 @Composable
 fun InteractionsPreview(@PreviewParameter(InteractionsPreviewProvider::class) interactions: Interactions) {
-    InteractionsView(interactions, substanceURL = "")
+    InteractionsView(interactions, navigateToURL = {}, substanceURL = "")
 }
 
 @Composable
-fun InteractionsView(interactions: Interactions, substanceURL: String) {
+fun InteractionsView(
+    interactions: Interactions,
+    substanceURL: String,
+    navigateToURL: (url: String) -> Unit
+) {
     Column {
         if (interactions.dangerous.isNotEmpty()) {
             interactions.dangerous.forEach {
@@ -52,19 +55,18 @@ fun InteractionsView(interactions: Interactions, substanceURL: String) {
                 )
             }
         }
-        InteractionExplanationButton(substanceURL = substanceURL)
+        InteractionExplanationButton(substanceURL = substanceURL, navigateToURL = navigateToURL)
     }
 }
 
 @Composable
-fun InteractionExplanationButton(substanceURL: String) {
-    val uriHandler = LocalUriHandler.current
+fun InteractionExplanationButton(substanceURL: String, navigateToURL: (url: String) -> Unit) {
     TextButton(onClick = {
         val interactionURL = "$substanceURL#Dangerous_interactions"
-        uriHandler.openUri(interactionURL)
+        navigateToURL(interactionURL)
     }) {
         Icon(
-            Icons.Default.OpenInBrowser,
+            Icons.Outlined.Info,
             contentDescription = "Open Link"
         )
         Spacer(Modifier.size(ButtonDefaults.IconSpacing))

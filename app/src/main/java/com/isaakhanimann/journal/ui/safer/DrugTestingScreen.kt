@@ -6,7 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.outlined.Biotech
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -213,7 +213,7 @@ fun TestingServiceItem(
             .fillMaxWidth()
     ) {
         Icon(
-            imageVector = Icons.Default.OpenInBrowser,
+            imageVector = Icons.Outlined.Biotech,
             contentDescription = "Open Link"
         )
         Text(

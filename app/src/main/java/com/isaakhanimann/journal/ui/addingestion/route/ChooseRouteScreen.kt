@@ -9,13 +9,12 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +25,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 @Composable
 fun ChooseRouteScreen(
     navigateToChooseDose: (administrationRoute: AdministrationRoute) -> Unit,
+    navigateToURL: (url: String) -> Unit,
     navigateToRouteExplanationScreen: () -> Unit,
     viewModel: ChooseRouteViewModel = hiltViewModel()
 ) {
@@ -45,6 +45,7 @@ fun ChooseRouteScreen(
             }
         },
         navigateToRouteExplanationScreen = navigateToRouteExplanationScreen,
+        navigateToURL = navigateToURL,
         isShowingInjectionDialog = viewModel.isShowingInjectionDialog,
         navigateWithCurrentRoute = {
             navigateToChooseDose(viewModel.currentRoute)
@@ -70,6 +71,7 @@ fun ChooseRouteScreenPreview() {
         otherRoutesChunked = otherRoutesChunked,
         onRouteTapped = {},
         navigateToRouteExplanationScreen = {},
+        navigateToURL = {},
         isShowingInjectionDialog = false,
         navigateWithCurrentRoute = {},
         dismissInjectionDialog = {}
@@ -85,6 +87,7 @@ fun ChooseRouteScreen(
     otherRoutesChunked: List<List<AdministrationRoute>>,
     onRouteTapped: (route: AdministrationRoute) -> Unit,
     navigateToRouteExplanationScreen: () -> Unit,
+    navigateToURL: (url: String) -> Unit,
     isShowingInjectionDialog: Boolean,
     navigateWithCurrentRoute: () -> Unit,
     dismissInjectionDialog: () -> Unit,
@@ -92,7 +95,7 @@ fun ChooseRouteScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {Text("Choose Route")},
+                title = { Text("Choose Route") },
                 navigationIcon = {
                     if (shouldShowOther && pwRoutes.isNotEmpty()) {
                         IconButton(onClick = { onChangeShowOther(false) }) {
@@ -120,6 +123,7 @@ fun ChooseRouteScreen(
             if (isShowingInjectionDialog) {
                 InjectionDialog(
                     navigateToNext = navigateWithCurrentRoute,
+                    navigateToURL = navigateToURL,
                     dismiss = dismissInjectionDialog
                 )
             }
@@ -181,7 +185,10 @@ fun ChooseRouteScreen(
                                 .fillMaxWidth()
                                 .weight(5f)
                         ) {
-                            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.fillMaxSize()
+                            ) {
                                 Text(
                                     text = "Other Routes",
                                     style = MaterialTheme.typography.headlineMedium
@@ -215,6 +222,7 @@ fun ChooseRouteScreen(
 fun InjectionDialogPreview() {
     InjectionDialog(
         navigateToNext = {},
+        navigateToURL = {},
         dismiss = {}
     )
 }
@@ -222,6 +230,7 @@ fun InjectionDialogPreview() {
 @Composable
 fun InjectionDialog(
     navigateToNext: () -> Unit,
+    navigateToURL: (url: String) -> Unit,
     dismiss: () -> Unit
 ) {
     AlertDialog(
@@ -239,7 +248,7 @@ fun InjectionDialog(
             Column {
                 Text("Using and sharing injection equipment is an extremely high-risk activity and is never truly safe to do in a non-medical context.")
                 Text("Read the safer injection guide:")
-                SaferInjectionLink()
+                SaferInjectionLink(navigateToURL)
                 Text("This guide is provided for educational and harm reduction purposes only and we strongly discourage users from engaging in this activity.")
 
             }
@@ -284,13 +293,12 @@ fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
 
 
 @Composable
-fun SaferInjectionLink() {
-    val uriHandler = LocalUriHandler.current
+fun SaferInjectionLink(navigateToURL: (url: String) -> Unit) {
     TextButton(onClick = {
-        uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL)
+        navigateToURL(AdministrationRoute.saferInjectionArticleURL)
     }) {
         Icon(
-            Icons.Default.OpenInBrowser,
+            Icons.Outlined.Article,
             contentDescription = "Open Link",
             modifier = Modifier.size(ButtonDefaults.IconSize),
         )

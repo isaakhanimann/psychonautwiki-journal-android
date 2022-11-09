@@ -2,12 +2,11 @@ package com.isaakhanimann.journal.ui.search.substance.category
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.filled.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,9 +17,10 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun CategoryScreen(
+    navigateToURL: (url: String) -> Unit,
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
-    CategoryScreen(category = viewModel.category)
+    CategoryScreen(category = viewModel.category, navigateToURL = navigateToURL)
 }
 
 @Preview
@@ -32,30 +32,30 @@ fun CategoryPreview() {
             description = "Psychedelics are drugs which alter the perception, causing a number of mental effects which manifest in many forms including altered states of consciousness, visual or tactile effects.",
             url = "https://psychonautwiki.org/wiki/Psychedelics",
             color = Color.Red
-        )
+        ),
+        navigateToURL = {}
     )
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryScreen(category: Category?) {
+fun CategoryScreen(category: Category?, navigateToURL: (url: String) -> Unit) {
     if (category == null) {
         EmptyScreenDisclaimer(
             title = "Category Not Found",
             description = "An error happened, please navigate back."
         )
     } else {
-        val uriHandler = LocalUriHandler.current
         Scaffold(
             topBar = { TopAppBar(title = { Text(category.name.replaceFirstChar { it.uppercase() }) }) },
             floatingActionButton = {
                 if (category.url != null) {
                     ExtendedFloatingActionButton(
-                        onClick = { uriHandler.openUri(category.url) },
+                        onClick = { navigateToURL(category.url) },
                         icon = {
                             Icon(
-                                Icons.Default.OpenInBrowser,
+                                Icons.Default.Article,
                                 contentDescription = "Open Link"
                             )
                         },

@@ -1,17 +1,18 @@
 package com.isaakhanimann.journal.ui.safer
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Biotech
+import androidx.compose.material.icons.outlined.HealthAndSafety
+import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.search.substance.CollapsibleSection
 import com.isaakhanimann.journal.ui.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import com.isaakhanimann.journal.ui.theme.verticalPaddingCards
 
 @Preview
 @Composable
@@ -31,7 +33,8 @@ fun SaferUsePreview() {
         navigateToDosageGuideScreen = {},
         navigateToDosageClassificationScreen = {},
         navigateToRouteExplanationScreen = {},
-        navigateToSettings = {}
+        navigateToSettings = {},
+        navigateToURL = {}
     )
 }
 
@@ -45,6 +48,7 @@ fun SaferUseScreen(
     navigateToDosageClassificationScreen: () -> Unit,
     navigateToRouteExplanationScreen: () -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToURL: (url: String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -69,15 +73,21 @@ fun SaferUseScreen(
             CollapsibleSection(title = "1. Research") {
                 SaferText(text = "In advance research the duration, subjective effects and potential adverse effects which the substance or combination of substances are likely to produce.\nRead the info in here and also the PsychonautWiki article. Its best to cross-reference with other sources (Tripsit, Erowid, Wikipedia, Bluelight, Reddit, etc). There is no rush.")
             }
+            val uriHandler = LocalUriHandler.current
             CollapsibleSection(title = "2. Testing") {
-                SaferText(text = "Test your substance with anonymous and free drug testing services. If those are not available in your country, use reagent testing kits. Times and producers change. Don‘t trust your dealer. Its better to have a tested stash instead of relying on a source spontaneously.")
+                SaferText(text = "Test your substance with anonymous and free drug testing services. If those are not available in your country, use reagent testing kits. Don‘t trust your dealer to sell reliable product. Its better to have a tested stash instead of relying on a source spontaneously.")
                 Button(
                     onClick = navigateToDrugTestingScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
+                    Icon(
+                        Icons.Outlined.Biotech,
+                        contentDescription = "Open Link",
+                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text("Drug Testing Services")
                 }
-                val uriHandler = LocalUriHandler.current
                 Button(
                     onClick = {
                         uriHandler.openUri("https://dancesafe.org/testing-kit-instructions/")
@@ -85,7 +95,7 @@ fun SaferUseScreen(
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Outlined.Science,
                         contentDescription = "Open Link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
@@ -126,7 +136,6 @@ fun SaferUseScreen(
                 }
                 VerticalSpace()
             }
-            val uriHandler = LocalUriHandler.current
             CollapsibleSection(title = "5. Combinations") {
                 SaferText(text = "Don’t combine drugs, including Alcohol, without research on the combo. The most common cause of substance-related deaths is the combination of depressants (such as opiates, benzodiazepines, or alcohol) with other depressants.")
                 Button(
@@ -168,7 +177,7 @@ fun SaferUseScreen(
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Default.PlayArrow,
                         contentDescription = "Open Link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
@@ -182,7 +191,7 @@ fun SaferUseScreen(
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Default.PlayArrow,
                         contentDescription = "Open Link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
@@ -196,7 +205,7 @@ fun SaferUseScreen(
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Default.PlayArrow,
                         contentDescription = "Open Link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
@@ -229,7 +238,7 @@ fun SaferUseScreen(
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Default.PlayArrow,
                         contentDescription = "Open Link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
@@ -237,6 +246,28 @@ fun SaferUseScreen(
                     Text("Recovery Position Video")
                 }
                 VerticalSpace()
+            }
+            Card(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = verticalPaddingCards
+                )
+            ) {
+                TextButton(
+                    onClick = {
+                        navigateToURL("https://psychonautwiki.org/wiki/Responsible_drug_use")
+                    },
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
+                    Icon(
+                        Icons.Outlined.HealthAndSafety,
+                        contentDescription = "Responsible Drug Use",
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Responsible Drug Use Article")
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
         }
     }

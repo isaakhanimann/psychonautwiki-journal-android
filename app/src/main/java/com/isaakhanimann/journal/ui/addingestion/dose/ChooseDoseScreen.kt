@@ -7,14 +7,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
-import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -32,6 +31,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun ChooseDoseScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
+    navigateToURL: (url: String) -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
@@ -55,6 +55,7 @@ fun ChooseDoseScreen(
                 viewModel.dose
             )
         },
+        navigateToURL = navigateToURL,
         useUnknownDoseAndNavigate = {
             navigateToChooseTimeAndMaybeColor(
                 viewModel.units,
@@ -92,6 +93,7 @@ fun ChooseDoseScreenPreview(
         isEstimate = false,
         onChangeIsEstimate = {},
         navigateToNext = {},
+        navigateToURL = {},
         useUnknownDoseAndNavigate = {},
         currentDoseClass = DoseClass.THRESHOLD,
         purityText = "20",
@@ -119,6 +121,7 @@ fun ChooseDoseScreenPreview2() {
         isEstimate = false,
         onChangeIsEstimate = {},
         navigateToNext = {},
+        navigateToURL = {},
         useUnknownDoseAndNavigate = {},
         currentDoseClass = null,
         purityText = "20",
@@ -136,6 +139,7 @@ fun ChooseDoseScreenPreview2() {
 fun ChooseDoseScreen(
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
+    navigateToURL: (url: String) -> Unit,
     substanceName: String,
     roaDose: RoaDose?,
     administrationRoute: AdministrationRoute,
@@ -295,10 +299,9 @@ fun ChooseDoseScreen(
                     Text(text = "Safer Sniffing")
                 }
             } else if (administrationRoute == AdministrationRoute.RECTAL) {
-                val uriHandler = LocalUriHandler.current
-                TextButton(onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
+                TextButton(onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) }) {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Outlined.Article,
                         contentDescription = "Open Link"
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))

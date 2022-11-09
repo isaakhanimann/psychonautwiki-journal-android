@@ -5,11 +5,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.search.substance.SectionText
@@ -20,7 +19,8 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun DoseGuideScreenPreview() {
     DoseGuideScreen(
         navigateToDoseClassification = {},
-        navigateToVolumetricDosing = {}
+        navigateToVolumetricDosing = {},
+        navigateToPWDosageArticle = {}
     )
 }
 
@@ -28,19 +28,19 @@ fun DoseGuideScreenPreview() {
 @Composable
 fun DoseGuideScreen(
     navigateToDoseClassification: () -> Unit,
-    navigateToVolumetricDosing: () -> Unit
+    navigateToVolumetricDosing: () -> Unit,
+    navigateToPWDosageArticle: () -> Unit,
 ) {
-    val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Dosage Guide") })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { uriHandler.openUri("https://psychonautwiki.org/wiki/Dosage") },
+                onClick = navigateToPWDosageArticle,
                 icon = {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Outlined.Article,
                         contentDescription = "Open Link"
                     )
                 },

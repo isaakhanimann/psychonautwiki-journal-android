@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Article
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
-import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -56,7 +56,7 @@ fun SubstanceScreen(
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
         navigateToCategoryScreen = navigateToCategoryScreen,
         navigateToExplainTimeline = navigateToExplainTimeline,
-        navigateToArticle = navigateToArticle,
+        navigateToURL = navigateToArticle,
         substanceWithCategories = viewModel.substanceWithCategories
     )
 }
@@ -73,7 +73,7 @@ fun SubstanceScreenPreview(
             navigateToSaferStimulantsScreen = {},
             navigateToVolumetricDosingScreen = {},
             navigateToExplainTimeline = {},
-            navigateToArticle = {},
+            navigateToURL = {},
             navigateToCategoryScreen = {},
             substanceWithCategories = substanceWithCategories
         )
@@ -88,7 +88,7 @@ fun SubstanceScreen(
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
-    navigateToArticle: (url: String) -> Unit,
+    navigateToURL: (url: String) -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     substanceWithCategories: SubstanceWithCategories
 ) {
@@ -99,10 +99,10 @@ fun SubstanceScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { navigateToArticle(substance.url) },
+                onClick = { navigateToURL(substance.url) },
                 icon = {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Default.Article,
                         contentDescription = "Open Link"
                     )
                 },
@@ -322,7 +322,8 @@ fun SubstanceScreen(
                     CollapsibleSection(title = "Interactions") {
                         InteractionsView(
                             interactions = substance.interactions,
-                            substanceURL = substance.url
+                            substanceURL = substance.url,
+                            navigateToURL = navigateToURL
                         )
                     }
                 }

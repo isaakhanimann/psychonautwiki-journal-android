@@ -5,11 +5,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -17,21 +16,27 @@ import com.isaakhanimann.journal.ui.search.substance.SectionText
 import com.isaakhanimann.journal.ui.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Preview
 @Composable
-fun RouteExplanationScreen() {
-    val uriHandler = LocalUriHandler.current
+fun RouteExplanationPreview() {
+    RouteExplanationScreen(navigateToURL = {})
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RouteExplanationScreen(navigateToURL: (url: String) -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Routes of Administration") })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { uriHandler.openUri(AdministrationRoute.psychonautWikiArticleURL) },
+                onClick = { navigateToURL(AdministrationRoute.psychonautWikiArticleURL) },
                 icon = {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Outlined.Article,
                         contentDescription = "Open Link"
                     )
                 },
@@ -56,11 +61,11 @@ Determining an optimal route of administration is highly dependent on the substa
                 SectionText(it.articleText)
                 if (it == AdministrationRoute.RECTAL) {
                     Button(
-                        onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) },
+                        onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) },
                         modifier = Modifier.padding(horizontal = 5.dp)
                     ) {
                         Icon(
-                            Icons.Default.OpenInBrowser,
+                            Icons.Outlined.Article,
                             contentDescription = "Open Link",
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))

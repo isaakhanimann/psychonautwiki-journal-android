@@ -35,8 +35,8 @@ import com.isaakhanimann.journal.ui.search.custom.AddCustomSubstance
 import com.isaakhanimann.journal.ui.search.custom.EditCustomSubstance
 import com.isaakhanimann.journal.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.journal.ui.search.substance.SaferStimulantsScreen
-import com.isaakhanimann.journal.ui.search.substance.UrlScreen
 import com.isaakhanimann.journal.ui.search.substance.SubstanceScreen
+import com.isaakhanimann.journal.ui.search.substance.UrlScreen
 import com.isaakhanimann.journal.ui.search.substance.category.CategoryScreen
 import com.isaakhanimann.journal.ui.settings.FAQScreen
 import com.isaakhanimann.journal.ui.settings.SettingsScreen
@@ -116,15 +116,25 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
         )
     }
     composable(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
-    composable(NoArgumentRouter.AdministrationRouteExplanationRouter.route) { RouteExplanationScreen() }
+    composable(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
+        RouteExplanationScreen(
+            navigateToURL = navController::navigateToURLScreen
+        )
+    }
     composable(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
     composable(NoArgumentRouter.DosageGuideRouter.route) {
         DoseGuideScreen(
             navigateToDoseClassification = navController::navigateToDosageExplanationScreen,
-            navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreen
+            navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreen,
+            navigateToPWDosageArticle = {
+                navController.navigateToURLScreen(url = "https://psychonautwiki.org/wiki/Dosage")
+            }
         )
     }
-    composable(NoArgumentRouter.VolumetricDosingRouter.route) { VolumetricDosingScreen() }
+    composable(NoArgumentRouter.VolumetricDosingRouter.route) {
+        VolumetricDosingScreen(
+            navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLScreen("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
+    }
     composable(NoArgumentRouter.AddCustomRouter.route) { AddCustomSubstance(navigateBack = navController::popBackStack) }
     composable(NoArgumentRouter.AddIngestionRouter.route) {
         AddIngestionSearchScreen(
@@ -180,7 +190,7 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         ArgumentRouter.CategoryRouter.route,
         arguments = ArgumentRouter.CategoryRouter.args
     ) {
-        CategoryScreen()
+        CategoryScreen(navigateToURL = navController::navigateToURLScreen)
     }
     composable(
         ArgumentRouter.EditCustomRouter.route,
@@ -274,7 +284,8 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             navigateToDosageGuideScreen = navController::navigateToDosageGuideScreen,
             navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreen,
             navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
-            navigateToSettings = navController::navigateToSettings
+            navigateToSettings = navController::navigateToSettings,
+            navigateToURL = navController::navigateToURLScreen
         )
     }
 }
@@ -293,7 +304,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     val args = backStackEntry.arguments!!
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
                     navController.navigateToChooseRoute(substanceName = substanceName)
-                }
+                },
+                navigateToURL = navController::navigateToURLScreen
             )
         }
         composable(
@@ -307,7 +319,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     val route =
                         AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
                     navController.navigateToChooseDose(substanceName, route)
-                }
+                },
+                navigateToURL = navController::navigateToURLScreen
             )
         }
         composable(
@@ -336,7 +349,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         isEstimate = isEstimate,
                         dose = dose
                     )
-                }
+                },
+                navigateToURL = navController::navigateToURLScreen
             )
         }
         composable(
@@ -353,6 +367,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     )
                 },
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
+                navigateToURL = navController::navigateToURLScreen
             )
         }
         composable(
@@ -388,7 +403,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         dose = dose,
                     )
                 },
-                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing
+                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
+                navigateToURL = navController::navigateToURLScreen
             )
         }
         composable(
@@ -410,7 +426,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     )
                 },
                 navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
-                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing
+                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
+                navigateToURL = navController::navigateToURLScreen
             )
         }
         composable(

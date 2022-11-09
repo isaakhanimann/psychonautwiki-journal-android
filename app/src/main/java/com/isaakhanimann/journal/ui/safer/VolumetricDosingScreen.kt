@@ -4,21 +4,24 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun VolumetricDosingScreen() {
-    val uriHandler = LocalUriHandler.current
+fun VolumetricDosingPreview() {
+    VolumetricDosingScreen {}
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun VolumetricDosingScreen(navigateToVolumetricLiquidDosingArticle: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -27,10 +30,10 @@ fun VolumetricDosingScreen() {
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { uriHandler.openUri("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") },
+                onClick = navigateToVolumetricLiquidDosingArticle,
                 icon = {
                     Icon(
-                        Icons.Default.OpenInBrowser,
+                        Icons.Outlined.Article,
                         contentDescription = "Open Link"
                     )
                 },

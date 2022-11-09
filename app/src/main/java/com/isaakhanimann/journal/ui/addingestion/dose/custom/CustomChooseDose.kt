@@ -7,13 +7,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
-import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +26,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun CustomChooseDose(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
+    navigateToURL: (url: String) -> Unit,
     viewModel: CustomChooseDoseViewModel = hiltViewModel()
 ) {
     CustomChooseDose(
@@ -47,6 +47,7 @@ fun CustomChooseDose(
                 viewModel.dose
             )
         },
+        navigateToURL = navigateToURL,
         useUnknownDoseAndNavigate = {
             navigateToChooseTimeAndMaybeColor(
                 viewModel.units,
@@ -77,6 +78,7 @@ fun CustomChooseDosePreview() {
         isEstimate = false,
         onChangeIsEstimate = {},
         navigateToNext = {},
+        navigateToURL = {},
         useUnknownDoseAndNavigate = {},
         purityText = "20",
         onPurityChange = {},
@@ -99,6 +101,7 @@ fun CustomChooseDose(
     isEstimate: Boolean,
     onChangeIsEstimate: (Boolean) -> Unit,
     navigateToNext: () -> Unit,
+    navigateToURL: (url: String) -> Unit,
     useUnknownDoseAndNavigate: () -> Unit,
     purityText: String,
     onPurityChange: (purity: String) -> Unit,
@@ -136,10 +139,9 @@ fun CustomChooseDose(
                     }
                     Divider()
                 } else if (administrationRoute == AdministrationRoute.RECTAL) {
-                    val uriHandler = LocalUriHandler.current
-                    TextButton(onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
+                    TextButton(onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) }) {
                         Icon(
-                            Icons.Default.OpenInBrowser,
+                            Icons.Outlined.Article,
                             contentDescription = "Open Link"
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
