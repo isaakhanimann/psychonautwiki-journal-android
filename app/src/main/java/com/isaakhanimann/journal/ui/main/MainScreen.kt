@@ -1,5 +1,9 @@
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package com.isaakhanimann.journal.ui.main
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,7 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.*
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.navigation
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.AcceptConditionsScreen
 import com.isaakhanimann.journal.ui.addingestion.dose.ChooseDoseScreen
@@ -50,7 +58,7 @@ fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
     if (viewModel.isAcceptedFlow.collectAsState().value) {
-        val navController = rememberNavController()
+        val navController = rememberAnimatedNavController()
         val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val isShowingBottomBar = navBackStackEntry?.destination?.route in setOf(
@@ -79,7 +87,7 @@ fun MainScreen(
                 }
             }
         ) { innerPadding ->
-            NavHost(
+            AnimatedNavHost(
                 navController,
                 startDestination = TabRouter.Search.route,
                 Modifier.padding(innerPadding)
@@ -222,8 +230,32 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
         EditIngestionScreen(navigateBack = navController::popBackStack)
     }
     composable(
-        ArgumentRouter.SubstanceRouter.route,
-        arguments = ArgumentRouter.SubstanceRouter.args
+        route = ArgumentRouter.SubstanceRouter.route,
+        arguments = ArgumentRouter.SubstanceRouter.args,
+        exitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { -300 },
+                animationSpec = tween(300)
+            ) + fadeOut(animationSpec = tween(300))
+        },
+        popEnterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { 300 },
+                animationSpec = tween(300)
+            ) + fadeIn(animationSpec = tween(300))
+        },
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { 300 },
+                animationSpec = tween(300)
+            ) + fadeIn(animationSpec = tween(300))
+        },
+        popExitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { 300 },
+                animationSpec = tween(300)
+            ) + fadeOut(animationSpec = tween(300))
+        }
     ) {
         SubstanceScreen(
             navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
@@ -267,7 +299,30 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             }
         )
     }
-    composable(TabRouter.Search.route) {
+    composable(route = TabRouter.Search.route,
+        enterTransition = { EnterTransition.None },
+        exitTransition = {
+            if(targetState.destination.route == ArgumentRouter.SubstanceRouter.route) {
+                slideOutHorizontally(
+                    targetOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            } else {
+                null
+            }
+        },
+        popEnterTransition = {
+            if(initialState.destination.route == ArgumentRouter.SubstanceRouter.route) {
+                slideInHorizontally(
+                    initialOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeIn(animationSpec = tween(300))
+            } else {
+                null
+            }
+        },
+        popExitTransition = { ExitTransition.None }
+    ) {
         SearchScreen(
             onSubstanceTap = {
                 navController.navigateToSubstanceScreen(substanceName = it)
