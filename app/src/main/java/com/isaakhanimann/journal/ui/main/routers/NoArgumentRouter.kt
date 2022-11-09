@@ -1,6 +1,18 @@
 package com.isaakhanimann.journal.ui.main.routers
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import com.isaakhanimann.journal.ui.addingestion.search.AddIngestionSearchScreen
+import com.isaakhanimann.journal.ui.journal.experience.timeline.ExplainTimelineScreen
+import com.isaakhanimann.journal.ui.main.routers.transitions.regularComposableWithTransitions
+import com.isaakhanimann.journal.ui.safer.*
+import com.isaakhanimann.journal.ui.search.custom.AddCustomSubstance
+import com.isaakhanimann.journal.ui.search.substance.SaferSniffingScreen
+import com.isaakhanimann.journal.ui.search.substance.SaferStimulantsScreen
+import com.isaakhanimann.journal.ui.settings.FAQScreen
+import com.isaakhanimann.journal.ui.settings.SettingsScreen
+import com.isaakhanimann.journal.ui.settings.combinations.CombinationSettingsScreen
+import com.isaakhanimann.journal.ui.stats.StatsScreen
 
 
 const val FAQ_ROUTE = "faqRoute"
@@ -98,5 +110,93 @@ fun NavController.navigateToDrugTestingScreen() {
 fun NavController.navigateToExperienceFromAddExperience(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId) {
         popUpTo(TabRouter.Journal.route)
+    }
+}
+
+fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
+    regularComposableWithTransitions(NoArgumentRouter.StatsRouter.route) {
+        StatsScreen(
+            navigateToSubstanceCompanion = {
+                navController.navigateToSubstanceCompanionScreen(it)
+            }
+        )
+    }
+    regularComposableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+    regularComposableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
+    regularComposableWithTransitions(NoArgumentRouter.ExplainTimelineRouter.route) { ExplainTimelineScreen() }
+    regularComposableWithTransitions(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
+    regularComposableWithTransitions(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
+    regularComposableWithTransitions(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
+    regularComposableWithTransitions(NoArgumentRouter.SettingsRouter.route) {
+        SettingsScreen(
+            navigateToFAQ = navController::navigateToFAQ,
+            navigateToComboSettings = navController::navigateToComboSettings
+        )
+    }
+    regularComposableWithTransitions(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
+    regularComposableWithTransitions(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
+        RouteExplanationScreen(
+            navigateToURL = navController::navigateToURLScreen
+        )
+    }
+    regularComposableWithTransitions(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
+    regularComposableWithTransitions(NoArgumentRouter.DosageGuideRouter.route) {
+        DoseGuideScreen(
+            navigateToDoseClassification = navController::navigateToDosageExplanationScreen,
+            navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreen,
+            navigateToPWDosageArticle = {
+                navController.navigateToURLScreen(url = "https://psychonautwiki.org/wiki/Dosage")
+            }
+        )
+    }
+    regularComposableWithTransitions(NoArgumentRouter.VolumetricDosingRouter.route) {
+        VolumetricDosingScreen(
+            navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLScreen("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
+    }
+    regularComposableWithTransitions(NoArgumentRouter.AddCustomRouter.route) {
+        AddCustomSubstance(
+            navigateBack = navController::popBackStack
+        )
+    }
+    regularComposableWithTransitions(NoArgumentRouter.AddIngestionRouter.route) {
+        AddIngestionSearchScreen(
+            navigateToCheckInteractionsSkipNothing = {
+                navController.navigateToCheckInteractionsSkipNothing(substanceName = it)
+            },
+            navigateToCheckInteractionsSkipRoute = { substanceName, route ->
+                navController.navigateToCheckInteractionsSkipRoute(
+                    substanceName = substanceName,
+                    administrationRoute = route
+                )
+            },
+            navigateToCheckInteractionsSkipDose = { substanceName, route, dose, units, isEstimate ->
+                navController.navigateToCheckInteractionsSkipDose(
+                    substanceName = substanceName,
+                    administrationRoute = route,
+                    units = units,
+                    isEstimate = isEstimate,
+                    dose = dose
+                )
+            },
+            navigateToCustomSubstanceChooseRoute = navController::navigateToChooseCustomRoute,
+            navigateToChooseTime = { substanceName, route, dose, units, isEstimate ->
+                navController.navigateToChooseTimeAndMaybeColor(
+                    substanceName = substanceName,
+                    administrationRoute = route,
+                    units = units,
+                    isEstimate = isEstimate,
+                    dose = dose
+                )
+            },
+            navigateToCustomDose = { substanceName, route ->
+                navController.navigateToChooseDoseCustom(substanceName, route)
+            },
+            navigateToDose = { substanceName, route ->
+                navController.navigateToChooseDose(substanceName, route)
+            },
+            navigateToChooseRoute = { substanceName ->
+                navController.navigateToChooseRoute(substanceName)
+            }
+        )
     }
 }

@@ -1,10 +1,24 @@
 package com.isaakhanimann.journal.ui.main.routers
 
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.navigation.*
+import com.google.accompanist.navigation.animation.navigation
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.ui.addingestion.dose.ChooseDoseScreen
+import com.isaakhanimann.journal.ui.addingestion.dose.custom.CustomChooseDose
+import com.isaakhanimann.journal.ui.addingestion.interactions.CheckInteractionsScreen
+import com.isaakhanimann.journal.ui.addingestion.route.ChooseRouteScreen
+import com.isaakhanimann.journal.ui.addingestion.route.CustomChooseRouteScreen
+import com.isaakhanimann.journal.ui.addingestion.time.ChooseTimeScreen
+import com.isaakhanimann.journal.ui.journal.experience.ExperienceScreen
+import com.isaakhanimann.journal.ui.journal.experience.edit.EditExperienceScreen
+import com.isaakhanimann.journal.ui.journal.experience.editingestion.EditIngestionScreen
+import com.isaakhanimann.journal.ui.main.routers.transitions.regularComposableWithTransitions
+import com.isaakhanimann.journal.ui.search.custom.EditCustomSubstance
+import com.isaakhanimann.journal.ui.search.substance.SubstanceScreen
+import com.isaakhanimann.journal.ui.search.substance.UrlScreen
+import com.isaakhanimann.journal.ui.search.substance.category.CategoryScreen
+import com.isaakhanimann.journal.ui.stats.substancecompanion.SubstanceCompanionScreen
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -236,3 +250,228 @@ fun NavController.navigateToCheckInteractionsSkipDose(
 ) {
     navigate("$ROUTE_START_CHECK_INTERACTIONS_SKIP_DOSE$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose")
 }
+
+fun NavGraphBuilder.argumentGraph(navController: NavController) {
+    regularComposableWithTransitions(
+        ArgumentRouter.EditExperienceRouter.route,
+        arguments = ArgumentRouter.EditExperienceRouter.args
+    ) {
+        EditExperienceScreen(navigateBack = navController::popBackStack)
+    }
+    regularComposableWithTransitions(
+        ArgumentRouter.CategoryRouter.route,
+        arguments = ArgumentRouter.CategoryRouter.args
+    ) {
+        CategoryScreen(navigateToURL = navController::navigateToURLScreen)
+    }
+    regularComposableWithTransitions(
+        ArgumentRouter.EditCustomRouter.route,
+        arguments = ArgumentRouter.EditCustomRouter.args
+    ) {
+        EditCustomSubstance(navigateBack = navController::popBackStack)
+    }
+    regularComposableWithTransitions(
+        ArgumentRouter.ExperienceRouter.route,
+        arguments = ArgumentRouter.ExperienceRouter.args
+    ) {
+        val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
+        ExperienceScreen(
+            navigateToAddIngestionSearch = navController::navigateToAddIngestion,
+            navigateToExplainTimeline = navController::navigateToExplainTimeline,
+            navigateToEditExperienceScreen = {
+                navController.navigateToEditExperience(experienceId)
+            },
+            navigateToIngestionScreen = { ingestionId ->
+                navController.navigateToIngestion(ingestionId)
+            },
+            navigateBack = navController::popBackStack
+        )
+    }
+    regularComposableWithTransitions(
+        ArgumentRouter.IngestionRouter.route,
+        arguments = ArgumentRouter.IngestionRouter.args
+    ) {
+        EditIngestionScreen(navigateBack = navController::popBackStack)
+    }
+    regularComposableWithTransitions(
+        route = ArgumentRouter.SubstanceRouter.route,
+        arguments = ArgumentRouter.SubstanceRouter.args,
+    ) {
+        SubstanceScreen(
+            navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
+            navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
+            navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
+            navigateToExplainTimeline = navController::navigateToExplainTimeline,
+            navigateToCategoryScreen = navController::navigateToCategoryScreen,
+            navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
+            navigateToArticle = navController::navigateToURLScreen
+        )
+    }
+    regularComposableWithTransitions(
+        ArgumentRouter.URLRouter.route,
+        arguments = ArgumentRouter.URLRouter.args
+    ) { backStackEntry ->
+        val args = backStackEntry.arguments!!
+        val url = args.getString(URL_KEY)!!
+        UrlScreen(url = url)
+    }
+    regularComposableWithTransitions(
+        ArgumentRouter.SubstanceCompanionRouter.route,
+        arguments = ArgumentRouter.SubstanceCompanionRouter.args
+    ) {
+        SubstanceCompanionScreen()
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
+    navigation(
+        startDestination = ArgumentRouter.CheckInteractionsRouterSkipNothing.route,
+        route = "is not used"
+    ) {
+        regularComposableWithTransitions(
+            ArgumentRouter.CheckInteractionsRouterSkipNothing.route,
+            arguments = ArgumentRouter.CheckInteractionsRouterSkipNothing.args
+        ) { backStackEntry ->
+            CheckInteractionsScreen(
+                navigateToNext = {
+                    val args = backStackEntry.arguments!!
+                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    navController.navigateToChooseRoute(substanceName = substanceName)
+                },
+                navigateToURL = navController::navigateToURLScreen
+            )
+        }
+        regularComposableWithTransitions(
+            ArgumentRouter.CheckInteractionsRouterSkipRoute.route,
+            arguments = ArgumentRouter.CheckInteractionsRouterSkipRoute.args
+        ) { backStackEntry ->
+            CheckInteractionsScreen(
+                navigateToNext = {
+                    val args = backStackEntry.arguments!!
+                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    val route =
+                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+                    navController.navigateToChooseDose(substanceName, route)
+                },
+                navigateToURL = navController::navigateToURLScreen
+            )
+        }
+        regularComposableWithTransitions(
+            ArgumentRouter.CheckInteractionsRouterSkipDose.route,
+            arguments = ArgumentRouter.CheckInteractionsRouterSkipDose.args
+        ) { backStackEntry ->
+            CheckInteractionsScreen(
+                navigateToNext = {
+                    val args = backStackEntry.arguments!!
+                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    val route =
+                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+                    val dose = args.getString(DOSE_KEY)?.toDoubleOrNull()
+                    val units = args.getString(UNITS_KEY)?.let {
+                        if (it == "null") {
+                            null
+                        } else {
+                            it
+                        }
+                    }
+                    val isEstimate = args.getBoolean(IS_ESTIMATE_KEY)
+                    navController.navigateToChooseTimeAndMaybeColor(
+                        substanceName,
+                        route,
+                        units,
+                        isEstimate = isEstimate,
+                        dose = dose
+                    )
+                },
+                navigateToURL = navController::navigateToURLScreen
+            )
+        }
+        regularComposableWithTransitions(
+            ArgumentRouter.ChooseRouteRouter.route,
+            arguments = ArgumentRouter.ChooseRouteRouter.args
+        ) { backStackEntry ->
+            val args = backStackEntry.arguments!!
+            val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+            ChooseRouteScreen(
+                navigateToChooseDose = { administrationRoute ->
+                    navController.navigateToChooseDose(
+                        substanceName = substanceName,
+                        administrationRoute = administrationRoute,
+                    )
+                },
+                navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
+                navigateToURL = navController::navigateToURLScreen
+            )
+        }
+        regularComposableWithTransitions(
+            ArgumentRouter.CustomChooseRouteRouter.route,
+            arguments = ArgumentRouter.CustomChooseRouteRouter.args
+        ) { backStackEntry ->
+            val args = backStackEntry.arguments!!
+            val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+            CustomChooseRouteScreen(
+                onRouteTap = { administrationRoute ->
+                    navController.navigateToChooseDoseCustom(
+                        substanceName = substanceName,
+                        administrationRoute = administrationRoute,
+                    )
+                }
+            )
+        }
+        regularComposableWithTransitions(
+            ArgumentRouter.CustomChooseDoseRouter.route,
+            arguments = ArgumentRouter.CustomChooseDoseRouter.args
+        ) { backStackEntry ->
+            CustomChooseDose(
+                navigateToChooseTimeAndMaybeColor = { units, isEstimate, dose ->
+                    val args = backStackEntry.arguments!!
+                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    val route =
+                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+                    navController.navigateToChooseTimeAndMaybeColor(
+                        substanceName = substanceName,
+                        administrationRoute = route,
+                        units = units,
+                        isEstimate = isEstimate,
+                        dose = dose,
+                    )
+                },
+                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
+                navigateToURL = navController::navigateToURLScreen
+            )
+        }
+        regularComposableWithTransitions(
+            ArgumentRouter.ChooseDoseRouter.route,
+            arguments = ArgumentRouter.ChooseDoseRouter.args
+        ) { backStackEntry ->
+            ChooseDoseScreen(
+                navigateToChooseTimeAndMaybeColor = { units, isEstimate, dose ->
+                    val args = backStackEntry.arguments!!
+                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    val route =
+                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+                    navController.navigateToChooseTimeAndMaybeColor(
+                        substanceName = substanceName,
+                        administrationRoute = route,
+                        units = units,
+                        isEstimate = isEstimate,
+                        dose = dose,
+                    )
+                },
+                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
+                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
+                navigateToURL = navController::navigateToURLScreen
+            )
+        }
+        regularComposableWithTransitions(
+            ArgumentRouter.ChooseTimeRouter.route,
+            arguments = ArgumentRouter.ChooseTimeRouter.args
+        ) {
+            ChooseTimeScreen(
+                dismissAddIngestionScreens = navController::dismissAddIngestionScreens,
+            )
+        }
+    }
+}
+
