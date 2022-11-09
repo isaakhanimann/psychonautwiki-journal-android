@@ -35,7 +35,7 @@ import com.isaakhanimann.journal.ui.search.custom.AddCustomSubstance
 import com.isaakhanimann.journal.ui.search.custom.EditCustomSubstance
 import com.isaakhanimann.journal.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.journal.ui.search.substance.SaferStimulantsScreen
-import com.isaakhanimann.journal.ui.search.substance.SubstanceArticleScreen
+import com.isaakhanimann.journal.ui.search.substance.UrlScreen
 import com.isaakhanimann.journal.ui.search.substance.SubstanceScreen
 import com.isaakhanimann.journal.ui.search.substance.category.CategoryScreen
 import com.isaakhanimann.journal.ui.settings.FAQScreen
@@ -104,7 +104,6 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
         )
     }
     composable(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
-    composable(NoArgumentRouter.ArticleRouter.route) { SubstanceArticleScreen() }
     composable(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
     composable(NoArgumentRouter.ExplainTimelineRouter.route) { ExplainTimelineScreen() }
     composable(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
@@ -223,8 +222,16 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
             navigateToExplainTimeline = navController::navigateToExplainTimeline,
             navigateToCategoryScreen = navController::navigateToCategoryScreen,
             navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
-            navigateToArticle = navController::navigateToArticle
+            navigateToArticle = navController::navigateToURLScreen
         )
+    }
+    composable(
+        ArgumentRouter.URLRouter.route,
+        arguments = ArgumentRouter.URLRouter.args
+    ) { backStackEntry ->
+        val args = backStackEntry.arguments!!
+        val url = args.getString(URL_KEY)!!
+        UrlScreen(url = url)
     }
     composable(
         ArgumentRouter.SubstanceCompanionRouter.route,

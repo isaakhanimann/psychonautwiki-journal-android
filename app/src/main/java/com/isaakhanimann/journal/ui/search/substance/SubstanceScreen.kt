@@ -45,7 +45,7 @@ fun SubstanceScreen(
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
-    navigateToArticle: () -> Unit,
+    navigateToArticle: (url: String) -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
@@ -88,7 +88,7 @@ fun SubstanceScreen(
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
-    navigateToArticle: () -> Unit,
+    navigateToArticle: (url: String) -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     substanceWithCategories: SubstanceWithCategories
 ) {
@@ -99,7 +99,7 @@ fun SubstanceScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { navigateToArticle() },
+                onClick = { navigateToArticle(substance.url) },
                 icon = {
                     Icon(
                         Icons.Default.OpenInBrowser,

@@ -5,11 +5,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 // argument keys
 const val EXPERIENCE_ID_KEY = "experienceId"
 const val INGESTION_ID_KEY = "ingestionId"
 const val SUBSTANCE_NAME_KEY = "substanceName"
+const val URL_KEY = "url"
 const val ADMINISTRATION_ROUTE_KEY = "administrationRoute"
 const val DOSE_KEY = "dose"
 const val IS_ESTIMATE_KEY = "isEstimate"
@@ -34,6 +37,7 @@ const val ROUTE_START_CHOOSE_DOSE = "chooseDose/"
 const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
 const val ROUTE_START_SUBSTANCE_COMPANION = "substancesCompanion/"
 const val ROUTE_START_CATEGORY = "category/"
+const val ROUTE_START_URL = "url/"
 
 
 sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>) {
@@ -55,6 +59,11 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     object EditCustomRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_CUSTOM{$SUBSTANCE_NAME_KEY}",
         args = listOf(navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType })
+    )
+
+    object URLRouter : ArgumentRouter(
+        route = "$ROUTE_START_URL{$URL_KEY}",
+        args = listOf(navArgument(URL_KEY) { type = NavType.StringType })
     )
 
     object CategoryRouter : ArgumentRouter(
@@ -156,6 +165,11 @@ fun NavController.navigateToEditExperience(experienceId: Int) {
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {
     navigate(ROUTE_START_SUBSTANCES + substanceName)
+}
+
+fun NavController.navigateToURLScreen(url: String) {
+    val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
+    navigate(ROUTE_START_URL + encodedUrl)
 }
 
 fun NavController.navigateToEditCustomSubstance(substanceName: String) {
