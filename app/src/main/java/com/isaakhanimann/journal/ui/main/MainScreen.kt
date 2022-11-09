@@ -6,18 +6,19 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -74,18 +75,41 @@ fun MainScreen(
             bottomBar = {
                 Column {
                     val currentExperience = viewModel.currentExperienceFlow.collectAsState().value
-                    if (currentExperience != null && isShowingBottomBar) {
-                        CurrentExperienceRow(
-                            experienceWithIngestionsAndCompanions = currentExperience,
-                            navigateToExperienceScreen = {
-                                navController.navigateToExperiencePopNothing(experienceId = currentExperience.experience.id)
-                            }
+                    if (isShowingBottomBar) {
+                        if (currentExperience != null) {
+                            CurrentExperienceRow(
+                                experienceWithIngestionsAndCompanions = currentExperience,
+                                navigateToExperienceScreen = {
+                                    navController.navigateToExperiencePopNothing(experienceId = currentExperience.experience.id)
+                                }
+                            )
+                        }
+                        val items = listOf(
+                            TabRouter.Journal,
+                            TabRouter.Statistics,
+                            TabRouter.Search,
+                            TabRouter.SaferUse
                         )
+                        NavigationBar {
+                            val currentRoute = navBackStackEntry?.destination?.route
+                            items.forEach { item ->
+                                NavigationBarItem(
+                                    icon = { Icon(item.icon, contentDescription = null) },
+                                    label = { Text(stringResource(item.resourceId)) },
+                                    selected = currentRoute == item.route,
+                                    onClick = {
+                                        navController.navigate(item.route) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    }
+                                )
+                            }
+                        }
                     }
-                    BottomBar(
-                        navController = navController,
-                        bottomBarState = bottomBarState
-                    )
                 }
             }
         ) { innerPadding ->
@@ -145,7 +169,11 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
         VolumetricDosingScreen(
             navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLScreen("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
     }
-    horizontalTransitionComposable(NoArgumentRouter.AddCustomRouter.route) { AddCustomSubstance(navigateBack = navController::popBackStack) }
+    horizontalTransitionComposable(NoArgumentRouter.AddCustomRouter.route) {
+        AddCustomSubstance(
+            navigateBack = navController::popBackStack
+        )
+    }
     horizontalTransitionComposable(NoArgumentRouter.AddIngestionRouter.route) {
         AddIngestionSearchScreen(
             navigateToCheckInteractionsSkipNothing = {
@@ -262,7 +290,9 @@ fun NavGraphBuilder.argumentGraph(navController: NavController) {
 }
 
 fun NavGraphBuilder.tabGraph(navController: NavController) {
-    tabScreenComposable(TabRouter.Journal.route) {
+    tabScreenComposable(
+        route = TabRouter.Journal.route,
+    ) {
         JournalScreen(
             navigateToExperiencePopNothing = {
                 navController.navigateToExperiencePopNothing(experienceId = it)
@@ -270,14 +300,18 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             navigateToAddIngestion = navController::navigateToAddIngestion
         )
     }
-    tabScreenComposable(TabRouter.Statistics.route) {
+    tabScreenComposable(
+        route = TabRouter.Statistics.route,
+    ) {
         StatsScreen(
             navigateToSubstanceCompanion = {
                 navController.navigateToSubstanceCompanionScreen(substanceName = it)
             }
         )
     }
-    tabScreenComposable(route = TabRouter.Search.route) {
+    tabScreenComposable(
+        route = TabRouter.Search.route,
+    ) {
         SearchScreen(
             onSubstanceTap = {
                 navController.navigateToSubstanceScreen(substanceName = it)
@@ -286,7 +320,9 @@ fun NavGraphBuilder.tabGraph(navController: NavController) {
             navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom,
         )
     }
-    tabScreenComposable(TabRouter.SaferUse.route) {
+    tabScreenComposable(
+        route = TabRouter.SaferUse.route
+    ) {
         SaferUseScreen(
             navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen,
             navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
@@ -454,35 +490,46 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
 
 fun NavGraphBuilder.tabScreenComposable(
     route: String,
-    content: @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
+    content: @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit),
 ) {
+    val tabRoutes = setOf(
+        TabRouter.Journal.route,
+        TabRouter.Statistics.route,
+        TabRouter.Search.route,
+        TabRouter.SaferUse.route
+    )
+    val tabSwitchTimeInMs = 200
     composable(
         route = route,
-        enterTransition = { EnterTransition.None },
+        enterTransition = { fadeIn(animationSpec = tween(tabSwitchTimeInMs)) },
         exitTransition = {
-            if (targetState.destination.route == ArgumentRouter.SubstanceRouter.route) {
+            if (tabRoutes.contains(targetState.destination.route)) {
+                fadeOut(animationSpec = tween(tabSwitchTimeInMs))
+            } else {
                 slideOutHorizontally(
                     targetOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeOut(animationSpec = tween(300))
-            } else {
-                null
+                    animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
+                ) + fadeOut(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
             }
         },
         popEnterTransition = {
-            if (initialState.destination.route == ArgumentRouter.SubstanceRouter.route) {
+            if (tabRoutes.contains(targetState.destination.route)) {
+                fadeIn(animationSpec = tween(tabSwitchTimeInMs))
+            } else {
                 slideInHorizontally(
                     initialOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeIn(animationSpec = tween(300))
-            } else {
-                null
+                    animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
+                ) + fadeIn(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
             }
         },
-        popExitTransition = { ExitTransition.None },
+        popExitTransition = {
+            fadeOut(animationSpec = tween(tabSwitchTimeInMs))
+        },
         content = content
     )
 }
+
+const val WITHIN_TAB_TRANSITION_TIME_IN_MS = 300
 
 fun NavGraphBuilder.horizontalTransitionComposable(
     route: String,
@@ -495,28 +542,29 @@ fun NavGraphBuilder.horizontalTransitionComposable(
         exitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { -300 },
-                animationSpec = tween(300)
-            ) + fadeOut(animationSpec = tween(300))
+                animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
+            ) + fadeOut(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
         },
         popEnterTransition = {
             slideInHorizontally(
-                initialOffsetX = { 300 },
-                animationSpec = tween(300)
-            ) + fadeIn(animationSpec = tween(300))
+                initialOffsetX = { -300 },
+                animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
+            ) + fadeIn(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
         },
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { 300 },
-                animationSpec = tween(300)
-            ) + fadeIn(animationSpec = tween(300))
+                animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
+            ) + fadeIn(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
         },
         popExitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { 300 },
-                animationSpec = tween(300)
-            ) + fadeOut(animationSpec = tween(300))
+                animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
+            ) + fadeOut(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
         },
         content = content
     )
 }
+
 
