@@ -513,7 +513,7 @@ fun NavGraphBuilder.tabScreenComposable(
             }
         },
         popEnterTransition = {
-            if (tabRoutes.contains(targetState.destination.route)) {
+            if (tabRoutes.contains(initialState.destination.route)) {
                 fadeIn(animationSpec = tween(tabSwitchTimeInMs))
             } else {
                 slideInHorizontally(
