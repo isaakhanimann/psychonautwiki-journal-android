@@ -32,7 +32,7 @@ class ChooseTimeViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
+    val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
     val localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
 
     private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()

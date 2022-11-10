@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Article
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -52,7 +52,8 @@ fun ChooseRouteScreen(
         },
         dismissInjectionDialog = {
             viewModel.isShowingInjectionDialog = false
-        }
+        },
+        substanceName = viewModel.substanceName
     )
 }
 
@@ -74,7 +75,8 @@ fun ChooseRouteScreenPreview() {
         navigateToURL = {},
         isShowingInjectionDialog = false,
         navigateWithCurrentRoute = {},
-        dismissInjectionDialog = {}
+        dismissInjectionDialog = {},
+        substanceName = "LSD"
     )
 }
 
@@ -91,11 +93,12 @@ fun ChooseRouteScreen(
     isShowingInjectionDialog: Boolean,
     navigateWithCurrentRoute: () -> Unit,
     dismissInjectionDialog: () -> Unit,
+    substanceName: String,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Choose Route") },
+                title = { Text("$substanceName Route") },
                 navigationIcon = {
                     if (shouldShowOther && pwRoutes.isNotEmpty()) {
                         IconButton(onClick = { onChangeShowOther(false) }) {
@@ -109,7 +112,7 @@ fun ChooseRouteScreen(
                 actions = {
                     IconButton(onClick = navigateToRouteExplanationScreen) {
                         Icon(
-                            imageVector = Icons.Default.Info,
+                            imageVector = Icons.Outlined.Info,
                             contentDescription = "Administration Routes Info"
                         )
                     }
@@ -120,7 +123,7 @@ fun ChooseRouteScreen(
         Column(modifier = Modifier.padding(padding)) {
             LinearProgressIndicator(progress = 0.5f, modifier = Modifier.fillMaxWidth())
             val spacing = 6
-            if (isShowingInjectionDialog) {
+            AnimatedVisibility(visible = isShowingInjectionDialog) {
                 InjectionDialog(
                     navigateToNext = navigateWithCurrentRoute,
                     navigateToURL = navigateToURL,

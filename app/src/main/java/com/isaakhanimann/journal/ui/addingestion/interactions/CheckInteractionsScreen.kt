@@ -1,5 +1,6 @@
 package com.isaakhanimann.journal.ui.addingestion.interactions
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -172,11 +173,14 @@ fun CheckInteractionsScreen(
                         }
                     }
                     item {
-                        InteractionExplanationButton(substanceURL = substanceUrl, navigateToURL = navigateToURL)
+                        InteractionExplanationButton(
+                            substanceURL = substanceUrl,
+                            navigateToURL = navigateToURL
+                        )
                     }
                 }
             }
-            if (isShowingAlert && alertInteractionType != null) {
+            AnimatedVisibility(visible = isShowingAlert) {
                 AlertDialog(
                     onDismissRequest = dismissAlert,
                     title = {
@@ -184,6 +188,7 @@ fun CheckInteractionsScreen(
                             InteractionType.DANGEROUS -> "Dangerous Interaction!"
                             InteractionType.UNSAFE -> "Unsafe Interaction"
                             InteractionType.UNCERTAIN -> "Uncertain Interaction"
+                            else -> "Interaction"
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(

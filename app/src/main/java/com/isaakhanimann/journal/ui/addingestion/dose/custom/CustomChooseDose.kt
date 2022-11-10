@@ -1,5 +1,6 @@
 package com.isaakhanimann.journal.ui.addingestion.dose.custom
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -167,19 +168,21 @@ fun CustomChooseDose(
                     }
                 }
             }
-            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
-                Column(
-                    modifier = Modifier.padding(
-                        horizontal = horizontalPadding,
-                        vertical = 10.dp
-                    )
-                ) {
-                    PurityCalculation(
-                        purityText = purityText,
-                        onPurityChange = onPurityChange,
-                        convertedDoseAndUnitText = convertedDoseAndUnitText,
-                        isValidPurity = isValidPurity
-                    )
+            AnimatedVisibility(visible = isValidDose) {
+                Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = horizontalPadding,
+                            vertical = 10.dp
+                        )
+                    ) {
+                        PurityCalculation(
+                            purityText = purityText,
+                            onPurityChange = onPurityChange,
+                            convertedDoseAndUnitText = convertedDoseAndUnitText,
+                            isValidPurity = isValidPurity
+                        )
+                    }
                 }
             }
             if (administrationRoute == AdministrationRoute.INSUFFLATED) {

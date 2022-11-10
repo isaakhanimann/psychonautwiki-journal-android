@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
 
@@ -56,7 +57,8 @@ fun ChooseTimeScreen(
         },
         experienceTitleToAddTo = viewModel.experienceTitleToAddToFlow.collectAsState().value,
         check = viewModel::toggleCheck,
-        isChecked = viewModel.userWantsToContinueSameExperienceFlow.collectAsState().value
+        isChecked = viewModel.userWantsToContinueSameExperienceFlow.collectAsState().value,
+        substanceName = viewModel.substanceName
     )
 }
 
@@ -86,7 +88,8 @@ fun ChooseTimeScreenPreview() {
         onNoteChange = {},
         experienceTitleToAddTo = "New Years Eve",
         check = {},
-        isChecked = false
+        isChecked = false,
+        substanceName = "LSD"
     )
 }
 
@@ -109,9 +112,10 @@ fun ChooseTimeScreen(
     experienceTitleToAddTo: String?,
     check: (Boolean) -> Unit,
     isChecked: Boolean,
+    substanceName: String,
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Choose Ingestion Time") }) },
+        topBar = { TopAppBar(title = { Text("$substanceName Ingestion") }) },
         floatingActionButton = {
             AnimatedVisibility(
                 visible = !isLoadingColor,
@@ -146,21 +150,20 @@ fun ChooseTimeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(10.dp)
+                    .padding(horizontal = horizontalPadding)
             ) {
+                Spacer(modifier = Modifier.height(3.dp))
                 if (isShowingColorPicker) {
-                    ColorPicker(
-                        selectedColor = selectedColor,
-                        onChangeOfColor = onChangeColor,
-                        alreadyUsedColors = alreadyUsedColors,
-                        otherColors = otherColors
-                    )
+                    MyCard(title = "$substanceName Color") {
+                        ColorPicker(
+                            selectedColor = selectedColor,
+                            onChangeOfColor = onChangeColor,
+                            alreadyUsedColors = alreadyUsedColors,
+                            otherColors = otherColors
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.height(20.dp))
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
+                MyCard(title = "Time") {
                     DatePickerButton(
                         localDateTime = localDateTime,
                         onChange = onChangeDateOrTime,
@@ -173,23 +176,53 @@ fun ChooseTimeScreen(
                         timeString = localDateTime.getStringOfPattern("HH:mm"),
                         modifier = Modifier.fillMaxWidth()
                     )
-                }
-                Spacer(modifier = Modifier.height(20.dp))
-                NoteSection(
-                    previousNotes,
-                    note,
-                    onNoteChange
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                if (experienceTitleToAddTo != null) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable { check(isChecked.not()) }) {
-                        Checkbox(checked = isChecked, onCheckedChange = check)
-                        Text(text = "Add to $experienceTitleToAddTo")
+                    AnimatedVisibility(visible = experienceTitleToAddTo != null) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable { check(isChecked.not()) }) {
+                            Checkbox(checked = isChecked, onCheckedChange = check)
+                            Text(text = "Add to $experienceTitleToAddTo")
+                        }
                     }
                 }
+                MyCard(title = "Notes", modifier = Modifier.weight(1f)) {
+                    NoteSection(
+                        previousNotes,
+                        note,
+                        onNoteChange
+                    )
+                }
+                Spacer(modifier = Modifier.height(3.dp))
             }
+        }
+    }
+}
+
+
+@Composable
+fun MyCard(
+    title: String,
+    modifier: Modifier = Modifier,
+    content: @Composable (ColumnScope.() -> Unit)
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(
+                horizontal = horizontalPadding,
+                vertical = 5.dp
+            )
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(3.dp))
+            content()
+            Spacer(modifier = Modifier.height(3.dp))
         }
     }
 }
@@ -201,56 +234,59 @@ fun NoteSection(
     note: String,
     onNoteChange: (String) -> Unit
 ) {
-    val focusManager = LocalFocusManager.current
     var isShowingSuggestions by remember { mutableStateOf(true) }
-    LazyColumn(
-        state = rememberLazyListState(),
-        modifier = Modifier.heightIn(max = TextFieldDefaults.MinHeight * 6)
-    ) {
-        item {
-            OutlinedTextField(
-                value = note,
-                onValueChange = onNoteChange,
-                label = { Text(text = "Notes") },
-                keyboardActions = KeyboardActions(onDone = {
-                    focusManager.clearFocus()
-                    isShowingSuggestions = false
-                }),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done,
-                    capitalization = KeyboardCapitalization.Sentences
-                ),
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onFocusChanged { focusState ->
-                        if (focusState.isFocused) {
-                            isShowingSuggestions = true
-                        }
+    val focusManager = LocalFocusManager.current
+    Column {
+        OutlinedTextField(
+            value = note,
+            onValueChange = onNoteChange,
+            label = { Text(text = "Notes") },
+            keyboardActions = KeyboardActions(onDone = {
+                focusManager.clearFocus()
+                isShowingSuggestions = false
+            }),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done,
+                capitalization = KeyboardCapitalization.Sentences
+            ),
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged { focusState ->
+                    if (focusState.isFocused) {
+                        isShowingSuggestions = true
                     }
-            )
-        }
+                }
+        )
         if (previousNotes.isNotEmpty() && isShowingSuggestions) {
-            items(previousNotes.size) { i ->
-                val previousNote = previousNotes[i]
-                Row(
-                    Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .clickable {
-                            focusManager.clearFocus()
-                            isShowingSuggestions = false
-                            onNoteChange(previousNote)
+            LazyColumn(
+                state = rememberLazyListState()
+            ) {
+                items(previousNotes.size) { i ->
+                    val previousNote = previousNotes[i]
+                    Row(
+                        Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .clickable {
+                                focusManager.clearFocus()
+                                isShowingSuggestions = false
+                                onNoteChange(previousNote)
+                            }
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                Icons.Filled.ContentCopy,
+                                contentDescription = "Copy",
+                                Modifier.size(15.dp)
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(
+                                text = previousNote,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
                         }
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Filled.ContentCopy,
-                            contentDescription = "Copy",
-                            Modifier.size(15.dp)
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = previousNote, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
                 }
             }

@@ -2,6 +2,12 @@ package com.isaakhanimann.journal.ui.addingestion.time
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +37,11 @@ fun DatePickerButton(
         }, localDateTime.year, localDateTime.monthValue - 1, localDateTime.dayOfMonth
     )
     OutlinedButton(onClick = datePickerDialog::show, modifier = modifier) {
+        Icon(
+            Icons.Outlined.Event,
+            contentDescription = "Open Calendar"
+        )
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
         Text(dateString)
     }
 }
