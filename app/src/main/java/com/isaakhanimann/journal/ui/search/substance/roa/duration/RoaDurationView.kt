@@ -62,7 +62,7 @@ fun RoaDurationView(roaDuration: RoaDuration) {
 @Composable
 fun TimeSurface(durationRange: DurationRange?, name: String) {
     if (durationRange != null) {
-        Surface(shape = RoundedCornerShape(5.dp)) {
+        Surface(shape = RoundedCornerShape(5.dp), tonalElevation = 12.dp) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(

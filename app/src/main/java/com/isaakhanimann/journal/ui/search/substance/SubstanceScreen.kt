@@ -174,7 +174,6 @@ fun SubstanceScreen(
                 CollapsibleSection(title = "Dosage") {
                     Column(Modifier.padding(horizontal = horizontalPadding)) {
                         if (substance.dosageRemark != null) {
-                            VerticalSpace()
                             Text(text = substance.dosageRemark)
                             VerticalSpace()
                             Divider()
@@ -188,7 +187,7 @@ fun SubstanceScreen(
                                 ) {
                                     RouteColorCircle(roa.route)
                                     Spacer(modifier = Modifier.width(10.dp))
-                                    Text(text = roa.route.displayText)
+                                    Text(text = roa.route.displayText, style = MaterialTheme.typography.titleMedium)
                                 }
                                 if (roa.roaDose == null) {
                                     Text(text = "No dosage info")
@@ -252,18 +251,18 @@ fun SubstanceScreen(
             }
             if (roasWithDurationsDefined.isNotEmpty()) {
                 CollapsibleSection(title = "Duration") {
-                    Column(Modifier.padding(horizontal = horizontalPadding, vertical = 5.dp)) {
+                    Column(Modifier.padding(horizontal = horizontalPadding)) {
                         var ingestionTime by remember { mutableStateOf(LocalDateTime.now()) }
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text("Ingestion Time:")
-                            Spacer(modifier = Modifier.width(10.dp))
+                            Text("Start:")
+                            Spacer(modifier = Modifier.width(5.dp))
                             TimePickerButton(
                                 localDateTime = ingestionTime,
                                 onChange = { ingestionTime = it },
                                 timeString = ingestionTime.getStringOfPattern("HH:mm"),
-                                modifier = Modifier.fillMaxWidth()
+                                hasOutline = false,
                             )
                         }
                         VerticalSpace()
@@ -286,7 +285,7 @@ fun SubstanceScreen(
                                 .fillMaxWidth()
                                 .height(200.dp)
                         )
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
                         Divider()
                         roasWithDurationsDefined.forEachIndexed { index, roa ->
                             Column(
@@ -298,8 +297,8 @@ fun SubstanceScreen(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     RouteColorCircle(roa.route)
-                                    Spacer(modifier = Modifier.width(10.dp))
-                                    Text(text = roa.route.displayText)
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(text = roa.route.displayText, style = MaterialTheme.typography.titleMedium)
                                 }
                                 val roaDuration = roa.roaDuration
                                 if (roaDuration == null) {
@@ -313,6 +312,7 @@ fun SubstanceScreen(
                                 Divider()
                             }
                         }
+                        VerticalSpace()
                     }
                 }
             }
@@ -331,58 +331,53 @@ fun SubstanceScreen(
             if (substance.effectsSummary != null) {
                 CollapsibleSection(title = "Effects") {
                     Column {
-                        VerticalSpace()
                         Text(
                             text = substance.effectsSummary,
                             modifier = Modifier.padding(horizontal = horizontalPadding)
                         )
-                        VerticalSpace()
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
             }
             if (substance.generalRisks != null && substance.longtermRisks != null) {
                 CollapsibleSection(title = "Risks") {
                     Column {
-                        VerticalSpace()
                         Text(
                             text = substance.generalRisks,
                             modifier = Modifier.padding(horizontal = horizontalPadding)
                         )
-                        VerticalSpace()
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
                 CollapsibleSection(title = "Long-term") {
                     Column {
-                        VerticalSpace()
                         Text(
                             text = substance.longtermRisks,
                             modifier = Modifier.padding(horizontal = horizontalPadding)
                         )
-                        VerticalSpace()
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
             }
             if (substance.saferUse.isNotEmpty()) {
                 CollapsibleSection(title = "Safer Use") {
                     Column {
-                        VerticalSpace()
                         BulletPoints(
                             points = substance.saferUse,
                             modifier = Modifier.padding(horizontal = horizontalPadding)
                         )
-                        VerticalSpace()
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
             }
             if (substance.addictionPotential != null) {
                 CollapsibleSection(title = "Addiction Potential") {
                     Column {
-                        VerticalSpace()
                         Text(
                             substance.addictionPotential,
                             modifier = Modifier.padding(horizontal = horizontalPadding)
                         )
-                        VerticalSpace()
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
             }

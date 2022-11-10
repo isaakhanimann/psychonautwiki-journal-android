@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Schedule
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,7 +18,8 @@ fun TimePickerButton(
     localDateTime: LocalDateTime,
     onChange: (LocalDateTime) -> Unit,
     timeString: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    hasOutline: Boolean = true
 ) {
     val context = LocalContext.current
     val dialogTheme =
@@ -40,12 +38,24 @@ fun TimePickerButton(
             )
         }, localDateTime.hour, localDateTime.minute, false
     )
-    OutlinedButton(onClick = timePickerDialog::show, modifier = modifier) {
-        Icon(
-            Icons.Outlined.Schedule,
-            contentDescription = "Open Time Picker"
-        )
-        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        Text(timeString)
+    if (hasOutline) {
+        OutlinedButton(onClick = timePickerDialog::show, modifier = modifier) {
+            Icon(
+                Icons.Outlined.Schedule,
+                contentDescription = "Open Time Picker"
+            )
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text(timeString)
+        }
+    } else {
+        TextButton(onClick = timePickerDialog::show, modifier = modifier) {
+            Icon(
+                Icons.Outlined.Schedule,
+                contentDescription = "Open Time Picker"
+            )
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text(timeString)
+        }
     }
+
 }
