@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Article
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -102,7 +102,7 @@ fun SubstanceScreen(
                 onClick = { navigateToURL(substance.url) },
                 icon = {
                     Icon(
-                        Icons.Default.Article,
+                        Icons.Outlined.Article,
                         contentDescription = "Open Link"
                     )
                 },

@@ -2,7 +2,7 @@ package com.isaakhanimann.journal.ui.search.substance.category
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Article
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -55,7 +55,7 @@ fun CategoryScreen(category: Category?, navigateToURL: (url: String) -> Unit) {
                         onClick = { navigateToURL(category.url) },
                         icon = {
                             Icon(
-                                Icons.Default.Article,
+                                Icons.Outlined.Article,
                                 contentDescription = "Open Link"
                             )
                         },
