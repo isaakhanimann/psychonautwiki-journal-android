@@ -264,8 +264,8 @@ fun ChooseDoseScreen(
                             OutlinedButton(onClick = { onChangeOfUnits("g") }) {
                                 Text(text = "g")
                             }
-                            OutlinedButton(onClick = { onChangeOfUnits("ml") }) {
-                                Text(text = "ml")
+                            OutlinedButton(onClick = { onChangeOfUnits("mL") }) {
+                                Text(text = "mL")
                             }
                         }
                     }

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun AddCustomSubstance(
@@ -128,7 +129,7 @@ fun AddOrEditCustomSubstance(
     ) { padding ->
         Column(modifier = Modifier
             .padding(padding)
-            .padding(horizontal = 5.dp, vertical = 10.dp)) {
+            .padding(horizontal = horizontalPadding, vertical = 10.dp)) {
             val focusManager = LocalFocusManager.current
             OutlinedTextField(
                 value = name,
@@ -164,8 +165,8 @@ fun AddOrEditCustomSubstance(
                 OutlinedButton(onClick = { onUnitsChange("g") }) {
                     Text(text = "g")
                 }
-                OutlinedButton(onClick = { onUnitsChange("ml") }) {
-                    Text(text = "ml")
+                OutlinedButton(onClick = { onUnitsChange("mL") }) {
+                    Text(text = "mL")
                 }
             }
             OutlinedTextField(

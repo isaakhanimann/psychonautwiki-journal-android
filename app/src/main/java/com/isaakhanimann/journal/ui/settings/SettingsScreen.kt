@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -61,7 +62,7 @@ fun SettingsScreen(
             TopAppBar(title = { Text("Settings") })
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
+        Column(modifier = Modifier.padding(padding).fillMaxSize()) {
             SettingsButton(
                 imageVector = Icons.Outlined.WarningAmber,
                 text = "Interaction Settings"
@@ -93,7 +94,7 @@ fun SettingsScreen(
             SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
                 isShowingExportDialog = true
             }
-            if (isShowingExportDialog) {
+            AnimatedVisibility(visible = isShowingExportDialog) {
                 val launcherExport =
                     rememberLauncherForActivityResult(
                         contract = ActivityResultContracts.CreateDocument(
@@ -142,7 +143,7 @@ fun SettingsScreen(
                         importFile(uri)
                     }
                 }
-            if (isShowingImportDialog) {
+            AnimatedVisibility(visible = isShowingImportDialog) {
                 AlertDialog(
                     onDismissRequest = { isShowingImportDialog = false },
                     title = {
@@ -175,7 +176,7 @@ fun SettingsScreen(
             SettingsButton(imageVector = Icons.Outlined.DeleteForever, text = "Delete Everything") {
                 isShowingDeleteDialog = true
             }
-            if (isShowingDeleteDialog) {
+            AnimatedVisibility(visible = isShowingDeleteDialog) {
                 val context = LocalContext.current
                 AlertDialog(
                     onDismissRequest = { isShowingDeleteDialog = false },
@@ -210,12 +211,15 @@ fun SettingsScreen(
                 )
             }
             Divider()
-            Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
+            Spacer(modifier = Modifier.weight(1f))
+            Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 3.dp)) {
                 Text(
                     text = "Version " + BuildConfig.VERSION_NAME,
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Text(
                     text = "Last Substance Update: 25. October 2022",
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }
