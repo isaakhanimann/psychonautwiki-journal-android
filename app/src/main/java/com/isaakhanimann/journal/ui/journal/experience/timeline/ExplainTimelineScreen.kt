@@ -47,8 +47,7 @@ fun ExplainTimelineScreen() {
                             "The vertical trajectory of dotted lines is unknown",
                             "A full stomach delays the onset of an orally consumed substance by approximately 3 hours",
                             "Durations are given only for common dosages. Heavy doses can have much longer durations",
-                        ),
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                        )
                     )
                 }
             }
