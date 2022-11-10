@@ -1,6 +1,5 @@
 package com.isaakhanimann.journal.ui.search
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -13,6 +12,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -62,37 +62,13 @@ fun SearchScreen(
                 }
             }
         }
-        val isShowingCustomSubstances =
-            searchViewModel.isShowingCustomSubstancesFlow.collectAsState().value
-        if (isShowingCustomSubstances) {
-            val customSubstances = searchViewModel.customSubstancesFlow.collectAsState().value
-            LazyColumn {
-                items(customSubstances) { customSubstance ->
-                    Text(
-                        text = customSubstance.name,
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onCustomSubstanceTap(customSubstance.name)
-                            }
-                            .padding(horizontal = horizontalPadding, vertical = 6.dp),
-                    )
-                    Divider()
-                }
-                item {
-                    TextButton(
-                        onClick = navigateToAddCustomSubstanceScreen,
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    ) {
-                        Text(text = "Add Custom Substance")
-                    }
-                }
-            }
-        } else {
-            val filteredSubstances = searchViewModel.filteredSubstances.collectAsState().value
-            if (filteredSubstances.isEmpty()) {
-                val activeCategoryNames = activeFilters.filter { it.isActive }.map { it.chipName }
+        val filteredCustomSubstances =
+            searchViewModel.filteredCustomSubstancesFlow.collectAsState().value
+        val filteredSubstances = searchViewModel.filteredSubstancesFlow.collectAsState().value
+        if (filteredSubstances.isEmpty() && filteredCustomSubstances.isEmpty()) {
+            Column {
+                val activeCategoryNames =
+                    activeFilters.filter { it.isActive }.map { it.chipName }
                 if (activeCategoryNames.isEmpty()) {
                     Text("None found", modifier = Modifier.padding(10.dp))
 
@@ -100,14 +76,50 @@ fun SearchScreen(
                     val names = activeCategoryNames.joinToString(separator = ", ")
                     Text("None found in $names", modifier = Modifier.padding(10.dp))
                 }
-            } else {
-                LazyColumn {
-                    items(filteredSubstances.size) { i ->
-                        val substance = filteredSubstances[i]
-                        SubstanceRow(substanceModel = substance, onTap = onSubstanceTap)
-                        if (i < filteredSubstances.size) {
-                            Divider()
-                        }
+                TextButton(
+                    onClick = navigateToAddCustomSubstanceScreen,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
+                    Icon(
+                        Icons.Outlined.Add,
+                        contentDescription = "Add"
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(text = "Add Custom Substance")
+                }
+            }
+        } else {
+            LazyColumn {
+                items(filteredSubstances) { substance ->
+                    SubstanceRow(substanceModel = substance, onTap = onSubstanceTap)
+                    Divider()
+                }
+                items(filteredCustomSubstances) { customSubstance ->
+                    SubstanceRow(substanceModel = SubstanceModel(
+                        name = customSubstance.name,
+                        commonNames = emptyList(),
+                        categories = listOf(
+                            CategoryModel(
+                                name = "custom",
+                                color = searchViewModel.customColor
+                            )
+                        )
+                    ), onTap = {
+                        onCustomSubstanceTap(customSubstance.name)
+                    })
+                    Divider()
+                }
+                item {
+                    TextButton(
+                        onClick = navigateToAddCustomSubstanceScreen,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    ) {
+                        Icon(
+                            Icons.Outlined.Add,
+                            contentDescription = "Add"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Add Custom Substance")
                     }
                 }
             }

@@ -12,15 +12,15 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 @Preview
 @Composable
 fun CustomChooseRouteScreenPreview() {
-    CustomChooseRouteScreen(onRouteTap = {})
+    CustomChooseRouteScreen(onRouteTap = {}, substanceName = "Cookies")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
+fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit, substanceName: String) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Choose Route") })
+            TopAppBar(title = { Text("$substanceName Route") })
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
@@ -49,7 +49,7 @@ fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
                             ) {
                                 RouteBox(
                                     route = route,
-                                    titleStyle = MaterialTheme.typography.titleLarge
+                                    titleStyle = MaterialTheme.typography.titleMedium
                                 )
                             }
                         }

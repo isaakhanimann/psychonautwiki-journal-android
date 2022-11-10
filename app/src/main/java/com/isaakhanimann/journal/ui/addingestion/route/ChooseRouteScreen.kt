@@ -288,7 +288,8 @@ fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
             )
             Text(
                 text = route.description,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodySmall
             )
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.journal.experience.CardWithTitle
 import com.isaakhanimann.journal.ui.search.substance.BulletPoints
 import com.isaakhanimann.journal.ui.search.substance.SectionText
@@ -34,15 +35,23 @@ fun ExplainTimelineScreen() {
                 .padding(horizontal = horizontalPadding)
         ) {
             VerticalSpace()
-            BulletPoints(
-                points = listOf(
-                    "The vertical trajectory of dotted lines is unknown",
-                    "A full stomach delays the onset of an orally consumed substance by approximately 3 hours",
-                    "Durations are given only for common dosages. Heavy doses can have much longer durations",
-                ),
-                modifier = Modifier.padding(horizontal = horizontalPadding)
-            )
-            VerticalSpace()
+            Card(modifier = Modifier.padding(vertical = 5.dp)) {
+                Column(
+                    Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 5.dp
+                    )
+                ) {
+                    BulletPoints(
+                        points = listOf(
+                            "The vertical trajectory of dotted lines is unknown",
+                            "A full stomach delays the onset of an orally consumed substance by approximately 3 hours",
+                            "Durations are given only for common dosages. Heavy doses can have much longer durations",
+                        ),
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
+                }
+            }
             CardWithTitle(title = "Incomplete Timelines") {
                 SectionText(text = "If there is no timeline or part of the timeline is missing that means that the duration is not defined in PsychonautWiki. If you add the missing durations in PsychonautWiki, the full timeline will be shown in the next update. ")
             }

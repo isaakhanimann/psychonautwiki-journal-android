@@ -107,12 +107,6 @@ fun NavController.navigateToDrugTestingScreen() {
     navigate(DRUG_TESTING_ROUTE)
 }
 
-fun NavController.navigateToExperienceFromAddExperience(experienceId: Int) {
-    navigate(ROUTE_START_EXPERIENCES + experienceId) {
-        popUpTo(TabRouter.Journal.route)
-    }
-}
-
 fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
     regularComposableWithTransitions(NoArgumentRouter.StatsRouter.route) {
         StatsScreen(
@@ -196,7 +190,8 @@ fun NavGraphBuilder.noArgumentGraph(navController: NavController) {
             },
             navigateToChooseRoute = { substanceName ->
                 navController.navigateToChooseRoute(substanceName)
-            }
+            },
+            navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom
         )
     }
 }

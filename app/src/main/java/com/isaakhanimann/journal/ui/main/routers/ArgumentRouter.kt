@@ -416,7 +416,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         substanceName = substanceName,
                         administrationRoute = administrationRoute,
                     )
-                }
+                },
+                substanceName = substanceName
             )
         }
         regularComposableWithTransitions(

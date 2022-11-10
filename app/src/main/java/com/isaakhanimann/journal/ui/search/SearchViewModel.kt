@@ -17,11 +17,6 @@ class SearchViewModel @Inject constructor(
     substanceRepo: SubstanceRepository
 ) : ViewModel() {
 
-    val customSubstancesFlow = experienceRepo.getCustomSubstancesFlow().stateIn(
-        initialValue = emptyList(),
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
 
     private val recentlyUsedSubstancesFlow: Flow<List<SubstanceWithCategories>> =
         experienceRepo.getLastUsedSubstanceNamesFlow(limit = 100).map { lastUsedSubstanceNames ->
@@ -46,10 +41,10 @@ class SearchViewModel @Inject constructor(
                 youUsedChipName -> {
                     isShowingYouUsedFlow.emit(isShowingYouUsedFlow.value.not())
                 }
-                customChipName -> {
-                    isShowingCustomSubstancesFlow.emit(isShowingCustomSubstancesFlow.value.not())
-                }
                 else -> {
+                    if (filterName == customChipName) {
+                        isShowingCustomSubstancesFlow.emit(isShowingCustomSubstancesFlow.value.not())
+                    }
                     val filters = filtersFlow.value.toMutableList()
                     if (filters.contains(filterName)) {
                         filters.remove(filterName)
@@ -63,7 +58,7 @@ class SearchViewModel @Inject constructor(
     }
 
     private val isShowingYouUsedFlow = MutableStateFlow(false)
-    val isShowingCustomSubstancesFlow = MutableStateFlow(false)
+    private val isShowingCustomSubstancesFlow = MutableStateFlow(false)
 
     val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> =
         filtersFlow.map { filters ->
@@ -90,7 +85,7 @@ class SearchViewModel @Inject constructor(
             newChips.add(
                 0, CategoryChipModel(
                     chipName = customChipName,
-                    color = Color.Cyan,
+                    color = customColor,
                     isActive = isShowingCustom
                 )
             )
@@ -101,6 +96,8 @@ class SearchViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
+    val customColor = Color.Cyan
+
     private val allOrYouUsedSubstances =
         recentlyUsedSubstancesFlow.combine(isShowingYouUsedFlow) { recents, isShowingYouUsed ->
             if (isShowingYouUsed) {
@@ -110,7 +107,7 @@ class SearchViewModel @Inject constructor(
             }
         }
 
-    val filteredSubstances =
+    val filteredSubstancesFlow =
         allOrYouUsedSubstances.combine(filtersFlow) { substances, filters ->
             substances.filter { substanceWithCategories ->
                 filters.all { substanceWithCategories.substance.categories.contains(it) }
@@ -141,6 +138,22 @@ class SearchViewModel @Inject constructor(
             _searchTextFlow.emit(searchText)
         }
     }
+
+    private val customSubstancesFlow = experienceRepo.getCustomSubstancesFlow()
+
+    val filteredCustomSubstancesFlow =
+        customSubstancesFlow.combine(searchTextFlow) { customSubstances, searchText ->
+            customSubstances.filter { custom ->
+                custom.name.contains(
+                    other = searchText,
+                    ignoreCase = true
+                )
+            }
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     companion object {
         fun getMatchingSubstances(

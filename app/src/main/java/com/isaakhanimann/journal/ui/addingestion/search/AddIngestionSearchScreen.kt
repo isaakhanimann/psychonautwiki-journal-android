@@ -34,6 +34,7 @@ fun AddIngestionSearchScreen(
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
+    navigateToAddCustomSubstanceScreen: () -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
 ) {
     AddIngestionSearchScreen(
@@ -45,6 +46,7 @@ fun AddIngestionSearchScreen(
         navigateToCustomSubstanceChooseRoute = navigateToCustomSubstanceChooseRoute,
         navigateToChooseTime = navigateToChooseTime,
         navigateToDose = navigateToDose,
+        navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
         shouldSkipInteractions = viewModel.shouldSkipInteractionsFlow.collectAsState().value,
         previousSubstances = viewModel.previousSubstanceRows.collectAsState().value,
     )
@@ -60,6 +62,7 @@ fun AddIngestionSearchScreen(
     navigateToCheckInteractionsSkipDose: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
+    navigateToAddCustomSubstanceScreen: () -> Unit,
     shouldSkipInteractions: Boolean,
     previousSubstances: List<PreviousSubstance>
 ) {
@@ -102,7 +105,7 @@ fun AddIngestionSearchScreen(
                         navigateToCheckInteractionsSkipNothing(it)
                     }
                 },
-                navigateToAddCustomSubstanceScreen = {},
+                navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
                 onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
             )
         }
