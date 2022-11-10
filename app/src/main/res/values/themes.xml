@@ -7,4 +7,6 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.Journal</item>
     </style>
+    <style name="DialogThemeDark" parent="android:Theme.DeviceDefault.Dialog" />
+    <style name="DialogThemeLight" parent="android:Theme.DeviceDefault.Light.Dialog" />
 </resources>
