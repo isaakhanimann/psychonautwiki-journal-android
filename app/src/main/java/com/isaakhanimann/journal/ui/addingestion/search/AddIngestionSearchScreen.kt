@@ -5,6 +5,8 @@
 
 package com.isaakhanimann.journal.ui.addingestion.search
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -74,26 +76,32 @@ fun AddIngestionSearchScreen(
     Column {
         LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
         val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-        if (previousSubstances.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(8.dp))
-            if (shouldSkipInteractions) {
-                SuggestionsSection(
-                    previousSubstances = previousSubstances,
-                    modifier = Modifier.heightIn(0.dp, screenHeight / 2),
-                    onRouteChosen = navigateToDose,
-                    onDoseChosen = navigateToChooseTime,
-                    onDoseOfCustomSubstanceChosen = navigateToChooseTime,
-                    onRouteOfCustomSubstanceChosen = navigateToCustomDose
-                )
-            } else {
-                SuggestionsSection(
-                    previousSubstances = previousSubstances,
-                    modifier = Modifier.heightIn(0.dp, screenHeight / 2),
-                    onRouteChosen = navigateToCheckInteractionsSkipRoute,
-                    onDoseChosen = navigateToCheckInteractionsSkipDose,
-                    onDoseOfCustomSubstanceChosen = navigateToChooseTime,
-                    onRouteOfCustomSubstanceChosen = navigateToCustomDose
-                )
+        val suggestionMaxHeight = screenHeight * 0.8f
+        AnimatedVisibility(
+            visible = !(previousSubstances.isNotEmpty() && wasKeyboardOpened().value),
+            enter = EnterTransition.None
+        ) {
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                if (shouldSkipInteractions) {
+                    SuggestionsSection(
+                        previousSubstances = previousSubstances,
+                        modifier = Modifier.heightIn(0.dp, suggestionMaxHeight),
+                        onRouteChosen = navigateToDose,
+                        onDoseChosen = navigateToChooseTime,
+                        onDoseOfCustomSubstanceChosen = navigateToChooseTime,
+                        onRouteOfCustomSubstanceChosen = navigateToCustomDose
+                    )
+                } else {
+                    SuggestionsSection(
+                        previousSubstances = previousSubstances,
+                        modifier = Modifier.heightIn(0.dp, suggestionMaxHeight),
+                        onRouteChosen = navigateToCheckInteractionsSkipRoute,
+                        onDoseChosen = navigateToCheckInteractionsSkipDose,
+                        onDoseOfCustomSubstanceChosen = navigateToChooseTime,
+                        onRouteOfCustomSubstanceChosen = navigateToCustomDose
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -188,13 +196,11 @@ fun SuggestionsSection(
                             OutlinedButton(onClick = {
                                 if (substanceRow.isCustom) {
                                     onRouteOfCustomSubstanceChosen(
-                                        substanceRow.substanceName,
-                                        routeWithDoses.route
+                                        substanceRow.substanceName, routeWithDoses.route
                                     )
                                 } else {
                                     onRouteChosen(
-                                        substanceRow.substanceName,
-                                        routeWithDoses.route
+                                        substanceRow.substanceName, routeWithDoses.route
                                     )
                                 }
                             }) {
@@ -223,8 +229,7 @@ fun SuggestionsSection(
                                         }
                                     }) {
                                         if (previousDose.dose != null) {
-                                            val estimate =
-                                                if (previousDose.isEstimate) "~" else ""
+                                            val estimate = if (previousDose.isEstimate) "~" else ""
                                             Text(text = "$estimate${previousDose.dose.toReadableString()} ${previousDose.unit ?: ""}")
                                         } else {
                                             Text(text = "Unknown Dose")
@@ -247,7 +252,6 @@ fun ColorCircle(adaptiveColor: AdaptiveColor) {
     Surface(
         shape = CircleShape,
         color = adaptiveColor.getComposeColor(isDarkTheme),
-        modifier = Modifier
-            .size(25.dp)
+        modifier = Modifier.size(25.dp)
     ) {}
 }
