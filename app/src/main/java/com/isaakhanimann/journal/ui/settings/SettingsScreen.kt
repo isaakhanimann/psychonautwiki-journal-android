@@ -218,7 +218,7 @@ fun SettingsScreen(
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = "Last Substance Update: 25. October 2022",
+                    text = "Last Substance Update: 11. November 2022",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
