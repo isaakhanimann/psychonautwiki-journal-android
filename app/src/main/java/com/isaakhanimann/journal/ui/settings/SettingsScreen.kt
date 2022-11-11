@@ -67,7 +67,11 @@ fun SettingsScreen(
             TopAppBar(title = { Text("Settings") })
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding).fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+        ) {
             SettingsButton(
                 imageVector = Icons.Outlined.WarningAmber,
                 text = "Interaction Settings"
@@ -99,17 +103,17 @@ fun SettingsScreen(
             SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
                 isShowingExportDialog = true
             }
-            AnimatedVisibility(visible = isShowingExportDialog) {
-                val launcherExport =
-                    rememberLauncherForActivityResult(
-                        contract = ActivityResultContracts.CreateDocument(
-                            mimeType = "application/json"
-                        )
-                    ) { uri ->
-                        if (uri != null) {
-                            exportFile(uri)
-                        }
+            val launcherExport =
+                rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.CreateDocument(
+                        mimeType = "application/json"
+                    )
+                ) { uri ->
+                    if (uri != null) {
+                        exportFile(uri)
                     }
+                }
+            AnimatedVisibility(visible = isShowingExportDialog) {
                 AlertDialog(
                     onDismissRequest = { isShowingExportDialog = false },
                     title = {
