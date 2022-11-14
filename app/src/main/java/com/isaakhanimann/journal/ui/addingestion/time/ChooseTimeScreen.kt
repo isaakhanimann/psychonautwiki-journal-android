@@ -63,7 +63,10 @@ fun ChooseTimeScreen(
         experienceTitleToAddTo = viewModel.experienceTitleToAddToFlow.collectAsState().value,
         check = viewModel::toggleCheck,
         isChecked = viewModel.userWantsToContinueSameExperienceFlow.collectAsState().value,
-        substanceName = viewModel.substanceName
+        substanceName = viewModel.substanceName,
+        enteredTitle = viewModel.enteredTitle,
+        onChangeOfEnteredTitle = viewModel::changeTitle,
+        isEnteredTitleOk = viewModel.isEnteredTitleOk
     )
 }
 
@@ -94,7 +97,10 @@ fun ChooseTimeScreenPreview() {
         experienceTitleToAddTo = "New Years Eve",
         check = {},
         isChecked = false,
-        substanceName = "LSD"
+        substanceName = "LSD",
+        enteredTitle = "This is my title",
+        onChangeOfEnteredTitle = {},
+        isEnteredTitleOk = true
     )
 }
 
@@ -118,6 +124,9 @@ fun ChooseTimeScreen(
     check: (Boolean) -> Unit,
     isChecked: Boolean,
     substanceName: String,
+    enteredTitle: String,
+    onChangeOfEnteredTitle: (String) -> Unit,
+    isEnteredTitleOk: Boolean
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName Ingestion") }) },
@@ -181,13 +190,34 @@ fun ChooseTimeScreen(
                         timeString = localDateTime.getStringOfPattern("HH:mm"),
                         modifier = Modifier.fillMaxWidth()
                     )
-                    AnimatedVisibility(visible = experienceTitleToAddTo != null) {
+                }
+                MyCard(title = "Experience") {
+                    val isCloseToExperience = experienceTitleToAddTo != null
+                    AnimatedVisibility(visible = isCloseToExperience) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.clickable { check(isChecked.not()) }) {
                             Checkbox(checked = isChecked, onCheckedChange = check)
                             Text(text = "Add to $experienceTitleToAddTo")
                         }
+                    }
+                    AnimatedVisibility(visible = !isCloseToExperience || !isChecked) {
+                        val focusManager = LocalFocusManager.current
+                        OutlinedTextField(
+                            value = enteredTitle,
+                            onValueChange = onChangeOfEnteredTitle,
+                            singleLine = true,
+                            label = { Text(text = "New Experience Title") },
+                            isError = !isEnteredTitleOk,
+                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                imeAction = ImeAction.Done,
+                                capitalization = KeyboardCapitalization.Words
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 3.dp)
+                        )
                     }
                 }
                 MyCard(title = "Notes", modifier = Modifier.weight(1f)) {

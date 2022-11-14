@@ -39,6 +39,8 @@ class ChooseTimeViewModel @Inject constructor(
 ) : ViewModel() {
     val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
     val localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
+    var enteredTitle by mutableStateOf(LocalDateTime.now().getStringOfPattern("dd MMMM yyyy"))
+    val isEnteredTitleOk get() = enteredTitle.isNotEmpty()
 
     private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()
 
@@ -79,6 +81,12 @@ class ChooseTimeViewModel @Inject constructor(
     var isShowingColorPicker by mutableStateOf(false)
     var selectedColor by mutableStateOf(AdaptiveColor.BLUE)
     var note by mutableStateOf("")
+    private var hasTitleBeenChanged = false
+
+    fun changeTitle(newTitle: String) {
+        enteredTitle = newTitle
+        hasTitleBeenChanged = true
+    }
 
     val previousNotesFlow: StateFlow<List<String>> =
         experienceRepo.getSortedIngestionsFlow(substanceName, limit = 10).map { list ->
@@ -155,6 +163,10 @@ class ChooseTimeViewModel @Inject constructor(
             localDateTimeFlow.emit(
                 newLocalDateTime
             )
+            val ingestionTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
+            if (!hasTitleBeenChanged) {
+                enteredTitle = ingestionTime.getStringOfPattern("dd MMMM yyyy")
+            }
         }
     }
 
@@ -172,7 +184,7 @@ class ChooseTimeViewModel @Inject constructor(
             if (userWantsToCreateANewExperience || oldIdToUse == null) {
                 val newExperience = Experience(
                     id = newIdToUse,
-                    title = ingestionTime.getStringOfPattern("dd MMMM yyyy"),
+                    title = enteredTitle,
                     text = "",
                     creationDate = Instant.now(),
                     sortDate = ingestionTime
