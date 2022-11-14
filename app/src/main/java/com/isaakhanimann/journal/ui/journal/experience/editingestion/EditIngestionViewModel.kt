@@ -32,6 +32,7 @@ class EditIngestionViewModel @Inject constructor(
     var ingestion: Ingestion? = null
     var note by mutableStateOf("")
     var isEstimate by mutableStateOf(false)
+    var isKnown by mutableStateOf(true)
     var dose by mutableStateOf("")
     var units by mutableStateOf("")
     var experienceId by mutableStateOf(1)
@@ -46,6 +47,7 @@ class EditIngestionViewModel @Inject constructor(
             isEstimate = ing.isDoseAnEstimate
             experienceId = ing.experienceId
             dose = ing.dose?.toReadableString() ?: ""
+            isKnown = ing.dose != null
             units = ing.units ?: ""
             localDateTimeFlow.emit(ing.time.getLocalDateTime())
         }
@@ -55,6 +57,14 @@ class EditIngestionViewModel @Inject constructor(
         viewModelScope.launch {
             localDateTimeFlow.emit(newLocalDateTime)
         }
+    }
+
+    fun toggleIsKnown() {
+        isKnown = isKnown.not()
+    }
+
+    fun toggleIsEstimate() {
+        isEstimate = isEstimate.not()
     }
 
     val relevantExperiences: StateFlow<List<ExperienceOption>> = localDateTimeFlow.map {
@@ -80,7 +90,7 @@ class EditIngestionViewModel @Inject constructor(
                 it.notes = note
                 it.isDoseAnEstimate = isEstimate
                 it.experienceId = experienceId
-                it.dose = dose.toDoubleOrNull()
+                it.dose = if (isKnown) dose.toDoubleOrNull() else null
                 it.units = units
                 it.time = selectedInstant
                 experienceRepo.update(it)

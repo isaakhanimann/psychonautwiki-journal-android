@@ -6,6 +6,7 @@
 package com.isaakhanimann.journal.ui.journal.experience.editingestion
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.addingestion.time.DatePickerButton
 import com.isaakhanimann.journal.ui.addingestion.time.TimePickerButton
+import com.isaakhanimann.journal.ui.journal.experience.CardWithTitle
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
@@ -42,7 +45,9 @@ fun EditIngestionScreen(
         note = viewModel.note,
         onNoteChange = { viewModel.note = it },
         isEstimate = viewModel.isEstimate,
-        onIsEstimateChange = { viewModel.isEstimate = it },
+        toggleIsEstimate = viewModel::toggleIsEstimate,
+        isKnown = viewModel.isKnown,
+        toggleIsKnown = viewModel::toggleIsKnown,
         dose = viewModel.dose,
         onDoseChange = { viewModel.dose = it },
         units = viewModel.units,
@@ -69,7 +74,9 @@ fun EditIngestionScreenPreview() {
             note = "This is my note",
             onNoteChange = {},
             isEstimate = false,
-            onIsEstimateChange = {},
+            toggleIsEstimate = {},
+            isKnown = true,
+            toggleIsKnown = {},
             dose = "5",
             onDoseChange = {},
             units = "mg",
@@ -92,7 +99,9 @@ fun EditIngestionScreen(
     note: String,
     onNoteChange: (String) -> Unit,
     isEstimate: Boolean,
-    onIsEstimateChange: (Boolean) -> Unit,
+    toggleIsEstimate: () -> Unit,
+    isKnown: Boolean,
+    toggleIsKnown: () -> Unit,
     dose: String,
     onDoseChange: (String) -> Unit,
     units: String,
@@ -129,102 +138,130 @@ fun EditIngestionScreen(
                 .padding(padding)
                 .padding(horizontal = horizontalPadding)
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             val focusManager = LocalFocusManager.current
-            OutlinedTextField(
-                value = units,
-                onValueChange = onUnitsChange,
-                label = { Text(text = "Units") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardActions = KeyboardActions(onDone = {
-                    focusManager.clearFocus()
-                }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                singleLine = true
-            )
-            OutlinedTextField(
-                value = dose,
-                onValueChange = onDoseChange,
-                label = { Text(text = "Dose") },
-                trailingIcon = { Text(text = units) },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardActions = KeyboardActions(onDone = {
-                    focusManager.clearFocus()
-                }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable { onIsEstimateChange(isEstimate.not()) }) {
-                Checkbox(checked = isEstimate, onCheckedChange = onIsEstimateChange)
-                Text("Dose is an estimate")
-            }
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                DatePickerButton(
-                    localDateTime = localDateTime,
-                    onChange = onTimeChange,
-                    dateString = localDateTime.getStringOfPattern("EEE dd MMM yyyy"),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                TimePickerButton(
-                    localDateTime = localDateTime,
-                    onChange = onTimeChange,
-                    timeString = localDateTime.getStringOfPattern("HH:mm"),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-            OutlinedTextField(
-                value = note,
-                onValueChange = onNoteChange,
-                label = { Text(text = "Notes") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardActions = KeyboardActions(onDone = {
-                    focusManager.clearFocus()
-                }),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    capitalization = KeyboardCapitalization.Sentences
-                ),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            var isShowingDropDownMenu by remember { mutableStateOf(false) }
-            Box(
-                modifier = Modifier
-                    .wrapContentSize(Alignment.TopEnd)
-            ) {
-                val selectedOption = experiences.firstOrNull { it.id == selectedExperienceId }
-                OutlinedButton(
-                    onClick = { isShowingDropDownMenu = true },
-                    modifier = Modifier.fillMaxWidth()
+            CardWithTitle(title = "Dose") {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable(onClick = toggleIsKnown)
+                        .fillMaxWidth()
                 ) {
-                    Text(text = if (selectedOption?.title != null) "Part of " + selectedOption.title else "Part of Unknown Experience")
+                    Checkbox(checked = isKnown, onCheckedChange = { toggleIsKnown() })
+                    Text("Dose is known")
                 }
-                DropdownMenu(
-                    expanded = isShowingDropDownMenu,
-                    onDismissRequest = { isShowingDropDownMenu = false }
-                ) {
-                    experiences.forEach { experience ->
-                        DropdownMenuItem(
-                            text = { Text(experience.title) },
-                            onClick = {
-                                onChangeId(experience.id)
-                                isShowingDropDownMenu = false
-                            }
+                AnimatedVisibility(visible = isKnown) {
+                    Column {
+                        OutlinedTextField(
+                            value = units,
+                            onValueChange = onUnitsChange,
+                            label = { Text(text = "Units") },
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardActions = KeyboardActions(onDone = {
+                                focusManager.clearFocus()
+                            }),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                            singleLine = true
                         )
+                        OutlinedTextField(
+                            value = dose,
+                            onValueChange = onDoseChange,
+                            label = { Text(text = "Dose") },
+                            trailingIcon = { Text(text = units) },
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardActions = KeyboardActions(onDone = {
+                                focusManager.clearFocus()
+                            }),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable(onClick = toggleIsEstimate)
+                        ) {
+                            Checkbox(checked = isEstimate, onCheckedChange = { toggleIsEstimate() })
+                            Text("Dose is an estimate")
+                        }
                     }
                 }
             }
+            CardWithTitle(title = "Notes") {
+                OutlinedTextField(
+                    value = note,
+                    onValueChange = onNoteChange,
+                    label = { Text(text = "Notes") },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusManager.clearFocus()
+                    }),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        capitalization = KeyboardCapitalization.Sentences
+                    ),
+                    singleLine = true
+                )
+            }
+            CardWithTitle(title = "Time") {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    DatePickerButton(
+                        localDateTime = localDateTime,
+                        onChange = onTimeChange,
+                        dateString = localDateTime.getStringOfPattern("EEE dd MMM yyyy"),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    TimePickerButton(
+                        localDateTime = localDateTime,
+                        onChange = onTimeChange,
+                        timeString = localDateTime.getStringOfPattern("HH:mm"),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    var isShowingDropDownMenu by remember { mutableStateOf(false) }
+                    Box(
+                        modifier = Modifier
+                            .wrapContentSize(Alignment.TopEnd)
+                    ) {
+                        val selectedOption =
+                            experiences.firstOrNull { it.id == selectedExperienceId }
+                        OutlinedButton(
+                            onClick = { isShowingDropDownMenu = true },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = if (selectedOption?.title != null) "Part of " + selectedOption.title else "Part of Unknown Experience")
+                        }
+                        DropdownMenu(
+                            expanded = isShowingDropDownMenu,
+                            onDismissRequest = { isShowingDropDownMenu = false }
+                        ) {
+                            experiences.forEach { experience ->
+                                DropdownMenuItem(
+                                    text = { Text(experience.title) },
+                                    onClick = {
+                                        onChangeId(experience.id)
+                                        isShowingDropDownMenu = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
             var isShowingDeleteDialog by remember { mutableStateOf(false) }
             OutlinedButton(
                 onClick = { isShowingDeleteDialog = true },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Delete Ingestion")
+                Icon(
+                    Icons.Outlined.Delete,
+                    contentDescription = "Delete"
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("Delete")
             }
             if (isShowingDeleteDialog) {
                 AlertDialog(
