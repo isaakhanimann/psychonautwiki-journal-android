@@ -30,6 +30,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.search.SearchScreen
 import com.isaakhanimann.journal.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import com.isaakhanimann.journal.ui.utils.keyboard.wasKeyboardOpened
 
 @Composable
 fun AddIngestionSearchScreen(

@@ -26,6 +26,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.isaakhanimann.journal.ui.AcceptConditionsScreen
 import com.isaakhanimann.journal.ui.main.routers.*
 import com.isaakhanimann.journal.ui.safer.*
+import com.isaakhanimann.journal.ui.utils.keyboard.isKeyboardOpen
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -41,7 +42,7 @@ fun MainScreen(
             TabRouter.Statistics.route,
             TabRouter.Search.route,
             TabRouter.SaferUse.route
-        )
+        ) && isKeyboardOpen().value.not()
         bottomBarState.value = isShowingBottomBar
         Scaffold(
             bottomBar = {
