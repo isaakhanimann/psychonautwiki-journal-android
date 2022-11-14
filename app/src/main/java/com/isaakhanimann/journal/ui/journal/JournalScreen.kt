@@ -5,6 +5,7 @@
 
 package com.isaakhanimann.journal.ui.journal
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -135,7 +136,7 @@ fun JournalScreen(
                 .padding(padding)
         ) {
             Column {
-                if (isSearchEnabled) {
+                AnimatedVisibility(visible = isSearchEnabled) {
                     val focusManager = LocalFocusManager.current
                     TextField(
                         value = searchText,
