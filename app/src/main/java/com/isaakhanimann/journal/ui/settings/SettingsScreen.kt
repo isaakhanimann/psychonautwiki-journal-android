@@ -6,7 +6,6 @@
 package com.isaakhanimann.journal.ui.settings
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -18,13 +17,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.BuildConfig
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import kotlinx.coroutines.launch
 
 @Preview
 @Composable
@@ -189,8 +188,8 @@ fun SettingsScreen(
             SettingsButton(imageVector = Icons.Outlined.DeleteForever, text = "Delete Everything") {
                 isShowingDeleteDialog = true
             }
+            val scope = rememberCoroutineScope()
             AnimatedVisibility(visible = isShowingDeleteDialog) {
-                val context = LocalContext.current
                 AlertDialog(
                     onDismissRequest = { isShowingDeleteDialog = false },
                     title = {
@@ -204,11 +203,12 @@ fun SettingsScreen(
                             onClick = {
                                 isShowingDeleteDialog = false
                                 deleteEverything()
-                                Toast.makeText(
-                                    context,
-                                    "Everything Deleted",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = "Deleted Everything",
+                                        duration = SnackbarDuration.Short
+                                    )
+                                }
                             }
                         ) {
                             Text("Delete")

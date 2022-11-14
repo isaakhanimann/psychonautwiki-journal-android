@@ -5,7 +5,6 @@
 
 package com.isaakhanimann.journal.ui.search.custom
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,7 +14,6 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -23,13 +21,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddCustomSubstance(
     navigateBack: () -> Unit,
     viewModel: AddCustomViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     AddOrEditCustomSubstance(
         name = viewModel.name,
         units = viewModel.units,
@@ -38,12 +38,13 @@ fun AddCustomSubstance(
         onUnitsChange = { viewModel.units = it },
         onDescriptionChange = { viewModel.description = it },
         onDoneTap = {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Custom Substance Added",
+                    duration = SnackbarDuration.Short
+                )
+            }
             viewModel.onDoneTap()
-            Toast.makeText(
-                context,
-                "Custom Substance Added",
-                Toast.LENGTH_SHORT
-            ).show()
             navigateBack()
         },
         isDoneEnabled = viewModel.isValid,
@@ -111,9 +112,11 @@ fun AddOrEditCustomSubstance(
     isDoneEnabled: Boolean,
     title: String,
     isShowingDelete: Boolean,
-    deleteAndNavigate: () -> Unit
+    deleteAndNavigate: () -> Unit,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(title = { Text(title) })
         },
@@ -132,9 +135,11 @@ fun AddOrEditCustomSubstance(
             }
         }
     ) { padding ->
-        Column(modifier = Modifier
-            .padding(padding)
-            .padding(horizontal = horizontalPadding, vertical = 10.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(horizontal = horizontalPadding, vertical = 10.dp)
+        ) {
             val focusManager = LocalFocusManager.current
             OutlinedTextField(
                 value = name,

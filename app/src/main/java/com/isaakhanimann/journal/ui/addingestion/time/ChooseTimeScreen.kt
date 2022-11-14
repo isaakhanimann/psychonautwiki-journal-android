@@ -5,7 +5,6 @@
 
 package com.isaakhanimann.journal.ui.addingestion.time
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -24,7 +23,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -35,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 
@@ -128,7 +127,10 @@ fun ChooseTimeScreen(
     onChangeOfEnteredTitle: (String) -> Unit,
     isEnteredTitleOk: Boolean
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = { TopAppBar(title = { Text("$substanceName Ingestion") }) },
         floatingActionButton = {
             AnimatedVisibility(
@@ -136,15 +138,15 @@ fun ChooseTimeScreen(
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                val context = LocalContext.current
                 ExtendedFloatingActionButton(
                     onClick = {
                         createAndSaveIngestion()
-                        Toast.makeText(
-                            context,
-                            "Ingestion Added",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = "Ingestion Added",
+                                duration = SnackbarDuration.Short
+                            )
+                        }
                         dismissAddIngestionScreens()
                     },
                     icon = {
