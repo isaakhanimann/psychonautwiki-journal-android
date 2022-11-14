@@ -6,6 +6,8 @@
 package com.isaakhanimann.journal.ui.settings
 
 import android.net.Uri
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
@@ -21,21 +23,31 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val experienceRepository: ExperienceRepository,
     private val fileSystemConnection: FileSystemConnection,
-    private val toastManager: ToastManager
 ) : ViewModel() {
+
+    val snackbarHostState = SnackbarHostState()
 
     fun importFile(uri: Uri) {
         viewModelScope.launch {
             val text = fileSystemConnection.getTextFromUri(uri)
             if (text == null) {
-                toastManager.showToast("File Not Found")
+                snackbarHostState.showSnackbar(
+                    message = "File Not Found",
+                    duration = SnackbarDuration.Short
+                )
             } else {
                 try {
                     val journalExport = Json.decodeFromString<JournalExport>(text)
                     experienceRepository.insertEverything(journalExport)
-                    toastManager.showToast("Import Successful")
+                    snackbarHostState.showSnackbar(
+                        message = "Import Successful",
+                        duration = SnackbarDuration.Short
+                    )
                 } catch (_: Exception) {
-                    toastManager.showToast("Decoding File Failed")
+                    snackbarHostState.showSnackbar(
+                        message = "Decoding File Failed",
+                        duration = SnackbarDuration.Short
+                    )
                 }
             }
         }
@@ -52,9 +64,15 @@ class SettingsViewModel @Inject constructor(
             try {
                 val jsonList = Json.encodeToString(journalExport)
                 fileSystemConnection.saveTextInUri(uri, text = jsonList)
-                toastManager.showToast("Export Successful")
+                snackbarHostState.showSnackbar(
+                    message = "Export Successful",
+                    duration = SnackbarDuration.Short
+                )
             } catch (_: Exception) {
-                toastManager.showToast("Export Failed")
+                snackbarHostState.showSnackbar(
+                    message = "Export Failed",
+                    duration = SnackbarDuration.Short
+                )
             }
 
         }

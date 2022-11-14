@@ -34,7 +34,8 @@ fun SettingsPreview() {
         navigateToFAQ = {},
         navigateToComboSettings = {},
         importFile = {},
-        exportFile = {}
+        exportFile = {},
+        snackbarHostState = remember { SnackbarHostState() }
     )
 }
 
@@ -49,7 +50,8 @@ fun SettingsScreen(
         navigateToComboSettings = navigateToComboSettings,
         deleteEverything = viewModel::deleteEverything,
         importFile = viewModel::importFile,
-        exportFile = viewModel::exportFile
+        exportFile = viewModel::exportFile,
+        snackbarHostState = viewModel.snackbarHostState
     )
 }
 
@@ -60,12 +62,14 @@ fun SettingsScreen(
     navigateToComboSettings: () -> Unit,
     deleteEverything: () -> Unit,
     importFile: (uri: Uri) -> Unit,
-    exportFile: (uri: Uri) -> Unit
+    exportFile: (uri: Uri) -> Unit,
+    snackbarHostState: SnackbarHostState
 ) {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Settings") })
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         Column(
             modifier = Modifier
