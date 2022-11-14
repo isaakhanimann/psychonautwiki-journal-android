@@ -106,10 +106,11 @@ fun SettingsScreen(
             SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
                 isShowingExportDialog = true
             }
+            val jsonMIMEType = "application/json"
             val launcherExport =
                 rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.CreateDocument(
-                        mimeType = "application/json"
+                        mimeType = jsonMIMEType
                     )
                 ) { uri ->
                     if (uri != null) {
@@ -168,7 +169,7 @@ fun SettingsScreen(
                         TextButton(
                             onClick = {
                                 isShowingImportDialog = false
-                                launcherImport.launch("*/*")
+                                launcherImport.launch(jsonMIMEType)
                             }
                         ) {
                             Text("Import")
