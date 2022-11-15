@@ -43,19 +43,16 @@ fun MainScreen(
                     TabRouter.Search,
                     TabRouter.SaferUse
                 )
+                val tabRoutes = tabs.map { it.route }.toSet()
                 val isShowingBottomBar = isKeyboardOpen().value.not()
                 if (isShowingBottomBar) {
                     NavigationBar {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentRoute = navBackStackEntry?.destination?.route
+                        val latestTab =
+                            navController.backQueue.lastOrNull { it.destination.route in tabRoutes }
                         tabs.forEach { tab ->
-                            val navBackStackEntry by navController.currentBackStackEntryAsState()
-                            val isTab = navBackStackEntry?.destination?.route in setOf(
-                                TabRouter.Journal.route,
-                                TabRouter.Statistics.route,
-                                TabRouter.Search.route,
-                                TabRouter.SaferUse.route
-                            )
-                            val isSelected =
-                                if (isTab) navBackStackEntry?.destination?.route == tab.route else navController.backQueue.any { it.destination.route == tab.route }
+                            val isSelected = latestTab?.destination?.route == tab.route
                             NavigationBarItem(
                                 icon = { Icon(tab.icon, contentDescription = null) },
                                 label = { Text(stringResource(tab.resourceId)) },
