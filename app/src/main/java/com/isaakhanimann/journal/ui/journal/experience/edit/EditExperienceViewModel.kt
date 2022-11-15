@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
-import com.isaakhanimann.journal.ui.main.routers.EXPERIENCE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

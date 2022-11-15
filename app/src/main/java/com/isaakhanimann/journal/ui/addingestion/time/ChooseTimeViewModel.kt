@@ -18,7 +18,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.main.routers.*
+import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import dagger.hilt.android.lifecycle.HiltViewModel

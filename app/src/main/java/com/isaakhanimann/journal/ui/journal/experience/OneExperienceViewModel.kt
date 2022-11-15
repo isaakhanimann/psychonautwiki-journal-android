@@ -15,7 +15,7 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.addingestion.time.hourLimitToSeparateIngestions
-import com.isaakhanimann.journal.ui.main.routers.EXPERIENCE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*

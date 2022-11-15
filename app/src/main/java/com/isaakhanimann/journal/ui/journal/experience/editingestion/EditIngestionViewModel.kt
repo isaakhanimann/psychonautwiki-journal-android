@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.journal.ui.main.routers.INGESTION_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.INGESTION_ID_KEY
 import com.isaakhanimann.journal.ui.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime

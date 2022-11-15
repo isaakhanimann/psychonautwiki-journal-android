@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
-import com.isaakhanimann.journal.ui.main.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch

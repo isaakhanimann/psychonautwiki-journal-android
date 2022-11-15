@@ -15,8 +15,8 @@ import com.isaakhanimann.journal.data.substances.classes.Substance
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.main.routers.ADMINISTRATION_ROUTE_KEY
-import com.isaakhanimann.journal.ui.main.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.search.substance.roa.toReadableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

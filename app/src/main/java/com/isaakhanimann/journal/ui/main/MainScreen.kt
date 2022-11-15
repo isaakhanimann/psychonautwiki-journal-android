@@ -19,12 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.isaakhanimann.journal.ui.AcceptConditionsScreen
-import com.isaakhanimann.journal.ui.main.routers.*
+import com.isaakhanimann.journal.ui.main.navigation.*
+import com.isaakhanimann.journal.ui.main.navigation.graphs.*
+import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.safer.*
 import com.isaakhanimann.journal.ui.utils.keyboard.isKeyboardOpen
 
@@ -37,38 +40,26 @@ fun MainScreen(
         val navController = rememberAnimatedNavController()
         Scaffold(
             bottomBar = {
-                val tabs = listOf(
-                    TabRouter.Journal,
-                    TabRouter.Statistics,
-                    TabRouter.Search,
-                    TabRouter.SaferUse
-                )
-                val tabRoutes = tabs.map { it.route }.toSet()
                 val isShowingBottomBar = isKeyboardOpen().value.not()
                 if (isShowingBottomBar) {
                     NavigationBar {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentRoute =
-                            navBackStackEntry?.destination?.route // this needs to be here else the backQueue is empty. This is probably because currentBackStackEntryAsState() needs to be used
-                        val latestTab =
-                            navController.backQueue.lastOrNull { it.destination.route in tabRoutes }
+                        val currentDestination = navBackStackEntry?.destination
+                        val tabs = listOf(
+                            TabRouter.Journal,
+                            TabRouter.Statistics,
+                            TabRouter.Search,
+                            TabRouter.SaferUse
+                        )
                         tabs.forEach { tab ->
-                            val isSelected = latestTab?.destination?.route == tab.route
                             NavigationBarItem(
                                 icon = { Icon(tab.icon, contentDescription = null) },
                                 label = { Text(stringResource(tab.resourceId)) },
-                                selected = isSelected,
+                                selected = currentDestination?.hierarchy?.any { it.route == tab.route } == true,
                                 onClick = {
                                     navController.navigate(tab.route) {
-                                        val isTabAlreadyInBackQueue =
-                                            tab.route in navController.backQueue.map { it.destination.route }
-                                                .toSet()
-                                        if (isTabAlreadyInBackQueue) {
-                                            popUpTo(tab.route)
-                                        } else {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
                                         }
                                         launchSingleTop = true
                                         restoreState = true
@@ -91,10 +82,10 @@ fun MainScreen(
                     navController,
                     startDestination = TabRouter.Search.route,
                 ) {
-                    tabGraph(navController)
-                    noArgumentGraph(navController)
-                    argumentGraph(navController)
-                    addIngestionGraph(navController)
+                    journalGraph(navController)
+                    statsGraph(navController)
+                    searchGraph(navController)
+                    saferGraph(navController)
                 }
                 if (currentExperience != null) {
                     CurrentExperienceRow(
