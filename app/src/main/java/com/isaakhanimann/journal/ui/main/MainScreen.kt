@@ -48,7 +48,8 @@ fun MainScreen(
                 if (isShowingBottomBar) {
                     NavigationBar {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentRoute = navBackStackEntry?.destination?.route
+                        val currentRoute =
+                            navBackStackEntry?.destination?.route // this needs to be here else the backstack is empty
                         val latestTab =
                             navController.backQueue.lastOrNull { it.destination.route in tabRoutes }
                         tabs.forEach { tab ->
