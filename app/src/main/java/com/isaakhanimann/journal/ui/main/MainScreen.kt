@@ -8,14 +8,14 @@
 package com.isaakhanimann.journal.ui.main
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,66 +35,66 @@ fun MainScreen(
 ) {
     if (viewModel.isAcceptedFlow.collectAsState().value) {
         val navController = rememberAnimatedNavController()
-        val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val isShowingBottomBar = navBackStackEntry?.destination?.route in setOf(
-            TabRouter.Journal.route,
-            TabRouter.Statistics.route,
-            TabRouter.Search.route,
-            TabRouter.SaferUse.route
-        ) && isKeyboardOpen().value.not()
-        bottomBarState.value = isShowingBottomBar
+        val abc = navBackStackEntry?.destination?.route
         Scaffold(
             bottomBar = {
-                Column {
-                    val currentExperience = viewModel.currentExperienceFlow.collectAsState().value
-                    if (isShowingBottomBar) {
-                        if (currentExperience != null) {
-                            CurrentExperienceRow(
-                                experienceWithIngestionsAndCompanions = currentExperience,
-                                navigateToExperienceScreen = {
-                                    navController.navigateToExperiencePopNothing(experienceId = currentExperience.experience.id)
+                val items = listOf(
+                    TabRouter.Journal,
+                    TabRouter.Statistics,
+                    TabRouter.Search,
+                    TabRouter.SaferUse
+                )
+                val isShowingBottomBar = isKeyboardOpen().value.not()
+                if (isShowingBottomBar) {
+                    NavigationBar {
+                        items.forEach { tab ->
+                            val isSelected =
+                                navController.backQueue.any { it.destination.route == tab.route }
+                            NavigationBarItem(
+                                icon = { Icon(tab.icon, contentDescription = null) },
+                                label = { Text(stringResource(tab.resourceId)) },
+                                selected = isSelected,
+                                onClick = {
+                                    navController.backQueue.clear()
+                                    navController.navigate(tab.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                 }
                             )
-                        }
-                        val items = listOf(
-                            TabRouter.Journal,
-                            TabRouter.Statistics,
-                            TabRouter.Search,
-                            TabRouter.SaferUse
-                        )
-                        NavigationBar {
-                            val currentRoute = navBackStackEntry?.destination?.route
-                            items.forEach { item ->
-                                NavigationBarItem(
-                                    icon = { Icon(item.icon, contentDescription = null) },
-                                    label = { Text(stringResource(item.resourceId)) },
-                                    selected = currentRoute == item.route,
-                                    onClick = {
-                                        navController.navigate(item.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
-                                    }
-                                )
-                            }
                         }
                     }
                 }
             }
         ) { innerPadding ->
-            AnimatedNavHost(
-                navController,
-                startDestination = TabRouter.Search.route,
-                Modifier.padding(innerPadding)
+            val currentExperience = viewModel.currentExperienceFlow.collectAsState().value
+            Box(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter
             ) {
-                tabGraph(navController)
-                noArgumentGraph(navController)
-                argumentGraph(navController)
-                addIngestionGraph(navController)
+                AnimatedNavHost(
+                    navController,
+                    startDestination = TabRouter.Search.route,
+                ) {
+                    tabGraph(navController)
+                    noArgumentGraph(navController)
+                    argumentGraph(navController)
+                    addIngestionGraph(navController)
+                }
+                if (currentExperience != null) {
+                    CurrentExperienceRow(
+                        experienceWithIngestionsAndCompanions = currentExperience,
+                        navigateToExperienceScreen = {
+                            navController.navigateToExperiencePopNothing(experienceId = currentExperience.experience.id)
+                        }
+                    )
+                }
             }
         }
     } else {
