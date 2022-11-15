@@ -35,11 +35,9 @@ fun MainScreen(
 ) {
     if (viewModel.isAcceptedFlow.collectAsState().value) {
         val navController = rememberAnimatedNavController()
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val abc = navBackStackEntry?.destination?.route
         Scaffold(
             bottomBar = {
-                val items = listOf(
+                val tabs = listOf(
                     TabRouter.Journal,
                     TabRouter.Statistics,
                     TabRouter.Search,
@@ -48,15 +46,21 @@ fun MainScreen(
                 val isShowingBottomBar = isKeyboardOpen().value.not()
                 if (isShowingBottomBar) {
                     NavigationBar {
-                        items.forEach { tab ->
+                        tabs.forEach { tab ->
+                            val navBackStackEntry by navController.currentBackStackEntryAsState()
+                            val isTab = navBackStackEntry?.destination?.route in setOf(
+                                TabRouter.Journal.route,
+                                TabRouter.Statistics.route,
+                                TabRouter.Search.route,
+                                TabRouter.SaferUse.route
+                            )
                             val isSelected =
-                                navController.backQueue.any { it.destination.route == tab.route }
+                                if (isTab) navBackStackEntry?.destination?.route == tab.route else navController.backQueue.any { it.destination.route == tab.route }
                             NavigationBarItem(
                                 icon = { Icon(tab.icon, contentDescription = null) },
                                 label = { Text(stringResource(tab.resourceId)) },
                                 selected = isSelected,
                                 onClick = {
-                                    navController.backQueue.clear()
                                     navController.navigate(tab.route) {
                                         popUpTo(navController.graph.findStartDestination().id) {
                                             saveState = true
