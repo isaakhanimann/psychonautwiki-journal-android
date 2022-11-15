@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +29,10 @@ fun CurrentExperienceRow(
     @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngestionsAndCompanions: ExperienceWithIngestionsAndCompanions,
     navigateToExperienceScreen: () -> Unit = {},
 ) {
-    Card(onClick = navigateToExperienceScreen, shape = RectangleShape) {
+    Card(
+        onClick = navigateToExperienceScreen,
+        modifier = Modifier.padding(horizontal = 5.dp, vertical = 5.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
