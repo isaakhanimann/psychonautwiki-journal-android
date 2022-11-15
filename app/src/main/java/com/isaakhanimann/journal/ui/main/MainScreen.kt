@@ -49,7 +49,7 @@ fun MainScreen(
                     NavigationBar {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentRoute =
-                            navBackStackEntry?.destination?.route // this needs to be here else the backQueue is empty
+                            navBackStackEntry?.destination?.route // this needs to be here else the backQueue is empty. This is probably because currentBackStackEntryAsState() needs to be used
                         val latestTab =
                             navController.backQueue.lastOrNull { it.destination.route in tabRoutes }
                         tabs.forEach { tab ->
