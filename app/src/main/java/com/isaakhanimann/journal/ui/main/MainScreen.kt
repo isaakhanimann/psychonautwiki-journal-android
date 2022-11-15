@@ -60,8 +60,15 @@ fun MainScreen(
                                 selected = isSelected,
                                 onClick = {
                                     navController.navigate(tab.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
+                                        val isTabAlreadyInBackQueue =
+                                            tab.route in navController.backQueue.map { it.destination.route }
+                                                .toSet()
+                                        if (isTabAlreadyInBackQueue) {
+                                            popUpTo(tab.route)
+                                        } else {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
                                         }
                                         launchSingleTop = true
                                         restoreState = true
