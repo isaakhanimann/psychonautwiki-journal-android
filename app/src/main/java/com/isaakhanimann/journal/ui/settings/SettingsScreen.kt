@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.BuildConfig
+import com.isaakhanimann.journal.ui.journal.experience.CardWithTitle
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import kotlinx.coroutines.launch
 
@@ -73,167 +74,170 @@ fun SettingsScreen(
         Column(
             modifier = Modifier
                 .padding(padding)
+                .padding(horizontal = horizontalPadding)
                 .fillMaxSize()
         ) {
-            SettingsButton(
-                imageVector = Icons.Outlined.WarningAmber,
-                text = "Interaction Settings"
-            ) {
-                navigateToComboSettings()
+            CardWithTitle(title = "Interactions", innerPaddingHorizontal = 0.dp) {
+                SettingsButton(
+                    imageVector = Icons.Outlined.WarningAmber,
+                    text = "Interaction Settings"
+                ) {
+                    navigateToComboSettings()
+                }
             }
-            Divider()
             val uriHandler = LocalUriHandler.current
-            SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
-                navigateToFAQ()
-            }
-            Divider()
-            SettingsButton(
-                imageVector = Icons.Outlined.ContactSupport,
-                text = "Question / Feedback / Bug Report"
-            ) {
-                uriHandler.openUri("https://t.me/isaakhanimann")
-            }
-            Divider()
-            SettingsButton(imageVector = Icons.Outlined.Code, text = "Source Code") {
-                uriHandler.openUri("https://github.com/isaakhanimann/psychonautwiki-journal-android")
-            }
-            Divider()
-            SettingsButton(imageVector = Icons.Outlined.VolunteerActivism, text = "Donate") {
-                uriHandler.openUri("https://www.buymeacoffee.com/isaakhanimann")
-            }
-            Divider()
-            var isShowingExportDialog by remember { mutableStateOf(false) }
-            SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
-                isShowingExportDialog = true
-            }
-            val jsonMIMEType = "application/json"
-            val launcherExport =
-                rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.CreateDocument(
-                        mimeType = jsonMIMEType
-                    )
-                ) { uri ->
-                    if (uri != null) {
-                        exportFile(uri)
-                    }
+            CardWithTitle(title = "Feedback", innerPaddingHorizontal = 0.dp) {
+                SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
+                    navigateToFAQ()
                 }
-            AnimatedVisibility(visible = isShowingExportDialog) {
-                AlertDialog(
-                    onDismissRequest = { isShowingExportDialog = false },
-                    title = {
-                        Text(text = "Export?")
-                    },
-                    text = {
-                        Text("This will export all your data from the app into a file so you can send it to someone or import it again on a new phone")
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                isShowingExportDialog = false
-                                launcherExport.launch("Journal.json")
-                            }
-                        ) {
-                            Text("Export")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = { isShowingExportDialog = false }
-                        ) {
-                            Text("Cancel")
-                        }
-                    }
-                )
-            }
-            Divider()
-            var isShowingImportDialog by remember { mutableStateOf(false) }
-            SettingsButton(imageVector = Icons.Outlined.FileDownload, text = "Import File") {
-                isShowingImportDialog = true
-            }
-            val launcherImport =
-                rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
-                    if (uri != null) {
-                        importFile(uri)
-                    }
+                Divider()
+                SettingsButton(
+                    imageVector = Icons.Outlined.ContactSupport,
+                    text = "Question / Feedback / Bug Report"
+                ) {
+                    uriHandler.openUri("https://t.me/isaakhanimann")
                 }
-            AnimatedVisibility(visible = isShowingImportDialog) {
-                AlertDialog(
-                    onDismissRequest = { isShowingImportDialog = false },
-                    title = {
-                        Text(text = "Import File?")
-                    },
-                    text = {
-                        Text("Import a file that was exported before. Note that this won't delete the data that you already have in the app, so consider deleting everything first.")
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                isShowingImportDialog = false
-                                launcherImport.launch(jsonMIMEType)
-                            }
-                        ) {
-                            Text("Import")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = { isShowingImportDialog = false }
-                        ) {
-                            Text("Cancel")
+                Divider()
+                SettingsButton(imageVector = Icons.Outlined.VolunteerActivism, text = "Donate") {
+                    uriHandler.openUri("https://www.buymeacoffee.com/isaakhanimann")
+                }
+            }
+            CardWithTitle(title = "App Data", innerPaddingHorizontal = 0.dp) {
+                var isShowingExportDialog by remember { mutableStateOf(false) }
+                SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
+                    isShowingExportDialog = true
+                }
+                val jsonMIMEType = "application/json"
+                val launcherExport =
+                    rememberLauncherForActivityResult(
+                        contract = ActivityResultContracts.CreateDocument(
+                            mimeType = jsonMIMEType
+                        )
+                    ) { uri ->
+                        if (uri != null) {
+                            exportFile(uri)
                         }
                     }
-                )
-            }
-            Divider()
-            var isShowingDeleteDialog by remember { mutableStateOf(false) }
-            SettingsButton(imageVector = Icons.Outlined.DeleteForever, text = "Delete Everything") {
-                isShowingDeleteDialog = true
-            }
-            val scope = rememberCoroutineScope()
-            AnimatedVisibility(visible = isShowingDeleteDialog) {
-                AlertDialog(
-                    onDismissRequest = { isShowingDeleteDialog = false },
-                    title = {
-                        Text(text = "Delete Everything?")
-                    },
-                    text = {
-                        Text("This will delete all your experiences, ingestions and custom substances.")
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                isShowingDeleteDialog = false
-                                deleteEverything()
-                                scope.launch {
-                                    snackbarHostState.showSnackbar(
-                                        message = "Deleted Everything",
-                                        duration = SnackbarDuration.Short
-                                    )
+                AnimatedVisibility(visible = isShowingExportDialog) {
+                    AlertDialog(
+                        onDismissRequest = { isShowingExportDialog = false },
+                        title = {
+                            Text(text = "Export?")
+                        },
+                        text = {
+                            Text("This will export all your data from the app into a file so you can send it to someone or import it again on a new phone")
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    isShowingExportDialog = false
+                                    launcherExport.launch("Journal.json")
                                 }
+                            ) {
+                                Text("Export")
                             }
-                        ) {
-                            Text("Delete")
+                        },
+                        dismissButton = {
+                            TextButton(
+                                onClick = { isShowingExportDialog = false }
+                            ) {
+                                Text("Cancel")
+                            }
                         }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = { isShowingDeleteDialog = false }
-                        ) {
-                            Text("Cancel")
+                    )
+                }
+                Divider()
+                var isShowingImportDialog by remember { mutableStateOf(false) }
+                SettingsButton(imageVector = Icons.Outlined.FileDownload, text = "Import File") {
+                    isShowingImportDialog = true
+                }
+                val launcherImport =
+                    rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
+                        if (uri != null) {
+                            importFile(uri)
                         }
                     }
-                )
+                AnimatedVisibility(visible = isShowingImportDialog) {
+                    AlertDialog(
+                        onDismissRequest = { isShowingImportDialog = false },
+                        title = {
+                            Text(text = "Import File?")
+                        },
+                        text = {
+                            Text("Import a file that was exported before. Note that this won't delete the data that you already have in the app, so consider deleting everything first.")
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    isShowingImportDialog = false
+                                    launcherImport.launch(jsonMIMEType)
+                                }
+                            ) {
+                                Text("Import")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(
+                                onClick = { isShowingImportDialog = false }
+                            ) {
+                                Text("Cancel")
+                            }
+                        }
+                    )
+                }
+                Divider()
+                var isShowingDeleteDialog by remember { mutableStateOf(false) }
+                SettingsButton(
+                    imageVector = Icons.Outlined.DeleteForever,
+                    text = "Delete Everything"
+                ) {
+                    isShowingDeleteDialog = true
+                }
+                val scope = rememberCoroutineScope()
+                AnimatedVisibility(visible = isShowingDeleteDialog) {
+                    AlertDialog(
+                        onDismissRequest = { isShowingDeleteDialog = false },
+                        title = {
+                            Text(text = "Delete Everything?")
+                        },
+                        text = {
+                            Text("This will delete all your experiences, ingestions and custom substances.")
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    isShowingDeleteDialog = false
+                                    deleteEverything()
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = "Deleted Everything",
+                                            duration = SnackbarDuration.Short
+                                        )
+                                    }
+                                }
+                            ) {
+                                Text("Delete")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(
+                                onClick = { isShowingDeleteDialog = false }
+                            ) {
+                                Text("Cancel")
+                            }
+                        }
+                    )
+                }
             }
-            Divider()
-            Spacer(modifier = Modifier.weight(1f))
-            Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 3.dp)) {
+            CardWithTitle(title = "App", innerPaddingHorizontal = 0.dp) {
+                SettingsButton(imageVector = Icons.Outlined.Code, text = "Source Code") {
+                    uriHandler.openUri("https://github.com/isaakhanimann/psychonautwiki-journal-android")
+                }
+                Divider()
                 Text(
                     text = "Version " + BuildConfig.VERSION_NAME,
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Text(
-                    text = "Last Substance Update: 11. November 2022",
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(ButtonDefaults.TextButtonContentPadding)
                 )
             }
         }
@@ -244,7 +248,7 @@ fun SettingsScreen(
 fun SettingsButton(imageVector: ImageVector, text: String, onClick: () -> Unit) {
     TextButton(
         onClick = onClick,
-        modifier = Modifier.padding(horizontal = horizontalPadding)
+        modifier = Modifier.padding(horizontal = 2.dp)
     ) {
         Icon(
             imageVector,

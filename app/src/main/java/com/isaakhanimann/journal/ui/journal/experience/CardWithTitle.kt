@@ -20,11 +20,12 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun CardWithTitle(
+    modifier: Modifier = Modifier,
     title: String,
     innerPaddingHorizontal: Dp = 10.dp,
     content: @Composable (ColumnScope.() -> Unit)
 ) {
-    Card(modifier = Modifier.padding(vertical = 5.dp)) {
+    Card(modifier = modifier.padding(vertical = 5.dp)) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
