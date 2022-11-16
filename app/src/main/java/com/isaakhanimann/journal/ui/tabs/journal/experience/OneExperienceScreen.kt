@@ -5,6 +5,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -12,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
@@ -95,6 +97,44 @@ fun ExperienceScreen(
             TopAppBar(
                 title = { Text(oneExperienceScreenModel.title) },
                 actions = {
+                    var isShowingDeleteDialog by remember { mutableStateOf(false) }
+                    IconButton(
+                        onClick = { isShowingDeleteDialog = true },
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Delete Experience",
+                        )
+                    }
+                    AnimatedVisibility(visible = isShowingDeleteDialog) {
+                        AlertDialog(
+                            onDismissRequest = { isShowingDeleteDialog = false },
+                            title = {
+                                Text(text = "Delete Experience?")
+                            },
+                            text = {
+                                Text("This will also delete all its ingestions.")
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        isShowingDeleteDialog = false
+                                        deleteExperience()
+                                        navigateBack()
+                                    }
+                                ) {
+                                    Text("Delete")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(
+                                    onClick = { isShowingDeleteDialog = false }
+                                ) {
+                                    Text("Cancel")
+                                }
+                            }
+                        )
+                    }
                     IconButton(onClick = navigateToEditExperienceScreen) {
                         Icon(
                             Icons.Default.Edit,
@@ -250,45 +290,6 @@ fun ExperienceScreen(
                         }
                     }
                 }
-            }
-            var isShowingDeleteDialog by remember { mutableStateOf(false) }
-            TextButton(
-                onClick = { isShowingDeleteDialog = true },
-                modifier = Modifier.padding(horizontal = 5.dp)
-            ) {
-                Text(
-                    "Delete Experience",
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            if (isShowingDeleteDialog) {
-                AlertDialog(
-                    onDismissRequest = { isShowingDeleteDialog = false },
-                    title = {
-                        Text(text = "Delete Experience?")
-                    },
-                    text = {
-                        Text("This will also delete all its ingestions.")
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                isShowingDeleteDialog = false
-                                deleteExperience()
-                                navigateBack()
-                            }
-                        ) {
-                            Text("Delete")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = { isShowingDeleteDialog = false }
-                        ) {
-                            Text("Cancel")
-                        }
-                    }
-                )
             }
         }
     }

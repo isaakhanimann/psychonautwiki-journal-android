@@ -15,8 +15,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -117,7 +117,46 @@ fun EditIngestionScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Edit Ingestion") })
+            TopAppBar(
+                title = { Text("Edit Ingestion") },
+                actions = {
+                    var isShowingDeleteDialog by remember { mutableStateOf(false) }
+                    AnimatedVisibility(visible = isShowingDeleteDialog) {
+                        AlertDialog(
+                            onDismissRequest = { isShowingDeleteDialog = false },
+                            title = {
+                                Text(text = "Delete Ingestion?")
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        isShowingDeleteDialog = false
+                                        deleteIngestion()
+                                        navigateBack()
+                                    }
+                                ) {
+                                    Text("Delete")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(
+                                    onClick = { isShowingDeleteDialog = false }
+                                ) {
+                                    Text("Cancel")
+                                }
+                            }
+                        )
+                    }
+                    IconButton(
+                        onClick = { isShowingDeleteDialog = true },
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Delete Ingestion",
+                        )
+                    }
+                }
+            )
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -247,47 +286,6 @@ fun EditIngestionScreen(
                         }
                     }
                 }
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            var isShowingDeleteDialog by remember { mutableStateOf(false) }
-            OutlinedButton(
-                onClick = { isShowingDeleteDialog = true },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(
-                    Icons.Outlined.Delete,
-                    contentDescription = "Delete"
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("Delete")
-            }
-            if (isShowingDeleteDialog) {
-                AlertDialog(
-                    onDismissRequest = { isShowingDeleteDialog = false },
-                    title = {
-                        Text(text = "Delete Ingestion?")
-                    },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                isShowingDeleteDialog = false
-                                deleteIngestion()
-                                navigateBack()
-                            }
-                        ) {
-                            Text("Delete")
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = { isShowingDeleteDialog = false }
-                        ) {
-                            Text("Cancel")
-                        }
-                    }
-                )
             }
         }
     }
