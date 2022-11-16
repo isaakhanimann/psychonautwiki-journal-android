@@ -14,9 +14,37 @@ import androidx.compose.material.icons.outlined.Timeline
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.isaakhanimann.journal.R
 
-sealed class TabRouter(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
-    object Journal : TabRouter("journal", R.string.journal, Icons.Outlined.Timeline)
-    object Statistics : TabRouter("statistics", R.string.stats, Icons.Outlined.BarChart)
-    object Search : TabRouter("search", R.string.search, Icons.Outlined.Search)
-    object SaferUse : TabRouter("saferUse", R.string.safer, Icons.Outlined.HealthAndSafety)
+sealed class TabRouter(
+    val route: String,
+    val childRoute: String,
+    @StringRes val resourceId: Int,
+    val icon: ImageVector
+) {
+    object Journal : TabRouter(
+        route = "journal",
+        childRoute = NoArgumentRouter.JournalRouter.route,
+        resourceId = R.string.journal,
+        icon = Icons.Outlined.Timeline
+    )
+
+    object Statistics : TabRouter(
+        route = "statistics",
+        childRoute = NoArgumentRouter.StatsRouter.route,
+        resourceId = R.string.stats,
+        icon = Icons.Outlined.BarChart
+    )
+
+    object Search : TabRouter(
+        route = "search",
+        childRoute = NoArgumentRouter.SearchRouter.route,
+        resourceId = R.string.search,
+        icon = Icons.Outlined.Search
+    )
+
+    object SaferUse : TabRouter(
+        route = "saferUse",
+        childRoute = NoArgumentRouter.SaferRouter.route,
+        resourceId = R.string.safer,
+        icon = Icons.Outlined.HealthAndSafety
+    )
 }

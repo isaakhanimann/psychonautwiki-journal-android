@@ -49,17 +49,26 @@ fun MainScreen(
                             TabRouter.SaferUse
                         )
                         tabs.forEach { tab ->
+                            val isSelected =
+                                currentDestination?.hierarchy?.any { it.route == tab.route } == true
                             NavigationBarItem(
                                 icon = { Icon(tab.icon, contentDescription = null) },
                                 label = { Text(stringResource(tab.resourceId)) },
-                                selected = currentDestination?.hierarchy?.any { it.route == tab.route } == true,
+                                selected = isSelected,
                                 onClick = {
-                                    navController.navigate(tab.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
+                                    if (isSelected) {
+                                        navController.popBackStack(
+                                            route = tab.childRoute,
+                                            inclusive = false
+                                        )
+                                    } else {
+                                        navController.navigate(tab.route) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
                                         }
-                                        launchSingleTop = true
-                                        restoreState = true
                                     }
                                 }
                             )
