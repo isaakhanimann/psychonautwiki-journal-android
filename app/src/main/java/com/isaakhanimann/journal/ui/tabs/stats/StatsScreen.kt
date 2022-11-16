@@ -5,8 +5,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.stats
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -89,12 +88,22 @@ fun StatsScreen(
                         )
                     }
                 }
-                if (statsModel.statItems.isEmpty()) {
+                val hasStatItems = statsModel.statItems.isNotEmpty()
+                AnimatedVisibility(
+                    visible = !hasStatItems,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
                     EmptyScreenDisclaimer(
                         title = "No Ingestions Since ${statsModel.selectedOption.longDisplayText}",
                         description = "Use a longer duration range to see statistics."
                     )
-                } else {
+                }
+                AnimatedVisibility(
+                    visible = hasStatItems,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
                     val isDarkTheme = isSystemInDarkTheme()
                     AnimatedContent(targetState = statsModel.selectedOption) {
                         Card(
