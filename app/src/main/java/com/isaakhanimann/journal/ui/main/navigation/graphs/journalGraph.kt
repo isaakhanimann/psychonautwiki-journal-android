@@ -27,7 +27,7 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
         ) {
             JournalScreen(
                 navigateToExperiencePopNothing = {
-                    navController.navigateToExperiencePopNothing(experienceId = it)
+                    navController.navigateToExperience(experienceId = it)
                 },
                 navigateToAddIngestion = navController::navigateToAddIngestion
             )

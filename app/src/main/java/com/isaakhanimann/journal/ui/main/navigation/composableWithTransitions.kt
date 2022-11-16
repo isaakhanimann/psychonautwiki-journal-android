@@ -13,14 +13,13 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 
-const val WITHIN_TAB_TRANSITION_TIME_IN_MS = 300
-
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.composableWithTransitions(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     content: @Composable (AnimatedVisibilityScope.(NavBackStackEntry) -> Unit)
 ) {
+    val withinTabTransitionTimeInMs = 300
     val tabSwitchTimeInMs = 200
     composable(
         route = route,
@@ -31,8 +30,8 @@ fun NavGraphBuilder.composableWithTransitions(
             } else {
                 slideOutHorizontally(
                     targetOffsetX = { -300 },
-                    animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
-                ) + fadeOut(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
+                    animationSpec = tween(withinTabTransitionTimeInMs)
+                ) + fadeOut(animationSpec = tween(withinTabTransitionTimeInMs))
             }
         },
         popEnterTransition = {
@@ -41,8 +40,8 @@ fun NavGraphBuilder.composableWithTransitions(
             } else {
                 slideInHorizontally(
                     initialOffsetX = { -300 },
-                    animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
-                ) + fadeIn(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
+                    animationSpec = tween(withinTabTransitionTimeInMs)
+                ) + fadeIn(animationSpec = tween(withinTabTransitionTimeInMs))
             }
         },
         enterTransition = {
@@ -51,8 +50,8 @@ fun NavGraphBuilder.composableWithTransitions(
             } else {
                 slideInHorizontally(
                     initialOffsetX = { 300 },
-                    animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
-                ) + fadeIn(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
+                    animationSpec = tween(withinTabTransitionTimeInMs)
+                ) + fadeIn(animationSpec = tween(withinTabTransitionTimeInMs))
             }
         },
         popExitTransition = {
@@ -61,8 +60,8 @@ fun NavGraphBuilder.composableWithTransitions(
             } else {
                 slideOutHorizontally(
                     targetOffsetX = { 300 },
-                    animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS)
-                ) + fadeOut(animationSpec = tween(WITHIN_TAB_TRANSITION_TIME_IN_MS))
+                    animationSpec = tween(withinTabTransitionTimeInMs)
+                ) + fadeOut(animationSpec = tween(withinTabTransitionTimeInMs))
             }
         },
         content = content

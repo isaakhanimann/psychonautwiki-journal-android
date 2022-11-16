@@ -166,7 +166,7 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     )
 }
 
-fun NavController.navigateToExperiencePopNothing(experienceId: Int) {
+fun NavController.navigateToExperience(experienceId: Int) {
     navigate(ROUTE_START_EXPERIENCES + experienceId)
 }
 
