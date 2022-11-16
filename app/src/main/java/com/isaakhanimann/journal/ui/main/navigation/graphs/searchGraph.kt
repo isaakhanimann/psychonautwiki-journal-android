@@ -46,7 +46,7 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
                 navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
                 navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
                 navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
-                navigateToExplainTimeline = navController::navigateToExplainTimeline,
+                navigateToExplainTimeline = navController::navigateToExplainTimelineOnSearchTab,
                 navigateToCategoryScreen = navController::navigateToCategoryScreen,
                 navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
                 navigateToArticle = navController::navigateToURLScreen

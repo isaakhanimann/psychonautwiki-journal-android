@@ -13,6 +13,9 @@ sealed class NoArgumentRouter(val route: String) {
     object CombinationSettingsRouter : NoArgumentRouter(route = "combinationSettings")
     object FAQRouter : NoArgumentRouter(route = "faqRoute")
     object ExplainTimelineOnSearchTabRouter : NoArgumentRouter(route = "explainTimelineOnSearchTab")
+    object ExplainTimelineOnJournalTabRouter :
+        NoArgumentRouter(route = "explainTimelineOnJournalTab")
+
     object SettingsRouter : NoArgumentRouter(route = "settings")
     object DosageExplanationRouter : NoArgumentRouter(route = "dosageExplanation")
     object AdministrationRouteExplanationRouter :
@@ -42,8 +45,12 @@ fun NavController.navigateToAddCustom() {
     navigate(NoArgumentRouter.AddCustomRouter.route)
 }
 
-fun NavController.navigateToExplainTimeline() {
+fun NavController.navigateToExplainTimelineOnSearchTab() {
     navigate(NoArgumentRouter.ExplainTimelineOnSearchTabRouter.route)
+}
+
+fun NavController.navigateToExplainTimelineOnJournalTab() {
+    navigate(NoArgumentRouter.ExplainTimelineOnJournalTabRouter.route)
 }
 
 fun NavController.navigateToSaferStimulants() {
