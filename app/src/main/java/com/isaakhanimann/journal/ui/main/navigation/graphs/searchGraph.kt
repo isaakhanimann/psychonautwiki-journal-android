@@ -5,17 +5,14 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.journal.experience.timeline.ExplainTimelineScreen
-import com.isaakhanimann.journal.ui.main.navigation.*
+import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
-import com.isaakhanimann.journal.ui.main.navigation.transitions.regularComposableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.transitions.tabNavigationWithTransitions
 import com.isaakhanimann.journal.ui.search.SearchScreen
 import com.isaakhanimann.journal.ui.search.custom.AddCustomSubstance
 import com.isaakhanimann.journal.ui.search.custom.EditCustomSubstance
@@ -24,13 +21,12 @@ import com.isaakhanimann.journal.ui.search.substance.UrlScreen
 import com.isaakhanimann.journal.ui.search.substance.category.CategoryScreen
 
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.searchGraph(navController: NavController) {
-    tabNavigationWithTransitions(
+    navigation(
         startDestination = NoArgumentRouter.SearchRouter.route,
-        route = TabRouter.Search.route, // todo add animation
+        route = TabRouter.Search.route,
     ) {
-        composable(
+        composableWithTransitions(
             route = NoArgumentRouter.SearchRouter.route,
         ) {
             SearchScreen(
@@ -42,7 +38,7 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
                 modifier = Modifier.fillMaxSize()
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             route = ArgumentRouter.SubstanceRouter.route,
             arguments = ArgumentRouter.SubstanceRouter.args,
         ) {
@@ -56,7 +52,7 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
                 navigateToArticle = navController::navigateToURLScreen
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.URLRouter.route,
             arguments = ArgumentRouter.URLRouter.args
         ) { backStackEntry ->
@@ -64,23 +60,23 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
             val url = args.getString(URL_KEY)!!
             UrlScreen(url = url)
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.CategoryRouter.route,
             arguments = ArgumentRouter.CategoryRouter.args
         ) {
             CategoryScreen(navigateToURL = navController::navigateToURLScreen)
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.EditCustomRouter.route,
             arguments = ArgumentRouter.EditCustomRouter.args
         ) {
             EditCustomSubstance(navigateBack = navController::popBackStack)
         }
-        regularComposableWithTransitions(NoArgumentRouter.AddCustomRouter.route) {
+        composableWithTransitions(NoArgumentRouter.AddCustomRouter.route) {
             AddCustomSubstance(
                 navigateBack = navController::popBackStack
             )
         }
-        regularComposableWithTransitions(NoArgumentRouter.ExplainTimelineRouter.route) { ExplainTimelineScreen() }
+        composableWithTransitions(NoArgumentRouter.ExplainTimelineRouter.route) { ExplainTimelineScreen() }
     }
 }

@@ -5,26 +5,23 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.journal.JournalScreen
 import com.isaakhanimann.journal.ui.journal.experience.ExperienceScreen
 import com.isaakhanimann.journal.ui.journal.experience.edit.EditExperienceScreen
 import com.isaakhanimann.journal.ui.journal.experience.editingestion.EditIngestionScreen
+import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
-import com.isaakhanimann.journal.ui.main.navigation.transitions.regularComposableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.transitions.tabNavigationWithTransitions
 
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.journalGraph(navController: NavController) {
-    tabNavigationWithTransitions(
+    navigation(
         startDestination = NoArgumentRouter.JournalRouter.route,
-        route = TabRouter.Journal.route, // todo add animation
+        route = TabRouter.Journal.route,
     ) {
-        composable(
+        composableWithTransitions(
             route = NoArgumentRouter.JournalRouter.route,
         ) {
             JournalScreen(
@@ -34,13 +31,13 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 navigateToAddIngestion = navController::navigateToAddIngestion
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.EditExperienceRouter.route,
             arguments = ArgumentRouter.EditExperienceRouter.args
         ) {
             EditExperienceScreen(navigateBack = navController::popBackStack)
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.ExperienceRouter.route,
             arguments = ArgumentRouter.ExperienceRouter.args
         ) {
@@ -57,7 +54,7 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 navigateBack = navController::popBackStack
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.IngestionRouter.route,
             arguments = ArgumentRouter.IngestionRouter.args
         ) {

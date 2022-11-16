@@ -5,13 +5,11 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.navigation
+import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
-import com.isaakhanimann.journal.ui.main.navigation.transitions.regularComposableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.transitions.tabNavigationWithTransitions
 import com.isaakhanimann.journal.ui.safer.*
 import com.isaakhanimann.journal.ui.search.substance.SaferSniffingScreen
 import com.isaakhanimann.journal.ui.search.substance.SaferStimulantsScreen
@@ -20,13 +18,12 @@ import com.isaakhanimann.journal.ui.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.settings.combinations.CombinationSettingsScreen
 
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.saferGraph(navController: NavController) {
-    tabNavigationWithTransitions(
+    navigation(
         startDestination = NoArgumentRouter.SaferRouter.route,
-        route = TabRouter.SaferUse.route, // todo add animation
+        route = TabRouter.SaferUse.route,
     ) {
-        composable(
+        composableWithTransitions(
             route = NoArgumentRouter.SaferRouter.route,
         ) {
             SaferUseScreen(
@@ -40,25 +37,25 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        regularComposableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
-        regularComposableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
-        regularComposableWithTransitions(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
-        regularComposableWithTransitions(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
-        regularComposableWithTransitions(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
-        regularComposableWithTransitions(NoArgumentRouter.SettingsRouter.route) {
+        composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+        composableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
+        composableWithTransitions(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
+        composableWithTransitions(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
+        composableWithTransitions(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
+        composableWithTransitions(NoArgumentRouter.SettingsRouter.route) {
             SettingsScreen(
                 navigateToFAQ = navController::navigateToFAQ,
                 navigateToComboSettings = navController::navigateToComboSettings
             )
         }
-        regularComposableWithTransitions(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
-        regularComposableWithTransitions(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
+        composableWithTransitions(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
+        composableWithTransitions(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
             RouteExplanationScreen(
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        regularComposableWithTransitions(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
-        regularComposableWithTransitions(NoArgumentRouter.DosageGuideRouter.route) {
+        composableWithTransitions(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
+        composableWithTransitions(NoArgumentRouter.DosageGuideRouter.route) {
             DoseGuideScreen(
                 navigateToDoseClassification = navController::navigateToDosageExplanationScreen,
                 navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreen,
@@ -67,7 +64,7 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
                 }
             )
         }
-        regularComposableWithTransitions(NoArgumentRouter.VolumetricDosingRouter.route) {
+        composableWithTransitions(NoArgumentRouter.VolumetricDosingRouter.route) {
             VolumetricDosingScreen(
                 navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLScreen("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
         }

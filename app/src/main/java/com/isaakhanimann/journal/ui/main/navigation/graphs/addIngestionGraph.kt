@@ -17,16 +17,16 @@ import com.isaakhanimann.journal.ui.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.journal.ui.addingestion.route.CustomChooseRouteScreen
 import com.isaakhanimann.journal.ui.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.journal.ui.addingestion.time.ChooseTimeScreen
+import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
-import com.isaakhanimann.journal.ui.main.navigation.transitions.regularComposableWithTransitions
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
     navigation(
         startDestination = NoArgumentRouter.AddIngestionSearchRouter.route,
-        route = NoArgumentRouter.AddIngestionRouter.route, // todo add animation
+        route = NoArgumentRouter.AddIngestionRouter.route,
     ) {
-        regularComposableWithTransitions(NoArgumentRouter.AddIngestionSearchRouter.route) {
+        composableWithTransitions(NoArgumentRouter.AddIngestionSearchRouter.route) {
             AddIngestionSearchScreen(
                 navigateToCheckInteractionsSkipNothing = {
                     navController.navigateToCheckInteractionsSkipNothing(substanceName = it)
@@ -68,7 +68,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.CheckInteractionsRouterSkipNothing.route,
             arguments = ArgumentRouter.CheckInteractionsRouterSkipNothing.args
         ) { backStackEntry ->
@@ -81,7 +81,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.CheckInteractionsRouterSkipRoute.route,
             arguments = ArgumentRouter.CheckInteractionsRouterSkipRoute.args
         ) { backStackEntry ->
@@ -96,7 +96,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.CheckInteractionsRouterSkipDose.route,
             arguments = ArgumentRouter.CheckInteractionsRouterSkipDose.args
         ) { backStackEntry ->
@@ -126,7 +126,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.ChooseRouteRouter.route,
             arguments = ArgumentRouter.ChooseRouteRouter.args
         ) { backStackEntry ->
@@ -143,7 +143,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.CustomChooseRouteRouter.route,
             arguments = ArgumentRouter.CustomChooseRouteRouter.args
         ) { backStackEntry ->
@@ -159,7 +159,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 substanceName = substanceName
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.CustomChooseDoseRouter.route,
             arguments = ArgumentRouter.CustomChooseDoseRouter.args
         ) { backStackEntry ->
@@ -181,7 +181,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.ChooseDoseRouter.route,
             arguments = ArgumentRouter.ChooseDoseRouter.args
         ) { backStackEntry ->
@@ -204,7 +204,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToURL = navController::navigateToURLScreen
             )
         }
-        regularComposableWithTransitions(
+        composableWithTransitions(
             ArgumentRouter.ChooseTimeRouter.route,
             arguments = ArgumentRouter.ChooseTimeRouter.args
         ) {
