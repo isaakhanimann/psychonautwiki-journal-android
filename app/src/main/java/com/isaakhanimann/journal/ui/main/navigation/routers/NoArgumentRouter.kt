@@ -8,92 +8,80 @@ package com.isaakhanimann.journal.ui.main.navigation.routers
 import androidx.navigation.NavController
 
 
-const val FAQ_ROUTE = "faqRoute"
-const val EXPLAIN_TIMELINE_ROUTE = "explainTimeline"
-const val SETTINGS_ROUTE = "settings"
-const val DOSAGE_EXPLANATION_ROUTE = "dosageExplanation"
-const val ADMINISTRATION_ROUTE_EXPLANATION_ROUTE = "administrationRouteExplanation"
-const val DOSAGE_GUIDE_ROUTE = "dosageGuide"
-const val VOLUMETRIC_DOSING_ROUTE = "volumetricDosing"
-const val DRUG_TESTING_ROUTE = "drugTesting"
-const val SAFER_HALLUCINOGENS_ROUTE = "saferHallucinogens"
-const val SAFER_SNIFFING_ROUTE = "saferSniffing"
-const val SAFER_STIMULANTS_ROUTE = "saferStimulants"
-const val STATS_ROUTE = "stats"
-const val COMBO_SETTINGS_ROUTE = "combinationSettings"
-
 sealed class NoArgumentRouter(val route: String) {
-    object StatsRouter : NoArgumentRouter(route = STATS_ROUTE)
-    object CombinationSettingsRouter : NoArgumentRouter(route = COMBO_SETTINGS_ROUTE)
-    object FAQRouter : NoArgumentRouter(route = FAQ_ROUTE)
-    object ExplainTimelineRouter : NoArgumentRouter(route = EXPLAIN_TIMELINE_ROUTE)
-    object SettingsRouter : NoArgumentRouter(route = SETTINGS_ROUTE)
-    object DosageExplanationRouter : NoArgumentRouter(route = DOSAGE_EXPLANATION_ROUTE)
+    object StatsRouter : NoArgumentRouter(route = "stats")
+    object CombinationSettingsRouter : NoArgumentRouter(route = "combinationSettings")
+    object FAQRouter : NoArgumentRouter(route = "faqRoute")
+    object ExplainTimelineOnSearchTabRouter : NoArgumentRouter(route = "explainTimelineOnSearchTab")
+    object SettingsRouter : NoArgumentRouter(route = "settings")
+    object DosageExplanationRouter : NoArgumentRouter(route = "dosageExplanation")
     object AdministrationRouteExplanationRouter :
-        NoArgumentRouter(route = ADMINISTRATION_ROUTE_EXPLANATION_ROUTE)
+        NoArgumentRouter(route = "administrationRouteExplanation")
 
-    object DosageGuideRouter : NoArgumentRouter(route = DOSAGE_GUIDE_ROUTE)
-    object VolumetricDosingRouter : NoArgumentRouter(route = VOLUMETRIC_DOSING_ROUTE)
-    object DrugTestingRouter : NoArgumentRouter(route = DRUG_TESTING_ROUTE)
-    object SaferHallucinogens : NoArgumentRouter(route = SAFER_HALLUCINOGENS_ROUTE)
-    object SaferSniffing : NoArgumentRouter(route = SAFER_SNIFFING_ROUTE)
-    object SaferStimulants : NoArgumentRouter(route = SAFER_STIMULANTS_ROUTE)
-    object AddIngestionRouter : NoArgumentRouter(route = ROUTE_START_ADD_INGESTIONS)
-    object AddIngestionSearchRouter : NoArgumentRouter(route = ROUTE_START_ADD_INGESTIONS_SEARCH)
-    object AddCustomRouter : NoArgumentRouter(route = ROUTE_START_ADD_CUSTOM)
-    object SearchRouter : NoArgumentRouter(route = ROUTE_START_SEARCH)
-    object JournalRouter : NoArgumentRouter(route = ROUTE_START_JOURNAL)
-    object SaferRouter : NoArgumentRouter(route = ROUTE_START_SAFER)
+    object DosageGuideRouter : NoArgumentRouter(route = "dosageGuide")
+    object VolumetricDosingRouter : NoArgumentRouter(route = "volumetricDosing")
+    object DrugTestingRouter : NoArgumentRouter(route = "drugTesting")
+    object SaferHallucinogens : NoArgumentRouter(route = "saferHallucinogens")
+    object SaferSniffing : NoArgumentRouter(route = "saferSniffing")
+    object SaferStimulants : NoArgumentRouter(route = "saferStimulants")
+    object AddIngestionRouter : NoArgumentRouter(route = "addIngestions")
+    object AddIngestionSearchRouter : NoArgumentRouter(route = "addIngestionsSearch")
+    object AddCustomRouter : NoArgumentRouter(route = "addCustom")
+    object SearchRouter :
+        NoArgumentRouter(route = "searchChild") // child because there is already a route for the tabs
+
+    object JournalRouter : NoArgumentRouter(route = "journalChild")
+    object SaferRouter : NoArgumentRouter(route = "saferChild")
 }
 
 fun NavController.navigateToComboSettings() {
-    navigate(COMBO_SETTINGS_ROUTE)
+    navigate(NoArgumentRouter.CombinationSettingsRouter.route)
 }
 
 fun NavController.navigateToAddCustom() {
-    navigate(ROUTE_START_ADD_CUSTOM)
+    navigate(NoArgumentRouter.AddCustomRouter.route)
 }
 
 fun NavController.navigateToExplainTimeline() {
-    navigate(EXPLAIN_TIMELINE_ROUTE)
+    navigate(NoArgumentRouter.ExplainTimelineOnSearchTabRouter.route)
 }
 
 fun NavController.navigateToSaferStimulants() {
-    navigate(SAFER_STIMULANTS_ROUTE)
+    navigate(NoArgumentRouter.SaferStimulants.route)
 }
 
 fun NavController.navigateToSaferHallucinogens() {
-    navigate(SAFER_HALLUCINOGENS_ROUTE)
+    navigate(NoArgumentRouter.SaferHallucinogens.route)
 }
 
 fun NavController.navigateToSaferSniffing() {
-    navigate(SAFER_SNIFFING_ROUTE)
+    navigate(NoArgumentRouter.SaferSniffing.route)
 }
 
 fun NavController.navigateToFAQ() {
-    navigate(FAQ_ROUTE)
+    navigate(NoArgumentRouter.FAQRouter.route)
 }
 
 fun NavController.navigateToSettings() {
-    navigate(SETTINGS_ROUTE)
+    navigate(NoArgumentRouter.SettingsRouter.route)
 }
 
 fun NavController.navigateToDosageExplanationScreen() {
-    navigate(DOSAGE_EXPLANATION_ROUTE)
+    navigate(NoArgumentRouter.DosageExplanationRouter.route)
 }
 
 fun NavController.navigateToAdministrationRouteExplanationScreen() {
-    navigate(ADMINISTRATION_ROUTE_EXPLANATION_ROUTE)
+    navigate(NoArgumentRouter.AdministrationRouteExplanationRouter.route)
 }
 
 fun NavController.navigateToDosageGuideScreen() {
-    navigate(DOSAGE_GUIDE_ROUTE)
+    navigate(NoArgumentRouter.DosageGuideRouter.route)
 }
 
 fun NavController.navigateToVolumetricDosingScreen() {
-    navigate(VOLUMETRIC_DOSING_ROUTE)
+    navigate(NoArgumentRouter.VolumetricDosingRouter.route)
 }
 
 fun NavController.navigateToDrugTestingScreen() {
-    navigate(DRUG_TESTING_ROUTE)
+    navigate(NoArgumentRouter.DrugTestingRouter.route)
 }

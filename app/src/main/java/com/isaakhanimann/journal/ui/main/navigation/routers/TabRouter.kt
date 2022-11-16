@@ -21,28 +21,28 @@ sealed class TabRouter(
     val icon: ImageVector
 ) {
     object Journal : TabRouter(
-        route = "journal",
+        route = "journalTab",
         childRoute = NoArgumentRouter.JournalRouter.route,
         resourceId = R.string.journal,
         icon = Icons.Outlined.Timeline
     )
 
     object Statistics : TabRouter(
-        route = "statistics",
+        route = "statisticsTab",
         childRoute = NoArgumentRouter.StatsRouter.route,
         resourceId = R.string.stats,
         icon = Icons.Outlined.BarChart
     )
 
     object Search : TabRouter(
-        route = "search",
+        route = "searchTab",
         childRoute = NoArgumentRouter.SearchRouter.route,
         resourceId = R.string.search,
         icon = Icons.Outlined.Search
     )
 
     object SaferUse : TabRouter(
-        route = "saferUse",
+        route = "saferTab",
         childRoute = NoArgumentRouter.SaferRouter.route,
         resourceId = R.string.safer,
         icon = Icons.Outlined.HealthAndSafety
