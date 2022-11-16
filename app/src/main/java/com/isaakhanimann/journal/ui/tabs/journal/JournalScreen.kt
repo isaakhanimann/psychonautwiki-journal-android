@@ -186,6 +186,7 @@ fun JournalScreen(
                 AnimatedVisibility(visible = !isSearchEnabled) {
                     if (currentExperience != null) {
                         CardWithTitle(title = "Current", innerPaddingHorizontal = 0.dp) {
+                            Divider()
                             ExperienceRow(
                                 currentExperience,
                                 navigateToExperienceScreen = {
@@ -198,6 +199,7 @@ fun JournalScreen(
                 }
                 if (previousExperiences.isNotEmpty()) {
                     CardWithTitle(title = "Previous", innerPaddingHorizontal = 0.dp) {
+                        Divider()
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             itemsIndexed(previousExperiences) { index, experienceWithIngestions ->
                                 ExperienceRow(
