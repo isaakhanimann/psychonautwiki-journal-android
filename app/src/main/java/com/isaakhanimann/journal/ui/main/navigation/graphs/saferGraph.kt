@@ -10,12 +10,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
-import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
-import com.isaakhanimann.journal.ui.tabs.search.substance.SaferStimulantsScreen
+import com.isaakhanimann.journal.ui.tabs.safer.*
 import com.isaakhanimann.journal.ui.tabs.safer.settings.FAQScreen
 import com.isaakhanimann.journal.ui.tabs.safer.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.tabs.safer.settings.combinations.CombinationSettingsScreen
-import com.isaakhanimann.journal.ui.tabs.safer.*
+import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
+import com.isaakhanimann.journal.ui.tabs.search.substance.SaferStimulantsScreen
+import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 
 
 fun NavGraphBuilder.saferGraph(navController: NavController) {
@@ -34,7 +35,7 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
                 navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreen,
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
                 navigateToSettings = navController::navigateToSettings,
-                navigateToURL = navController::navigateToURLScreen
+                navigateToURL = navController::navigateToURLInSaferTab
             )
         }
         composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
@@ -51,8 +52,16 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
         composableWithTransitions(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
             RouteExplanationScreen(
-                navigateToURL = navController::navigateToURLScreen
+                navigateToURL = navController::navigateToURLInSaferTab
             )
+        }
+        composableWithTransitions(
+            ArgumentRouter.SaferTabURLRouter.route,
+            arguments = ArgumentRouter.SaferTabURLRouter.args
+        ) { backStackEntry ->
+            val args = backStackEntry.arguments!!
+            val url = args.getString(URL_KEY)!!
+            UrlScreen(url = url)
         }
         composableWithTransitions(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
         composableWithTransitions(NoArgumentRouter.DosageGuideRouter.route) {
@@ -60,13 +69,13 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
                 navigateToDoseClassification = navController::navigateToDosageExplanationScreen,
                 navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreen,
                 navigateToPWDosageArticle = {
-                    navController.navigateToURLScreen(url = "https://psychonautwiki.org/wiki/Dosage")
+                    navController.navigateToURLInSaferTab(url = "https://psychonautwiki.org/wiki/Dosage")
                 }
             )
         }
         composableWithTransitions(NoArgumentRouter.VolumetricDosingRouter.route) {
             VolumetricDosingScreen(
-                navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLScreen("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
+                navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLInSaferTab("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
         }
     }
 }

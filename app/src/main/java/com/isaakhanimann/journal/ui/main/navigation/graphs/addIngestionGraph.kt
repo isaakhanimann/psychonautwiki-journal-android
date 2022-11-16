@@ -79,7 +79,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
                     navController.navigateToChooseRoute(substanceName = substanceName)
                 },
-                navigateToURL = navController::navigateToURLScreen
+                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(
@@ -94,12 +94,12 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
                     navController.navigateToChooseDose(substanceName, route)
                 },
-                navigateToURL = navController::navigateToURLScreen
+                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(
-            ArgumentRouter.CheckInteractionsURLRouter.route,
-            arguments = ArgumentRouter.CheckInteractionsURLRouter.args
+            ArgumentRouter.JournalTabURLRouter.route,
+            arguments = ArgumentRouter.JournalTabURLRouter.args
         ) { backStackEntry ->
             val args = backStackEntry.arguments!!
             val url = args.getString(URL_KEY)!!
@@ -132,7 +132,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         dose = dose
                     )
                 },
-                navigateToURL = navController::navigateToURLScreen
+                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(
@@ -149,7 +149,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     )
                 },
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
-                navigateToURL = navController::navigateToURLScreen
+                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(
@@ -187,7 +187,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     )
                 },
                 navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
-                navigateToURL = navController::navigateToURLScreen
+                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(
@@ -210,7 +210,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 },
                 navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
                 navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
-                navigateToURL = navController::navigateToURLScreen
+                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(
