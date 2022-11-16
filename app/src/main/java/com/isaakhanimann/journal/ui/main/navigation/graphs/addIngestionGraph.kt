@@ -10,6 +10,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.navigation
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
+import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChooseDoseScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.custom.CustomChooseDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.CheckInteractionsScreen
@@ -17,8 +19,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.ChooseRouteS
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomChooseRouteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ChooseTimeScreen
-import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.*
+import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
@@ -95,6 +96,14 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 },
                 navigateToURL = navController::navigateToURLScreen
             )
+        }
+        composableWithTransitions(
+            ArgumentRouter.CheckInteractionsURLRouter.route,
+            arguments = ArgumentRouter.CheckInteractionsURLRouter.args
+        ) { backStackEntry ->
+            val args = backStackEntry.arguments!!
+            val url = args.getString(URL_KEY)!!
+            UrlScreen(url = url)
         }
         composableWithTransitions(
             ArgumentRouter.CheckInteractionsRouterSkipDose.route,

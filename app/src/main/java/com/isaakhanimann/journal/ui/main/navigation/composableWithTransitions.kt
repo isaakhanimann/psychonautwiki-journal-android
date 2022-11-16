@@ -26,9 +26,7 @@ fun NavGraphBuilder.composableWithTransitions(
         route = route,
         arguments = arguments,
         exitTransition = {
-            val isChangingTab =
-                initialState.destination.parent?.route != targetState.destination.parent?.route
-            if (isChangingTab) {
+            if (isChangingTab()) {
                 fadeOut(animationSpec = tween(tabSwitchTimeInMs))
             } else {
                 slideOutHorizontally(
@@ -38,9 +36,7 @@ fun NavGraphBuilder.composableWithTransitions(
             }
         },
         popEnterTransition = {
-            val isChangingTab =
-                initialState.destination.parent?.route != targetState.destination.parent?.route
-            if (isChangingTab) {
+            if (isChangingTab()) {
                 fadeIn(animationSpec = tween(tabSwitchTimeInMs))
             } else {
                 slideInHorizontally(
@@ -50,9 +46,7 @@ fun NavGraphBuilder.composableWithTransitions(
             }
         },
         enterTransition = {
-            val isChangingTab =
-                initialState.destination.parent?.route != targetState.destination.parent?.route
-            if (isChangingTab) {
+            if (isChangingTab()) {
                 fadeIn(animationSpec = tween(tabSwitchTimeInMs))
             } else {
                 slideInHorizontally(
@@ -62,9 +56,7 @@ fun NavGraphBuilder.composableWithTransitions(
             }
         },
         popExitTransition = {
-            val isChangingTab =
-                initialState.destination.parent?.route != targetState.destination.parent?.route
-            if (isChangingTab) {
+            if (isChangingTab()) {
                 fadeOut(animationSpec = tween(tabSwitchTimeInMs))
             } else {
                 slideOutHorizontally(
@@ -75,4 +67,15 @@ fun NavGraphBuilder.composableWithTransitions(
         },
         content = content
     )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun AnimatedContentScope<NavBackStackEntry>.isChangingTab(): Boolean {
+    // check grandparents because in a tab graph there can be another nested graph such as addIngestion
+    val initialParent = initialState.destination.parent
+    val initialGrandParent = initialParent?.parent
+    val targetParent = targetState.destination.parent
+    val targetGrandParent = targetParent?.parent
+    return (initialGrandParent?.route ?: initialParent?.route) != (targetGrandParent?.route
+        ?: targetParent?.route)
 }

@@ -47,6 +47,7 @@ const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
 const val ROUTE_START_SUBSTANCE_COMPANION = "substancesCompanion/"
 const val ROUTE_START_CATEGORY = "category/"
 const val ROUTE_START_URL = "url/"
+const val ROUTE_START_CHECK_INTERACTIONS_URL = "checkInteractionsUrl/"
 
 
 sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>) {
@@ -72,6 +73,11 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
 
     object URLRouter : ArgumentRouter(
         route = "$ROUTE_START_URL{$URL_KEY}",
+        args = listOf(navArgument(URL_KEY) { type = NavType.StringType })
+    )
+
+    object CheckInteractionsURLRouter : ArgumentRouter(
+        route = "$ROUTE_START_CHECK_INTERACTIONS_URL{$URL_KEY}",
         args = listOf(navArgument(URL_KEY) { type = NavType.StringType })
     )
 
@@ -179,6 +185,11 @@ fun NavController.navigateToSubstanceScreen(substanceName: String) {
 fun NavController.navigateToURLScreen(url: String) {
     val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
     navigate(ROUTE_START_URL + encodedUrl)
+}
+
+fun NavController.navigateToCheckInteractionsURLScreen(url: String) {
+    val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
+    navigate(ROUTE_START_CHECK_INTERACTIONS_URL + encodedUrl)
 }
 
 fun NavController.navigateToEditCustomSubstance(substanceName: String) {
