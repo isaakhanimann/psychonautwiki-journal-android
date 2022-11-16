@@ -123,6 +123,7 @@ fun AddIngestionSearchScreen(
                 onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
