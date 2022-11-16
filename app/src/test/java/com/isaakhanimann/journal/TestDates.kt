@@ -5,7 +5,7 @@
 
 package com.isaakhanimann.journal
 
-import com.isaakhanimann.journal.ui.journal.experience.timeline.drawables.AxisDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import com.isaakhanimann.journal.ui.utils.getTimeDifferenceText

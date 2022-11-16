@@ -12,7 +12,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompani
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
-import com.isaakhanimann.journal.ui.settings.JournalExport
+import com.isaakhanimann.journal.ui.tabs.safer.settings.JournalExport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
@@ -87,7 +87,10 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getIngestionsWithExperiencesFlow(fromInstant: Instant, toInstant: Instant): Flow<List<IngestionWithExperience>> =
+    fun getIngestionsWithExperiencesFlow(
+        fromInstant: Instant,
+        toInstant: Instant
+    ): Flow<List<IngestionWithExperience>> =
         experienceDao.getIngestionWithExperiencesFlow(fromInstant, toInstant)
             .flowOn(Dispatchers.IO)
             .conflate()

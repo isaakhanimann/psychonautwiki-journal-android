@@ -21,11 +21,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.isaakhanimann.journal.ui.AcceptConditionsScreen
 import com.isaakhanimann.journal.ui.main.navigation.*
 import com.isaakhanimann.journal.ui.main.navigation.graphs.*
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
-import com.isaakhanimann.journal.ui.safer.*
 import com.isaakhanimann.journal.ui.utils.keyboard.isKeyboardOpen
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)

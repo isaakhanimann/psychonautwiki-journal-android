@@ -13,8 +13,8 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceCompanionScreen
-import com.isaakhanimann.journal.ui.stats.StatsScreen
-import com.isaakhanimann.journal.ui.stats.substancecompanion.SubstanceCompanionScreen
+import com.isaakhanimann.journal.ui.tabs.stats.StatsScreen
+import com.isaakhanimann.journal.ui.tabs.stats.substancecompanion.SubstanceCompanionScreen
 
 
 fun NavGraphBuilder.statsGraph(navController: NavController) {

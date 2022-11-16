@@ -10,13 +10,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.navigation
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.addingestion.dose.ChooseDoseScreen
-import com.isaakhanimann.journal.ui.addingestion.dose.custom.CustomChooseDose
-import com.isaakhanimann.journal.ui.addingestion.interactions.CheckInteractionsScreen
-import com.isaakhanimann.journal.ui.addingestion.route.ChooseRouteScreen
-import com.isaakhanimann.journal.ui.addingestion.route.CustomChooseRouteScreen
-import com.isaakhanimann.journal.ui.addingestion.search.AddIngestionSearchScreen
-import com.isaakhanimann.journal.ui.addingestion.time.ChooseTimeScreen
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChooseDoseScreen
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.custom.CustomChooseDose
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.CheckInteractionsScreen
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.ChooseRouteScreen
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomChooseRouteScreen
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestionSearchScreen
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ChooseTimeScreen
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 

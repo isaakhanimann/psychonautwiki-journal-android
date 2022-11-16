@@ -10,12 +10,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
-import com.isaakhanimann.journal.ui.safer.*
-import com.isaakhanimann.journal.ui.search.substance.SaferSniffingScreen
-import com.isaakhanimann.journal.ui.search.substance.SaferStimulantsScreen
-import com.isaakhanimann.journal.ui.settings.FAQScreen
-import com.isaakhanimann.journal.ui.settings.SettingsScreen
-import com.isaakhanimann.journal.ui.settings.combinations.CombinationSettingsScreen
+import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
+import com.isaakhanimann.journal.ui.tabs.search.substance.SaferStimulantsScreen
+import com.isaakhanimann.journal.ui.tabs.safer.settings.FAQScreen
+import com.isaakhanimann.journal.ui.tabs.safer.settings.SettingsScreen
+import com.isaakhanimann.journal.ui.tabs.safer.settings.combinations.CombinationSettingsScreen
+import com.isaakhanimann.journal.ui.tabs.safer.*
 
 
 fun NavGraphBuilder.saferGraph(navController: NavController) {

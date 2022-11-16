@@ -14,7 +14,7 @@ import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithI
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
-import com.isaakhanimann.journal.ui.settings.JournalExport
+import com.isaakhanimann.journal.ui.tabs.safer.settings.JournalExport
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
@@ -100,7 +100,10 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM ingestion WHERE time > :fromInstant AND time < :toInstant")
-    fun getIngestionWithExperiencesFlow(fromInstant: Instant, toInstant: Instant): Flow<List<IngestionWithExperience>>
+    fun getIngestionWithExperiencesFlow(
+        fromInstant: Instant,
+        toInstant: Instant
+    ): Flow<List<IngestionWithExperience>>
 
     @Query("SELECT * FROM ingestion WHERE id =:id")
     fun getIngestionFlow(id: Int): Flow<Ingestion?>

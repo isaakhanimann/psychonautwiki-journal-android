@@ -8,10 +8,10 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
-import com.isaakhanimann.journal.ui.journal.JournalScreen
-import com.isaakhanimann.journal.ui.journal.experience.ExperienceScreen
-import com.isaakhanimann.journal.ui.journal.experience.edit.EditExperienceScreen
-import com.isaakhanimann.journal.ui.journal.experience.editingestion.EditIngestionScreen
+import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.ExperienceScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.edit.EditExperienceScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.editingestion.EditIngestionScreen
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 

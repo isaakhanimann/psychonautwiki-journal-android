@@ -10,15 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
-import com.isaakhanimann.journal.ui.journal.experience.timeline.ExplainTimelineScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
-import com.isaakhanimann.journal.ui.search.SearchScreen
-import com.isaakhanimann.journal.ui.search.custom.AddCustomSubstance
-import com.isaakhanimann.journal.ui.search.custom.EditCustomSubstance
-import com.isaakhanimann.journal.ui.search.substance.SubstanceScreen
-import com.isaakhanimann.journal.ui.search.substance.UrlScreen
-import com.isaakhanimann.journal.ui.search.substance.category.CategoryScreen
+import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
+import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstance
+import com.isaakhanimann.journal.ui.tabs.search.custom.EditCustomSubstance
+import com.isaakhanimann.journal.ui.tabs.search.substance.SubstanceScreen
+import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
+import com.isaakhanimann.journal.ui.tabs.search.substance.category.CategoryScreen
 
 
 fun NavGraphBuilder.searchGraph(navController: NavController) {
