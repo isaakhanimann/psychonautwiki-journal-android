@@ -12,15 +12,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.ui.addingestion.time.hourLimitToSeparateIngestions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 val ARE_CONDITIONS_ACCEPTED = booleanPreferencesKey("are_conditions_accepted")
@@ -47,21 +44,4 @@ class MainScreenViewModel @Inject constructor(
             }
         }
     }
-
-    val currentExperienceFlow =
-        experienceRepo.getSortedExperiencesWithIngestionsAndCompanionsFlow(limit = 3)
-            .map { experiences ->
-                return@map experiences.firstOrNull { experience ->
-                    experience.ingestionsWithCompanions.any {
-                        it.ingestion.time > Instant.now().minus(
-                            hourLimitToSeparateIngestions, ChronoUnit.HOURS
-                        )
-                    }
-                }
-            }
-            .stateIn(
-                initialValue = null,
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
 }

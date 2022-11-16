@@ -8,14 +8,11 @@
 package com.isaakhanimann.journal.ui.main
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -71,30 +68,16 @@ fun MainScreen(
                 }
             }
         ) { innerPadding ->
-            val currentExperience = viewModel.currentExperienceFlow.collectAsState().value
-            Box(
+            AnimatedNavHost(
+                navController,
+                startDestination = TabRouter.Search.route,
                 modifier = Modifier
                     .padding(innerPadding)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.BottomCenter
             ) {
-                AnimatedNavHost(
-                    navController,
-                    startDestination = TabRouter.Search.route,
-                ) {
-                    journalGraph(navController)
-                    statsGraph(navController)
-                    searchGraph(navController)
-                    saferGraph(navController)
-                }
-                if (currentExperience != null) {
-                    CurrentExperienceRow(
-                        experienceWithIngestionsAndCompanions = currentExperience,
-                        navigateToExperienceScreen = {
-                            navController.navigateToExperiencePopNothing(experienceId = currentExperience.experience.id)
-                        }
-                    )
-                }
+                journalGraph(navController)
+                statsGraph(navController)
+                searchGraph(navController)
+                saferGraph(navController)
             }
         }
     } else {

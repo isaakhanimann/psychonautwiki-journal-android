@@ -8,7 +8,7 @@ package com.isaakhanimann.journal.ui.journal
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -29,10 +29,13 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.ui.journal.experience.CardWithTitle
 import com.isaakhanimann.journal.ui.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.JournalTheme
+import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun JournalScreen(
@@ -40,16 +43,18 @@ fun JournalScreen(
     navigateToAddIngestion: () -> Unit,
     viewModel: JournalViewModel = hiltViewModel()
 ) {
+    val currentAndPrevious = viewModel.currentAndPreviousExperiences.collectAsState().value
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToAddIngestion = navigateToAddIngestion,
-        experiences = viewModel.experiences.collectAsState().value,
         isFavoriteEnabled = viewModel.isFavoriteEnabledFlow.collectAsState().value,
         onChangeIsFavorite = viewModel::onChangeFavorite,
         searchText = viewModel.searchTextFlow.collectAsState().value,
         onChangeSearchText = viewModel::search,
         isSearchEnabled = viewModel.isSearchEnabled.value,
-        onChangeIsSearchEnabled = viewModel::onChangeOfIsSearchEnabled
+        onChangeIsSearchEnabled = viewModel::onChangeOfIsSearchEnabled,
+        currentExperience = currentAndPrevious.currentExperience,
+        previousExperiences = currentAndPrevious.previousExperiences
     )
 }
 
@@ -64,13 +69,14 @@ fun ExperiencesScreenPreview(
         JournalScreen(
             navigateToExperiencePopNothing = {},
             navigateToAddIngestion = {},
-            experiences = experiences,
             isFavoriteEnabled = false,
             onChangeIsFavorite = {},
             searchText = "",
             onChangeSearchText = {},
             isSearchEnabled = true,
-            onChangeIsSearchEnabled = {}
+            onChangeIsSearchEnabled = {},
+            currentExperience = experiences.firstOrNull(),
+            previousExperiences = experiences.drop(1)
         )
     }
 }
@@ -80,13 +86,14 @@ fun ExperiencesScreenPreview(
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    experiences: List<ExperienceWithIngestionsAndCompanions>,
     isFavoriteEnabled: Boolean,
     onChangeIsFavorite: (Boolean) -> Unit,
     searchText: String,
     onChangeSearchText: (String) -> Unit,
     isSearchEnabled: Boolean,
-    onChangeIsSearchEnabled: (Boolean) -> Unit
+    onChangeIsSearchEnabled: (Boolean) -> Unit,
+    currentExperience: ExperienceWithIngestionsAndCompanions?,
+    previousExperiences: List<ExperienceWithIngestionsAndCompanions>,
 ) {
     Scaffold(
         topBar = {
@@ -135,7 +142,12 @@ fun JournalScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            Column {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Top
+            ) {
                 AnimatedVisibility(visible = isSearchEnabled) {
                     val focusManager = LocalFocusManager.current
                     TextField(
@@ -171,22 +183,38 @@ fun JournalScreen(
                         singleLine = true
                     )
                 }
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    if (experiences.isNotEmpty()) {
-                        item { Divider() }
+                AnimatedVisibility(visible = !isSearchEnabled) {
+                    if (currentExperience != null) {
+                        CardWithTitle(title = "Current", innerPaddingHorizontal = 0.dp) {
+                            ExperienceRow(
+                                currentExperience,
+                                navigateToExperienceScreen = {
+                                    navigateToExperiencePopNothing(currentExperience.experience.id)
+                                },
+                            )
+                        }
                     }
-                    items(experiences) { experienceWithIngestions ->
-                        ExperienceRow(
-                            experienceWithIngestions,
-                            navigateToExperienceScreen = {
-                                navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
-                            },
-                        )
-                        Divider()
+
+                }
+                if (previousExperiences.isNotEmpty()) {
+                    CardWithTitle(title = "Previous", innerPaddingHorizontal = 0.dp) {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            itemsIndexed(previousExperiences) { index, experienceWithIngestions ->
+                                ExperienceRow(
+                                    experienceWithIngestions,
+                                    navigateToExperienceScreen = {
+                                        navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
+                                    },
+                                )
+                                if (index < previousExperiences.size - 1) {
+                                    Divider()
+                                }
+                            }
+                        }
                     }
                 }
             }
-            if (experiences.isEmpty()) {
+            if (currentExperience == null && previousExperiences.isEmpty()) {
                 if (isSearchEnabled && searchText.isNotEmpty()) {
                     if (isFavoriteEnabled) {
                         EmptyScreenDisclaimer(
