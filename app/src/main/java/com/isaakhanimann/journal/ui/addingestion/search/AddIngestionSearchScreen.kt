@@ -77,7 +77,7 @@ fun AddIngestionSearchScreen(
     Column {
         LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
         val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-        val suggestionMaxHeight = screenHeight * 0.8f
+        val suggestionMaxHeight = screenHeight * 0.65f
         AnimatedVisibility(
             visible = !(previousSubstances.isNotEmpty() && wasKeyboardOpened().value),
             enter = EnterTransition.None
@@ -137,13 +137,14 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
                 .padding(padding)
         ) {
             val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+            val suggestionMaxHeight = screenHeight * 0.65f
             SuggestionsSection(
                 previousSubstances = previousSubstances,
                 onDoseChosen = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
                 onRouteChosen = { _: String, _: AdministrationRoute -> },
                 onDoseOfCustomSubstanceChosen = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
                 onRouteOfCustomSubstanceChosen = { _: String, _: AdministrationRoute -> },
-                modifier = Modifier.heightIn(0.dp, screenHeight / 2)
+                modifier = Modifier.heightIn(0.dp, suggestionMaxHeight)
             )
             Surface(
                 color = Color.Blue, modifier = Modifier
@@ -174,7 +175,6 @@ fun SuggestionsSection(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 5.dp)
         )
-        Divider()
         LazyColumn {
             items(previousSubstances) { substanceRow ->
                 Column(
@@ -241,7 +241,7 @@ fun SuggestionsSection(
                         }
                     }
                 }
-                Divider()
+                Divider(Modifier.padding(horizontal = horizontalPadding))
             }
         }
     }
