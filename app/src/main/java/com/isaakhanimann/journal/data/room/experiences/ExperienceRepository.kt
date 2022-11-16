@@ -168,6 +168,11 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
+    fun getSortedIngestionsWithExperienceFlow(substanceName: String) =
+        experienceDao.getSortedIngestionsWithExperienceFlow(substanceName)
+            .flowOn(Dispatchers.IO)
+            .conflate()
+
     fun getAllSubstanceCompanionsFlow() = experienceDao.getAllSubstanceCompanionsFlow()
         .flowOn(Dispatchers.IO)
         .conflate()

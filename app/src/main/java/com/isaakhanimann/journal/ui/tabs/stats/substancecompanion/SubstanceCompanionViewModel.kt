@@ -19,7 +19,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.time.Duration
 import java.time.Instant
 import javax.inject.Inject
 
@@ -50,66 +49,34 @@ class SubstanceCompanionViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    private val sortedIngestionsFlow: Flow<List<Ingestion>> =
-        experienceRepo.getSortedIngestionsFlow(substanceName)
-
     val ingestionBurstsFlow: StateFlow<List<IngestionsBurst>> =
-        sortedIngestionsFlow.combine(currentTimeFlow) { sortedIngestions, currentTime ->
-            var lastDate = currentTime
-            val firstIngestion =
-                sortedIngestions.firstOrNull() ?: return@combine emptyList<IngestionsBurst>()
-            var diffTextToAdd =
-                getTimeDifferenceText(fromInstant = firstIngestion.time, toInstant = currentTime)
-            var currentIngestions: MutableList<Ingestion> = mutableListOf(firstIngestion)
-            val allIngestionBursts: MutableList<IngestionsBurst> = mutableListOf()
-            if (sortedIngestions.size == 1) {
-                allIngestionBursts.add(
-                    IngestionsBurst(
-                        timeUntil = diffTextToAdd,
-                        ingestions = currentIngestions
+        experienceRepo.getSortedIngestionsWithExperienceFlow(substanceName)
+            .combine(currentTimeFlow) { sortedIngestionsWithExperiences, currentTime ->
+                val experiencesWithIngestions =
+                    sortedIngestionsWithExperiences.groupBy { it.experience.id }
+                var lastDate = currentTime
+                val allIngestionBursts: MutableList<IngestionsBurst> = mutableListOf()
+                for (oneExperience in experiencesWithIngestions) {
+                    val newInstant =
+                        oneExperience.value.firstOrNull()?.experience?.sortDate ?: continue
+                    val diffText = getTimeDifferenceText(
+                        fromInstant = newInstant,
+                        toInstant = lastDate
                     )
-                )
-                currentIngestions = mutableListOf()
-            }
-            for (oneIngestion in sortedIngestions.takeLast(sortedIngestions.size - 1)) {
-                if (isDifferenceBig(fromInstance = oneIngestion.time, toInstance = lastDate)) {
-                    // finalize burst
                     allIngestionBursts.add(
                         IngestionsBurst(
-                            timeUntil = diffTextToAdd,
-                            ingestions = currentIngestions
+                            timeUntil = diffText,
+                            ingestions = oneExperience.value.map { it.ingestion }
                         )
                     )
-                    diffTextToAdd =
-                        getTimeDifferenceText(fromInstant = oneIngestion.time, toInstant = lastDate)
-                    currentIngestions = mutableListOf(oneIngestion)
-                    lastDate = oneIngestion.time
-                } else {
-                    // add to current burst
-                    currentIngestions.add(oneIngestion)
-                    lastDate = oneIngestion.time
+                    lastDate = newInstant
                 }
-            }
-            // finalize last burst
-            if (currentIngestions.isNotEmpty()) {
-                allIngestionBursts.add(
-                    IngestionsBurst(
-                        timeUntil = diffTextToAdd,
-                        ingestions = currentIngestions
-                    )
-                )
-            }
-            return@combine allIngestionBursts
-        }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
-
-    private fun isDifferenceBig(fromInstance: Instant, toInstance: Instant): Boolean {
-        val diff = Duration.between(fromInstance, toInstance)
-        return diff.toHours() > 12
-    }
+                return@combine allIngestionBursts
+            }.stateIn(
+                initialValue = emptyList(),
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
 
     private val companionsFlow = experienceRepo.getAllSubstanceCompanionsFlow()
 

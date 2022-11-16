@@ -88,6 +88,10 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC")
     fun getSortedIngestionsFlow(substanceName: String): Flow<List<Ingestion>>
 
+    @Transaction
+    @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC")
+    fun getSortedIngestionsWithExperienceFlow(substanceName: String): Flow<List<IngestionWithExperience>>
+
     @Query("SELECT * FROM experience WHERE id =:id")
     suspend fun getExperience(id: Int): Experience?
 
