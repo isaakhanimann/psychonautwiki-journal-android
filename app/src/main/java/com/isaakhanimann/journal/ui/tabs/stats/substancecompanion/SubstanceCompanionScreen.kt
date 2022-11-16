@@ -132,6 +132,23 @@ fun SubstanceCompanionScreen(
                 TimeArrowUp(timeText = burst.timeUntil)
                 Card(modifier = Modifier.padding(vertical = 5.dp)) {
                     Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 5.dp)
+                        ) {
+                            Text(
+                                text = burst.experience.title,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                            Text(
+                                text = burst.experience.sortDate.getStringOfPattern("dd MMMM yyyy"),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                        Divider()
                         burst.ingestions.forEachIndexed { index, ingestion ->
                             IngestionRow(ingestion = ingestion)
                             if (index < burst.ingestions.size - 1) {
@@ -162,7 +179,7 @@ fun IngestionRow(ingestion: Ingestion) {
                 text = "Unknown Dose ${ingestion.administrationRoute.displayText}",
             )
         }
-        val dateString = ingestion.time.getStringOfPattern("dd MMM yyyy, HH:mm")
+        val dateString = ingestion.time.getStringOfPattern("HH:mm")
         Text(text = dateString)
     }
 }

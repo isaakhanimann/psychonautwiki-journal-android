@@ -6,8 +6,9 @@
 package com.isaakhanimann.journal.ui.tabs.stats.substancecompanion
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.Experience
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.utils.getInstant
@@ -23,6 +24,26 @@ class SubstanceCompanionScreenPreviewProvider :
             second = listOf(
                 IngestionsBurst(
                     timeUntil = "35 min",
+                    experience = Experience(
+                        id = 1,
+                        title = "Vienna Weekend",
+                        creationDate = getInstant(
+                            year = 2022,
+                            month = 7,
+                            day = 20,
+                            hourOfDay = 14,
+                            minute = 20
+                        )!!,
+                        sortDate = getInstant(
+                            year = 2022,
+                            month = 7,
+                            day = 20,
+                            hourOfDay = 14,
+                            minute = 20
+                        )!!,
+                        text = "",
+                        isFavorite = false
+                    ),
                     ingestions = listOf(
                         Ingestion(
                             substanceName = "Cocaine",
@@ -60,6 +81,26 @@ class SubstanceCompanionScreenPreviewProvider :
                 ),
                 IngestionsBurst(
                     timeUntil = "2 weeks",
+                    experience = Experience(
+                        id = 1,
+                        title = "21. Birthday",
+                        creationDate = getInstant(
+                            year = 2022,
+                            month = 7,
+                            day = 4,
+                            hourOfDay = 14,
+                            minute = 20
+                        )!!,
+                        sortDate = getInstant(
+                            year = 2022,
+                            month = 7,
+                            day = 4,
+                            hourOfDay = 14,
+                            minute = 20
+                        )!!,
+                        text = "",
+                        isFavorite = false
+                    ),
                     ingestions = listOf(
                         Ingestion(
                             substanceName = "Cocaine",

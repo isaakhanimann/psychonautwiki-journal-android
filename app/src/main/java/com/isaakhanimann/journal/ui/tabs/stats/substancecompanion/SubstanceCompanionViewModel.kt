@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
@@ -57,8 +58,8 @@ class SubstanceCompanionViewModel @Inject constructor(
                 var lastDate = currentTime
                 val allIngestionBursts: MutableList<IngestionsBurst> = mutableListOf()
                 for (oneExperience in experiencesWithIngestions) {
-                    val newInstant =
-                        oneExperience.value.firstOrNull()?.experience?.sortDate ?: continue
+                    val experience = oneExperience.value.firstOrNull()?.experience ?: continue
+                    val newInstant = experience.sortDate
                     val diffText = getTimeDifferenceText(
                         fromInstant = newInstant,
                         toInstant = lastDate
@@ -66,6 +67,7 @@ class SubstanceCompanionViewModel @Inject constructor(
                     allIngestionBursts.add(
                         IngestionsBurst(
                             timeUntil = diffText,
+                            experience = experience,
                             ingestions = oneExperience.value.map { it.ingestion }
                         )
                     )
@@ -113,5 +115,6 @@ class SubstanceCompanionViewModel @Inject constructor(
 
 data class IngestionsBurst(
     val timeUntil: String,
+    val experience: Experience,
     val ingestions: List<Ingestion>
 )
