@@ -124,16 +124,18 @@ fun JournalScreen(
             )
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = navigateToAddIngestion,
-                icon = {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add"
-                    )
-                },
-                text = { Text("Ingestion") },
-            )
+            if (!isSearchEnabled) {
+                ExtendedFloatingActionButton(
+                    onClick = navigateToAddIngestion,
+                    icon = {
+                        Icon(
+                            Icons.Filled.Add,
+                            contentDescription = "Add"
+                        )
+                    },
+                    text = { Text("Ingestion") },
+                )
+            }
         }
     ) { padding ->
         Box(
@@ -149,39 +151,66 @@ fun JournalScreen(
                 verticalArrangement = Arrangement.Top
             ) {
                 AnimatedVisibility(visible = isSearchEnabled) {
-                    val focusManager = LocalFocusManager.current
-                    TextField(
-                        value = searchText,
-                        onValueChange = onChangeSearchText,
-                        leadingIcon = {
-                            Icon(
-                                Icons.Default.Search,
-                                contentDescription = "Search",
-                            )
-                        },
-                        trailingIcon = {
-                            if (searchText != "") {
-                                IconButton(
-                                    onClick = {
-                                        onChangeSearchText("")
+                    Column {
+                        val focusManager = LocalFocusManager.current
+                        TextField(
+                            value = searchText,
+                            onValueChange = onChangeSearchText,
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Default.Search,
+                                    contentDescription = "Search",
+                                )
+                            },
+                            trailingIcon = {
+                                if (searchText != "") {
+                                    IconButton(
+                                        onClick = {
+                                            onChangeSearchText("")
+                                        }
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Close,
+                                            contentDescription = "Close",
+                                        )
                                     }
-                                ) {
-                                    Icon(
-                                        Icons.Default.Close,
-                                        contentDescription = "Close",
+                                }
+                            },
+                            label = { Text(text = "Search by title") },
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                capitalization = KeyboardCapitalization.Sentences
+                            ),
+                            singleLine = true
+                        )
+                        if (currentExperience == null && previousExperiences.isEmpty() && isSearchEnabled && searchText.isNotEmpty()) {
+                            if (isFavoriteEnabled) {
+                                Column(modifier = Modifier.padding(vertical = 5.dp)) {
+                                    Text(
+                                        text = "No Results",
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    Text(
+                                        text = "No favorite experience titles match your search.",
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                }
+                            } else {
+                                Column(modifier = Modifier.padding(vertical = 5.dp)) {
+                                    Text(
+                                        text = "No Results",
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    Text(
+                                        text = "No experience titles match your search.",
+                                        style = MaterialTheme.typography.bodySmall
                                     )
                                 }
                             }
-                        },
-                        label = { Text(text = "Search by title") },
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            capitalization = KeyboardCapitalization.Sentences
-                        ),
-                        singleLine = true
-                    )
+                        }
+                    }
                 }
                 AnimatedVisibility(visible = !isSearchEnabled) {
                     if (currentExperience != null) {
@@ -216,31 +245,17 @@ fun JournalScreen(
                     }
                 }
             }
-            if (currentExperience == null && previousExperiences.isEmpty()) {
-                if (isSearchEnabled && searchText.isNotEmpty()) {
-                    if (isFavoriteEnabled) {
-                        EmptyScreenDisclaimer(
-                            title = "No Results",
-                            description = "No favorite experience titles match your search."
-                        )
-                    } else {
-                        EmptyScreenDisclaimer(
-                            title = "No Results",
-                            description = "No experience titles match your search."
-                        )
-                    }
+            if (currentExperience == null && previousExperiences.isEmpty() && !isSearchEnabled) {
+                if (isFavoriteEnabled) {
+                    EmptyScreenDisclaimer(
+                        title = "No Favorites",
+                        description = "Mark experiences as favorites to find them quickly."
+                    )
                 } else {
-                    if (isFavoriteEnabled) {
-                        EmptyScreenDisclaimer(
-                            title = "No Favorites",
-                            description = "Mark experiences as favorites to find them quickly."
-                        )
-                    } else {
-                        EmptyScreenDisclaimer(
-                            title = "No Experiences Yet",
-                            description = "Add your first ingestion."
-                        )
-                    }
+                    EmptyScreenDisclaimer(
+                        title = "No Experiences Yet",
+                        description = "Add your first ingestion."
+                    )
                 }
             }
         }
