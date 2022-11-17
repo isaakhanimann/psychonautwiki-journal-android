@@ -92,19 +92,22 @@ fun AllTimelines(
         Box(contentAlignment = Alignment.TopEnd) {
             Canvas(modifier = modifier) {
                 val canvasWithLabelsHeight = size.height
-                val labelsHeight = labelSize.toPx() + 5f
+                val labelsHeight = labelSize.toPx()
                 val canvasWidth = size.width
                 val pixelsPerSec = canvasWidth / model.widthInSeconds
                 inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight) {
-                    val canvasHeightOuter = size.height
-                    model.ingestionDrawables.forEach { ingestionDrawable ->
-                        drawIngestion(
-                            ingestionDrawable = ingestionDrawable,
-                            isDarkTheme = isDarkTheme,
-                            pixelsPerSec = pixelsPerSec,
-                            canvasHeightOuter = canvasHeightOuter,
-                            density = density
-                        )
+                    val canvasHeightWithVerticalLine = size.height
+                    inset(vertical = 7.dp.toPx()) {
+                        val canvasHeight = size.height
+                        model.ingestionDrawables.forEach { ingestionDrawable ->
+                            drawIngestion(
+                                ingestionDrawable = ingestionDrawable,
+                                isDarkTheme = isDarkTheme,
+                                pixelsPerSec = pixelsPerSec,
+                                canvasHeightOuter = canvasHeight,
+                                density = density
+                            )
+                        }
                     }
                     if (isShowingCurrentTime) {
                         drawCurrentTime(
@@ -113,7 +116,7 @@ fun AllTimelines(
                             currentTime = currentTime,
                             pixelsPerSec = pixelsPerSec,
                             isDarkTheme = isDarkTheme,
-                            canvasHeightOuter = canvasHeightOuter
+                            canvasHeightOuter = canvasHeightWithVerticalLine,
                         )
                     }
                 }
@@ -193,7 +196,7 @@ fun DrawScope.drawCurrentTime(
     currentTime: Instant,
     pixelsPerSec: Float,
     isDarkTheme: Boolean,
-    canvasHeightOuter: Float
+    canvasHeightOuter: Float,
 ) {
     val endTime = startTime.plusSeconds(timelineWidthInSeconds.toLong())
     if (startTime.isBefore(currentTime) && endTime.isAfter(currentTime)) {
@@ -204,7 +207,7 @@ fun DrawScope.drawCurrentTime(
             color = color,
             start = Offset(x = timeStartX, y = canvasHeightOuter),
             end = Offset(x = timeStartX, y = 0f),
-            strokeWidth = 5f,
+            strokeWidth = 4.dp.toPx(),
             cap = StrokeCap.Round
         )
     }

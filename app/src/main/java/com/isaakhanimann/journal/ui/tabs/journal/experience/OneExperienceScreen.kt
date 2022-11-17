@@ -199,7 +199,7 @@ fun ExperienceScreen(
                             .padding(
                                 horizontal = horizontalPadding,
                             )
-                            .padding(bottom = 10.dp, top = 3.dp)
+                            .padding(bottom = 10.dp)
                     ) {
                         AllTimelines(
                             dataForEffectLines = effectTimelines,
