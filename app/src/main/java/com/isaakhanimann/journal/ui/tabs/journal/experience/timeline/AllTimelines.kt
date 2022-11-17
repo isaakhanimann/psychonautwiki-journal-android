@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.tabs.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
@@ -101,7 +102,8 @@ fun AllTimelines(
                             ingestionDrawable = ingestionDrawable,
                             isDarkTheme = isDarkTheme,
                             pixelsPerSec = pixelsPerSec,
-                            canvasHeightOuter = canvasHeightOuter
+                            canvasHeightOuter = canvasHeightOuter,
+                            density = density
                         )
                     }
                     if (isShowingCurrentTime) {
@@ -137,14 +139,15 @@ fun DrawScope.drawIngestion(
     ingestionDrawable: IngestionDrawable,
     isDarkTheme: Boolean,
     pixelsPerSec: Float,
-    canvasHeightOuter: Float
+    canvasHeightOuter: Float,
+    density: Density
 ) {
     val color = ingestionDrawable.color.getComposeColor(isDarkTheme)
     val startX =
         ingestionDrawable.ingestionPointDistanceFromStartInSeconds * pixelsPerSec
-    val verticalInsetForLine = AllTimelinesModel.strokeWidth / 2
+    val verticalInsetForLine = density.strokeWidth / 2
     val topInset =
-        (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * AllTimelinesModel.strokeWidth)
+        (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * density.strokeWidth)
     inset(
         left = 0f,
         top = topInset,
@@ -156,7 +159,7 @@ fun DrawScope.drawIngestion(
             val canvasHeightInner = size.height
             drawCircle(
                 color = color,
-                radius = 17f,
+                radius = 7.dp.toPx(),
                 center = Offset(x = startX, y = canvasHeightInner)
             )
         }
@@ -169,6 +172,7 @@ fun DrawScope.drawIngestion(
                     startX = startX,
                     pixelsPerSec = pixelsPerSec,
                     color = color,
+                    density = density
                 )
             }
             timelineDrawable.drawTimeLineShape(
@@ -176,7 +180,8 @@ fun DrawScope.drawIngestion(
                 height = ingestionHeight,
                 startX = startX,
                 pixelsPerSec = pixelsPerSec,
-                color = color
+                color = color,
+                density = density
             )
         }
     }

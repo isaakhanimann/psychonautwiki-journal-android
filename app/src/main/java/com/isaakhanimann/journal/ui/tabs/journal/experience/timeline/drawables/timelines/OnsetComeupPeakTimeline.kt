@@ -8,9 +8,12 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeWidth
 
 data class OnsetComeupPeakTimeline(
     val onset: FullDurationRange,
@@ -21,7 +24,9 @@ data class OnsetComeupPeakTimeline(
 
     override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float> {
         val startRange =
-            startDurationInSeconds + onset.interpolateAtValueInSeconds(0.5f) + comeup.interpolateAtValueInSeconds(0.5f)
+            startDurationInSeconds + onset.interpolateAtValueInSeconds(0.5f) + comeup.interpolateAtValueInSeconds(
+                0.5f
+            )
         return startRange..(startRange + peak.interpolateAtValueInSeconds(peakWeight))
     }
 
@@ -34,6 +39,7 @@ data class OnsetComeupPeakTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         val weight = 0.5f
         val onsetEndX =
@@ -50,7 +56,7 @@ data class OnsetComeupPeakTimeline(
                 lineTo(x = peakEndX, y = 0f)
             },
             color = color,
-            style = AllTimelinesModel.normalStroke
+            style = density.normalStroke
         )
     }
 
@@ -60,6 +66,7 @@ data class OnsetComeupPeakTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         drawScope.drawPath(
             path = Path().apply {
@@ -74,14 +81,14 @@ data class OnsetComeupPeakTimeline(
                 val peakEndMaxX = comeupEndMaxX + (peak.maxInSeconds * pixelsPerSec)
                 val peakEndMinX = comeupEndMinX + (peak.minInSeconds * pixelsPerSec)
                 lineTo(x = peakEndMaxX, y = 0f)
-                lineTo(x = peakEndMaxX, y = AllTimelinesModel.shapeWidth)
-                lineTo(x = peakEndMinX, y = AllTimelinesModel.shapeWidth)
+                lineTo(x = peakEndMaxX, y = density.shapeWidth)
+                lineTo(x = peakEndMinX, y = density.shapeWidth)
                 lineTo(x = peakEndMinX, y = 0f)
                 lineTo(x = comeupEndMaxX, y = 0f)
                 lineTo(x = onsetEndMaxX, y = height)
                 close()
             },
-            color = color.copy(alpha = AllTimelinesModel.shapeAlpha)
+            color = color.copy(alpha = shapeAlpha)
         )
     }
 }

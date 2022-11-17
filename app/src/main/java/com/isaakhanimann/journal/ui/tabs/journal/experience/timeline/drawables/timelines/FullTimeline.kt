@@ -8,10 +8,11 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel.Companion.shapeAlpha
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
 
 data class FullTimeline(
     val onset: FullDurationRange,
@@ -38,6 +39,7 @@ data class FullTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         drawScope.drawPath(
             path = Path().apply {
@@ -57,7 +59,7 @@ data class FullTimeline(
                 lineTo(x = offsetEndX, y = height)
             },
             color = color,
-            style = AllTimelinesModel.normalStroke
+            style = density.normalStroke
         )
     }
 
@@ -67,6 +69,7 @@ data class FullTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         drawScope.drawPath(
             path = Path().apply {

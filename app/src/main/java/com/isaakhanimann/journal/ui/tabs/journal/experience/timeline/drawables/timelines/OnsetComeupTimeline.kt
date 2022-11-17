@@ -8,9 +8,11 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
 
 data class OnsetComeupTimeline(
     val onset: FullDurationRange,
@@ -30,6 +32,7 @@ data class OnsetComeupTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         val weight = 0.5f
         val onsetEndX =
@@ -43,7 +46,7 @@ data class OnsetComeupTimeline(
                 lineTo(x = comeupEndX, y = 0f)
             },
             color = color,
-            style = AllTimelinesModel.normalStroke
+            style = density.normalStroke
         )
     }
 
@@ -53,6 +56,7 @@ data class OnsetComeupTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         drawScope.drawPath(
             path = Path().apply {
@@ -67,7 +71,7 @@ data class OnsetComeupTimeline(
                 lineTo(x = onsetStartMaxX, y = height)
                 close()
             },
-            color = color.copy(alpha = AllTimelinesModel.shapeAlpha)
+            color = color.copy(alpha = shapeAlpha)
         )
     }
 }

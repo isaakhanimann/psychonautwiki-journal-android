@@ -5,9 +5,6 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline
 
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import com.isaakhanimann.journal.ui.tabs.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.IngestionDrawable
@@ -92,18 +89,5 @@ class AllTimelinesModel(
             }
             return insetTimes
         }
-
-        const val shapeAlpha = 0.3f
-        const val strokeWidth = 13f
-        const val shapeWidth = 3 * strokeWidth
-        val normalStroke = Stroke(
-            width = strokeWidth,
-            cap = StrokeCap.Round,
-        )
-        val dottedStroke = Stroke(
-            width = strokeWidth,
-            cap = StrokeCap.Round,
-            pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 30f))
-        )
     }
 }

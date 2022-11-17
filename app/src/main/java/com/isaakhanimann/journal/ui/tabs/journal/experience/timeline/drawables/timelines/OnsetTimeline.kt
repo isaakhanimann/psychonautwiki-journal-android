@@ -8,9 +8,12 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeWidth
 
 
 data class OnsetTimeline(
@@ -30,6 +33,7 @@ data class OnsetTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         val weight = 0.5f
         val onsetEndX =
@@ -40,7 +44,7 @@ data class OnsetTimeline(
                 lineTo(x = onsetEndX, y = height)
             },
             color = color,
-            style = AllTimelinesModel.normalStroke
+            style = density.normalStroke
         )
     }
 
@@ -50,6 +54,7 @@ data class OnsetTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         drawScope.drawPath(
             path = Path().apply {
@@ -57,11 +62,11 @@ data class OnsetTimeline(
                 val onsetEndMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
                 moveTo(onsetEndMinX, height)
                 lineTo(x = onsetEndMaxX, y = height)
-                lineTo(x = onsetEndMaxX, y = height- AllTimelinesModel.shapeWidth)
-                lineTo(x = onsetEndMinX, y = height- AllTimelinesModel.shapeWidth)
+                lineTo(x = onsetEndMaxX, y = height - density.shapeWidth)
+                lineTo(x = onsetEndMinX, y = height - density.shapeWidth)
                 close()
             },
-            color = color.copy(alpha = AllTimelinesModel.shapeAlpha)
+            color = color.copy(alpha = shapeAlpha)
         )
     }
 }

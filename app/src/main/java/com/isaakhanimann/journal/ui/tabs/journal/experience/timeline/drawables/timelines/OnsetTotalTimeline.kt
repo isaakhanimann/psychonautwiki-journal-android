@@ -8,9 +8,12 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.dottedStroke
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
 
 data class OnsetTotalTimeline(
     val onset: FullDurationRange,
@@ -31,6 +34,7 @@ data class OnsetTotalTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         val onsetWeight = 0.5f
         val onsetEndX =
@@ -41,7 +45,7 @@ data class OnsetTotalTimeline(
                 lineTo(x = onsetEndX, y = height)
             },
             color = color,
-            style = AllTimelinesModel.normalStroke
+            style = density.normalStroke
         )
         drawScope.drawPath(
             path = Path().apply {
@@ -62,7 +66,7 @@ data class OnsetTotalTimeline(
                 )
             },
             color = color,
-            style = AllTimelinesModel.dottedStroke
+            style = density.dottedStroke
         )
     }
 
@@ -72,6 +76,7 @@ data class OnsetTotalTimeline(
         startX: Float,
         pixelsPerSec: Float,
         color: Color,
+        density: Density
     ) {
         drawScope.drawPath(
             path = Path().apply {
@@ -86,12 +91,12 @@ data class OnsetTotalTimeline(
                 endSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
                     startX = onsetEndMinX,
-                    endX = totalX/2,
+                    endX = totalX / 2,
                     endY = 0f
                 )
                 startSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
-                    startX = totalX/2,
+                    startX = totalX / 2,
                     startY = 0f,
                     endX = totalMaxX,
                     endY = height
@@ -100,19 +105,19 @@ data class OnsetTotalTimeline(
                 endSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
                     startX = totalMinX,
-                    endX = totalX/2,
+                    endX = totalX / 2,
                     endY = 0f
                 )
                 startSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
-                    startX = totalX/2,
+                    startX = totalX / 2,
                     startY = 0f,
                     endX = onsetEndMaxX,
                     endY = height
                 )
                 close()
             },
-            color = color.copy(alpha = AllTimelinesModel.shapeAlpha)
+            color = color.copy(alpha = shapeAlpha)
         )
     }
 }
