@@ -5,11 +5,15 @@
 
 package com.isaakhanimann.journal.ui.tabs.search.custom
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -118,7 +122,44 @@ fun AddOrEditCustomSubstance(
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            TopAppBar(title = { Text(title) })
+            TopAppBar(title = { Text(title) }, actions = {
+                if (isShowingDelete) {
+                    var isShowingDeleteDialog by remember { mutableStateOf(false) }
+                    IconButton(
+                        onClick = { isShowingDeleteDialog = true },
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Delete Substance",
+                        )
+                    }
+                    AnimatedVisibility(visible = isShowingDeleteDialog) {
+                        AlertDialog(
+                            onDismissRequest = { isShowingDeleteDialog = false },
+                            title = {
+                                Text(text = "Delete Substance?")
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        isShowingDeleteDialog = false
+                                        deleteAndNavigate()
+                                    }
+                                ) {
+                                    Text("Delete")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(
+                                    onClick = { isShowingDeleteDialog = false }
+                                ) {
+                                    Text("Cancel")
+                                }
+                            }
+                        )
+                    }
+                }
+            })
         },
         floatingActionButton = {
             if (isDoneEnabled) {
@@ -138,8 +179,10 @@ fun AddOrEditCustomSubstance(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(horizontal = horizontalPadding, vertical = 10.dp)
+                .padding(horizontal = horizontalPadding)
+                .verticalScroll(rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(5.dp))
             val focusManager = LocalFocusManager.current
             OutlinedTextField(
                 value = name,
@@ -190,41 +233,8 @@ fun AddOrEditCustomSubstance(
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
-            if (isShowingDelete) {
-                var isShowingDeleteDialog by remember { mutableStateOf(false) }
-                Spacer(modifier = Modifier.height(10.dp))
-                OutlinedButton(
-                    onClick = { isShowingDeleteDialog = true },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Delete Substance")
-                }
-                if (isShowingDeleteDialog) {
-                    AlertDialog(
-                        onDismissRequest = { isShowingDeleteDialog = false },
-                        title = {
-                            Text(text = "Delete Substance?")
-                        },
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    isShowingDeleteDialog = false
-                                    deleteAndNavigate()
-                                }
-                            ) {
-                                Text("Delete")
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(
-                                onClick = { isShowingDeleteDialog = false }
-                            ) {
-                                Text("Cancel")
-                            }
-                        }
-                    )
-                }
-            }
+            Spacer(modifier = Modifier.height(5.dp))
+
         }
     }
 }
