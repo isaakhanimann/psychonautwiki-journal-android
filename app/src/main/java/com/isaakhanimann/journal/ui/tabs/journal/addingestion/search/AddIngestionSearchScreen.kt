@@ -10,13 +10,13 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -77,7 +77,7 @@ fun AddIngestionSearchScreen(
     Column {
         LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
         val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-        val suggestionMaxHeight = screenHeight * 0.65f
+        val suggestionMaxHeight = screenHeight * 0.6f
         AnimatedVisibility(
             visible = previousSubstances.isNotEmpty() && !wasKeyboardOpened().value,
             enter = EnterTransition.None
@@ -159,6 +159,7 @@ fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider:
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SuggestionsSection(
     previousSubstances: List<PreviousSubstance>,
@@ -176,15 +177,16 @@ fun SuggestionsSection(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 5.dp)
         )
+        Divider()
         LazyColumn {
-            items(previousSubstances) { substanceRow ->
+            itemsIndexed(previousSubstances) { index, substanceRow ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = horizontalPadding, vertical = 5.dp)
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalAlignment = CenterVertically,
                     ) {
                         ColorCircle(adaptiveColor = substanceRow.color)
                         Spacer(modifier = Modifier.width(8.dp))
@@ -194,55 +196,67 @@ fun SuggestionsSection(
                         )
                     }
                     substanceRow.routesWithDoses.forEach { routeWithDoses ->
-                        Row {
-                            OutlinedButton(onClick = {
-                                if (substanceRow.isCustom) {
-                                    onRouteOfCustomSubstanceChosen(
-                                        substanceRow.substanceName, routeWithDoses.route
-                                    )
-                                } else {
-                                    onRouteChosen(
-                                        substanceRow.substanceName, routeWithDoses.route
-                                    )
-                                }
-                            }) {
-                                Text(text = routeWithDoses.route.displayText)
-                            }
+                        Column {
+                            Text(
+                                text = routeWithDoses.route.displayText,
+                                style = MaterialTheme.typography.labelLarge,
+                                modifier = Modifier.padding(top = 3.dp)
+                            )
                             Spacer(modifier = Modifier.width(5.dp))
                             FlowRow(mainAxisSpacing = 5.dp) {
                                 routeWithDoses.doses.forEach { previousDose ->
-                                    OutlinedButton(onClick = {
-                                        if (substanceRow.isCustom) {
-                                            onDoseOfCustomSubstanceChosen(
-                                                substanceRow.substanceName,
-                                                routeWithDoses.route,
-                                                previousDose.dose,
-                                                previousDose.unit,
-                                                previousDose.isEstimate
-                                            )
-                                        } else {
-                                            onDoseChosen(
-                                                substanceRow.substanceName,
-                                                routeWithDoses.route,
-                                                previousDose.dose,
-                                                previousDose.unit,
-                                                previousDose.isEstimate
-                                            )
-                                        }
-                                    }) {
-                                        if (previousDose.dose != null) {
-                                            val estimate = if (previousDose.isEstimate) "~" else ""
-                                            Text(text = "$estimate${previousDose.dose.toReadableString()} ${previousDose.unit ?: ""}")
-                                        } else {
-                                            Text(text = "Unknown Dose")
-                                        }
-                                    }
+                                    SuggestionChip(
+                                        onClick = {
+                                            if (substanceRow.isCustom) {
+                                                onDoseOfCustomSubstanceChosen(
+                                                    substanceRow.substanceName,
+                                                    routeWithDoses.route,
+                                                    previousDose.dose,
+                                                    previousDose.unit,
+                                                    previousDose.isEstimate
+                                                )
+                                            } else {
+                                                onDoseChosen(
+                                                    substanceRow.substanceName,
+                                                    routeWithDoses.route,
+                                                    previousDose.dose,
+                                                    previousDose.unit,
+                                                    previousDose.isEstimate
+                                                )
+                                            }
+                                        },
+                                        label = {
+                                            if (previousDose.dose != null) {
+                                                val estimate =
+                                                    if (previousDose.isEstimate) "~" else ""
+                                                Text(text = "$estimate${previousDose.dose.toReadableString()} ${previousDose.unit ?: ""}")
+                                            } else {
+                                                Text(text = "Unknown")
+                                            }
+                                        },
+                                    )
                                 }
+                                SuggestionChip(
+                                    onClick = {
+                                        if (substanceRow.isCustom) {
+                                            onRouteOfCustomSubstanceChosen(
+                                                substanceRow.substanceName, routeWithDoses.route
+                                            )
+                                        } else {
+                                            onRouteChosen(
+                                                substanceRow.substanceName, routeWithDoses.route
+                                            )
+                                        }
+                                    },
+                                    label = { Text("Other") }
+                                )
                             }
                         }
                     }
                 }
-                Divider(Modifier.padding(horizontal = horizontalPadding))
+                if (index < previousSubstances.size - 1) {
+                    Divider(Modifier.padding(horizontal = horizontalPadding))
+                }
             }
         }
     }
