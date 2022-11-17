@@ -21,13 +21,16 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun BarChart(buckets: List<List<ColorCount>>, startDateText: String) {
     Column {
         val isDarkTheme = isSystemInDarkTheme()
         val tickColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.20f)
+        val labelHeight = with(LocalDensity.current) { 12.sp.toPx() }
         Canvas(
             modifier = Modifier
                 .padding(horizontal = 10.dp)
@@ -41,10 +44,10 @@ fun BarChart(buckets: List<List<ColorCount>>, startDateText: String) {
                 }
                 val half = maxCount / 2
                 val halfLineHeight = half.toFloat() * canvasHeightOuter / maxCount
-                val labelHeight = 30f
                 val halfLabelHeight = labelHeight / 2
-                val labelWidth = 60f
-                val spaceBetweenLabelAndChart = 20f
+                val numLettersInLabel = maxCount.toString().length
+                val labelWidth = (numLettersInLabel + 1) * labelHeight
+                val spaceBetweenLabelAndChart = labelHeight
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
                         half.toString(),
