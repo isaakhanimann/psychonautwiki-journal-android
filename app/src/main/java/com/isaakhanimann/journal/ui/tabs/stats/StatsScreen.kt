@@ -112,24 +112,31 @@ fun StatsScreen(
                                 vertical = 10.dp
                             )
                         ) {
-                            Column {
-                                Text(
-                                    text = "Experiences since ${statsModel.startDateText}",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.padding(start = 10.dp, top = 5.dp)
-                                )
-                                Text(
-                                    text = "Substance counted once per experience",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
-                                )
-                                BarChart(
-                                    buckets = statsModel.chartBuckets,
-                                    startDateText = statsModel.startDateText
-                                )
-                                Divider()
-                                LazyColumn {
-                                    items(statsModel.statItems.size) { i ->
+                            LazyColumn {
+                                item {
+                                    Column {
+                                        Text(
+                                            text = "Experiences since ${statsModel.startDateText}",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            modifier = Modifier.padding(start = 10.dp, top = 5.dp)
+                                        )
+                                        Text(
+                                            text = "Substance counted once per experience",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            modifier = Modifier.padding(
+                                                start = 10.dp,
+                                                bottom = 10.dp
+                                            )
+                                        )
+                                        BarChart(
+                                            buckets = statsModel.chartBuckets,
+                                            startDateText = statsModel.startDateText
+                                        )
+                                        Divider()
+                                    }
+                                }
+                                items(statsModel.statItems.size) { i ->
+                                    Column {
                                         val subStat = statsModel.statItems[i]
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
