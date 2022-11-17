@@ -79,7 +79,7 @@ fun AddIngestionSearchScreen(
         val screenHeight = LocalConfiguration.current.screenHeightDp.dp
         val suggestionMaxHeight = screenHeight * 0.65f
         AnimatedVisibility(
-            visible = !(previousSubstances.isNotEmpty() && wasKeyboardOpened().value),
+            visible = previousSubstances.isNotEmpty() && !wasKeyboardOpened().value,
             enter = EnterTransition.None
         ) {
             Column {
