@@ -104,7 +104,7 @@ fun CombinationSettingsScreen(
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = "Opt in to see alerts when you log substances that have interactions with those substances.",
+                            text = "In addition to receiving alerts about interactions with substances that you log you can also receive alerts with the following substances, even if you haven't logged them.",
                             style = MaterialTheme.typography.bodySmall
                         )
                         substanceInteractions.forEach { substanceInteraction ->
