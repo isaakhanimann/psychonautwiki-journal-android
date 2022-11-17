@@ -8,8 +8,10 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
@@ -184,7 +186,11 @@ fun ChooseDoseScreen(
             }
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+        ) {
             LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(4.dp))
             Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
