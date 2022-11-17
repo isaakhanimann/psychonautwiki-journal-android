@@ -10,10 +10,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
@@ -160,7 +160,11 @@ fun ChooseTimeScreen(
             }
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+        ) {
             LinearProgressIndicator(progress = 0.9f, modifier = Modifier.fillMaxWidth())
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -222,7 +226,7 @@ fun ChooseTimeScreen(
                         )
                     }
                 }
-                MyCard(title = "Notes", modifier = Modifier.weight(1f)) {
+                MyCard(title = "Notes") {
                     NoteSection(
                         previousNotes,
                         note,
@@ -296,11 +300,8 @@ fun NoteSection(
                 }
         )
         if (previousNotes.isNotEmpty() && isShowingSuggestions) {
-            LazyColumn(
-                state = rememberLazyListState()
-            ) {
-                items(previousNotes.size) { i ->
-                    val previousNote = previousNotes[i]
+            Column {
+                previousNotes.forEach {
                     Row(
                         Modifier
                             .padding(8.dp)
@@ -308,7 +309,7 @@ fun NoteSection(
                             .clickable {
                                 focusManager.clearFocus()
                                 isShowingSuggestions = false
-                                onNoteChange(previousNote)
+                                onNoteChange(it)
                             }
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -319,7 +320,7 @@ fun NoteSection(
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                             Text(
-                                text = previousNote,
+                                text = it,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
