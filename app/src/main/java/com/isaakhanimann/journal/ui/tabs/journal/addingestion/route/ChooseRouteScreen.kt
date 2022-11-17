@@ -166,7 +166,7 @@ fun ChooseRouteScreen(
                                     ) {
                                         RouteBox(
                                             route = route,
-                                            titleStyle = MaterialTheme.typography.headlineMedium
+                                            titleStyle = MaterialTheme.typography.headlineSmall
                                         )
                                     }
                                 }
@@ -199,7 +199,7 @@ fun ChooseRouteScreen(
                             ) {
                                 Text(
                                     text = "Other Routes",
-                                    style = MaterialTheme.typography.headlineMedium
+                                    style = MaterialTheme.typography.headlineSmall
                                 )
                             }
                         }
@@ -214,7 +214,7 @@ fun ChooseRouteScreen(
                             ) {
                                 RouteBox(
                                     route = route,
-                                    titleStyle = MaterialTheme.typography.headlineMedium
+                                    titleStyle = MaterialTheme.typography.headlineSmall
                                 )
                             }
                         }
