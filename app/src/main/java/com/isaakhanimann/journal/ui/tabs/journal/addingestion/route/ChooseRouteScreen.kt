@@ -20,6 +20,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -284,6 +286,8 @@ fun InjectionDialog(
 
 @Composable
 fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val screenHeightPx = with(LocalDensity.current) { screenHeight.toPx() }
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
@@ -291,11 +295,13 @@ fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
                 textAlign = TextAlign.Center,
                 style = titleStyle
             )
-            Text(
-                text = route.description,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodySmall
-            )
+            if (screenHeightPx > 500) {
+                Text(
+                    text = route.description,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
     }
 }
