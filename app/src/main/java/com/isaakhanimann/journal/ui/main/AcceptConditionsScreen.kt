@@ -8,6 +8,8 @@ package com.isaakhanimann.journal.ui.main
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
@@ -35,7 +37,9 @@ fun AcceptConditionsScreen(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .padding(10.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         val checkedState0 = remember { mutableStateOf(false) }
         val checkedState1 = remember { mutableStateOf(false) }
@@ -48,7 +52,9 @@ fun AcceptConditionsScreen(
         Image(
             painter = painter,
             contentDescription = "PsychonautWiki eye",
-            modifier = Modifier.fillMaxWidth(0.4f)
+            modifier = Modifier
+                .fillMaxWidth(0.4f)
+                .padding(bottom = 10.dp)
         )
         Column(
             horizontalAlignment = Alignment.Start,
