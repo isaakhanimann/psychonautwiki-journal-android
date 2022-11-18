@@ -1,5 +1,6 @@
-Copyright (C) 2022 Isaak Hanimann.
-See the end of the file for license conditions.
+Copyright (C) 2022 Isaak Hanimann.See the end of the file for license conditions.
+
+This file is part of PsychonautWiki Journal.
 
 # PsychonautWiki Journal
 
