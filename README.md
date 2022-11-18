@@ -9,15 +9,21 @@ To try out this app, clone this repository and open the root directory in [Andro
 
 ## License
 ```
-Licensed under the GNU GENERAL PUBLIC LICENCE, Version 3.
-You may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+Copyright (C) 2022 Free Software Foundation, Inc.
+See the end of the file for license conditions.
 
-    https://www.gnu.org/licenses/gpl-3.0.en.html
+This directory tree holds the source code for the Android PsychonautWiki Journal, the journal for psychonautics.
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+PsychonautWiki Journal is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
+
+PsychonautWiki Journal is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
 ```
