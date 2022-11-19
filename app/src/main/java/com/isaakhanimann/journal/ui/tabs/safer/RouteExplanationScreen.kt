@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -81,7 +82,13 @@ Determining an optimal route of administration is highly dependent on the substa
             }
             AdministrationRoute.values().filter { !it.isInjectionMethod }.forEach {
                 CollapsibleSection(title = it.displayText) {
-                    SectionText(it.articleText)
+                    Text(
+                        text = it.articleText,
+                        textAlign = TextAlign.Justify,
+                        modifier = Modifier
+                            .padding(horizontal = horizontalPadding)
+                            .padding(bottom = 10.dp)
+                    )
                     if (it == AdministrationRoute.RECTAL) {
                         Button(
                             onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) },
@@ -95,15 +102,20 @@ Determining an optimal route of administration is highly dependent on the substa
                             Text("Safer Plugging")
                         }
                     }
-                    VerticalSpace()
                 }
             }
             AdministrationRoute.values().filter { it.isInjectionMethod }.forEach {
                 CollapsibleSection(title = it.displayText) {
-                    SectionText(it.articleText)
-                    VerticalSpace()
+                    Text(
+                        text = it.articleText,
+                        textAlign = TextAlign.Justify,
+                        modifier = Modifier
+                            .padding(horizontal = horizontalPadding)
+                            .padding(bottom = 10.dp)
+                    )
                 }
             }
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }

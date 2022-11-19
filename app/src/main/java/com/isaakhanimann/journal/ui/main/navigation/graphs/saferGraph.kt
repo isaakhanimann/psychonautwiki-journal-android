@@ -27,7 +27,6 @@ import com.isaakhanimann.journal.ui.tabs.safer.*
 import com.isaakhanimann.journal.ui.tabs.safer.settings.FAQScreen
 import com.isaakhanimann.journal.ui.tabs.safer.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.tabs.safer.settings.combinations.CombinationSettingsScreen
-import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 
@@ -56,7 +55,6 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
         composableWithTransitions(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
         composableWithTransitions(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
-        composableWithTransitions(NoArgumentRouter.SaferSniffing.route) { SaferSniffingScreen() }
         composableWithTransitions(NoArgumentRouter.SettingsRouter.route) {
             SettingsScreen(
                 navigateToFAQ = navController::navigateToFAQ,

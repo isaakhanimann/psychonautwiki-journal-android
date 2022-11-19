@@ -199,7 +199,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         dose = dose,
                     )
                 },
-                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
+                navigateToSaferSniffingScreen = navController::navigateToSaferSniffingOnJournalTab,
                 navigateToURL = navController::navigateToURLInJournalTab
             )
         }
@@ -222,7 +222,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     )
                 },
                 navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreenOnSaferTab,
-                navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
+                navigateToSaferSniffingScreen = navController::navigateToSaferSniffingOnJournalTab,
                 navigateToURL = navController::navigateToURLInJournalTab
             )
         }
