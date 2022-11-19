@@ -52,7 +52,8 @@ fun SaferUsePreview() {
         navigateToDosageClassificationScreen = {},
         navigateToRouteExplanationScreen = {},
         navigateToSettings = {},
-        navigateToURL = {}
+        navigateToURL = {},
+        navigateToReagentTestingScreen = {}
     )
 }
 
@@ -66,7 +67,8 @@ fun SaferUseScreen(
     navigateToDosageClassificationScreen: () -> Unit,
     navigateToRouteExplanationScreen: () -> Unit,
     navigateToSettings: () -> Unit,
-    navigateToURL: (url: String) -> Unit
+    navigateToURL: (url: String) -> Unit,
+    navigateToReagentTestingScreen: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -107,9 +109,7 @@ fun SaferUseScreen(
                     Text("Drug Testing Services")
                 }
                 Button(
-                    onClick = {
-                        uriHandler.openUri("https://dancesafe.org/testing-kit-instructions/")
-                    },
+                    onClick = navigateToReagentTestingScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Icon(

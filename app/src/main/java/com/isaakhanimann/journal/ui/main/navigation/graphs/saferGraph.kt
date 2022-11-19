@@ -48,7 +48,8 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
                 navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreen,
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
                 navigateToSettings = navController::navigateToSettings,
-                navigateToURL = navController::navigateToURLInSaferTab
+                navigateToURL = navController::navigateToURLInSaferTab,
+                navigateToReagentTestingScreen = navController::navigateToReagentTesting
             )
         }
         composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
@@ -89,6 +90,15 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.VolumetricDosingOnSaferTabRouter.route) {
             VolumetricDosingScreen(
                 navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLInSaferTab("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
+        }
+        composableWithTransitions(NoArgumentRouter.ReagentTestingRouter.route) {
+            ReagentTestingScreen(
+                navigateToReagentTestingArticle = {
+                    navController.navigateToURLInSaferTab(
+                        "https://psychonautwiki.org/wiki/Reagent_testing_kits"
+                    )
+                }
+            )
         }
     }
 }

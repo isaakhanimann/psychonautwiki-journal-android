@@ -43,6 +43,7 @@ sealed class NoArgumentRouter(val route: String) {
     object SaferHallucinogens : NoArgumentRouter(route = "saferHallucinogens")
     object SaferSniffing : NoArgumentRouter(route = "saferSniffing")
     object SaferStimulants : NoArgumentRouter(route = "saferStimulants")
+    object ReagentTestingRouter : NoArgumentRouter(route = "reagentTesting")
     object AddIngestionRouter : NoArgumentRouter(route = "addIngestions")
     object AddIngestionSearchRouter : NoArgumentRouter(route = "addIngestionsSearch")
     object AddCustomRouter : NoArgumentRouter(route = "addCustom")
@@ -55,6 +56,10 @@ sealed class NoArgumentRouter(val route: String) {
 
 fun NavController.navigateToComboSettings() {
     navigate(NoArgumentRouter.CombinationSettingsRouter.route)
+}
+
+fun NavController.navigateToReagentTesting() {
+    navigate(NoArgumentRouter.ReagentTestingRouter.route)
 }
 
 fun NavController.navigateToAddCustom() {
