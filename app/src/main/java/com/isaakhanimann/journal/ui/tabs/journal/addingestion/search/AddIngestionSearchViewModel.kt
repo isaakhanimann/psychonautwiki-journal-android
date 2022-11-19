@@ -41,15 +41,13 @@ class AddIngestionSearchViewModel @Inject constructor(
     comboStorage: CombinationSettingsStorage,
 ) : ViewModel() {
 
-    private val last100Ingestions =
-        experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow(limit = 100)
-
     private val customSubstancesFlow = experienceRepo.getCustomSubstancesFlow()
 
     val previousSubstanceRows: StateFlow<List<PreviousSubstance>> =
-        last100Ingestions.combine(customSubstancesFlow) { ingestions, customSubstances ->
-            return@combine getPreviousSubstances(ingestions, customSubstances)
-        }.stateIn(
+        experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow(limit = 150)
+            .combine(customSubstancesFlow) { ingestions, customSubstances ->
+                return@combine getPreviousSubstances(ingestions, customSubstances)
+            }.stateIn(
             initialValue = emptyList(),
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000)
@@ -90,7 +88,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                                         unit = ingestionWithCompanion.ingestion.units,
                                         isEstimate = ingestionWithCompanion.ingestion.isDoseAnEstimate
                                     )
-                                }.distinct().take(4)
+                                }.distinct().take(6)
                             )
                         }
                 )
