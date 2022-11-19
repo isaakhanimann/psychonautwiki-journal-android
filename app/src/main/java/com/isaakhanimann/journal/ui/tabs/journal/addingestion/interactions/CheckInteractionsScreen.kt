@@ -156,46 +156,48 @@ fun CheckInteractionsScreen(
                     Text(text = "No interactions found... check other sources.")
                 }
             } else {
-                val verticalSpaceBetween = 1.dp
-                val verticalPaddingInside = 4.dp
-                LazyColumn {
-                    item {
-                        Spacer(modifier = Modifier.height(5.dp))
-                    }
-                    if (dangerousInteractions.isNotEmpty()) {
-                        items(dangerousInteractions) {
-                            InteractionRow(
-                                text = it,
-                                interactionType = InteractionType.DANGEROUS,
-                                verticalSpaceBetween = verticalSpaceBetween,
-                                verticalPaddingInside = verticalPaddingInside,
-                            )
-                        }
-                    }
-                    if (unsafeInteractions.isNotEmpty()) {
-                        items(unsafeInteractions) {
-                            InteractionRow(
-                                text = it, interactionType = InteractionType.UNSAFE,
-                                verticalSpaceBetween = verticalSpaceBetween,
-                                verticalPaddingInside = verticalPaddingInside,
-                            )
-                        }
-                    }
-                    if (uncertainInteractions.isNotEmpty()) {
-                        items(uncertainInteractions) {
-                            InteractionRow(
-                                text = it, interactionType = InteractionType.UNCERTAIN,
-                                verticalSpaceBetween = verticalSpaceBetween,
-                                verticalPaddingInside = verticalPaddingInside,
-                            )
-                        }
-                    }
-                    item {
-                        InteractionExplanationButton(
-                            substanceURL = substanceUrl,
-                            navigateToURL = navigateToURL
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = horizontalPadding, vertical = 10.dp
                         )
+                ) {
+                    val verticalPaddingInside = 4.dp
+                    LazyColumn {
+                        item {
+                            Spacer(modifier = Modifier.height(5.dp))
+                        }
+                        if (dangerousInteractions.isNotEmpty()) {
+                            items(dangerousInteractions) {
+                                InteractionRow(
+                                    text = it,
+                                    interactionType = InteractionType.DANGEROUS,
+                                    verticalPaddingInside = verticalPaddingInside,
+                                )
+                            }
+                        }
+                        if (unsafeInteractions.isNotEmpty()) {
+                            items(unsafeInteractions) {
+                                InteractionRow(
+                                    text = it, interactionType = InteractionType.UNSAFE,
+                                    verticalPaddingInside = verticalPaddingInside,
+                                )
+                            }
+                        }
+                        if (uncertainInteractions.isNotEmpty()) {
+                            items(uncertainInteractions) {
+                                InteractionRow(
+                                    text = it, interactionType = InteractionType.UNCERTAIN,
+                                    verticalPaddingInside = verticalPaddingInside,
+                                )
+                            }
+                        }
                     }
+                    InteractionExplanationButton(
+                        substanceURL = substanceUrl,
+                        navigateToURL = navigateToURL
+                    )
                 }
             }
             AnimatedVisibility(visible = isShowingAlert) {
@@ -243,12 +245,10 @@ fun CheckInteractionsScreen(
 fun InteractionRow(
     text: String,
     interactionType: InteractionType,
-    verticalSpaceBetween: Dp = 1.dp,
     verticalPaddingInside: Dp = 2.dp
 ) {
     Surface(
         modifier = Modifier
-            .padding(vertical = verticalSpaceBetween)
             .fillMaxWidth(),
         shape = RectangleShape,
         color = interactionType.color

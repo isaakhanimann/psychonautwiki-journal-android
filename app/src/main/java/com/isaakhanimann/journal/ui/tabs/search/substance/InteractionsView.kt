@@ -88,7 +88,7 @@ fun InteractionExplanationButton(substanceURL: String, navigateToURL: (url: Stri
             contentDescription = "Open Link"
         )
         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        Text("Interaction Explanations")
+        Text("Explanations")
     }
 }
 
@@ -100,8 +100,7 @@ fun InteractionRowSubstanceScreen(
 ) {
     Surface(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 1.dp),
+            .fillMaxWidth(),
         shape = RectangleShape,
         color = interactionType.color
     ) {
