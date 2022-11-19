@@ -79,7 +79,7 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         args = listOf(navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType })
     )
 
-    object URLRouter : ArgumentRouter(
+    object URLRouterOnSearchTab : ArgumentRouter(
         route = "$ROUTE_START_URL{$URL_KEY}",
         args = listOf(navArgument(URL_KEY) { type = NavType.StringType })
     )
@@ -89,7 +89,7 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         args = listOf(navArgument(URL_KEY) { type = NavType.StringType })
     )
 
-    object SaferTabURLRouter : ArgumentRouter(
+    object URLRouterOnSaferTab : ArgumentRouter(
         route = "$ROUTE_START_SAFER_TAB_URL{$URL_KEY}",
         args = listOf(navArgument(URL_KEY) { type = NavType.StringType })
     )
@@ -195,7 +195,7 @@ fun NavController.navigateToSubstanceScreen(substanceName: String) {
     navigate(ROUTE_START_SUBSTANCES + substanceName)
 }
 
-fun NavController.navigateToURLScreen(url: String) {
+fun NavController.navigateToURLScreenOnSearchTab(url: String) {
     val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
     navigate(ROUTE_START_URL + encodedUrl)
 }

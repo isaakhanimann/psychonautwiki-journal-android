@@ -333,7 +333,7 @@ fun ChooseDoseScreen(
                     Text("Safer Plugging")
                 }
             }
-            if (roaDose?.shouldDefinitelyUseVolumetricDosing == true) {
+            if (roaDose?.shouldUseVolumetricDosing == true) {
                 TextButton(onClick = navigateToVolumetricDosingScreen) {
                     Text(text = "Use Volumetric Liquid Dosing")
                 }

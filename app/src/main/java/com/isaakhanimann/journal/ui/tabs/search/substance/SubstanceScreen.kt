@@ -42,8 +42,8 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.Category
 import com.isaakhanimann.journal.data.substances.classes.SubstanceWithCategories
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
 import com.isaakhanimann.journal.ui.doseDisclaimer
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.ToleranceSection
@@ -220,6 +220,20 @@ fun SubstanceScreen(
                         }
                         VerticalSpace()
                         Text(text = doseDisclaimer)
+                        VerticalSpace()
+                        if (substance.roas.any { it.roaDose?.shouldUseVolumetricDosing == true }) {
+                            Divider()
+                            TextButton(onClick = navigateToVolumetricDosingScreen) {
+                                Icon(
+                                    Icons.Outlined.Info,
+                                    contentDescription = "Info",
+                                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                                )
+                                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                                Text("Volumetric Dosing")
+                            }
+                        }
+                        Divider()
                         TextButton(onClick = navigateToDosageExplanationScreen) {
                             Icon(
                                 Icons.Outlined.Info,
@@ -229,6 +243,7 @@ fun SubstanceScreen(
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                             Text("Dosage Classification")
                         }
+
                     }
                 }
             }
@@ -406,7 +421,7 @@ fun SubstanceScreen(
                 }
             }
             val firstRoa = substance.roas.firstOrNull()
-            val useVolumetric = firstRoa?.roaDose?.shouldDefinitelyUseVolumetricDosing == true
+            val useVolumetric = firstRoa?.roaDose?.shouldUseVolumetricDosing == true
             if (substance.isHallucinogen || substance.isStimulant || useVolumetric) {
                 CollapsibleSection(title = "See Also") {
                     Column {
@@ -423,15 +438,6 @@ fun SubstanceScreen(
                             TextButton(onClick = navigateToSaferStimulantsScreen) {
                                 Text(
                                     text = "Safer Stimulant Use",
-                                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                                )
-                            }
-                            Divider()
-                        }
-                        if (useVolumetric) {
-                            TextButton(onClick = navigateToVolumetricDosingScreen) {
-                                Text(
-                                    text = "Volumetric Liquid Dosing",
                                     modifier = Modifier.padding(horizontal = horizontalPadding)
                                 )
                             }

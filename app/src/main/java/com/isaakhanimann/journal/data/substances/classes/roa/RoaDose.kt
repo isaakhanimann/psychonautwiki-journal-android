@@ -43,12 +43,12 @@ data class RoaDose(
         }
     }
 
-    val shouldDefinitelyUseVolumetricDosing: Boolean
+    val shouldUseVolumetricDosing: Boolean
         get() {
             if (units == "µg") return true
             return if (units == "mg") {
-                val sample = common?.min
-                sample != null && sample < 15
+                val sample = common?.min ?: light?.max ?: common?.max ?: strong?.min ?: strong?.max
+                sample != null && sample < 40
             } else {
                 false
             }

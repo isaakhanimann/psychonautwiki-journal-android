@@ -26,6 +26,7 @@ import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
+import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
 import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstance
 import com.isaakhanimann.journal.ui.tabs.search.custom.EditCustomSubstance
@@ -61,13 +62,13 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
                 navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
                 navigateToExplainTimeline = navController::navigateToExplainTimelineOnSearchTab,
                 navigateToCategoryScreen = navController::navigateToCategoryScreen,
-                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
-                navigateToArticle = navController::navigateToURLScreen
+                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreenOnSearchTab,
+                navigateToArticle = navController::navigateToURLScreenOnSearchTab
             )
         }
         composableWithTransitions(
-            ArgumentRouter.URLRouter.route,
-            arguments = ArgumentRouter.URLRouter.args
+            ArgumentRouter.URLRouterOnSearchTab.route,
+            arguments = ArgumentRouter.URLRouterOnSearchTab.args
         ) { backStackEntry ->
             val args = backStackEntry.arguments!!
             val url = args.getString(URL_KEY)!!
@@ -77,7 +78,7 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
             ArgumentRouter.CategoryRouter.route,
             arguments = ArgumentRouter.CategoryRouter.args
         ) {
-            CategoryScreen(navigateToURL = navController::navigateToURLScreen)
+            CategoryScreen(navigateToURL = navController::navigateToURLScreenOnSearchTab)
         }
         composableWithTransitions(
             ArgumentRouter.EditCustomRouter.route,
@@ -89,6 +90,14 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
             AddCustomSubstance(
                 navigateBack = navController::popBackStack
             )
+        }
+        composableWithTransitions(NoArgumentRouter.VolumetricDosingOnSearchTabRouter.route) {
+            VolumetricDosingScreen(
+                navigateToVolumetricLiquidDosingArticle = {
+                    navController.navigateToURLScreenOnSearchTab(
+                        "https://psychonautwiki.org/wiki/Volumetric_liquid_dosing"
+                    )
+                })
         }
         composableWithTransitions(NoArgumentRouter.ExplainTimelineOnSearchTabRouter.route) { ExplainTimelineScreen() }
     }

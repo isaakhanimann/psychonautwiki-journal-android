@@ -221,7 +221,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         dose = dose,
                     )
                 },
-                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
+                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreenOnSaferTab,
                 navigateToSaferSniffingScreen = navController::navigateToSaferSniffing,
                 navigateToURL = navController::navigateToURLInJournalTab
             )

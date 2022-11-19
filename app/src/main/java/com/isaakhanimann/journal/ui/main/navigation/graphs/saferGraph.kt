@@ -43,7 +43,7 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
             SaferUseScreen(
                 navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen,
                 navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
-                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreen,
+                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreenOnSaferTab,
                 navigateToDosageGuideScreen = navController::navigateToDosageGuideScreen,
                 navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreen,
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
@@ -69,8 +69,8 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
             )
         }
         composableWithTransitions(
-            ArgumentRouter.SaferTabURLRouter.route,
-            arguments = ArgumentRouter.SaferTabURLRouter.args
+            ArgumentRouter.URLRouterOnSaferTab.route,
+            arguments = ArgumentRouter.URLRouterOnSaferTab.args
         ) { backStackEntry ->
             val args = backStackEntry.arguments!!
             val url = args.getString(URL_KEY)!!
@@ -80,13 +80,13 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.DosageGuideRouter.route) {
             DoseGuideScreen(
                 navigateToDoseClassification = navController::navigateToDosageExplanationScreen,
-                navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreen,
+                navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreenOnSaferTab,
                 navigateToPWDosageArticle = {
                     navController.navigateToURLInSaferTab(url = "https://psychonautwiki.org/wiki/Dosage")
                 }
             )
         }
-        composableWithTransitions(NoArgumentRouter.VolumetricDosingRouter.route) {
+        composableWithTransitions(NoArgumentRouter.VolumetricDosingOnSaferTabRouter.route) {
             VolumetricDosingScreen(
                 navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLInSaferTab("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
         }
