@@ -59,8 +59,8 @@ fun BarChart(buckets: List<List<ColorCount>>, startDateText: String) {
                 val halfLineHeight = half.toFloat() * canvasHeightOuter / maxCount
                 val halfLabelHeight = labelHeight / 2
                 val numLettersInLabel = maxCount.toString().length
-                val labelWidth = (numLettersInLabel + 1) * labelHeight
-                val spaceBetweenLabelAndChart = labelHeight
+                val labelWidth = (numLettersInLabel + 1) * labelHeight * 0.6f
+                val spaceBetweenLabelAndChart = labelHeight * 0.5f
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
                         half.toString(),
