@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Article
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -321,6 +322,12 @@ fun ChooseDoseScreen(
             }
             if (administrationRoute == AdministrationRoute.INSUFFLATED) {
                 TextButton(onClick = navigateToSaferSniffingScreen) {
+                    Icon(
+                        Icons.Outlined.Info,
+                        contentDescription = "Info",
+                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(text = "Safer Sniffing")
                 }
             } else if (administrationRoute == AdministrationRoute.RECTAL) {
@@ -335,7 +342,13 @@ fun ChooseDoseScreen(
             }
             if (roaDose?.shouldUseVolumetricDosing == true) {
                 TextButton(onClick = navigateToVolumetricDosingScreen) {
-                    Text(text = "Use Volumetric Liquid Dosing")
+                    Icon(
+                        Icons.Outlined.Info,
+                        contentDescription = "Info",
+                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(text = "Volumetric Liquid Dosing")
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
