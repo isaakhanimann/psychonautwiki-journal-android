@@ -42,7 +42,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.Category
 import com.isaakhanimann.journal.data.substances.classes.SubstanceWithCategories
-import com.isaakhanimann.journal.ui.doseDisclaimer
+import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
@@ -219,7 +219,7 @@ fun SubstanceScreen(
                             Divider()
                         }
                         VerticalSpace()
-                        Text(text = doseDisclaimer)
+                        Text(text = DOSE_DISCLAIMER)
                         VerticalSpace()
                         if (substance.roas.any { it.roaDose?.shouldUseVolumetricDosing == true }) {
                             Divider()

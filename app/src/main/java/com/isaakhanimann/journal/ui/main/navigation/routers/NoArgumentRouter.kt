@@ -41,6 +41,9 @@ sealed class NoArgumentRouter(val route: String) {
 
     object DosageGuideRouter : NoArgumentRouter(route = "dosageGuide")
     object VolumetricDosingOnSaferTabRouter : NoArgumentRouter(route = "volumetricDosingOnSaferTab")
+    object VolumetricDosingOnJournalTabRouter :
+        NoArgumentRouter(route = "volumetricDosingOnJournalTab")
+
     object VolumetricDosingOnSearchTabRouter :
         NoArgumentRouter(route = "volumetricDosingOnSearchTab")
 
@@ -117,6 +120,10 @@ fun NavController.navigateToDosageGuideScreen() {
 
 fun NavController.navigateToVolumetricDosingScreenOnSaferTab() {
     navigate(NoArgumentRouter.VolumetricDosingOnSaferTabRouter.route)
+}
+
+fun NavController.navigateToVolumetricDosingScreenOnJournalTab() {
+    navigate(NoArgumentRouter.VolumetricDosingOnJournalTabRouter.route)
 }
 
 fun NavController.navigateToVolumetricDosingScreenOnSearchTab() {

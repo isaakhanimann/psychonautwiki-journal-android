@@ -21,6 +21,7 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
+import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.tabs.safer.*
@@ -87,7 +88,11 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
         }
         composableWithTransitions(NoArgumentRouter.VolumetricDosingOnSaferTabRouter.route) {
             VolumetricDosingScreen(
-                navigateToVolumetricLiquidDosingArticle = { navController.navigateToURLInSaferTab("https://psychonautwiki.org/wiki/Volumetric_liquid_dosing") })
+                navigateToVolumetricLiquidDosingArticle = {
+                    navController.navigateToURLInSaferTab(
+                        VOLUMETRIC_DOSE_ARTICLE_URL
+                    )
+                })
         }
         composableWithTransitions(NoArgumentRouter.ReagentTestingRouter.route) {
             ReagentTestingScreen(

@@ -44,7 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
-import com.isaakhanimann.journal.ui.doseDisclaimer
+import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -52,13 +52,13 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun ChooseDoseScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
-    navigateToVolumetricDosingScreen: () -> Unit,
+    navigateToVolumetricDosingScreenOnSaferTab: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
     ChooseDoseScreen(
-        navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
+        navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreenOnSaferTab,
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         substanceName = viewModel.substance.name,
         roaDose = viewModel.roaDose,
@@ -214,7 +214,7 @@ fun ChooseDoseScreen(
                         vertical = 10.dp
                     )
                 ) {
-                    Text(text = doseDisclaimer)
+                    Text(text = DOSE_DISCLAIMER)
                     Spacer(modifier = Modifier.height(5.dp))
                     if (roaDose != null) {
                         RoaDoseView(roaDose = roaDose)

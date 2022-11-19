@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
+import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
@@ -95,7 +96,7 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
             VolumetricDosingScreen(
                 navigateToVolumetricLiquidDosingArticle = {
                     navController.navigateToURLScreenOnSearchTab(
-                        "https://psychonautwiki.org/wiki/Volumetric_liquid_dosing"
+                        VOLUMETRIC_DOSE_ARTICLE_URL
                     )
                 })
         }

@@ -21,6 +21,7 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
+import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
@@ -29,6 +30,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.edit.EditExperienceS
 import com.isaakhanimann.journal.ui.tabs.journal.experience.editingestion.EditIngestionScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
+import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
 
 
@@ -52,6 +54,14 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
             arguments = ArgumentRouter.EditExperienceRouter.args
         ) {
             EditExperienceScreen(navigateBack = navController::popBackStack)
+        }
+        composableWithTransitions(NoArgumentRouter.VolumetricDosingOnJournalTabRouter.route) {
+            VolumetricDosingScreen(
+                navigateToVolumetricLiquidDosingArticle = {
+                    navController.navigateToURLInJournalTab(
+                        VOLUMETRIC_DOSE_ARTICLE_URL
+                    )
+                })
         }
         composableWithTransitions(
             ArgumentRouter.ExperienceRouter.route,
