@@ -193,7 +193,7 @@ fun SubstanceScreen(
                     Column(Modifier.padding(horizontal = horizontalPadding)) {
                         if (substance.dosageRemark != null) {
                             Text(text = substance.dosageRemark)
-                            VerticalSpace()
+                            Spacer(modifier = Modifier.height(10.dp))
                             Divider()
                         }
                         roasWithDosesDefined.forEach { roa ->
