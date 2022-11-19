@@ -57,7 +57,7 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
             arguments = ArgumentRouter.SubstanceRouter.args,
         ) {
             SubstanceScreen(
-                navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreen,
+                navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreenOnSearchTab,
                 navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
                 navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
                 navigateToExplainTimeline = navController::navigateToExplainTimelineOnSearchTab,

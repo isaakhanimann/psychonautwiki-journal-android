@@ -45,7 +45,7 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
                 navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
                 navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreenOnSaferTab,
                 navigateToDosageGuideScreen = navController::navigateToDosageGuideScreen,
-                navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreen,
+                navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreenOnSaferTab,
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
                 navigateToSettings = navController::navigateToSettings,
                 navigateToURL = navController::navigateToURLInSaferTab,
@@ -63,7 +63,7 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
                 navigateToComboSettings = navController::navigateToComboSettings
             )
         }
-        composableWithTransitions(NoArgumentRouter.DosageExplanationRouter.route) { DoseExplanationScreen() }
+        composableWithTransitions(NoArgumentRouter.DosageExplanationRouterOnSaferTab.route) { DoseExplanationScreen() }
         composableWithTransitions(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
             RouteExplanationScreen(
                 navigateToURL = navController::navigateToURLInSaferTab
@@ -80,7 +80,7 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
         composableWithTransitions(NoArgumentRouter.DosageGuideRouter.route) {
             DoseGuideScreen(
-                navigateToDoseClassification = navController::navigateToDosageExplanationScreen,
+                navigateToDoseClassification = navController::navigateToDosageExplanationScreenOnSaferTab,
                 navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreenOnSaferTab,
                 navigateToPWDosageArticle = {
                     navController.navigateToURLInSaferTab(url = "https://psychonautwiki.org/wiki/Dosage")

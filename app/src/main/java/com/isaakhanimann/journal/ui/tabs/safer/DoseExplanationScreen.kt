@@ -26,9 +26,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
-import com.isaakhanimann.journal.ui.tabs.search.substance.SectionText
+import com.isaakhanimann.journal.ui.tabs.search.substance.CollapsibleSection
+import com.isaakhanimann.journal.ui.tabs.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,15 +48,27 @@ fun DoseExplanationScreen() {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
-                .padding(horizontal = horizontalPadding)
         ) {
-            SectionText(
-                text = "The range and intensity of the effects of a substance depends on upon a number of factors. These include route of administration, dosage, set and setting, and personal and environmental factors.\n" +
-                        "Effective doses can be divided into five categories: threshold, light, common, strong, and heavy."
-            )
+            VerticalSpace()
+            Card(modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)) {
+                Text(
+                    text = "The range and intensity of the effects of a substance depends on upon a number of factors. These include route of administration, dosage, set and setting, and personal and environmental factors.\n" +
+                            "Effective doses can be divided into five categories: threshold, light, common, strong, and heavy.",
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier
+                        .padding(vertical = 10.dp, horizontal = horizontalPadding)
+                )
+            }
             DoseClass.values().forEach {
-                Text(text = it.name, style = MaterialTheme.typography.titleMedium)
-                SectionText(it.description)
+                CollapsibleSection(title = it.name) {
+                    Text(
+                        text = it.description,
+                        textAlign = TextAlign.Justify,
+                        modifier = Modifier
+                            .padding(bottom = 10.dp)
+                            .padding(horizontal = horizontalPadding)
+                    )
+                }
             }
         }
     }

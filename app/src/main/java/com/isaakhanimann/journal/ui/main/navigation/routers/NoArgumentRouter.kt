@@ -30,7 +30,12 @@ sealed class NoArgumentRouter(val route: String) {
         NoArgumentRouter(route = "explainTimelineOnJournalTab")
 
     object SettingsRouter : NoArgumentRouter(route = "settings")
-    object DosageExplanationRouter : NoArgumentRouter(route = "dosageExplanation")
+    object DosageExplanationRouterOnSaferTab :
+        NoArgumentRouter(route = "dosageExplanationOnSaferTab")
+
+    object DosageExplanationRouterOnSearchTab :
+        NoArgumentRouter(route = "dosageExplanationOnSearchTab")
+
     object AdministrationRouteExplanationRouter :
         NoArgumentRouter(route = "administrationRouteExplanation")
 
@@ -94,8 +99,12 @@ fun NavController.navigateToSettings() {
     navigate(NoArgumentRouter.SettingsRouter.route)
 }
 
-fun NavController.navigateToDosageExplanationScreen() {
-    navigate(NoArgumentRouter.DosageExplanationRouter.route)
+fun NavController.navigateToDosageExplanationScreenOnSaferTab() {
+    navigate(NoArgumentRouter.DosageExplanationRouterOnSaferTab.route)
+}
+
+fun NavController.navigateToDosageExplanationScreenOnSearchTab() {
+    navigate(NoArgumentRouter.DosageExplanationRouterOnSearchTab.route)
 }
 
 fun NavController.navigateToAdministrationRouteExplanationScreen() {

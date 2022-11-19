@@ -28,6 +28,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.ExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.edit.EditExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.editingestion.EditIngestionScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
+import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 
 
 fun NavGraphBuilder.journalGraph(navController: NavController) {
@@ -76,5 +77,6 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
         }
         addIngestionGraph(navController)
         composableWithTransitions(NoArgumentRouter.ExplainTimelineOnJournalTabRouter.route) { ExplainTimelineScreen() }
+        composableWithTransitions(NoArgumentRouter.DosageExplanationRouterOnSearchTab.route) { DoseExplanationScreen() }
     }
 }
