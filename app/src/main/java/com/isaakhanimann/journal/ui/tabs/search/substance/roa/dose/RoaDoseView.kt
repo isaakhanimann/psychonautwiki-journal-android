@@ -64,6 +64,8 @@ fun RoaDoseView(
         val commonColor = DoseClass.COMMON.getComposeColor(isDarkTheme)
         val strongColor = DoseClass.STRONG.getComposeColor(isDarkTheme)
         val heavyColor = DoseClass.HEAVY.getComposeColor(isDarkTheme)
+        val labelStyle = MaterialTheme.typography.labelSmall
+        val numberStyle = MaterialTheme.typography.labelLarge
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.textBrush(
@@ -74,15 +76,17 @@ fun RoaDoseView(
                 )
             )
         ) {
-            Text(text = roaDose.threshold?.toReadableString() ?: "..")
-            Text("thresh  ", style = MaterialTheme.typography.bodySmall)
+            Text(text = roaDose.threshold?.toReadableString() ?: "..", style = numberStyle)
+            Text("thresh  ", style = labelStyle)
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("-", color = lightColor)
-            Text("light", style = MaterialTheme.typography.bodySmall, color = lightColor)
+            Text("light", style = labelStyle, color = lightColor)
         }
         Text(
-            text = lightMaxOrCommonMin?.toReadableString() ?: "..", modifier = Modifier.textBrush(
+            text = lightMaxOrCommonMin?.toReadableString() ?: "..",
+            style = numberStyle,
+            modifier = Modifier.textBrush(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
                         lightColor, commonColor
@@ -91,11 +95,12 @@ fun RoaDoseView(
             )
         )
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("-", color = commonColor)
-            Text("common", style = MaterialTheme.typography.bodySmall, color = commonColor)
+            Text("-", color = commonColor, style = numberStyle)
+            Text("common", style = labelStyle, color = commonColor)
         }
         Text(
             text = commonMaxOrStrongMin?.toReadableString() ?: "..",
+            style = numberStyle,
             modifier = Modifier.textBrush(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
@@ -105,11 +110,12 @@ fun RoaDoseView(
             )
         )
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("-", color = strongColor)
-            Text("strong", style = MaterialTheme.typography.bodySmall, color = strongColor)
+            Text("-", color = strongColor, style = numberStyle)
+            Text("strong", style = labelStyle, color = strongColor)
         }
         Text(
             text = strongMaxOrHeavy?.toReadableString() ?: "..",
+            style = numberStyle,
             modifier = Modifier.textBrush(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
@@ -119,9 +125,9 @@ fun RoaDoseView(
             )
         )
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("-", color = heavyColor)
-            Text("heavy", style = MaterialTheme.typography.bodySmall, color = heavyColor)
+            Text("-", color = heavyColor, style = numberStyle)
+            Text("heavy", style = labelStyle, color = heavyColor)
         }
-        Text(text = roaDose.units ?: "")
+        Text(text = roaDose.units ?: "", style = numberStyle)
     }
 }
