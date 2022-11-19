@@ -18,15 +18,11 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Preview
@@ -46,18 +42,11 @@ fun UnknownDoseDialog(
     AlertDialog(
         onDismissRequest = dismiss,
         title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning")
-                Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                Text(text = "Unknown Danger", style = MaterialTheme.typography.headlineSmall)
-            }
+            Text(text = "Don't know the dose?", style = MaterialTheme.typography.headlineSmall)
         },
         text = {
             Text(
-                "Administering the wrong dosage of a substance can lead to negative experiences such as extreme anxiety, uncomfortable physical side effects, hospitalization, or (in extreme cases) death.\n" +
-                        "Read the dosage guide."
+                "You can log an unknown dose. But note that administering the wrong dosage of a substance can lead to negative experiences such as extreme anxiety, uncomfortable physical side effects, hospitalization, or (in extreme cases) death."
             )
         },
         confirmButton = {
@@ -67,7 +56,7 @@ fun UnknownDoseDialog(
                     useUnknownDoseAndNavigate()
                 }
             ) {
-                Text("Continue")
+                Text("Log Unknown Dose")
             }
         },
         dismissButton = {

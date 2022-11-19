@@ -28,6 +28,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
+import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -131,7 +132,24 @@ fun CustomChooseDose(
     units: String
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text(administrationRoute.displayText + " " + substanceName + " Dosage") }) },
+        topBar = {
+            TopAppBar(title = { Text(administrationRoute.displayText + " " + substanceName + " Dosage") },
+                actions = {
+                    var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
+                    IconButton(onClick = { isShowingUnknownDoseDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Default.QuestionMark,
+                            contentDescription = "Log Unknown Dose"
+                        )
+                    }
+                    AnimatedVisibility(visible = isShowingUnknownDoseDialog) {
+                        UnknownDoseDialog(
+                            useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
+                            dismiss = { isShowingUnknownDoseDialog = false }
+                        )
+                    }
+                })
+        },
         floatingActionButton = {
             if (isValidDose) {
                 ExtendedFloatingActionButton(
@@ -222,19 +240,6 @@ fun CustomChooseDose(
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text("Safer Plugging")
                 }
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
-            TextButton(
-                onClick = { isShowingUnknownDoseDialog = true },
-            ) {
-                Text("Use Unknown Dose")
-            }
-            if (isShowingUnknownDoseDialog) {
-                UnknownDoseDialog(
-                    useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
-                    dismiss = { isShowingUnknownDoseDialog = false }
-                )
             }
         }
     }

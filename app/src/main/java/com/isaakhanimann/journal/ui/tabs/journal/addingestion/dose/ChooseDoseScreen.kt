@@ -28,6 +28,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
+import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
@@ -52,18 +53,19 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun ChooseDoseScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
-    navigateToVolumetricDosingScreenOnSaferTab: () -> Unit,
+    navigateToVolumetricDosingScreenOnJournalTab: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
     ChooseDoseScreen(
-        navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreenOnSaferTab,
+        navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreenOnJournalTab,
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         substanceName = viewModel.substance.name,
         roaDose = viewModel.roaDose,
         administrationRoute = viewModel.administrationRoute,
         doseText = viewModel.doseText,
+        doseRemark = viewModel.substance.dosageRemark,
         onChangeDoseText = viewModel::onDoseTextChange,
         isValidDose = viewModel.isValidDose,
         isEstimate = viewModel.isEstimate,
@@ -110,6 +112,7 @@ fun ChooseDoseScreenPreview(
         roaDose = roaDose,
         administrationRoute = AdministrationRoute.INSUFFLATED,
         doseText = "5",
+        doseRemark = "This is a dose remark",
         onChangeDoseText = {},
         isValidDose = true,
         isEstimate = false,
@@ -135,6 +138,7 @@ fun ChooseDoseScreenPreview2() {
         navigateToVolumetricDosingScreen = {},
         navigateToSaferSniffingScreen = {},
         substanceName = "Example Substance",
+        doseRemark = null,
         roaDose = null,
         administrationRoute = AdministrationRoute.ORAL,
         doseText = "5",
@@ -165,6 +169,7 @@ fun ChooseDoseScreen(
     substanceName: String,
     roaDose: RoaDose?,
     administrationRoute: AdministrationRoute,
+    doseRemark: String?,
     doseText: String,
     onChangeDoseText: (String) -> Unit,
     isValidDose: Boolean,
@@ -183,7 +188,23 @@ fun ChooseDoseScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("$substanceName ${administrationRoute.displayText} Dose") })
+            TopAppBar(
+                title = { Text("$substanceName ${administrationRoute.displayText} Dose") },
+                actions = {
+                    var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
+                    IconButton(onClick = { isShowingUnknownDoseDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Default.QuestionMark,
+                            contentDescription = "Log Unknown Dose"
+                        )
+                    }
+                    AnimatedVisibility(visible = isShowingUnknownDoseDialog) {
+                        UnknownDoseDialog(
+                            useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
+                            dismiss = { isShowingUnknownDoseDialog = false }
+                        )
+                    }
+                })
         },
         floatingActionButton = {
             if (isValidDose) {
@@ -200,6 +221,7 @@ fun ChooseDoseScreen(
             }
         }
     ) { padding ->
+
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -214,7 +236,9 @@ fun ChooseDoseScreen(
                         vertical = 10.dp
                     )
                 ) {
-                    Text(text = DOSE_DISCLAIMER)
+                    if (doseRemark != null && doseRemark.isNotBlank()) {
+                        Text(text = doseRemark)
+                    }
                     Spacer(modifier = Modifier.height(5.dp))
                     if (roaDose != null) {
                         RoaDoseView(roaDose = roaDose)
@@ -232,6 +256,7 @@ fun ChooseDoseScreen(
                             )
                         }
                     }
+                    Text(text = DOSE_DISCLAIMER)
                 }
             }
             Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
@@ -242,7 +267,11 @@ fun ChooseDoseScreen(
                     )
                 ) {
                     if (roaDose != null) {
-                        CurrentDoseClassInfo(currentDoseClass, roaDose)
+                        AnimatedVisibility(visible = currentDoseClass != null) {
+                            if (currentDoseClass != null) {
+                                CurrentDoseClassInfo(currentDoseClass, roaDose)
+                            }
+                        }
                     }
                     val focusManager = LocalFocusManager.current
                     val textStyle = MaterialTheme.typography.titleMedium
@@ -304,7 +333,12 @@ fun ChooseDoseScreen(
                 }
             }
             AnimatedVisibility(visible = isValidDose) {
-                Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                Card(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 4.dp
+                    )
+                ) {
                     Column(
                         modifier = Modifier.padding(
                             horizontal = horizontalPadding,
@@ -351,19 +385,7 @@ fun ChooseDoseScreen(
                     Text(text = "Volumetric Liquid Dosing")
                 }
             }
-            Spacer(modifier = Modifier.weight(1f))
-            var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
-            TextButton(
-                onClick = { isShowingUnknownDoseDialog = true },
-            ) {
-                Text("Use Unknown Dose")
-            }
-            if (isShowingUnknownDoseDialog) {
-                UnknownDoseDialog(
-                    useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
-                    dismiss = { isShowingUnknownDoseDialog = false }
-                )
-            }
         }
+
     }
 }
