@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Biotech
 import androidx.compose.material.icons.outlined.HealthAndSafety
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -234,6 +235,12 @@ fun SaferUseScreen(
                     onClick = navigateToRouteExplanationScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
+                    Icon(
+                        Icons.Outlined.Info,
+                        contentDescription = "Info",
+                        modifier = Modifier.size(ButtonDefaults.IconSize),
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text("Administration Routes Info")
                 }
                 VerticalSpace()
@@ -296,6 +303,8 @@ fun SaferText(text: String) {
     Text(
         text = text,
         textAlign = TextAlign.Justify,
-        modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 5.dp)
+        modifier = Modifier
+            .padding(horizontal = horizontalPadding)
+            .padding(bottom = 10.dp)
     )
 }
