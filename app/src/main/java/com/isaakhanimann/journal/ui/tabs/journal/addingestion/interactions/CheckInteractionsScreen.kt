@@ -165,9 +165,6 @@ fun CheckInteractionsScreen(
                 ) {
                     val verticalPaddingInside = 4.dp
                     LazyColumn {
-                        item {
-                            Spacer(modifier = Modifier.height(5.dp))
-                        }
                         if (dangerousInteractions.isNotEmpty()) {
                             items(dangerousInteractions) {
                                 InteractionRow(
