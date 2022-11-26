@@ -48,7 +48,7 @@ data class RoaDose(
             if (units == "µg") return true
             return if (units == "mg") {
                 val sample = common?.min ?: light?.max ?: common?.max ?: strong?.min ?: strong?.max
-                sample != null && sample < 40
+                sample != null && sample < 15
             } else {
                 false
             }
