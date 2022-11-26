@@ -46,7 +46,13 @@ import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 fun SubstanceCompanionScreen(
     viewModel: SubstanceCompanionViewModel = hiltViewModel()
 ) {
-    viewModel.thisCompanionFlow.collectAsState().value?.also { companion ->
+    val companion = viewModel.thisCompanionFlow.collectAsState().value
+    if (companion == null) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {}
+    } else {
         SubstanceCompanionScreen(
             substanceCompanion = companion,
             ingestionBursts = viewModel.ingestionBurstsFlow.collectAsState().value,

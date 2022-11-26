@@ -48,6 +48,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.Instant
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExperienceScreen(
     viewModel: OneExperienceViewModel = hiltViewModel(),
@@ -57,7 +58,14 @@ fun ExperienceScreen(
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
 ) {
-    viewModel.oneExperienceScreenModelFlow.collectAsState().value?.also { oneExperienceScreenModel ->
+    val oneExperienceScreenModel = viewModel.oneExperienceScreenModelFlow.collectAsState().value
+    if (oneExperienceScreenModel == null) {
+        // without this the screen would glitch when navigating
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {}
+    } else {
         ExperienceScreen(
             oneExperienceScreenModel = oneExperienceScreenModel,
             addIngestion = navigateToAddIngestionSearch,
