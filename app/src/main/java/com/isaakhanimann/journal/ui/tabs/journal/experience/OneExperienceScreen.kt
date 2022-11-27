@@ -48,7 +48,6 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.Instant
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExperienceScreen(
     viewModel: OneExperienceViewModel = hiltViewModel(),

@@ -19,7 +19,10 @@
 package com.isaakhanimann.journal.data.substances.repositories
 
 import android.content.Context
-import com.isaakhanimann.journal.data.substances.classes.*
+import com.isaakhanimann.journal.data.substances.classes.Category
+import com.isaakhanimann.journal.data.substances.classes.Substance
+import com.isaakhanimann.journal.data.substances.classes.SubstanceFile
+import com.isaakhanimann.journal.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.journal.data.substances.parse.SubstanceParserInterface
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -77,105 +80,4 @@ class SubstanceRepository @Inject constructor(
             categories = substanceFile.categories.filter { substance.categories.contains(it.name) }
         )
     }
-
-    override suspend fun getAllInteractions(
-        type: InteractionType,
-        substanceName: String,
-        originalInteractions: List<String>,
-        interactionsToFilterOut: List<String>,
-        categories: List<String>
-    ): List<String> {
-        val otherInteractions = substanceFile.substances.filter { sub ->
-            val interactions =
-                sub.interactions?.getInteractions(interactionType = type) ?: emptyList()
-            val isDirectMatch = interactions.contains(substanceName)
-            val isClassMatch = categories.any { categoryName ->
-                interactions.any { interactionName ->
-                    interactionName.contains(categoryName, ignoreCase = true)
-                }
-            }
-            isDirectMatch || isClassMatch
-        }.map { it.name }
-        val tooManyInteractions =
-            (replaceSubstitutedAmphetaminesAndSerotoninReleasers(originalInteractions) + otherInteractions).distinct()
-        return tooManyInteractions.filter {
-            !interactionsToFilterOut.contains(it)
-        }
-    }
-
-    private fun replaceSubstitutedAmphetaminesAndSerotoninReleasers(interactions: List<String>): List<String> {
-        return interactions.flatMap { name ->
-            when (name) {
-                "Substituted amphetamines" -> {
-                    return@flatMap substitutedAmphetamines
-                }
-                "Serotonin releasers" -> {
-                    return@flatMap serotoninReleasers
-                }
-                else -> {
-                    return@flatMap listOf(name)
-                }
-            }
-        }.distinct()
-    }
-
-    private val serotoninReleasers = listOf(
-        "MDMA",
-        "MDA",
-        "Mephedrone"
-    )
-
-    private val substitutedAmphetamines = listOf(
-        "Amphetamine",
-        "Methamphetamine",
-        "Ethylamphetamine",
-        "Propylamphetamine",
-        "Isopropylamphetamine",
-        "Bromo-DragonFLY",
-        "Lisdexamfetamine",
-        "Clobenzorex",
-        "Dimethylamphetamine",
-        "Selegiline",
-        "Benzphetamine",
-        "Ortetamine",
-        "3-Methylamphetamine",
-        "4-Methylamphetamine",
-        "4-MMA",
-        "Xylopropamine",
-        "ß-methylamphetamine",
-        "3-phenylmethamphetamine",
-        "2-FA",
-        "2-FMA",
-        "2-FEA",
-        "3-FA",
-        "3-FMA",
-        "3-FEA",
-        "Fenfluramine",
-        "Norfenfluramine",
-        "4-FA",
-        "4-FMA",
-        "4-CA",
-        "4-BA",
-        "4-IA",
-        "DCA",
-        "4-HA",
-        "4-HMA",
-        "3,4-DHA",
-        "OMA",
-        "3-MA",
-        "MMMA",
-        "MMA",
-        "PMA",
-        "PMMA",
-        "PMEA",
-        "4-ETA",
-        "TMA-2",
-        "TMA-6",
-        "4-MTA",
-        "5-API",
-        "Cathine",
-        "Phenmetrazine",
-        "3-FPM",
-        "Prolintane"
-    )
 }

@@ -40,9 +40,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CheckInteractionsViewModel @Inject constructor(
-    private val substanceRepo: SubstanceRepository,
+    substanceRepo: SubstanceRepository,
     private val experienceRepo: ExperienceRepository,
     private val combinationSettingsStorage: CombinationSettingsStorage,
+    private val interactionChecker: InteractionChecker,
     state: SavedStateHandle,
 ) : ViewModel() {
     val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
@@ -59,59 +60,34 @@ class CheckInteractionsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val foundDangerous = substanceRepo.getAllInteractions(
-                type = InteractionType.DANGEROUS,
-                substanceName = substanceName,
-                originalInteractions = dangerousInteractions,
-                interactionsToFilterOut = emptyList(),
-                categories = substance.categories
-            )
-            val foundUnsafe = substanceRepo.getAllInteractions(
-                type = InteractionType.UNSAFE,
-                substanceName = substanceName,
-                originalInteractions = unsafeInteractions,
-                interactionsToFilterOut = dangerousInteractions,
-                categories = substance.categories
-            )
-            val foundUncertain = substanceRepo.getAllInteractions(
-                type = InteractionType.UNCERTAIN,
-                substanceName = substanceName,
-                originalInteractions = uncertainInteractions,
-                interactionsToFilterOut = dangerousInteractions + unsafeInteractions,
-                categories = substance.categories
-            )
             val twoDaysAgo = Instant.now().minus(2, ChronoUnit.DAYS)
             latestIngestionsOfEverySubstanceSinceTwoDays =
                 experienceRepo.getLatestIngestionOfEverySubstanceSinceDate(twoDaysAgo)
-            checkInteractionsAndMaybeShowAlert(
-                dangerous = foundDangerous,
-                unsafe = foundUnsafe,
-                uncertain = foundUncertain
-            )
+            checkInteractionsAndMaybeShowAlert()
             isSearchingForInteractions = false
         }
     }
 
-    private suspend fun checkInteractionsAndMaybeShowAlert(
-        dangerous: List<String>,
-        unsafe: List<String>,
-        uncertain: List<String>,
-    ) {
-        val dangerousIngestions = getIngestionsWithInteraction(
-            interactions = dangerous
-        ).sortedByDescending { it.time }
-        val unsafeIngestions = getIngestionsWithInteraction(
-            interactions = unsafe
-        )
-        val uncertainIngestions = getIngestionsWithInteraction(
-            interactions = uncertain
-        )
+    private suspend fun checkInteractionsAndMaybeShowAlert() {
+        val filteredIngestions = getIngestionsWithInteraction()
+        val dangerousIngestions =
+            filteredIngestions.filter { it.interactionType == InteractionType.DANGEROUS }
+                .map { it.ingestion }.sortedByDescending { it.time }
+        val unsafeIngestions =
+            filteredIngestions.filter { it.interactionType == InteractionType.UNSAFE }
+                .map { it.ingestion }.sortedByDescending { it.time }
+        val uncertainIngestions =
+            filteredIngestions.filter { it.interactionType == InteractionType.UNCERTAIN }
+                .map { it.ingestion }.sortedByDescending { it.time }
         val enabledExtraInteractions =
             combinationSettingsStorage.substanceInteractors.filter { it.flow.first() }
                 .map { it.name }
-        val dangerousExtras = enabledExtraInteractions.filter { dangerous.contains(it) }
-        val unsafeExtras = enabledExtraInteractions.filter { unsafe.contains(it) }
-        val uncertainExtras = enabledExtraInteractions.filter { uncertain.contains(it) }
+        val dangerousExtras =
+            enabledExtraInteractions.filter { substance.interactions?.dangerous?.contains(it) == true }
+        val unsafeExtras =
+            enabledExtraInteractions.filter { substance.interactions?.unsafe?.contains(it) == true }
+        val uncertainExtras =
+            enabledExtraInteractions.filter { substance.interactions?.uncertain?.contains(it) == true }
         alertInteractionType =
             if (dangerousIngestions.isNotEmpty() || dangerousExtras.isNotEmpty()) {
                 InteractionType.DANGEROUS
@@ -160,28 +136,27 @@ class CheckInteractionsViewModel @Inject constructor(
         isShowingAlert = true
     }
 
-    private fun getIngestionsWithInteraction(
-        interactions: List<String>
-    ): List<Ingestion> {
-        return latestIngestionsOfEverySubstanceSinceTwoDays.filter { ingestion ->
-            val substance = substanceRepo.getSubstance(ingestion.substanceName)
-            val isSubstanceInDangerClass =
-                substance?.categories?.any { categoryName ->
-                    interactions.any { interactionName ->
-                        interactionName.contains(categoryName, ignoreCase = true)
-                    }
-                } ?: false
-            val isWildCardMatch = interactions.map { interaction ->
-                Regex(
-                    pattern = interaction.replace(
-                        oldValue = "x",
-                        newValue = "[\\S]*",
-                        ignoreCase = true
-                    ),
-                    option = RegexOption.IGNORE_CASE
-                ).matches(ingestion.substanceName)
-            }.any { it }
-            return@filter interactions.contains(ingestion.substanceName) || isSubstanceInDangerClass || isWildCardMatch
+    private fun getIngestionsWithInteraction(): List<IngestionInteraction> {
+        return latestIngestionsOfEverySubstanceSinceTwoDays.mapNotNull { ingestion ->
+            val interaction = interactionChecker.getInteractionBetween(
+                aName = substanceName,
+                bName = ingestion.substanceName
+            )
+            if (interaction != null) {
+                return@mapNotNull IngestionInteraction(
+                    ingestion = ingestion,
+                    interactionType = interaction.interactionType
+                )
+            } else {
+                return@mapNotNull null
+            }
         }
     }
+
+    data class IngestionInteraction(
+        val ingestion: Ingestion,
+        val interactionType: InteractionType
+    )
+
+
 }
