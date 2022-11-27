@@ -27,6 +27,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
+import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
@@ -55,6 +56,8 @@ import com.isaakhanimann.journal.ui.theme.verticalPaddingCards
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 @Composable
 fun SubstanceScreen(
@@ -300,6 +303,19 @@ fun SubstanceScreen(
                                 timeString = ingestionTime.getStringOfPattern("HH:mm"),
                                 hasOutline = false,
                             )
+                            val isTimeALotDifferentToNow = ChronoUnit.MINUTES.between(
+                                ingestionTime,
+                                LocalDateTime.now()
+                            ).absoluteValue > 5
+                            Spacer(modifier = Modifier.width(5.dp))
+                            AnimatedVisibility(visible = isTimeALotDifferentToNow) {
+                                IconButton(onClick = { ingestionTime = LocalDateTime.now() }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Update,
+                                        contentDescription = "Reset to Now"
+                                    )
+                                }
+                            }
                         }
                         VerticalSpace()
                         val dataForEffectLines = remember(roasWithDurationsDefined, ingestionTime) {
