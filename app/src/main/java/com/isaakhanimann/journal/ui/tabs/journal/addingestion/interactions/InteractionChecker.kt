@@ -30,10 +30,8 @@ class InteractionChecker @Inject constructor(
     private val substanceRepo: SubstanceRepository,
 ) {
     fun getInteractionBetween(aName: String, bName: String): Interaction? {
-        val substanceA = substanceRepo.getSubstance(aName)
-        val substanceB = substanceRepo.getSubstance(bName)
-        val interactionFromAToB = getInteractionFromAToB(substanceA, substanceB)
-        val interactionFromBToA = getInteractionFromAToB(substanceB, substanceA)
+        val interactionFromAToB = getInteractionFromAToB(aName, bName)
+        val interactionFromBToA = getInteractionFromAToB(bName, aName)
         if (interactionFromAToB != null && interactionFromBToA != null) {
             val isAtoB = interactionFromAToB.dangerCount >= interactionFromBToA.dangerCount
             val interactionType = if (isAtoB) interactionFromAToB else interactionFromBToA
@@ -63,30 +61,35 @@ class InteractionChecker @Inject constructor(
     }
 
     private fun getInteractionFromAToB(
-        substanceA: Substance?,
-        substanceB: Substance?
+        aName: String,
+        bName: String,
     ): InteractionType? {
-        return if (substanceA != null && substanceB != null) {
-            if (doInteractionsContainSubstance(
-                    substanceA.interactions?.dangerous ?: emptyList(),
-                    substanceB
-                )
-            ) {
-                InteractionType.DANGEROUS
-            } else if (doInteractionsContainSubstance(
-                    substanceA.interactions?.unsafe ?: emptyList(),
-                    substanceB
-                )
-            ) {
-                InteractionType.UNSAFE
-            } else if (doInteractionsContainSubstance(
-                    substanceA.interactions?.uncertain ?: emptyList(),
-                    substanceB
-                )
-            ) {
-                InteractionType.UNCERTAIN
+        val substanceA = substanceRepo.getSubstance(aName)
+        return if (substanceA != null) {
+            val dangerousInteractions = substanceA.interactions?.dangerous ?: emptyList()
+            val unsafeInteractions = substanceA.interactions?.unsafe ?: emptyList()
+            val uncertainInteractions = substanceA.interactions?.uncertain ?: emptyList()
+            val substanceB = substanceRepo.getSubstance(bName)
+            if (substanceB != null) {
+                if (doInteractionsContainSubstance(dangerousInteractions, substanceB)) {
+                    InteractionType.DANGEROUS
+                } else if (doInteractionsContainSubstance(unsafeInteractions, substanceB)) {
+                    InteractionType.UNSAFE
+                } else if (doInteractionsContainSubstance(uncertainInteractions, substanceB)) {
+                    InteractionType.UNCERTAIN
+                } else {
+                    null
+                }
             } else {
-                null
+                if (dangerousInteractions.contains(bName)) {
+                    InteractionType.DANGEROUS
+                } else if (unsafeInteractions.contains(bName)) {
+                    InteractionType.UNSAFE
+                } else if (uncertainInteractions.contains(bName)) {
+                    InteractionType.UNCERTAIN
+                } else {
+                    null
+                }
             }
         } else {
             null
