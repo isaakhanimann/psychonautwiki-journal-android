@@ -33,6 +33,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Inter
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
 import com.isaakhanimann.journal.ui.tabs.safer.settings.combinations.CombinationSettingsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -170,11 +171,13 @@ class OneExperienceViewModel @Inject constructor(
                 cumulativeDoses = pair.first.second,
                 interactions = pair.second
             )
-        }.stateIn(
-            initialValue = null,
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
+        }
+            .flowOn(Dispatchers.IO) // if this wasn't on the background the navigation from journal screen to this screen would jump
+            .stateIn(
+                initialValue = null,
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
 
     private companion object {
         fun getCumulativeDoses(ingestions: List<IngestionWithAssociatedData>): List<CumulativeDose> {

@@ -64,10 +64,13 @@ fun OneExperienceScreen(
     val oneExperienceScreenModel = viewModel.oneExperienceScreenModelFlow.collectAsState().value
     if (oneExperienceScreenModel == null) {
         // without this the screen would glitch when navigating
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {}
+        Column(modifier = Modifier.fillMaxSize()) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            Surface(
+                modifier = Modifier.weight(1f),
+                color = MaterialTheme.colorScheme.background
+            ) {}
+        }
     } else {
         OneExperienceScreen(
             oneExperienceScreenModel = oneExperienceScreenModel,
