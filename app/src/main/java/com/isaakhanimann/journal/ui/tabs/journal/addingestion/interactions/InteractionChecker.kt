@@ -21,7 +21,6 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions
 import com.isaakhanimann.journal.data.substances.classes.InteractionType
 import com.isaakhanimann.journal.data.substances.classes.Substance
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.utils.getInteractionExplanationURLForSubstance
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,35 +32,25 @@ class InteractionChecker @Inject constructor(
     fun getInteractionBetween(aName: String, bName: String): Interaction? {
         val interactionFromAToB = getInteractionFromAToB(aName, bName)
         val interactionFromBToA = getInteractionFromAToB(bName, aName)
-        val aURL = substanceRepo.getSubstance(aName)?.url
-        val aExplanationURL =
-            if (aURL != null) getInteractionExplanationURLForSubstance(aURL) else null
-        val bURL = substanceRepo.getSubstance(bName)?.url
-        val bExplanationURL =
-            if (bURL != null) getInteractionExplanationURLForSubstance(bURL) else null
         if (interactionFromAToB != null && interactionFromBToA != null) {
             val isAtoB = interactionFromAToB.dangerCount >= interactionFromBToA.dangerCount
             val interactionType = if (isAtoB) interactionFromAToB else interactionFromBToA
-            val explanationURL = if (isAtoB) aExplanationURL else bExplanationURL
             return Interaction(
                 aName = aName,
                 bName = bName,
                 interactionType = interactionType,
-                interactionExplanationURL = explanationURL
             )
         } else if (interactionFromAToB != null) {
             return Interaction(
                 aName = aName,
                 bName = bName,
                 interactionType = interactionFromAToB,
-                interactionExplanationURL = aExplanationURL
             )
         } else if (interactionFromBToA != null) {
             return Interaction(
                 aName = aName,
                 bName = bName,
                 interactionType = interactionFromBToA,
-                interactionExplanationURL = bExplanationURL
             )
         } else {
             return null
@@ -210,5 +199,4 @@ data class Interaction(
     val aName: String,
     val bName: String,
     val interactionType: InteractionType,
-    val interactionExplanationURL: String?,
 )

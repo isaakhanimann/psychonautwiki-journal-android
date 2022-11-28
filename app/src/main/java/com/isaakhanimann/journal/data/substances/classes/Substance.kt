@@ -20,6 +20,7 @@ package com.isaakhanimann.journal.data.substances.classes
 
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.Roa
+import com.isaakhanimann.journal.ui.utils.getInteractionExplanationURLForSubstance
 
 data class Substance(
     val name: String,
@@ -61,4 +62,6 @@ data class Substance(
             )
             stimulants.contains(it.lowercase())
         }
+
+    val interactionExplanationURL get() = getInteractionExplanationURLForSubstance(url)
 }

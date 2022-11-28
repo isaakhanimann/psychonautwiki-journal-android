@@ -227,7 +227,16 @@ class OneExperienceScreenPreviewProvider :
                     aName = "MDMA",
                     bName = "Cocaine",
                     interactionType = InteractionType.UNSAFE,
-                    interactionExplanationURL = "www.google.com"
+                )
+            ),
+            interactionExplanations = listOf(
+                InteractionExplanation(
+                    name = "Cocaine",
+                    url = "www.google.com"
+                ),
+                InteractionExplanation(
+                    name = "MDMA",
+                    url = "www.google.com"
                 )
             )
         )

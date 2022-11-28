@@ -24,9 +24,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.*
@@ -40,6 +42,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
@@ -61,29 +65,30 @@ fun OneExperienceScreen(
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
 ) {
-    val oneExperienceScreenModel = viewModel.oneExperienceScreenModelFlow.collectAsState().value
-    if (oneExperienceScreenModel == null) {
-        // without this the screen would glitch when navigating
-        Column(modifier = Modifier.fillMaxSize()) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            Surface(
-                modifier = Modifier.weight(1f),
-                color = MaterialTheme.colorScheme.background
-            ) {}
-        }
-    } else {
-        OneExperienceScreen(
-            oneExperienceScreenModel = oneExperienceScreenModel,
-            addIngestion = navigateToAddIngestionSearch,
-            deleteExperience = viewModel::deleteExperience,
-            navigateToEditExperienceScreen = navigateToEditExperienceScreen,
-            navigateToExplainTimeline = navigateToExplainTimeline,
-            navigateToIngestionScreen = navigateToIngestionScreen,
-            navigateBack = navigateBack,
-            saveIsFavorite = viewModel::saveIsFavorite,
-            navigateToURL = navigateToURL
-        )
-    }
+    val experienceWithIngestions = viewModel.experienceWithIngestionsFlow.collectAsState().value
+    val experience = experienceWithIngestions?.experience
+    val oneExperienceScreenModel = OneExperienceScreenModel(
+        isFavorite = experience?.isFavorite ?: false,
+        title = experience?.title ?: "",
+        firstIngestionTime = experienceWithIngestions?.sortInstant ?: Instant.now(),
+        notes = experience?.text ?: "",
+        isShowingAddIngestionButton = viewModel.isShowingAddIngestionButtonFlow.collectAsState().value,
+        ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
+        cumulativeDoses = viewModel.cumulativeDosesFlow.collectAsState().value,
+        interactions = viewModel.interactionsFlow.collectAsState().value,
+        interactionExplanations = viewModel.interactionExplanationsFlow.collectAsState().value
+    )
+    OneExperienceScreen(
+        oneExperienceScreenModel = oneExperienceScreenModel,
+        addIngestion = navigateToAddIngestionSearch,
+        deleteExperience = viewModel::deleteExperience,
+        navigateToEditExperienceScreen = navigateToEditExperienceScreen,
+        navigateToExplainTimeline = navigateToExplainTimeline,
+        navigateToIngestionScreen = navigateToIngestionScreen,
+        navigateBack = navigateBack,
+        saveIsFavorite = viewModel::saveIsFavorite,
+        navigateToURL = navigateToURL
+    )
 }
 
 @Preview
@@ -289,9 +294,29 @@ fun OneExperienceScreen(
                 Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Interactions")
                     interactions.forEachIndexed { index, interaction ->
-                        InteractionRow(interaction = interaction, navigateToURL = navigateToURL)
+                        InteractionRow(interaction = interaction)
                         if (index < interactions.size - 1) {
                             Divider()
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = "Explanations",
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
+                    FlowRow(
+                        mainAxisSpacing = 5.dp,
+                        crossAxisAlignment = FlowCrossAxisAlignment.Center,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    ) {
+                        oneExperienceScreenModel.interactionExplanations.forEach {
+                            SuggestionChip(
+                                onClick = {
+                                    navigateToURL(it.url)
+                                },
+                                label = { Text(it.name) }
+                            )
                         }
                     }
                 }
@@ -339,16 +364,9 @@ fun OneExperienceScreen(
 }
 
 @Composable
-fun InteractionRow(interaction: Interaction, navigateToURL: (url: String) -> Unit) {
-    val explanationURL = interaction.interactionExplanationURL
+fun InteractionRow(interaction: Interaction) {
     Surface(
-        modifier = Modifier
-            .clickable(enabled = explanationURL != null, onClick = {
-                if (explanationURL != null) {
-                    navigateToURL(explanationURL)
-                }
-            })
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RectangleShape,
         color = interaction.interactionType.color
     ) {
