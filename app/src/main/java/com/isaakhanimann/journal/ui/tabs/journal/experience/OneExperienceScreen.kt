@@ -290,8 +290,11 @@ fun OneExperienceScreen(
                 }
             }
             val interactions = oneExperienceScreenModel.interactions
-            if (interactions.isNotEmpty()) {
-                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+            AnimatedVisibility(visible = interactions.isNotEmpty()) {
+                Card(
+                    modifier = Modifier
+                        .padding(vertical = verticalCardPadding)
+                ) {
                     CardTitle(title = "Interactions")
                     interactions.forEachIndexed { index, interaction ->
                         InteractionRow(interaction = interaction)
