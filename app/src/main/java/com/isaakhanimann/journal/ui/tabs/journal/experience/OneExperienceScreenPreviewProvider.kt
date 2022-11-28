@@ -19,15 +19,17 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.data.substances.classes.InteractionType
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
 import com.isaakhanimann.journal.ui.utils.getInstant
 
 class OneExperienceScreenPreviewProvider :
@@ -218,6 +220,14 @@ class OneExperienceScreenPreviewProvider :
                     units = "mg",
                     isEstimate = false,
                     doseClass = DoseClass.STRONG
+                )
+            ),
+            interactions = listOf(
+                Interaction(
+                    aName = "MDMA",
+                    bName = "Cocaine",
+                    interactionType = InteractionType.UNSAFE,
+                    interactionExplanationURL = "www.google.com"
                 )
             )
         )

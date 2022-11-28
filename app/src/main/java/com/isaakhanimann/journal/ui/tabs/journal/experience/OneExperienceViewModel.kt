@@ -28,7 +28,10 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.InteractionChecker
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
+import com.isaakhanimann.journal.ui.tabs.safer.settings.combinations.CombinationSettingsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -41,6 +44,8 @@ import javax.inject.Inject
 class OneExperienceViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     private val substanceRepo: SubstanceRepository,
+    private val interactionChecker: InteractionChecker,
+    combinationSettingsStorage: CombinationSettingsStorage,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -124,6 +129,20 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
+    private val interactionsFlow =
+        sortedIngestionsWithCompanionsFlow.combine(combinationSettingsStorage.enabledInteractionsFlow) { ingestions, enabledInteractions ->
+            val interactionsToCheck =
+                ingestions.map { it.ingestion.substanceName }.plus(enabledInteractions).distinct()
+            return@combine interactionsToCheck.flatMapIndexed { index: Int, interaction: String ->
+                return@flatMapIndexed interactionsToCheck.drop(index + 1).mapNotNull { other ->
+                    interactionChecker.getInteractionBetween(
+                        interaction,
+                        other
+                    )
+                }
+            }.sortedByDescending { it.interactionType.dangerCount }
+        }
+
     fun deleteExperience() {
         viewModelScope.launch {
             experienceWithIngestionsFlow.firstOrNull()?.let {
@@ -137,6 +156,8 @@ class OneExperienceViewModel @Inject constructor(
             Pair(first = isShowingAddIngestion, second = ingestionElements)
         }.combine(cumulativeDosesFlow) { pair, cumulativeDoses ->
             Pair(first = pair, second = cumulativeDoses)
+        }.combine(interactionsFlow) { pair, interactions ->
+            Pair(first = pair, second = interactions)
         }.combine(experienceWithIngestionsFlow) { pair, experienceWithIngestions ->
             val experience = experienceWithIngestions?.experience ?: return@combine null
             return@combine OneExperienceScreenModel(
@@ -144,9 +165,10 @@ class OneExperienceViewModel @Inject constructor(
                 title = experience.title,
                 firstIngestionTime = experienceWithIngestions.sortInstant,
                 notes = experience.text,
-                isShowingAddIngestionButton = pair.first.first,
-                ingestionElements = pair.first.second,
-                cumulativeDoses = pair.second
+                isShowingAddIngestionButton = pair.first.first.first,
+                ingestionElements = pair.first.first.second,
+                cumulativeDoses = pair.first.second,
+                interactions = pair.second
             )
         }.stateIn(
             initialValue = null,
@@ -191,7 +213,8 @@ data class OneExperienceScreenModel(
     val notes: String,
     val isShowingAddIngestionButton: Boolean,
     val ingestionElements: List<IngestionElement>,
-    val cumulativeDoses: List<CumulativeDose>
+    val cumulativeDoses: List<CumulativeDose>,
+    val interactions: List<Interaction>
 )
 
 data class CumulativeDose(

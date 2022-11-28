@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.substances.classes.InteractionType
 import com.isaakhanimann.journal.data.substances.classes.Interactions
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import com.isaakhanimann.journal.ui.utils.getInteractionExplanationURLForSubstance
 
 @Preview
 @Composable
@@ -80,7 +81,7 @@ fun InteractionsView(
 @Composable
 fun InteractionExplanationButton(substanceURL: String, navigateToURL: (url: String) -> Unit) {
     TextButton(onClick = {
-        val interactionURL = "$substanceURL#Dangerous_interactions"
+        val interactionURL = getInteractionExplanationURLForSubstance(substanceURL)
         navigateToURL(interactionURL)
     }) {
         Icon(

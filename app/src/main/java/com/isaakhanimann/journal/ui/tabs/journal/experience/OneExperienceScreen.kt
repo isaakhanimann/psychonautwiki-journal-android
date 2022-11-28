@@ -21,19 +21,21 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -41,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
@@ -49,11 +52,12 @@ import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.Instant
 
 @Composable
-fun ExperienceScreen(
+fun OneExperienceScreen(
     viewModel: OneExperienceViewModel = hiltViewModel(),
     navigateToAddIngestionSearch: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
+    navigateToURL: (url: String) -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
 ) {
@@ -65,7 +69,7 @@ fun ExperienceScreen(
             color = MaterialTheme.colorScheme.background
         ) {}
     } else {
-        ExperienceScreen(
+        OneExperienceScreen(
             oneExperienceScreenModel = oneExperienceScreenModel,
             addIngestion = navigateToAddIngestionSearch,
             deleteExperience = viewModel::deleteExperience,
@@ -73,7 +77,8 @@ fun ExperienceScreen(
             navigateToExplainTimeline = navigateToExplainTimeline,
             navigateToIngestionScreen = navigateToIngestionScreen,
             navigateBack = navigateBack,
-            saveIsFavorite = viewModel::saveIsFavorite
+            saveIsFavorite = viewModel::saveIsFavorite,
+            navigateToURL = navigateToURL
         )
     }
 }
@@ -87,7 +92,7 @@ fun ExperienceScreenPreview(
     ) oneExperienceScreenModel: OneExperienceScreenModel
 ) {
     JournalTheme {
-        ExperienceScreen(
+        OneExperienceScreen(
             oneExperienceScreenModel = oneExperienceScreenModel,
             addIngestion = {},
             deleteExperience = {},
@@ -95,22 +100,24 @@ fun ExperienceScreenPreview(
             navigateToExplainTimeline = {},
             navigateToIngestionScreen = {},
             navigateBack = {},
-            saveIsFavorite = {}
+            saveIsFavorite = {},
+            navigateToURL = {}
         )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExperienceScreen(
+fun OneExperienceScreen(
     oneExperienceScreenModel: OneExperienceScreenModel,
     addIngestion: () -> Unit,
     deleteExperience: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
+    navigateToURL: (url: String) -> Unit,
     navigateToExplainTimeline: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateBack: () -> Unit,
-    saveIsFavorite: (Boolean) -> Unit
+    saveIsFavorite: (Boolean) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -274,6 +281,18 @@ fun ExperienceScreen(
                     }
                 }
             }
+            val interactions = oneExperienceScreenModel.interactions
+            if (interactions.isNotEmpty()) {
+                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                    CardTitle(title = "Interactions")
+                    interactions.forEachIndexed { index, interaction ->
+                        InteractionRow(interaction = interaction, navigateToURL = navigateToURL)
+                        if (index < interactions.size - 1) {
+                            Divider()
+                        }
+                    }
+                }
+            }
             Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                 if (oneExperienceScreenModel.notes.isEmpty()) {
                     TextButton(
@@ -312,6 +331,46 @@ fun ExperienceScreen(
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
+        }
+    }
+}
+
+@Composable
+fun InteractionRow(interaction: Interaction, navigateToURL: (url: String) -> Unit) {
+    val explanationURL = interaction.interactionExplanationURL
+    Surface(
+        modifier = Modifier
+            .clickable(enabled = explanationURL != null, onClick = {
+                if (explanationURL != null) {
+                    navigateToURL(explanationURL)
+                }
+            })
+            .fillMaxWidth(),
+        shape = RectangleShape,
+        color = interaction.interactionType.color
+    ) {
+        Row(
+            modifier = Modifier.padding(
+                horizontal = horizontalPadding,
+                vertical = 4.dp
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "${interaction.aName} and ${interaction.bName}",
+                textAlign = TextAlign.Center,
+                color = Color.Black,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            LazyRow {
+                items(interaction.interactionType.dangerCount) {
+                    Icon(
+                        imageVector = Icons.Outlined.WarningAmber,
+                        contentDescription = "Warning",
+                        tint = Color.Black,
+                    )
+                }
+            }
         }
     }
 }

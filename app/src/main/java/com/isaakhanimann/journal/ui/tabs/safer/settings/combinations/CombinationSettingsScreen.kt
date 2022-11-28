@@ -18,7 +18,6 @@
 
 package com.isaakhanimann.journal.ui.tabs.safer.settings.combinations
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -35,13 +34,15 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun CombinationSettingsScreen(viewModel: CombinationSettingsViewModel = hiltViewModel()) {
     CombinationSettingsScreen(
-        isSkippingInteractions = viewModel.skipViewModelInteraction.stateFlow.collectAsState().value,
-        toggleIsSkipping = viewModel.skipViewModelInteraction::toggle,
-        substanceInteractions = viewModel.substanceInteraction.map {
+        isSkippingInteractions = viewModel.skipFlow.collectAsState().value,
+        toggleIsSkipping = viewModel::toggleSkip,
+        substanceInteractions = viewModel.optionsFlow.collectAsState().value.map {
             SubstanceInteraction(
                 name = it.name,
-                isOn = it.stateFlow.collectAsState().value,
-                toggle = it::toggle
+                isOn = it.enabled,
+                toggle = {
+                    viewModel.toggleOption(it.name)
+                }
             )
         }
     )
@@ -96,7 +97,7 @@ fun CombinationSettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Skip Interactions Altogether",
+                        text = "Skip Interaction Check",
                         style = MaterialTheme.typography.titleMedium
                     )
                     Switch(
@@ -104,33 +105,31 @@ fun CombinationSettingsScreen(
                         onCheckedChange = { toggleIsSkipping() })
                 }
             }
-            AnimatedVisibility(visible = isSkippingInteractions.not()) {
-                Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
-                    Column(
-                        modifier = Modifier.padding(
-                            horizontal = horizontalPadding,
-                            vertical = 10.dp
-                        )
-                    ) {
-                        Text(
-                            text = "Interaction Alerts",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = "In addition to receiving alerts about interactions with substances that you log you can also receive alerts with the following substances, even if you haven't logged them.",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                        substanceInteractions.forEach { substanceInteraction ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(text = substanceInteraction.name)
-                                Switch(
-                                    checked = substanceInteraction.isOn,
-                                    onCheckedChange = { substanceInteraction.toggle() })
-                            }
+            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    )
+                ) {
+                    Text(
+                        text = "Interaction Alerts",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "In addition to receiving alerts about interactions with substances that you log you can also receive alerts with the following substances, even if you haven't logged them.",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    substanceInteractions.forEach { substanceInteraction ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(text = substanceInteraction.name)
+                            Switch(
+                                checked = substanceInteraction.isOn,
+                                onCheckedChange = { substanceInteraction.toggle() })
                         }
                     }
                 }

@@ -16,27 +16,8 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.safer.settings.combinations
+package com.isaakhanimann.journal.ui.utils
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-
-class SubstanceViewModelInteraction(
-    private val scope: CoroutineScope,
-    private val booleanInteraction: BooleanInteraction
-) {
-    val name = booleanInteraction.name
-    val stateFlow = booleanInteraction.flow.stateIn(
-        initialValue = false,
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
-
-    fun toggle() {
-        scope.launch {
-            booleanInteraction.toggle()
-        }
-    }
+fun getInteractionExplanationURLForSubstance(substanceURL: String): String {
+    return "$substanceURL#Dangerous_interactions"
 }

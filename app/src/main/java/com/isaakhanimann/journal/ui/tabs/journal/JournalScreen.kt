@@ -21,7 +21,7 @@ package com.isaakhanimann.journal.ui.tabs.journal
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -243,16 +243,14 @@ fun JournalScreen(
                     CardWithTitle(title = "Previous", innerPaddingHorizontal = 0.dp) {
                         Divider()
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            itemsIndexed(previousExperiences) { index, experienceWithIngestions ->
+                            items(previousExperiences) { experienceWithIngestions ->
                                 ExperienceRow(
                                     experienceWithIngestions,
                                     navigateToExperienceScreen = {
                                         navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
                                     },
                                 )
-                                if (index < previousExperiences.size - 1) {
-                                    Divider()
-                                }
+                                Divider()
                             }
                         }
                     }

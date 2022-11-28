@@ -21,22 +21,37 @@ package com.isaakhanimann.journal.ui.tabs.safer.settings.combinations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CombinationSettingsViewModel @Inject constructor(
-    comboStorage: CombinationSettingsStorage,
+    private val comboStorage: CombinationSettingsStorage,
 ) : ViewModel() {
 
-    val skipViewModelInteraction = SubstanceViewModelInteraction(
+    val skipFlow = comboStorage.skipFlow.stateIn(
+        initialValue = false,
         scope = viewModelScope,
-        booleanInteraction = comboStorage.skipInteractor
+        started = SharingStarted.WhileSubscribed(5000)
     )
 
-    val substanceInteraction = comboStorage.substanceInteractors.map {
-        SubstanceViewModelInteraction(
-            scope = viewModelScope,
-            booleanInteraction = it
-        )
+    fun toggleSkip() {
+        viewModelScope.launch {
+            comboStorage.toggleSkip()
+        }
+    }
+
+    val optionsFlow = comboStorage.optionFlow.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
+    fun toggleOption(optionName: String) {
+        viewModelScope.launch {
+            comboStorage.toggleSubstanceInteraction(optionName)
+        }
     }
 }

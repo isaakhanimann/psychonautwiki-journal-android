@@ -25,7 +25,7 @@ import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
-import com.isaakhanimann.journal.ui.tabs.journal.experience.ExperienceScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.edit.EditExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.editingestion.EditIngestionScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
@@ -68,7 +68,7 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
             arguments = ArgumentRouter.ExperienceRouter.args
         ) {
             val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
-            ExperienceScreen(
+            OneExperienceScreen(
                 navigateToAddIngestionSearch = navController::navigateToAddIngestion,
                 navigateToExplainTimeline = navController::navigateToExplainTimelineOnJournalTab,
                 navigateToEditExperienceScreen = {
@@ -77,7 +77,8 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 navigateToIngestionScreen = { ingestionId ->
                     navController.navigateToIngestion(ingestionId)
                 },
-                navigateBack = navController::popBackStack
+                navigateBack = navController::popBackStack,
+                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(

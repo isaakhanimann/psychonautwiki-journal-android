@@ -80,8 +80,7 @@ class CheckInteractionsViewModel @Inject constructor(
             filteredIngestions.filter { it.interactionType == InteractionType.UNCERTAIN }
                 .map { it.ingestion }.sortedByDescending { it.time }
         val enabledExtraInteractions =
-            combinationSettingsStorage.substanceInteractors.filter { it.flow.first() }
-                .map { it.name }
+            combinationSettingsStorage.enabledInteractionsFlow.first()
         val dangerousExtras =
             enabledExtraInteractions.filter { substance.interactions?.dangerous?.contains(it) == true }
         val unsafeExtras =

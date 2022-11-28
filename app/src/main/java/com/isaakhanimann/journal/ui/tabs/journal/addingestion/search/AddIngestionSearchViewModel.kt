@@ -48,12 +48,12 @@ class AddIngestionSearchViewModel @Inject constructor(
             .combine(customSubstancesFlow) { ingestions, customSubstances ->
                 return@combine getPreviousSubstances(ingestions, customSubstances)
             }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
+                initialValue = emptyList(),
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
 
-    val shouldSkipInteractionsFlow = comboStorage.skipInteractor.flow.stateIn(
+    val shouldSkipInteractionsFlow = comboStorage.skipFlow.stateIn(
         initialValue = false,
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
