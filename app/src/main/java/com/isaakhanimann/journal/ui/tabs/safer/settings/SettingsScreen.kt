@@ -261,11 +261,18 @@ fun SettingsScreen(
                     context.startActivity(shareIntent)
                 }
                 Divider()
-                Text(
-                    text = "Version " + BuildConfig.VERSION_NAME,
-                    style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(ButtonDefaults.TextButtonContentPadding)
-                )
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 15.dp)
+                        .padding(top = 10.dp)
+                ) {
+                    Text(
+                        text = "Version " + BuildConfig.VERSION_NAME,
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text("Installing newer versions will automatically migrate your data.")
+                }
                 SettingsButton(
                     imageVector = Icons.Outlined.OpenInBrowser,
                     text = "Check Here For Newer Versions"
