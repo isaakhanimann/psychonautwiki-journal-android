@@ -18,6 +18,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.safer.settings
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -247,11 +249,29 @@ fun SettingsScreen(
                     uriHandler.openUri("https://github.com/isaakhanimann/psychonautwiki-journal-android")
                 }
                 Divider()
+                val context = LocalContext.current
+                val downloadURL = "https://isaakhanimann.github.io"
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, downloadURL)
+                    type = "text/plain"
+                }
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                SettingsButton(imageVector = Icons.Outlined.Share, text = "Share") {
+                    context.startActivity(shareIntent)
+                }
+                Divider()
                 Text(
                     text = "Version " + BuildConfig.VERSION_NAME,
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.padding(ButtonDefaults.TextButtonContentPadding)
                 )
+                SettingsButton(
+                    imageVector = Icons.Outlined.OpenInBrowser,
+                    text = "Check Here For Newer Versions"
+                ) {
+                    uriHandler.openUri(downloadURL)
+                }
             }
         }
     }
