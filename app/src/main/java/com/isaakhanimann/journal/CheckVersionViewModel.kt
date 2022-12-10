@@ -48,16 +48,19 @@ class CheckVersionViewModel @Inject constructor(
 
     fun checkVersion() {
         viewModelScope.launch(context = Dispatchers.IO) {
-            delay(1000) // delay so that the
+            delay(1000)
             val daysSince =
                 Duration.between(lastTimeVersionCheckedFlow.first(), Instant.now()).toDays()
             if (daysSince > 20) {
-                val url = URL("https://isaakhanimann.github.io/version.txt")
-                val text = url.readText()
-                if (BuildConfig.VERSION_NAME != text) {
-                    newerVersionText.value =
-                        "Your version is ${BuildConfig.VERSION_NAME} but the newest version is $text. Visit the website to download the newest version. Your data will be automatically migrated during installation."
-                    isShowingNewerVersionAlert.value = true
+                val url = URL("https://isaakhanimann.github.io/versdsion.txt")
+                try {
+                    val text = url.readText()
+                    if (BuildConfig.VERSION_NAME != text) {
+                        newerVersionText.value =
+                            "Your version is ${BuildConfig.VERSION_NAME} but the newest version is $text. Visit the website to download the newest version. Your data will be automatically migrated during installation."
+                        isShowingNewerVersionAlert.value = true
+                    }
+                } catch (_: Exception) {
                 }
                 updateVersionCheck()
             }
