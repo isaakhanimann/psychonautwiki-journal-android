@@ -274,7 +274,7 @@ fun SettingsScreen(
                 }
                 SettingsButton(
                     imageVector = Icons.Outlined.OpenInBrowser,
-                    text = "Check Here For Newer Versions"
+                    text = "Visit Download Website"
                 ) {
                     uriHandler.openUri(DOWNLOAD_URL)
                 }
