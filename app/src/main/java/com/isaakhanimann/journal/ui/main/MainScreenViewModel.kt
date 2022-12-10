@@ -24,7 +24,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +37,6 @@ val ARE_CONDITIONS_ACCEPTED = booleanPreferencesKey("are_conditions_accepted")
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    experienceRepo: ExperienceRepository
 ) : ViewModel() {
 
     val isAcceptedFlow: StateFlow<Boolean> = dataStore.data

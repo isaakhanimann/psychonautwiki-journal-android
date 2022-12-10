@@ -250,10 +250,9 @@ fun SettingsScreen(
                 }
                 Divider()
                 val context = LocalContext.current
-                val downloadURL = "https://isaakhanimann.github.io"
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, downloadURL)
+                    putExtra(Intent.EXTRA_TEXT, DOWNLOAD_URL)
                     type = "text/plain"
                 }
                 val shareIntent = Intent.createChooser(sendIntent, null)
@@ -277,12 +276,15 @@ fun SettingsScreen(
                     imageVector = Icons.Outlined.OpenInBrowser,
                     text = "Check Here For Newer Versions"
                 ) {
-                    uriHandler.openUri(downloadURL)
+                    uriHandler.openUri(DOWNLOAD_URL)
                 }
             }
         }
     }
 }
+
+const val DOWNLOAD_URL = "https://isaakhanimann.github.io"
+
 
 @Composable
 fun SettingsButton(imageVector: ImageVector, text: String, onClick: () -> Unit) {
