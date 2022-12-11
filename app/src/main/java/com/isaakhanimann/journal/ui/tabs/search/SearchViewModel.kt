@@ -87,16 +87,6 @@ class SearchViewModel @Inject constructor(
 
     val customColor = Color.Cyan
 
-    private val recentlyUsedSubstancesFlow: Flow<List<SubstanceWithCategories>> =
-        experienceRepo.getSortedLastUsedSubstanceNamesFlow(limit = 100)
-            .map { lastUsedSubstanceNames ->
-                lastUsedSubstanceNames.mapNotNull {
-                    substanceRepo.getSubstanceWithCategories(
-                        substanceName = it
-                    )
-                }
-            }
-
     val filteredSubstancesFlow =
         filtersFlow.map { filters ->
             substanceRepo.getAllSubstancesWithCategories().filter { substanceWithCategories ->
@@ -104,9 +94,14 @@ class SearchViewModel @Inject constructor(
             }
         }.combine(searchTextFlow) { substances, searchText ->
             getMatchingSubstances(searchText, substances)
-        }.combine(recentlyUsedSubstancesFlow) { filteredSubstances, sortedRecentlyUsed ->
+        }.combine(experienceRepo.getSortedLastUsedSubstanceNamesFlow(limit = 200)) { filteredSubstances, sortedRecentlyUsed ->
+            val recentNames = sortedRecentlyUsed.distinct()
             val showFirst =
-                sortedRecentlyUsed.filter { recent -> filteredSubstances.any { it.substance.name == recent.substance.name } }
+                recentNames.filter { recent -> filteredSubstances.any { it.substance.name == recent } }.mapNotNull {
+                    substanceRepo.getSubstanceWithCategories(
+                        substanceName = it
+                    )
+                }
             val showSecond = filteredSubstances.filter { sub -> sub.categories.any { cat -> cat.name == "common" } }
             val sortedResults = (showFirst + showSecond + filteredSubstances).distinctBy { it.substance.name }
             return@combine sortedResults.map {

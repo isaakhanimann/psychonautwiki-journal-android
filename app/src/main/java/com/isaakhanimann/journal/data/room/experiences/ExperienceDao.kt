@@ -63,7 +63,7 @@ interface ExperienceDao {
     @Query("SELECT * FROM substancecompanion")
     suspend fun getAllSubstanceCompanions(): List<SubstanceCompanion>
 
-    @Query("SELECT DISTINCT substanceName FROM ingestion ORDER BY time DESC LIMIT :limit")
+    @Query("SELECT substanceName FROM ingestion ORDER BY time DESC LIMIT :limit")
     fun getSortedLastUsedSubstanceNamesFlow(limit: Int): Flow<List<String>>
 
     @Transaction
