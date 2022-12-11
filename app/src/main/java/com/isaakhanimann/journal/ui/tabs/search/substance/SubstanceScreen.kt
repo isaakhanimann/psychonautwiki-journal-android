@@ -142,7 +142,7 @@ fun SubstanceScreen(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
                         vertical = verticalPaddingCards
-                    )
+                    ).fillMaxWidth()
                 ) {
                     Row(
                         modifier = Modifier.padding(
@@ -156,7 +156,8 @@ fun SubstanceScreen(
                     }
                 }
             }
-            if (substance.summary != null) {
+            val categories = substanceWithCategories.categories
+            if (substance.summary != null || categories.isNotEmpty()) {
                 VerticalSpace()
                 Card(
                     modifier = Modifier.padding(
@@ -172,9 +173,10 @@ fun SubstanceScreen(
                             )
                             .fillMaxWidth()
                     ) {
-                        Text(text = substance.summary)
-                        val categories = substanceWithCategories.categories
-                        VerticalSpace()
+                        if (substance.summary != null) {
+                            Text(text = substance.summary)
+                            VerticalSpace()
+                        }
                         FlowRow(
                             mainAxisSpacing = 5.dp,
                             crossAxisSpacing = 5.dp,
