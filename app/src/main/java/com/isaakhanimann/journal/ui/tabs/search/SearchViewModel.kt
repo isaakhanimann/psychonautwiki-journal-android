@@ -48,7 +48,7 @@ class SearchViewModel @Inject constructor(
     private val _searchTextFlow = MutableStateFlow("")
     val searchTextFlow = _searchTextFlow.asStateFlow()
 
-    private val filtersFlow = MutableStateFlow(listOf("common"))
+    private val filtersFlow = MutableStateFlow(emptyList<String>())
 
     private val youUsedChipName = "used"
     private val customChipName = "custom"
