@@ -65,7 +65,7 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val substances: MutableList<Substance> = mutableListOf()
         for (i in 0 until jsonSubstances.length()) {
             val jsonCategory = jsonSubstances.getOptionalJSONObject(i) ?: continue
-            val newSubstance = parseSubstance(jsonCategory) ?: continue
+            val newSubstance = parseSubstance(jsonCategory)
             substances.add(newSubstance)
         }
         return substances
@@ -80,11 +80,11 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         return Category(name, description, url, color)
     }
 
-    private fun parseSubstance(jsonSubstance: JSONObject): Substance? {
-        val name = jsonSubstance.getOptionalString("name") ?: return null
+    private fun parseSubstance(jsonSubstance: JSONObject): Substance {
+        val name = jsonSubstance.getString("name")
         val jsonCommonNames = jsonSubstance.getOptionalJSONArray("commonNames")
         val commonNames = parseCommonNames(jsonCommonNames, removeName = name)
-        val url = jsonSubstance.getOptionalString("url") ?: return null
+        val url = jsonSubstance.getString("url")
         val isApproved = jsonSubstance.getOptionalBoolean("isApproved") ?: false
         val jsonTolerance = jsonSubstance.getOptionalJSONObject("tolerance")
         val tolerance = parseTolerance(jsonTolerance)
@@ -92,7 +92,7 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
         val crossTolerances = parseCrossTolerances(jsonTolerances)
         val addictionPotential = jsonSubstance.getOptionalString("addictionPotential")
         val jsonToxicities = jsonSubstance.getOptionalJSONArray("toxicities")
-        val toxicities = parseToxicities(jsonToxicities)
+        val toxicities = parseJsonArrayToStringArray(jsonToxicities)
         val jsonCategory = jsonSubstance.getOptionalJSONArray("categories")
         val categories = parseJsonArrayToStringArray(jsonCategory)
         val summary = jsonSubstance.getOptionalString("summary")
@@ -130,28 +130,16 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
     private fun parseInteractions(jsonInteractions: JSONObject?): Interactions? {
         if (jsonInteractions == null) return null
         val jsonUncertain = jsonInteractions.getOptionalJSONArray("uncertain")
-        val uncertainInteractions = parseInteractionItems(jsonUncertain)
+        val uncertainInteractions = parseJsonArrayToStringArray(jsonUncertain)
         val jsonUnsafe = jsonInteractions.getOptionalJSONArray("unsafe")
-        val unsafeInteractions = parseInteractionItems(jsonUnsafe)
+        val unsafeInteractions = parseJsonArrayToStringArray(jsonUnsafe)
         val jsonDangerous = jsonInteractions.getOptionalJSONArray("dangerous")
-        val dangerousInteractions = parseInteractionItems(jsonDangerous)
+        val dangerousInteractions = parseJsonArrayToStringArray(jsonDangerous)
         return Interactions(
             dangerous = dangerousInteractions,
             unsafe = unsafeInteractions,
             uncertain = uncertainInteractions
         )
-    }
-
-    private fun parseToxicities(jsonToxicities: JSONArray?): List<String> {
-        if (jsonToxicities == null) return emptyList()
-        val toxicities: MutableList<String> = mutableListOf()
-        for (i in 0 until jsonToxicities.length()) {
-            val toxicity = jsonToxicities.getOptionalString(i) ?: continue
-            if (!toxicity.contains("unknown", ignoreCase = true)) {
-                toxicities.add(toxicity)
-            }
-        }
-        return toxicities
     }
 
     private fun parseCommonNames(jsonNames: JSONArray?, removeName: String): List<String> {
@@ -336,16 +324,5 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
             tolNames.add(tolName)
         }
         return tolNames
-    }
-
-    private fun parseInteractionItems(jsonInteractions: JSONArray?): List<String> {
-        if (jsonInteractions == null) return emptyList()
-        val interactionNames: MutableList<String> = mutableListOf()
-        for (i in 0 until jsonInteractions.length()) {
-            val jsonInt = jsonInteractions.getOptionalJSONObject(i) ?: continue
-            val intName = jsonInt.getOptionalString("name") ?: continue
-            interactionNames.add(intName)
-        }
-        return interactionNames
     }
 }
