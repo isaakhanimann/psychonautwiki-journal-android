@@ -50,6 +50,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimeline
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.ToleranceSection
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.duration.RoaDurationView
+import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.theme.verticalPaddingCards
@@ -217,6 +218,10 @@ fun SubstanceScreen(
                                     Text(text = "No dosage info")
                                 } else {
                                     RoaDoseView(roaDose = roa.roaDose)
+                                }
+                                val bio = roa.bioavailability
+                                if (bio != null) {
+                                    Text(text = "Bioavailability: ${bio.min?.toReadableString() ?: ".."}-${bio.max?.toReadableString() ?: ".."}%")
                                 }
                             }
                             Divider()
