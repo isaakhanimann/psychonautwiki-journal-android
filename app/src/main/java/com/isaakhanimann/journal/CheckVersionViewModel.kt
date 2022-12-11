@@ -52,12 +52,14 @@ class CheckVersionViewModel @Inject constructor(
             val daysSince =
                 Duration.between(lastTimeVersionCheckedFlow.first(), Instant.now()).toDays()
             if (daysSince > 20) {
-                val url = URL("https://isaakhanimann.github.io/versdsion.txt")
+                val url = URL("https://isaakhanimann.github.io/version.txt")
                 try {
-                    val text = url.readText()
-                    if (BuildConfig.VERSION_NAME != text) {
+                    val onlineVersion = url.readText()
+                    val majorVersionOnline = onlineVersion.split(".")[0]
+                    val majorVersionApp = BuildConfig.VERSION_NAME.split(".")[0]
+                    if (majorVersionOnline != majorVersionApp) {
                         newerVersionText.value =
-                            "Your version is ${BuildConfig.VERSION_NAME} but the newest version is $text. Visit the website to download the newest version. Your data will be automatically migrated during installation."
+                            "Your version is ${BuildConfig.VERSION_NAME} but the newest version is $onlineVersion. Visit the website to download the newest version. Your data will be automatically migrated during installation."
                         isShowingNewerVersionAlert.value = true
                     }
                 } catch (_: Exception) {
