@@ -101,12 +101,12 @@ fun ToleranceSection(
                         }
                     }
                 }
-                Text(text = "zero is the time until tolerance is like the first time")
+                Text(text = "* zero is the time until tolerance is like the first time.")
             }
             if (crossTolerances.isNotEmpty()) {
                 val names = crossTolerances.map { it }.distinct()
                     .joinToString(separator = ", ")
-                Text(text = "Cross tolerance with $names")
+                Text(text = "Cross tolerance with $names.")
             }
         }
 
