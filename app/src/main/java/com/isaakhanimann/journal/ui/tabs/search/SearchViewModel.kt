@@ -107,9 +107,8 @@ class SearchViewModel @Inject constructor(
         }.combine(recentlyUsedSubstancesFlow) { filteredSubstances, sortedRecentlyUsed ->
             val showFirst =
                 sortedRecentlyUsed.filter { recent -> filteredSubstances.any { it.substance.name == recent.substance.name } }
-            val showAfter =
-                filteredSubstances.filter { sub -> !sortedRecentlyUsed.any { it.substance.name == sub.substance.name } }
-            val sortedResults = showFirst + showAfter
+            val showSecond = filteredSubstances.filter { sub -> sub.categories.any { cat -> cat.name == "common" } }
+            val sortedResults = (showFirst + showSecond + filteredSubstances).distinctBy { it.substance.name }
             return@combine sortedResults.map {
                 SubstanceModel(
                     name = it.substance.name,
