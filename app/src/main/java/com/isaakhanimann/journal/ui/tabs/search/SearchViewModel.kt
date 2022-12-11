@@ -35,47 +35,28 @@ class SearchViewModel @Inject constructor(
     substanceRepo: SubstanceRepository
 ) : ViewModel() {
 
-
-    private val recentlyUsedSubstancesFlow: Flow<List<SubstanceWithCategories>> =
-        experienceRepo.getLastUsedSubstanceNamesFlow(limit = 100).map { lastUsedSubstanceNames ->
-            lastUsedSubstanceNames.mapNotNull {
-                substanceRepo.getSubstanceWithCategories(
-                    substanceName = it
-                )
-            }
-        }
-
     private val _searchTextFlow = MutableStateFlow("")
     val searchTextFlow = _searchTextFlow.asStateFlow()
 
     private val filtersFlow = MutableStateFlow(emptyList<String>())
 
-    private val youUsedChipName = "used"
     private val customChipName = "custom"
 
     fun onFilterTapped(filterName: String) {
         viewModelScope.launch {
-            when (filterName) {
-                youUsedChipName -> {
-                    isShowingYouUsedFlow.emit(isShowingYouUsedFlow.value.not())
-                }
-                else -> {
-                    if (filterName == customChipName) {
-                        isShowingCustomSubstancesFlow.emit(isShowingCustomSubstancesFlow.value.not())
-                    }
-                    val filters = filtersFlow.value.toMutableList()
-                    if (filters.contains(filterName)) {
-                        filters.remove(filterName)
-                    } else {
-                        filters.add(filterName)
-                    }
-                    filtersFlow.emit(filters)
-                }
+            if (filterName == customChipName) {
+                isShowingCustomSubstancesFlow.emit(isShowingCustomSubstancesFlow.value.not())
             }
+            val filters = filtersFlow.value.toMutableList()
+            if (filters.contains(filterName)) {
+                filters.remove(filterName)
+            } else {
+                filters.add(filterName)
+            }
+            filtersFlow.emit(filters)
         }
     }
 
-    private val isShowingYouUsedFlow = MutableStateFlow(false)
     private val isShowingCustomSubstancesFlow = MutableStateFlow(false)
 
     val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> =
@@ -88,16 +69,6 @@ class SearchViewModel @Inject constructor(
                     isActive = isActive
                 )
             }
-        }.combine(isShowingYouUsedFlow) { chips, isShowingYouUsed ->
-            val newChips = chips.toMutableList()
-            newChips.add(
-                0, CategoryChipModel(
-                    chipName = youUsedChipName,
-                    color = Color.Magenta,
-                    isActive = isShowingYouUsed
-                )
-            )
-            return@combine newChips
         }.combine(isShowingCustomSubstancesFlow) { chips, isShowingCustom ->
             val newChips = chips.toMutableList()
             newChips.add(
@@ -116,24 +87,30 @@ class SearchViewModel @Inject constructor(
 
     val customColor = Color.Cyan
 
-    private val allOrYouUsedSubstances =
-        recentlyUsedSubstancesFlow.combine(isShowingYouUsedFlow) { recents, isShowingYouUsed ->
-            if (isShowingYouUsed) {
-                return@combine recents
-            } else {
-                return@combine substanceRepo.getAllSubstancesWithCategories()
+    private val recentlyUsedSubstancesFlow: Flow<List<SubstanceWithCategories>> =
+        experienceRepo.getSortedLastUsedSubstanceNamesFlow(limit = 100)
+            .map { lastUsedSubstanceNames ->
+                lastUsedSubstanceNames.mapNotNull {
+                    substanceRepo.getSubstanceWithCategories(
+                        substanceName = it
+                    )
+                }
             }
-        }
 
     val filteredSubstancesFlow =
-        allOrYouUsedSubstances.combine(filtersFlow) { substances, filters ->
-            substances.filter { substanceWithCategories ->
+        filtersFlow.map { filters ->
+            substanceRepo.getAllSubstancesWithCategories().filter { substanceWithCategories ->
                 filters.all { substanceWithCategories.substance.categories.contains(it) }
             }
         }.combine(searchTextFlow) { substances, searchText ->
             getMatchingSubstances(searchText, substances)
-        }.map { substancesWithCategories ->
-            substancesWithCategories.map {
+        }.combine(recentlyUsedSubstancesFlow) { filteredSubstances, sortedRecentlyUsed ->
+            val showFirst =
+                sortedRecentlyUsed.filter { recent -> filteredSubstances.any { it.substance.name == recent.substance.name } }
+            val showAfter =
+                filteredSubstances.filter { sub -> !sortedRecentlyUsed.any { it.substance.name == sub.substance.name } }
+            val sortedResults = showFirst + showAfter
+            return@combine sortedResults.map {
                 SubstanceModel(
                     name = it.substance.name,
                     commonNames = it.substance.commonNames,

@@ -108,8 +108,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getLastUsedSubstanceNamesFlow(limit: Int): Flow<List<String>> =
-        experienceDao.getLastUsedSubstanceNamesFlow(limit).flowOn(Dispatchers.IO).conflate()
+    fun getSortedLastUsedSubstanceNamesFlow(limit: Int): Flow<List<String>> =
+        experienceDao.getSortedLastUsedSubstanceNamesFlow(limit).flowOn(Dispatchers.IO).conflate()
 
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
