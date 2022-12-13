@@ -62,9 +62,9 @@ class CheckVersionViewModel @Inject constructor(
                             "Your version is ${BuildConfig.VERSION_NAME} but the newest version is $onlineVersion. Visit the website to download the newest version. Your data will be automatically migrated during installation."
                         isShowingNewerVersionAlert.value = true
                     }
-                } catch (_: Exception) {
+                } finally {
+                    updateVersionCheck()
                 }
-                updateVersionCheck()
             }
         }
     }
