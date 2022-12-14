@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "366516140472",
+    "project_id": "psychonautwiki-journal",
+    "storage_bucket": "psychonautwiki-journal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366516140472:android:61bca0d7fd0b3229e7374d",
+        "android_client_info": {
+          "package_name": "com.isaakhanimann.journal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366516140472-bhvhpv92hpmqma0ljuv1r9cbngvfom24.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAWYsudCr0ASxRZYuw6E1BAD2L1BfxWaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366516140472-bhvhpv92hpmqma0ljuv1r9cbngvfom24.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
