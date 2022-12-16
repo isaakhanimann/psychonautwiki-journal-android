@@ -191,7 +191,7 @@ fun SubstanceScreen(
             val roasWithDosesDefined = substance.roas.filter { roa ->
                 val roaDose = roa.roaDose
                 val isEveryDoseNull =
-                    roaDose?.threshold == null && roaDose?.light == null && roaDose?.common == null && roaDose?.strong == null && roaDose?.heavy == null
+                    roaDose?.lightMin == null && roaDose?.commonMin == null && roaDose?.strongMin == null && roaDose?.heavyMin == null
                 return@filter !isEveryDoseNull
             }
             if (substance.dosageRemark != null || roasWithDosesDefined.isNotEmpty()) {

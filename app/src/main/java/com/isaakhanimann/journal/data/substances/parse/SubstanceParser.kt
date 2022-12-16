@@ -221,38 +221,18 @@ class SubstanceParser @Inject constructor() : SubstanceParserInterface {
 
     private fun parseRoaDose(jsonDose: JSONObject?): RoaDose? {
         if (jsonDose == null) return null
-        val units = jsonDose.getOptionalString("units")
-        val threshold = jsonDose.getOptionalDouble("threshold")
-        val jsonLight = jsonDose.getOptionalJSONObject("light")
-        val light = parseDoseRange(jsonLight)
-        val jsonCommon = jsonDose.getOptionalJSONObject("common")
-        val common = parseDoseRange(jsonCommon)
-        val jsonStrong = jsonDose.getOptionalJSONObject("strong")
-        val strong = parseDoseRange(jsonStrong)
-        val heavy = jsonDose.getOptionalDouble("heavy")
-        return if (units == null && threshold == null && light == null && common == null && strong == null && heavy == null) {
-            null
-        } else {
-            RoaDose(
-                units = units,
-                threshold = threshold,
-                light = light,
-                common = common,
-                strong = strong,
-                heavy = heavy
-            )
-        }
-    }
-
-    private fun parseDoseRange(jsonRange: JSONObject?): DoseRange? {
-        if (jsonRange == null) return null
-        val min = jsonRange.getOptionalDouble("min")
-        val max = jsonRange.getOptionalDouble("max")
-        return if (min == null && max == null) {
-            null
-        } else {
-            DoseRange(min, max)
-        }
+        val units = jsonDose.getString("units")
+        val lightMin = jsonDose.getOptionalDouble("lightMin")
+        val commonMin = jsonDose.getOptionalDouble("commonMin")
+        val strongMin = jsonDose.getOptionalDouble("strongMin")
+        val heavyMin = jsonDose.getOptionalDouble("heavyMin")
+        return RoaDose(
+            units = units,
+            lightMin = lightMin,
+            commonMin = commonMin,
+            strongMin = strongMin,
+            heavyMin = heavyMin,
+        )
     }
 
     private fun parseRoaDuration(jsonRoaDuration: JSONObject?): RoaDuration? {

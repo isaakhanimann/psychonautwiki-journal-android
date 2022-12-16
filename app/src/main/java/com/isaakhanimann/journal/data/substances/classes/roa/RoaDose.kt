@@ -22,24 +22,23 @@ import kotlin.math.floor
 import kotlin.math.roundToInt
 
 data class RoaDose(
-    val units: String?,
-    val threshold: Double?,
-    val light: DoseRange?,
-    val common: DoseRange?,
-    val strong: DoseRange?,
-    val heavy: Double?
+    val units: String,
+    val lightMin: Double?,
+    val commonMin: Double?,
+    val strongMin: Double?,
+    val heavyMin: Double?,
 ) {
     fun getDoseClass(ingestionDose: Double?, ingestionUnits: String? = units): DoseClass? {
         if (ingestionUnits != units || ingestionDose == null) return null
-        return if (threshold != null && ingestionDose < threshold) {
+        return if (lightMin != null && ingestionDose < lightMin) {
             DoseClass.THRESHOLD
-        } else if (light?.isValueInRange(ingestionDose) == true) {
+        } else if (lightMin != null && commonMin != null && lightMin <= ingestionDose && ingestionDose < commonMin) {
             DoseClass.LIGHT
-        } else if (common?.isValueInRange(ingestionDose) == true) {
+        } else if (commonMin != null && strongMin != null && commonMin <= ingestionDose && ingestionDose < strongMin) {
             DoseClass.COMMON
-        } else if (strong?.isValueInRange(ingestionDose) == true) {
+        } else if (strongMin != null && heavyMin != null && strongMin <= ingestionDose && ingestionDose < heavyMin) {
             DoseClass.STRONG
-        } else if (heavy != null && ingestionDose > heavy) {
+        } else if (heavyMin != null && ingestionDose > heavyMin) {
             DoseClass.HEAVY
         } else {
             null
@@ -48,22 +47,21 @@ data class RoaDose(
 
     fun getNumDots(ingestionDose: Double?, ingestionUnits: String? = units): Int? {
         if (ingestionUnits != units || ingestionDose == null) return null
-        if (threshold != null && ingestionDose < threshold) {
+        if (lightMin != null && ingestionDose < lightMin) {
             return 0
-        } else if (light?.isValueInRange(ingestionDose) == true) {
+        } else if (lightMin != null && commonMin != null && lightMin <= ingestionDose && ingestionDose < commonMin) {
             return 1
-        } else if (common?.isValueInRange(ingestionDose) == true) {
+        } else if (commonMin != null && strongMin != null && commonMin <= ingestionDose && ingestionDose < strongMin) {
             return 2
-        } else if (strong?.isValueInRange(ingestionDose) == true) {
+        } else if (strongMin != null && heavyMin != null && strongMin <= ingestionDose && ingestionDose < heavyMin) {
             return 3
-        } else if (heavy != null) {
-            return if (ingestionDose > heavy) {
-                val timesHeavy = floor(ingestionDose.div(heavy)).roundToInt()
-                val rest = ingestionDose.rem(heavy)
-                val result = (timesHeavy * 4) + getNumDotsUpTo4(dose = rest)
-                return result
+        } else if (heavyMin != null) {
+            return if (ingestionDose > heavyMin) {
+                val timesHeavy = floor(ingestionDose.div(heavyMin)).roundToInt()
+                val rest = ingestionDose.rem(heavyMin)
+                return (timesHeavy * 4) + getNumDotsUpTo4(dose = rest)
             } else {
-                floor(ingestionDose / heavy).roundToInt()
+                floor(ingestionDose / heavyMin).roundToInt()
             }
         } else {
             return null
@@ -71,16 +69,16 @@ data class RoaDose(
     }
 
     private fun getNumDotsUpTo4(dose: Double): Int {
-        return if (threshold != null && dose < threshold) {
+        return if (lightMin != null && dose < lightMin) {
             0
-        } else if (light?.isValueInRange(dose) == true) {
+        } else if (lightMin != null && commonMin != null && lightMin <= dose && dose < commonMin) {
             1
-        } else if (common?.isValueInRange(dose) == true) {
+        } else if (commonMin != null && strongMin != null && commonMin <= dose && dose < strongMin) {
             2
-        } else if (strong?.isValueInRange(dose) == true) {
+        } else if (strongMin != null && heavyMin != null && strongMin <= dose && dose < heavyMin) {
             3
-        } else if (heavy != null) {
-            floor(dose / heavy).roundToInt()
+        } else if (heavyMin != null) {
+            floor(dose / heavyMin).roundToInt()
         } else {
             0
         }
@@ -90,7 +88,7 @@ data class RoaDose(
         get() {
             if (units == "µg") return true
             return if (units == "mg") {
-                val sample = common?.min ?: light?.max ?: common?.max ?: strong?.min ?: strong?.max
+                val sample = commonMin ?: strongMin
                 sample != null && sample < 15
             } else {
                 false

@@ -50,9 +50,6 @@ fun RoaDoseView(
     roaDose: RoaDose,
     modifier: Modifier = Modifier
 ) {
-    val lightMaxOrCommonMin = roaDose.light?.max ?: roaDose.common?.min
-    val commonMaxOrStrongMin = roaDose.common?.max ?: roaDose.strong?.min
-    val strongMaxOrHeavy = roaDose.strong?.max ?: roaDose.heavy
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top,
@@ -76,7 +73,7 @@ fun RoaDoseView(
                 )
             )
         ) {
-            Text(text = roaDose.threshold?.toReadableString() ?: "..", style = numberStyle)
+            Text(text = roaDose.lightMin?.toReadableString() ?: "..", style = numberStyle)
             Text("thresh  ", style = labelStyle)
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -84,7 +81,7 @@ fun RoaDoseView(
             Text("light", style = labelStyle, color = lightColor)
         }
         Text(
-            text = lightMaxOrCommonMin?.toReadableString() ?: "..",
+            text = roaDose.commonMin?.toReadableString() ?: "..",
             style = numberStyle,
             modifier = Modifier.textBrush(
                 brush = Brush.horizontalGradient(
@@ -99,7 +96,7 @@ fun RoaDoseView(
             Text("common", style = labelStyle, color = commonColor)
         }
         Text(
-            text = commonMaxOrStrongMin?.toReadableString() ?: "..",
+            text = roaDose.strongMin?.toReadableString() ?: "..",
             style = numberStyle,
             modifier = Modifier.textBrush(
                 brush = Brush.horizontalGradient(
@@ -114,7 +111,7 @@ fun RoaDoseView(
             Text("strong", style = labelStyle, color = strongColor)
         }
         Text(
-            text = strongMaxOrHeavy?.toReadableString() ?: "..",
+            text = roaDose.heavyMin?.toReadableString() ?: "..",
             style = numberStyle,
             modifier = Modifier.textBrush(
                 brush = Brush.horizontalGradient(
@@ -128,6 +125,6 @@ fun RoaDoseView(
             Text("-", color = heavyColor, style = numberStyle)
             Text("heavy", style = labelStyle, color = heavyColor)
         }
-        Text(text = roaDose.units ?: "", style = numberStyle)
+        Text(text = roaDose.units, style = numberStyle)
     }
 }

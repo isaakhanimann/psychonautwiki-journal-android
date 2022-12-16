@@ -43,20 +43,10 @@ class SubstanceWithCategoriesPreviewProvider : PreviewParameterProvider<Substanc
                         route = AdministrationRoute.SMOKED,
                         roaDose = RoaDose(
                             "mg",
-                            threshold = 20.0,
-                            light = DoseRange(
-                                min = 20.0,
-                                max = 40.0
-                            ),
-                            common = DoseRange(
-                                min = 40.0,
-                                max = 90.0
-                            ),
-                            strong = DoseRange(
-                                min = 90.0,
-                                max = 140.0
-                            ),
-                            heavy = 140.0
+                            lightMin = 20.0,
+                            commonMin = 40.0,
+                            strongMin  = 90.0,
+                            heavyMin = 140.0
                         ),
                         roaDuration = RoaDuration(
                             onset = DurationRange(
@@ -99,20 +89,10 @@ class SubstanceWithCategoriesPreviewProvider : PreviewParameterProvider<Substanc
                         route = AdministrationRoute.INTRAVENOUS,
                         roaDose = RoaDose(
                             "mg",
-                            threshold = 20.0,
-                            light = DoseRange(
-                                min = 20.0,
-                                max = 40.0
-                            ),
-                            common = DoseRange(
-                                min = 40.0,
-                                max = 90.0
-                            ),
-                            strong = DoseRange(
-                                min = 90.0,
-                                max = 140.0
-                            ),
-                            heavy = 140.0
+                            lightMin = 20.0,
+                            commonMin = 40.0,
+                            strongMin  = 90.0,
+                            heavyMin = 140.0
                         ),
                         roaDuration = RoaDuration(
                             onset = DurationRange(
@@ -155,20 +135,10 @@ class SubstanceWithCategoriesPreviewProvider : PreviewParameterProvider<Substanc
                         route = AdministrationRoute.ORAL,
                         roaDose = RoaDose(
                             "mg",
-                            threshold = 20.0,
-                            light = DoseRange(
-                                min = 20.0,
-                                max = 40.0
-                            ),
-                            common = DoseRange(
-                                min = 40.0,
-                                max = 90.0
-                            ),
-                            strong = DoseRange(
-                                min = 90.0,
-                                max = 140.0
-                            ),
-                            heavy = 140.0
+                            lightMin = 20.0,
+                            commonMin = 40.0,
+                            strongMin  = 90.0,
+                            heavyMin = 140.0
                         ),
                         roaDuration = RoaDuration(
                             onset = DurationRange(
