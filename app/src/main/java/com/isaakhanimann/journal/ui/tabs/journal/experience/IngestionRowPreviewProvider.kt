@@ -19,12 +19,11 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import java.time.Instant
 
 class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
@@ -47,7 +46,27 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                 )
             ),
             roaDuration = null,
-            doseClass = DoseClass.COMMON
+            numDots = 2
+        ),
+        IngestionElement(
+            ingestionWithCompanion = IngestionWithCompanion(
+                ingestion = Ingestion(
+                    substanceName = "2C-B",
+                    time = Instant.now(),
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = 90.0,
+                    isDoseAnEstimate = false,
+                    units = "mg",
+                    experienceId = 0,
+                    notes = "This is a very long note which I wrote to see how it looks like if the note spans more than one line in the ingestion row.",
+                ),
+                substanceCompanion = SubstanceCompanion(
+                    substanceName = "2C-B",
+                    color = AdaptiveColor.GREEN
+                )
+            ),
+            roaDuration = null,
+            numDots = 8
         ),
         IngestionElement(
             ingestionWithCompanion = IngestionWithCompanion(
@@ -67,7 +86,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                 )
             ),
             roaDuration = null,
-            doseClass = DoseClass.COMMON
+            numDots = null
         )
     )
 }

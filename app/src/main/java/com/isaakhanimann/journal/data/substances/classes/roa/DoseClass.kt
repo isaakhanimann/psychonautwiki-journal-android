@@ -22,8 +22,6 @@ import androidx.compose.ui.graphics.Color
 
 enum class DoseClass {
     THRESHOLD {
-        override val numDots: Int
-            get() = 1
         override val description: String
             get() = "A threshold dose is the dose at which the mental and physical alterations produced by the substance first become apparent.\n" +
                     "These effects are distinctly beyond that of placebo but may still be ignored with some effort by directing one's focus towards the external environment.\n" +
@@ -38,8 +36,6 @@ enum class DoseClass {
         }
     },
     LIGHT {
-        override val numDots: Int
-            get() = 2
         override val description: String
             get() = "A light dose produces a state which is somewhat distinct from sobriety but does not threaten to override the subject's ordinary awareness.\n" +
                     "The effects can be ignored by increasing the focus one directs towards the external environment and performing complex tasks.\n" +
@@ -54,8 +50,6 @@ enum class DoseClass {
         }
     },
     COMMON {
-        override val numDots: Int
-            get() = 3
         override val description: String
             get() = "A common dose is the dose at which the effects and nature of the substance is quite clear and distinct; the subject's ordinary awareness slips and ignoring its action becomes difficult.\n" +
                     "The subject will generally be able to partake in regular behaviors and remain functional and able to communicate, although this can depend on the individual.\n" +
@@ -70,8 +64,6 @@ enum class DoseClass {
         }
     },
     STRONG {
-        override val numDots: Int
-            get() = 4
         override val description: String
             get() = "A strong dose renders its subject mostly incapable of functioning, interacting normally, or thinking in a straightforward manner.\n" +
                     "The effects of the substance are clear and can no longer be ignored or suppressed, leaving the subject entirely engaged in the experience regardless of their desire or volition. Negative effects become more common at this level.\n" +
@@ -86,8 +78,6 @@ enum class DoseClass {
         }
     },
     HEAVY {
-        override val numDots: Int
-            get() = 5
         override val description: String
             get() = "A heavy dose is the upper limit of what a substance is capable of producing in terms of psychoactive effects; doses past this range are associated with rapidly increasing side effects and marginal desirable effects.\n" +
                     "Depending on the substance consumed, the user may be rendered incapable of functioning and communicating in addition to experiencing extremely uncomfortable side effects that overshadow the positive effects experienced at lower doses.\n" +
@@ -104,7 +94,6 @@ enum class DoseClass {
         }
     };
 
-    abstract val numDots: Int
     abstract val description: String
     abstract fun getComposeColor(isDarkTheme: Boolean): Color
 }

@@ -33,7 +33,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 
@@ -71,7 +70,10 @@ fun IngestionRow(
         Column {
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(text = ingestion.substanceName, style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = ingestion.substanceName,
+                        style = MaterialTheme.typography.titleMedium
+                    )
                     val timeString = ingestion.time.getStringOfPattern("EEE HH:mm")
                     Text(text = timeString)
                 }
@@ -83,9 +85,9 @@ fun IngestionRow(
                     } ?: run {
                         Text(text = "${ingestion.administrationRoute.displayText} Unknown Dose")
                     }
-                    val doseClass = ingestionElement.doseClass
-                    if (doseClass != null) {
-                        DotRow(doseClass = doseClass)
+                    val numDots = ingestionElement.numDots
+                    if (numDots != null) {
+                        DotRows(numDots = numDots)
                     }
                 }
             }
@@ -98,28 +100,61 @@ fun IngestionRow(
 }
 
 @Composable
-fun DotRow(doseClass: DoseClass) {
+fun DotRows(numDots: Int) {
+    val verticalPadding = 2.dp
+    Column {
+        if (numDots==0) {
+            Row(modifier = Modifier.padding(vertical = verticalPadding)) {
+                for (dot in 1..4) {
+                    Dot(isFull = false)
+                }
+            }
+        } else {
+            val numFullRows = numDots/4
+            val dotsInLastRow = numDots.rem(4)
+            if (numFullRows > 0) {
+                for (row in 1..numFullRows) {
+                    Row(modifier = Modifier.padding(vertical = verticalPadding)) {
+                        for (dot in 1..4) {
+                            Dot(isFull = true)
+                        }
+                    }
+                }
+            }
+            if (dotsInLastRow > 0) {
+                Row(modifier = Modifier.padding(vertical = verticalPadding)) {
+                    for (dot in 1..dotsInLastRow) {
+                        Dot(isFull = true)
+                    }
+                    val numEmpty = 4 - dotsInLastRow
+                    for (dot in 1..numEmpty) {
+                        Dot(isFull = false)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Dot(isFull: Boolean) {
     val dotSize = 10.dp
     val horizontalPadding = 1.dp
-    Row(modifier = Modifier.padding(vertical = 3.dp)) {
-        List(doseClass.numDots, init = { it }).forEach { _ ->
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
-                    .size(dotSize)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onBackground)
-            )
-        }
-        val numEmpty = DoseClass.values().size - doseClass.numDots
-        List(numEmpty, init = { it }).forEach { _ ->
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
-                    .size(dotSize)
-                    .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
-            )
-        }
+    if (isFull) {
+        Box(
+            modifier = Modifier
+                .padding(horizontal = horizontalPadding)
+                .size(dotSize)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.onBackground)
+        )
+    } else {
+        Box(
+            modifier = Modifier
+                .padding(horizontal = horizontalPadding)
+                .size(dotSize)
+                .clip(CircleShape)
+                .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+        )
     }
 }

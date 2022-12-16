@@ -211,14 +211,20 @@ fun OneExperienceScreen(
             val elements = oneExperienceScreenModel.ingestionElements
             val effectTimelines = remember(elements) {
                 elements.map { oneElement ->
+                    val horizontalWeight = if (oneElement.numDots==null) {
+                        0.5f
+                    } else if (oneElement.numDots>4) {
+                        1f
+                    } else {
+                        oneElement.numDots.toFloat()/4f
+                    }
                     return@map DataForOneEffectLine(
                         roaDuration = oneElement.roaDuration,
                         height = getHeightBetween0And1(
                             ingestion = oneElement.ingestionWithCompanion.ingestion,
                             allIngestions = elements.map { it.ingestionWithCompanion.ingestion }
                         ),
-                        horizontalWeight = ((oneElement.doseClass?.numDots?.toFloat()
-                            ?: 3f) - 1f) / 4f,
+                        horizontalWeight = horizontalWeight,
                         color = oneElement.ingestionWithCompanion.substanceCompanion?.color
                             ?: AdaptiveColor.RED,
                         startTime = oneElement.ingestionWithCompanion.ingestion.time
@@ -443,9 +449,9 @@ fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
         Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.titleMedium)
         Column(horizontalAlignment = Alignment.End) {
             Text(text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units)
-            val doseClass = cumulativeDose.doseClass
-            if (doseClass != null) {
-                DotRow(doseClass = doseClass)
+            val numDots = cumulativeDose.numDots
+            if (numDots != null) {
+                DotRows(numDots = numDots)
             }
         }
     }

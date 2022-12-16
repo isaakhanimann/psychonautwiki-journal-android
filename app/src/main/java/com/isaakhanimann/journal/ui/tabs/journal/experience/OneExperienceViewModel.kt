@@ -23,7 +23,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
@@ -134,15 +133,15 @@ class OneExperienceViewModel @Inject constructor(
 
     private fun getIngestionElements(sortedIngestionsWith: List<IngestionWithAssociatedData>): List<IngestionElement> {
         return sortedIngestionsWith.map { ingestionWith ->
-            val doseClass =
-                ingestionWith.roaDose?.getDoseClass(
+            val numDots =
+                ingestionWith.roaDose?.getNumDots(
                     ingestionWith.ingestionWithCompanion.ingestion.dose,
                     ingestionUnits = ingestionWith.ingestionWithCompanion.ingestion.units
                 )
             IngestionElement(
                 ingestionWithCompanion = ingestionWith.ingestionWithCompanion,
                 roaDuration = ingestionWith.roaDuration,
-                doseClass = doseClass
+                numDots = numDots
             )
         }
     }
@@ -205,7 +204,7 @@ class OneExperienceViewModel @Inject constructor(
                     val cumulativeDose =
                         groupedIngestions.mapNotNull { it.ingestionWithCompanion.ingestion.dose }
                             .sum()
-                    val doseClass = groupedIngestions.first().roaDose?.getDoseClass(
+                    val numDots = groupedIngestions.first().roaDose?.getNumDots(
                         ingestionDose = cumulativeDose,
                         ingestionUnits = units
                     )
@@ -214,7 +213,7 @@ class OneExperienceViewModel @Inject constructor(
                         cumulativeDose = cumulativeDose,
                         units = units,
                         isEstimate = isEstimate,
-                        doseClass = doseClass
+                        numDots = numDots
                     )
                 }
         }
@@ -238,13 +237,13 @@ data class CumulativeDose(
     val cumulativeDose: Double,
     val units: String?,
     val isEstimate: Boolean,
-    val doseClass: DoseClass?
+    val numDots: Int?
 )
 
 data class IngestionElement(
     val ingestionWithCompanion: IngestionWithCompanion,
     val roaDuration: RoaDuration?,
-    val doseClass: DoseClass?
+    val numDots: Int?
 )
 
 data class InteractionExplanation(

@@ -25,7 +25,6 @@ import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompani
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.InteractionType
-import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
@@ -104,7 +103,7 @@ class OneExperienceScreenPreviewProvider :
                             units = DurationUnits.HOURS
                         )
                     ),
-                    doseClass = DoseClass.COMMON
+                    numDots = 2
                 ),
                 IngestionElement(
                     ingestionWithCompanion = IngestionWithCompanion(
@@ -118,7 +117,7 @@ class OneExperienceScreenPreviewProvider :
                                 minute = 5
                             )!!,
                             administrationRoute = AdministrationRoute.INSUFFLATED,
-                            dose = 40.0,
+                            dose = 80.0,
                             isDoseAnEstimate = false,
                             units = "mg",
                             experienceId = 0,
@@ -157,7 +156,7 @@ class OneExperienceScreenPreviewProvider :
                         ),
                         afterglow = null
                     ),
-                    doseClass = DoseClass.COMMON
+                    numDots = 3
                 ),
                 IngestionElement(
                     ingestionWithCompanion = IngestionWithCompanion(
@@ -171,7 +170,7 @@ class OneExperienceScreenPreviewProvider :
                                 minute = 15
                             )!!,
                             administrationRoute = AdministrationRoute.INSUFFLATED,
-                            dose = 20.0,
+                            dose = 50.0,
                             isDoseAnEstimate = false,
                             units = "mg",
                             experienceId = 0,
@@ -210,7 +209,7 @@ class OneExperienceScreenPreviewProvider :
                         ),
                         afterglow = null
                     ),
-                    doseClass = DoseClass.LIGHT
+                    numDots = 2
                 )
             ),
             cumulativeDoses = listOf(
@@ -219,7 +218,7 @@ class OneExperienceScreenPreviewProvider :
                     cumulativeDose = 60.0,
                     units = "mg",
                     isEstimate = false,
-                    doseClass = DoseClass.STRONG
+                    numDots = 6
                 )
             ),
             interactions = listOf(
