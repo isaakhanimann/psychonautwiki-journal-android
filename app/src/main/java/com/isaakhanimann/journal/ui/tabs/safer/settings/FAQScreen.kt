@@ -61,6 +61,10 @@ fun FAQScreen() {
                 question = "Why does the timeline treat every ingestion independently?",
                 answer = "Because the information on tolerance and cross tolerance does not yet allow to do this reliably."
             )
+            QuestionAnswerRow(
+                question = "What do the dots next to the dose of the ingestion mean?",
+                answer = "0 dots means that the dose is less than threshold, 1: light, 2: common, 3: strong, 4: heavy. More than 4 dots means that the heavy dose is subtracted and the remainder is again classified in terms of light, common and strong."
+            )
         }
     }
 }
