@@ -38,7 +38,7 @@ data class RoaDose(
             DoseClass.COMMON
         } else if (strongMin != null && heavyMin != null && strongMin <= ingestionDose && ingestionDose < heavyMin) {
             DoseClass.STRONG
-        } else if (heavyMin != null && ingestionDose > heavyMin) {
+        } else if (heavyMin != null && heavyMin <= ingestionDose) {
             DoseClass.HEAVY
         } else {
             null
@@ -56,7 +56,7 @@ data class RoaDose(
         } else if (strongMin != null && heavyMin != null && strongMin <= ingestionDose && ingestionDose < heavyMin) {
             return 3
         } else if (heavyMin != null) {
-            return if (ingestionDose > heavyMin) {
+            return if (heavyMin <= ingestionDose) {
                 val timesHeavy = floor(ingestionDose.div(heavyMin)).roundToInt()
                 val rest = ingestionDose.rem(heavyMin)
                 return (timesHeavy * 4) + getNumDotsUpTo4(dose = rest)
