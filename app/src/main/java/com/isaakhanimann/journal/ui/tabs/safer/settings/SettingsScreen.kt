@@ -24,6 +24,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -91,6 +93,7 @@ fun SettingsScreen(
                 .padding(padding)
                 .padding(horizontal = horizontalPadding)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             CardWithTitle(title = "Interactions", innerPaddingHorizontal = 0.dp) {
                 SettingsButton(
