@@ -63,7 +63,7 @@ data class OnsetTotalTimeline(
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = onsetEndX, y = height)
-                val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
+                val totalX = startX + (total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec)
                 endSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
                     startX = onsetEndX,
@@ -95,11 +95,11 @@ data class OnsetTotalTimeline(
             path = Path().apply {
                 val onsetEndMinX = startX + (onset.minInSeconds * pixelsPerSec)
                 val onsetEndMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
-                val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
+                val totalX = startX + (total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec)
                 val totalMinX =
-                    total.minInSeconds * pixelsPerSec
+                    startX + (total.minInSeconds * pixelsPerSec)
                 val totalMaxX =
-                    total.maxInSeconds * pixelsPerSec
+                    startX + (total.maxInSeconds * pixelsPerSec)
                 moveTo(onsetEndMinX, height)
                 endSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,

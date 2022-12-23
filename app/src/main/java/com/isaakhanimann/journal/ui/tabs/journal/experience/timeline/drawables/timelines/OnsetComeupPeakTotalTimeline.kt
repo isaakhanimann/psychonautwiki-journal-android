@@ -76,7 +76,7 @@ data class OnsetComeupPeakTotalTimeline(
             path = Path().apply {
                 moveTo(x = peakEndX, y = 0f)
                 val offsetEndX =
-                    total.interpolateAtValueInSeconds(peakAndTotalWeight) * pixelsPerSec
+                    startX + (total.interpolateAtValueInSeconds(peakAndTotalWeight) * pixelsPerSec)
                 lineTo(x = offsetEndX, y = height)
             },
             color = color,
@@ -99,7 +99,7 @@ data class OnsetComeupPeakTotalTimeline(
                 val comeupEndMinX = onsetStartMinX + (comeup.minInSeconds * pixelsPerSec)
                 val peakEndMaxX =
                     startX + ((onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds) * pixelsPerSec)
-                val offsetEndMaxX = total.maxInSeconds * pixelsPerSec
+                val offsetEndMaxX = startX + (total.maxInSeconds * pixelsPerSec)
                 moveTo(onsetStartMinX, height)
                 lineTo(x = comeupEndMinX, y = 0f)
                 lineTo(x = peakEndMaxX, y = 0f)
@@ -111,7 +111,7 @@ data class OnsetComeupPeakTotalTimeline(
                 val peakEndMinX =
                     startX + ((onset.minInSeconds + comeup.minInSeconds + peak.minInSeconds) * pixelsPerSec)
                 val offsetEndMinX =
-                    total.minInSeconds * pixelsPerSec
+                    startX + (total.minInSeconds * pixelsPerSec)
                 lineTo(x = offsetEndMinX, y = height)
                 lineTo(x = peakEndMinX, y = 0f)
                 lineTo(x = comeupEndMaxX, y = 0f)
