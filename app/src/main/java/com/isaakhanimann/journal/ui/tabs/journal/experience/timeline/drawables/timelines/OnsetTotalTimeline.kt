@@ -63,18 +63,18 @@ data class OnsetTotalTimeline(
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = onsetEndX, y = height)
-                val totalX = startX + (total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec)
+                val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
                 endSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
                     startX = onsetEndX,
-                    endX = totalX / 2f,
+                    endX = startX + (totalX / 2f),
                     endY = 0f
                 )
                 startSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
-                    startX = totalX / 2f,
+                    startX = startX + (totalX / 2f),
                     startY = 0f,
-                    endX = totalX,
+                    endX = startX + totalX,
                     endY = height
                 )
             },
@@ -95,7 +95,8 @@ data class OnsetTotalTimeline(
             path = Path().apply {
                 val onsetEndMinX = startX + (onset.minInSeconds * pixelsPerSec)
                 val onsetEndMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
-                val totalX = startX + (total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec)
+                val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
+                val halfTotalX = startX + (totalX / 2)
                 val totalMinX =
                     startX + (total.minInSeconds * pixelsPerSec)
                 val totalMaxX =
@@ -104,12 +105,12 @@ data class OnsetTotalTimeline(
                 endSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
                     startX = onsetEndMinX,
-                    endX = totalX / 2,
+                    endX = halfTotalX,
                     endY = 0f
                 )
                 startSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
-                    startX = totalX / 2,
+                    startX = halfTotalX,
                     startY = 0f,
                     endX = totalMaxX,
                     endY = height
@@ -118,12 +119,12 @@ data class OnsetTotalTimeline(
                 endSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
                     startX = totalMinX,
-                    endX = totalX / 2,
+                    endX = halfTotalX,
                     endY = 0f
                 )
                 startSmoothLineTo(
                     smoothnessBetween0And1 = 0.5f,
-                    startX = totalX / 2,
+                    startX = halfTotalX,
                     startY = 0f,
                     endX = onsetEndMaxX,
                     endY = height

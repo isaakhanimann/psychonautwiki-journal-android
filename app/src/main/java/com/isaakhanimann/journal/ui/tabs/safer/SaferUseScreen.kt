@@ -255,7 +255,7 @@ fun SaferUseScreen(
                 SaferText(text = "Don’t drive, operate heavy machinery, or otherwise be directly or indirectly responsible for the safety or care of another person while intoxicated.")
             }
             CollapsibleSection(title = "10. Recovery Position") {
-                SaferText(text = "If someone is unconscious and breathing place them into Recovery Position to prevent death by the suffocation of vomit after a drug overdose.\nHave the contact details of help services to hand in case of urgent need. ")
+                SaferText(text = "If someone is unconscious and breathing place them into Recovery Position to prevent death by the suffocation of vomit after a drug overdose.\nHave the contact details of help services to hand in case of urgent need.")
                 Button(
                     onClick = {
                         uriHandler.openUri("https://www.youtube.com/watch?v=dv3agW-DZ5I")
