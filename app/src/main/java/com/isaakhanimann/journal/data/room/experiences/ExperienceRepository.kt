@@ -129,8 +129,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getAllIngestions(): List<Ingestion> =
         experienceDao.getAllIngestions()
 
-    suspend fun getAllExperiences(): List<Experience> =
-        experienceDao.getAllExperiences()
+    suspend fun getAllExperiencesWithIngestionsSorted(): List<ExperienceWithIngestions> =
+        experienceDao.getAllExperiencesWithIngestionsSorted()
 
     suspend fun getAllCustomSubstances(): List<CustomSubstance> =
         experienceDao.getAllCustomSubstances()

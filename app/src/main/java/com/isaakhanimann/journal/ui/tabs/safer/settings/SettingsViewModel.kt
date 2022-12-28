@@ -68,9 +68,30 @@ class SettingsViewModel @Inject constructor(
 
     fun exportFile(uri: Uri) {
         viewModelScope.launch {
+            val experiencesWithIngestions = experienceRepository.getAllExperiencesWithIngestionsSorted()
+            val experiencesSerializable = experiencesWithIngestions.map {
+                ExperienceSerializable(
+                    title = it.experience.title,
+                    text = it.experience.text,
+                    creationDate = it.experience.creationDate,
+                    sortDate = it.experience.sortDate,
+                    isFavorite = it.experience.isFavorite,
+                    ingestions = it.ingestions.map { ingestion ->
+                        IngestionSerializable(
+                            substanceName = ingestion.substanceName,
+                            time = ingestion.time,
+                            creationDate = ingestion.creationDate,
+                            administrationRoute = ingestion.administrationRoute,
+                            dose = ingestion.dose,
+                            isDoseAnEstimate = ingestion.isDoseAnEstimate,
+                            units = ingestion.units,
+                            notes = ingestion.notes
+                        )
+                    }
+                )
+            }
             val journalExport = JournalExport(
-                ingestions = experienceRepository.getAllIngestions(),
-                experiences = experienceRepository.getAllExperiences(),
+                experiences = experiencesSerializable,
                 substanceCompanions = experienceRepository.getAllSubstanceCompanions(),
                 customSubstances = experienceRepository.getAllCustomSubstances()
             )

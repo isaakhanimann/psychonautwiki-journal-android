@@ -54,8 +54,8 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion")
     suspend fun getAllIngestions(): List<Ingestion>
 
-    @Query("SELECT * FROM experience")
-    suspend fun getAllExperiences(): List<Experience>
+    @Query("SELECT * FROM experience ORDER BY sortDate")
+    suspend fun getAllExperiencesWithIngestionsSorted(): List<ExperienceWithIngestions>
 
     @Query("SELECT * FROM customsubstance")
     suspend fun getAllCustomSubstances(): List<CustomSubstance>
@@ -202,8 +202,32 @@ interface ExperienceDao {
     suspend fun insertEverything(
         journalExport: JournalExport
     ) {
-        journalExport.experiences.forEach { insert(it) }
-        journalExport.ingestions.forEach { insert(it) }
+        journalExport.experiences.forEachIndexed { indexExperience, experienceSerializable ->
+            val experienceID = indexExperience + 1
+            val newExperience = Experience(
+                id = experienceID,
+                title = experienceSerializable.title,
+                text = experienceSerializable.text,
+                creationDate = experienceSerializable.creationDate,
+                sortDate = experienceSerializable.sortDate,
+                isFavorite = experienceSerializable.isFavorite
+            )
+            insert(newExperience)
+            experienceSerializable.ingestions.forEach { ingestionSerializable ->
+                val newIngestion = Ingestion(
+                    substanceName = ingestionSerializable.substanceName,
+                    time = ingestionSerializable.time,
+                    creationDate = ingestionSerializable.creationDate,
+                    administrationRoute = ingestionSerializable.administrationRoute,
+                    dose = ingestionSerializable.dose,
+                    isDoseAnEstimate = ingestionSerializable.isDoseAnEstimate,
+                    units = ingestionSerializable.units,
+                    experienceId = experienceID,
+                    notes = ingestionSerializable.notes
+                )
+                insert(newIngestion)
+            }
+        }
         journalExport.substanceCompanions.forEach { insert(it) }
         journalExport.customSubstances.forEach { insert(it) }
     }

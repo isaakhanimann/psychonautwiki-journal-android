@@ -19,15 +19,36 @@
 package com.isaakhanimann.journal.ui.tabs.safer.settings
 
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
-import com.isaakhanimann.journal.data.room.experiences.entities.Experience
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import kotlinx.serialization.Serializable
+import java.time.Instant
 
 @Serializable
 data class JournalExport(
-    val ingestions: List<Ingestion>,
-    val experiences: List<Experience>,
+    val experiences: List<ExperienceSerializable>,
     val substanceCompanions: List<SubstanceCompanion>,
     val customSubstances: List<CustomSubstance>
+)
+
+@Serializable
+data class ExperienceSerializable(
+    val title: String,
+    val text: String,
+    @Serializable(with= InstantSerializer::class) val creationDate: Instant = Instant.now(),
+    @Serializable(with= InstantSerializer::class) val sortDate: Instant,
+    val isFavorite: Boolean = false,
+    val ingestions: List<IngestionSerializable>
+)
+
+@Serializable
+data class IngestionSerializable(
+    val substanceName: String,
+    @Serializable(with= InstantSerializer::class) var time: Instant,
+    @Serializable(with= InstantSerializer::class) var creationDate: Instant? = Instant.now(),
+    val administrationRoute: AdministrationRoute,
+    var dose: Double?,
+    var isDoseAnEstimate: Boolean,
+    var units: String?,
+    var notes: String?
 )
