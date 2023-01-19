@@ -15,8 +15,8 @@ android {
         applicationId "com.isaakhanimann.journal"
         minSdk 26
         targetSdk 33
-        versionCode 10
-        versionName "2.3"
+        versionCode 11
+        versionName "3.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
