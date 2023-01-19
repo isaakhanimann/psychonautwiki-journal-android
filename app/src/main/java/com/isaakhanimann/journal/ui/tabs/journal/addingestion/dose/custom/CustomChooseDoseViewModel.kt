@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -62,10 +62,14 @@ class CustomChooseDoseViewModel @Inject constructor(
                 if (it == null) return null
                 purity.let { safePurity ->
                     if (safePurity == null) return null
-                    return String
+                    val value = String
                         .format("%.2f", it.div(safePurity).times(100))
-                        .toDouble()
-                        .toReadableString() + " $units"
+                        .toDoubleOrNull()
+                    if (value != null) {
+                        return value.toReadableString() + " $units"
+                    } else {
+                        return null
+                    }
                 }
             }
         }
