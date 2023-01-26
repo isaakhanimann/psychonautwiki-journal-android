@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.time
 
 import android.app.TimePickerDialog
+import android.text.format.DateFormat
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -54,7 +55,7 @@ fun TimePickerButton(
                     .withHour(newHour)
                     .withMinute(newMinute)
             )
-        }, localDateTime.hour, localDateTime.minute, false
+        }, localDateTime.hour, localDateTime.minute, DateFormat.is24HourFormat(context)
     )
     if (hasOutline) {
         OutlinedButton(onClick = timePickerDialog::show, modifier = modifier) {
