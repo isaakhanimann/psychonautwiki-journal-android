@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -25,6 +25,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.isaakhanimann.journal.ui.VERSION_NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -56,10 +57,10 @@ class CheckVersionViewModel @Inject constructor(
                 try {
                     val onlineVersion = url.readText()
                     val majorVersionOnline = onlineVersion.split(".")[0]
-                    val majorVersionApp = BuildConfig.VERSION_NAME.split(".")[0]
+                    val majorVersionApp = VERSION_NAME.split(".")[0]
                     if (majorVersionOnline != majorVersionApp) {
                         newerVersionText.value =
-                            "Your version is ${BuildConfig.VERSION_NAME} but the newest version is $onlineVersion. Visit the website to download the newest version. Your data will be automatically migrated during installation."
+                            "Your version is $VERSION_NAME but the newest version is $onlineVersion. Visit the website to download the newest version. Your data will be automatically migrated during installation."
                         isShowingNewerVersionAlert.value = true
                     }
                 } finally {

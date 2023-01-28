@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -22,3 +22,5 @@ const val DOSE_DISCLAIMER =
     "Always start with lower doses due to differences between individual body weight, tolerance, metabolism, and personal sensitivity."
 
 const val VOLUMETRIC_DOSE_ARTICLE_URL = "https://psychonautwiki.org/wiki/Volumetric_liquid_dosing"
+
+const val VERSION_NAME = "3.0"

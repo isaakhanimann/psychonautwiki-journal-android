@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.journal.BuildConfig
+import com.isaakhanimann.journal.ui.VERSION_NAME
 import com.isaakhanimann.journal.ui.tabs.journal.experience.CardWithTitle
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import kotlinx.coroutines.launch
@@ -269,7 +269,7 @@ fun SettingsScreen(
                         .padding(top = 10.dp)
                 ) {
                     Text(
-                        text = "Version " + BuildConfig.VERSION_NAME,
+                        text = "Version $VERSION_NAME",
                         style = MaterialTheme.typography.labelLarge,
                     )
                     Spacer(modifier = Modifier.height(5.dp))
