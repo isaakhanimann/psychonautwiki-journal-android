@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ data class AxisDrawable(
     fun getFullHours(pixelsPerSec: Float, widthInPixels: Float): List<FullHour> {
         val widthInWholeHours = widthInSeconds.toLong().toDuration(DurationUnit.SECONDS).inWholeHours
         val widthPerHour = widthInPixels / widthInWholeHours
-        val minWidthPerHour = 70.0
+        val minWidthPerHour = 60.0
         var stepSize = (minWidthPerHour / widthPerHour).roundToLong()
         if (stepSize == 0.toLong()) {
             stepSize = 1

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -85,7 +85,7 @@ fun AllTimelines(
         }
         val isDarkTheme = isSystemInDarkTheme()
         val density = LocalDensity.current
-        val labelSize = MaterialTheme.typography.bodyLarge.fontSize
+        val labelSize = MaterialTheme.typography.labelMedium.fontSize
         val textPaint = remember(density) {
             Paint().apply {
                 color =
