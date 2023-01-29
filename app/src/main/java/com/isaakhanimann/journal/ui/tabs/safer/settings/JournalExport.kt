@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -38,7 +38,8 @@ data class ExperienceSerializable(
     @Serializable(with= InstantSerializer::class) val creationDate: Instant = Instant.now(),
     @Serializable(with= InstantSerializer::class) val sortDate: Instant,
     val isFavorite: Boolean = false,
-    val ingestions: List<IngestionSerializable>
+    val ingestions: List<IngestionSerializable>,
+    val location: LocationSerializable?
 )
 
 @Serializable
@@ -51,4 +52,11 @@ data class IngestionSerializable(
     var isDoseAnEstimate: Boolean,
     var units: String?,
     var notes: String?
+)
+
+@Serializable
+data class LocationSerializable(
+    val name: String,
+    val latitude: Double?,
+    val longitude: Double?
 )

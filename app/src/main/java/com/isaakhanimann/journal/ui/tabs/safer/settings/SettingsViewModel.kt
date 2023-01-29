@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -56,7 +56,8 @@ class SettingsViewModel @Inject constructor(
                         message = "Import Successful",
                         duration = SnackbarDuration.Short
                     )
-                } catch (_: Exception) {
+                } catch (e: Exception) {
+                    println("Error when decoding: ${e.message}")
                     snackbarHostState.showSnackbar(
                         message = "Decoding File Failed",
                         duration = SnackbarDuration.Short
@@ -87,7 +88,8 @@ class SettingsViewModel @Inject constructor(
                             units = ingestion.units,
                             notes = ingestion.notes
                         )
-                    }
+                    },
+                    location = null
                 )
             }
             val journalExport = JournalExport(
