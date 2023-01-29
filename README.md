@@ -10,9 +10,6 @@ This app is built natively with [Jetpack Compose](https://developer.android.com/
 ## Download
 https://isaakhanimann.github.io/
 
-## Requirements
-To try out this app, clone this repository and open the root directory in [Android Studio](https://developer.android.com/studio).
-
 ## License
 ```
 This file is part of PsychonautWiki Journal.
