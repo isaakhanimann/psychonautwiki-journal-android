@@ -39,7 +39,7 @@ data class ExperienceSerializable(
     @Serializable(with= InstantSerializer::class) val sortDate: Instant,
     val isFavorite: Boolean = false,
     val ingestions: List<IngestionSerializable>,
-    val location: LocationSerializable?
+    val location: LocationSerializable? = null
 )
 
 @Serializable
