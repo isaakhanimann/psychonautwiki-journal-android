@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ sealed class NoArgumentRouter(val route: String) {
     object ExplainTimelineOnJournalTabRouter :
         NoArgumentRouter(route = "explainTimelineOnJournalTab")
 
-    object SettingsRouter : NoArgumentRouter(route = "settings")
+    object SettingsRouter : NoArgumentRouter(route = "settingsChild")
     object DosageExplanationRouterOnSaferTab :
         NoArgumentRouter(route = "dosageExplanationOnSaferTab")
 

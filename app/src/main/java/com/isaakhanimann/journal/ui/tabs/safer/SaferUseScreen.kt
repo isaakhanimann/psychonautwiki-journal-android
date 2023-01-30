@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Biotech
 import androidx.compose.material.icons.outlined.HealthAndSafety
 import androidx.compose.material.icons.outlined.Info
@@ -52,7 +51,6 @@ fun SaferUsePreview() {
         navigateToDosageGuideScreen = {},
         navigateToDosageClassificationScreen = {},
         navigateToRouteExplanationScreen = {},
-        navigateToSettings = {},
         navigateToURL = {},
         navigateToReagentTestingScreen = {}
     )
@@ -67,22 +65,13 @@ fun SaferUseScreen(
     navigateToDosageGuideScreen: () -> Unit,
     navigateToDosageClassificationScreen: () -> Unit,
     navigateToRouteExplanationScreen: () -> Unit,
-    navigateToSettings: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     navigateToReagentTestingScreen: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Safer Use") },
-                actions = {
-                    IconButton(
-                        onClick = navigateToSettings
-                    ) {
-                        Icon(Icons.Filled.Settings, contentDescription = "Settings")
-
-                    }
-                }
+                title = { Text("Safer Use") }
             )
         }
     ) { padding ->

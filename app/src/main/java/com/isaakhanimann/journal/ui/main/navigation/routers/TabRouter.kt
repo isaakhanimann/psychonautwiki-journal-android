@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -20,10 +20,7 @@ package com.isaakhanimann.journal.ui.main.navigation.routers
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BarChart
-import androidx.compose.material.icons.outlined.HealthAndSafety
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Timeline
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.isaakhanimann.journal.R
 
@@ -59,5 +56,12 @@ sealed class TabRouter(
         childRoute = NoArgumentRouter.SaferRouter.route,
         resourceId = R.string.safer,
         icon = Icons.Outlined.HealthAndSafety
+    )
+
+    object Settings : TabRouter(
+        route = "settingsTab",
+        childRoute = NoArgumentRouter.SettingsRouter.route,
+        resourceId = R.string.settings,
+        icon = Icons.Outlined.Settings
     )
 }

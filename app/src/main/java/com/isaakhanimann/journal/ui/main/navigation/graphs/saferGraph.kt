@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -25,9 +25,6 @@ import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.tabs.safer.*
-import com.isaakhanimann.journal.ui.tabs.safer.settings.FAQScreen
-import com.isaakhanimann.journal.ui.tabs.safer.settings.SettingsScreen
-import com.isaakhanimann.journal.ui.tabs.safer.settings.combinations.CombinationSettingsScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 
@@ -47,21 +44,12 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
                 navigateToDosageGuideScreen = navController::navigateToDosageGuideScreen,
                 navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreenOnSaferTab,
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
-                navigateToSettings = navController::navigateToSettings,
                 navigateToURL = navController::navigateToURLInSaferTab,
                 navigateToReagentTestingScreen = navController::navigateToReagentTesting
             )
         }
-        composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
-        composableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
         composableWithTransitions(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
         composableWithTransitions(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
-        composableWithTransitions(NoArgumentRouter.SettingsRouter.route) {
-            SettingsScreen(
-                navigateToFAQ = navController::navigateToFAQ,
-                navigateToComboSettings = navController::navigateToComboSettings
-            )
-        }
         composableWithTransitions(NoArgumentRouter.DosageExplanationRouterOnSaferTab.route) { DoseExplanationScreen() }
         composableWithTransitions(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
             RouteExplanationScreen(

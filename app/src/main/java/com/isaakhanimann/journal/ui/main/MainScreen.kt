@@ -54,7 +54,8 @@ fun MainScreen(
             TabRouter.Journal,
             TabRouter.Statistics,
             TabRouter.Search,
-            TabRouter.SaferUse
+            TabRouter.SaferUse,
+            TabRouter.Settings
         )
         ModalNavigationDrawer(
             drawerState = drawerState,
@@ -105,6 +106,7 @@ fun MainScreen(
                     statsGraph(navController)
                     searchGraph(navController)
                     saferGraph(navController)
+                    settingsGraph(navController)
                 }
             }
         )
