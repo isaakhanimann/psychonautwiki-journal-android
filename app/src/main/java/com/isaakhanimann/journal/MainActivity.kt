@@ -35,7 +35,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.isaakhanimann.journal.ui.main.MainScreen
-import com.isaakhanimann.journal.ui.tabs.safer.settings.DOWNLOAD_URL
+import com.isaakhanimann.journal.ui.tabs.settings.DOWNLOAD_URL
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import dagger.hilt.android.AndroidEntryPoint
 

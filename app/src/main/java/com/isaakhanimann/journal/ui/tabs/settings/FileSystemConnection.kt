@@ -16,7 +16,7 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.safer.settings
+package com.isaakhanimann.journal.ui.tabs.settings
 
 import android.content.Context
 import android.net.Uri

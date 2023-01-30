@@ -16,7 +16,7 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.safer.settings
+package com.isaakhanimann.journal.ui.tabs.settings
 
 import android.net.Uri
 import androidx.compose.material3.SnackbarDuration
@@ -51,6 +51,7 @@ class SettingsViewModel @Inject constructor(
             } else {
                 try {
                     val journalExport = Json.decodeFromString<JournalExport>(text)
+                    experienceRepository.deleteEverything()
                     experienceRepository.insertEverything(journalExport)
                     snackbarHostState.showSnackbar(
                         message = "Import Successful",

@@ -26,9 +26,9 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToComboSettings
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToFAQ
-import com.isaakhanimann.journal.ui.tabs.safer.settings.FAQScreen
-import com.isaakhanimann.journal.ui.tabs.safer.settings.SettingsScreen
-import com.isaakhanimann.journal.ui.tabs.safer.settings.combinations.CombinationSettingsScreen
+import com.isaakhanimann.journal.ui.tabs.settings.FAQScreen
+import com.isaakhanimann.journal.ui.tabs.settings.SettingsScreen
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsScreen
 
 
 fun NavGraphBuilder.settingsGraph(navController: NavController) {

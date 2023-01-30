@@ -16,7 +16,7 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.safer.settings.combinations
+package com.isaakhanimann.journal.ui.tabs.settings.combinations
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

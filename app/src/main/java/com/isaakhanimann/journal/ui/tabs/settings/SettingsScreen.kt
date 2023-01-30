@@ -16,7 +16,7 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.safer.settings
+package com.isaakhanimann.journal.ui.tabs.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -182,7 +182,7 @@ fun SettingsScreen(
                             Text(text = "Import File?")
                         },
                         text = {
-                            Text("Import a file that was exported before. Note that this won't delete the data that you already have in the app, so consider deleting everything first.")
+                            Text("Import a file that was exported before. Note that this will delete the data that you already have in the app.")
                         },
                         confirmButton = {
                             TextButton(
