@@ -23,4 +23,4 @@ const val DOSE_DISCLAIMER =
 
 const val VOLUMETRIC_DOSE_ARTICLE_URL = "https://psychonautwiki.org/wiki/Volumetric_liquid_dosing"
 
-const val VERSION_NAME = "4.0"
+const val VERSION_NAME = "5.0"
