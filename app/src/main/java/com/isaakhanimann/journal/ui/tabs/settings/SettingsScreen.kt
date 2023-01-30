@@ -263,24 +263,13 @@ fun SettingsScreen(
                     context.startActivity(shareIntent)
                 }
                 Divider()
-                Column(
+                Text(
+                    text = "Version $VERSION_NAME",
+                    style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier
                         .padding(horizontal = 15.dp)
-                        .padding(top = 10.dp)
-                ) {
-                    Text(
-                        text = "Version $VERSION_NAME",
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text("Installing newer versions will automatically migrate your data.")
-                }
-                SettingsButton(
-                    imageVector = Icons.Outlined.OpenInBrowser,
-                    text = "Visit Download Website"
-                ) {
-                    uriHandler.openUri(DOWNLOAD_URL)
-                }
+                        .padding(vertical = 10.dp)
+                )
             }
         }
     }
