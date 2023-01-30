@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -34,7 +34,10 @@ import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
 
 
-fun NavGraphBuilder.journalGraph(navController: NavController) {
+fun NavGraphBuilder.journalGraph(
+    navController: NavController,
+    openNavigationDrawer: () -> Unit
+) {
     navigation(
         startDestination = NoArgumentRouter.JournalRouter.route,
         route = TabRouter.Journal.route,
@@ -46,7 +49,8 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 navigateToExperiencePopNothing = {
                     navController.navigateToExperience(experienceId = it)
                 },
-                navigateToAddIngestion = navController::navigateToAddIngestion
+                navigateToAddIngestion = navController::navigateToAddIngestion,
+                openNavigationDrawer = openNavigationDrawer
             )
         }
         composableWithTransitions(

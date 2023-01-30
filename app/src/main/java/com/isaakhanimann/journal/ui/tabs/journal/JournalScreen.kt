@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -26,10 +26,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.*
@@ -54,12 +51,14 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
+    openNavigationDrawer: () -> Unit,
     viewModel: JournalViewModel = hiltViewModel()
 ) {
     val currentAndPrevious = viewModel.currentAndPreviousExperiences.collectAsState().value
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToAddIngestion = navigateToAddIngestion,
+        openNavigationDrawer = openNavigationDrawer,
         isFavoriteEnabled = viewModel.isFavoriteEnabledFlow.collectAsState().value,
         onChangeIsFavorite = viewModel::onChangeFavorite,
         searchText = viewModel.searchTextFlow.collectAsState().value,
@@ -82,6 +81,7 @@ fun ExperiencesScreenPreview(
         JournalScreen(
             navigateToExperiencePopNothing = {},
             navigateToAddIngestion = {},
+            openNavigationDrawer = {},
             isFavoriteEnabled = false,
             onChangeIsFavorite = {},
             searchText = "",
@@ -99,6 +99,7 @@ fun ExperiencesScreenPreview(
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
+    openNavigationDrawer: () -> Unit,
     isFavoriteEnabled: Boolean,
     onChangeIsFavorite: (Boolean) -> Unit,
     searchText: String,
@@ -112,6 +113,14 @@ fun JournalScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Experiences") },
+                navigationIcon = {
+                    IconButton(onClick = openNavigationDrawer) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu"
+                        )
+                    }
+                },
                 actions = {
                     IconToggleButton(
                         checked = isFavoriteEnabled,
