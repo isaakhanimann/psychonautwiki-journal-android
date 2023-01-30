@@ -1,0 +1,398 @@
+{
+    "substanceCompanions":
+    [
+        {
+            "color": "GREEN",
+            "substanceName": "Caffeine"
+        },
+        {
+            "color": "BLUE",
+            "substanceName": "Citicoline"
+        },
+        {
+            "color": "PINK",
+            "substanceName": "Tyrosine"
+        }
+    ],
+    "customSubstances":
+    [],
+    "experiences":
+    [
+        {
+            "location": null,
+            "creationDate": 1673800834000,
+            "title": "14 Mar 2022",
+            "sortDate": 1647276011000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 100,
+                    "time": 1647276011000,
+                    "creationDate": 1673800834000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673800862000,
+            "title": "1 Nov 2022",
+            "sortDate": 1667320857000,
+            "isFavorite": true,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 100,
+                    "time": 1667320857000,
+                    "creationDate": 1673800862000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673800872000,
+            "title": "21 Sep 2022",
+            "sortDate": 1663774866000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 100,
+                    "time": 1663774866000,
+                    "creationDate": 1673800872000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673800883000,
+            "title": "31 May 2022",
+            "sortDate": 1654011676000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 100,
+                    "time": 1654011676000,
+                    "creationDate": 1673800883000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673800894000,
+            "title": "1 Aug 2022",
+            "sortDate": 1659368488000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 100,
+                    "time": 1659368488000,
+                    "creationDate": 1673800894000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                },
+                {
+                    "dose": 800,
+                    "time": 1659370664000,
+                    "creationDate": 1673803077000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Citicoline"
+                },
+                {
+                    "dose": 1500,
+                    "time": 1659370804000,
+                    "creationDate": 1673803216000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Tyrosine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673800904000,
+            "title": "28 Nov 2022",
+            "sortDate": 1669653698000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 100,
+                    "time": 1669653698000,
+                    "creationDate": 1673800904000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                },
+                {
+                    "dose": 1500,
+                    "time": 1669655954000,
+                    "creationDate": 1673803164000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Tyrosine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673800951000,
+            "title": "6 Oct 2022",
+            "sortDate": 1665070939000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 1500,
+                    "time": 1665070939000,
+                    "creationDate": 1673800951000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Tyrosine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673800965000,
+            "title": "11 Jun 2022",
+            "sortDate": 1654962159000,
+            "isFavorite": true,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 1500,
+                    "time": 1654962159000,
+                    "creationDate": 1673800965000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Tyrosine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673800978000,
+            "title": "23 Apr 2022",
+            "sortDate": 1650728569000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 1500,
+                    "time": 1650728569000,
+                    "creationDate": 1673800978000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Tyrosine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673801042000,
+            "title": "28 Jun 2022",
+            "sortDate": 1656431035000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 800,
+                    "time": 1656431035000,
+                    "creationDate": 1673801042000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Citicoline"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673801060000,
+            "title": "6 Sep 2022",
+            "sortDate": 1662479048000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 800,
+                    "time": 1662479048000,
+                    "creationDate": 1673801060000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Citicoline"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673803056000,
+            "title": "13 Nov 2022",
+            "sortDate": 1668359852000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 800,
+                    "time": 1668359852000,
+                    "creationDate": 1673803056000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Citicoline"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673803103000,
+            "title": "17 Dec 2022",
+            "sortDate": 1671297497000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 1500,
+                    "time": 1671297497000,
+                    "creationDate": 1673803103000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Tyrosine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673862934000,
+            "title": "8 Dec 2022",
+            "sortDate": 1670493331000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 100,
+                    "time": 1670493331000,
+                    "creationDate": 1673862934000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673862941000,
+            "title": "10 Nov 2022",
+            "sortDate": 1668074138000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 100,
+                    "time": 1668074138000,
+                    "creationDate": 1673862941000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                }
+            ]
+        },
+        {
+            "location": null,
+            "creationDate": 1673863023000,
+            "title": "16 Jan 2023",
+            "sortDate": 1673848616000,
+            "isFavorite": false,
+            "text": "",
+            "ingestions":
+            [
+                {
+                    "dose": 100,
+                    "time": 1673848616000,
+                    "creationDate": 1673863023000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                },
+                {
+                    "dose": 100,
+                    "time": 1673863028000,
+                    "creationDate": 1673863031000,
+                    "notes": "",
+                    "units": "mg",
+                    "isDoseAnEstimate": false,
+                    "administrationRoute": "ORAL",
+                    "substanceName": "Caffeine"
+                }
+            ]
+        }
+    ]
+}
