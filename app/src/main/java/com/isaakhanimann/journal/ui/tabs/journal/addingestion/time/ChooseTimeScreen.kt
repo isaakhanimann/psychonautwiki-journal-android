@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -46,7 +46,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 
@@ -57,10 +56,11 @@ fun ChooseTimeScreen(
 ) {
     val localDateTime = viewModel.localDateTimeFlow.collectAsState().value
     ChooseTimeScreen(
-        createAndSaveIngestion = viewModel::createAndSaveIngestion,
+        createSaveAndDismissAfter = {
+            viewModel.createSaveAndDismissAfter(dismiss = dismissAddIngestionScreens)
+        },
         onChangeDateOrTime = viewModel::onChangeDateOrTime,
         localDateTime = localDateTime,
-        dismissAddIngestionScreens = dismissAddIngestionScreens,
         isLoadingColor = viewModel.isLoadingColor,
         isShowingColorPicker = viewModel.isShowingColorPicker,
         selectedColor = viewModel.selectedColor,
@@ -90,10 +90,9 @@ fun ChooseTimeScreenPreview() {
         !alreadyUsedColors.contains(color)
     }
     ChooseTimeScreen(
-        createAndSaveIngestion = {},
+        createSaveAndDismissAfter = {},
         onChangeDateOrTime = {},
         localDateTime = LocalDateTime.now(),
-        dismissAddIngestionScreens = {},
         isLoadingColor = false,
         isShowingColorPicker = true,
         selectedColor = AdaptiveColor.BLUE,
@@ -119,10 +118,9 @@ fun ChooseTimeScreenPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseTimeScreen(
-    createAndSaveIngestion: () -> Unit,
+    createSaveAndDismissAfter: () -> Unit,
     onChangeDateOrTime: (LocalDateTime) -> Unit,
     localDateTime: LocalDateTime,
-    dismissAddIngestionScreens: () -> Unit,
     isLoadingColor: Boolean,
     isShowingColorPicker: Boolean,
     selectedColor: AdaptiveColor,
@@ -140,10 +138,7 @@ fun ChooseTimeScreen(
     onChangeOfEnteredTitle: (String) -> Unit,
     isEnteredTitleOk: Boolean
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = { TopAppBar(title = { Text("$substanceName Ingestion") }) },
         floatingActionButton = {
             AnimatedVisibility(
@@ -153,14 +148,7 @@ fun ChooseTimeScreen(
             ) {
                 ExtendedFloatingActionButton(
                     onClick = {
-                        createAndSaveIngestion()
-                        scope.launch {
-                            snackbarHostState.showSnackbar(
-                                message = "Ingestion Added",
-                                duration = SnackbarDuration.Short
-                            )
-                        }
-                        dismissAddIngestionScreens()
+                        createSaveAndDismissAfter()
                     },
                     icon = {
                         Icon(

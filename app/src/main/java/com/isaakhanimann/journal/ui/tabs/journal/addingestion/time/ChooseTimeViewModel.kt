@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -35,8 +35,10 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -183,57 +185,64 @@ class ChooseTimeViewModel @Inject constructor(
         }
     }
 
-    fun createAndSaveIngestion() {
+    fun createSaveAndDismissAfter(dismiss: () -> Unit) {
         viewModelScope.launch {
-            val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
-            val oldIdToUse = experienceWithIngestionsToAddToFlow.firstOrNull()?.experience?.id
-            val userWantsToCreateANewExperience =
-                !(userWantsToContinueSameExperienceFlow.firstOrNull() ?: true)
-            val substanceCompanion = SubstanceCompanion(
-                substanceName,
-                color = selectedColor
-            )
-            val ingestionTime = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
-            if (userWantsToCreateANewExperience || oldIdToUse == null) {
-                val newExperience = Experience(
-                    id = newIdToUse,
-                    title = enteredTitle,
-                    text = "",
-                    creationDate = Instant.now(),
-                    sortDate = ingestionTime
-                )
-                val newIngestion = Ingestion(
-                    substanceName = substanceName,
-                    time = ingestionTime,
-                    administrationRoute = administrationRoute,
-                    dose = dose,
-                    isDoseAnEstimate = isEstimate,
-                    units = units,
-                    experienceId = newExperience.id,
-                    notes = note
-                )
-                experienceRepo.insertIngestionExperienceAndCompanion(
-                    ingestion = newIngestion,
-                    experience = newExperience,
-                    substanceCompanion = substanceCompanion
-                )
-
-            } else {
-                val newIngestion = Ingestion(
-                    substanceName = substanceName,
-                    time = ingestionTime,
-                    administrationRoute = administrationRoute,
-                    dose = dose,
-                    isDoseAnEstimate = isEstimate,
-                    units = units,
-                    experienceId = oldIdToUse,
-                    notes = note
-                )
-                experienceRepo.insertIngestionAndCompanion(
-                    ingestion = newIngestion,
-                    substanceCompanion = substanceCompanion
-                )
+            createAndSaveIngestion()
+            withContext(Dispatchers.Main) {
+                dismiss()
             }
+        }
+    }
+
+    suspend fun createAndSaveIngestion() {
+        val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
+        val oldIdToUse = experienceWithIngestionsToAddToFlow.firstOrNull()?.experience?.id
+        val userWantsToCreateANewExperience =
+            !(userWantsToContinueSameExperienceFlow.firstOrNull() ?: true)
+        val substanceCompanion = SubstanceCompanion(
+            substanceName,
+            color = selectedColor
+        )
+        val ingestionTime = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+        if (userWantsToCreateANewExperience || oldIdToUse == null) {
+            val newExperience = Experience(
+                id = newIdToUse,
+                title = enteredTitle,
+                text = "",
+                creationDate = Instant.now(),
+                sortDate = ingestionTime
+            )
+            val newIngestion = Ingestion(
+                substanceName = substanceName,
+                time = ingestionTime,
+                administrationRoute = administrationRoute,
+                dose = dose,
+                isDoseAnEstimate = isEstimate,
+                units = units,
+                experienceId = newExperience.id,
+                notes = note
+            )
+            experienceRepo.insertIngestionExperienceAndCompanion(
+                ingestion = newIngestion,
+                experience = newExperience,
+                substanceCompanion = substanceCompanion
+            )
+
+        } else {
+            val newIngestion = Ingestion(
+                substanceName = substanceName,
+                time = ingestionTime,
+                administrationRoute = administrationRoute,
+                dose = dose,
+                isDoseAnEstimate = isEstimate,
+                units = units,
+                experienceId = oldIdToUse,
+                notes = note
+            )
+            experienceRepo.insertIngestionAndCompanion(
+                ingestion = newIngestion,
+                substanceCompanion = substanceCompanion
+            )
         }
     }
 }
