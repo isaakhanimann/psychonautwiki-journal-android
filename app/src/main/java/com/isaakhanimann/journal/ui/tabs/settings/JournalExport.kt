@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.settings
 
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import kotlinx.serialization.Serializable
@@ -39,7 +40,7 @@ data class ExperienceSerializable(
     @Serializable(with= InstantSerializer::class) val sortDate: Instant,
     val isFavorite: Boolean = false,
     val ingestions: List<IngestionSerializable>,
-    val location: LocationSerializable? = null
+    val location: LocationSerializable?
 )
 
 @Serializable
@@ -51,7 +52,8 @@ data class IngestionSerializable(
     var dose: Double?,
     var isDoseAnEstimate: Boolean,
     var units: String?,
-    var notes: String?
+    var notes: String?,
+    var stomachFullness: StomachFullness?
 )
 
 @Serializable

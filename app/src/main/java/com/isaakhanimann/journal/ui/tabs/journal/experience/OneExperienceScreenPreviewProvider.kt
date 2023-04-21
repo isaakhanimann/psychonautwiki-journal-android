@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -65,6 +66,7 @@ class OneExperienceScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
+                            stomachFullness = StomachFullness.EMPTY
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "MDMA",
@@ -122,6 +124,7 @@ class OneExperienceScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
+                            stomachFullness = StomachFullness.EMPTY
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Cocaine",
@@ -175,6 +178,7 @@ class OneExperienceScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
+                            stomachFullness = StomachFullness.EMPTY
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Cocaine",

@@ -87,7 +87,8 @@ class SettingsViewModel @Inject constructor(
                             dose = ingestion.dose,
                             isDoseAnEstimate = ingestion.isDoseAnEstimate,
                             units = ingestion.units,
-                            notes = ingestion.notes
+                            notes = ingestion.notes,
+                            stomachFullness = ingestion.stomachFullness
                         )
                     },
                     location = null

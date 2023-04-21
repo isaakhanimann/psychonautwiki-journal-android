@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -19,10 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.journal
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
-import com.isaakhanimann.journal.data.room.experiences.entities.Experience
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.*
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -46,6 +43,7 @@ class JournalScreenPreviewProvider :
                             hourOfDay = 14,
                             minute = 20
                         )!!,
+                        location = Location(name = "Max place", longitude = 4.0, latitude = 5.0)
                     ),
                     ingestionsWithCompanions = listOf(
                         IngestionWithCompanion(
@@ -64,6 +62,7 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
+                                stomachFullness = StomachFullness.EMPTY
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "MDMA",
@@ -86,6 +85,7 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
+                                stomachFullness = StomachFullness.EMPTY
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Cocaine",
@@ -108,6 +108,7 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
+                                stomachFullness = StomachFullness.EMPTY
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Ketamine",
@@ -128,6 +129,7 @@ class JournalScreenPreviewProvider :
                             hourOfDay = 12,
                             minute = 20
                         )!!,
+                        location = Location(name = "Max place", longitude = 4.0, latitude = 5.0)
                     ),
                     ingestionsWithCompanions = listOf(
                         IngestionWithCompanion(
@@ -146,6 +148,7 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
+                                stomachFullness = StomachFullness.EMPTY
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "MDMA",
@@ -166,6 +169,7 @@ class JournalScreenPreviewProvider :
                             hourOfDay = 18,
                             minute = 13
                         )!!,
+                        location = Location(name = "Max place", longitude = 4.0, latitude = 5.0)
                     ),
                     ingestionsWithCompanions = listOf(
                         IngestionWithCompanion(
@@ -184,6 +188,7 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
+                                stomachFullness = StomachFullness.EMPTY
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Cocaine",
@@ -206,6 +211,7 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
+                                stomachFullness = StomachFullness.EMPTY
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Ketamine",
@@ -226,7 +232,8 @@ class JournalScreenPreviewProvider :
                             day = 22,
                             hourOfDay = 18,
                             minute = 13
-                        )!!
+                        )!!,
+                        location = Location(name = "Max place", longitude = 4.0, latitude = 5.0)
                     ),
                     ingestionsWithCompanions = listOf(
                         IngestionWithCompanion(
@@ -245,6 +252,7 @@ class JournalScreenPreviewProvider :
                                 units = "µg",
                                 experienceId = 0,
                                 notes = null,
+                                stomachFullness = StomachFullness.EMPTY
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "LSD",
@@ -267,6 +275,7 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
+                                stomachFullness = StomachFullness.EMPTY
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Cocaine",

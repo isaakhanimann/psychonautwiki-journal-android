@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -19,10 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.stats.substancecompanion
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
-import com.isaakhanimann.journal.data.room.experiences.entities.Experience
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.*
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.utils.getInstant
 
@@ -55,7 +52,8 @@ class SubstanceCompanionScreenPreviewProvider :
                             minute = 20
                         )!!,
                         text = "",
-                        isFavorite = false
+                        isFavorite = false,
+                        location = null
                     ),
                     ingestions = listOf(
                         Ingestion(
@@ -73,6 +71,7 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
+                            stomachFullness = StomachFullness.EMPTY
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
@@ -89,6 +88,7 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
+                            stomachFullness = StomachFullness.EMPTY
                         )
                     )
                 ),
@@ -112,7 +112,8 @@ class SubstanceCompanionScreenPreviewProvider :
                             minute = 20
                         )!!,
                         text = "",
-                        isFavorite = false
+                        isFavorite = false,
+                        location = null
                     ),
                     ingestions = listOf(
                         Ingestion(
@@ -130,6 +131,7 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
+                            stomachFullness = StomachFullness.EMPTY
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
@@ -146,6 +148,7 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
+                            stomachFullness = StomachFullness.EMPTY
                         )
                     )
                 )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -19,10 +19,7 @@
 package com.isaakhanimann.journal.data.room.experiences
 
 import androidx.room.*
-import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
-import com.isaakhanimann.journal.data.room.experiences.entities.Experience
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.*
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
@@ -54,6 +51,7 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion")
     suspend fun getAllIngestions(): List<Ingestion>
 
+    @Transaction
     @Query("SELECT * FROM experience ORDER BY sortDate")
     suspend fun getAllExperiencesWithIngestionsSorted(): List<ExperienceWithIngestions>
 
@@ -210,7 +208,16 @@ interface ExperienceDao {
                 text = experienceSerializable.text,
                 creationDate = experienceSerializable.creationDate,
                 sortDate = experienceSerializable.sortDate,
-                isFavorite = experienceSerializable.isFavorite
+                isFavorite = experienceSerializable.isFavorite,
+                location = if (experienceSerializable.location != null) {
+                    Location(
+                        name = experienceSerializable.location.name,
+                        longitude = experienceSerializable.location.longitude,
+                        latitude = experienceSerializable.location.latitude
+                    )
+                } else {
+                    null
+                }
             )
             insert(newExperience)
             experienceSerializable.ingestions.forEach { ingestionSerializable ->
@@ -223,7 +230,8 @@ interface ExperienceDao {
                     isDoseAnEstimate = ingestionSerializable.isDoseAnEstimate,
                     units = ingestionSerializable.units,
                     experienceId = experienceID,
-                    notes = ingestionSerializable.notes
+                    notes = ingestionSerializable.notes,
+                    stomachFullness = ingestionSerializable.stomachFullness
                 )
                 insert(newIngestion)
             }

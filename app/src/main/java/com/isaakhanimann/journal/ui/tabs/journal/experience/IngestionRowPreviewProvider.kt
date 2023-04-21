@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -39,6 +40,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     units = "mg",
                     experienceId = 0,
                     notes = "This is a very long note which I wrote to see how it looks like if the note spans more than one line in the ingestion row.",
+                    stomachFullness = StomachFullness.EMPTY
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "MDMA",
@@ -59,6 +61,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     units = "mg",
                     experienceId = 0,
                     notes = "This is a very long note which I wrote to see how it looks like if the note spans more than one line in the ingestion row.",
+                    stomachFullness = StomachFullness.EMPTY
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "2C-B",
@@ -79,6 +82,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     units = "µg",
                     experienceId = 0,
                     notes = null,
+                    stomachFullness = StomachFullness.EMPTY
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "LSD",

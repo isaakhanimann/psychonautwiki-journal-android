@@ -210,7 +210,8 @@ class ChooseTimeViewModel @Inject constructor(
                 title = enteredTitle,
                 text = "",
                 creationDate = Instant.now(),
-                sortDate = ingestionTime
+                sortDate = ingestionTime,
+                location = null // todo: allow to add real location
             )
             val newIngestion = Ingestion(
                 substanceName = substanceName,
@@ -220,7 +221,8 @@ class ChooseTimeViewModel @Inject constructor(
                 isDoseAnEstimate = isEstimate,
                 units = units,
                 experienceId = newExperience.id,
-                notes = note
+                notes = note,
+                stomachFullness = null // todo: allow to add real stomach fullness
             )
             experienceRepo.insertIngestionExperienceAndCompanion(
                 ingestion = newIngestion,
@@ -237,7 +239,8 @@ class ChooseTimeViewModel @Inject constructor(
                 isDoseAnEstimate = isEstimate,
                 units = units,
                 experienceId = oldIdToUse,
-                notes = note
+                notes = note,
+                stomachFullness = null // todo: allow to add real stomach fullness
             )
             experienceRepo.insertIngestionAndCompanion(
                 ingestion = newIngestion,

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Isaak Hanimann.
+ * Copyright (c) 2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -18,19 +18,8 @@
 
 package com.isaakhanimann.journal.data.room.experiences.entities
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.time.Instant
-
-@Entity
-data class Experience(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    var title: String,
-    var text: String,
-    val creationDate: Instant = Instant.now(),
-    val sortDate: Instant,
-    var isFavorite: Boolean = false,
-    @Embedded val location: Location?
+data class Location(
+    val name: String,
+    val longitude: Double?,
+    val latitude: Double?,
 )

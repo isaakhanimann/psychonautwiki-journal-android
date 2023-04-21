@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -27,10 +27,11 @@ import com.isaakhanimann.journal.data.room.experiences.entities.*
 
 @TypeConverters(InstantConverter::class)
 @Database(
-    version = 2,
+    version = 3,
     entities = [Experience::class, Ingestion::class, SubstanceCompanion::class, CustomSubstance::class],
     autoMigrations = [
-        AutoMigration (from = 1, to = 2)
+        AutoMigration (from = 1, to = 2),
+        AutoMigration (from = 2, to = 3)
     ]
 )
 abstract class AppDatabase : RoomDatabase() {

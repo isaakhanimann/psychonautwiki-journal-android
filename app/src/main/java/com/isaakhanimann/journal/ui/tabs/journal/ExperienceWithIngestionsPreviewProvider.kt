@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -19,10 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.journal
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
-import com.isaakhanimann.journal.data.room.experiences.entities.Experience
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.*
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -39,6 +36,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 text = "Some notes",
                 isFavorite = true,
                 sortDate = Instant.now().minus(2, ChronoUnit.HOURS),
+                location = Location(name = "Max place", longitude = 4.0, latitude = 5.0)
             ),
             ingestionsWithCompanions = listOf(
                 IngestionWithCompanion(
@@ -51,6 +49,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
+                        stomachFullness = StomachFullness.EMPTY
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -67,6 +66,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
+                        stomachFullness = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -83,6 +83,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
+                        stomachFullness = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -99,6 +100,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 text = "Some notes",
                 isFavorite = true,
                 sortDate = Instant.now(),
+                location = null
                 ),
             ingestionsWithCompanions = listOf(
                 IngestionWithCompanion(
@@ -111,6 +113,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
+                        stomachFullness = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -127,6 +130,7 @@ class ExperienceWithIngestionsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
+                        stomachFullness = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Isaak Hanimann.
+ * Copyright (c) 2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -18,19 +18,24 @@
 
 package com.isaakhanimann.journal.data.room.experiences.entities
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.time.Instant
+enum class StomachFullness {
+    EMPTY {
+        override val text = "Empty"
+        override val onsetDelayForOralInHours: Double = 0.0
+    },
+    HALF_FULL {
+        override val text = "Half Full"
+        override val onsetDelayForOralInHours = 1.5
+    },
+    FULL {
+        override val text = "Full"
+        override val onsetDelayForOralInHours: Double = 3.0
+    },
+    VERY_FULL {
+        override val text = "Very Full"
+        override val onsetDelayForOralInHours: Double = 4.0
+    };
 
-@Entity
-data class Experience(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    var title: String,
-    var text: String,
-    val creationDate: Instant = Instant.now(),
-    val sortDate: Instant,
-    var isFavorite: Boolean = false,
-    @Embedded val location: Location?
-)
+    abstract val text: String
+    abstract val onsetDelayForOralInHours: Double
+}
