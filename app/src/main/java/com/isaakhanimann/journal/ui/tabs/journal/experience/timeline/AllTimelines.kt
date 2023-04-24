@@ -50,6 +50,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.I
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
+import kotlin.math.max
 
 
 @Preview(showBackground = true)
@@ -161,9 +162,8 @@ fun DrawScope.drawIngestion(
     val color = ingestionDrawable.color.getComposeColor(isDarkTheme)
     val startX =
         ingestionDrawable.ingestionPointDistanceFromStartInSeconds * pixelsPerSec
-    val verticalInsetForLine = density.strokeWidth / 2
-    val topInset =
-        (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * density.strokeWidth)
+    val verticalInsetForLine = max(0f,density.strokeWidth / 2)
+    val topInset = max(0f, (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * density.strokeWidth))
     inset(
         left = 0f,
         top = topInset,
