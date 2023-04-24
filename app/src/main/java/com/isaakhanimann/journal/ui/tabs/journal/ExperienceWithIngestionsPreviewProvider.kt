@@ -20,16 +20,16 @@ package com.isaakhanimann.journal.ui.tabs.journal
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.*
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-class ExperienceWithIngestionsPreviewProvider :
-    PreviewParameterProvider<ExperienceWithIngestionsAndCompanions> {
-    override val values: Sequence<ExperienceWithIngestionsAndCompanions> = sequenceOf(
-        ExperienceWithIngestionsAndCompanions(
+class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
+    PreviewParameterProvider<ExperienceWithIngestionsCompanionsAndRatings> {
+    override val values: Sequence<ExperienceWithIngestionsCompanionsAndRatings> = sequenceOf(
+        ExperienceWithIngestionsCompanionsAndRatings(
             experience = Experience(
                 id = 0,
                 title = "Day at Lake Geneva",
@@ -90,10 +90,29 @@ class ExperienceWithIngestionsPreviewProvider :
                         color = AdaptiveColor.BLUE
                     )
                 )
-
+            ),
+            ratings = listOf(
+                ShulginRating(
+                    time = Instant.now().minus(30, ChronoUnit.MINUTES),
+                    creationDate = Instant.now(),
+                    option = ShulginRatingOption.TWO_PLUS,
+                    experienceId = 0
+                ),
+                ShulginRating(
+                    time = Instant.now().minus(15, ChronoUnit.MINUTES),
+                    creationDate = Instant.now(),
+                    option = ShulginRatingOption.THREE_PLUS,
+                    experienceId = 0
+                ),
+                ShulginRating(
+                    time = Instant.now().minus(5, ChronoUnit.MINUTES),
+                    creationDate = Instant.now(),
+                    option = ShulginRatingOption.TWO_PLUS,
+                    experienceId = 0
+                )
             )
         ),
-        ExperienceWithIngestionsAndCompanions(
+        ExperienceWithIngestionsCompanionsAndRatings(
             experience = Experience(
                 id = 0,
                 title = "This one has a very very very long title in case somebody wants to be creative with the naming.",
@@ -101,7 +120,7 @@ class ExperienceWithIngestionsPreviewProvider :
                 isFavorite = true,
                 sortDate = Instant.now(),
                 location = null
-                ),
+            ),
             ingestionsWithCompanions = listOf(
                 IngestionWithCompanion(
                     ingestion = Ingestion(
@@ -136,6 +155,14 @@ class ExperienceWithIngestionsPreviewProvider :
                         substanceName = "Cocaine",
                         color = AdaptiveColor.BLUE
                     )
+                )
+            ),
+            ratings = listOf(
+                ShulginRating(
+                    time = Instant.now().minus(15, ChronoUnit.MINUTES),
+                    creationDate = Instant.now(),
+                    option = ShulginRatingOption.FOUR_PLUS,
+                    experienceId = 0
                 )
             )
         )

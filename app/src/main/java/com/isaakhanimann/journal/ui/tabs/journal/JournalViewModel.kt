@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,7 +70,7 @@ class JournalViewModel @Inject constructor(
     }
 
     val currentAndPreviousExperiences =
-        experienceRepo.getSortedExperiencesWithIngestionsAndCompanionsFlow()
+        experienceRepo.getSortedExperienceWithIngestionsCompanionsAndRatingsFlow()
             .combine(searchTextFlow) { experiencesWithIngestions, searchText ->
                 Pair(first = experiencesWithIngestions, second = searchText)
             }
@@ -124,6 +124,6 @@ class JournalViewModel @Inject constructor(
 }
 
 data class CurrentAndPreviousExperiences(
-    val currentExperience: ExperienceWithIngestionsAndCompanions?,
-    val previousExperiences: List<ExperienceWithIngestionsAndCompanions>
+    val currentExperience: ExperienceWithIngestionsCompanionsAndRatings?,
+    val previousExperiences: List<ExperienceWithIngestionsCompanionsAndRatings>
 )

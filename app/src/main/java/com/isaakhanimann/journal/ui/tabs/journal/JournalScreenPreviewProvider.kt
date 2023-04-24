@@ -20,17 +20,19 @@ package com.isaakhanimann.journal.ui.tabs.journal
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.*
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.utils.getInstant
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 class JournalScreenPreviewProvider :
-    PreviewParameterProvider<List<ExperienceWithIngestionsAndCompanions>> {
-    override val values: Sequence<List<ExperienceWithIngestionsAndCompanions>> =
+    PreviewParameterProvider<List<ExperienceWithIngestionsCompanionsAndRatings>> {
+    override val values: Sequence<List<ExperienceWithIngestionsCompanionsAndRatings>> =
         sequenceOf(
             listOf(
-                ExperienceWithIngestionsAndCompanions(
+                ExperienceWithIngestionsCompanionsAndRatings(
                     experience = Experience(
                         id = 0,
                         title = "Festival",
@@ -115,9 +117,17 @@ class JournalScreenPreviewProvider :
                                 color = AdaptiveColor.MINT
                             )
                         )
+                    ),
+                    ratings = listOf(
+                        ShulginRating(
+                            time = Instant.now().minus(15, ChronoUnit.MINUTES),
+                            creationDate = Instant.now(),
+                            option = ShulginRatingOption.TWO_PLUS,
+                            experienceId = 0
+                        )
                     )
                 ),
-                ExperienceWithIngestionsAndCompanions(
+                ExperienceWithIngestionsCompanionsAndRatings(
                     experience = Experience(
                         id = 0,
                         title = "Bachelor Party",
@@ -155,9 +165,10 @@ class JournalScreenPreviewProvider :
                                 color = AdaptiveColor.PINK
                             )
                         )
-                    )
+                    ),
+                    ratings = listOf()
                 ),
-                ExperienceWithIngestionsAndCompanions(
+                ExperienceWithIngestionsCompanionsAndRatings(
                     experience = Experience(
                         id = 0,
                         title = "Liam's Birthday",
@@ -218,10 +229,17 @@ class JournalScreenPreviewProvider :
                                 color = AdaptiveColor.MINT
                             )
                         )
-
+                    ),
+                    ratings = listOf(
+                        ShulginRating(
+                            time = Instant.now().minus(15, ChronoUnit.MINUTES),
+                            creationDate = Instant.now(),
+                            option = ShulginRatingOption.TWO_PLUS,
+                            experienceId = 0
+                        )
                     )
                 ),
-                ExperienceWithIngestionsAndCompanions(
+                ExperienceWithIngestionsCompanionsAndRatings(
                     experience = Experience(
                         id = 0,
                         title = "Last day in Stockholm",
@@ -282,8 +300,9 @@ class JournalScreenPreviewProvider :
                                 color = AdaptiveColor.BLUE
                             )
                         )
-                    )
-                )
+                    ),
+                    ratings = listOf()
+                ),
             ),
             listOf()
         )

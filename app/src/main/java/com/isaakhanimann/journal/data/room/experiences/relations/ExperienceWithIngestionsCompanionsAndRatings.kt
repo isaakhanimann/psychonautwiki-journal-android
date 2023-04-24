@@ -23,6 +23,7 @@ import androidx.room.Relation
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import java.time.Instant
 
 data class ExperienceWithIngestionsCompanionsAndRatings(
@@ -39,4 +40,5 @@ data class ExperienceWithIngestionsCompanionsAndRatings(
     ) val ratings: List<ShulginRating>
 ) {
     val sortInstant: Instant get() = ingestionsWithCompanions.firstOrNull()?.ingestion?.time ?: experience.creationDate
+    val highestRatingOption: ShulginRatingOption? get() = ratings.maxOfOrNull { it.option }
 }

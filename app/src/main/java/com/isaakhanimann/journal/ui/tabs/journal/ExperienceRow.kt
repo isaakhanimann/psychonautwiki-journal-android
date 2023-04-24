@@ -39,7 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
@@ -47,7 +47,7 @@ import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 @Preview(showBackground = true)
 @Composable
 fun ExperienceRow(
-    @PreviewParameter(ExperienceWithIngestionsPreviewProvider::class) experienceWithIngestionsAndCompanions: ExperienceWithIngestionsAndCompanions,
+    @PreviewParameter(ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider::class) experienceWithIngestionsCompanionsAndRatings: ExperienceWithIngestionsCompanionsAndRatings,
     navigateToExperienceScreen: () -> Unit = {},
 ) {
     Row(
@@ -61,8 +61,8 @@ fun ExperienceRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val ingestions = experienceWithIngestionsAndCompanions.ingestionsWithCompanions
-        val experience = experienceWithIngestionsAndCompanions.experience
+        val ingestions = experienceWithIngestionsCompanionsAndRatings.ingestionsWithCompanions
+        val experience = experienceWithIngestionsCompanionsAndRatings.experience
         Box(contentAlignment = Alignment.Center) {
             ExperienceCircle(ingestions = ingestions)
             if (experience.isFavorite) {
@@ -74,8 +74,8 @@ fun ExperienceRow(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                val dateText = remember(experienceWithIngestionsAndCompanions.sortInstant) {
-                    experienceWithIngestionsAndCompanions.sortInstant.getStringOfPattern("dd MMM yy")
+                val dateText = remember(experienceWithIngestionsCompanionsAndRatings.sortInstant) {
+                    experienceWithIngestionsCompanionsAndRatings.sortInstant.getStringOfPattern("dd MMM yy")
                 }
                 Text(
                     text = dateText,
@@ -93,16 +93,25 @@ fun ExperienceRow(
                 text = experience.title,
                 style = MaterialTheme.typography.titleMedium,
             )
-            val substanceNames = remember(ingestions) {
-                ingestions.map { it.ingestion.substanceName }.distinct()
-                    .joinToString(separator = ", ")
-            }
-            if (substanceNames.isNotEmpty()) {
-                Text(text = substanceNames)
-            } else {
-                Text(
-                    text = "No substance yet",
-                )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val substanceNames = remember(ingestions) {
+                    ingestions.map { it.ingestion.substanceName }.distinct()
+                        .joinToString(separator = ", ")
+                }
+                if (substanceNames.isNotEmpty()) {
+                    Text(text = substanceNames)
+                } else {
+                    Text(
+                        text = "No substance yet",
+                    )
+                }
+                val rating = experienceWithIngestionsCompanionsAndRatings.highestRatingOption?.sign
+                if (rating != null) {
+                    Text(text = rating)
+                }
             }
         }
     }

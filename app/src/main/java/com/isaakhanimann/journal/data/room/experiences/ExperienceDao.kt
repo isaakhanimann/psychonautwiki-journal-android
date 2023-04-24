@@ -70,6 +70,10 @@ interface ExperienceDao {
     fun getSortedExperiencesWithIngestionsAndCompanionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>>
 
     @Transaction
+    @Query("SELECT * FROM experience ORDER BY sortDate DESC")
+    fun getSortedExperienceWithIngestionsCompanionsAndRatingsFlow(): Flow<List<ExperienceWithIngestionsCompanionsAndRatings>>
+
+    @Transaction
     @Query("SELECT * FROM experience ORDER BY sortDate DESC LIMIT :limit")
     fun getSortedExperiencesWithIngestionsAndCompanionsFlow(limit: Int): Flow<List<ExperienceWithIngestionsAndCompanions>>
 

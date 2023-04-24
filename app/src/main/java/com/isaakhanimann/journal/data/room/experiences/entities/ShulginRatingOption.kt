@@ -18,6 +18,7 @@
 
 package com.isaakhanimann.journal.data.room.experiences.entities
 
+// the order matters because the ordinal value increases by one for each subsequent case
 enum class ShulginRatingOption {
     MINUS {
         override val sign = "-"

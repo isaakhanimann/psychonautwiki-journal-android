@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.ui.tabs.journal.experience.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.JournalTheme
@@ -75,7 +75,7 @@ fun JournalScreen(
 fun ExperiencesScreenPreview(
     @PreviewParameter(
         JournalScreenPreviewProvider::class,
-    ) experiences: List<ExperienceWithIngestionsAndCompanions>,
+    ) experiences: List<ExperienceWithIngestionsCompanionsAndRatings>,
 ) {
     JournalTheme {
         JournalScreen(
@@ -106,8 +106,8 @@ fun JournalScreen(
     onChangeSearchText: (String) -> Unit,
     isSearchEnabled: Boolean,
     onChangeIsSearchEnabled: (Boolean) -> Unit,
-    currentExperience: ExperienceWithIngestionsAndCompanions?,
-    previousExperiences: List<ExperienceWithIngestionsAndCompanions>,
+    currentExperience: ExperienceWithIngestionsCompanionsAndRatings?,
+    previousExperiences: List<ExperienceWithIngestionsCompanionsAndRatings>,
 ) {
     Scaffold(
         topBar = {

@@ -22,10 +22,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndRatings
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
+import com.isaakhanimann.journal.data.room.experiences.relations.*
 import com.isaakhanimann.journal.ui.tabs.settings.JournalExport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -78,6 +75,11 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     fun getSortedExperiencesWithIngestionsAndCompanionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>> =
         experienceDao.getSortedExperiencesWithIngestionsAndCompanionsFlow()
+            .flowOn(Dispatchers.IO)
+            .conflate()
+
+    fun getSortedExperienceWithIngestionsCompanionsAndRatingsFlow(): Flow<List<ExperienceWithIngestionsCompanionsAndRatings>> =
+        experienceDao.getSortedExperienceWithIngestionsCompanionsAndRatingsFlow()
             .flowOn(Dispatchers.IO)
             .conflate()
 
