@@ -28,7 +28,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.*
 @TypeConverters(InstantConverter::class)
 @Database(
     version = 3,
-    entities = [Experience::class, Ingestion::class, SubstanceCompanion::class, CustomSubstance::class],
+    entities = [Experience::class, Ingestion::class, SubstanceCompanion::class, CustomSubstance::class, ShulginRating::class],
     autoMigrations = [
         AutoMigration (from = 1, to = 2),
         AutoMigration (from = 2, to = 3)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Isaak Hanimann.
+ * Copyright (c) 2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -18,25 +18,29 @@
 
 package com.isaakhanimann.journal.ui.tabs.settings
 
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.time.Instant
 
-@Serializer(forClass = Instant::class)
 @OptIn(ExperimentalSerializationApi::class)
-object InstantSerializer : KSerializer<Instant> {
-    override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor("Instant", PrimitiveKind.LONG)
+@Serializer(forClass = ShulginRatingOption::class)
+object ShulginRatingOptionSerializer : KSerializer<ShulginRatingOption> {
+    override val descriptor = PrimitiveSerialDescriptor("ShulginRatingOption", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: Instant) =
-        encoder.encodeLong(value.toEpochMilli())
+    override fun serialize(encoder: Encoder, value: ShulginRatingOption) {
+        encoder.encodeString(value.rawValue)
+    }
 
-    override fun deserialize(decoder: Decoder): Instant = Instant.ofEpochMilli(decoder.decodeDouble()
-        .toLong())
+    override fun deserialize(decoder: Decoder): ShulginRatingOption {
+        val ratingRawValue = decoder.decodeString()
+        val foundRating = ShulginRatingOption.values().firstOrNull {
+            it.rawValue == ratingRawValue
+        }
+        return foundRating ?: ShulginRatingOption.FOUR_PLUS
+    }
 }

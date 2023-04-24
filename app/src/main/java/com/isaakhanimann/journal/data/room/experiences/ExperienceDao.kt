@@ -20,10 +20,7 @@ package com.isaakhanimann.journal.data.room.experiences
 
 import androidx.room.*
 import com.isaakhanimann.journal.data.room.experiences.entities.*
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
+import com.isaakhanimann.journal.data.room.experiences.relations.*
 import com.isaakhanimann.journal.ui.tabs.settings.JournalExport
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
@@ -54,6 +51,10 @@ interface ExperienceDao {
     @Transaction
     @Query("SELECT * FROM experience ORDER BY sortDate")
     suspend fun getAllExperiencesWithIngestionsSorted(): List<ExperienceWithIngestions>
+
+    @Transaction
+    @Query("SELECT * FROM experience ORDER BY sortDate")
+    suspend fun getAllExperiencesWithIngestionsAndRatingsSorted(): List<ExperienceWithIngestionsAndRatings>
 
     @Query("SELECT * FROM customsubstance")
     suspend fun getAllCustomSubstances(): List<CustomSubstance>
@@ -185,6 +186,9 @@ interface ExperienceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(ingestion: Ingestion)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(rating: ShulginRating)
+
     @Transaction
     suspend fun insertIngestionExperienceAndCompanion(
         ingestion: Ingestion,
@@ -234,6 +238,15 @@ interface ExperienceDao {
                     stomachFullness = ingestionSerializable.stomachFullness
                 )
                 insert(newIngestion)
+            }
+            experienceSerializable.ratings.forEach { ratingSerializable ->
+                val newRating = ShulginRating(
+                    time = ratingSerializable.time,
+                    creationDate = ratingSerializable.creationDate,
+                    option = ratingSerializable.option,
+                    experienceId = experienceID
+                )
+                insert(newRating)
             }
         }
         journalExport.substanceCompanions.forEach { insert(it) }

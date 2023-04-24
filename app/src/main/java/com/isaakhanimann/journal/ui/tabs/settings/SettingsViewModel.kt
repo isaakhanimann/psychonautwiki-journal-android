@@ -70,8 +70,9 @@ class SettingsViewModel @Inject constructor(
 
     fun exportFile(uri: Uri) {
         viewModelScope.launch {
-            val experiencesWithIngestions = experienceRepository.getAllExperiencesWithIngestionsSorted()
-            val experiencesSerializable = experiencesWithIngestions.map {
+            val experiencesWithIngestionsAndRatings =
+                experienceRepository.getAllExperiencesWithIngestionsAndRatingsSorted()
+            val experiencesSerializable = experiencesWithIngestionsAndRatings.map {
                 ExperienceSerializable(
                     title = it.experience.title,
                     text = it.experience.text,
@@ -91,7 +92,22 @@ class SettingsViewModel @Inject constructor(
                             stomachFullness = ingestion.stomachFullness
                         )
                     },
-                    location = null
+                    location = if (it.experience.location != null) {
+                        LocationSerializable(
+                            name = it.experience.location.name,
+                            latitude = it.experience.location.latitude,
+                            longitude = it.experience.location.longitude
+                        )
+                    } else {
+                        null
+                    },
+                    ratings = it.ratings.map { rating ->
+                        RatingSerializable(
+                            option = rating.option,
+                            time = rating.time,
+                            creationDate = rating.creationDate
+                        )
+                    }
                 )
             }
             val journalExport = JournalExport(

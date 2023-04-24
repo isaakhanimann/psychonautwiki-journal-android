@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "7ee58161b4e693348f3c9c03fdd201d0",
+    "identityHash": "83d3c5f053d9c56ce9047a8880c3ad6f",
     "entities": [
       {
         "tableName": "Experience",
@@ -215,12 +215,56 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "ShulginRating",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `time` INTEGER NOT NULL, `creationDate` INTEGER, `option` TEXT NOT NULL, `experienceId` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creationDate",
+            "columnName": "creationDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "option",
+            "columnName": "option",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "experienceId",
+            "columnName": "experienceId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7ee58161b4e693348f3c9c03fdd201d0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83d3c5f053d9c56ce9047a8880c3ad6f')"
     ]
   }
 }

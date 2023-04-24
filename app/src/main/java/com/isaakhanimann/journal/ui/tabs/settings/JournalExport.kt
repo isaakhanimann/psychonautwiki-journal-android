@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.settings
 
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -40,7 +41,15 @@ data class ExperienceSerializable(
     @Serializable(with= InstantSerializer::class) val sortDate: Instant,
     val isFavorite: Boolean = false,
     val ingestions: List<IngestionSerializable>,
-    val location: LocationSerializable?
+    val location: LocationSerializable?,
+    val ratings: List<RatingSerializable>
+)
+
+@Serializable
+data class RatingSerializable(
+    @Serializable(with= ShulginRatingOptionSerializer::class) val option: ShulginRatingOption,
+    @Serializable(with= InstantSerializer::class) var time: Instant,
+    @Serializable(with= InstantSerializer::class) var creationDate: Instant? = Instant.now()
 )
 
 @Serializable

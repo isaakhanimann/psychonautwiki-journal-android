@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
 import com.isaakhanimann.journal.ui.tabs.settings.JournalExport
 import kotlinx.coroutines.Dispatchers
@@ -131,6 +132,9 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     suspend fun getAllExperiencesWithIngestionsSorted(): List<ExperienceWithIngestions> =
         experienceDao.getAllExperiencesWithIngestionsSorted()
+
+    suspend fun getAllExperiencesWithIngestionsAndRatingsSorted(): List<ExperienceWithIngestionsAndRatings> =
+        experienceDao.getAllExperiencesWithIngestionsAndRatingsSorted()
 
     suspend fun getAllCustomSubstances(): List<CustomSubstance> =
         experienceDao.getAllCustomSubstances()
