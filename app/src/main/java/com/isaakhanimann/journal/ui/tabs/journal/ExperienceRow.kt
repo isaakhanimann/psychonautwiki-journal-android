@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -58,47 +58,52 @@ fun ExperienceRow(
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
             .padding(horizontal = horizontalPadding, vertical = 5.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1f)
-        ) {
-            val ingestions = experienceWithIngestionsAndCompanions.ingestionsWithCompanions
-            val experience = experienceWithIngestionsAndCompanions.experience
+        val ingestions = experienceWithIngestionsAndCompanions.ingestionsWithCompanions
+        val experience = experienceWithIngestionsAndCompanions.experience
+        Box(contentAlignment = Alignment.Center) {
             ExperienceCircle(ingestions = ingestions)
-            Column {
-                Text(
-                    text = experience.title,
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                val substanceNames = remember(ingestions) {
-                    ingestions.map { it.ingestion.substanceName }.distinct()
-                        .joinToString(separator = ", ")
+            if (experience.isFavorite) {
+                Icon(imageVector = Icons.Filled.Star, contentDescription = "Is Favorite")
+            }
+        }
+        Column {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val dateText = remember(experienceWithIngestionsAndCompanions.sortInstant) {
+                    experienceWithIngestionsAndCompanions.sortInstant.getStringOfPattern("dd MMM yy")
                 }
-                if (substanceNames.isNotEmpty()) {
-                    Text(text = substanceNames)
-                } else {
+                Text(
+                    text = dateText,
+                    style = MaterialTheme.typography.titleSmall
+                )
+                val location = experience.location
+                if (location != null) {
                     Text(
-                        text = "No substance yet",
+                        text = location.name,
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }
-        }
-        Column(
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxHeight()
-        ) {
-            if (experienceWithIngestionsAndCompanions.experience.isFavorite) {
-                Icon(imageVector = Icons.Filled.Star, contentDescription = "Is Favorite")
+            Text(
+                text = experience.title,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            val substanceNames = remember(ingestions) {
+                ingestions.map { it.ingestion.substanceName }.distinct()
+                    .joinToString(separator = ", ")
             }
-            val dateText = remember(experienceWithIngestionsAndCompanions.sortInstant) {
-                experienceWithIngestionsAndCompanions.sortInstant.getStringOfPattern("dd MMM yy")
+            if (substanceNames.isNotEmpty()) {
+                Text(text = substanceNames)
+            } else {
+                Text(
+                    text = "No substance yet",
+                )
             }
-            Text(text = dateText)
         }
     }
 }
