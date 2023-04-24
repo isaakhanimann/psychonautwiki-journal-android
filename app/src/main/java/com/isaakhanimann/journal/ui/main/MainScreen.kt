@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,6 +58,7 @@ fun MainScreen(
         )
         ModalNavigationDrawer(
             drawerState = drawerState,
+            gesturesEnabled = false,
             drawerContent = {
                 ModalDrawerSheet {
                     Spacer(Modifier.height(12.dp))
@@ -89,12 +89,6 @@ fun MainScreen(
                             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                         )
                     }
-                    Spacer(Modifier.height(12.dp))
-                    Text(
-                        text = "* Drawer opens with left swipe",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 15.dp).alpha(0.5f)
-                    )
                 }
             },
             content = {
