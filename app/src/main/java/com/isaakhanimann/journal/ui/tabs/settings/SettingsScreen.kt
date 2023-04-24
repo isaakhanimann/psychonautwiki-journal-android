@@ -255,7 +255,7 @@ fun SettingsScreen(
                 val context = LocalContext.current
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, DOWNLOAD_URL)
+                    putExtra(Intent.EXTRA_TEXT, SHARE_APP_URL)
                     type = "text/plain"
                 }
                 val shareIntent = Intent.createChooser(sendIntent, null)
@@ -275,7 +275,7 @@ fun SettingsScreen(
     }
 }
 
-const val DOWNLOAD_URL = "https://isaakhanimann.github.io"
+const val SHARE_APP_URL = "https://psychonautwiki.org/wiki/PsychonautWiki_Journal"
 
 
 @Composable
