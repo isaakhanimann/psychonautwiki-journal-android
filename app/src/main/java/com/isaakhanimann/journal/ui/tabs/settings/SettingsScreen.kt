@@ -41,7 +41,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.VERSION_NAME
 import com.isaakhanimann.journal.ui.tabs.journal.experience.CardWithTitle
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import kotlinx.coroutines.launch
+import java.time.Instant
 
 @Preview
 @Composable
@@ -149,7 +151,7 @@ fun SettingsScreen(
                             TextButton(
                                 onClick = {
                                     isShowingExportDialog = false
-                                    launcherExport.launch("Journal.json")
+                                    launcherExport.launch("Journal ${Instant.now().getStringOfPattern("dd MMM yyyy")}.json")
                                 }
                             ) {
                                 Text("Export")
