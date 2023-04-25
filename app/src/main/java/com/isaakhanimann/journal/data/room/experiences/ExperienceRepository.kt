@@ -123,6 +123,11 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
+    fun getExperienceFlow(experienceId: Int) =
+        experienceDao.getExperienceFlow(experienceId)
+            .flowOn(Dispatchers.IO)
+            .conflate()
+
     suspend fun getLatestIngestionOfEverySubstanceSinceDate(instant: Instant): List<Ingestion> =
         experienceDao.getLatestIngestionOfEverySubstanceSinceDate(instant)
 

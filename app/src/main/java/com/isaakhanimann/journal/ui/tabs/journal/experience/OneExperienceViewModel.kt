@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -51,19 +51,11 @@ class OneExperienceViewModel @Inject constructor(
 
     fun saveIsFavorite(isFavorite: Boolean) {
         viewModelScope.launch {
-            localIsFavoriteFlow.emit(isFavorite)
             val experience = experienceWithIngestionsFlow.firstOrNull()?.experience
             if (experience != null) {
                 experience.isFavorite = isFavorite
                 experienceRepo.update(experience)
             }
-        }
-    }
-
-    init {
-        viewModelScope.launch {
-            val isFavorite = experienceRepo.getExperience(experienceId)?.isFavorite ?: false
-            localIsFavoriteFlow.emit(isFavorite)
         }
     }
 
@@ -77,9 +69,7 @@ class OneExperienceViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000)
             )
 
-    private val localIsFavoriteFlow = MutableStateFlow(false)
-
-    val isFavoriteFlow = localIsFavoriteFlow.stateIn(
+    val isFavoriteFlow = experienceRepo.getExperienceFlow(experienceId).map { it?.isFavorite ?: false }.stateIn(
         initialValue = false,
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
