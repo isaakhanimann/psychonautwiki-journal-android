@@ -66,10 +66,9 @@ fun OneExperienceScreen(
     navigateBack: () -> Unit,
 ) {
     val experienceWithIngestions = viewModel.experienceWithIngestionsFlow.collectAsState().value
-    val experience = experienceWithIngestions?.experience
-    val isFavorite = viewModel.isFavoriteFlow.collectAsState().value
+    val experience = viewModel.experienceFlow.collectAsState().value
     val oneExperienceScreenModel = OneExperienceScreenModel(
-        isFavorite = isFavorite,
+        isFavorite = experience?.isFavorite ?: false,
         title = experience?.title ?: "",
         firstIngestionTime = experienceWithIngestions?.sortInstant ?: Instant.now(),
         notes = experience?.text ?: "",

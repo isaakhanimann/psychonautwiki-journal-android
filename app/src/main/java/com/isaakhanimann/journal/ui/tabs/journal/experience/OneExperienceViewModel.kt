@@ -69,8 +69,8 @@ class OneExperienceViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000)
             )
 
-    val isFavoriteFlow = experienceRepo.getExperienceFlow(experienceId).map { it?.isFavorite ?: false }.stateIn(
-        initialValue = false,
+    val experienceFlow = experienceRepo.getExperienceFlow(experienceId).stateIn(
+        initialValue = null,
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
     )
