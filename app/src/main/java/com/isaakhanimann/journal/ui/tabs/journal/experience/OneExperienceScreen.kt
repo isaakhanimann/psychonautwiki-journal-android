@@ -63,6 +63,7 @@ fun OneExperienceScreen(
     navigateToExplainTimeline: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
+    navigateToAddRatingScreen: () -> Unit,
     navigateBack: () -> Unit,
 ) {
     val experienceWithIngestions = viewModel.experienceWithIngestionsFlow.collectAsState().value
@@ -85,6 +86,7 @@ fun OneExperienceScreen(
         navigateToEditExperienceScreen = navigateToEditExperienceScreen,
         navigateToExplainTimeline = navigateToExplainTimeline,
         navigateToIngestionScreen = navigateToIngestionScreen,
+        navigateToAddRatingScreen = navigateToAddRatingScreen,
         navigateBack = navigateBack,
         saveIsFavorite = viewModel::saveIsFavorite,
         navigateToURL = navigateToURL
@@ -107,6 +109,7 @@ fun ExperienceScreenPreview(
             navigateToEditExperienceScreen = {},
             navigateToExplainTimeline = {},
             navigateToIngestionScreen = {},
+            navigateToAddRatingScreen = {},
             navigateBack = {},
             saveIsFavorite = {},
             navigateToURL = {}
@@ -124,6 +127,7 @@ fun OneExperienceScreen(
     navigateToURL: (url: String) -> Unit,
     navigateToExplainTimeline: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
+    navigateToAddRatingScreen: () -> Unit,
     navigateBack: () -> Unit,
     saveIsFavorite: (Boolean) -> Unit,
 ) {
@@ -365,6 +369,43 @@ fun OneExperienceScreen(
                             )
                         }
                     }
+                }
+            }
+            Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                if (oneExperienceScreenModel.notes.isEmpty()) {
+                    TextButton(
+                        onClick = navigateToAddRatingScreen,
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    ) {
+                        Icon(
+                            Icons.Filled.Edit,
+                            contentDescription = "Add",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Add Shulgin Rating")
+                    }
+                } else {
+                    CardTitle(title = "Shulgin Rating")
+//                    Row(
+//                        horizontalArrangement = Arrangement.SpaceBetween,
+//                        verticalAlignment = Alignment.CenterVertically,
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(start = horizontalPadding)
+//                    ) {
+//                        Text(
+//                            text = oneExperienceScreenModel.notes,
+//                            modifier = Modifier.padding(vertical = 10.dp)
+//                        )
+//                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+//                        IconButton(onClick = navigateToEditExperienceScreen) {
+//                            Icon(
+//                                imageVector = Icons.Default.Edit,
+//                                contentDescription = "Edit Notes"
+//                            )
+//                        }
+//                    }
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))

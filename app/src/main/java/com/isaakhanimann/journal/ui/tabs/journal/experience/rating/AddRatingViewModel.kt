@@ -1,0 +1,80 @@
+/*
+ * Copyright (c) 2022-2023. Isaak Hanimann.
+ * This file is part of PsychonautWiki Journal.
+ *
+ * PsychonautWiki Journal is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at
+ * your option) any later version.
+ *
+ * PsychonautWiki Journal is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
+ */
+
+package com.isaakhanimann.journal.ui.tabs.journal.experience.rating
+
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
+import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
+import com.isaakhanimann.journal.ui.utils.getInstant
+import com.isaakhanimann.journal.ui.utils.getLocalDateTime
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import javax.inject.Inject
+
+@HiltViewModel
+class AddRatingViewModel @Inject constructor(
+    private val experienceRepo: ExperienceRepository,
+    state: SavedStateHandle
+) : ViewModel() {
+    var rating by mutableStateOf(ShulginRatingOption.TWO_PLUS)
+    val experienceId: Int
+    var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
+
+    init {
+        val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
+        this.experienceId = experienceId
+        viewModelScope.launch {
+            val experience = experienceRepo.getExperience(id = experienceId) ?: return@launch
+            val isExperienceCurrent = experience.sortDate.isBefore(Instant.now().minus(12, ChronoUnit.HOURS))
+            if (!isExperienceCurrent) {
+                localDateTimeFlow.emit(experience.sortDate.getLocalDateTime())
+            }
+        }
+    }
+
+    fun onChangeTime(newLocalDateTime: LocalDateTime) {
+        viewModelScope.launch {
+            localDateTimeFlow.emit(newLocalDateTime)
+        }
+    }
+
+    fun onChangeRating(newRating: ShulginRatingOption) {
+        rating = newRating
+    }
+
+    fun onDoneTap() {
+        viewModelScope.launch {
+            val selectedInstant = localDateTimeFlow.firstOrNull()?.getInstant() ?: return@launch
+            val newRating = ShulginRating(time = selectedInstant, creationDate = Instant.now(), option = rating, experienceId = experienceId)
+            experienceRepo.insert(newRating)
+        }
+    }
+}

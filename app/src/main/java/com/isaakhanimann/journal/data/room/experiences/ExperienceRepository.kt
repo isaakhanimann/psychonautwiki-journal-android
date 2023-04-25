@@ -18,10 +18,7 @@
 
 package com.isaakhanimann.journal.data.room.experiences
 
-import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
-import com.isaakhanimann.journal.data.room.experiences.entities.Experience
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.*
 import com.isaakhanimann.journal.data.room.experiences.relations.*
 import com.isaakhanimann.journal.ui.tabs.settings.JournalExport
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +33,7 @@ import javax.inject.Singleton
 class ExperienceRepository @Inject constructor(private val experienceDao: ExperienceDao) {
     suspend fun insert(experience: Experience) = experienceDao.insert(experience)
     suspend fun insert(ingestion: Ingestion) = experienceDao.insert(ingestion)
+    suspend fun insert(rating: ShulginRating) = experienceDao.insert(rating)
     suspend fun update(experience: Experience) = experienceDao.update(experience)
     suspend fun update(ingestion: Ingestion) = experienceDao.update(ingestion)
     suspend fun insertIngestionExperienceAndCompanion(

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -41,6 +41,7 @@ const val CATEGORY_KEY = "category"
 private const val ROUTE_START_EXPERIENCES = "experiences/"
 private const val ROUTE_START_INGESTIONS = "ingestions/"
 private const val ROUTE_START_EDIT_EXPERIENCE = "editExperience/"
+private const val ROUTE_START_ADD_RATING = "addRating/"
 private const val ROUTE_START_EDIT_CUSTOM = "editCustom/"
 private const val ROUTE_START_CHOOSE_ROUTE_CUSTOM = "chooseRouteCustom/"
 private const val ROUTE_START_CHOOSE_DOSE_CUSTOM = "chooseDoseCustom/"
@@ -71,6 +72,11 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
 
     object EditExperienceRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_EXPERIENCE{$EXPERIENCE_ID_KEY}",
+        args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
+    )
+
+    object AddRatingRouter : ArgumentRouter(
+        route = "$ROUTE_START_ADD_RATING{$EXPERIENCE_ID_KEY}",
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
     )
 
@@ -189,6 +195,10 @@ fun NavController.navigateToIngestion(ingestionId: Int) {
 
 fun NavController.navigateToEditExperience(experienceId: Int) {
     navigate(ROUTE_START_EDIT_EXPERIENCE + experienceId)
+}
+
+fun NavController.navigateToAddRating(experienceId: Int) {
+    navigate(ROUTE_START_ADD_RATING + experienceId)
 }
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {
