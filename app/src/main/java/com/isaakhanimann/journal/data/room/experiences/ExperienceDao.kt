@@ -169,11 +169,16 @@ interface ExperienceDao {
         deleteAllExperiences()
         deleteAllSubstanceCompanions()
         deleteAllCustomSubstances()
+        deleteAllRatings()
     }
 
     @Transaction
     @Query("DELETE FROM ingestion")
     suspend fun deleteAllIngestions()
+
+    @Transaction
+    @Query("DELETE FROM shulginrating")
+    suspend fun deleteAllRatings()
 
     @Transaction
     @Query("DELETE FROM experience")
