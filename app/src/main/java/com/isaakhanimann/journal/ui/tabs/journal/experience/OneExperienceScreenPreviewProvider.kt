@@ -19,10 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
-import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.*
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.InteractionType
@@ -240,6 +237,44 @@ class OneExperienceScreenPreviewProvider :
                 InteractionExplanation(
                     name = "MDMA",
                     url = "www.google.com"
+                )
+            ),
+            ratings = listOf(
+                ShulginRating(
+                    time = getInstant(
+                        year = 2022,
+                        month = 2,
+                        day = 20,
+                        hourOfDay = 1,
+                        minute = 15
+                    )!!,
+                    creationDate = getInstant(
+                        year = 2022,
+                        month = 2,
+                        day = 20,
+                        hourOfDay = 1,
+                        minute = 15
+                    )!!,
+                    option = ShulginRatingOption.TWO_PLUS,
+                    experienceId = 0
+                ),
+                ShulginRating(
+                    time = getInstant(
+                        year = 2022,
+                        month = 2,
+                        day = 20,
+                        hourOfDay = 3,
+                        minute = 15
+                    )!!,
+                    creationDate = getInstant(
+                        year = 2022,
+                        month = 3,
+                        day = 20,
+                        hourOfDay = 1,
+                        minute = 15
+                    )!!,
+                    option = ShulginRatingOption.PLUS,
+                    experienceId = 0
                 )
             )
         )

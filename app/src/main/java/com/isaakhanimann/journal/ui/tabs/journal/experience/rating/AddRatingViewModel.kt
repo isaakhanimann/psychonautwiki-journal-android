@@ -53,8 +53,8 @@ class AddRatingViewModel @Inject constructor(
         this.experienceId = experienceId
         viewModelScope.launch {
             val experience = experienceRepo.getExperience(id = experienceId) ?: return@launch
-            val isExperienceCurrent = experience.sortDate.isBefore(Instant.now().minus(12, ChronoUnit.HOURS))
-            if (!isExperienceCurrent) {
+            val isOldExperience = experience.sortDate.isBefore(Instant.now().minus(12, ChronoUnit.HOURS))
+            if (isOldExperience) {
                 localDateTimeFlow.emit(experience.sortDate.getLocalDateTime())
             }
         }

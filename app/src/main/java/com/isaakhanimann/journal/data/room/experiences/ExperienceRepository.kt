@@ -62,14 +62,13 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     suspend fun delete(ingestion: Ingestion) = experienceDao.deleteIngestion(ingestion)
 
+    suspend fun deleteEverythingOfExperience(experienceId: Int) = experienceDao.deleteEverythingOfExperience(experienceId)
+
     suspend fun delete(experience: Experience) =
         experienceDao.deleteExperience(experience)
 
     suspend fun delete(experienceWithIngestions: ExperienceWithIngestions) =
         experienceDao.deleteExperienceWithIngestions(experienceWithIngestions)
-
-    suspend fun delete(experienceWithIngestionsAndCompanions: ExperienceWithIngestionsAndCompanions) =
-        experienceDao.deleteExperienceWithIngestions(experienceWithIngestionsAndCompanions)
 
     fun getSortedExperiencesWithIngestionsAndCompanionsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>> =
         experienceDao.getSortedExperiencesWithIngestionsAndCompanionsFlow()
@@ -118,6 +117,16 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     fun getIngestionWithCompanionFlow(id: Int) = experienceDao.getIngestionWithCompanionFlow(id)
     fun getExperienceWithIngestionsAndCompanionsFlow(experienceId: Int) =
         experienceDao.getExperienceWithIngestionsAndCompanionsFlow(experienceId)
+            .flowOn(Dispatchers.IO)
+            .conflate()
+
+    fun getIngestionsWithCompanionsFlow(experienceId: Int) =
+        experienceDao.getIngestionsWithCompanionsFlow(experienceId)
+            .flowOn(Dispatchers.IO)
+            .conflate()
+
+    fun getRatingsFlow(experienceId: Int) =
+        experienceDao.getRatingsFlow(experienceId)
             .flowOn(Dispatchers.IO)
             .conflate()
 

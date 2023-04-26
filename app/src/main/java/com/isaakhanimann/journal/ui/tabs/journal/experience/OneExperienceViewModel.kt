@@ -22,6 +22,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
@@ -51,7 +52,7 @@ class OneExperienceViewModel @Inject constructor(
 
     fun saveIsFavorite(isFavorite: Boolean) {
         viewModelScope.launch {
-            val experience = experienceWithIngestionsFlow.firstOrNull()?.experience
+            val experience = experienceFlow.firstOrNull()
             if (experience != null) {
                 experience.isFavorite = isFavorite
                 experienceRepo.update(experience)
@@ -61,10 +62,18 @@ class OneExperienceViewModel @Inject constructor(
 
     private val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
 
-    val experienceWithIngestionsFlow =
-        experienceRepo.getExperienceWithIngestionsAndCompanionsFlow(experienceId)
+    val ingestionsWithCompanionsFlow =
+        experienceRepo.getIngestionsWithCompanionsFlow(experienceId)
             .stateIn(
-                initialValue = null,
+                initialValue = emptyList(),
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
+
+    val ratingsFlow =
+        experienceRepo.getRatingsFlow(experienceId)
+            .stateIn(
+                initialValue = emptyList(),
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000)
             )
@@ -83,10 +92,10 @@ class OneExperienceViewModel @Inject constructor(
     }
 
     val isShowingAddIngestionButtonFlow =
-        experienceWithIngestionsFlow.combine(currentTimeFlow) { experienceWithIngestions, currentTime ->
+        ingestionsWithCompanionsFlow.combine(currentTimeFlow) { ingestionsWithCompanions, currentTime ->
             val ingestionTimes =
-                experienceWithIngestions?.ingestionsWithCompanions?.map { it.ingestion.time }
-            val lastIngestionTime = ingestionTimes?.maxOrNull() ?: return@combine false
+                ingestionsWithCompanions.map { it.ingestion.time }
+            val lastIngestionTime = ingestionTimes.maxOrNull() ?: return@combine false
             val limitAgo = currentTime.minus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
             return@combine limitAgo < lastIngestionTime
         }.stateIn(
@@ -96,8 +105,8 @@ class OneExperienceViewModel @Inject constructor(
         )
 
     private val sortedIngestionsWithCompanionsFlow =
-        experienceWithIngestionsFlow.map { experience ->
-            experience?.ingestionsWithCompanions?.sortedBy { it.ingestion.time } ?: emptyList()
+        ingestionsWithCompanionsFlow.map { ingestionsWithCompanions ->
+            ingestionsWithCompanions.sortedBy { it.ingestion.time }
         }
 
     private data class IngestionWithAssociatedData(
@@ -190,9 +199,7 @@ class OneExperienceViewModel @Inject constructor(
 
     fun deleteExperience() {
         viewModelScope.launch {
-            experienceWithIngestionsFlow.firstOrNull()?.let {
-                experienceRepo.delete(it)
-            }
+            experienceRepo.deleteEverythingOfExperience(experienceId = experienceId)
         }
     }
 
@@ -235,7 +242,8 @@ data class OneExperienceScreenModel(
     val ingestionElements: List<IngestionElement>,
     val cumulativeDoses: List<CumulativeDose>,
     val interactions: List<Interaction>,
-    val interactionExplanations: List<InteractionExplanation>
+    val interactionExplanations: List<InteractionExplanation>,
+    val ratings: List<ShulginRating>
 )
 
 data class CumulativeDose(

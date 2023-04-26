@@ -152,14 +152,6 @@ interface ExperienceDao {
         }
     }
 
-    @Transaction
-    suspend fun deleteExperienceWithIngestions(experienceWithIngestionsAndCompanions: ExperienceWithIngestionsAndCompanions) {
-        deleteExperience(experience = experienceWithIngestionsAndCompanions.experience)
-        experienceWithIngestionsAndCompanions.ingestionsWithCompanions.forEach {
-            deleteIngestion(it.ingestion)
-        }
-    }
-
     @Delete
     suspend fun deleteIngestion(ingestion: Ingestion)
 
@@ -173,8 +165,28 @@ interface ExperienceDao {
     }
 
     @Transaction
+    suspend fun deleteEverythingOfExperience(experienceId: Int) {
+        deleteIngestions(experienceId)
+        deleteRatings(experienceId)
+        deleteExperience(experienceId)
+    }
+
+
+    @Transaction
     @Query("DELETE FROM ingestion")
     suspend fun deleteAllIngestions()
+
+    @Transaction
+    @Query("DELETE FROM ingestion WHERE experienceId = :experienceId")
+    suspend fun deleteIngestions(experienceId: Int)
+
+    @Transaction
+    @Query("DELETE FROM shulginrating WHERE experienceId = :experienceId")
+    suspend fun deleteRatings(experienceId: Int)
+
+    @Transaction
+    @Query("DELETE FROM experience WHERE id = :experienceId")
+    suspend fun deleteExperience(experienceId: Int)
 
     @Transaction
     @Query("DELETE FROM shulginrating")
@@ -274,6 +286,13 @@ interface ExperienceDao {
     @Transaction
     @Query("SELECT * FROM experience WHERE id = :experienceId")
     fun getExperienceWithIngestionsAndCompanionsFlow(experienceId: Int): Flow<ExperienceWithIngestionsAndCompanions?>
+
+    @Transaction
+    @Query("SELECT * FROM ingestion WHERE experienceId = :experienceId")
+    fun getIngestionsWithCompanionsFlow(experienceId: Int): Flow<List<IngestionWithCompanion>>
+
+    @Query("SELECT * FROM shulginrating WHERE experienceId = :experienceId")
+    fun getRatingsFlow(experienceId: Int): Flow<List<ShulginRating>>
 
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC LIMIT 1")
     suspend fun getLastIngestion(substanceName: String): Ingestion?

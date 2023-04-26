@@ -21,7 +21,6 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -30,14 +29,10 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
-import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -45,11 +40,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.*
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
-import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
@@ -66,18 +60,20 @@ fun OneExperienceScreen(
     navigateToAddRatingScreen: () -> Unit,
     navigateBack: () -> Unit,
 ) {
-    val experienceWithIngestions = viewModel.experienceWithIngestionsFlow.collectAsState().value
+    val ingestionsWithCompanions = viewModel.ingestionsWithCompanionsFlow.collectAsState().value
     val experience = viewModel.experienceFlow.collectAsState().value
     val oneExperienceScreenModel = OneExperienceScreenModel(
         isFavorite = experience?.isFavorite ?: false,
         title = experience?.title ?: "",
-        firstIngestionTime = experienceWithIngestions?.sortInstant ?: Instant.now(),
+        firstIngestionTime = ingestionsWithCompanions.firstOrNull()?.ingestion?.time
+            ?: experience?.sortDate ?: Instant.now(),
         notes = experience?.text ?: "",
         isShowingAddIngestionButton = viewModel.isShowingAddIngestionButtonFlow.collectAsState().value,
         ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
         cumulativeDoses = viewModel.cumulativeDosesFlow.collectAsState().value,
         interactions = viewModel.interactionsFlow.collectAsState().value,
-        interactionExplanations = viewModel.interactionExplanationsFlow.collectAsState().value
+        interactionExplanations = viewModel.interactionExplanationsFlow.collectAsState().value,
+        ratings = viewModel.ratingsFlow.collectAsState().value
     )
     OneExperienceScreen(
         oneExperienceScreenModel = oneExperienceScreenModel,
@@ -129,7 +125,7 @@ fun OneExperienceScreen(
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateToAddRatingScreen: () -> Unit,
     navigateBack: () -> Unit,
-    saveIsFavorite: (Boolean) -> Unit,
+    saveIsFavorite: (Boolean) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -215,12 +211,12 @@ fun OneExperienceScreen(
             val elements = oneExperienceScreenModel.ingestionElements
             val effectTimelines = remember(elements) {
                 elements.map { oneElement ->
-                    val horizontalWeight = if (oneElement.numDots==null) {
+                    val horizontalWeight = if (oneElement.numDots == null) {
                         0.5f
-                    } else if (oneElement.numDots>4) {
+                    } else if (oneElement.numDots > 4) {
                         1f
                     } else {
-                        oneElement.numDots.toFloat()/4f
+                        oneElement.numDots.toFloat() / 4f
                     }
                     return@map DataForOneEffectLine(
                         roaDuration = oneElement.roaDuration,
@@ -299,41 +295,6 @@ fun OneExperienceScreen(
                     }
                 }
             }
-            val interactions = oneExperienceScreenModel.interactions
-            AnimatedVisibility(visible = interactions.isNotEmpty()) {
-                Card(
-                    modifier = Modifier
-                        .padding(vertical = verticalCardPadding)
-                ) {
-                    CardTitle(title = "Interactions")
-                    interactions.forEachIndexed { index, interaction ->
-                        InteractionRow(interaction = interaction)
-                        if (index < interactions.size - 1) {
-                            Divider()
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(
-                        text = "Explanations",
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    )
-                    FlowRow(
-                        mainAxisSpacing = 5.dp,
-                        crossAxisAlignment = FlowCrossAxisAlignment.Center,
-                        modifier = Modifier.padding(horizontal = horizontalPadding)
-                    ) {
-                        oneExperienceScreenModel.interactionExplanations.forEach {
-                            SuggestionChip(
-                                onClick = {
-                                    navigateToURL(it.url)
-                                },
-                                label = { Text(it.name) }
-                            )
-                        }
-                    }
-                }
-            }
             Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                 if (oneExperienceScreenModel.notes.isEmpty()) {
                     TextButton(
@@ -372,128 +333,71 @@ fun OneExperienceScreen(
                 }
             }
             Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                if (oneExperienceScreenModel.notes.isEmpty()) {
-                    TextButton(
-                        onClick = navigateToAddRatingScreen,
-                        modifier = Modifier.padding(horizontal = 5.dp)
-                    ) {
-                        Icon(
-                            Icons.Filled.Edit,
-                            contentDescription = "Add",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Add Shulgin Rating")
-                    }
-                } else {
-                    CardTitle(title = "Shulgin Rating")
-//                    Row(
-//                        horizontalArrangement = Arrangement.SpaceBetween,
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(start = horizontalPadding)
-//                    ) {
-//                        Text(
-//                            text = oneExperienceScreenModel.notes,
-//                            modifier = Modifier.padding(vertical = 10.dp)
-//                        )
-//                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-//                        IconButton(onClick = navigateToEditExperienceScreen) {
-//                            Icon(
-//                                imageVector = Icons.Default.Edit,
-//                                contentDescription = "Edit Notes"
-//                            )
-//                        }
-//                    }
+                CardTitle(title = "Shulgin Rating")
+                val ratings = oneExperienceScreenModel.ratings
+                if (ratings.isNotEmpty()) {
+                    Divider()
                 }
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-    }
-}
-
-@Composable
-fun InteractionRow(interaction: Interaction) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RectangleShape,
-        color = interaction.interactionType.color
-    ) {
-        Row(
-            modifier = Modifier.padding(
-                horizontal = horizontalPadding,
-                vertical = 4.dp
-            ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "${interaction.aName} and ${interaction.bName}",
-                textAlign = TextAlign.Center,
-                color = Color.Black,
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            LazyRow {
-                items(interaction.interactionType.dangerCount) {
-                    Icon(
-                        imageVector = Icons.Outlined.WarningAmber,
-                        contentDescription = "Warning",
-                        tint = Color.Black,
+                ratings.forEach { rating ->
+                    RatingRow(
+                        rating = rating,
+                        modifier = Modifier
+                            .clickable {
+//                                    navigateToIngestionScreen(ingestionElement.ingestionWithCompanion.ingestion.id)
+                            }
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp, horizontal = horizontalPadding)
                     )
+                    Divider()
+                }
+                TextButton(
+                    onClick = navigateToAddRatingScreen,
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add",
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text("Add Rating")
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun CardTitle(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 5.dp)
-    )
-}
-
-data class DataForOneEffectLine(
-    val roaDuration: RoaDuration?,
-    val height: Float,
-    val horizontalWeight: Float,
-    val color: AdaptiveColor,
-    val startTime: Instant
-)
-
-fun getHeightBetween0And1(
-    ingestion: Ingestion,
-    allIngestions: List<Ingestion>
-): Float {
-    val max = allIngestions
-        .filter { it.substanceName == ingestion.substanceName }
-        .mapNotNull { it.dose }
-        .maxOrNull()
-    return ingestion.dose.let { doseSnap ->
-        if (max == null || doseSnap == null) {
-            1f
-        } else {
-            doseSnap.div(max).toFloat()
-        }
-    }
-}
-
-@Composable
-fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.titleMedium)
-        Column(horizontalAlignment = Alignment.End) {
-            Text(text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units)
-            val numDots = cumulativeDose.numDots
-            if (numDots != null) {
-                DotRows(numDots = numDots)
+            val interactions = oneExperienceScreenModel.interactions
+            AnimatedVisibility(visible = interactions.isNotEmpty()) {
+                Card(
+                    modifier = Modifier
+                        .padding(vertical = verticalCardPadding)
+                ) {
+                    CardTitle(title = "Interactions")
+                    interactions.forEachIndexed { index, interaction ->
+                        InteractionRow(interaction = interaction)
+                        if (index < interactions.size - 1) {
+                            Divider()
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = "Explanations",
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
+                    FlowRow(
+                        mainAxisSpacing = 5.dp,
+                        crossAxisAlignment = FlowCrossAxisAlignment.Center,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    ) {
+                        oneExperienceScreenModel.interactionExplanations.forEach {
+                            SuggestionChip(
+                                onClick = {
+                                    navigateToURL(it.url)
+                                },
+                                label = { Text(it.name) }
+                            )
+                        }
+                    }
+                }
             }
+            Spacer(modifier = Modifier.height(60.dp))
         }
     }
 }
