@@ -43,7 +43,8 @@ import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesNew
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
@@ -247,8 +248,9 @@ fun OneExperienceScreen(
                             )
                             .padding(bottom = 10.dp)
                     ) {
-                        AllTimelines(
+                        AllTimelinesNew(
                             dataForEffectLines = effectTimelines,
+                            dataForRatings = oneExperienceScreenModel.ratings.map { DataForOneRating(time = it.time, option = it.option) },
                             isShowingCurrentTime = true,
                             navigateToExplainTimeline = navigateToExplainTimeline,
                             modifier = Modifier

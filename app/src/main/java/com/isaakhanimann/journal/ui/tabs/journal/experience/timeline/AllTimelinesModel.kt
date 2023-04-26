@@ -22,11 +22,15 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOn
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.IngestionDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines.FullTimeline
+import java.time.Duration
 import java.time.Instant
+import kotlin.math.max
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 class AllTimelinesModel(
-    dataForLines: List<DataForOneEffectLine>
+    dataForLines: List<DataForOneEffectLine>,
+    dataForRatings: List<DataForOneRating>
 ) {
     val startTime: Instant
     val widthInSeconds: Float
@@ -34,8 +38,10 @@ class AllTimelinesModel(
     val axisDrawable: AxisDrawable
 
     init {
-        startTime = dataForLines.map { it.startTime }
-            .reduce { acc, date -> if (acc.isBefore(date)) acc else date }
+        val ratingTimes = dataForRatings.map { it.time }
+        val ingestionTimes = dataForLines.map { it.startTime }
+        val allStartTimeCandidates = ratingTimes + ingestionTimes
+        startTime = allStartTimeCandidates.reduce { acc, date -> if (acc.isBefore(date)) acc else date }
         val ingestionDrawablesWithoutInsets = dataForLines.map { dataForOneLine ->
             IngestionDrawable(
                 startTimeGraph = startTime,
@@ -47,18 +53,20 @@ class AllTimelinesModel(
             )
         }
         ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)
-        val max = ingestionDrawables.maxOfOrNull {
+        val maxWidthIngestions: Float = ingestionDrawables.maxOfOrNull {
             if (it.timelineDrawable != null) {
                 it.timelineDrawable.widthInSeconds + it.ingestionPointDistanceFromStartInSeconds
             } else {
                 it.ingestionPointDistanceFromStartInSeconds
             }
-        }
-        widthInSeconds = if (max == null || max == 0f) {
-            5.hours.inWholeSeconds.toFloat()
+        } ?: 0f
+        val latestRating = ratingTimes.maxOrNull()
+        val maxWidthRating: Float = if (latestRating != null) {
+            Duration.between(startTime, latestRating).seconds.toFloat()
         } else {
-            max
+            0f
         }
+        widthInSeconds = max(maxWidthIngestions, max(maxWidthRating, 4.hours.inWholeSeconds.toFloat())) + 10.minutes.inWholeSeconds.toFloat()
         axisDrawable = AxisDrawable(startTime, widthInSeconds)
     }
 

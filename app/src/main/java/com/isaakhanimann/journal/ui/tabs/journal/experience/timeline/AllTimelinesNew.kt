@@ -44,12 +44,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.IngestionDrawable
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import kotlin.math.max
 
 
@@ -60,8 +62,26 @@ fun AllTimelinesPreview(
         TimelinesPreviewProvider::class,
     ) dataForEffectLines: List<DataForOneEffectLine>
 ) {
-    AllTimelines(
+    AllTimelinesNew(
         dataForEffectLines = dataForEffectLines,
+        dataForRatings = listOf(
+            DataForOneRating(
+                time = Instant.now().minus(3, ChronoUnit.HOURS),
+                option = ShulginRatingOption.MINUS
+            ),
+            DataForOneRating(
+                time = Instant.now().minus(2, ChronoUnit.HOURS),
+                option = ShulginRatingOption.TWO_PLUS
+            ),
+            DataForOneRating(
+                time = Instant.now().minus(1, ChronoUnit.HOURS),
+                option = ShulginRatingOption.THREE_PLUS
+            ),
+            DataForOneRating(
+                time = Instant.now().plus(2, ChronoUnit.HOURS),
+                option = ShulginRatingOption.FOUR_PLUS
+            )
+        ),
         isShowingCurrentTime = true,
         navigateToExplainTimeline = {},
         modifier = Modifier
@@ -72,8 +92,9 @@ fun AllTimelinesPreview(
 
 
 @Composable
-fun AllTimelines(
+fun AllTimelinesNew(
     dataForEffectLines: List<DataForOneEffectLine>,
+    dataForRatings: List<DataForOneRating>,
     isShowingCurrentTime: Boolean,
     navigateToExplainTimeline: () -> Unit,
     modifier: Modifier = Modifier,
@@ -82,17 +103,26 @@ fun AllTimelines(
         Text(text = "Insufficient Data for Timeline")
     } else {
         val model: AllTimelinesModel = remember(dataForEffectLines) {
-            AllTimelinesModel(dataForEffectLines)
+            AllTimelinesModel(dataForEffectLines, dataForRatings)
         }
         val isDarkTheme = isSystemInDarkTheme()
         val density = LocalDensity.current
-        val labelSize = MaterialTheme.typography.labelMedium.fontSize
-        val textPaint = remember(density) {
+        val axisLabelSize = MaterialTheme.typography.labelMedium.fontSize
+        val axisLabelTextPaint = remember(density) {
             Paint().apply {
                 color =
                     if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
                 textAlign = Paint.Align.CENTER
-                textSize = density.run { labelSize.toPx() }
+                textSize = density.run { axisLabelSize.toPx() }
+            }
+        }
+        val ratingSize = MaterialTheme.typography.labelLarge.fontSize
+        val ratingTextPaint = remember(density) {
+            Paint().apply {
+                color =
+                    if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+                textAlign = Paint.Align.CENTER
+                textSize = density.run { ratingSize.toPx() }
             }
         }
         var currentTime by remember {
@@ -106,7 +136,7 @@ fun AllTimelines(
         Box(contentAlignment = Alignment.TopEnd) {
             Canvas(modifier = modifier) {
                 val canvasWithLabelsHeight = size.height
-                val labelsHeight = labelSize.toPx()
+                val labelsHeight = axisLabelSize.toPx()
                 val canvasWidth = size.width
                 val pixelsPerSec = canvasWidth / model.widthInSeconds
                 inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight) {
@@ -122,6 +152,16 @@ fun AllTimelines(
                                 density = density
                             )
                         }
+                    }
+                    dataForRatings.forEach { dataForOneRating ->
+                        drawRating(
+                            startTime = model.startTime,
+                            ratingTime = dataForOneRating.time,
+                            pixelsPerSec = pixelsPerSec,
+                            canvasHeightOuter = canvasHeightWithVerticalLine,
+                            rating = dataForOneRating.option,
+                            textPaint = ratingTextPaint
+                        )
                     }
                     if (isShowingCurrentTime) {
                         drawCurrentTime(
@@ -139,7 +179,7 @@ fun AllTimelines(
                     pixelsPerSec = pixelsPerSec,
                     canvasWidth = canvasWidth,
                     canvasHeight = canvasWithLabelsHeight,
-                    textPaint = textPaint
+                    textPaint = axisLabelTextPaint
                 )
             }
             IconButton(onClick = navigateToExplainTimeline) {
@@ -162,8 +202,11 @@ fun DrawScope.drawIngestion(
     val color = ingestionDrawable.color.getComposeColor(isDarkTheme)
     val startX =
         ingestionDrawable.ingestionPointDistanceFromStartInSeconds * pixelsPerSec
-    val verticalInsetForLine = max(0f,density.strokeWidth / 2)
-    val topInset = max(0f, (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * density.strokeWidth))
+    val verticalInsetForLine = max(0f, density.strokeWidth / 2)
+    val topInset = max(
+        0f,
+        (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * density.strokeWidth)
+    )
     inset(
         left = 0f,
         top = topInset,
@@ -224,6 +267,47 @@ fun DrawScope.drawCurrentTime(
             cap = StrokeCap.Round
         )
     }
+}
+
+fun DrawScope.drawRating(
+    startTime: Instant,
+    ratingTime: Instant,
+    pixelsPerSec: Float,
+    canvasHeightOuter: Float,
+    rating: ShulginRatingOption,
+    textPaint: Paint
+) {
+    val timeStartInSec = Duration.between(startTime, ratingTime).seconds
+    val timeStartX = timeStartInSec * pixelsPerSec
+    var y = canvasHeightOuter * 0.3f
+    drawLine(
+        color = Color.Gray,
+        start = Offset(x = timeStartX, y = 0f),
+        end = Offset(x = timeStartX, y = y),
+        strokeWidth = 4.dp.toPx(),
+        cap = StrokeCap.Round
+    )
+    val lineHeight = textPaint.textSize
+    y += 2*lineHeight
+    val lines = rating.verticalSign.split("\n")
+    drawContext.canvas.nativeCanvas.apply {
+        for (line in lines) {
+            drawText(
+                line,
+                timeStartX,
+                y,
+                textPaint
+            )
+            y += lineHeight
+        }
+    }
+    drawLine(
+        color = Color.Gray,
+        start = Offset(x = timeStartX, y = y),
+        end = Offset(x = timeStartX, y = canvasHeightOuter),
+        strokeWidth = 4.dp.toPx(),
+        cap = StrokeCap.Round
+    )
 }
 
 fun DrawScope.drawAxis(
