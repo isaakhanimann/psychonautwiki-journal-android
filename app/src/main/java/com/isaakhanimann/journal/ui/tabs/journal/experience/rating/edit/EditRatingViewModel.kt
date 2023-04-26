@@ -67,6 +67,14 @@ class EditRatingViewModel @Inject constructor(
         selectedRatingOption = newRating
     }
 
+    fun delete() {
+        viewModelScope.launch {
+            rating?.let {
+                experienceRepo.delete(it)
+            }
+        }
+    }
+
     fun onDoneTap() {
         viewModelScope.launch {
             val selectedInstant = localDateTimeFlow.firstOrNull()?.getInstant() ?: return@launch

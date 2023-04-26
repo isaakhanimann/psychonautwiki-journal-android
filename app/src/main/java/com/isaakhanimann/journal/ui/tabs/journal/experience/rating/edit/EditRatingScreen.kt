@@ -21,14 +21,14 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.rating.edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.RatingScreenContent
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.RatingScreen
 
 @Composable
 fun EditRatingScreen(
     viewModel: EditRatingViewModel = hiltViewModel(),
     navigateBack: () -> Unit
 ) {
-    RatingScreenContent(
+    RatingScreen(
         title = "Edit Shulgin Rating",
         onDone = {
             viewModel.onDoneTap()
@@ -37,6 +37,10 @@ fun EditRatingScreen(
         selectedTime = viewModel.localDateTimeFlow.collectAsState().value,
         onTimeChange = viewModel::onChangeTime,
         selectedRating = viewModel.selectedRatingOption,
-        onRatingChange = viewModel::onChangeRating
+        onRatingChange = viewModel::onChangeRating,
+        onDelete = {
+            viewModel.delete()
+            navigateBack()
+        }
     )
 }

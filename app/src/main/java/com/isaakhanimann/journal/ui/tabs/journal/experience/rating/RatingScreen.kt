@@ -25,6 +25,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -47,7 +48,7 @@ import java.time.LocalDateTime
 @Composable
 fun RatingScreenPreview() {
     JournalTheme {
-        RatingScreenContent(
+        RatingScreen(
             title = "Edit Shulgin Rating",
             onDone = {},
             selectedTime = LocalDateTime.now(),
@@ -60,18 +61,31 @@ fun RatingScreenPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RatingScreenContent(
+fun RatingScreen(
     title: String,
     onDone: () -> Unit,
     selectedTime: LocalDateTime,
     onTimeChange: (LocalDateTime) -> Unit,
     selectedRating: ShulginRatingOption,
-    onRatingChange: (ShulginRatingOption) -> Unit
+    onRatingChange: (ShulginRatingOption) -> Unit,
+    onDelete: (() -> Unit)? = null
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(title) },
+                actions = {
+                    if (onDelete != null) {
+                        IconButton(
+                            onClick = { onDelete() },
+                        ) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete Rating",
+                            )
+                        }
+                    }
+                }
             )
         },
         floatingActionButton = {

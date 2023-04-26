@@ -21,7 +21,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.rating.add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.RatingScreenContent
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.RatingScreen
 
 
 @Composable
@@ -29,7 +29,7 @@ fun AddRatingScreen(
     viewModel: AddRatingViewModel = hiltViewModel(),
     navigateBack: () -> Unit
 ) {
-    RatingScreenContent(
+    RatingScreen(
         title = "Add Shulgin Rating",
         onDone = {
             viewModel.onDoneTap()
