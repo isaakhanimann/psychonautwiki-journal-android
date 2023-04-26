@@ -102,7 +102,7 @@ fun AllTimelinesNew(
     if (dataForEffectLines.isEmpty()) {
         Text(text = "Insufficient Data for Timeline")
     } else {
-        val model: AllTimelinesModel = remember(dataForEffectLines) {
+        val model: AllTimelinesModel = remember(dataForEffectLines, dataForRatings) {
             AllTimelinesModel(dataForEffectLines, dataForRatings)
         }
         val isDarkTheme = isSystemInDarkTheme()
