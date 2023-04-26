@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -50,7 +50,9 @@ fun EditExperienceScreen(
             navigateBack()
         },
         text = viewModel.enteredText,
-        onTextChange = { viewModel.enteredText = it }
+        onTextChange = { viewModel.enteredText = it },
+        location = viewModel.enteredLocation,
+        onLocationChange = { viewModel.enteredLocation = it}
     )
 }
 
@@ -63,7 +65,9 @@ fun EditExperienceScreenPreview() {
         isEnteredTitleOk = true,
         onDoneTap = {},
         text = "Here are some sample notes",
-        onTextChange = {}
+        onTextChange = {},
+        location = "Zurich",
+        onLocationChange = {}
     )
 }
 
@@ -75,7 +79,9 @@ fun EditExperienceScreen(
     isEnteredTitleOk: Boolean,
     onDoneTap: () -> Unit,
     text: String,
-    onTextChange: (String) -> Unit
+    onTextChange: (String) -> Unit,
+    location: String,
+    onLocationChange: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -111,6 +117,18 @@ fun EditExperienceScreen(
                 singleLine = true,
                 label = { Text(text = "Title") },
                 isError = !isEnteredTitleOk,
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    capitalization = KeyboardCapitalization.Words
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = location,
+                onValueChange = onLocationChange,
+                singleLine = true,
+                label = { Text(text = "Location") },
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done,

@@ -32,5 +32,5 @@ data class Experience(
     val creationDate: Instant = Instant.now(),
     val sortDate: Instant,
     var isFavorite: Boolean = false,
-    @Embedded val location: Location?
+    @Embedded var location: Location?
 )
