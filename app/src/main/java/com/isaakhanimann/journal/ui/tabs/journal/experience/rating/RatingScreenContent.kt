@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Isaak Hanimann.
+ * Copyright (c) 2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -24,17 +24,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.DatePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
@@ -45,28 +43,12 @@ import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
 
 
-@Composable
-fun AddRatingScreen(
-    viewModel: AddRatingViewModel = hiltViewModel(),
-    navigateBack: () -> Unit
-) {
-    AddRatingScreen(
-        onDone = {
-            viewModel.onDoneTap()
-            navigateBack()
-        },
-        selectedTime = viewModel.localDateTimeFlow.collectAsState().value,
-        onTimeChange = viewModel::onChangeTime,
-        selectedRating = viewModel.rating,
-        onRatingChange = viewModel::onChangeRating
-    )
-}
-
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun AddRatingScreenPreview() {
+fun RatingScreenPreview() {
     JournalTheme {
-        AddRatingScreen(
+        RatingScreenContent(
+            title = "Edit Shulgin Rating",
             onDone = {},
             selectedTime = LocalDateTime.now(),
             onTimeChange = {},
@@ -78,7 +60,8 @@ fun AddRatingScreenPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddRatingScreen(
+fun RatingScreenContent(
+    title: String,
     onDone: () -> Unit,
     selectedTime: LocalDateTime,
     onTimeChange: (LocalDateTime) -> Unit,
@@ -88,7 +71,7 @@ fun AddRatingScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add Shulgin Rating") },
+                title = { Text(title) },
             )
         },
         floatingActionButton = {
@@ -156,7 +139,27 @@ fun AddRatingScreen(
                                 style = MaterialTheme.typography.titleLarge,
                                 modifier = Modifier.padding(start = 16.dp)
                             )
+                            Text(
+                                text = oneRating.shortDescription,
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
                         }
+                    }
+                }
+            }
+            CardWithTitle(title = "Longer Explanations") {
+                val ratings = ShulginRatingOption.values()
+                ratings.forEach { oneRating ->
+                    Column(modifier = Modifier.padding(vertical = 5.dp)) {
+                        Text(
+                            text = oneRating.sign,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        Text(
+                            text = oneRating.longDescription,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
             }

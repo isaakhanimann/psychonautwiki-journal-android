@@ -28,7 +28,8 @@ import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.edit.EditExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.editingestion.EditIngestionScreen
-import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.AddRatingScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.add.AddRatingScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.edit.EditRatingScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
@@ -66,6 +67,12 @@ fun NavGraphBuilder.journalGraph(
         ) {
             AddRatingScreen(navigateBack = navController::popBackStack)
         }
+        composableWithTransitions(
+            ArgumentRouter.EditRatingRouter.route,
+            arguments = ArgumentRouter.EditRatingRouter.args
+        ) {
+            EditRatingScreen(navigateBack = navController::popBackStack)
+        }
         composableWithTransitions(NoArgumentRouter.VolumetricDosingOnJournalTabRouter.route) {
             VolumetricDosingScreen(
                 navigateToVolumetricLiquidDosingArticle = {
@@ -92,7 +99,8 @@ fun NavGraphBuilder.journalGraph(
                 navigateToAddRatingScreen = {
                     navController.navigateToAddRating(experienceId)
                 },
-                navigateToURL = navController::navigateToURLInJournalTab
+                navigateToURL = navController::navigateToURLInJournalTab,
+                navigateToEditRatingScreen = navController::navigateToEditRating
             )
         }
         composableWithTransitions(

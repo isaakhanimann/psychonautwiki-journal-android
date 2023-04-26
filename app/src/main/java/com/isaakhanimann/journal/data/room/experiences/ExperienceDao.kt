@@ -111,6 +111,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM experience WHERE id =:id")
     suspend fun getExperience(id: Int): Experience?
 
+    @Query("SELECT * FROM shulginrating WHERE id =:id")
+    suspend fun getRating(id: Int): ShulginRating?
+
     @Query("SELECT * FROM experience WHERE id =:id")
     fun getExperienceFlow(id: Int): Flow<Experience?>
 
@@ -140,6 +143,9 @@ interface ExperienceDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(ingestion: Ingestion)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(rating: ShulginRating)
 
     @Delete
     suspend fun deleteExperience(experience: Experience)

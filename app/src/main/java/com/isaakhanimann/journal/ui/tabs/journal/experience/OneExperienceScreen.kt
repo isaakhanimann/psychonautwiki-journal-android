@@ -58,6 +58,7 @@ fun OneExperienceScreen(
     navigateToURL: (url: String) -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateToAddRatingScreen: () -> Unit,
+    navigateToEditRatingScreen: (ratingId: Int) -> Unit,
     navigateBack: () -> Unit,
 ) {
     val ingestionsWithCompanions = viewModel.ingestionsWithCompanionsFlow.collectAsState().value
@@ -85,7 +86,8 @@ fun OneExperienceScreen(
         navigateToAddRatingScreen = navigateToAddRatingScreen,
         navigateBack = navigateBack,
         saveIsFavorite = viewModel::saveIsFavorite,
-        navigateToURL = navigateToURL
+        navigateToURL = navigateToURL,
+        navigateToEditRatingScreen = navigateToEditRatingScreen
     )
 }
 
@@ -108,7 +110,8 @@ fun ExperienceScreenPreview(
             navigateToAddRatingScreen = {},
             navigateBack = {},
             saveIsFavorite = {},
-            navigateToURL = {}
+            navigateToURL = {},
+            navigateToEditRatingScreen = {}
         )
     }
 }
@@ -125,7 +128,8 @@ fun OneExperienceScreen(
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateToAddRatingScreen: () -> Unit,
     navigateBack: () -> Unit,
-    saveIsFavorite: (Boolean) -> Unit
+    saveIsFavorite: (Boolean) -> Unit,
+    navigateToEditRatingScreen: (ratingId: Int) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -343,7 +347,7 @@ fun OneExperienceScreen(
                         rating = rating,
                         modifier = Modifier
                             .clickable {
-//                                    navigateToIngestionScreen(ingestionElement.ingestionWithCompanion.ingestion.id)
+                                    navigateToEditRatingScreen(rating.id)
                             }
                             .fillMaxWidth()
                             .padding(vertical = 8.dp, horizontal = horizontalPadding)

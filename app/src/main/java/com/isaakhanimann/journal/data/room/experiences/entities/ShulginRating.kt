@@ -29,6 +29,6 @@ data class ShulginRating(
     val id: Int = 0,
     var time: Instant,
     var creationDate: Instant? = Instant.now(),
-    val option: ShulginRatingOption,
+    var option: ShulginRatingOption,
     var experienceId: Int
 )

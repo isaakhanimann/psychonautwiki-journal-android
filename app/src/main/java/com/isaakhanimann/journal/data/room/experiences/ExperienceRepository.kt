@@ -36,6 +36,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun insert(rating: ShulginRating) = experienceDao.insert(rating)
     suspend fun update(experience: Experience) = experienceDao.update(experience)
     suspend fun update(ingestion: Ingestion) = experienceDao.update(ingestion)
+    suspend fun update(rating: ShulginRating) = experienceDao.update(rating)
     suspend fun insertIngestionExperienceAndCompanion(
         ingestion: Ingestion,
         experience: Experience,
@@ -112,6 +113,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
         experienceDao.getSortedLastUsedSubstanceNamesFlow(limit).flowOn(Dispatchers.IO).conflate()
 
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)
+    suspend fun getRating(id: Int): ShulginRating? = experienceDao.getRating(id)
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
     fun getIngestionWithExperienceFlow(id: Int) = experienceDao.getIngestionWithExperienceFlow(id)
     fun getIngestionWithCompanionFlow(id: Int) = experienceDao.getIngestionWithCompanionFlow(id)

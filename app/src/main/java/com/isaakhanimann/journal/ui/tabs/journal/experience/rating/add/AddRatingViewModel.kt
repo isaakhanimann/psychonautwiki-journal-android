@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Isaak Hanimann.
+ * Copyright (c) 2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.journal.experience.rating
+package com.isaakhanimann.journal.ui.tabs.journal.experience.rating.add
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,7 +44,7 @@ class AddRatingViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    var rating by mutableStateOf(ShulginRatingOption.TWO_PLUS)
+    var selectedRating by mutableStateOf(ShulginRatingOption.TWO_PLUS)
     val experienceId: Int
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
 
@@ -67,13 +67,13 @@ class AddRatingViewModel @Inject constructor(
     }
 
     fun onChangeRating(newRating: ShulginRatingOption) {
-        rating = newRating
+        selectedRating = newRating
     }
 
     fun onDoneTap() {
         viewModelScope.launch {
             val selectedInstant = localDateTimeFlow.firstOrNull()?.getInstant() ?: return@launch
-            val newRating = ShulginRating(time = selectedInstant, creationDate = Instant.now(), option = rating, experienceId = experienceId)
+            val newRating = ShulginRating(time = selectedInstant, creationDate = Instant.now(), option = selectedRating, experienceId = experienceId)
             experienceRepo.insert(newRating)
         }
     }
