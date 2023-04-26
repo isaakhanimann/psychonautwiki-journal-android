@@ -54,6 +54,7 @@ class EditRatingViewModel @Inject constructor(
             val loadedRating = experienceRepo.getRating(id = ratingId) ?: return@launch
             rating = loadedRating
             localDateTimeFlow.emit(loadedRating.time.getLocalDateTime())
+            selectedRatingOption = loadedRating.option
         }
     }
 
