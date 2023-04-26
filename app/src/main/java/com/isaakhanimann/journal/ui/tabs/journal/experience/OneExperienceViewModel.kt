@@ -238,6 +238,7 @@ data class OneExperienceScreenModel(
     val title: String,
     val firstIngestionTime: Instant,
     val notes: String,
+    val locationName: String,
     val isShowingAddIngestionButton: Boolean,
     val ingestionElements: List<IngestionElement>,
     val cumulativeDoses: List<CumulativeDose>,

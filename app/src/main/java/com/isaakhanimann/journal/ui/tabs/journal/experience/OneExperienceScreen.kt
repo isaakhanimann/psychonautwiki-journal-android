@@ -69,6 +69,7 @@ fun OneExperienceScreen(
         firstIngestionTime = ingestionsWithCompanions.firstOrNull()?.ingestion?.time
             ?: experience?.sortDate ?: Instant.now(),
         notes = experience?.text ?: "",
+        locationName = experience?.location?.name ?: "",
         isShowingAddIngestionButton = viewModel.isShowingAddIngestionButtonFlow.collectAsState().value,
         ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
         cumulativeDoses = viewModel.cumulativeDosesFlow.collectAsState().value,
@@ -322,10 +323,13 @@ fun OneExperienceScreen(
                             .fillMaxWidth()
                             .padding(start = horizontalPadding)
                     ) {
-                        Text(
-                            text = oneExperienceScreenModel.notes,
-                            modifier = Modifier.padding(vertical = 10.dp)
-                        )
+                        Column(modifier = Modifier.padding(vertical = 10.dp)) {
+                            Text(text = oneExperienceScreenModel.notes)
+                            if (oneExperienceScreenModel.locationName.isNotBlank()) {
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Text(text = "Location: ${oneExperienceScreenModel.locationName}")
+                            }
+                        }
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                         IconButton(onClick = navigateToEditExperienceScreen) {
                             Icon(
@@ -347,7 +351,7 @@ fun OneExperienceScreen(
                         rating = rating,
                         modifier = Modifier
                             .clickable {
-                                    navigateToEditRatingScreen(rating.id)
+                                navigateToEditRatingScreen(rating.id)
                             }
                             .fillMaxWidth()
                             .padding(vertical = 8.dp, horizontal = horizontalPadding)

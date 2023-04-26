@@ -44,6 +44,7 @@ class OneExperienceScreenPreviewProvider :
                 minute = 5
             )!!,
             notes = "Some Notes",
+            locationName = "Zurich",
             isShowingAddIngestionButton = true,
             ingestionElements = listOf(
                 IngestionElement(
