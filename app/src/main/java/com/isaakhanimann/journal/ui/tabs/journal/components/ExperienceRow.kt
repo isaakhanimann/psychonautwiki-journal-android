@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
-import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 
 @Preview(showBackground = true)
@@ -78,8 +77,8 @@ fun ExperienceRow(
             ) {
                 val timeStyle = MaterialTheme.typography.labelMedium
                 if (isTimeRelativeToNow) {
-                    RelativeDateText(
-                        dateTime = experienceWithIngestionsCompanionsAndRatings.sortInstant.getLocalDateTime(),
+                    RelativeDateTextNew(
+                        dateTime = experienceWithIngestionsCompanionsAndRatings.sortInstant,
                         style = timeStyle
                     )
                 } else {

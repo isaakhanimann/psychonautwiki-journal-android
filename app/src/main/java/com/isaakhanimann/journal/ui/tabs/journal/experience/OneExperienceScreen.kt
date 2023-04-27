@@ -24,11 +24,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -89,7 +87,9 @@ fun OneExperienceScreen(
         navigateBack = navigateBack,
         saveIsFavorite = viewModel::saveIsFavorite,
         navigateToURL = navigateToURL,
-        navigateToEditRatingScreen = navigateToEditRatingScreen
+        navigateToEditRatingScreen = navigateToEditRatingScreen,
+        timeDisplayOption = viewModel.timeDisplayOption.value,
+        onChangeTimeDisplayOption = { viewModel.timeDisplayOption.value = it }
     )
 }
 
@@ -113,7 +113,9 @@ fun ExperienceScreenPreview(
             navigateBack = {},
             saveIsFavorite = {},
             navigateToURL = {},
-            navigateToEditRatingScreen = {}
+            navigateToEditRatingScreen = {},
+            timeDisplayOption = TimeDisplayOption.RELATIVE_TO_START,
+            onChangeTimeDisplayOption = {}
         )
     }
 }
@@ -131,7 +133,9 @@ fun OneExperienceScreen(
     navigateToAddRatingScreen: () -> Unit,
     navigateBack: () -> Unit,
     saveIsFavorite: (Boolean) -> Unit,
-    navigateToEditRatingScreen: (ratingId: Int) -> Unit
+    navigateToEditRatingScreen: (ratingId: Int) -> Unit,
+    timeDisplayOption: TimeDisplayOption,
+    onChangeTimeDisplayOption: (TimeDisplayOption) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -188,6 +192,37 @@ fun OneExperienceScreen(
                             Icon(Icons.Filled.Star, contentDescription = "Is Favorite")
                         } else {
                             Icon(Icons.Outlined.StarOutline, contentDescription = "Is not Favorite")
+                        }
+                    }
+                    var isExpanded by remember { mutableStateOf(false) }
+                    IconButton(onClick = { isExpanded = true }) {
+                        if (timeDisplayOption == TimeDisplayOption.REGULAR) {
+                            Icon(Icons.Outlined.Timer, contentDescription = "Time Regular")
+                        } else {
+                            Icon(Icons.Filled.Timer, contentDescription = "Regular Time")
+                        }
+                    }
+                    DropdownMenu(
+                        expanded = isExpanded,
+                        onDismissRequest = { isExpanded = false }
+                    ) {
+                        TimeDisplayOption.values().forEach { option ->
+                            DropdownMenuItem(
+                                text = { Text(option.text) },
+                                onClick = {
+                                    onChangeTimeDisplayOption(option)
+                                    isExpanded = false
+                                },
+                                leadingIcon = {
+                                    if (option == timeDisplayOption) {
+                                        Icon(
+                                            Icons.Filled.Check,
+                                            contentDescription = "Check",
+                                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                                        )
+                                    }
+                                }
+                            )
                         }
                     }
                 }
@@ -250,7 +285,12 @@ fun OneExperienceScreen(
                     ) {
                         AllTimelinesNew(
                             dataForEffectLines = effectTimelines,
-                            dataForRatings = oneExperienceScreenModel.ratings.map { DataForOneRating(time = it.time, option = it.option) },
+                            dataForRatings = oneExperienceScreenModel.ratings.map {
+                                DataForOneRating(
+                                    time = it.time,
+                                    option = it.option
+                                )
+                            },
                             isShowingCurrentTime = true,
                             navigateToExplainTimeline = navigateToExplainTimeline,
                             modifier = Modifier
@@ -273,6 +313,8 @@ fun OneExperienceScreen(
                     oneExperienceScreenModel.ingestionElements.forEachIndexed { index, ingestionElement ->
                         IngestionRow(
                             ingestionElement = ingestionElement,
+                            timeDisplayOption = timeDisplayOption,
+                            startTime = oneExperienceScreenModel.firstIngestionTime,
                             modifier = Modifier
                                 .clickable {
                                     navigateToIngestionScreen(ingestionElement.ingestionWithCompanion.ingestion.id)

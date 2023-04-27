@@ -18,8 +18,6 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -29,19 +27,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.tabs.journal.experience.IngestionElement
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DotRows
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeRelativeToNowText
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeRelativeToStartText
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 @Preview
 @Composable
 fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionElement: IngestionElement) {
     IngestionRow(
         ingestionElement = ingestionElement,
+        timeDisplayOption = TimeDisplayOption.REGULAR,
+        startTime = Instant.now().minus(3, ChronoUnit.HOURS),
         modifier = Modifier.fillMaxWidth()
     )
 }
@@ -50,6 +55,8 @@ fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) in
 @Composable
 fun IngestionRow(
     ingestionElement: IngestionElement,
+    timeDisplayOption: TimeDisplayOption,
+    startTime: Instant,
     modifier: Modifier = Modifier,
 ) {
     val ingestionWithCompanion = ingestionElement.ingestionWithCompanion
@@ -75,8 +82,29 @@ fun IngestionRow(
                         text = ingestion.substanceName,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    val timeString = ingestion.time.getStringOfPattern("EEE HH:mm")
-                    Text(text = timeString)
+                    val timeStyle = MaterialTheme.typography.bodyLarge
+                    when (timeDisplayOption) {
+                        TimeDisplayOption.REGULAR -> {
+                            val timeString = ingestion.time.getStringOfPattern("EEE HH:mm")
+                            Text(
+                                text = timeString,
+                                style = timeStyle
+                            )
+                        }
+                        TimeDisplayOption.RELATIVE_TO_NOW -> {
+                            TimeRelativeToNowText(
+                                time = ingestion.time,
+                                style = timeStyle
+                            )
+                        }
+                        TimeDisplayOption.RELATIVE_TO_START -> {
+                            TimeRelativeToStartText(
+                                time = ingestion.time,
+                                startTime = startTime,
+                                style = timeStyle
+                            )
+                        }
+                    }
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     ingestion.dose?.also {
@@ -97,65 +125,5 @@ fun IngestionRow(
                 Text(text = note, style = MaterialTheme.typography.bodySmall)
             }
         }
-    }
-}
-
-@Composable
-fun DotRows(numDots: Int) {
-    val verticalPadding = 2.dp
-    Column {
-        if (numDots==0) {
-            Row(modifier = Modifier.padding(vertical = verticalPadding)) {
-                for (dot in 1..4) {
-                    Dot(isFull = false)
-                }
-            }
-        } else {
-            val numFullRows = numDots/4
-            val dotsInLastRow = numDots.rem(4)
-            if (numFullRows > 0) {
-                for (row in 1..numFullRows) {
-                    Row(modifier = Modifier.padding(vertical = verticalPadding)) {
-                        for (dot in 1..4) {
-                            Dot(isFull = true)
-                        }
-                    }
-                }
-            }
-            if (dotsInLastRow > 0) {
-                Row(modifier = Modifier.padding(vertical = verticalPadding)) {
-                    for (dot in 1..dotsInLastRow) {
-                        Dot(isFull = true)
-                    }
-                    val numEmpty = 4 - dotsInLastRow
-                    for (dot in 1..numEmpty) {
-                        Dot(isFull = false)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun Dot(isFull: Boolean) {
-    val dotSize = 10.dp
-    val horizontalPadding = 1.dp
-    if (isFull) {
-        Box(
-            modifier = Modifier
-                .padding(horizontal = horizontalPadding)
-                .size(dotSize)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onBackground)
-        )
-    } else {
-        Box(
-            modifier = Modifier
-                .padding(horizontal = horizontalPadding)
-                .size(dotSize)
-                .clip(CircleShape)
-                .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
-        )
     }
 }
