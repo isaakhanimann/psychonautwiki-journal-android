@@ -279,17 +279,18 @@ fun DrawScope.drawRating(
 ) {
     val timeStartInSec = Duration.between(startTime, ratingTime).seconds
     val timeStartX = timeStartInSec * pixelsPerSec
-    var y = canvasHeightOuter * 0.3f
+    val lineHeight = textPaint.textSize
+    val lines = rating.verticalSign.split("\n")
+    val signHeight = lines.size * lineHeight
+    val verticalLineHeight = (canvasHeightOuter - 2 * lineHeight - signHeight) / 2
     drawLine(
         color = Color.Gray,
         start = Offset(x = timeStartX, y = 0f),
-        end = Offset(x = timeStartX, y = y),
+        end = Offset(x = timeStartX, y = verticalLineHeight),
         strokeWidth = 4.dp.toPx(),
         cap = StrokeCap.Round
     )
-    val lineHeight = textPaint.textSize
-    y += 2*lineHeight
-    val lines = rating.verticalSign.split("\n")
+    var y = verticalLineHeight + 1.5f*lineHeight
     drawContext.canvas.nativeCanvas.apply {
         for (line in lines) {
             drawText(
