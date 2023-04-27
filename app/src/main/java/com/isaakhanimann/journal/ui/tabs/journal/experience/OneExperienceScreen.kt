@@ -343,33 +343,25 @@ fun OneExperienceScreen(
                 }
             }
             Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                CardTitle(title = "Shulgin Rating")
                 val ratings = oneExperienceScreenModel.ratings
-                if (ratings.isNotEmpty()) {
+                if (ratings.isEmpty()) {
+                    AddShulginRatingButton(navigateToAddRatingScreen)
+                } else {
+                    CardTitle(title = "Shulgin Ratings")
                     Divider()
-                }
-                ratings.forEach { rating ->
-                    RatingRow(
-                        rating = rating,
-                        modifier = Modifier
-                            .clickable {
-                                navigateToEditRatingScreen(rating.id)
-                            }
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp, horizontal = horizontalPadding)
-                    )
-                    Divider()
-                }
-                TextButton(
-                    onClick = navigateToAddRatingScreen,
-                ) {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add",
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Add Rating")
+                    ratings.forEach { rating ->
+                        RatingRow(
+                            rating = rating,
+                            modifier = Modifier
+                                .clickable {
+                                    navigateToEditRatingScreen(rating.id)
+                                }
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp, horizontal = horizontalPadding)
+                        )
+                        Divider()
+                    }
+                    AddShulginRatingButton(navigateToAddRatingScreen)
                 }
             }
             val interactions = oneExperienceScreenModel.interactions
@@ -409,5 +401,22 @@ fun OneExperienceScreen(
             }
             Spacer(modifier = Modifier.height(60.dp))
         }
+    }
+}
+
+@Composable
+fun AddShulginRatingButton(
+    navigateToAddRatingScreen: () -> Unit
+) {
+    TextButton(
+        onClick = navigateToAddRatingScreen,
+    ) {
+        Icon(
+            Icons.Filled.Add,
+            contentDescription = "Add",
+            modifier = Modifier.size(ButtonDefaults.IconSize)
+        )
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+        Text("Add Shulgin Rating")
     }
 }
