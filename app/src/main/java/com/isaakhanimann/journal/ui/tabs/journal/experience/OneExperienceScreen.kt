@@ -394,6 +394,8 @@ fun OneExperienceScreen(
                     ratings.forEach { rating ->
                         RatingRow(
                             rating = rating,
+                            timeDisplayOption = timeDisplayOption,
+                            startTime = oneExperienceScreenModel.firstIngestionTime,
                             modifier = Modifier
                                 .clickable {
                                     navigateToEditRatingScreen(rating.id)

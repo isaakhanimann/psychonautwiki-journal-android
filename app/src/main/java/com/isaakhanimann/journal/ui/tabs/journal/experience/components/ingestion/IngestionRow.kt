@@ -31,12 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.tabs.journal.experience.IngestionElement
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DotRows
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeRelativeToNowText
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeRelativeToStartText
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.*
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
@@ -82,29 +78,12 @@ fun IngestionRow(
                         text = ingestion.substanceName,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    val timeStyle = MaterialTheme.typography.bodyLarge
-                    when (timeDisplayOption) {
-                        TimeDisplayOption.REGULAR -> {
-                            val timeString = ingestion.time.getStringOfPattern("EEE HH:mm")
-                            Text(
-                                text = timeString,
-                                style = timeStyle
-                            )
-                        }
-                        TimeDisplayOption.RELATIVE_TO_NOW -> {
-                            TimeRelativeToNowText(
-                                time = ingestion.time,
-                                style = timeStyle
-                            )
-                        }
-                        TimeDisplayOption.RELATIVE_TO_START -> {
-                            TimeRelativeToStartText(
-                                time = ingestion.time,
-                                startTime = startTime,
-                                style = timeStyle
-                            )
-                        }
-                    }
+                    TimeText(
+                        time = ingestion.time,
+                        timeDisplayOption = timeDisplayOption,
+                        startTime = startTime,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     ingestion.dose?.also {

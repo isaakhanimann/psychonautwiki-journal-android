@@ -27,7 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeText
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 
 @Preview
@@ -35,6 +38,8 @@ import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 fun RatingRowPreview(@PreviewParameter(RatingPreviewProvider::class) rating: ShulginRating) {
     RatingRow(
         rating = rating,
+        timeDisplayOption = TimeDisplayOption.REGULAR,
+        startTime = Instant.now().minus(2, ChronoUnit.HOURS),
         modifier = Modifier.fillMaxWidth()
     )
 }
@@ -43,6 +48,8 @@ fun RatingRowPreview(@PreviewParameter(RatingPreviewProvider::class) rating: Shu
 @Composable
 fun RatingRow(
     rating: ShulginRating,
+    timeDisplayOption: TimeDisplayOption,
+    startTime: Instant,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -50,8 +57,12 @@ fun RatingRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
     ) {
-        val timeString = rating.time.getStringOfPattern("EEE HH:mm")
-        Text(text = timeString)
+        TimeText(
+            time = rating.time,
+            timeDisplayOption = timeDisplayOption,
+            startTime = startTime,
+            style = MaterialTheme.typography.bodyLarge
+        )
         Text(
             text = rating.option.sign,
             style = MaterialTheme.typography.titleMedium
