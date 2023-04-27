@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -42,6 +43,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
+import com.isaakhanimann.journal.ui.tabs.journal.components.ExperienceRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.JournalTheme
@@ -61,6 +63,8 @@ fun JournalScreen(
         openNavigationDrawer = openNavigationDrawer,
         isFavoriteEnabled = viewModel.isFavoriteEnabledFlow.collectAsState().value,
         onChangeIsFavorite = viewModel::onChangeFavorite,
+        isTimeRelativeToNow = viewModel.isTimeRelativeToNow.value,
+        onChangeIsRelative = viewModel::onChangeRelative,
         searchText = viewModel.searchTextFlow.collectAsState().value,
         onChangeSearchText = viewModel::search,
         isSearchEnabled = viewModel.isSearchEnabled.value,
@@ -84,6 +88,8 @@ fun ExperiencesScreenPreview(
             openNavigationDrawer = {},
             isFavoriteEnabled = false,
             onChangeIsFavorite = {},
+            isTimeRelativeToNow = true,
+            onChangeIsRelative = {},
             searchText = "",
             onChangeSearchText = {},
             isSearchEnabled = true,
@@ -102,6 +108,8 @@ fun JournalScreen(
     openNavigationDrawer: () -> Unit,
     isFavoriteEnabled: Boolean,
     onChangeIsFavorite: (Boolean) -> Unit,
+    isTimeRelativeToNow: Boolean,
+    onChangeIsRelative: (Boolean) -> Unit,
     searchText: String,
     onChangeSearchText: (String) -> Unit,
     isSearchEnabled: Boolean,
@@ -122,6 +130,16 @@ fun JournalScreen(
                     }
                 },
                 actions = {
+                    IconToggleButton(
+                        checked = isTimeRelativeToNow,
+                        onCheckedChange = onChangeIsRelative
+                    ) {
+                        if (isTimeRelativeToNow) {
+                            Icon(Icons.Filled.Timer, contentDescription = "Regular Time")
+                        } else {
+                            Icon(Icons.Outlined.Timer, contentDescription = "Time Relative To Now")
+                        }
+                    }
                     IconToggleButton(
                         checked = isFavoriteEnabled,
                         onCheckedChange = onChangeIsFavorite
@@ -243,6 +261,7 @@ fun JournalScreen(
                                 navigateToExperienceScreen = {
                                     navigateToExperiencePopNothing(currentExperience.experience.id)
                                 },
+                                isTimeRelativeToNow = isTimeRelativeToNow
                             )
                         }
                     }
@@ -258,6 +277,7 @@ fun JournalScreen(
                                     navigateToExperienceScreen = {
                                         navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
                                     },
+                                    isTimeRelativeToNow = isTimeRelativeToNow
                                 )
                                 Divider()
                             }

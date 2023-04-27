@@ -16,7 +16,7 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.journal
+package com.isaakhanimann.journal.ui.tabs.journal.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 
 @Preview(showBackground = true)
@@ -49,6 +50,7 @@ import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 fun ExperienceRow(
     @PreviewParameter(ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider::class) experienceWithIngestionsCompanionsAndRatings: ExperienceWithIngestionsCompanionsAndRatings,
     navigateToExperienceScreen: () -> Unit = {},
+    isTimeRelativeToNow: Boolean = true
 ) {
     Row(
         modifier = Modifier
@@ -74,18 +76,23 @@ fun ExperienceRow(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                val dateText = remember(experienceWithIngestionsCompanionsAndRatings.sortInstant) {
-                    experienceWithIngestionsCompanionsAndRatings.sortInstant.getStringOfPattern("dd MMM yy")
+                val timeStyle = MaterialTheme.typography.labelMedium
+                if (isTimeRelativeToNow) {
+                    RelativeDateText(
+                        dateTime = experienceWithIngestionsCompanionsAndRatings.sortInstant.getLocalDateTime(),
+                        style = timeStyle
+                    )
+                } else {
+                    Text(
+                        text = experienceWithIngestionsCompanionsAndRatings.sortInstant.getStringOfPattern("dd MMM yy"),
+                        style = timeStyle
+                    )
                 }
-                Text(
-                    text = dateText,
-                    style = MaterialTheme.typography.titleSmall
-                )
                 val location = experience.location
                 if (location != null) {
                     Text(
                         text = location.name,
-                        style = MaterialTheme.typography.titleSmall
+                        style = MaterialTheme.typography.labelMedium
                     )
                 }
             }

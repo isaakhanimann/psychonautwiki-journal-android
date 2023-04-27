@@ -40,8 +40,12 @@ class JournalViewModel @Inject constructor(
     experienceRepo: ExperienceRepository
 ) : ViewModel() {
 
-    val isFavoriteEnabledFlow = MutableStateFlow(false)
 
+    val isTimeRelativeToNow = mutableStateOf(false)
+
+    fun onChangeRelative(isRelative: Boolean) {
+        isTimeRelativeToNow.value = isRelative
+    }
     val isSearchEnabled = mutableStateOf(false)
 
     fun onChangeOfIsSearchEnabled(newValue: Boolean) {
@@ -54,6 +58,8 @@ class JournalViewModel @Inject constructor(
             }
         }
     }
+
+    val isFavoriteEnabledFlow = MutableStateFlow(false)
 
     fun onChangeFavorite(isFavorite: Boolean) {
         viewModelScope.launch {
