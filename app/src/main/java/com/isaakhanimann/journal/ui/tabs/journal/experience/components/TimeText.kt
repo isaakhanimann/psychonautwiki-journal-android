@@ -24,8 +24,6 @@ import androidx.compose.ui.text.TextStyle
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.Instant
 
-class TimeText
-
 @Composable
 fun TimeText(
     time: Instant,
