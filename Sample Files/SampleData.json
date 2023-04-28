@@ -72,7 +72,7 @@
                     "creationDate": 1668855673000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -96,7 +96,7 @@
                     "creationDate": 1668855538000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -144,7 +144,7 @@
                     "creationDate": 1668855579000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -441,7 +441,7 @@
                     "creationDate": 1637245107000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -489,7 +489,7 @@
                     "creationDate": 1668856013000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -513,7 +513,7 @@
                     "creationDate": 1668856075000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -679,7 +679,7 @@
                     "creationDate": 1668856389000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -713,7 +713,13 @@
         {
             "location": null,
             "ratings":
-            [],
+            [
+                {
+                    "option": "threePlus",
+                    "time": null,
+                    "creationDate": 1668856594000
+                }
+            ],
             "creationDate": 1668856594000,
             "title": "15 October 2022",
             "sortDate": 1665828993000,
@@ -727,7 +733,7 @@
                     "creationDate": 1668856594000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -751,7 +757,7 @@
                     "creationDate": 1668856095000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -775,7 +781,7 @@
                     "creationDate": 1668855824000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -845,7 +851,7 @@
                     "creationDate": 1668856372000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -869,7 +875,7 @@
                     "creationDate": 1668855849000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -893,7 +899,7 @@
                     "creationDate": 1668855652000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -917,7 +923,7 @@
                     "creationDate": 1636640197000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -957,7 +963,7 @@
                     "creationDate": 1668856568000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -1040,7 +1046,7 @@
                     "creationDate": 1668855790000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
@@ -1099,7 +1105,7 @@
                     "creationDate": 1668855498000,
                     "notes": "",
                     "stomachFullness": null,
-                    "units": "mg (THC)",
+                    "units": "mg",
                     "isDoseAnEstimate": false,
                     "administrationRoute": "SMOKED",
                     "substanceName": "Cannabis"
