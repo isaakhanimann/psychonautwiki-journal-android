@@ -48,7 +48,7 @@ data class ExperienceSerializable(
 @Serializable
 data class RatingSerializable(
     @Serializable(with= ShulginRatingOptionSerializer::class) val option: ShulginRatingOption,
-    @Serializable(with= InstantSerializer::class) var time: Instant,
+    @Serializable(with= InstantSerializer::class) var time: Instant?,
     @Serializable(with= InstantSerializer::class) var creationDate: Instant? = Instant.now()
 )
 

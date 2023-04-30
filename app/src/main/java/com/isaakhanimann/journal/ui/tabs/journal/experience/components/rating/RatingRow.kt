@@ -57,12 +57,20 @@ fun RatingRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
     ) {
-        TimeText(
-            time = rating.time,
-            timeDisplayOption = timeDisplayOption,
-            startTime = startTime,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        val ratingTime = rating.time
+        if (ratingTime == null) {
+            Text(
+                text = "Overall Rating",
+                style = MaterialTheme.typography.bodyLarge
+            )
+        } else {
+            TimeText(
+                time = ratingTime,
+                timeDisplayOption = timeDisplayOption,
+                startTime = startTime,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
         Text(
             text = rating.option.sign,
             style = MaterialTheme.typography.titleMedium

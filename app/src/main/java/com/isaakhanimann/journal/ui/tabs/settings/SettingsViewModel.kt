@@ -73,7 +73,8 @@ class SettingsViewModel @Inject constructor(
             val experiencesWithIngestionsAndRatings =
                 experienceRepository.getAllExperiencesWithIngestionsAndRatingsSorted()
             val experiencesSerializable = experiencesWithIngestionsAndRatings.map {
-                ExperienceSerializable(
+                val location = it.experience.location
+                return@map ExperienceSerializable(
                     title = it.experience.title,
                     text = it.experience.text,
                     creationDate = it.experience.creationDate,
@@ -92,11 +93,11 @@ class SettingsViewModel @Inject constructor(
                             stomachFullness = ingestion.stomachFullness
                         )
                     },
-                    location = if (it.experience.location != null) {
+                    location = if (location != null) {
                         LocationSerializable(
-                            name = it.experience.location.name,
-                            latitude = it.experience.location.latitude,
-                            longitude = it.experience.location.longitude
+                            name = location.name,
+                            latitude = location.latitude,
+                            longitude = location.longitude
                         )
                     } else {
                         null

@@ -47,7 +47,8 @@ fun EditRatingScreenPreview() {
         onTimeChange = {},
         selectedRating = ShulginRatingOption.TWO_PLUS,
         onRatingChange = {},
-        onDelete = {}
+        onDelete = {},
+        isOverallRating = false
     )
 }
 
@@ -68,7 +69,8 @@ fun EditRatingScreen(
         onDelete = {
             viewModel.delete()
             navigateBack()
-        }
+        },
+        isOverallRating = viewModel.isOverallRating.value
     )
 }
 
@@ -80,7 +82,8 @@ fun EditRatingScreen(
     onTimeChange: (LocalDateTime) -> Unit,
     selectedRating: ShulginRatingOption,
     onRatingChange: (ShulginRatingOption) -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    isOverallRating: Boolean
 ) {
     Scaffold(
         topBar = {
@@ -109,7 +112,9 @@ fun EditRatingScreen(
                 .padding(horizontal = horizontalPadding)
         ) {
             Spacer(modifier = Modifier.height(3.dp))
-            TimePickerSection(selectedTime = selectedTime, onTimeChange = onTimeChange)
+            if (!isOverallRating) {
+                TimePickerSection(selectedTime = selectedTime, onTimeChange = onTimeChange)
+            }
             RatingPickerSection(selectedRating = selectedRating, onRatingChange = onRatingChange)
             RatingsExplanationSection()
         }

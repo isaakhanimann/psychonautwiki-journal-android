@@ -27,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.isaakhanimann.journal.ui.tabs.journal.experience.CumulativeDose
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.DotRows
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 
 @Composable

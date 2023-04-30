@@ -40,5 +40,7 @@ data class ExperienceWithIngestionsCompanionsAndRatings(
     ) val ratings: List<ShulginRating>
 ) {
     val sortInstant: Instant get() = ingestionsWithCompanions.firstOrNull()?.ingestion?.time ?: experience.creationDate
-    val highestRatingOption: ShulginRatingOption? get() = ratings.maxOfOrNull { it.option }
+    private val highestRatingOption: ShulginRatingOption? get() = ratings.maxOfOrNull { it.option }
+    private val overallRatingOption: ShulginRatingOption? get() = ratings.firstOrNull { it.time == null }?.option
+    val rating: ShulginRatingOption? get() = overallRatingOption ?: highestRatingOption
 }

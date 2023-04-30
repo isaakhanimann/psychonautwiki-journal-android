@@ -64,7 +64,7 @@ fun AddRatingScreen(
         onTimeChange = viewModel::onChangeTime,
         selectedRating = viewModel.selectedRating,
         onRatingChange = viewModel::onChangeRating,
-        canAddOverallRating = viewModel.isThereAlreadyAnOverallRatingFlow.collectAsState().value,
+        canAddOverallRating = !viewModel.isThereAlreadyAnOverallRatingFlow.collectAsState().value,
         isOverallRating = viewModel.isThisOverallRating,
         onChangeIsOverallRating = {viewModel.isThisOverallRating = it}
     )

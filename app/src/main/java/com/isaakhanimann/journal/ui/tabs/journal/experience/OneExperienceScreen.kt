@@ -285,11 +285,16 @@ fun OneExperienceScreen(
                     ) {
                         AllTimelinesNew(
                             dataForEffectLines = effectTimelines,
-                            dataForRatings = oneExperienceScreenModel.ratings.map {
-                                DataForOneRating(
-                                    time = it.time,
-                                    option = it.option
-                                )
+                            dataForRatings = oneExperienceScreenModel.ratings.mapNotNull {
+                                val ratingTime = it.time
+                                return@mapNotNull if (ratingTime == null) {
+                                    null
+                                } else {
+                                    DataForOneRating(
+                                        time = ratingTime,
+                                        option = it.option
+                                    )
+                                }
                             },
                             isShowingCurrentTime = true,
                             navigateToExplainTimeline = navigateToExplainTimeline,
@@ -385,13 +390,13 @@ fun OneExperienceScreen(
                 }
             }
             Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                val ratings = oneExperienceScreenModel.ratings
-                if (ratings.isEmpty()) {
+                if (oneExperienceScreenModel.ratings.isEmpty()) {
                     AddShulginRatingButton(navigateToAddRatingScreen)
                 } else {
                     CardTitle(title = "Shulgin Ratings")
                     Divider()
-                    ratings.forEach { rating ->
+                    val ratingsWithTime = oneExperienceScreenModel.ratings.filter { it.time != null }
+                    ratingsWithTime.forEach { rating ->
                         RatingRow(
                             rating = rating,
                             timeDisplayOption = timeDisplayOption,
@@ -399,6 +404,21 @@ fun OneExperienceScreen(
                             modifier = Modifier
                                 .clickable {
                                     navigateToEditRatingScreen(rating.id)
+                                }
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp, horizontal = horizontalPadding)
+                        )
+                        Divider()
+                    }
+                    val overallRating = oneExperienceScreenModel.ratings.firstOrNull { it.time == null }
+                    if (overallRating != null) {
+                        RatingRow(
+                            rating = overallRating,
+                            timeDisplayOption = timeDisplayOption,
+                            startTime = oneExperienceScreenModel.firstIngestionTime,
+                            modifier = Modifier
+                                .clickable {
+                                    navigateToEditRatingScreen(overallRating.id)
                                 }
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp, horizontal = horizontalPadding)

@@ -114,7 +114,7 @@ fun ExperienceRow(
                         text = "No substance yet",
                     )
                 }
-                val rating = experienceWithIngestionsCompanionsAndRatings.highestRatingOption?.sign
+                val rating = experienceWithIngestionsCompanionsAndRatings.rating?.sign
                 if (rating != null) {
                     Text(text = rating)
                 }
