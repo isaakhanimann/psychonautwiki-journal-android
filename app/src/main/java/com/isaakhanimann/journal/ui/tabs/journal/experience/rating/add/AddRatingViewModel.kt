@@ -48,7 +48,7 @@ class AddRatingViewModel @Inject constructor(
     val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
 
-    var isThereAlreadyAnOverallRating = experienceRepo.getRatingsFlow(experienceId).map { ratings ->
+    var isThereAlreadyAnOverallRatingFlow = experienceRepo.getRatingsFlow(experienceId).map { ratings ->
         ratings.any { it.time == null }
     }.stateIn(
         initialValue = true,
@@ -78,7 +78,11 @@ class AddRatingViewModel @Inject constructor(
 
     fun onDoneTap() {
         viewModelScope.launch {
-            val selectedInstant = localDateTimeFlow.firstOrNull()?.getInstant() ?: return@launch
+            val selectedInstant = if (isThisOverallRating) {
+                null
+            } else {
+                localDateTimeFlow.firstOrNull()?.getInstant()
+            }
             val newRating = ShulginRating(
                 time = selectedInstant,
                 creationDate = Instant.now(),

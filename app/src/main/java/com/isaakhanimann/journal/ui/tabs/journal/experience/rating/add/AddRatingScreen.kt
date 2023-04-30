@@ -18,15 +18,14 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.rating.add
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,7 +43,10 @@ fun AddRatingScreenPreview() {
         selectedTime = LocalDateTime.now(),
         onTimeChange = {},
         selectedRating = ShulginRatingOption.TWO_PLUS,
-        onRatingChange = {}
+        onRatingChange = {},
+        canAddOverallRating = true,
+        isOverallRating = false,
+        onChangeIsOverallRating = {}
     )
 }
 
@@ -61,7 +63,10 @@ fun AddRatingScreen(
         selectedTime = viewModel.localDateTimeFlow.collectAsState().value,
         onTimeChange = viewModel::onChangeTime,
         selectedRating = viewModel.selectedRating,
-        onRatingChange = viewModel::onChangeRating
+        onRatingChange = viewModel::onChangeRating,
+        canAddOverallRating = viewModel.isThereAlreadyAnOverallRatingFlow.collectAsState().value,
+        isOverallRating = viewModel.isThisOverallRating,
+        onChangeIsOverallRating = {viewModel.isThisOverallRating = it}
     )
 }
 
@@ -73,6 +78,9 @@ fun AddRatingScreen(
     onTimeChange: (LocalDateTime) -> Unit,
     selectedRating: ShulginRatingOption,
     onRatingChange: (ShulginRatingOption) -> Unit,
+    canAddOverallRating: Boolean,
+    isOverallRating: Boolean,
+    onChangeIsOverallRating: (Boolean) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -91,7 +99,30 @@ fun AddRatingScreen(
                 .padding(horizontal = horizontalPadding)
         ) {
             Spacer(modifier = Modifier.height(3.dp))
-            TimePickerSection(selectedTime = selectedTime, onTimeChange = onTimeChange)
+            if (canAddOverallRating) {
+                Card(modifier = Modifier
+                    .padding(vertical = 5.dp)
+                    .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)
+                    ) {
+                        Switch(
+                            checked = isOverallRating,
+                            onCheckedChange = { onChangeIsOverallRating(it) }
+                        )
+                        Text(
+                            text = "Overall Rating",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }
+            }
+            AnimatedVisibility(visible = !isOverallRating) {
+                TimePickerSection(selectedTime = selectedTime, onTimeChange = onTimeChange)
+            }
             RatingPickerSection(selectedRating = selectedRating, onRatingChange = onRatingChange)
             RatingsExplanationSection()
         }
