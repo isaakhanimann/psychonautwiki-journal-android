@@ -18,19 +18,42 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.rating.add
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.RatingScreen
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.*
+import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import java.time.LocalDateTime
 
+@Preview
+@Composable
+fun AddRatingScreenPreview() {
+    AddRatingScreen(
+        onDone = {},
+        selectedTime = LocalDateTime.now(),
+        onTimeChange = {},
+        selectedRating = ShulginRatingOption.TWO_PLUS,
+        onRatingChange = {}
+    )
+}
 
 @Composable
 fun AddRatingScreen(
     viewModel: AddRatingViewModel = hiltViewModel(),
     navigateBack: () -> Unit
 ) {
-    RatingScreen(
-        title = "Add Shulgin Rating",
+    AddRatingScreen(
         onDone = {
             viewModel.onDoneTap()
             navigateBack()
@@ -40,4 +63,37 @@ fun AddRatingScreen(
         selectedRating = viewModel.selectedRating,
         onRatingChange = viewModel::onChangeRating
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddRatingScreen(
+    onDone: () -> Unit,
+    selectedTime: LocalDateTime,
+    onTimeChange: (LocalDateTime) -> Unit,
+    selectedRating: ShulginRatingOption,
+    onRatingChange: (ShulginRatingOption) -> Unit,
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Add Shulgin Rating") },
+            )
+        },
+        floatingActionButton = {
+            FloatingDoneButton(onDone)
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(padding)
+                .padding(horizontal = horizontalPadding)
+        ) {
+            Spacer(modifier = Modifier.height(3.dp))
+            TimePickerSection(selectedTime = selectedTime, onTimeChange = onTimeChange)
+            RatingPickerSection(selectedRating = selectedRating, onRatingChange = onRatingChange)
+            RatingsExplanationSection()
+        }
+    }
 }

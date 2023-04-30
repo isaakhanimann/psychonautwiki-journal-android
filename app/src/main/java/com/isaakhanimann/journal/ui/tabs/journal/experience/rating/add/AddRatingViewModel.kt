@@ -31,8 +31,7 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
@@ -45,12 +44,19 @@ class AddRatingViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     var selectedRating by mutableStateOf(ShulginRatingOption.TWO_PLUS)
-    val experienceId: Int
+    var isThisOverallRating by mutableStateOf(false)
+    val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
 
+    var isThereAlreadyAnOverallRating = experienceRepo.getRatingsFlow(experienceId).map { ratings ->
+        ratings.any { it.time == null }
+    }.stateIn(
+        initialValue = true,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
     init {
-        val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
-        this.experienceId = experienceId
         viewModelScope.launch {
             val experience = experienceRepo.getExperience(id = experienceId) ?: return@launch
             val isOldExperience = experience.sortDate.isBefore(Instant.now().minus(12, ChronoUnit.HOURS))
@@ -73,7 +79,12 @@ class AddRatingViewModel @Inject constructor(
     fun onDoneTap() {
         viewModelScope.launch {
             val selectedInstant = localDateTimeFlow.firstOrNull()?.getInstant() ?: return@launch
-            val newRating = ShulginRating(time = selectedInstant, creationDate = Instant.now(), option = selectedRating, experienceId = experienceId)
+            val newRating = ShulginRating(
+                time = selectedInstant,
+                creationDate = Instant.now(),
+                option = selectedRating,
+                experienceId = experienceId
+            )
             experienceRepo.insert(newRating)
         }
     }

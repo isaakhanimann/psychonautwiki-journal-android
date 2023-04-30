@@ -18,41 +18,33 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.rating
 
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
-import com.isaakhanimann.journal.ui.theme.JournalTheme
-import java.time.LocalDateTime
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview
 @Composable
-fun RatingScreenPreview() {
-    JournalTheme {
-        RatingScreen(
-            title = "Edit Shulgin Rating",
-            onDone = {},
-            selectedTime = LocalDateTime.now(),
-            onTimeChange = {},
-            selectedRating = ShulginRatingOption.TWO_PLUS,
-            onRatingChange = {}
-        )
+fun RatingsExplanationSection() {
+    CardWithTitle(title = "Longer Explanations") {
+        val ratings = ShulginRatingOption.values()
+        ratings.forEach { oneRating ->
+            Column(modifier = Modifier.padding(vertical = 5.dp)) {
+                Text(
+                    text = oneRating.sign,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = oneRating.longDescription,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RatingScreen(
-    title: String,
-    onDone: () -> Unit,
-    selectedTime: LocalDateTime,
-    onTimeChange: (LocalDateTime) -> Unit,
-    selectedRating: ShulginRatingOption,
-    onRatingChange: (ShulginRatingOption) -> Unit,
-    onDelete: (() -> Unit)? = null
-) {
-
 }

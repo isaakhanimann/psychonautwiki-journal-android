@@ -16,19 +16,25 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.data.room.experiences.entities
+package com.isaakhanimann.journal.ui.tabs.journal.experience.rating
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.time.Instant
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 
-
-@Entity
-data class ShulginRating(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    var time: Instant?,
-    var creationDate: Instant? = Instant.now(),
-    var option: ShulginRatingOption,
-    var experienceId: Int
-)
+@Composable
+fun FloatingDoneButton(onDone: ()->Unit) {
+    ExtendedFloatingActionButton(
+        onClick = onDone,
+        icon = {
+            Icon(
+                Icons.Filled.Done,
+                contentDescription = "Done Icon"
+            )
+        },
+        text = { Text("Done") }
+    )
+}
