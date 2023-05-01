@@ -97,10 +97,10 @@ fun MainScreen(
                     startDestination = TabRouter.Journal.route
                 ) {
                     journalGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
-                    statsGraph(navController)
+                    statsGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
                     searchGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
-                    saferGraph(navController)
-                    settingsGraph(navController)
+                    saferGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
+                    settingsGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
                 }
             }
         )

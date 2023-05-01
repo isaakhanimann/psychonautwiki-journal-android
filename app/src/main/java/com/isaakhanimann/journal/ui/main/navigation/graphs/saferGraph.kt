@@ -29,7 +29,10 @@ import com.isaakhanimann.journal.ui.tabs.search.substance.SaferStimulantsScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 
 
-fun NavGraphBuilder.saferGraph(navController: NavController) {
+fun NavGraphBuilder.saferGraph(
+    navController: NavController,
+    openNavigationDrawer: () -> Unit
+) {
     navigation(
         startDestination = NoArgumentRouter.SaferRouter.route,
         route = TabRouter.SaferUse.route,
@@ -45,7 +48,8 @@ fun NavGraphBuilder.saferGraph(navController: NavController) {
                 navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreenOnSaferTab,
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
                 navigateToURL = navController::navigateToURLInSaferTab,
-                navigateToReagentTestingScreen = navController::navigateToReagentTesting
+                navigateToReagentTestingScreen = navController::navigateToReagentTesting,
+                openNavigationDrawer = openNavigationDrawer
             )
         }
         composableWithTransitions(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }

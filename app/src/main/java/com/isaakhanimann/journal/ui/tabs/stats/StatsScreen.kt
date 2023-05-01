@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.ui.tabs.journal.components.NavigationButton
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -43,12 +44,14 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun StatsScreen(
     viewModel: StatsViewModel = hiltViewModel(),
-    navigateToSubstanceCompanion: (substanceName: String) -> Unit
+    navigateToSubstanceCompanion: (substanceName: String) -> Unit,
+    openNavigationDrawer: () -> Unit
 ) {
     StatsScreen(
         navigateToSubstanceCompanion = navigateToSubstanceCompanion,
         onTapOption = viewModel::onTapOption,
-        statsModel = viewModel.statsModelFlow.collectAsState().value
+        statsModel = viewModel.statsModelFlow.collectAsState().value,
+        openNavigationDrawer = openNavigationDrawer
     )
 }
 
@@ -63,7 +66,8 @@ fun StatsPreview(
         StatsScreen(
             navigateToSubstanceCompanion = {},
             onTapOption = {},
-            statsModel = statsModel
+            statsModel = statsModel,
+            openNavigationDrawer = {}
         )
     }
 }
@@ -73,12 +77,16 @@ fun StatsPreview(
 fun StatsScreen(
     navigateToSubstanceCompanion: (substanceName: String) -> Unit,
     onTapOption: (option: TimePickerOption) -> Unit,
-    statsModel: StatsModel
+    statsModel: StatsModel,
+    openNavigationDrawer: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Statistics") }
+                title = { Text("Statistics") },
+                navigationIcon = {
+                    NavigationButton(onClick = openNavigationDrawer)
+                },
             )
         }
     ) { padding ->

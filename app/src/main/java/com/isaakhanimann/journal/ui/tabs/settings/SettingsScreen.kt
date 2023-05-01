@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.VERSION_NAME
+import com.isaakhanimann.journal.ui.tabs.journal.components.NavigationButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
@@ -54,7 +55,8 @@ fun SettingsPreview() {
         navigateToComboSettings = {},
         importFile = {},
         exportFile = {},
-        snackbarHostState = remember { SnackbarHostState() }
+        snackbarHostState = remember { SnackbarHostState() },
+        openNavigationDrawer = {}
     )
 }
 
@@ -62,7 +64,8 @@ fun SettingsPreview() {
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     navigateToFAQ: () -> Unit,
-    navigateToComboSettings: () -> Unit
+    navigateToComboSettings: () -> Unit,
+    openNavigationDrawer: () -> Unit
 ) {
     SettingsScreen(
         navigateToFAQ = navigateToFAQ,
@@ -70,7 +73,8 @@ fun SettingsScreen(
         deleteEverything = viewModel::deleteEverything,
         importFile = viewModel::importFile,
         exportFile = viewModel::exportFile,
-        snackbarHostState = viewModel.snackbarHostState
+        snackbarHostState = viewModel.snackbarHostState,
+        openNavigationDrawer = openNavigationDrawer
     )
 }
 
@@ -82,11 +86,17 @@ fun SettingsScreen(
     deleteEverything: () -> Unit,
     importFile: (uri: Uri) -> Unit,
     exportFile: (uri: Uri) -> Unit,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    openNavigationDrawer: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Settings") })
+            TopAppBar(
+                title = { Text("Settings") },
+                navigationIcon = {
+                    NavigationButton(onClick = openNavigationDrawer)
+                },
+            )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->

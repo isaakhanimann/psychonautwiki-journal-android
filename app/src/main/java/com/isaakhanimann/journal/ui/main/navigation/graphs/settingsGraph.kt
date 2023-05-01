@@ -31,7 +31,10 @@ import com.isaakhanimann.journal.ui.tabs.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsScreen
 
 
-fun NavGraphBuilder.settingsGraph(navController: NavController) {
+fun NavGraphBuilder.settingsGraph(
+    navController: NavController,
+    openNavigationDrawer: () -> Unit
+) {
     navigation(
         startDestination = NoArgumentRouter.SettingsRouter.route,
         route = TabRouter.Settings.route,
@@ -39,7 +42,8 @@ fun NavGraphBuilder.settingsGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.SettingsRouter.route) {
             SettingsScreen(
                 navigateToFAQ = navController::navigateToFAQ,
-                navigateToComboSettings = navController::navigateToComboSettings
+                navigateToComboSettings = navController::navigateToComboSettings,
+                openNavigationDrawer = openNavigationDrawer
             )
         }
         composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }

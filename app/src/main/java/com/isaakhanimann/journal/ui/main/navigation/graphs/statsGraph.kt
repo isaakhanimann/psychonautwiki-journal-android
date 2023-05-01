@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -30,7 +30,10 @@ import com.isaakhanimann.journal.ui.tabs.stats.StatsScreen
 import com.isaakhanimann.journal.ui.tabs.stats.substancecompanion.SubstanceCompanionScreen
 
 
-fun NavGraphBuilder.statsGraph(navController: NavController) {
+fun NavGraphBuilder.statsGraph(
+    navController: NavController,
+    openNavigationDrawer: () -> Unit
+) {
     navigation(
         startDestination = NoArgumentRouter.StatsRouter.route,
         route = TabRouter.Statistics.route,
@@ -41,7 +44,8 @@ fun NavGraphBuilder.statsGraph(navController: NavController) {
             StatsScreen(
                 navigateToSubstanceCompanion = {
                     navController.navigateToSubstanceCompanionScreen(substanceName = it)
-                }
+                },
+                openNavigationDrawer = openNavigationDrawer
             )
         }
         composableWithTransitions(
