@@ -470,7 +470,7 @@ fun SubstanceScreen(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(70.dp))
         }
     }
 }
