@@ -131,7 +131,7 @@ class InteractionChecker @Inject constructor(
     }
 
     private fun isClassMatch(interactions: List<String>, categories: List<String>): Boolean {
-        val extendedInteractions = replaceSubstitutedAmphetaminesAndSerotoninReleasers(interactions)
+        val extendedInteractions = extendAndCleanInteractions(interactions)
         return categories.any { categoryName ->
                 extendedInteractions.any { interactionName ->
                     interactionName.contains(categoryName, ignoreCase = true)
@@ -140,7 +140,7 @@ class InteractionChecker @Inject constructor(
     }
 
     private fun isWildcardMatch(interactions: List<String>, substanceName: String): Boolean {
-        val extendedInteractions = replaceSubstitutedAmphetaminesAndSerotoninReleasers(interactions)
+        val extendedInteractions = extendAndCleanInteractions(interactions)
         return extendedInteractions.map { interaction ->
             Regex(
                 pattern = interaction.replace(
@@ -154,11 +154,11 @@ class InteractionChecker @Inject constructor(
     }
 
     private fun isDirectMatch(interactions: List<String>, substanceName: String): Boolean {
-        val extendedInteractions = replaceSubstitutedAmphetaminesAndSerotoninReleasers(interactions)
+        val extendedInteractions = extendAndCleanInteractions(interactions)
         return extendedInteractions.contains(substanceName)
     }
 
-    private fun replaceSubstitutedAmphetaminesAndSerotoninReleasers(interactions: List<String>): List<String> {
+    private fun extendAndCleanInteractions(interactions: List<String>): List<String> {
         return interactions.flatMap { name ->
             when (name) {
                 "Substituted amphetamines" -> {
@@ -166,6 +166,9 @@ class InteractionChecker @Inject constructor(
                 }
                 "Serotonin releasers" -> {
                     return@flatMap serotoninReleasers
+                }
+                "Tricyclic antidepressants" -> {
+                    return@flatMap emptyList() // remove because we don't want to match "depressant" with it and there is no substance that belongs to that class
                 }
                 else -> {
                     return@flatMap listOf(name)
