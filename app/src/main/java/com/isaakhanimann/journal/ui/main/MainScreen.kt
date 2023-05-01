@@ -98,7 +98,7 @@ fun MainScreen(
                 ) {
                     journalGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
                     statsGraph(navController)
-                    searchGraph(navController)
+                    searchGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
                     saferGraph(navController)
                     settingsGraph(navController)
                 }

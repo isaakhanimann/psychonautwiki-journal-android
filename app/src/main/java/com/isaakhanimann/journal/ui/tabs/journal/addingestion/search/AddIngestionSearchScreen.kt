@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
+import com.isaakhanimann.journal.ui.tabs.search.SearchScreenWithoutDrawerButton
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.keyboard.wasKeyboardOpened
@@ -124,7 +124,7 @@ fun AddIngestionSearchScreen(
                 .weight(1f)
                 .padding(horizontal = horizontalPadding)
         ) {
-            SearchScreen(
+            SearchScreenWithoutDrawerButton(
                 onSubstanceTap = {
                     if (shouldSkipInteractions) {
                         navigateToChooseRoute(it)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -18,8 +18,6 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
@@ -28,7 +26,7 @@ import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
-import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
+import com.isaakhanimann.journal.ui.tabs.search.SearchScreenWithDrawerButton
 import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstance
 import com.isaakhanimann.journal.ui.tabs.search.custom.EditCustomSubstance
 import com.isaakhanimann.journal.ui.tabs.search.substance.SubstanceScreen
@@ -36,7 +34,7 @@ import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.category.CategoryScreen
 
 
-fun NavGraphBuilder.searchGraph(navController: NavController) {
+fun NavGraphBuilder.searchGraph(navController: NavController, openNavigationDrawer: () -> Unit) {
     navigation(
         startDestination = NoArgumentRouter.SearchRouter.route,
         route = TabRouter.Search.route,
@@ -44,13 +42,13 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
         composableWithTransitions(
             route = NoArgumentRouter.SearchRouter.route,
         ) {
-            SearchScreen(
+            SearchScreenWithDrawerButton(
                 onSubstanceTap = {
                     navController.navigateToSubstanceScreen(substanceName = it)
                 },
                 onCustomSubstanceTap = navController::navigateToEditCustomSubstance,
                 navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom,
-                modifier = Modifier.fillMaxSize()
+                openNavigationDrawer = openNavigationDrawer
             )
         }
         composableWithTransitions(

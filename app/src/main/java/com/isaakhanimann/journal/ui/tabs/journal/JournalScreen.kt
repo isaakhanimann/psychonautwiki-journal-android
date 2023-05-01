@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.ui.tabs.journal.components.ExperienceRow
+import com.isaakhanimann.journal.ui.tabs.journal.components.NavigationButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.JournalTheme
@@ -122,12 +123,7 @@ fun JournalScreen(
             TopAppBar(
                 title = { Text("Experiences") },
                 navigationIcon = {
-                    IconButton(onClick = openNavigationDrawer) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "Menu"
-                        )
-                    }
+                    NavigationButton(onClick = openNavigationDrawer)
                 },
                 actions = {
                     IconToggleButton(
