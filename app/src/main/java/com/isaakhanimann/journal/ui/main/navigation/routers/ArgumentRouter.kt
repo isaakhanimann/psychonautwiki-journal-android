@@ -48,7 +48,8 @@ private const val ROUTE_START_EDIT_CUSTOM = "editCustom/"
 private const val ROUTE_START_CHOOSE_ROUTE_CUSTOM = "chooseRouteCustom/"
 private const val ROUTE_START_CHOOSE_DOSE_CUSTOM = "chooseDoseCustom/"
 private const val ROUTE_START_SUBSTANCES = "substances/"
-private const val ROUTE_START_CHECK_INTERACTIONS_SKIP_NOTHING = "checkInteractionsSkipNothing/"
+private const val ROUTE_START_CHECK_INTERACTIONS = "checkInteractionsSkipNothing/"
+private const val ROUTE_START_CHECK_SAFER_USE = "checkSaferUse/"
 private const val ROUTE_START_CHOOSE_ROUTE = "chooseRoute/"
 private const val ROUTE_START_CHOOSE_DOSE = "chooseDose/"
 private const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
@@ -137,8 +138,15 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         )
     )
 
-    object CheckInteractionsRouterSkipNothing : ArgumentRouter(
-        route = "$ROUTE_START_CHECK_INTERACTIONS_SKIP_NOTHING{$SUBSTANCE_NAME_KEY}",
+    object CheckInteractionsRouter : ArgumentRouter(
+        route = "$ROUTE_START_CHECK_INTERACTIONS{$SUBSTANCE_NAME_KEY}",
+        args = listOf(
+            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
+        )
+    )
+
+    object CheckSaferUseRouter : ArgumentRouter(
+        route = "$ROUTE_START_CHECK_SAFER_USE{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
         )
@@ -226,8 +234,12 @@ fun NavController.navigateToCategoryScreen(categoryName: String) {
     navigate(ROUTE_START_CATEGORY + categoryName)
 }
 
-fun NavController.navigateToCheckInteractionsSkipNothing(substanceName: String) {
-    navigate("$ROUTE_START_CHECK_INTERACTIONS_SKIP_NOTHING$substanceName")
+fun NavController.navigateToCheckInteractions(substanceName: String) {
+    navigate("$ROUTE_START_CHECK_INTERACTIONS$substanceName")
+}
+
+fun NavController.navigateToCheckSaferUse(substanceName: String) {
+    navigate("$ROUTE_START_CHECK_SAFER_USE$substanceName")
 }
 
 fun NavController.navigateToChooseRoute(substanceName: String) {

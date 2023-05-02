@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.*
@@ -42,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.substances.classes.InteractionType
 import com.isaakhanimann.journal.data.substances.classes.SubstanceWithCategories
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.NextFAB
 import com.isaakhanimann.journal.ui.tabs.search.substance.InteractionExplanationButton
 import com.isaakhanimann.journal.ui.tabs.search.substance.SubstanceWithCategoriesPreviewProvider
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -130,16 +130,7 @@ fun CheckInteractionsScreen(
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName Interactions") }) },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = navigateToNext,
-                icon = {
-                    Icon(
-                        Icons.Filled.NavigateNext,
-                        contentDescription = "Next"
-                    )
-                },
-                text = { Text("Next") },
-            )
+            NextFAB(navigateToNext)
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {

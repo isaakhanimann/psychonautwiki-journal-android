@@ -47,7 +47,8 @@ import com.isaakhanimann.journal.ui.utils.keyboard.wasKeyboardOpened
 
 @Composable
 fun AddIngestionSearchScreen(
-    navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
+    navigateToCheckInteractions: (substanceName: String) -> Unit,
+    navigateToCheckSaferUse: (substanceName: String) -> Unit,
     navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
@@ -57,7 +58,8 @@ fun AddIngestionSearchScreen(
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
 ) {
     AddIngestionSearchScreen(
-        navigateToCheckInteractionsSkipNothing = navigateToCheckInteractionsSkipNothing,
+        navigateToCheckInteractions = navigateToCheckInteractions,
+        navigateToCheckSaferUse = navigateToCheckSaferUse,
         navigateToChooseRoute = navigateToChooseRoute,
         navigateToCustomDose = navigateToCustomDose,
         navigateToCustomSubstanceChooseRoute = navigateToCustomSubstanceChooseRoute,
@@ -70,8 +72,9 @@ fun AddIngestionSearchScreen(
 
 @Composable
 fun AddIngestionSearchScreen(
-    navigateToCheckInteractionsSkipNothing: (substanceName: String) -> Unit,
+    navigateToCheckInteractions: (substanceName: String) -> Unit,
     navigateToChooseRoute: (substanceName: String) -> Unit,
+    navigateToCheckSaferUse: (substanceName: String) -> Unit,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
@@ -107,7 +110,7 @@ fun AddIngestionSearchScreen(
         ) {
             SearchScreenWithoutDrawerButton(
                 onSubstanceTap = {
-                    navigateToCheckInteractionsSkipNothing(it)
+                    navigateToCheckInteractions(it)
                 },
                 navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
                 onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,

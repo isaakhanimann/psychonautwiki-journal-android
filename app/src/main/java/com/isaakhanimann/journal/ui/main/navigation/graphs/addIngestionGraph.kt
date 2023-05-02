@@ -30,6 +30,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.custom.Custom
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.CheckInteractionsScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomChooseRouteScreen
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.saferuse.CheckSaferUseScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ChooseTimeScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
@@ -42,8 +43,11 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
     ) {
         composableWithTransitions(NoArgumentRouter.AddIngestionSearchRouter.route) {
             AddIngestionSearchScreen(
-                navigateToCheckInteractionsSkipNothing = {
-                    navController.navigateToCheckInteractionsSkipNothing(substanceName = it)
+                navigateToCheckInteractions = {
+                    navController.navigateToCheckInteractions(substanceName = it)
+                },
+                navigateToCheckSaferUse = {
+                    navController.navigateToCheckSaferUse(substanceName = it)
                 },
                 navigateToCustomSubstanceChooseRoute = navController::navigateToChooseCustomRoute,
                 navigateToChooseTime = { substanceName, route, dose, units, isEstimate ->
@@ -68,8 +72,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             )
         }
         composableWithTransitions(
-            ArgumentRouter.CheckInteractionsRouterSkipNothing.route,
-            arguments = ArgumentRouter.CheckInteractionsRouterSkipNothing.args
+            ArgumentRouter.CheckInteractionsRouter.route,
+            arguments = ArgumentRouter.CheckInteractionsRouter.args
         ) { backStackEntry ->
             CheckInteractionsScreen(
                 navigateToNext = {
@@ -78,6 +82,18 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigateToChooseRoute(substanceName = substanceName)
                 },
                 navigateToURL = navController::navigateToURLInJournalTab
+            )
+        }
+        composableWithTransitions(
+            ArgumentRouter.CheckSaferUseRouter.route,
+            arguments = ArgumentRouter.CheckSaferUseRouter.args
+        ) { backStackEntry ->
+            CheckSaferUseScreen(
+                navigateToNext = {
+                    val args = backStackEntry.arguments!!
+                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    navController.navigateToCheckInteractions(substanceName = substanceName)
+                },
             )
         }
         composableWithTransitions(
