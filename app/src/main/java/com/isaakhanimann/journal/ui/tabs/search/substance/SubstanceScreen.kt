@@ -44,6 +44,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.Category
 import com.isaakhanimann.journal.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.OptionalDosageUnitDisclaimer
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesNew
@@ -229,6 +230,7 @@ fun SubstanceScreen(
                             Divider()
                         }
                         VerticalSpace()
+                        OptionalDosageUnitDisclaimer(substance.name)
                         Text(text = DOSE_DISCLAIMER)
                         VerticalSpace()
                         if (substance.roas.any { it.roaDose?.shouldUseVolumetricDosing == true }) {

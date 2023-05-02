@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -221,7 +221,6 @@ fun ChooseDoseScreen(
             }
         }
     ) { padding ->
-
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -256,6 +255,7 @@ fun ChooseDoseScreen(
                             )
                         }
                     }
+                    OptionalDosageUnitDisclaimer(substanceName)
                     Text(text = DOSE_DISCLAIMER)
                 }
             }
