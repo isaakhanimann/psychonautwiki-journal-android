@@ -69,7 +69,16 @@ class CombinationSettingsStorage @Inject constructor(private val dataStore: Data
         "Caffeine",
         "Cannabis",
         "Grapefruit",
-        "Hormonal birth control"
+        "Hormonal birth control",
+        "Nicotine",
+        "Lithium",
+        "MAOI",
+        "SSRIs",
+        "SNRIs",
+        "5-Hydroxytryptophan",
+        "Tricyclic antidepressants",
+        "Antibiotics",
+        "Antihistamine"
     )
 
     val optionFlow: Flow<List<Option>> = enabledInteractionsFlow.map { set ->
