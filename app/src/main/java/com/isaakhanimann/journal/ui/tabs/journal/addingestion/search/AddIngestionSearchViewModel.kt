@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -26,7 +26,6 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +37,6 @@ import javax.inject.Inject
 class AddIngestionSearchViewModel @Inject constructor(
     experienceRepo: ExperienceRepository,
     val substanceRepo: SubstanceRepository,
-    comboStorage: CombinationSettingsStorage,
 ) : ViewModel() {
 
     private val customSubstancesFlow = experienceRepo.getCustomSubstancesFlow()
@@ -52,12 +50,6 @@ class AddIngestionSearchViewModel @Inject constructor(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000)
             )
-
-    val shouldSkipInteractionsFlow = comboStorage.skipFlow.stateIn(
-        initialValue = false,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
 
     private fun getPreviousSubstances(
         ingestions: List<IngestionWithCompanion>,

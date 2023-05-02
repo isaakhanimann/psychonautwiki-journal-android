@@ -31,18 +31,6 @@ class CombinationSettingsViewModel @Inject constructor(
     private val comboStorage: CombinationSettingsStorage,
 ) : ViewModel() {
 
-    val skipFlow = comboStorage.skipFlow.stateIn(
-        initialValue = false,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
-
-    fun toggleSkip() {
-        viewModelScope.launch {
-            comboStorage.toggleSkip()
-        }
-    }
-
     val optionsFlow = comboStorage.optionFlow.stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,

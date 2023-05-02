@@ -49,8 +49,6 @@ private const val ROUTE_START_CHOOSE_ROUTE_CUSTOM = "chooseRouteCustom/"
 private const val ROUTE_START_CHOOSE_DOSE_CUSTOM = "chooseDoseCustom/"
 private const val ROUTE_START_SUBSTANCES = "substances/"
 private const val ROUTE_START_CHECK_INTERACTIONS_SKIP_NOTHING = "checkInteractionsSkipNothing/"
-private const val ROUTE_START_CHECK_INTERACTIONS_SKIP_ROUTE = "checkInteractionsSkipRoute/"
-private const val ROUTE_START_CHECK_INTERACTIONS_SKIP_DOSE = "checkInteractionsSkipDose/"
 private const val ROUTE_START_CHOOSE_ROUTE = "chooseRoute/"
 private const val ROUTE_START_CHOOSE_DOSE = "chooseDose/"
 private const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
@@ -143,25 +141,6 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         route = "$ROUTE_START_CHECK_INTERACTIONS_SKIP_NOTHING{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
-        )
-    )
-
-    object CheckInteractionsRouterSkipRoute : ArgumentRouter(
-        route = "$ROUTE_START_CHECK_INTERACTIONS_SKIP_ROUTE{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}",
-        args = listOf(
-            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
-            navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType }
-        )
-    )
-
-    object CheckInteractionsRouterSkipDose : ArgumentRouter(
-        route = "$ROUTE_START_CHECK_INTERACTIONS_SKIP_DOSE{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}",
-        args = listOf(
-            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
-            navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType },
-            navArgument(IS_ESTIMATE_KEY) { type = NavType.BoolType },
-            navArgument(UNITS_KEY) { nullable = true },
-            navArgument(DOSE_KEY) { nullable = true },
         )
     )
 
@@ -269,13 +248,6 @@ fun NavController.navigateToChooseDoseCustom(
     navigate("$ROUTE_START_CHOOSE_DOSE_CUSTOM$substanceName/${administrationRoute.name}")
 }
 
-fun NavController.navigateToCheckInteractionsSkipRoute(
-    substanceName: String,
-    administrationRoute: AdministrationRoute
-) {
-    navigate("$ROUTE_START_CHECK_INTERACTIONS_SKIP_ROUTE$substanceName/${administrationRoute.name}")
-}
-
 fun NavController.navigateToChooseTimeAndMaybeColor(
     substanceName: String,
     administrationRoute: AdministrationRoute,
@@ -285,15 +257,3 @@ fun NavController.navigateToChooseTimeAndMaybeColor(
 ) {
     navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose")
 }
-
-fun NavController.navigateToCheckInteractionsSkipDose(
-    substanceName: String,
-    administrationRoute: AdministrationRoute,
-    units: String?,
-    isEstimate: Boolean,
-    dose: Double?,
-) {
-    navigate("$ROUTE_START_CHECK_INTERACTIONS_SKIP_DOSE$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose")
-}
-
-

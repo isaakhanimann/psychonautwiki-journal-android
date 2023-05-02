@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -45,21 +45,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToCheckInteractionsSkipNothing = {
                     navController.navigateToCheckInteractionsSkipNothing(substanceName = it)
                 },
-                navigateToCheckInteractionsSkipRoute = { substanceName, route ->
-                    navController.navigateToCheckInteractionsSkipRoute(
-                        substanceName = substanceName,
-                        administrationRoute = route
-                    )
-                },
-                navigateToCheckInteractionsSkipDose = { substanceName, route, dose, units, isEstimate ->
-                    navController.navigateToCheckInteractionsSkipDose(
-                        substanceName = substanceName,
-                        administrationRoute = route,
-                        units = units,
-                        isEstimate = isEstimate,
-                        dose = dose
-                    )
-                },
                 navigateToCustomSubstanceChooseRoute = navController::navigateToChooseCustomRoute,
                 navigateToChooseTime = { substanceName, route, dose, units, isEstimate ->
                     navController.navigateToChooseTimeAndMaybeColor(
@@ -96,57 +81,12 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             )
         }
         composableWithTransitions(
-            ArgumentRouter.CheckInteractionsRouterSkipRoute.route,
-            arguments = ArgumentRouter.CheckInteractionsRouterSkipRoute.args
-        ) { backStackEntry ->
-            CheckInteractionsScreen(
-                navigateToNext = {
-                    val args = backStackEntry.arguments!!
-                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
-                    val route =
-                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
-                    navController.navigateToChooseDose(substanceName, route)
-                },
-                navigateToURL = navController::navigateToURLInJournalTab
-            )
-        }
-        composableWithTransitions(
             ArgumentRouter.JournalTabURLRouter.route,
             arguments = ArgumentRouter.JournalTabURLRouter.args
         ) { backStackEntry ->
             val args = backStackEntry.arguments!!
             val url = args.getString(URL_KEY)!!
             UrlScreen(url = url)
-        }
-        composableWithTransitions(
-            ArgumentRouter.CheckInteractionsRouterSkipDose.route,
-            arguments = ArgumentRouter.CheckInteractionsRouterSkipDose.args
-        ) { backStackEntry ->
-            CheckInteractionsScreen(
-                navigateToNext = {
-                    val args = backStackEntry.arguments!!
-                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
-                    val route =
-                        AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
-                    val dose = args.getString(DOSE_KEY)?.toDoubleOrNull()
-                    val units = args.getString(UNITS_KEY)?.let {
-                        if (it == "null") {
-                            null
-                        } else {
-                            it
-                        }
-                    }
-                    val isEstimate = args.getBoolean(IS_ESTIMATE_KEY)
-                    navController.navigateToChooseTimeAndMaybeColor(
-                        substanceName,
-                        route,
-                        units,
-                        isEstimate = isEstimate,
-                        dose = dose
-                    )
-                },
-                navigateToURL = navController::navigateToURLInJournalTab
-            )
         }
         composableWithTransitions(
             ArgumentRouter.ChooseRouteRouter.route,

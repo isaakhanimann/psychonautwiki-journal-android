@@ -34,8 +34,6 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun CombinationSettingsScreen(viewModel: CombinationSettingsViewModel = hiltViewModel()) {
     CombinationSettingsScreen(
-        isSkippingInteractions = viewModel.skipFlow.collectAsState().value,
-        toggleIsSkipping = viewModel::toggleSkip,
         substanceInteractions = viewModel.optionsFlow.collectAsState().value.map {
             SubstanceInteraction(
                 name = it.name,
@@ -58,8 +56,6 @@ class SubstanceInteraction(
 @Composable
 fun CombinationSettingsPreview() {
     CombinationSettingsScreen(
-        isSkippingInteractions = false,
-        toggleIsSkipping = {},
         substanceInteractions = listOf(
             SubstanceInteraction(name = "Alcohol", toggle = {}, isOn = true),
             SubstanceInteraction(name = "Caffeine", toggle = {}, isOn = false),
@@ -73,8 +69,6 @@ fun CombinationSettingsPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CombinationSettingsScreen(
-    isSkippingInteractions: Boolean,
-    toggleIsSkipping: () -> Unit,
     substanceInteractions: List<SubstanceInteraction>
 ) {
     Scaffold(
@@ -89,23 +83,6 @@ fun CombinationSettingsScreen(
         ) {
             Spacer(modifier = Modifier.height(5.dp))
             Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = horizontalPadding),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Skip Interaction Check",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Switch(
-                        checked = isSkippingInteractions,
-                        onCheckedChange = { toggleIsSkipping() })
-                }
-            }
-            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
@@ -117,7 +94,7 @@ fun CombinationSettingsScreen(
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = "In addition to receiving alerts about interactions with substances that you log you can also receive alerts with the following substances, even if you haven't logged them.",
+                        text = "Get warnings about interactions with following substances, even if you haven't logged them.",
                         style = MaterialTheme.typography.bodySmall
                     )
                     substanceInteractions.forEach { substanceInteraction ->
