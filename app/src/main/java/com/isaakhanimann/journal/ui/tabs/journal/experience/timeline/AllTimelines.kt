@@ -62,7 +62,7 @@ fun AllTimelinesPreview(
         TimelinesPreviewProvider::class,
     ) dataForEffectLines: List<DataForOneEffectLine>
 ) {
-    AllTimelinesNew(
+    AllTimelines(
         dataForEffectLines = dataForEffectLines,
         dataForRatings = listOf(
             DataForOneRating(
@@ -92,7 +92,7 @@ fun AllTimelinesPreview(
 
 
 @Composable
-fun AllTimelinesNew(
+fun AllTimelines(
     dataForEffectLines: List<DataForOneEffectLine>,
     dataForRatings: List<DataForOneRating>,
     isShowingCurrentTime: Boolean,

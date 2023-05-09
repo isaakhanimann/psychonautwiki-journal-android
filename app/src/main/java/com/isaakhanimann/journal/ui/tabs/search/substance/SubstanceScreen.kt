@@ -47,7 +47,7 @@ import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.OptionalDosageUnitDisclaimer
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesNew
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.ToleranceSection
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.duration.RoaDurationView
@@ -338,7 +338,7 @@ fun SubstanceScreen(
                                 )
                             }
                         }
-                        AllTimelinesNew(
+                        AllTimelines(
                             dataForEffectLines = dataForEffectLines,
                             dataForRatings = emptyList(),
                             isShowingCurrentTime = false,
