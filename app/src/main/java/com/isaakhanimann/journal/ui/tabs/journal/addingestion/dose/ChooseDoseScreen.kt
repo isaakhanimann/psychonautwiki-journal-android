@@ -385,7 +385,11 @@ fun ChooseDoseScreen(
                     Text(text = "Volumetric Liquid Dosing")
                 }
             }
+            if (administrationRoute == AdministrationRoute.SMOKED && substanceName != "Cannabis") {
+                Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                    ChasingTheDragonText(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 10.dp))
+                }
+            }
         }
-
     }
 }

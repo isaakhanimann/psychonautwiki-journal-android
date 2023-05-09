@@ -44,6 +44,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.Category
 import com.isaakhanimann.journal.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChasingTheDragonText
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.OptionalDosageUnitDisclaimer
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
@@ -140,10 +141,12 @@ fun SubstanceScreen(
         ) {
             if (!substance.isApproved) {
                 Card(
-                    modifier = Modifier.padding(
-                        horizontal = horizontalPadding,
-                        vertical = verticalPaddingCards
-                    ).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(
+                            horizontal = horizontalPadding,
+                            vertical = verticalPaddingCards
+                        )
+                        .fillMaxWidth()
                 ) {
                     Row(
                         modifier = Modifier.padding(
@@ -225,6 +228,12 @@ fun SubstanceScreen(
                                 val bio = roa.bioavailability
                                 if (bio != null) {
                                     Text(text = "Bioavailability: ${bio.min?.toReadableString() ?: ".."}-${bio.max?.toReadableString() ?: ".."}%")
+                                }
+                                if (roa.route == AdministrationRoute.SMOKED && substance.name != "Cannabis") {
+                                    Spacer(modifier = Modifier.height(5.dp))
+                                    ChasingTheDragonText(
+                                        titleStyle = MaterialTheme.typography.titleMedium
+                                    )
                                 }
                             }
                             Divider()
