@@ -109,11 +109,11 @@ fun AddIngestionSearchScreen(
                 .padding(horizontal = horizontalPadding)
         ) {
             SearchScreenWithoutDrawerButton(
-                onSubstanceTap = {
-                    navigateToCheckInteractions(it)
-                },
                 navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
                 onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
+                navigateToCheckInteractions = navigateToCheckInteractions,
+                navigateToCheckSaferUse = navigateToCheckSaferUse,
+                navigateToChooseRoute = navigateToChooseRoute
             )
         }
         Spacer(modifier = Modifier.height(8.dp))

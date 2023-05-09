@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -113,7 +113,9 @@ class SearchViewModel @Inject constructor(
                             name = category.name,
                             color = category.color
                         )
-                    }
+                    },
+                    hasSaferUse = it.substance.saferUse.isNotEmpty(),
+                    hasInteractions = it.substance.hasInteractions
                 )
             }
         }.stateIn(
@@ -201,7 +203,9 @@ data class CategoryChipModel(
 data class SubstanceModel(
     val name: String,
     val commonNames: List<String>,
-    val categories: List<CategoryModel>
+    val categories: List<CategoryModel>,
+    val hasSaferUse: Boolean,
+    val hasInteractions: Boolean
 )
 
 data class CategoryModel(

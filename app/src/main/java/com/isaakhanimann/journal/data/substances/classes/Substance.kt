@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -43,6 +43,14 @@ data class Substance(
 ) {
     fun getRoa(route: AdministrationRoute): Roa? {
         return roas.firstOrNull { it.route == route }
+    }
+
+    val hasInteractions: Boolean get() {
+        return if (interactions == null) {
+            false
+        } else {
+            interactions.uncertain.isNotEmpty() || interactions.unsafe.isNotEmpty() || interactions.dangerous.isNotEmpty()
+        }
     }
 
     val isHallucinogen

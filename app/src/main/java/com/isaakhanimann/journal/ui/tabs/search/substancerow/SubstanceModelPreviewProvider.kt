@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -37,7 +37,9 @@ class SubstanceModelPreviewProvider : PreviewParameterProvider<SubstanceModel> {
                     name = "psychedelic",
                     color = Color.Magenta
                 )
-            )
+            ),
+            hasSaferUse = false,
+            hasInteractions = false
         )
     )
 }

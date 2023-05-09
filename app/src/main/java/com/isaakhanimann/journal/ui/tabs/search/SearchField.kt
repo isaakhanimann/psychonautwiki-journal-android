@@ -43,6 +43,7 @@ fun SearchField(
     onChange: (searchText: String) -> Unit,
     categories: List<CategoryChipModel>,
     onFilterTapped: (filterName: String) -> Unit,
+    isShowingFilter: Boolean
 ) {
     val focusManager = LocalFocusManager.current
     TextField(
@@ -72,7 +73,7 @@ fun SearchField(
                         contentDescription = "Close",
                     )
                 }
-            } else {
+            } else if (isShowingFilter) {
                 var isExpanded by remember { mutableStateOf(false) }
                 val activeFilters = categories.filter { it.isActive }
                 IconButton(
