@@ -140,9 +140,8 @@ fun EditExperienceScreen(
                 value = text,
                 onValueChange = onTextChange,
                 label = { Text(text = "Notes") },
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done,
+                    imeAction = ImeAction.Default,
                     capitalization = KeyboardCapitalization.Sentences
                 ),
                 modifier = Modifier
