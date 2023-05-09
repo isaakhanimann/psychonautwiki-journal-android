@@ -34,7 +34,7 @@ data class AxisDrawable(
     fun getFullHours(pixelsPerSec: Float, widthInPixels: Float): List<FullHour> {
         val widthInWholeHours = widthInSeconds.toLong().toDuration(DurationUnit.SECONDS).inWholeHours
         val widthPerHour = widthInPixels / widthInWholeHours
-        val minWidthPerHour = 60.0
+        val minWidthPerHour = 80.0
         var stepSize = (minWidthPerHour / widthPerHour).roundToLong()
         if (stepSize == 0.toLong()) {
             stepSize = 1
