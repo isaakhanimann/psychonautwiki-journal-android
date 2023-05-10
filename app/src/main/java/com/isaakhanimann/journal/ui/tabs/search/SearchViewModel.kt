@@ -25,14 +25,19 @@ import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    experienceRepo: ExperienceRepository,
-    substanceRepo: SubstanceRepository
+    experienceRepo: ExperienceRepository, substanceRepo: SubstanceRepository
 ) : ViewModel() {
 
     private val _searchTextFlow = MutableStateFlow("")
@@ -59,65 +64,56 @@ class SearchViewModel @Inject constructor(
 
     private val isShowingCustomSubstancesFlow = MutableStateFlow(false)
 
-    val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> =
-        filtersFlow.map { filters ->
-            substanceRepo.getAllCategories().map { category ->
-                val isActive = filters.contains(category.name)
-                CategoryChipModel(
-                    chipName = category.name,
-                    color = category.color,
-                    isActive = isActive
-                )
-            }
-        }.combine(isShowingCustomSubstancesFlow) { chips, isShowingCustom ->
-            val newChips = chips.toMutableList()
-            newChips.add(
-                0, CategoryChipModel(
-                    chipName = customChipName,
-                    color = customColor,
-                    isActive = isShowingCustom
-                )
+    val chipCategoriesFlow: StateFlow<List<CategoryChipModel>> = filtersFlow.map { filters ->
+        substanceRepo.getAllCategories().map { category ->
+            val isActive = filters.contains(category.name)
+            CategoryChipModel(
+                chipName = category.name, color = category.color, isActive = isActive
             )
-            return@combine newChips
-        }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
+        }
+    }.combine(isShowingCustomSubstancesFlow) { chips, isShowingCustom ->
+        val newChips = chips.toMutableList()
+        newChips.add(
+            0, CategoryChipModel(
+                chipName = customChipName, color = customColor, isActive = isShowingCustom
+            )
         )
+        return@combine newChips
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     val customColor = Color.Cyan
 
-    val filteredSubstancesFlow =
-        filtersFlow.map { filters ->
-            substanceRepo.getAllSubstancesWithCategories().filter { substanceWithCategories ->
-                filters.all { substanceWithCategories.substance.categories.contains(it) }
-            }
-        }.combine(searchTextFlow) { substances, searchText ->
-            getMatchingSubstances(searchText, substances)
-        }.combine(experienceRepo.getSortedLastUsedSubstanceNamesFlow(limit = 200)) { filteredSubstances, sortedRecentlyUsed ->
+    val filteredSubstancesFlow = filtersFlow.map { filters ->
+        // find substances matching all categories
+        substanceRepo.getAllSubstancesWithCategories().filter { substanceWithCategories ->
+            filters.all { substanceWithCategories.substance.categories.contains(it) }
+        }
+        // find substances matching our search string
+    }.combine(searchTextFlow) { substances, searchText ->
+        getMatchingSubstances(searchText, substances)
+    }
+        // also rank results by recently used & being a common drug
+        .combine(experienceRepo.getSortedLastUsedSubstanceNamesFlow(limit = 200)) { filteredSubstances, sortedRecentlyUsed ->
             val recentNames = sortedRecentlyUsed.distinct()
+            // recently used substances matching our search
             val showFirst =
-                recentNames.filter { recent -> filteredSubstances.any { it.substance.name == recent } }.mapNotNull {
-                    substanceRepo.getSubstanceWithCategories(
-                        substanceName = it
-                    )
-                }
-            val showSecond = filteredSubstances.filter { sub -> sub.categories.any { cat -> cat.name == "common" } }
-            val sortedResults = (showFirst + showSecond + filteredSubstances).distinctBy { it.substance.name }
-            return@combine sortedResults.map {
-                SubstanceModel(
-                    name = it.substance.name,
-                    commonNames = it.substance.commonNames,
-                    categories = it.categories.map { category ->
-                        CategoryModel(
-                            name = category.name,
-                            color = category.color
+                recentNames.filter { recent -> filteredSubstances.any { it.substance.name == recent } }
+                    .mapNotNull {
+                        substanceRepo.getSubstanceWithCategories(
+                            substanceName = it
                         )
-                    },
-                    hasSaferUse = it.substance.saferUse.isNotEmpty(),
-                    hasInteractions = it.substance.hasInteractions
-                )
-            }
+                    }
+            // common substances matching our search
+            val showSecond =
+                filteredSubstances.filter { sub -> sub.categories.any { cat -> cat.name == "common" } }
+
+            val sortedResults =
+                (showFirst + showSecond + filteredSubstances).distinctBy { it.substance.name }
+            return@combine sortedResults.map { it.toSubstanceModel() }
         }.stateIn(
             initialValue = emptyList(),
             scope = viewModelScope,
@@ -136,8 +132,7 @@ class SearchViewModel @Inject constructor(
         customSubstancesFlow.combine(searchTextFlow) { customSubstances, searchText ->
             customSubstances.filter { custom ->
                 custom.name.contains(
-                    other = searchText,
-                    ignoreCase = true
+                    other = searchText, ignoreCase = true
                 )
             }
         }.stateIn(
@@ -147,57 +142,51 @@ class SearchViewModel @Inject constructor(
         )
 
     companion object {
+        // both needle and haystack are preprocessed by removing '-' and whitespaces
         fun getMatchingSubstances(
-            searchText: String,
-            substances: List<SubstanceWithCategories>
+            searchText: String, substances: List<SubstanceWithCategories>
         ): List<SubstanceWithCategories> {
             return if (searchText.isEmpty()) {
                 substances
             } else {
-                if (searchText.length < 3) {
-                    substances.filter { substanceWithCategories ->
-                        substanceWithCategories.substance.name.startsWith(
-                            prefix = searchText,
-                            ignoreCase = true
-                        ) ||
-                                substanceWithCategories.substance.commonNames.any { commonName ->
-                                    commonName.startsWith(prefix = searchText, ignoreCase = true)
-                                }
-                    }
-                } else {
-                    val containing = substances.filter { substanceWithCategories ->
-                        substanceWithCategories.substance.name.contains(
-                            other = searchText,
-                            ignoreCase = true
-                        ) ||
-                                substanceWithCategories.substance.commonNames.any { commonName ->
-                                    commonName.contains(other = searchText, ignoreCase = true)
-                                }
-                    }
-                    val prefixAndContainingMatches =
-                        containing.partition { substanceWithCategories ->
-                            substanceWithCategories.substance.name.startsWith(
-                                prefix = searchText,
-                                ignoreCase = true
-                            ) ||
-                                    substanceWithCategories.substance.commonNames.any { commonName ->
-                                        commonName.startsWith(
-                                            prefix = searchText,
-                                            ignoreCase = true
-                                        )
-                                    }
-                        }
-                    prefixAndContainingMatches.first + prefixAndContainingMatches.second
+                val searchString = searchText.replace(Regex("[- ]"), "")
+
+                // substances whose primary name begins with the search string
+                val mainPrefixMatches = substances.filter { substanceWithCategories ->
+                    substanceWithCategories.substance.name.replace(Regex("[- ]"), "").startsWith(
+                        prefix = searchString, ignoreCase = true
+                    )
                 }
+
+                // substances with any name beginning with the search string
+                val prefixMatches = substances.filter { substanceWithCategories ->
+                    val allNames =
+                        substanceWithCategories.substance.commonNames + substanceWithCategories.substance.name
+                    allNames.any { name ->
+                        name.replace(Regex("[- ]"), "").startsWith(
+                            prefix = searchString, ignoreCase = true
+                        )
+                    }
+                }
+
+                // substances containing the search string in any of their names
+                val matches = substances.filter { substanceWithCategories ->
+                    val allNames =
+                        substanceWithCategories.substance.commonNames + substanceWithCategories.substance.name
+                    allNames.any { name ->
+                        name.replace(Regex("[- ]"), "").contains(
+                            other = searchString, ignoreCase = true
+                        )
+                    }
+                }
+                return (mainPrefixMatches + prefixMatches + matches).distinct()
             }
         }
     }
 }
 
 data class CategoryChipModel(
-    val chipName: String,
-    val color: Color,
-    val isActive: Boolean
+    val chipName: String, val color: Color, val isActive: Boolean
 )
 
 data class SubstanceModel(
@@ -209,6 +198,5 @@ data class SubstanceModel(
 )
 
 data class CategoryModel(
-    val name: String,
-    val color: Color
+    val name: String, val color: Color
 )

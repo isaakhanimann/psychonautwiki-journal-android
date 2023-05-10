@@ -60,6 +60,7 @@ fun SearchField(
         },
         trailingIcon = {
             Row {
+                // clear search button
                 if (searchText.isNotEmpty()) {
                     IconButton(onClick = {
                         onChange("")
@@ -70,6 +71,7 @@ fun SearchField(
                         )
                     }
                 }
+                // show filters button
                 if (isShowingFilter) {
                     var isExpanded by remember { mutableStateOf(false) }
                     val activeFilters = categories.filter { it.isActive }
@@ -109,7 +111,9 @@ fun SearchField(
         },
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
         keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Done, capitalization = KeyboardCapitalization.Words
+            autoCorrect = false,
+            imeAction = ImeAction.Done,
+            capitalization = KeyboardCapitalization.Words,
         ),
         singleLine = true
     )
