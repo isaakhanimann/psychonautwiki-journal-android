@@ -40,19 +40,14 @@ import androidx.compose.ui.unit.dp
 fun CategoryChipDeletePreview(
     @PreviewParameter(CategoryChipPreviewProvider::class) categoryChipModel: CategoryChipModel
 ) {
-    CategoryChipDelete(
-        categoryChipModel = categoryChipModel,
-        onClick = {}
-    )
+    CategoryChipDelete(categoryChipModel = categoryChipModel, onClick = {})
 }
 
 @Composable
 fun CategoryChipDelete(
-    categoryChipModel: CategoryChipModel,
-    onClick: () -> Unit
+    categoryChipModel: CategoryChipModel, onClick: () -> Unit
 ) {
     Row(
-        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clip(shape = CircleShape)
@@ -67,6 +62,7 @@ fun CategoryChipDelete(
             Modifier.size(ButtonDefaults.IconSize)
         )
         Spacer(Modifier.width(3.dp))
-        Text(text = categoryChipModel.chipName)
+        Text(text = categoryChipModel.chipName, Modifier.padding(bottom = 2.dp))
+
     }
 }
