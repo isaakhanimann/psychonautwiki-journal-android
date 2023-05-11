@@ -179,7 +179,7 @@ class SearchViewModel @Inject constructor(
                         )
                     }
                 }
-                return (mainPrefixMatches + prefixMatches + matches).distinct()
+                return (mainPrefixMatches + prefixMatches + matches).distinctBy { it.substance.name }
             }
         }
     }
