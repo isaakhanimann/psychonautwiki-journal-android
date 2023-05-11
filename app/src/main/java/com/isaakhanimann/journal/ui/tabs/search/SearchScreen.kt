@@ -96,6 +96,11 @@ fun SearchScreen(
                 val activeCategoryNames = activeFilters.filter { it.isActive }.map { it.chipName }
                 if (activeCategoryNames.isEmpty()) {
                     Text("No matching substance found", modifier = Modifier.padding(10.dp))
+                } else if (activeCategoryNames.size == 1) {
+                    Text(
+                        "No matching substance with the tag '${activeCategoryNames[0]}' found",
+                        modifier = Modifier.padding(10.dp)
+                    )
                 } else {
                     val names = activeCategoryNames.joinToString(separator = "', '")
                     Text(
