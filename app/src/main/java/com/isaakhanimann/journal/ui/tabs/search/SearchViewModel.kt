@@ -109,7 +109,7 @@ class SearchViewModel @Inject constructor(
                     }
             // common substances matching our search
             val showSecond =
-                emptyList<SubstanceWithCategories>()   //filteredSubstances.filter { sub -> sub.categories.any { cat -> cat.name == "common" } }
+                filteredSubstances.filter { sub -> sub.categories.any { cat -> cat.name == "common" } }
 
             val sortedResults =
                 (showFirst + showSecond + filteredSubstances).distinctBy { it.substance.name }
