@@ -40,7 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.search.SearchScreenWithoutDrawerButton
+import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.keyboard.wasKeyboardOpened
@@ -108,13 +108,18 @@ fun AddIngestionSearchScreen(
                 .weight(1f)
                 .padding(horizontal = horizontalPadding)
         ) {
-            SearchScreenWithoutDrawerButton(
+            SearchScreen(
                 navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
                 onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
-                navigateToCheckInteractions = navigateToCheckInteractions,
-                navigateToCheckSaferUse = navigateToCheckSaferUse,
-                navigateToChooseRoute = navigateToChooseRoute
-            )
+                onSubstanceTap = { substance ->
+                    if (substance.hasSaferUse) {
+                        navigateToCheckSaferUse(substance.name)
+                    } else if (substance.hasInteractions) {
+                        navigateToCheckInteractions(substance.name)
+                    } else {
+                        navigateToChooseRoute(substance.name)
+                    }
+                })
         }
         Spacer(modifier = Modifier.height(8.dp))
     }
@@ -229,20 +234,17 @@ fun SuggestionsSection(
                                         },
                                     )
                                 }
-                                SuggestionChip(
-                                    onClick = {
-                                        if (substanceRow.isCustom) {
-                                            onRouteOfCustomSubstanceChosen(
-                                                substanceRow.substanceName, routeWithDoses.route
-                                            )
-                                        } else {
-                                            onRouteChosen(
-                                                substanceRow.substanceName, routeWithDoses.route
-                                            )
-                                        }
-                                    },
-                                    label = { Text("Other") }
-                                )
+                                SuggestionChip(onClick = {
+                                    if (substanceRow.isCustom) {
+                                        onRouteOfCustomSubstanceChosen(
+                                            substanceRow.substanceName, routeWithDoses.route
+                                        )
+                                    } else {
+                                        onRouteChosen(
+                                            substanceRow.substanceName, routeWithDoses.route
+                                        )
+                                    }
+                                }, label = { Text("Other") })
                             }
                         }
                     }
