@@ -36,7 +36,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -46,10 +45,8 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.search.CategoryModel
 import com.isaakhanimann.journal.ui.tabs.search.SubstanceModel
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
-import com.isaakhanimann.journal.ui.tabs.search.substancerow.SubstanceRow
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
@@ -227,12 +224,10 @@ fun AddIngestionSearchScreen(
                 }
             }
             itemsIndexed(filteredCustomSubstances) { index, customSubstance ->
-                SubstanceRow(substanceModel = SubstanceModel(
+                SubstanceRowAddIngestion(substanceModel = SubstanceModel(
                     name = customSubstance.name,
                     commonNames = emptyList(),
-                    categories = listOf(
-                        CategoryModel(name = "custom", color = Color.Cyan)
-                    ),
+                    categories = emptyList(),
                     hasSaferUse = false,
                     hasInteractions = false
                 ), onTap = {
@@ -248,7 +243,7 @@ fun AddIngestionSearchScreen(
                 }
             }
             itemsIndexed(filteredSubstances) { index, substance ->
-                    SubstanceRow(substanceModel = substance, onTap = {
+                SubstanceRowAddIngestion(substanceModel = substance, onTap = {
                         if (substance.hasSaferUse) {
                             navigateToCheckSaferUse(substance.name)
                         } else if (substance.hasInteractions) {

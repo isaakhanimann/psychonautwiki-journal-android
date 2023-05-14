@@ -117,14 +117,6 @@ data class CategoryChipModel(
     val chipName: String, val color: Color, val isActive: Boolean
 )
 
-data class SubstanceModel(
-    val name: String,
-    val commonNames: List<String>,
-    val categories: List<CategoryModel>,
-    val hasSaferUse: Boolean,
-    val hasInteractions: Boolean
-)
-
 data class CategoryModel(
     val name: String, val color: Color
 )
