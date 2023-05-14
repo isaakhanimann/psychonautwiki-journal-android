@@ -29,13 +29,16 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -97,153 +100,169 @@ fun AddIngestionSearchScreen(
     filteredSubstances: List<SubstanceModel>,
     filteredCustomSubstances: List<CustomSubstance>
 ) {
-    Column {
-        LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
-        val focusManager = LocalFocusManager.current
-        TextField(
-            value = searchText,
-            onValueChange = { value ->
-                onChangeSearchText(value)
-            },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(text = "Search Substances") },
-            leadingIcon = {
-                Icon(
-                    Icons.Default.Search,
-                    contentDescription = "Search",
-                )
-            },
-            trailingIcon = {
-                Row {
-                    if (searchText.isNotEmpty()) {
-                        IconButton(onClick = {
-                            onChangeSearchText("")
-                        }) {
-                            Icon(
-                                Icons.Default.Close,
-                                contentDescription = "Close",
-                            )
-                        }
-                    }
-                }
-            },
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                autoCorrect = false,
-                imeAction = ImeAction.Done,
-                capitalization = KeyboardCapitalization.Words,
-            ),
-            singleLine = true
-        )
-        LazyColumn {
-            if (substanceSuggestions.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(title = "Quick Logging")
+    val focusRequester = remember { FocusRequester() }
+    var isFocused by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+    Scaffold(
+        floatingActionButton = {
+            if (!isFocused) {
+                FloatingActionButton(onClick = { focusRequester.requestFocus() }) {
+                    Icon(Icons.Default.Keyboard, contentDescription = "Keyboard")
                 }
             }
-            itemsIndexed(substanceSuggestions) { index, substanceRow ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp, bottom = 5.dp)
-                        .padding(horizontal = horizontalPadding)
-                ) {
-                    Row(
-                        verticalAlignment = CenterVertically,
-                    ) {
-                        ColorCircle(adaptiveColor = substanceRow.color)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = substanceRow.substanceName,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                    substanceRow.routesWithDoses.forEach { routeWithDoses ->
-                        Column {
-                            Text(
-                                text = routeWithDoses.route.displayText,
-                                style = MaterialTheme.typography.labelLarge,
-                                modifier = Modifier.padding(top = 3.dp)
-                            )
-                            Spacer(modifier = Modifier.width(5.dp))
-                            FlowRow(mainAxisSpacing = 5.dp) {
-                                routeWithDoses.doses.forEach { previousDose ->
-                                    SuggestionChip(
-                                        onClick = {
-                                            if (substanceRow.isCustom) {
-                                                navigateToChooseTime(
-                                                    substanceRow.substanceName,
-                                                    routeWithDoses.route,
-                                                    previousDose.dose,
-                                                    previousDose.unit,
-                                                    previousDose.isEstimate
-                                                )
-                                            } else {
-                                                navigateToChooseTime(
-                                                    substanceRow.substanceName,
-                                                    routeWithDoses.route,
-                                                    previousDose.dose,
-                                                    previousDose.unit,
-                                                    previousDose.isEstimate
-                                                )
-                                            }
-                                        },
-                                        label = {
-                                            if (previousDose.dose != null) {
-                                                val estimate =
-                                                    if (previousDose.isEstimate) "~" else ""
-                                                Text(text = "$estimate${previousDose.dose.toReadableString()} ${previousDose.unit ?: ""}")
-                                            } else {
-                                                Text(text = "Unknown")
-                                            }
-                                        },
-                                    )
-                                }
-                                SuggestionChip(onClick = {
-                                    if (substanceRow.isCustom) {
-                                        navigateToCustomDose(
-                                            substanceRow.substanceName, routeWithDoses.route
-                                        )
-                                    } else {
-                                        navigateToDose(
-                                            substanceRow.substanceName, routeWithDoses.route
-                                        )
-                                    }
-                                }, label = { Text("Other") })
+        }
+    ) { padding ->
+        Column(modifier = Modifier.padding(padding)) {
+            LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
+            TextField(
+                value = searchText,
+                onValueChange = { value ->
+                    onChangeSearchText(value)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
+                    },
+                placeholder = { Text(text = "Search Substances") },
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.Search,
+                        contentDescription = "Search",
+                    )
+                },
+                trailingIcon = {
+                    Row {
+                        if (searchText.isNotEmpty()) {
+                            IconButton(onClick = {
+                                onChangeSearchText("")
+                            }) {
+                                Icon(
+                                    Icons.Default.Close,
+                                    contentDescription = "Close",
+                                )
                             }
                         }
                     }
+                },
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    autoCorrect = false,
+                    imeAction = ImeAction.Done,
+                    capitalization = KeyboardCapitalization.Words,
+                ),
+                singleLine = true
+            )
+            LazyColumn {
+                if (substanceSuggestions.isNotEmpty()) {
+                    stickyHeader {
+                        SectionHeader(title = "Quick Logging")
+                    }
                 }
-                if (index < substanceSuggestions.size - 1) {
-                    Divider()
+                itemsIndexed(substanceSuggestions) { index, substanceRow ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp, bottom = 5.dp)
+                            .padding(horizontal = horizontalPadding)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            ColorCircle(adaptiveColor = substanceRow.color)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = substanceRow.substanceName,
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                        substanceRow.routesWithDoses.forEach { routeWithDoses ->
+                            Column {
+                                Text(
+                                    text = routeWithDoses.route.displayText,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    modifier = Modifier.padding(top = 3.dp)
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                FlowRow(mainAxisSpacing = 5.dp) {
+                                    routeWithDoses.doses.forEach { previousDose ->
+                                        SuggestionChip(
+                                            onClick = {
+                                                if (substanceRow.isCustom) {
+                                                    navigateToChooseTime(
+                                                        substanceRow.substanceName,
+                                                        routeWithDoses.route,
+                                                        previousDose.dose,
+                                                        previousDose.unit,
+                                                        previousDose.isEstimate
+                                                    )
+                                                } else {
+                                                    navigateToChooseTime(
+                                                        substanceRow.substanceName,
+                                                        routeWithDoses.route,
+                                                        previousDose.dose,
+                                                        previousDose.unit,
+                                                        previousDose.isEstimate
+                                                    )
+                                                }
+                                            },
+                                            label = {
+                                                if (previousDose.dose != null) {
+                                                    val estimate =
+                                                        if (previousDose.isEstimate) "~" else ""
+                                                    Text(text = "$estimate${previousDose.dose.toReadableString()} ${previousDose.unit ?: ""}")
+                                                } else {
+                                                    Text(text = "Unknown")
+                                                }
+                                            },
+                                        )
+                                    }
+                                    SuggestionChip(onClick = {
+                                        if (substanceRow.isCustom) {
+                                            navigateToCustomDose(
+                                                substanceRow.substanceName, routeWithDoses.route
+                                            )
+                                        } else {
+                                            navigateToDose(
+                                                substanceRow.substanceName, routeWithDoses.route
+                                            )
+                                        }
+                                    }, label = { Text("Other") })
+                                }
+                            }
+                        }
+                    }
+                    if (index < substanceSuggestions.size - 1) {
+                        Divider()
+                    }
                 }
-            }
-            if (filteredCustomSubstances.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(title = "Custom Substances")
+                if (filteredCustomSubstances.isNotEmpty()) {
+                    stickyHeader {
+                        SectionHeader(title = "Custom Substances")
+                    }
                 }
-            }
-            itemsIndexed(filteredCustomSubstances) { index, customSubstance ->
-                SubstanceRowAddIngestion(substanceModel = SubstanceModel(
-                    name = customSubstance.name,
-                    commonNames = emptyList(),
-                    categories = emptyList(),
-                    hasSaferUse = false,
-                    hasInteractions = false
-                ), onTap = {
-                    navigateToCustomSubstanceChooseRoute(customSubstance.name)
-                })
-                if (index < filteredCustomSubstances.size - 1) {
-                    Divider()
+                itemsIndexed(filteredCustomSubstances) { index, customSubstance ->
+                    SubstanceRowAddIngestion(substanceModel = SubstanceModel(
+                        name = customSubstance.name,
+                        commonNames = emptyList(),
+                        categories = emptyList(),
+                        hasSaferUse = false,
+                        hasInteractions = false
+                    ), onTap = {
+                        navigateToCustomSubstanceChooseRoute(customSubstance.name)
+                    })
+                    if (index < filteredCustomSubstances.size - 1) {
+                        Divider()
+                    }
                 }
-            }
-            if (filteredSubstances.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(title = "Substances")
+                if (filteredSubstances.isNotEmpty()) {
+                    stickyHeader {
+                        SectionHeader(title = "Substances")
+                    }
                 }
-            }
-            itemsIndexed(filteredSubstances) { index, substance ->
-                SubstanceRowAddIngestion(substanceModel = substance, onTap = {
+                itemsIndexed(filteredSubstances) { index, substance ->
+                    SubstanceRowAddIngestion(substanceModel = substance, onTap = {
                         if (substance.hasSaferUse) {
                             navigateToCheckSaferUse(substance.name)
                         } else if (substance.hasInteractions) {
@@ -252,25 +271,26 @@ fun AddIngestionSearchScreen(
                             navigateToChooseRoute(substance.name)
                         }
                     })
-                if (index < filteredSubstances.size - 1) {
-                    Divider()
+                    if (index < filteredSubstances.size - 1) {
+                        Divider()
+                    }
                 }
-            }
-            item {
-                TextButton(
-                    onClick = navigateToAddCustomSubstanceScreen,
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                ) {
-                    Icon(
-                        Icons.Outlined.Add, contentDescription = "Add"
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = "Add Custom Substance")
+                item {
+                    TextButton(
+                        onClick = navigateToAddCustomSubstanceScreen,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    ) {
+                        Icon(
+                            Icons.Outlined.Add, contentDescription = "Add"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Add Custom Substance")
+                    }
                 }
-            }
-            item {
-                if (filteredSubstances.isEmpty() && filteredCustomSubstances.isEmpty()) {
-                    Text("No matching substance found", modifier = Modifier.padding(10.dp))
+                item {
+                    if (filteredSubstances.isEmpty() && filteredCustomSubstances.isEmpty()) {
+                        Text("No matching substance found", modifier = Modifier.padding(10.dp))
+                    }
                 }
             }
         }
@@ -279,7 +299,9 @@ fun AddIngestionSearchScreen(
 
 @Composable
 fun SectionHeader(title: String) {
-    Box(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background)) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .background(MaterialTheme.colorScheme.background)) {
         Surface(
             color = MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier.fillMaxWidth()

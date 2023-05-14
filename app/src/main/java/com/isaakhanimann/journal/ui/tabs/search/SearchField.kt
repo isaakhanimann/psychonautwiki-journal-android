@@ -19,7 +19,6 @@
 package com.isaakhanimann.journal.ui.tabs.search
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -38,6 +37,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchField(
+    modifier: Modifier,
     searchText: String,
     onChange: (searchText: String) -> Unit,
     categories: List<CategoryChipModel>,
@@ -50,7 +50,7 @@ fun SearchField(
         onValueChange = { value ->
             onChange(value)
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         placeholder = { Text(text = "Search Substances") },
         leadingIcon = {
             Icon(
