@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -20,6 +20,8 @@ package com.isaakhanimann.journal.di
 
 import com.isaakhanimann.journal.data.substances.parse.SubstanceParser
 import com.isaakhanimann.journal.data.substances.parse.SubstanceParserInterface
+import com.isaakhanimann.journal.data.substances.repositories.SearchRepository
+import com.isaakhanimann.journal.data.substances.repositories.SearchRepositoryInterface
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepositoryInterface
 import dagger.Binds
@@ -43,4 +45,10 @@ abstract class RepositoryModule {
     abstract fun bindSubstanceRepository(
         substanceRepository: SubstanceRepository
     ): SubstanceRepositoryInterface
+
+    @Binds
+    @Singleton
+    abstract fun bindSearchRepository(
+        substanceRepository: SearchRepository
+    ): SearchRepositoryInterface
 }
