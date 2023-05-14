@@ -54,7 +54,7 @@ class AddIngestionSearchViewModel @Inject constructor(
     ) { searchText, recents ->
         return@combine searchRepo.getMatchingSubstances(
             searchText = searchText,
-            filterCategories = emptyList<String>(),
+            filterCategories = emptyList(),
             recentlyUsedSubstanceNamesSorted = recents
         ).map { it.toSubstanceModel() }
     }.stateIn(

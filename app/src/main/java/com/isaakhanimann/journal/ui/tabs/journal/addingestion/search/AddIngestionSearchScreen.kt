@@ -18,21 +18,22 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,7 +46,8 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.search.*
+import com.isaakhanimann.journal.ui.tabs.search.CategoryModel
+import com.isaakhanimann.journal.ui.tabs.search.SubstanceModel
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.tabs.search.substancerow.SubstanceRow
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -81,7 +83,7 @@ fun AddIngestionSearchScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun AddIngestionSearchScreen(
     navigateToCheckInteractions: (substanceName: String) -> Unit,
@@ -137,11 +139,17 @@ fun AddIngestionSearchScreen(
             singleLine = true
         )
         LazyColumn {
+            if (substanceSuggestions.isNotEmpty()) {
+                stickyHeader {
+                    SectionHeader(title = "Quick Logging")
+                }
+            }
             itemsIndexed(substanceSuggestions) { index, substanceRow ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = horizontalPadding, vertical = 5.dp)
+                        .padding(top = 10.dp, bottom = 5.dp)
+                        .padding(horizontal = horizontalPadding)
                 ) {
                     Row(
                         verticalAlignment = CenterVertically,
@@ -210,10 +218,15 @@ fun AddIngestionSearchScreen(
                     }
                 }
                 if (index < substanceSuggestions.size - 1) {
-                    Divider(Modifier.padding(horizontal = horizontalPadding))
+                    Divider()
                 }
             }
-            items(filteredCustomSubstances) { customSubstance ->
+            if (filteredCustomSubstances.isNotEmpty()) {
+                stickyHeader {
+                    SectionHeader(title = "Custom Substances")
+                }
+            }
+            itemsIndexed(filteredCustomSubstances) { index, customSubstance ->
                 SubstanceRow(substanceModel = SubstanceModel(
                     name = customSubstance.name,
                     commonNames = emptyList(),
@@ -225,9 +238,16 @@ fun AddIngestionSearchScreen(
                 ), onTap = {
                     navigateToCustomSubstanceChooseRoute(customSubstance.name)
                 })
-                Divider()
+                if (index < filteredCustomSubstances.size - 1) {
+                    Divider()
+                }
             }
-            items(filteredSubstances) { substance ->
+            if (filteredSubstances.isNotEmpty()) {
+                stickyHeader {
+                    SectionHeader(title = "Substances")
+                }
+            }
+            itemsIndexed(filteredSubstances) { index, substance ->
                     SubstanceRow(substanceModel = substance, onTap = {
                         if (substance.hasSaferUse) {
                             navigateToCheckSaferUse(substance.name)
@@ -237,7 +257,9 @@ fun AddIngestionSearchScreen(
                             navigateToChooseRoute(substance.name)
                         }
                     })
-                Divider()
+                if (index < filteredSubstances.size - 1) {
+                    Divider()
+                }
             }
             item {
                 TextButton(
@@ -256,6 +278,24 @@ fun AddIngestionSearchScreen(
                     Text("No matching substance found", modifier = Modifier.padding(10.dp))
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun SectionHeader(title: String) {
+    Box(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background)) {
+        Surface(
+            color = MaterialTheme.colorScheme.secondaryContainer,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = horizontalPadding, vertical = 5.dp)
+                    .fillMaxWidth(),
+                text = title,
+                style = MaterialTheme.typography.titleSmall
+            )
         }
     }
 }
