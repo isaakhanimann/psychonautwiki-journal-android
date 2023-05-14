@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -22,10 +22,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 
-class AddIngestionSearchScreenProvider : PreviewParameterProvider<List<PreviousSubstance>> {
-    override val values: Sequence<List<PreviousSubstance>> = sequenceOf(
+class AddIngestionSearchScreenProvider : PreviewParameterProvider<List<SubstanceSuggestion>> {
+    override val values: Sequence<List<SubstanceSuggestion>> = sequenceOf(
         listOf(
-            PreviousSubstance(
+            SubstanceSuggestion(
                 color = AdaptiveColor.PINK,
                 substanceName = "MDMA",
                 isCustom = false,
@@ -52,7 +52,7 @@ class AddIngestionSearchScreenProvider : PreviewParameterProvider<List<PreviousS
                     )
                 )
             ),
-            PreviousSubstance(
+            SubstanceSuggestion(
                 color = AdaptiveColor.BLUE,
                 substanceName = "Amphetamine",
                 isCustom = false,

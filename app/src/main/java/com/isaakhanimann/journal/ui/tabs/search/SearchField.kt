@@ -117,5 +117,4 @@ fun SearchField(
         ),
         singleLine = true
     )
-
 }

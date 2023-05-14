@@ -18,32 +18,37 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
+import com.isaakhanimann.journal.ui.tabs.search.*
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
+import com.isaakhanimann.journal.ui.tabs.search.substancerow.SubstanceRow
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
-import com.isaakhanimann.journal.ui.utils.keyboard.wasKeyboardOpened
 
 @Composable
 fun AddIngestionSearchScreen(
@@ -66,10 +71,17 @@ fun AddIngestionSearchScreen(
         navigateToChooseTime = navigateToChooseTime,
         navigateToDose = navigateToDose,
         navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
-        previousSubstances = viewModel.previousSubstanceRows.collectAsState().value,
+        substanceSuggestions = viewModel.substanceSuggestionRows.collectAsState().value,
+        searchText = viewModel.searchTextFlow.collectAsState().value,
+        onChangeSearchText = {
+            viewModel.filterSubstances(it)
+        },
+        filteredSubstances = viewModel.filteredSubstancesFlow.collectAsState().value,
+        filteredCustomSubstances = viewModel.filteredCustomSubstancesFlow.collectAsState().value
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddIngestionSearchScreen(
     navigateToCheckInteractions: (substanceName: String) -> Unit,
@@ -80,104 +92,52 @@ fun AddIngestionSearchScreen(
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
-    previousSubstances: List<PreviousSubstance>
+    substanceSuggestions: List<SubstanceSuggestion>,
+    searchText: String,
+    onChangeSearchText: (searchText: String) -> Unit,
+    filteredSubstances: List<SubstanceModel>,
+    filteredCustomSubstances: List<CustomSubstance>
 ) {
     Column {
         LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
-        val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-        val suggestionMaxHeight = screenHeight * 0.6f
-        AnimatedVisibility(
-            visible = previousSubstances.isNotEmpty() && !wasKeyboardOpened().value,
-            enter = EnterTransition.None
-        ) {
-            Column {
-                Spacer(modifier = Modifier.height(8.dp))
-                SuggestionsSection(
-                    previousSubstances = previousSubstances,
-                    modifier = Modifier.heightIn(0.dp, suggestionMaxHeight),
-                    onRouteChosen = navigateToDose,
-                    onDoseChosen = navigateToChooseTime,
-                    onDoseOfCustomSubstanceChosen = navigateToChooseTime,
-                    onRouteOfCustomSubstanceChosen = navigateToCustomDose
+        val focusManager = LocalFocusManager.current
+        TextField(
+            value = searchText,
+            onValueChange = { value ->
+                onChangeSearchText(value)
+            },
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text(text = "Search Substances") },
+            leadingIcon = {
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = "Search",
                 )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = horizontalPadding)
-        ) {
-            SearchScreen(
-                navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
-                onCustomSubstanceTap = navigateToCustomSubstanceChooseRoute,
-                onSubstanceTap = { substance ->
-                    if (substance.hasSaferUse) {
-                        navigateToCheckSaferUse(substance.name)
-                    } else if (substance.hasInteractions) {
-                        navigateToCheckInteractions(substance.name)
-                    } else {
-                        navigateToChooseRoute(substance.name)
+            },
+            trailingIcon = {
+                Row {
+                    if (searchText.isNotEmpty()) {
+                        IconButton(onClick = {
+                            onChangeSearchText("")
+                        }) {
+                            Icon(
+                                Icons.Default.Close,
+                                contentDescription = "Close",
+                            )
+                        }
                     }
-                })
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Composable
-fun SuggestionSectionPreview(@PreviewParameter(AddIngestionSearchScreenProvider::class) previousSubstances: List<PreviousSubstance>) {
-    Scaffold { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-            val suggestionMaxHeight = screenHeight * 0.65f
-            SuggestionsSection(
-                previousSubstances = previousSubstances,
-                onDoseChosen = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
-                onRouteChosen = { _: String, _: AdministrationRoute -> },
-                onDoseOfCustomSubstanceChosen = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> },
-                onRouteOfCustomSubstanceChosen = { _: String, _: AdministrationRoute -> },
-                modifier = Modifier.heightIn(0.dp, suggestionMaxHeight)
-            )
-            Surface(
-                color = Color.Blue, modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-            ) {
-                Text(text = "Search Screen")
-            }
-        }
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SuggestionsSection(
-    previousSubstances: List<PreviousSubstance>,
-    onRouteChosen: (substanceName: String, route: AdministrationRoute) -> Unit,
-    onDoseChosen: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
-    onDoseOfCustomSubstanceChosen: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
-    onRouteOfCustomSubstanceChosen: (substanceName: String, route: AdministrationRoute) -> Unit,
-    modifier: Modifier
-) {
-    Card(
-        modifier = modifier.padding(horizontal = horizontalPadding),
-    ) {
-        Text(
-            text = "Quick Logging",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 5.dp)
+                }
+            },
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                autoCorrect = false,
+                imeAction = ImeAction.Done,
+                capitalization = KeyboardCapitalization.Words,
+            ),
+            singleLine = true
         )
-        Divider()
         LazyColumn {
-            itemsIndexed(previousSubstances) { index, substanceRow ->
+            itemsIndexed(substanceSuggestions) { index, substanceRow ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -206,7 +166,7 @@ fun SuggestionsSection(
                                     SuggestionChip(
                                         onClick = {
                                             if (substanceRow.isCustom) {
-                                                onDoseOfCustomSubstanceChosen(
+                                                navigateToChooseTime(
                                                     substanceRow.substanceName,
                                                     routeWithDoses.route,
                                                     previousDose.dose,
@@ -214,7 +174,7 @@ fun SuggestionsSection(
                                                     previousDose.isEstimate
                                                 )
                                             } else {
-                                                onDoseChosen(
+                                                navigateToChooseTime(
                                                     substanceRow.substanceName,
                                                     routeWithDoses.route,
                                                     previousDose.dose,
@@ -236,11 +196,11 @@ fun SuggestionsSection(
                                 }
                                 SuggestionChip(onClick = {
                                     if (substanceRow.isCustom) {
-                                        onRouteOfCustomSubstanceChosen(
+                                        navigateToCustomDose(
                                             substanceRow.substanceName, routeWithDoses.route
                                         )
                                     } else {
-                                        onRouteChosen(
+                                        navigateToDose(
                                             substanceRow.substanceName, routeWithDoses.route
                                         )
                                     }
@@ -249,13 +209,57 @@ fun SuggestionsSection(
                         }
                     }
                 }
-                if (index < previousSubstances.size - 1) {
+                if (index < substanceSuggestions.size - 1) {
                     Divider(Modifier.padding(horizontal = horizontalPadding))
+                }
+            }
+            items(filteredCustomSubstances) { customSubstance ->
+                SubstanceRow(substanceModel = SubstanceModel(
+                    name = customSubstance.name,
+                    commonNames = emptyList(),
+                    categories = listOf(
+                        CategoryModel(name = "custom", color = Color.Cyan)
+                    ),
+                    hasSaferUse = false,
+                    hasInteractions = false
+                ), onTap = {
+                    navigateToCustomSubstanceChooseRoute(customSubstance.name)
+                })
+                Divider()
+            }
+            items(filteredSubstances) { substance ->
+                    SubstanceRow(substanceModel = substance, onTap = {
+                        if (substance.hasSaferUse) {
+                            navigateToCheckSaferUse(substance.name)
+                        } else if (substance.hasInteractions) {
+                            navigateToCheckInteractions(substance.name)
+                        } else {
+                            navigateToChooseRoute(substance.name)
+                        }
+                    })
+                Divider()
+            }
+            item {
+                TextButton(
+                    onClick = navigateToAddCustomSubstanceScreen,
+                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                ) {
+                    Icon(
+                        Icons.Outlined.Add, contentDescription = "Add"
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(text = "Add Custom Substance")
+                }
+            }
+            item {
+                if (filteredSubstances.isEmpty() && filteredCustomSubstances.isEmpty()) {
+                    Text("No matching substance found", modifier = Modifier.padding(10.dp))
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun ColorCircle(adaptiveColor: AdaptiveColor) {
