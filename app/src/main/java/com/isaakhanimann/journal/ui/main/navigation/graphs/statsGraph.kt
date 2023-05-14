@@ -30,10 +30,7 @@ import com.isaakhanimann.journal.ui.tabs.stats.StatsScreen
 import com.isaakhanimann.journal.ui.tabs.stats.substancecompanion.SubstanceCompanionScreen
 
 
-fun NavGraphBuilder.statsGraph(
-    navController: NavController,
-    openNavigationDrawer: () -> Unit
-) {
+fun NavGraphBuilder.statsGraph(navController: NavController) {
     navigation(
         startDestination = NoArgumentRouter.StatsRouter.route,
         route = TabRouter.Statistics.route,
@@ -44,8 +41,7 @@ fun NavGraphBuilder.statsGraph(
             StatsScreen(
                 navigateToSubstanceCompanion = {
                     navController.navigateToSubstanceCompanionScreen(substanceName = it)
-                },
-                openNavigationDrawer = openNavigationDrawer
+                }
             )
         }
         composableWithTransitions(

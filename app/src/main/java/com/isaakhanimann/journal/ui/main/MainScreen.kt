@@ -26,7 +26,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -36,7 +35,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.isaakhanimann.journal.ui.main.navigation.*
 import com.isaakhanimann.journal.ui.main.navigation.graphs.*
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
-import kotlinx.coroutines.launch
+import com.isaakhanimann.journal.ui.utils.keyboard.isKeyboardOpen
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -45,65 +44,60 @@ fun MainScreen(
 ) {
     if (viewModel.isAcceptedFlow.collectAsState().value) {
         val navController = rememberAnimatedNavController()
-        val drawerState = rememberDrawerState(DrawerValue.Closed)
-        val scope = rememberCoroutineScope()
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-        val tabs = listOf(
-            TabRouter.Journal,
-            TabRouter.Statistics,
-            TabRouter.Search,
-            TabRouter.SaferUse,
-            TabRouter.Settings
-        )
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            gesturesEnabled = false,
-            drawerContent = {
-                ModalDrawerSheet {
-                    Spacer(Modifier.height(12.dp))
-                    tabs.forEach { tab ->
-                        val isSelected =
-                            currentDestination?.hierarchy?.any { it.route == tab.route } == true
-                        NavigationDrawerItem(
-                            icon = { Icon(tab.icon, contentDescription = null) },
-                            label = { Text(stringResource(tab.resourceId)) },
-                            selected = isSelected,
-                            onClick = {
-                                scope.launch { drawerState.close() }
-                                if (isSelected) {
-                                    navController.popBackStack(
-                                        route = tab.childRoute,
-                                        inclusive = false
-                                    )
-                                } else {
-                                    navController.navigate(tab.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
+        Scaffold(
+            bottomBar = {
+                val isShowingBottomBar = isKeyboardOpen().value.not()
+                if (isShowingBottomBar) {
+                    NavigationBar {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentDestination = navBackStackEntry?.destination
+                        val tabs = listOf(
+                            TabRouter.Journal,
+                            TabRouter.Statistics,
+                            TabRouter.Search,
+                            TabRouter.SaferUse
+                        )
+                        tabs.forEach { tab ->
+                            val isSelected =
+                                currentDestination?.hierarchy?.any { it.route == tab.route } == true
+                            NavigationBarItem(
+                                icon = { Icon(tab.icon, contentDescription = null) },
+                                label = { Text(stringResource(tab.resourceId)) },
+                                selected = isSelected,
+                                onClick = {
+                                    if (isSelected) {
+                                        navController.popBackStack(
+                                            route = tab.childRoute,
+                                            inclusive = false
+                                        )
+                                    } else {
+                                        navController.navigate(tab.route) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
                                         }
-                                        launchSingleTop = true
-                                        restoreState = true
                                     }
                                 }
-                            },
-                            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                        )
+                            )
+                        }
                     }
                 }
-            },
-            content = {
+            }
+        ) { innerPadding ->
                 AnimatedNavHost(
                     navController,
-                    startDestination = TabRouter.Journal.route
+                    startDestination = TabRouter.Journal.route,
+                    modifier = Modifier
+                        .padding(innerPadding)
                 ) {
-                    journalGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
-                    statsGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
-                    searchGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
-                    saferGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
-                    settingsGraph(navController, openNavigationDrawer = { scope.launch { drawerState.open() } })
+                    journalGraph(navController)
+                    statsGraph(navController)
+                    searchGraph(navController)
+                    saferGraph(navController)
                 }
             }
-        )
     } else {
         AcceptConditionsScreen(onTapAccept = viewModel::accept)
     }

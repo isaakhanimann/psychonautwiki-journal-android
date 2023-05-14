@@ -36,7 +36,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.journal.ui.tabs.journal.components.NavigationButton
 import com.isaakhanimann.journal.ui.tabs.search.substance.CollapsibleSection
 import com.isaakhanimann.journal.ui.tabs.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -54,7 +53,6 @@ fun SaferUsePreview() {
         navigateToRouteExplanationScreen = {},
         navigateToURL = {},
         navigateToReagentTestingScreen = {},
-        openNavigationDrawer = {}
     )
 }
 
@@ -69,15 +67,11 @@ fun SaferUseScreen(
     navigateToRouteExplanationScreen: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     navigateToReagentTestingScreen: () -> Unit,
-    openNavigationDrawer: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Safer Use") },
-                navigationIcon = {
-                    NavigationButton(onClick = openNavigationDrawer)
-                },
             )
         }
     ) { padding ->

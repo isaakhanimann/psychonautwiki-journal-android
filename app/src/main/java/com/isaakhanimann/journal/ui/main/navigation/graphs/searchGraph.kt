@@ -23,20 +23,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.URL_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddCustom
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCategoryScreen
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToDosageExplanationScreenOnSearchTab
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditCustomSubstance
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExplainTimelineOnSearchTab
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferHallucinogens
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferStimulants
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceScreen
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLScreenOnSearchTab
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToVolumetricDosingScreenOnSearchTab
+import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
@@ -47,7 +34,7 @@ import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.category.CategoryScreen
 
 
-fun NavGraphBuilder.searchGraph(navController: NavController, openNavigationDrawer: () -> Unit) {
+fun NavGraphBuilder.searchGraph(navController: NavController) {
     navigation(
         startDestination = NoArgumentRouter.SearchRouter.route,
         route = TabRouter.Search.route,
@@ -61,7 +48,6 @@ fun NavGraphBuilder.searchGraph(navController: NavController, openNavigationDraw
                 },
                 onCustomSubstanceTap = navController::navigateToEditCustomSubstance,
                 navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom,
-                openNavigationDrawer = openNavigationDrawer
             )
         }
         composableWithTransitions(

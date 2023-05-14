@@ -28,6 +28,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.SearchOff
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
@@ -44,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.ui.tabs.journal.components.ExperienceRow
-import com.isaakhanimann.journal.ui.tabs.journal.components.NavigationButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.JournalTheme
@@ -54,14 +54,14 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    openNavigationDrawer: () -> Unit,
+    navigateToSettings: () -> Unit,
     viewModel: JournalViewModel = hiltViewModel()
 ) {
     val currentAndPrevious = viewModel.currentAndPreviousExperiences.collectAsState().value
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToAddIngestion = navigateToAddIngestion,
-        openNavigationDrawer = openNavigationDrawer,
+        navigateToSettings = navigateToSettings,
         isFavoriteEnabled = viewModel.isFavoriteEnabledFlow.collectAsState().value,
         onChangeIsFavorite = viewModel::onChangeFavorite,
         isTimeRelativeToNow = viewModel.isTimeRelativeToNow.value,
@@ -86,7 +86,7 @@ fun ExperiencesScreenPreview(
         JournalScreen(
             navigateToExperiencePopNothing = {},
             navigateToAddIngestion = {},
-            openNavigationDrawer = {},
+            navigateToSettings = {},
             isFavoriteEnabled = false,
             onChangeIsFavorite = {},
             isTimeRelativeToNow = true,
@@ -106,7 +106,7 @@ fun ExperiencesScreenPreview(
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    openNavigationDrawer: () -> Unit,
+    navigateToSettings: () -> Unit,
     isFavoriteEnabled: Boolean,
     onChangeIsFavorite: (Boolean) -> Unit,
     isTimeRelativeToNow: Boolean,
@@ -123,7 +123,12 @@ fun JournalScreen(
             TopAppBar(
                 title = { Text("Experiences") },
                 navigationIcon = {
-                    NavigationButton(onClick = openNavigationDrawer)
+                    IconButton(onClick = navigateToSettings) {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = "Settings"
+                        )
+                    }
                 },
                 actions = {
                     IconToggleButton(

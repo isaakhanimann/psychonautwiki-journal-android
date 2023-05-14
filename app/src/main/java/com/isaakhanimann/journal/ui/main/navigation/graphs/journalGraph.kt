@@ -34,12 +34,12 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTime
 import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
+import com.isaakhanimann.journal.ui.tabs.settings.FAQScreen
+import com.isaakhanimann.journal.ui.tabs.settings.SettingsScreen
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsScreen
 
 
-fun NavGraphBuilder.journalGraph(
-    navController: NavController,
-    openNavigationDrawer: () -> Unit
-) {
+fun NavGraphBuilder.journalGraph(navController: NavController) {
     navigation(
         startDestination = NoArgumentRouter.JournalRouter.route,
         route = TabRouter.Journal.route,
@@ -52,9 +52,17 @@ fun NavGraphBuilder.journalGraph(
                     navController.navigateToExperience(experienceId = it)
                 },
                 navigateToAddIngestion = navController::navigateToAddIngestion,
-                openNavigationDrawer = openNavigationDrawer
+                navigateToSettings = navController::navigateToSettings
             )
         }
+        composableWithTransitions(NoArgumentRouter.SettingsRouter.route) {
+            SettingsScreen(
+                navigateToFAQ = navController::navigateToFAQ,
+                navigateToComboSettings = navController::navigateToComboSettings,
+            )
+        }
+        composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+        composableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
         composableWithTransitions(
             ArgumentRouter.EditExperienceRouter.route,
             arguments = ArgumentRouter.EditExperienceRouter.args
@@ -76,9 +84,7 @@ fun NavGraphBuilder.journalGraph(
         composableWithTransitions(NoArgumentRouter.VolumetricDosingOnJournalTabRouter.route) {
             VolumetricDosingScreen(
                 navigateToVolumetricLiquidDosingArticle = {
-                    navController.navigateToURLInJournalTab(
-                        VOLUMETRIC_DOSE_ARTICLE_URL
-                    )
+                    navController.navigateToURLInJournalTab(url = VOLUMETRIC_DOSE_ARTICLE_URL)
                 })
         }
         composableWithTransitions(

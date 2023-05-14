@@ -18,29 +18,18 @@
 
 package com.isaakhanimann.journal.ui.tabs.search
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.journal.ui.tabs.journal.components.NavigationButton
 import com.isaakhanimann.journal.ui.tabs.search.substancerow.SubstanceRow
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
@@ -50,21 +39,17 @@ fun SearchScreen(
     onSubstanceTap: (substanceModel: SubstanceModel) -> Unit,
     onCustomSubstanceTap: (substanceName: String) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
-    openNavigationDrawer: (() -> Unit)? = null
 ) {
     Column {
-        Row {
-            if (openNavigationDrawer != null) NavigationButton(onClick = openNavigationDrawer)
-            SearchField(
-                searchText = searchViewModel.searchTextFlow.collectAsState().value,
-                onChange = {
-                    searchViewModel.filterSubstances(searchText = it)
-                },
-                categories = searchViewModel.chipCategoriesFlow.collectAsState().value,
-                onFilterTapped = searchViewModel::onFilterTapped,
-                isShowingFilter = true
-            )
-        }
+        SearchField(
+            searchText = searchViewModel.searchTextFlow.collectAsState().value,
+            onChange = {
+                searchViewModel.filterSubstances(searchText = it)
+            },
+            categories = searchViewModel.chipCategoriesFlow.collectAsState().value,
+            onFilterTapped = searchViewModel::onFilterTapped,
+            isShowingFilter = true
+        )
         val activeFilters =
             searchViewModel.chipCategoriesFlow.collectAsState().value.filter { it.isActive }
         val onFilterTapped = searchViewModel::onFilterTapped
