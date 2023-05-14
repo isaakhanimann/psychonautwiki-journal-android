@@ -71,10 +71,10 @@ fun AddIngestionSearchScreen(
         navigateToChooseTime = navigateToChooseTime,
         navigateToDose = navigateToDose,
         navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
-        substanceSuggestions = viewModel.substanceSuggestionRows.collectAsState().value,
+        substanceSuggestions = viewModel.filteredSuggestions.collectAsState().value,
         searchText = viewModel.searchTextFlow.collectAsState().value,
         onChangeSearchText = {
-            viewModel.filterSubstances(it)
+            viewModel.updateSearchText(it)
         },
         filteredSubstances = viewModel.filteredSubstancesFlow.collectAsState().value,
         filteredCustomSubstances = viewModel.filteredCustomSubstancesFlow.collectAsState().value

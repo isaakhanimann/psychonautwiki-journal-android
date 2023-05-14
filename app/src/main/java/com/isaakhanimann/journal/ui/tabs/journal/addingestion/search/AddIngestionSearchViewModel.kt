@@ -42,14 +42,21 @@ class AddIngestionSearchViewModel @Inject constructor(
     private val _searchTextFlow = MutableStateFlow("")
     val searchTextFlow = _searchTextFlow.asStateFlow()
 
-    fun filterSubstances(searchText: String) {
+    fun updateSearchText(searchText: String) {
         viewModelScope.launch {
             _searchTextFlow.emit(searchText)
         }
     }
 
-    val filteredSubstancesFlow = combine(searchTextFlow, experienceRepo.getSortedLastUsedSubstanceNamesFlow(limit = 200)) { searchText, recents ->
-        return@combine searchRepo.getMatchingSubstances(searchText = searchText, filterCategories = emptyList<String>(), recentlyUsedSubstanceNamesSorted = recents).map { it.toSubstanceModel() }
+    val filteredSubstancesFlow = combine(
+        searchTextFlow,
+        experienceRepo.getSortedLastUsedSubstanceNamesFlow(limit = 200)
+    ) { searchText, recents ->
+        return@combine searchRepo.getMatchingSubstances(
+            searchText = searchText,
+            filterCategories = emptyList<String>(),
+            recentlyUsedSubstanceNamesSorted = recents
+        ).map { it.toSubstanceModel() }
     }.stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,
@@ -61,9 +68,7 @@ class AddIngestionSearchViewModel @Inject constructor(
     val filteredCustomSubstancesFlow =
         customSubstancesFlow.combine(searchTextFlow) { customSubstances, searchText ->
             customSubstances.filter { custom ->
-                custom.name.contains(
-                    other = searchText, ignoreCase = true
-                )
+                custom.name.contains(other = searchText, ignoreCase = true)
             }
         }.stateIn(
             initialValue = emptyList(),
@@ -71,15 +76,25 @@ class AddIngestionSearchViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    val substanceSuggestionRows: StateFlow<List<SubstanceSuggestion>> =
-        experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow(limit = 150)
-            .combine(customSubstancesFlow) { ingestions, customSubstances ->
-                return@combine getSubstanceSuggestions(ingestions, customSubstances)
-            }.stateIn(
-                initialValue = emptyList(),
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
+    val filteredSuggestions: StateFlow<List<SubstanceSuggestion>> = combine(
+        experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow(limit = 150),
+        customSubstancesFlow,
+        filteredSubstancesFlow,
+        searchTextFlow
+    ) { ingestions, customSubstances, filteredSubstances, searchText ->
+        val suggestions = getSubstanceSuggestions(ingestions, customSubstances)
+        return@combine suggestions.filter { sug ->
+            filteredSubstances.any { it.name == sug.substanceName } || sug.substanceName.contains(
+                other = searchText,
+                ignoreCase = true
             )
+        }
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
 
     private fun getSubstanceSuggestions(
         ingestions: List<IngestionWithCompanion>,
