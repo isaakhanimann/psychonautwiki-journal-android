@@ -26,9 +26,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
+import java.util.*
 
 @Composable
 fun RelativeDateTextNew(
@@ -59,9 +61,13 @@ fun RelativeDateTextNew(
 }
 
 fun roundToOneDecimal(num: Double): String {
-    val roundedNum = "%.1f".format(num).toDouble()
-    val df = DecimalFormat("#.#")
-    return df.format(roundedNum)
+    return try {
+        val df = DecimalFormat("#.#", DecimalFormatSymbols.getInstance(Locale.US))
+        df.format(num)
+    } catch (e: NumberFormatException) {
+        println("Failed to format the number: $e")
+        ""
+    }
 }
 
 @Preview(showBackground = true)

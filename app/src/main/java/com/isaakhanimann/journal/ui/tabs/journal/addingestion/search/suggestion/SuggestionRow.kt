@@ -26,6 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -35,7 +37,16 @@ import com.isaakhanimann.journal.ui.tabs.journal.components.RelativeDateTextNew
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
-
+@Preview(showBackground = true)
+@Composable
+fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) substanceSuggestion: SubstanceSuggestion) {
+    SuggestionRow(
+        substanceRow = substanceSuggestion,
+        navigateToDose = { _: String, _: AdministrationRoute -> },
+        navigateToCustomDose = { _: String, _: AdministrationRoute -> },
+        navigateToChooseTime = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean -> }
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,18 +62,17 @@ fun SuggestionRow(
             .padding(top = 10.dp, bottom = 5.dp)
             .padding(horizontal = horizontalPadding)
     ) {
-        Row(horizontalArrangement = Arrangement.SpaceBetween) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                ColorCircle(adaptiveColor = substanceRow.color)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = substanceRow.substanceName,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            ColorCircle(adaptiveColor = substanceRow.color)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = substanceRow.substanceName,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.weight(1f))
             RelativeDateTextNew(
                 dateTime = substanceRow.lastUsed,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.bodyMedium
             )
         }
         substanceRow.routesWithDoses.forEach { routeWithDoses ->
