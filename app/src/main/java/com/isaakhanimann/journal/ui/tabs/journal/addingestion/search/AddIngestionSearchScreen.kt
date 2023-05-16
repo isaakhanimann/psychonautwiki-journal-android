@@ -34,7 +34,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -44,12 +43,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.SuggestionRow
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceSuggestion
 import com.isaakhanimann.journal.ui.tabs.search.SubstanceModel
-import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
@@ -161,78 +160,12 @@ fun AddIngestionSearchScreen(
                     }
                 }
                 itemsIndexed(substanceSuggestions) { index, substanceRow ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp, bottom = 5.dp)
-                            .padding(horizontal = horizontalPadding)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            ColorCircle(adaptiveColor = substanceRow.color)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = substanceRow.substanceName,
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                        }
-                        substanceRow.routesWithDoses.forEach { routeWithDoses ->
-                            Column {
-                                Text(
-                                    text = routeWithDoses.route.displayText,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    modifier = Modifier.padding(top = 3.dp)
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                FlowRow(mainAxisSpacing = 5.dp) {
-                                    routeWithDoses.doses.forEach { previousDose ->
-                                        SuggestionChip(
-                                            onClick = {
-                                                if (substanceRow.isCustom) {
-                                                    navigateToChooseTime(
-                                                        substanceRow.substanceName,
-                                                        routeWithDoses.route,
-                                                        previousDose.dose,
-                                                        previousDose.unit,
-                                                        previousDose.isEstimate
-                                                    )
-                                                } else {
-                                                    navigateToChooseTime(
-                                                        substanceRow.substanceName,
-                                                        routeWithDoses.route,
-                                                        previousDose.dose,
-                                                        previousDose.unit,
-                                                        previousDose.isEstimate
-                                                    )
-                                                }
-                                            },
-                                            label = {
-                                                if (previousDose.dose != null) {
-                                                    val estimate =
-                                                        if (previousDose.isEstimate) "~" else ""
-                                                    Text(text = "$estimate${previousDose.dose.toReadableString()} ${previousDose.unit ?: ""}")
-                                                } else {
-                                                    Text(text = "Unknown")
-                                                }
-                                            },
-                                        )
-                                    }
-                                    SuggestionChip(onClick = {
-                                        if (substanceRow.isCustom) {
-                                            navigateToCustomDose(
-                                                substanceRow.substanceName, routeWithDoses.route
-                                            )
-                                        } else {
-                                            navigateToDose(
-                                                substanceRow.substanceName, routeWithDoses.route
-                                            )
-                                        }
-                                    }, label = { Text("Other") })
-                                }
-                            }
-                        }
-                    }
+                    SuggestionRow(
+                        substanceRow = substanceRow,
+                        navigateToDose = navigateToDose,
+                        navigateToCustomDose = navigateToCustomDose,
+                        navigateToChooseTime = navigateToChooseTime
+                    )
                     if (index < substanceSuggestions.size - 1) {
                         Divider()
                     }

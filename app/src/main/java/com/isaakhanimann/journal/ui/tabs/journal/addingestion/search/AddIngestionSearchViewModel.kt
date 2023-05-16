@@ -21,15 +21,17 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
-import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.repositories.SearchRepository
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.PreviousDose
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.RouteWithDoses
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceSuggestion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
@@ -103,11 +105,12 @@ class AddIngestionSearchViewModel @Inject constructor(
         val grouped = ingestions.groupBy { it.ingestion.substanceName }
         return grouped.mapNotNull { entry ->
             val substanceName = entry.key
-            val groupedIngestions = entry.value
+            val ingestionsGroupedBySubstance = entry.value
             val color =
-                groupedIngestions.firstOrNull()?.substanceCompanion?.color ?: return@mapNotNull null
+                ingestionsGroupedBySubstance.firstOrNull()?.substanceCompanion?.color ?: return@mapNotNull null
             val isPredefinedSubstance = substanceRepo.getSubstance(substanceName) != null
             val isCustomSubstance = customSubstances.any { it.name == substanceName }
+            val groupedRoute = ingestionsGroupedBySubstance.groupBy { it.ingestion.administrationRoute }
             if (!isPredefinedSubstance && !isCustomSubstance) {
                 return@mapNotNull null
             } else {
@@ -115,7 +118,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                     color = color,
                     substanceName = substanceName,
                     isCustom = isCustomSubstance,
-                    routesWithDoses = groupedIngestions.groupBy { it.ingestion.administrationRoute }
+                    routesWithDoses = groupedRoute
                         .map { routeEntry ->
                             RouteWithDoses(
                                 route = routeEntry.key,
@@ -127,27 +130,10 @@ class AddIngestionSearchViewModel @Inject constructor(
                                     )
                                 }.distinct().take(6)
                             )
-                        }
+                        },
+                    lastUsed = ingestionsGroupedBySubstance.maxOfOrNull { it.ingestion.time } ?: Instant.now()
                 )
             }
         }
     }
 }
-
-data class SubstanceSuggestion(
-    val color: AdaptiveColor,
-    val substanceName: String,
-    val isCustom: Boolean,
-    val routesWithDoses: List<RouteWithDoses>
-)
-
-data class RouteWithDoses(
-    val route: AdministrationRoute,
-    val doses: List<PreviousDose>
-)
-
-data class PreviousDose(
-    val dose: Double?,
-    val unit: String?,
-    val isEstimate: Boolean
-)
