@@ -38,6 +38,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.ui.FULL_STOMACH_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
@@ -279,10 +281,9 @@ fun OneExperienceScreen(
                     CardTitle(title = "Effect Timeline")
                     Column(
                         modifier = Modifier
-                            .padding(
-                                horizontal = horizontalPadding,
-                            )
-                            .padding(bottom = 10.dp)
+                            .padding(horizontal = horizontalPadding)
+                            .padding(bottom = 10.dp),
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
                         AllTimelines(
                             dataForEffectLines = effectTimelines,
@@ -303,6 +304,9 @@ fun OneExperienceScreen(
                                 .fillMaxWidth()
                                 .height(200.dp)
                         )
+                        if (oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanion.ingestion.administrationRoute == AdministrationRoute.ORAL }) {
+                            Text(text = FULL_STOMACH_DISCLAIMER, style = MaterialTheme.typography.bodySmall)
+                        }
                     }
                 }
             }

@@ -44,6 +44,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.Category
 import com.isaakhanimann.journal.data.substances.classes.SubstanceWithCategories
 import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
+import com.isaakhanimann.journal.ui.FULL_STOMACH_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChasingTheDragonText
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.OptionalDosageUnitDisclaimer
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
@@ -380,6 +381,9 @@ fun SubstanceScreen(
                                 } else {
                                     Spacer(modifier = Modifier.height(3.dp))
                                     RoaDurationView(roaDuration = roaDuration)
+                                    if (roa.route == AdministrationRoute.ORAL) {
+                                        Text(text = FULL_STOMACH_DISCLAIMER, style = MaterialTheme.typography.bodySmall)
+                                    }
                                 }
                             }
                             if (index < roasWithDurationsDefined.size - 1) {
