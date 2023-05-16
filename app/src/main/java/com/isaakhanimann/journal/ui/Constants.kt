@@ -23,6 +23,6 @@ const val DOSE_DISCLAIMER =
 
 const val VOLUMETRIC_DOSE_ARTICLE_URL = "https://psychonautwiki.org/wiki/Volumetric_liquid_dosing"
 
-const val VERSION_NAME = "5.0"
+const val VERSION_NAME = "6.0"
 
 const val FULL_STOMACH_DISCLAIMER = "A full stomach delays the onset of oral ingestions by approx. 3 hours."
