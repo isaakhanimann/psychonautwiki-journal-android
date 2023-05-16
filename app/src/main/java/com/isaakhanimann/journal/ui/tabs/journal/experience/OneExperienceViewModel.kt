@@ -52,8 +52,31 @@ class OneExperienceViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
+    val timeDisplayOption = mutableStateOf(TimeDisplayOption.REGULAR)
+
+    private val experienceId: Int
+
+    private val localIsFavoriteFlow = MutableStateFlow(false)
+
+    val isFavoriteFlow = localIsFavoriteFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
+    init {
+        val expId = state.get<Int>(EXPERIENCE_ID_KEY)!!
+        experienceId = expId
+        viewModelScope.launch {
+            val experience = experienceRepo.getExperience(expId)
+            val isFavorite = experience?.isFavorite ?: false
+            localIsFavoriteFlow.emit(isFavorite)
+        }
+    }
+
     fun saveIsFavorite(isFavorite: Boolean) {
         viewModelScope.launch {
+            localIsFavoriteFlow.emit(isFavorite)
             val experience = experienceFlow.firstOrNull()
             if (experience != null) {
                 experience.isFavorite = isFavorite
@@ -61,10 +84,6 @@ class OneExperienceViewModel @Inject constructor(
             }
         }
     }
-
-    val timeDisplayOption = mutableStateOf(TimeDisplayOption.REGULAR)
-
-    private val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
 
     val ingestionsWithCompanionsFlow =
         experienceRepo.getIngestionsWithCompanionsFlow(experienceId)
