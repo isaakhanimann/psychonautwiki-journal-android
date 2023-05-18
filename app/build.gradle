@@ -62,7 +62,7 @@ android {
 
 dependencies {
     implementation platform('androidx.compose:compose-bom:2022.10.00')
-    implementation platform('com.google.firebase:firebase-bom:31.1.1')
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ndk'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
