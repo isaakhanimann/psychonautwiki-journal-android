@@ -18,24 +18,62 @@
 
 package com.isaakhanimann.journal.data.room.experiences.entities
 
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+
+@Serializable(with = StomachFullnessSerializer::class)
 enum class StomachFullness {
     EMPTY {
         override val text = "Empty"
+        override val serialized = "EMPTY"
         override val onsetDelayForOralInHours: Double = 0.0
     },
     HALF_FULL {
         override val text = "Half Full"
+        override val serialized = "HALFFULL"
         override val onsetDelayForOralInHours = 1.5
     },
     FULL {
         override val text = "Full"
+        override val serialized = "FULL"
         override val onsetDelayForOralInHours: Double = 3.0
     },
     VERY_FULL {
         override val text = "Very Full"
+        override val serialized = "VERYFULL"
         override val onsetDelayForOralInHours: Double = 4.0
     };
 
     abstract val text: String
+    abstract val serialized: String
     abstract val onsetDelayForOralInHours: Double
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@Serializer(forClass = StomachFullness::class)
+object StomachFullnessSerializer : KSerializer<StomachFullness> {
+
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("DayOfWeek", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: StomachFullness) {
+        encoder.encodeString(value.serialized)
+    }
+
+    override fun deserialize(decoder: Decoder): StomachFullness {
+        val value = decoder.decodeString()
+        val fullness = StomachFullness.values().find { it.serialized == value }
+        if (fullness == null) {
+            throw IllegalArgumentException("$value is not a valid stomach fullness")
+        } else {
+            return fullness
+        }
+    }
 }
