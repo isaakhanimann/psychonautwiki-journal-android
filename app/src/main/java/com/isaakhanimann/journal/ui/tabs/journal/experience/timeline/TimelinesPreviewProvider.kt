@@ -378,6 +378,82 @@ class TimelinesPreviewProvider :
                     ),
                     offset = DurationRange(
                         min = 2f,
+                        max = 4f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 3f,
+                        max = 5f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.PURPLE,
+                startTime = Instant.now().minus(150, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 4f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 3f,
+                        max = 5f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.BROWN,
+                startTime = Instant.now().minus(130, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
                         max = 3f,
                         units = DurationUnits.HOURS
                     ),
@@ -396,6 +472,348 @@ class TimelinesPreviewProvider :
                 horizontalWeight = 0.5f,
                 color = AdaptiveColor.ORANGE,
                 startTime = Instant.now().minus(1, ChronoUnit.HOURS)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 3f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 6f,
+                        max = 11f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.RED,
+                startTime = Instant.now().minus(50, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 3f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 6f,
+                        max = 11f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.GREEN,
+                startTime = Instant.now().minus(40, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 3f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 6f,
+                        max = 11f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.CYAN,
+                startTime = Instant.now().minus(30, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 3f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 6f,
+                        max = 11f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.BLUE,
+                startTime = Instant.now().minus(28, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 3f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 6f,
+                        max = 11f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.RED,
+                startTime = Instant.now().minus(24, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 3f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 6f,
+                        max = 11f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.ORANGE,
+                startTime = Instant.now().minus(20, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 3f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 6f,
+                        max = 11f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.BROWN,
+                startTime = Instant.now().minus(15, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 3f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 6f,
+                        max = 11f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.INDIGO,
+                startTime = Instant.now().minus(10, ChronoUnit.MINUTES)
+            ),
+            DataForOneEffectLine(
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 20f,
+                        max = 40f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 4f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 2f,
+                        max = 3f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 6f,
+                        max = 11f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.RED,
+                startTime = Instant.now().minus(5, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
                 roaDuration = RoaDuration(
@@ -473,7 +891,7 @@ class TimelinesPreviewProvider :
                 height = 1f,
                 horizontalWeight = 0.5f,
                 color = AdaptiveColor.BLUE,
-                startTime = Instant.now().minus(20, ChronoUnit.MINUTES)
+                startTime = Instant.now().minus(3, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
                 roaDuration = RoaDuration(

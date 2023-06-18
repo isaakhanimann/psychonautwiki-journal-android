@@ -203,13 +203,13 @@ fun DrawScope.drawIngestion(
     val startX =
         ingestionDrawable.ingestionPointDistanceFromStartInSeconds * pixelsPerSec
     val verticalInsetForLine = max(0f, density.strokeWidth / 2)
-    val topInset = max(
-        0f,
-        (canvasHeightOuter * (1f - ingestionDrawable.height)) + (ingestionDrawable.insetTimes * density.strokeWidth)
-    )
+    val maxInsetTimes = 12
+    val actualInsetTimes = ingestionDrawable.insetTimes.mod(maxInsetTimes)
+    val calculatedInset = (canvasHeightOuter * (1f - ingestionDrawable.height)) + (actualInsetTimes * density.strokeWidth)
+    val safeInsetTop = max(0f, calculatedInset)
     inset(
         left = 0f,
-        top = topInset,
+        top = safeInsetTop,
         right = 0f,
         bottom = 0f
     ) {
