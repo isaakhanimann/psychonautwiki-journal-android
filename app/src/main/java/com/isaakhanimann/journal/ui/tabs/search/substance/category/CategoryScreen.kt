@@ -84,7 +84,7 @@ fun CategoryScreen(category: Category?, navigateToURL: (url: String) -> Unit) {
         ) { padding ->
             Text(
                 text = category.description,
-                textAlign = TextAlign.Justify,
+                textAlign = TextAlign.Left,
                 modifier = Modifier
                     .padding(padding)
                     .padding(horizontal = horizontalPadding, vertical = 10.dp)

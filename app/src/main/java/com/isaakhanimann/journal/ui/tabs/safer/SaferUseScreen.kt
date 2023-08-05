@@ -292,7 +292,7 @@ fun SaferUseScreen(
 fun SaferText(text: String) {
     Text(
         text = text,
-        textAlign = TextAlign.Justify,
+        textAlign = TextAlign.Left,
         modifier = Modifier
             .padding(horizontal = horizontalPadding)
             .padding(bottom = 10.dp)
