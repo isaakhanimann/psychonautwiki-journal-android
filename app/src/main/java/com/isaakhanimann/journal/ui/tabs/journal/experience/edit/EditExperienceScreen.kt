@@ -85,21 +85,17 @@ fun EditExperienceScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Edit Experience") })
-        },
-        floatingActionButton = {
-            if (isEnteredTitleOk) {
-                ExtendedFloatingActionButton(
-                    onClick = onDoneTap,
-                    icon = {
-                        Icon(
-                            Icons.Filled.Done,
-                            contentDescription = "Done Icon"
-                        )
-                    },
-                    text = { Text("Done") }
-                )
-            }
+            TopAppBar(title = { Text("Edit Experience") },
+                actions = {
+                    if (isEnteredTitleOk) {
+                        IconButton(onClick = onDoneTap) {
+                            Icon(
+                                Icons.Filled.Done,
+                                contentDescription = "Done Icon"
+                            )
+                        }
+                    }
+            })
         }
     ) { padding ->
         Column(
