@@ -50,11 +50,11 @@ fun DoseExplanationScreen() {
                 .padding(padding)
         ) {
             VerticalSpace()
-            Card(modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)) {
+            ElevatedCard(modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)) {
                 Text(
                     text = "The range and intensity of the effects of a substance depends on upon a number of factors. These include route of administration, dosage, set and setting, and personal and environmental factors.\n" +
                             "Effective doses can be divided into five categories: threshold, light, common, strong, and heavy.",
-                    textAlign = TextAlign.Justify,
+                    textAlign = TextAlign.Left,
                     modifier = Modifier
                         .padding(vertical = 10.dp, horizontal = horizontalPadding)
                 )
@@ -63,7 +63,7 @@ fun DoseExplanationScreen() {
                 CollapsibleSection(title = it.name) {
                     Text(
                         text = it.description,
-                        textAlign = TextAlign.Justify,
+                        textAlign = TextAlign.Left,
                         modifier = Modifier
                             .padding(bottom = 10.dp)
                             .padding(horizontal = horizontalPadding)

@@ -187,7 +187,7 @@ fun CardWithTesting(
     title: String,
     content: @Composable () -> Unit
 ) {
-    Card(modifier = Modifier.padding(vertical = 5.dp)) {
+    ElevatedCard(modifier = Modifier.padding(vertical = 5.dp)) {
         Column(
             Modifier.padding(vertical = 5.dp)
         ) {

@@ -30,6 +30,7 @@ import androidx.compose.material.icons.outlined.HealthAndSafety
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material3.*
+import androidx.compose.material3.ElevatedCard as Card
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -292,7 +293,7 @@ fun SaferUseScreen(
 fun SaferText(text: String) {
     Text(
         text = text,
-        textAlign = TextAlign.Justify,
+        textAlign = TextAlign.Left,
         modifier = Modifier
             .padding(horizontal = horizontalPadding)
             .padding(bottom = 10.dp)

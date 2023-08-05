@@ -82,7 +82,7 @@ fun CombinationSettingsScreen(
                 .padding(padding)
         ) {
             Spacer(modifier = Modifier.height(5.dp))
-            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,

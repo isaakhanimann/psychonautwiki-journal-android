@@ -72,7 +72,7 @@ fun VolumetricDosingScreen(navigateToVolumetricLiquidDosingArticle: () -> Unit) 
 Many psychoactive substances, including benzodiazepines and certain psychedelics, are active at less than a single milligram. Such small quantities cannot be accurately measured with common digital scales, so the substance must instead be dosed volumetrically by weighing out larger amounts of the compound and dissolving it in a calculated volume of a suitable liquid.
 
 Search the internet to determine what solvent to use. All substances should dissolve in alcohol, but many substances will not dissolve in water.""",
-                textAlign = TextAlign.Justify
+                textAlign = TextAlign.Left
             )
         }
     }

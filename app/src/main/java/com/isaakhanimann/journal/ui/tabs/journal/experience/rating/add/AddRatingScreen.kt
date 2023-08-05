@@ -100,7 +100,7 @@ fun AddRatingScreen(
         ) {
             Spacer(modifier = Modifier.height(3.dp))
             if (canAddOverallRating) {
-                Card(modifier = Modifier
+                ElevatedCard(modifier = Modifier
                     .padding(vertical = 5.dp)
                     .fillMaxWidth()
                 ) {
