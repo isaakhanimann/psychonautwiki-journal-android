@@ -84,7 +84,7 @@ Determining an optimal route of administration is highly dependent on the substa
                 CollapsibleSection(title = it.displayText) {
                     Text(
                         text = it.articleText,
-                        textAlign = TextAlign.Justify,
+                        textAlign = TextAlign.Left,
                         modifier = Modifier
                             .padding(horizontal = horizontalPadding)
                             .padding(bottom = 10.dp)
@@ -108,7 +108,7 @@ Determining an optimal route of administration is highly dependent on the substa
                 CollapsibleSection(title = it.displayText) {
                     Text(
                         text = it.articleText,
-                        textAlign = TextAlign.Justify,
+                        textAlign = TextAlign.Left,
                         modifier = Modifier
                             .padding(horizontal = horizontalPadding)
                             .padding(bottom = 10.dp)

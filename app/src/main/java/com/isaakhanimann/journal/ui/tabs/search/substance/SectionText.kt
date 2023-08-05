@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 fun SectionText(text: String) {
     Text(
         text = text,
-        textAlign = TextAlign.Justify,
+        textAlign = TextAlign.Left,
         modifier = Modifier.padding(vertical = 5.dp)
     )
 }
