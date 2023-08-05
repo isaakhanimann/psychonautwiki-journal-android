@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -23,17 +23,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
-import com.isaakhanimann.journal.data.room.experiences.entities.Experience
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
-import com.isaakhanimann.journal.ui.utils.getTimeDifferenceText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,13 +40,6 @@ class SubstanceCompanionViewModel @Inject constructor(
     substanceRepo: SubstanceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-
-    private val currentTimeFlow: Flow<Instant> = flow {
-        while (true) {
-            emit(Instant.now())
-            delay(timeMillis = 1000 * 10)
-        }
-    }
 
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
 
@@ -63,35 +54,6 @@ class SubstanceCompanionViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    val ingestionBurstsFlow: StateFlow<List<IngestionsBurst>> =
-        experienceRepo.getSortedIngestionsWithExperienceFlow(substanceName)
-            .combine(currentTimeFlow) { sortedIngestionsWithExperiences, currentTime ->
-                val experiencesWithIngestions =
-                    sortedIngestionsWithExperiences.groupBy { it.experience.id }
-                var lastDate = currentTime
-                val allIngestionBursts: MutableList<IngestionsBurst> = mutableListOf()
-                for (oneExperience in experiencesWithIngestions) {
-                    val experience = oneExperience.value.firstOrNull()?.experience ?: continue
-                    val newInstant = experience.sortDate
-                    val diffText = getTimeDifferenceText(
-                        fromInstant = newInstant,
-                        toInstant = lastDate
-                    )
-                    allIngestionBursts.add(
-                        IngestionsBurst(
-                            timeUntil = diffText,
-                            experience = experience,
-                            ingestions = oneExperience.value.map { it.ingestion }
-                        )
-                    )
-                    lastDate = newInstant
-                }
-                return@combine allIngestionBursts
-            }.stateIn(
-                initialValue = emptyList(),
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
 
     private val companionsFlow = experienceRepo.getAllSubstanceCompanionsFlow()
 
@@ -125,9 +87,3 @@ class SubstanceCompanionViewModel @Inject constructor(
         }
     }
 }
-
-data class IngestionsBurst(
-    val timeUntil: String,
-    val experience: Experience,
-    val ingestions: List<Ingestion>
-)
