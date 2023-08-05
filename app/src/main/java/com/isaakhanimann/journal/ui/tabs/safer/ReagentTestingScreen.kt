@@ -69,7 +69,7 @@ fun ReagentTestingScreen(
                 .padding(padding)
                 .padding(horizontal = horizontalPadding)
         ) {
-            Card(modifier = Modifier.padding(vertical = 3.dp)) {
+            ElevatedCard(modifier = Modifier.padding(vertical = 3.dp)) {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     SectionText(
                         text = """Reagent testing kits is a drug testing method that uses chemical solutions that change in color when applied to a chemical compound. They can help determine what chemical might be present in a given sample. In many cases they do not rule out the possibility of another similar compound being present in addition to or instead of the one suspected.
@@ -79,7 +79,7 @@ Reagents can only determine the presence, not the quantity or purity, of a parti
                     VerticalSpace()
                 }
             }
-            Card(modifier = Modifier.padding(vertical = 5.dp)) {
+            ElevatedCard(modifier = Modifier.padding(vertical = 5.dp)) {
                 Column(
                     Modifier.padding(vertical = 5.dp)
                 ) {

@@ -230,7 +230,7 @@ fun ChooseDoseScreen(
         ) {
             LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(4.dp))
-            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
@@ -261,7 +261,7 @@ fun ChooseDoseScreen(
                     Text(text = DOSE_DISCLAIMER)
                 }
             }
-            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
@@ -341,7 +341,7 @@ fun ChooseDoseScreen(
                 }
             }
             AnimatedVisibility(visible = isValidDose) {
-                Card(
+                ElevatedCard(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
                         vertical = 4.dp
@@ -394,7 +394,7 @@ fun ChooseDoseScreen(
                 }
             }
             if (administrationRoute == AdministrationRoute.SMOKED && substanceName != "Cannabis") {
-                Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                     ChasingTheDragonText(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 10.dp))
                 }
             }
