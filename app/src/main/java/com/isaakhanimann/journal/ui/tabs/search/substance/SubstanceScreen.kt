@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
+import androidx.compose.material3.ElevatedCard as Card
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier

@@ -70,7 +70,7 @@ fun RouteExplanationScreen(navigateToURL: (url: String) -> Unit) {
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
         ) {
-            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)) {
+            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)) {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     SectionText(
                         text = """A route of administration is the method in which a psychoactive substance is delivered into the body.

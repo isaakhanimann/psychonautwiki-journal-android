@@ -247,7 +247,7 @@ fun MyCard(
     modifier: Modifier = Modifier,
     content: @Composable (ColumnScope.() -> Unit)
 ) {
-    Card(
+    ElevatedCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)

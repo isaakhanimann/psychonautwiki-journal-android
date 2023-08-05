@@ -53,7 +53,7 @@ fun ExplainTimelineScreen() {
                 .padding(horizontal = horizontalPadding)
         ) {
             VerticalSpace()
-            Card(modifier = Modifier.padding(vertical = 5.dp)) {
+            ElevatedCard(modifier = Modifier.padding(vertical = 5.dp)) {
                 Column(
                     Modifier.padding(
                         horizontal = horizontalPadding,
