@@ -217,7 +217,7 @@ fun JournalScreen(
                                     }
                                 }
                             },
-                            label = { Text(text = "Search by title") },
+                            label = { Text(text = "Search by title or substance") },
                             modifier = Modifier.fillMaxWidth(),
                             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             keyboardOptions = KeyboardOptions(

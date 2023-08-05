@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
+import com.isaakhanimann.journal.data.substances.repositories.SearchRepository
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +38,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JournalViewModel @Inject constructor(
-    experienceRepo: ExperienceRepository
+    experienceRepo: ExperienceRepository,
+    searchRepository: SearchRepository
 ) : ViewModel() {
 
 
@@ -90,19 +92,27 @@ class JournalViewModel @Inject constructor(
                         experiencesWithIngestions
                     }
                 } else {
+                    val matchingSubstances = searchRepository.getMatchingSubstances(
+                        searchText = searchText,
+                        filterCategories = emptyList(),
+                        recentlyUsedSubstanceNamesSorted = emptyList())
                     if (isFavoriteEnabled) {
                         experiencesWithIngestions.filter {
-                            it.experience.isFavorite && it.experience.title.contains(
+                            it.experience.isFavorite && (it.experience.title.contains(
                                 other = searchText,
                                 ignoreCase = true
-                            )
+                            ) || it.ingestionsWithCompanions.any { ingestionWithCompanion ->
+                                matchingSubstances.any { sub -> sub.substance.name == ingestionWithCompanion.substanceCompanion?.substanceName  }
+                            })
                         }
                     } else {
                         experiencesWithIngestions.filter {
                             it.experience.title.contains(
                                 other = searchText,
                                 ignoreCase = true
-                            )
+                            ) || it.ingestionsWithCompanions.any { ingestionWithCompanion ->
+                                matchingSubstances.any { sub -> sub.substance.name == ingestionWithCompanion.substanceCompanion?.substanceName  }
+                            }
                         }
                     }
                 }
