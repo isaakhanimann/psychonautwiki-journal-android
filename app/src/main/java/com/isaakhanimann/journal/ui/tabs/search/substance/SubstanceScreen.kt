@@ -31,7 +31,6 @@ import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
-import androidx.compose.material3.ElevatedCard as Card
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,6 +62,7 @@ import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.absoluteValue
+import androidx.compose.material3.ElevatedCard as Card
 
 @Composable
 fun SubstanceScreen(
@@ -352,6 +352,7 @@ fun SubstanceScreen(
                         AllTimelines(
                             dataForEffectLines = dataForEffectLines,
                             dataForRatings = emptyList(),
+                            dataForTimedNotes = emptyList(),
                             isShowingCurrentTime = false,
                             navigateToExplainTimeline = navigateToExplainTimeline,
                             modifier = Modifier

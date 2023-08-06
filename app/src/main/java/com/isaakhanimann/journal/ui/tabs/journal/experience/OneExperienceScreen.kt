@@ -46,6 +46,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.Ra
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.timednote.TimedNoteRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
@@ -309,6 +310,9 @@ fun OneExperienceScreen(
                                     )
                                 }
                             },
+                            dataForTimedNotes = oneExperienceScreenModel.timedNotes.map {
+                                DataForOneTimedNote(time = it.time, color = it.color)
+                            },
                             isShowingCurrentTime = true,
                             navigateToExplainTimeline = navigateToExplainTimeline,
                             modifier = Modifier
@@ -316,7 +320,10 @@ fun OneExperienceScreen(
                                 .height(200.dp)
                         )
                         if (oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanion.ingestion.administrationRoute == AdministrationRoute.ORAL }) {
-                            Text(text = FULL_STOMACH_DISCLAIMER, style = MaterialTheme.typography.bodySmall)
+                            Text(
+                                text = FULL_STOMACH_DISCLAIMER,
+                                style = MaterialTheme.typography.bodySmall
+                            )
                         }
                     }
                 }
@@ -396,7 +403,8 @@ fun OneExperienceScreen(
                 } else {
                     CardTitle(title = "Shulgin Ratings")
                     Divider()
-                    val ratingsWithTime = oneExperienceScreenModel.ratings.filter { it.time != null }
+                    val ratingsWithTime =
+                        oneExperienceScreenModel.ratings.filter { it.time != null }
                     ratingsWithTime.forEach { rating ->
                         RatingRow(
                             rating = rating,
@@ -411,7 +419,8 @@ fun OneExperienceScreen(
                         )
                         Divider()
                     }
-                    val overallRating = oneExperienceScreenModel.ratings.firstOrNull { it.time == null }
+                    val overallRating =
+                        oneExperienceScreenModel.ratings.firstOrNull { it.time == null }
                     if (overallRating != null) {
                         RatingRow(
                             rating = overallRating,

@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.inset
@@ -44,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
@@ -82,6 +84,16 @@ fun AllTimelinesPreview(
                 option = ShulginRatingOption.FOUR_PLUS
             )
         ),
+        dataForTimedNotes = listOf(
+            DataForOneTimedNote(
+                time = Instant.now().minus(30, ChronoUnit.MINUTES),
+                color = AdaptiveColor.PURPLE
+            ),
+            DataForOneTimedNote(
+                time = Instant.now().plus(30, ChronoUnit.MINUTES),
+                color = AdaptiveColor.BLUE
+            ),
+        ),
         isShowingCurrentTime = true,
         navigateToExplainTimeline = {},
         modifier = Modifier
@@ -95,6 +107,7 @@ fun AllTimelinesPreview(
 fun AllTimelines(
     dataForEffectLines: List<DataForOneEffectLine>,
     dataForRatings: List<DataForOneRating>,
+    dataForTimedNotes: List<DataForOneTimedNote>,
     isShowingCurrentTime: Boolean,
     navigateToExplainTimeline: () -> Unit,
     modifier: Modifier = Modifier,
@@ -161,6 +174,16 @@ fun AllTimelines(
                             canvasHeightOuter = canvasHeightWithVerticalLine,
                             rating = dataForOneRating.option,
                             textPaint = ratingTextPaint
+                        )
+                    }
+                    dataForTimedNotes.forEach { dataForOneTimedNote ->
+                        drawTimedNote(
+                            startTime = model.startTime,
+                            noteTime = dataForOneTimedNote.time,
+                            color = dataForOneTimedNote.color,
+                            pixelsPerSec = pixelsPerSec,
+                            canvasHeightOuter = canvasHeightWithVerticalLine,
+                            isDarkTheme = isDarkTheme
                         )
                     }
                     if (isShowingCurrentTime) {
@@ -308,6 +331,27 @@ fun DrawScope.drawRating(
         end = Offset(x = timeStartX, y = canvasHeightOuter),
         strokeWidth = 4.dp.toPx(),
         cap = StrokeCap.Round
+    )
+}
+
+fun DrawScope.drawTimedNote(
+    startTime: Instant,
+    noteTime: Instant,
+    pixelsPerSec: Float,
+    canvasHeightOuter: Float,
+    color: AdaptiveColor,
+    isDarkTheme: Boolean
+) {
+    val timeStartInSec = Duration.between(startTime, noteTime).seconds
+    val timeStartX = timeStartInSec * pixelsPerSec
+    val strokeWidth = 3.dp.toPx()
+    drawLine(
+        color = color.getComposeColor(isDarkTheme = isDarkTheme),
+        start = Offset(x = timeStartX, y = 0f),
+        end = Offset(x = timeStartX, y = canvasHeightOuter),
+        strokeWidth = strokeWidth,
+        cap = StrokeCap.Round,
+        pathEffect = PathEffect.dashPathEffect(floatArrayOf(strokeWidth, strokeWidth * 2))
     )
 }
 
