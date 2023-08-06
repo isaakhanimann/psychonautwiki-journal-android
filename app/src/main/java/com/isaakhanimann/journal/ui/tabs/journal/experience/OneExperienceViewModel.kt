@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
+import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
@@ -95,6 +96,14 @@ class OneExperienceViewModel @Inject constructor(
 
     val ratingsFlow =
         experienceRepo.getRatingsFlow(experienceId)
+            .stateIn(
+                initialValue = emptyList(),
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000)
+            )
+
+    val timedNotesFlow =
+        experienceRepo.getTimedNotesFlow(experienceId)
             .stateIn(
                 initialValue = emptyList(),
                 scope = viewModelScope,
@@ -267,7 +276,8 @@ data class OneExperienceScreenModel(
     val cumulativeDoses: List<CumulativeDose>,
     val interactions: List<Interaction>,
     val interactionExplanations: List<InteractionExplanation>,
-    val ratings: List<ShulginRating>
+    val ratings: List<ShulginRating>,
+    val timedNotes: List<TimedNote>
 )
 
 data class CumulativeDose(

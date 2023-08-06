@@ -114,6 +114,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM shulginrating WHERE id =:id")
     suspend fun getRating(id: Int): ShulginRating?
 
+    @Query("SELECT * FROM timednote WHERE id =:id")
+    suspend fun getTimedNote(id: Int): TimedNote?
+
     @Query("SELECT * FROM experience WHERE id =:id")
     fun getExperienceFlow(id: Int): Flow<Experience?>
 
@@ -147,11 +150,17 @@ interface ExperienceDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(rating: ShulginRating)
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(timedNote: TimedNote)
+
     @Delete
     suspend fun delete(experience: Experience)
 
     @Delete
     suspend fun delete(rating: ShulginRating)
+
+    @Delete
+    suspend fun delete(timedNote: TimedNote)
 
     @Transaction
     suspend fun deleteExperienceWithIngestions(experienceWithIngestions: ExperienceWithIngestions) {
@@ -218,6 +227,9 @@ interface ExperienceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(rating: ShulginRating)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(timedNote: TimedNote)
 
     @Transaction
     suspend fun insertIngestionExperienceAndCompanion(
@@ -302,6 +314,9 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM shulginrating WHERE experienceId = :experienceId")
     fun getRatingsFlow(experienceId: Int): Flow<List<ShulginRating>>
+
+    @Query("SELECT * FROM timednote WHERE experienceId = :experienceId")
+    fun getTimedNotesFlow(experienceId: Int): Flow<List<TimedNote>>
 
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC LIMIT 1")
     suspend fun getLastIngestion(substanceName: String): Ingestion?

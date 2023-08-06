@@ -29,6 +29,7 @@ import java.nio.charset.StandardCharsets
 // argument keys
 const val EXPERIENCE_ID_KEY = "experienceId"
 const val RATING_ID_KEY = "ratingId"
+const val TIMED_NOTE_ID_KEY = "timedNoteId"
 const val INGESTION_ID_KEY = "ingestionId"
 const val SUBSTANCE_NAME_KEY = "substanceName"
 const val URL_KEY = "url"
@@ -43,7 +44,9 @@ private const val ROUTE_START_EXPERIENCES = "experiences/"
 private const val ROUTE_START_INGESTIONS = "ingestions/"
 private const val ROUTE_START_EDIT_EXPERIENCE = "editExperience/"
 private const val ROUTE_START_ADD_RATING = "addRating/"
+private const val ROUTE_START_ADD_TIMED_NOTE = "addTimedNote/"
 private const val ROUTE_START_EDIT_RATING = "editRating/"
+private const val ROUTE_START_EDIT_TIMED_NOTE = "editTimedNote/"
 private const val ROUTE_START_EDIT_CUSTOM = "editCustom/"
 private const val ROUTE_START_CHOOSE_ROUTE_CUSTOM = "chooseRouteCustom/"
 private const val ROUTE_START_CHOOSE_DOSE_CUSTOM = "chooseDoseCustom/"
@@ -81,9 +84,19 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
     )
 
+    object AddTimedNoteRouter : ArgumentRouter(
+        route = "$ROUTE_START_ADD_TIMED_NOTE{$EXPERIENCE_ID_KEY}",
+        args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
+    )
+
     object EditRatingRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_RATING{$RATING_ID_KEY}",
         args = listOf(navArgument(RATING_ID_KEY) { type = NavType.IntType })
+    )
+
+    object EditTimedNoteRouter : ArgumentRouter(
+        route = "$ROUTE_START_EDIT_TIMED_NOTE{$TIMED_NOTE_ID_KEY}",
+        args = listOf(navArgument(TIMED_NOTE_ID_KEY) { type = NavType.IntType })
     )
 
     object EditCustomRouter : ArgumentRouter(
@@ -195,8 +208,16 @@ fun NavController.navigateToAddRating(experienceId: Int) {
     navigate(ROUTE_START_ADD_RATING + experienceId)
 }
 
+fun NavController.navigateToAddTimedNote(experienceId: Int) {
+    navigate(ROUTE_START_ADD_TIMED_NOTE + experienceId)
+}
+
 fun NavController.navigateToEditRating(ratingId: Int) {
     navigate(ROUTE_START_EDIT_RATING + ratingId)
+}
+
+fun NavController.navigateToEditTimedNote(timedNoteId: Int) {
+    navigate(ROUTE_START_EDIT_TIMED_NOTE + timedNoteId)
 }
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {

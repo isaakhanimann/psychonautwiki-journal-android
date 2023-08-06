@@ -30,6 +30,8 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.edit.EditExperienceS
 import com.isaakhanimann.journal.ui.tabs.journal.experience.editingestion.EditIngestionScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.add.AddRatingScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.edit.EditRatingScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timednote.add.AddTimedNoteScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timednote.edit.EditTimedNoteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
@@ -76,10 +78,22 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
             AddRatingScreen(navigateBack = navController::popBackStack)
         }
         composableWithTransitions(
+            ArgumentRouter.AddTimedNoteRouter.route,
+            arguments = ArgumentRouter.AddTimedNoteRouter.args
+        ) {
+            AddTimedNoteScreen(navigateBack = navController::popBackStack)
+        }
+        composableWithTransitions(
             ArgumentRouter.EditRatingRouter.route,
             arguments = ArgumentRouter.EditRatingRouter.args
         ) {
             EditRatingScreen(navigateBack = navController::popBackStack)
+        }
+        composableWithTransitions(
+            ArgumentRouter.EditTimedNoteRouter.route,
+            arguments = ArgumentRouter.EditTimedNoteRouter.args
+        ) {
+            EditTimedNoteScreen(navigateBack = navController::popBackStack)
         }
         composableWithTransitions(NoArgumentRouter.VolumetricDosingOnJournalTabRouter.route) {
             VolumetricDosingScreen(
@@ -105,8 +119,12 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 navigateToAddRatingScreen = {
                     navController.navigateToAddRating(experienceId)
                 },
+                navigateToAddTimedNoteScreen = {
+                    navController.navigateToAddTimedNote(experienceId)
+                },
                 navigateToURL = navController::navigateToURLInJournalTab,
-                navigateToEditRatingScreen = navController::navigateToEditRating
+                navigateToEditRatingScreen = navController::navigateToEditRating,
+                navigateToEditTimedNoteScreen = navController::navigateToEditTimedNote
             )
         }
         composableWithTransitions(

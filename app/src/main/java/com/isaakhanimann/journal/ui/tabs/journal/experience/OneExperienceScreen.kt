@@ -28,7 +28,6 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
-import androidx.compose.material3.ElevatedCard as Card
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,12 +43,14 @@ import com.isaakhanimann.journal.ui.FULL_STOMACH_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.timednote.TimedNoteRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.Instant
+import androidx.compose.material3.ElevatedCard as Card
 
 @Composable
 fun OneExperienceScreen(
@@ -60,7 +61,9 @@ fun OneExperienceScreen(
     navigateToURL: (url: String) -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateToAddRatingScreen: () -> Unit,
+    navigateToAddTimedNoteScreen: () -> Unit,
     navigateToEditRatingScreen: (ratingId: Int) -> Unit,
+    navigateToEditTimedNoteScreen: (timedNoteId: Int) -> Unit,
     navigateBack: () -> Unit,
 ) {
     val ingestionsWithCompanions = viewModel.ingestionsWithCompanionsFlow.collectAsState().value
@@ -78,7 +81,8 @@ fun OneExperienceScreen(
         cumulativeDoses = viewModel.cumulativeDosesFlow.collectAsState().value,
         interactions = viewModel.interactionsFlow.collectAsState().value,
         interactionExplanations = viewModel.interactionExplanationsFlow.collectAsState().value,
-        ratings = viewModel.ratingsFlow.collectAsState().value
+        ratings = viewModel.ratingsFlow.collectAsState().value,
+        timedNotes = viewModel.timedNotesFlow.collectAsState().value
     )
     OneExperienceScreen(
         oneExperienceScreenModel = oneExperienceScreenModel,
@@ -88,10 +92,12 @@ fun OneExperienceScreen(
         navigateToExplainTimeline = navigateToExplainTimeline,
         navigateToIngestionScreen = navigateToIngestionScreen,
         navigateToAddRatingScreen = navigateToAddRatingScreen,
+        navigateToAddTimedNoteScreen = navigateToAddTimedNoteScreen,
         navigateBack = navigateBack,
         saveIsFavorite = viewModel::saveIsFavorite,
         navigateToURL = navigateToURL,
         navigateToEditRatingScreen = navigateToEditRatingScreen,
+        navigateToEditTimedNoteScreen = navigateToEditTimedNoteScreen,
         timeDisplayOption = viewModel.timeDisplayOption.value,
         onChangeTimeDisplayOption = { viewModel.timeDisplayOption.value = it }
     )
@@ -114,10 +120,12 @@ fun ExperienceScreenPreview(
             navigateToExplainTimeline = {},
             navigateToIngestionScreen = {},
             navigateToAddRatingScreen = {},
+            navigateToAddTimedNoteScreen = {},
             navigateBack = {},
             saveIsFavorite = {},
             navigateToURL = {},
             navigateToEditRatingScreen = {},
+            navigateToEditTimedNoteScreen = {},
             timeDisplayOption = TimeDisplayOption.RELATIVE_TO_START,
             onChangeTimeDisplayOption = {}
         )
@@ -135,9 +143,11 @@ fun OneExperienceScreen(
     navigateToExplainTimeline: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateToAddRatingScreen: () -> Unit,
+    navigateToAddTimedNoteScreen: () -> Unit,
     navigateBack: () -> Unit,
     saveIsFavorite: (Boolean) -> Unit,
     navigateToEditRatingScreen: (ratingId: Int) -> Unit,
+    navigateToEditTimedNoteScreen: (timedNoteId: Int) -> Unit,
     timeDisplayOption: TimeDisplayOption,
     onChangeTimeDisplayOption: (TimeDisplayOption) -> Unit
 ) {
@@ -356,43 +366,28 @@ fun OneExperienceScreen(
                 }
             }
             Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                if (oneExperienceScreenModel.notes.isEmpty()) {
-                    TextButton(
-                        onClick = navigateToEditExperienceScreen,
-                        modifier = Modifier.padding(horizontal = 5.dp)
-                    ) {
-                        Icon(
-                            Icons.Filled.Edit,
-                            contentDescription = "Edit",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Add Notes")
-                    }
+                if (oneExperienceScreenModel.timedNotes.isEmpty()) {
+                    AddTimedNoteButton(navigateToAddTimedNoteScreen)
                 } else {
-                    CardTitle(title = "Notes")
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = horizontalPadding)
-                    ) {
-                        Column(modifier = Modifier.padding(vertical = 10.dp)) {
-                            Text(text = oneExperienceScreenModel.notes)
-                            if (oneExperienceScreenModel.locationName.isNotBlank()) {
-                                Spacer(modifier = Modifier.height(5.dp))
-                                Text(text = "Location: ${oneExperienceScreenModel.locationName}")
-                            }
-                        }
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        IconButton(onClick = navigateToEditExperienceScreen) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit Notes"
-                            )
-                        }
+                    CardTitle(title = "Timed Notes")
+                    if (oneExperienceScreenModel.timedNotes.isNotEmpty()) {
+                        Divider()
                     }
+                    oneExperienceScreenModel.timedNotes.forEach { timedNote ->
+                        TimedNoteRow(
+                            timedNote = timedNote,
+                            timeDisplayOption = timeDisplayOption,
+                            startTime = oneExperienceScreenModel.firstIngestionTime,
+                            modifier = Modifier
+                                .clickable {
+                                    navigateToEditTimedNoteScreen(timedNote.id)
+                                }
+                                .fillMaxWidth()
+                                .padding(vertical = 5.dp, horizontal = horizontalPadding)
+                        )
+                        Divider()
+                    }
+                    AddTimedNoteButton(navigateToAddTimedNoteScreen)
                 }
             }
             Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
@@ -432,6 +427,46 @@ fun OneExperienceScreen(
                         Divider()
                     }
                     AddShulginRatingButton(navigateToAddRatingScreen)
+                }
+            }
+            Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                if (oneExperienceScreenModel.notes.isEmpty()) {
+                    TextButton(
+                        onClick = navigateToEditExperienceScreen,
+                        modifier = Modifier.padding(horizontal = 5.dp)
+                    ) {
+                        Icon(
+                            Icons.Filled.Edit,
+                            contentDescription = "Edit",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Add Notes")
+                    }
+                } else {
+                    CardTitle(title = "Notes")
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = horizontalPadding)
+                    ) {
+                        Column(modifier = Modifier.padding(vertical = 10.dp)) {
+                            Text(text = oneExperienceScreenModel.notes)
+                            if (oneExperienceScreenModel.locationName.isNotBlank()) {
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Text(text = "Location: ${oneExperienceScreenModel.locationName}")
+                            }
+                        }
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        IconButton(onClick = navigateToEditExperienceScreen) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit Notes"
+                            )
+                        }
+                    }
                 }
             }
             val interactions = oneExperienceScreenModel.interactions
@@ -475,9 +510,7 @@ fun OneExperienceScreen(
 }
 
 @Composable
-fun AddShulginRatingButton(
-    navigateToAddRatingScreen: () -> Unit
-) {
+fun AddShulginRatingButton(navigateToAddRatingScreen: () -> Unit) {
     TextButton(
         onClick = navigateToAddRatingScreen,
     ) {
@@ -488,5 +521,20 @@ fun AddShulginRatingButton(
         )
         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
         Text("Add Shulgin Rating")
+    }
+}
+
+@Composable
+fun AddTimedNoteButton(navigateToAddTimedNoteScreen: () -> Unit) {
+    TextButton(
+        onClick = navigateToAddTimedNoteScreen,
+    ) {
+        Icon(
+            Icons.Filled.Add,
+            contentDescription = "Add",
+            modifier = Modifier.size(ButtonDefaults.IconSize)
+        )
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+        Text("Add Timed Note")
     }
 }

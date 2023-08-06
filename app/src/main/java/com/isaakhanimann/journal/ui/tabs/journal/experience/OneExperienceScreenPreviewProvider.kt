@@ -277,6 +277,46 @@ class OneExperienceScreenPreviewProvider :
                     option = ShulginRatingOption.PLUS,
                     experienceId = 0
                 )
+            ),
+            timedNotes = listOf(
+                TimedNote(
+                    creationDate = getInstant(
+                        year = 2022,
+                        month = 2,
+                        day = 19,
+                        hourOfDay = 23,
+                        minute = 25
+                    )!!,
+                    time = getInstant(
+                        year = 2022,
+                        month = 2,
+                        day = 19,
+                        hourOfDay = 23,
+                        minute = 25
+                    )!!,
+                    note = "Onset start",
+                    color = AdaptiveColor.PURPLE,
+                    experienceId = 0
+                ),
+                TimedNote(
+                    creationDate = getInstant(
+                        year = 2022,
+                        month = 2,
+                        day = 19,
+                        hourOfDay = 23,
+                        minute = 25
+                    )!!,
+                    time = getInstant(
+                        year = 2022,
+                        month = 2,
+                        day = 19,
+                        hourOfDay = 23,
+                        minute = 45
+                    )!!,
+                    note = "Peak start",
+                    color = AdaptiveColor.BLUE,
+                    experienceId = 0
+                )
             )
         )
     )

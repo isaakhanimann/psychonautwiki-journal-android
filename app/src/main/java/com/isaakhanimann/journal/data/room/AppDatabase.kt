@@ -27,11 +27,12 @@ import com.isaakhanimann.journal.data.room.experiences.entities.*
 
 @TypeConverters(InstantConverter::class)
 @Database(
-    version = 3,
-    entities = [Experience::class, Ingestion::class, SubstanceCompanion::class, CustomSubstance::class, ShulginRating::class],
+    version = 4,
+    entities = [Experience::class, Ingestion::class, SubstanceCompanion::class, CustomSubstance::class, ShulginRating::class, TimedNote::class],
     autoMigrations = [
         AutoMigration (from = 1, to = 2),
-        AutoMigration (from = 2, to = 3)
+        AutoMigration (from = 2, to = 3),
+        AutoMigration (from = 3, to = 4)
     ]
 )
 abstract class AppDatabase : RoomDatabase() {

@@ -52,7 +52,7 @@ fun EditExperienceScreen(
         text = viewModel.enteredText,
         onTextChange = { viewModel.enteredText = it },
         location = viewModel.enteredLocation,
-        onLocationChange = { viewModel.enteredLocation = it}
+        onLocationChange = { viewModel.enteredLocation = it }
     )
 }
 
@@ -85,7 +85,8 @@ fun EditExperienceScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Edit Experience") },
+            TopAppBar(
+                title = { Text("Edit Experience") },
                 actions = {
                     if (isEnteredTitleOk) {
                         IconButton(onClick = onDoneTap) {
@@ -95,7 +96,8 @@ fun EditExperienceScreen(
                             )
                         }
                     }
-            })
+                }
+            )
         }
     ) { padding ->
         Column(
