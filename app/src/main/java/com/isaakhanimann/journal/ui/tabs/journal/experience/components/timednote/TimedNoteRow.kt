@@ -65,21 +65,25 @@ fun TimedNoteRow(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = modifier
+        modifier = modifier.height(intrinsicSize = IntrinsicSize.Min)
     ) {
         val isDarkTheme = isSystemInDarkTheme()
-        Canvas(modifier = Modifier.height(30.dp).width(3.dp)) {
-            val strokeWidth = 3.dp.toPx()
+        val strokeWidth = 3.dp
+        Canvas(modifier = Modifier
+            .fillMaxHeight()
+            .width(strokeWidth)
+            .padding(vertical = 5.dp)) {
+            val strokeWidthPx = strokeWidth.toPx()
             drawLine(
                 color = timedNote.color.getComposeColor(isDarkTheme),
-                start = Offset(x = 0f, y = 0f),
-                end = Offset(x = 0f, y = size.height),
-                strokeWidth = strokeWidth,
+                start = Offset(x = size.width/2, y = 0f),
+                end = Offset(x = size.width/2, y = size.height),
+                strokeWidth = strokeWidthPx,
                 cap = StrokeCap.Round,
                 pathEffect = PathEffect.dashPathEffect(
                     floatArrayOf(
-                        strokeWidth,
-                        strokeWidth * 2
+                        strokeWidthPx,
+                        strokeWidthPx * 2
                     )
                 )
             )
