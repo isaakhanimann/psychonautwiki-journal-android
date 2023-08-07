@@ -313,7 +313,7 @@ class OneExperienceScreenPreviewProvider :
                         hourOfDay = 23,
                         minute = 45
                     )!!,
-                    note = "Peak start",
+                    note = "Peak start and this is a note that spans multiple lines, so long that we can see what a bigger layout looks like.",
                     color = AdaptiveColor.BLUE,
                     experienceId = 0
                 )
