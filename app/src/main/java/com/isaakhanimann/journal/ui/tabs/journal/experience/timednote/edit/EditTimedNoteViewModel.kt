@@ -31,8 +31,7 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.TIMED_NOTE_ID_KEY
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -77,6 +76,31 @@ class EditTimedNoteViewModel @Inject constructor(
     fun onChangeColor(newColor: AdaptiveColor) {
         color = newColor
     }
+
+    private val companionsFlow = experienceRepo.getAllSubstanceCompanionsFlow()
+    private val timedNotesFlow = experienceRepo.getAllTimedNotesFlow()
+
+    val alreadyUsedColorsFlow: StateFlow<List<AdaptiveColor>> =
+        companionsFlow.combine(timedNotesFlow) { companions, notes ->
+            val companionColors = companions.map { it.color }
+            val noteColors = notes.map { it.color }
+            return@combine (companionColors + noteColors).distinct()
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
+
+    val otherColorsFlow: StateFlow<List<AdaptiveColor>> =
+        alreadyUsedColorsFlow.map { alreadyUsedColors ->
+            AdaptiveColor.values().filter {
+                !alreadyUsedColors.contains(it)
+            }
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     fun delete() {
         viewModelScope.launch {

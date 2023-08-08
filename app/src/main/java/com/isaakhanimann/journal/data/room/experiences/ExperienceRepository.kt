@@ -173,6 +173,9 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getAllSubstanceCompanions(): List<SubstanceCompanion> =
         experienceDao.getAllSubstanceCompanions()
 
+    suspend fun getAllTimedNotes(): List<TimedNote> =
+        experienceDao.getAllTimedNotes()
+
     suspend fun insert(substanceCompanion: SubstanceCompanion) =
         experienceDao.insert(substanceCompanion)
 
@@ -222,6 +225,10 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .conflate()
 
     fun getAllSubstanceCompanionsFlow() = experienceDao.getAllSubstanceCompanionsFlow()
+        .flowOn(Dispatchers.IO)
+        .conflate()
+
+    fun getAllTimedNotesFlow() = experienceDao.getAllTimedNotesFlow()
         .flowOn(Dispatchers.IO)
         .conflate()
 

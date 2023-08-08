@@ -46,6 +46,22 @@ class AddTimedNoteViewModel @Inject constructor(
     var color by mutableStateOf(AdaptiveColor.BLUE)
     val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
+    var alreadyUsedColors by mutableStateOf(emptyList<AdaptiveColor>())
+    var otherColors by mutableStateOf(emptyList<AdaptiveColor>())
+
+    init {
+        viewModelScope.launch {
+            val notes = experienceRepo.getAllTimedNotes()
+            val companions = experienceRepo.getAllSubstanceCompanions()
+            val companionColors = companions.map { it.color }
+            val noteColors = notes.map { it.color }
+            alreadyUsedColors = (companionColors + noteColors).distinct()
+            otherColors = AdaptiveColor.values().filter {
+                !alreadyUsedColors.contains(it)
+            }
+            color = otherColors.randomOrNull() ?: AdaptiveColor.BLUE
+        }
+    }
 
     fun onChangeTime(newLocalDateTime: LocalDateTime) {
         viewModelScope.launch {

@@ -344,4 +344,10 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM substancecompanion")
     fun getAllSubstanceCompanionsFlow(): Flow<List<SubstanceCompanion>>
+
+    @Query("SELECT * FROM timednote")
+    fun getAllTimedNotesFlow(): Flow<List<TimedNote>>
+
+    @Query("SELECT * FROM timednote")
+    suspend fun getAllTimedNotes(): List<TimedNote>
 }
