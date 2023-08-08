@@ -18,11 +18,8 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -60,17 +57,9 @@ fun IngestionRow(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = modifier
+        modifier = modifier.height(intrinsicSize = IntrinsicSize.Min)
     ) {
-        val isDarkTheme = isSystemInDarkTheme()
-        Surface(
-            shape = CircleShape,
-            color = ingestionWithCompanion.substanceCompanion!!.color.getComposeColor(
-                isDarkTheme
-            ),
-            modifier = Modifier
-                .size(25.dp)
-        ) {}
+        VerticalLine(color = ingestionWithCompanion.substanceCompanion!!.color)
         Column {
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
                 Column(modifier = Modifier.weight(1f)) {
