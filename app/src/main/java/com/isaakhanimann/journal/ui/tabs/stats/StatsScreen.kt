@@ -23,10 +23,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.*
-import androidx.compose.material3.ElevatedCard as Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -39,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import androidx.compose.material3.ElevatedCard as Card
 
 
 @Composable
@@ -157,6 +157,7 @@ fun StatsScreen(
                                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                                             modifier = Modifier
                                                 .fillMaxWidth()
+                                                .height(intrinsicSize = IntrinsicSize.Min)
                                                 .clickable {
                                                     navigateToSubstanceCompanion(subStat.substanceName)
                                                 }
@@ -166,9 +167,9 @@ fun StatsScreen(
                                                 )
                                         ) {
                                             Surface(
-                                                shape = CircleShape,
+                                                shape = RoundedCornerShape(3.dp),
                                                 color = subStat.color.getComposeColor(isDarkTheme),
-                                                modifier = Modifier.size(25.dp)
+                                                modifier = Modifier.width(11.dp).fillMaxHeight()
                                             ) {}
                                             Column {
                                                 Text(
