@@ -22,7 +22,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -37,7 +37,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
@@ -57,48 +56,24 @@ fun ExperienceRow(
                 navigateToExperienceScreen()
             }
             .fillMaxWidth()
-            .height(IntrinsicSize.Max)
+            .height(IntrinsicSize.Min)
             .padding(horizontal = horizontalPadding, vertical = 5.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         val ingestions = experienceWithIngestionsCompanionsAndRatings.ingestionsWithCompanions
         val experience = experienceWithIngestionsCompanionsAndRatings.experience
-        Box(contentAlignment = Alignment.Center) {
-            ExperienceCircle(ingestions = ingestions)
-            if (experience.isFavorite) {
-                Icon(imageVector = Icons.Filled.Star, contentDescription = "Is Favorite")
-            }
-        }
+        ColorRectangle(ingestions = ingestions)
         Column {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                val timeStyle = MaterialTheme.typography.labelMedium
-                if (isTimeRelativeToNow) {
-                    RelativeDateTextNew(
-                        dateTime = experienceWithIngestionsCompanionsAndRatings.sortInstant,
-                        style = timeStyle
-                    )
-                } else {
-                    Text(
-                        text = experienceWithIngestionsCompanionsAndRatings.sortInstant.getStringOfPattern("dd MMM yy"),
-                        style = timeStyle
-                    )
-                }
-                val location = experience.location
-                if (location != null) {
-                    Text(
-                        text = location.name,
-                        style = MaterialTheme.typography.labelMedium
-                    )
+            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = experience.title,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                if (experience.isFavorite) {
+                    Icon(imageVector = Icons.Filled.Star, contentDescription = "Is Favorite")
                 }
             }
-            Text(
-                text = experience.title,
-                style = MaterialTheme.typography.titleMedium,
-            )
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
@@ -119,31 +94,60 @@ fun ExperienceRow(
                     Text(text = rating)
                 }
             }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val timeStyle = MaterialTheme.typography.labelMedium
+                if (isTimeRelativeToNow) {
+                    RelativeDateTextNew(
+                        dateTime = experienceWithIngestionsCompanionsAndRatings.sortInstant,
+                        style = timeStyle
+                    )
+                } else {
+                    Text(
+                        text = experienceWithIngestionsCompanionsAndRatings.sortInstant.getStringOfPattern(
+                            "dd MMM yy"
+                        ),
+                        style = timeStyle
+                    )
+                }
+                val location = experience.location
+                if (location != null) {
+                    Text(
+                        text = location.name,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-fun ExperienceCircle(ingestions: List<IngestionWithCompanion>, circleSize: Dp = 35.dp) {
+fun ColorRectangle(ingestions: List<IngestionWithCompanion>) {
     val isDarkTheme = isSystemInDarkTheme()
+    val width = 11.dp
+    val cornerRadius = 3.dp
     if (ingestions.size >= 2) {
         val brush = remember(ingestions) {
             val colors =
                 ingestions.map { it.substanceCompanion!!.color.getComposeColor(isDarkTheme) }
-            val twiceColors = colors.flatMap { listOf(it, it) } + colors.first()
-            Brush.sweepGradient(twiceColors)
+            Brush.verticalGradient(colors = colors)
         }
         Box(
             modifier = Modifier
-                .size(circleSize)
-                .clip(CircleShape)
+                .width(width)
+                .fillMaxHeight()
+                .clip(RoundedCornerShape(cornerRadius))
                 .background(brush),
         ) {}
     } else if (ingestions.size == 1) {
         Box(
             modifier = Modifier
-                .size(circleSize)
-                .clip(CircleShape)
+                .width(width)
+                .fillMaxHeight()
+                .clip(RoundedCornerShape(cornerRadius))
                 .background(
                     ingestions.first().substanceCompanion!!.color.getComposeColor(
                         isDarkTheme
@@ -153,8 +157,9 @@ fun ExperienceCircle(ingestions: List<IngestionWithCompanion>, circleSize: Dp = 
     } else {
         Box(
             modifier = Modifier
-                .size(circleSize)
-                .clip(CircleShape)
+                .width(width)
+                .fillMaxHeight()
+                .clip(RoundedCornerShape(cornerRadius))
                 .background(Color.LightGray.copy(0.1f)),
         ) {}
     }
