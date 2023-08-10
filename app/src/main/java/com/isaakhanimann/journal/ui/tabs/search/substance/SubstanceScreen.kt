@@ -339,8 +339,9 @@ fun SubstanceScreen(
                         }
                         VerticalSpace()
                         val dataForEffectLines = remember(roasWithDurationsDefined, ingestionTime) {
-                            roasWithDurationsDefined.map { roa ->
+                            roasWithDurationsDefined.mapIndexed { index, roa ->
                                 DataForOneEffectLine(
+                                    substanceName = "name$index",
                                     roaDuration = roa.roaDuration,
                                     height = 1f,
                                     horizontalWeight = 0.5f,

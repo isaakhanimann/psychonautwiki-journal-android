@@ -150,7 +150,7 @@ fun OneExperienceScreen(
     navigateToEditRatingScreen: (ratingId: Int) -> Unit,
     navigateToEditTimedNoteScreen: (timedNoteId: Int) -> Unit,
     timeDisplayOption: TimeDisplayOption,
-    onChangeTimeDisplayOption: (TimeDisplayOption) -> Unit
+    onChangeTimeDisplayOption: (TimeDisplayOption) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -275,6 +275,7 @@ fun OneExperienceScreen(
                         oneElement.numDots.toFloat() / 4f
                     }
                     return@map DataForOneEffectLine(
+                        substanceName = oneElement.ingestionWithCompanion.ingestion.substanceName,
                         roaDuration = oneElement.roaDuration,
                         height = getHeightBetween0And1(
                             ingestion = oneElement.ingestionWithCompanion.ingestion,

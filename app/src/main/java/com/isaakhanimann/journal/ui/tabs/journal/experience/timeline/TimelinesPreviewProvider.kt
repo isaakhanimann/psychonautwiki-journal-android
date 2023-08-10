@@ -32,6 +32,7 @@ class TimelinesPreviewProvider :
     override val values: Sequence<List<DataForOneEffectLine>> = sequenceOf(
         listOf(
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -52,6 +53,7 @@ class TimelinesPreviewProvider :
         ),
         listOf(
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -76,6 +78,7 @@ class TimelinesPreviewProvider :
         ),
         listOf(
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -100,6 +103,7 @@ class TimelinesPreviewProvider :
         ),
         listOf(
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -128,6 +132,7 @@ class TimelinesPreviewProvider :
         ),
         listOf(
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -160,6 +165,7 @@ class TimelinesPreviewProvider :
         ),
         listOf(
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -188,6 +194,7 @@ class TimelinesPreviewProvider :
         ),
         listOf(
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -226,6 +233,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(4, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -264,6 +272,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(3, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -302,6 +311,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(1, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
+                substanceName = "name2",
                 roaDuration = RoaDuration(
                     onset = null,
                     comeup = null,
@@ -322,6 +332,7 @@ class TimelinesPreviewProvider :
         ),
         listOf(
             DataForOneEffectLine(
+                substanceName = "name",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -360,6 +371,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(3, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
+                substanceName = "name2",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -398,6 +410,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(150, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name3",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -436,6 +449,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(130, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name4",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -474,6 +488,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(1, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
+                substanceName = "name5",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -512,6 +527,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(50, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "nam6",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -550,6 +566,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(40, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name7",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -588,6 +605,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(30, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name8",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -626,6 +644,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(28, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name9",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -664,6 +683,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(24, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name10",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -702,6 +722,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(20, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name11",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -740,6 +761,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(15, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name12",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -778,6 +800,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(10, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name13",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -816,6 +839,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(5, ChronoUnit.MINUTES)
             ),
             DataForOneEffectLine(
+                substanceName = "name14",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -856,6 +880,7 @@ class TimelinesPreviewProvider :
         ),
         listOf(
             DataForOneEffectLine(
+                substanceName = "name15",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -894,6 +919,7 @@ class TimelinesPreviewProvider :
                 startTime = Instant.now().minus(3, ChronoUnit.HOURS)
             ),
             DataForOneEffectLine(
+                substanceName = "name16",
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,

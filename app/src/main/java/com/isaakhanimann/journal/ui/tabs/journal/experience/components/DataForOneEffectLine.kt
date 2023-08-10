@@ -23,6 +23,7 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import java.time.Instant
 
 data class DataForOneEffectLine(
+    val substanceName: String,
     val roaDuration: RoaDuration?,
     val height: Float,
     val horizontalWeight: Float,
