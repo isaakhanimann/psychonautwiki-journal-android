@@ -49,12 +49,11 @@ import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.IngestionDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.GroupDrawable
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import kotlin.math.max
 
 
 @Preview(showBackground = true)
@@ -154,17 +153,14 @@ fun AllTimelines(
                 val pixelsPerSec = canvasWidth / model.widthInSeconds
                 inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight) {
                     val canvasHeightWithVerticalLine = size.height
-                    inset(vertical = 7.dp.toPx()) {
-                        val canvasHeight = size.height
-                        model.ingestionDrawables.forEach { ingestionDrawable ->
-                            drawIngestion(
-                                ingestionDrawable = ingestionDrawable,
-                                isDarkTheme = isDarkTheme,
-                                pixelsPerSec = pixelsPerSec,
-                                canvasHeightOuter = canvasHeight,
-                                density = density
-                            )
-                        }
+                    model.groupDrawables.forEach { group ->
+                        drawGroup(
+                            groupDrawable = group,
+                            isDarkTheme = isDarkTheme,
+                            pixelsPerSec = pixelsPerSec,
+                            canvasHeightOuter = canvasHeightWithVerticalLine,
+                            density = density
+                        )
                     }
                     dataForRatings.forEach { dataForOneRating ->
                         drawRating(
@@ -215,57 +211,23 @@ fun AllTimelines(
     }
 }
 
-fun DrawScope.drawIngestion(
-    ingestionDrawable: IngestionDrawable,
+fun DrawScope.drawGroup(
+    groupDrawable: GroupDrawable,
     isDarkTheme: Boolean,
     pixelsPerSec: Float,
     canvasHeightOuter: Float,
     density: Density
 ) {
-    val color = ingestionDrawable.color.getComposeColor(isDarkTheme)
-    val startX =
-        ingestionDrawable.ingestionPointDistanceFromStartInSeconds * pixelsPerSec
-    val verticalInsetForLine = max(0f, density.strokeWidth / 2)
-    val maxInsetTimes = 12
-    val actualInsetTimes = ingestionDrawable.insetTimes.mod(maxInsetTimes)
-    val calculatedInset = (canvasHeightOuter * (1f - ingestionDrawable.height)) + (actualInsetTimes * density.strokeWidth)
-    val safeInsetTop = max(0f, calculatedInset)
-    inset(
-        left = 0f,
-        top = safeInsetTop,
-        right = 0f,
-        bottom = 0f
-    ) {
-        val ingestionHeight = size.height
-        inset(vertical = verticalInsetForLine) {
-            val canvasHeightInner = size.height
-            drawCircle(
-                color = color,
-                radius = 7.dp.toPx(),
-                center = Offset(x = startX, y = canvasHeightInner)
-            )
-        }
-        ingestionDrawable.timelineDrawable?.let { timelineDrawable ->
-            inset(vertical = verticalInsetForLine) {
-                val canvasHeightInner = size.height
-                timelineDrawable.drawTimeLine(
-                    drawScope = this,
-                    height = canvasHeightInner,
-                    startX = startX,
-                    pixelsPerSec = pixelsPerSec,
-                    color = color,
-                    density = density
-                )
-            }
-            timelineDrawable.drawTimeLineShape(
-                drawScope = this,
-                height = ingestionHeight,
-                startX = startX,
-                pixelsPerSec = pixelsPerSec,
-                color = color,
-                density = density
-            )
-        }
+    val color = groupDrawable.color.getComposeColor(isDarkTheme)
+    for (drawable in groupDrawable.timelineDrawables) {
+        drawable.drawTimeLine(
+            drawScope = this,
+            height = canvasHeightOuter,
+            startX = 0f,
+            pixelsPerSec = pixelsPerSec,
+            color = color,
+            density = density
+        )
     }
 }
 

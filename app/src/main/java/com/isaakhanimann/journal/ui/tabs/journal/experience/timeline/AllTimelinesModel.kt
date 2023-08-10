@@ -18,10 +18,13 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline
 
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.GroupDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.IngestionDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines.FullTimeline
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines.FullTimelines
 import java.time.Duration
 import java.time.Instant
 import kotlin.math.max
@@ -34,31 +37,56 @@ class AllTimelinesModel(
 ) {
     val startTime: Instant
     val widthInSeconds: Float
-    val ingestionDrawables: List<IngestionDrawable>
+    val groupDrawables: List<GroupDrawable>
     val axisDrawable: AxisDrawable
+
+    data class SubstanceGroup(
+        val color: AdaptiveColor,
+        val roaDuration: RoaDuration?,
+        val weightedLines: List<WeightedLine>
+    )
+
+    data class WeightedLine(
+        val startTime: Instant,
+        val horizontalWeight: Float,
+        val height: Float
+    )
 
     init {
         val ratingTimes = dataForRatings.map { it.time }
         val ingestionTimes = dataForLines.map { it.startTime }
+
+        val substanceGroups = dataForLines.groupBy { it.substanceName }.map { entry ->
+            val lines = entry.value
+            val color = lines.first().color
+            val roaDuration = lines.first().roaDuration
+            val weightedLines = lines.map { WeightedLine(it.startTime, it.horizontalWeight, it.height) }
+            SubstanceGroup(color, roaDuration, weightedLines)
+        }
         val allStartTimeCandidates = ratingTimes + ingestionTimes
         startTime = allStartTimeCandidates.reduce { acc, date -> if (acc.isBefore(date)) acc else date }
-        val ingestionDrawablesWithoutInsets = dataForLines.map { dataForOneLine ->
-            IngestionDrawable(
+        val groupDrawables = substanceGroups.map { group ->
+            GroupDrawable(
                 startTimeGraph = startTime,
-                color = dataForOneLine.color,
-                ingestionTime = dataForOneLine.startTime,
-                roaDuration = dataForOneLine.roaDuration,
-                height = dataForOneLine.height,
-                peakAndOffsetWeight = dataForOneLine.horizontalWeight
+                color = group.color,
+                roaDuration = group.roaDuration,
+                weightedLines = group.weightedLines
             )
         }
-        ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)
-        val maxWidthIngestions: Float = ingestionDrawables.maxOfOrNull {
-            if (it.timelineDrawable != null) {
-                it.timelineDrawable.widthInSeconds + it.ingestionPointDistanceFromStartInSeconds
-            } else {
-                it.ingestionPointDistanceFromStartInSeconds
-            }
+        this.groupDrawables = groupDrawables
+//        val ingestionDrawablesWithoutInsets = dataForLines.map { dataForOneLine ->
+//            IngestionDrawable(
+//                startTimeGraph = startTime,
+//                color = dataForOneLine.color,
+//                ingestionTime = dataForOneLine.startTime,
+//                roaDuration = dataForOneLine.roaDuration,
+//                height = dataForOneLine.height,
+//                peakAndOffsetWeight = dataForOneLine.horizontalWeight
+//            )
+//        }
+//        ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)
+        val maxWidthIngestions: Float = groupDrawables.maxOfOrNull {
+            it.getMaxWidth()
         } ?: 0f
         val latestRating = ratingTimes.maxOrNull()
         val maxWidthRating: Float = if (latestRating != null) {
@@ -90,8 +118,8 @@ class AllTimelinesModel(
             ingestionDrawable: IngestionDrawable,
             otherDrawables: List<IngestionDrawable>
         ): Int {
-            val currentFullTimeline =
-                ingestionDrawable.timelineDrawable as? FullTimeline ?: return 0
+            val currentFullTimelines =
+                ingestionDrawable.timelineDrawable as? FullTimelines ?: return 0
             val otherFullTimelinePeakRangesWithSameHeight: List<ClosedRange<Float>> =
                 otherDrawables
                     .filter { it.height == ingestionDrawable.height }
@@ -101,7 +129,7 @@ class AllTimelinesModel(
                         )
                     }
             val currentRange =
-                currentFullTimeline.getPeakDurationRangeInSeconds(startDurationInSeconds = ingestionDrawable.ingestionPointDistanceFromStartInSeconds)
+                currentFullTimelines.getPeakDurationRangeInSeconds(startDurationInSeconds = ingestionDrawable.ingestionPointDistanceFromStartInSeconds)
             var insetTimes = 0
             for (otherRange in otherFullTimelinePeakRangesWithSameHeight) {
                 val isOverlap =

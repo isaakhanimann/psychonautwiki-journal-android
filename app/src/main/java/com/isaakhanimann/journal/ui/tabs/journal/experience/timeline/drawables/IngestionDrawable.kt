@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables
 
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines.*
 import java.time.Duration
 import java.time.Instant
@@ -39,7 +40,7 @@ class IngestionDrawable(
     init {
         ingestionPointDistanceFromStartInSeconds =
             Duration.between(startTimeGraph, ingestionTime).seconds.toFloat()
-        val full = roaDuration?.toFullTimeline(peakAndOffsetWeight = peakAndOffsetWeight)
+        val full = null // roaDuration?.toFullTimeline(peakAndOffsetWeight = peakAndOffsetWeight)
         val onsetComeupPeakTotal =
             roaDuration?.toOnsetComeupPeakTotalTimeline(peakAndTotalWeight = peakAndOffsetWeight)
         val onsetComeupTotal =
@@ -53,5 +54,33 @@ class IngestionDrawable(
         timelineDrawable =
             full ?: onsetComeupPeakTotal ?: onsetComeupTotal ?: onsetTotal ?: total
                     ?: onsetComeupPeak ?: onsetComeup ?: onset
+    }
+}
+
+class GroupDrawable(
+    startTimeGraph: Instant,
+    val color: AdaptiveColor,
+    roaDuration: RoaDuration?,
+    weightedLines: List<AllTimelinesModel.WeightedLine>
+) {
+    var timelineDrawables: List<TimelineDrawable>
+    var insetTimes = 0
+
+    fun getMaxWidth(): Float {
+        return timelineDrawables.maxOfOrNull { it.widthInSeconds } ?: 0f
+    }
+
+    init {
+        val fulls = roaDuration?.toFullTimelines(weightedLines, startTimeGraph)
+        timelineDrawables = if (fulls != null) {
+            listOf(fulls)
+        } else {
+            val onsetComeupPeakTotals = weightedLines.mapNotNull {
+                roaDuration?.toOnsetComeupPeakTotalTimeline(peakAndTotalWeight = it.horizontalWeight)
+            }
+            onsetComeupPeakTotals.ifEmpty {
+                emptyList()
+            }
+        }
     }
 }
