@@ -124,7 +124,9 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 },
                 navigateToURL = navController::navigateToURLInJournalTab,
                 navigateToEditRatingScreen = navController::navigateToEditRating,
-                navigateToEditTimedNoteScreen = navController::navigateToEditTimedNote
+                navigateToEditTimedNoteScreen = {
+                    navController.navigateToEditTimedNote(timedNoteId = it, experienceId = experienceId)
+                }
             )
         }
         composableWithTransitions(

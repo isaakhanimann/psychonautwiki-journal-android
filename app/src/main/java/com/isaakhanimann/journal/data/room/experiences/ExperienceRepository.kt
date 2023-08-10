@@ -122,6 +122,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
         experienceDao.getSortedLastUsedSubstanceNamesFlow(limit).flowOn(Dispatchers.IO).conflate()
 
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)
+    suspend fun getIngestionsWithCompanions(experienceId: Int) = experienceDao.getIngestionsWithCompanions(experienceId)
     suspend fun getRating(id: Int): ShulginRating? = experienceDao.getRating(id)
     suspend fun getTimedNote(id: Int): TimedNote? = experienceDao.getTimedNote(id)
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
@@ -175,6 +176,9 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     suspend fun getAllTimedNotes(): List<TimedNote> =
         experienceDao.getAllTimedNotes()
+
+    suspend fun getTimedNotes(experienceId: Int): List<TimedNote> =
+        experienceDao.getTimedNotes(experienceId)
 
     suspend fun insert(substanceCompanion: SubstanceCompanion) =
         experienceDao.insert(substanceCompanion)

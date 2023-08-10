@@ -27,6 +27,7 @@ import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
+import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.TIMED_NOTE_ID_KEY
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
@@ -45,6 +46,7 @@ class EditTimedNoteViewModel @Inject constructor(
     var color by mutableStateOf(AdaptiveColor.BLUE)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var timedNote: TimedNote? = null
+    val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
 
     private val timedNoteId: Int
 
@@ -77,12 +79,12 @@ class EditTimedNoteViewModel @Inject constructor(
         color = newColor
     }
 
-    private val companionsFlow = experienceRepo.getAllSubstanceCompanionsFlow()
-    private val timedNotesFlow = experienceRepo.getAllTimedNotesFlow()
+    private val ingestionsFlow = experienceRepo.getIngestionsWithCompanionsFlow(experienceId)
+    private val timedNotesFlow = experienceRepo.getTimedNotesFlow(experienceId)
 
     val alreadyUsedColorsFlow: StateFlow<List<AdaptiveColor>> =
-        companionsFlow.combine(timedNotesFlow) { companions, notes ->
-            val companionColors = companions.map { it.color }
+        ingestionsFlow.combine(timedNotesFlow) { ingestions, notes ->
+            val companionColors = ingestions.mapNotNull { it.substanceCompanion?.color }
             val noteColors = notes.map { it.color }
             return@combine (companionColors + noteColors).distinct()
         }.stateIn(

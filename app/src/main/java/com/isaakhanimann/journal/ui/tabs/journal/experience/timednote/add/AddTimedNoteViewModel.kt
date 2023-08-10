@@ -51,11 +51,11 @@ class AddTimedNoteViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val notes = experienceRepo.getAllTimedNotes()
-            val companions = experienceRepo.getAllSubstanceCompanions()
-            val companionColors = companions.map { it.color }
-            val noteColors = notes.map { it.color }
-            alreadyUsedColors = (companionColors + noteColors).distinct()
+            val ingestionsWithCompanions = experienceRepo.getIngestionsWithCompanions(experienceId)
+            val substanceColors = ingestionsWithCompanions.mapNotNull { it.substanceCompanion?.color }.distinct()
+            val notes = experienceRepo.getTimedNotes(experienceId)
+            val noteColors = notes.map { it.color }.distinct()
+            alreadyUsedColors = (substanceColors + noteColors).distinct()
             otherColors = AdaptiveColor.values().filter {
                 !alreadyUsedColors.contains(it)
             }

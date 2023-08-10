@@ -111,6 +111,10 @@ interface ExperienceDao {
     @Query("SELECT * FROM experience WHERE id =:id")
     suspend fun getExperience(id: Int): Experience?
 
+    @Transaction
+    @Query("SELECT * FROM ingestion WHERE experienceId =:experienceId")
+    suspend fun getIngestionsWithCompanions(experienceId: Int): List<IngestionWithCompanion>
+
     @Query("SELECT * FROM shulginrating WHERE id =:id")
     suspend fun getRating(id: Int): ShulginRating?
 
@@ -350,4 +354,7 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM timednote")
     suspend fun getAllTimedNotes(): List<TimedNote>
+
+    @Query("SELECT * FROM timednote WHERE experienceId =:experienceId")
+    suspend fun getTimedNotes(experienceId: Int): List<TimedNote>
 }

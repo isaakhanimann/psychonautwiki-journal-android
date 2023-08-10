@@ -95,8 +95,11 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     )
 
     object EditTimedNoteRouter : ArgumentRouter(
-        route = "$ROUTE_START_EDIT_TIMED_NOTE{$TIMED_NOTE_ID_KEY}",
-        args = listOf(navArgument(TIMED_NOTE_ID_KEY) { type = NavType.IntType })
+        route = "$ROUTE_START_EDIT_TIMED_NOTE{$TIMED_NOTE_ID_KEY}/{$EXPERIENCE_ID_KEY}",
+        args = listOf(
+            navArgument(TIMED_NOTE_ID_KEY) { type = NavType.IntType },
+            navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType }
+        )
     )
 
     object EditCustomRouter : ArgumentRouter(
@@ -216,8 +219,8 @@ fun NavController.navigateToEditRating(ratingId: Int) {
     navigate(ROUTE_START_EDIT_RATING + ratingId)
 }
 
-fun NavController.navigateToEditTimedNote(timedNoteId: Int) {
-    navigate(ROUTE_START_EDIT_TIMED_NOTE + timedNoteId)
+fun NavController.navigateToEditTimedNote(timedNoteId: Int, experienceId: Int) {
+    navigate("$ROUTE_START_EDIT_TIMED_NOTE$timedNoteId/$experienceId")
 }
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {
