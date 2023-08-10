@@ -78,15 +78,17 @@ class AddTimedNoteViewModel @Inject constructor(
     }
 
     fun onDoneTap() {
-        viewModelScope.launch {
-            val newTimedNote = TimedNote(
-                time = localDateTimeFlow.firstOrNull()?.getInstant() ?: Instant.now(),
-                creationDate = Instant.now(),
-                note = note,
-                color = color,
-                experienceId = experienceId
-            )
-            experienceRepo.insert(newTimedNote)
+        if (note.isNotBlank()) {
+            viewModelScope.launch {
+                val newTimedNote = TimedNote(
+                    time = localDateTimeFlow.firstOrNull()?.getInstant() ?: Instant.now(),
+                    creationDate = Instant.now(),
+                    note = note,
+                    color = color,
+                    experienceId = experienceId
+                )
+                experienceRepo.insert(newTimedNote)
+            }
         }
     }
 }
