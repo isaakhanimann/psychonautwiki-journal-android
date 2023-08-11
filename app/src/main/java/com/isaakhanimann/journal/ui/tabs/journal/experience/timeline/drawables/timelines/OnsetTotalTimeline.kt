@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -26,7 +26,6 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.dottedStroke
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
 
 data class OnsetTotalTimeline(
     val onset: FullDurationRange,
@@ -80,58 +79,6 @@ data class OnsetTotalTimeline(
             },
             color = color,
             style = density.dottedStroke
-        )
-    }
-
-    override fun drawTimeLineShape(
-        drawScope: DrawScope,
-        height: Float,
-        startX: Float,
-        pixelsPerSec: Float,
-        color: Color,
-        density: Density
-    ) {
-        drawScope.drawPath(
-            path = Path().apply {
-                val onsetEndMinX = startX + (onset.minInSeconds * pixelsPerSec)
-                val onsetEndMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
-                val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
-                val halfTotalX = startX + (totalX / 2)
-                val totalMinX =
-                    startX + (total.minInSeconds * pixelsPerSec)
-                val totalMaxX =
-                    startX + (total.maxInSeconds * pixelsPerSec)
-                moveTo(onsetEndMinX, height)
-                endSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = onsetEndMinX,
-                    endX = halfTotalX,
-                    endY = 0f
-                )
-                startSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = halfTotalX,
-                    startY = 0f,
-                    endX = totalMaxX,
-                    endY = height
-                )
-                lineTo(x = totalMinX, y = height)
-                endSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = totalMinX,
-                    endX = halfTotalX,
-                    endY = 0f
-                )
-                startSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = halfTotalX,
-                    startY = 0f,
-                    endX = onsetEndMaxX,
-                    endY = height
-                )
-                close()
-            },
-            color = color.copy(alpha = shapeAlpha)
         )
     }
 }

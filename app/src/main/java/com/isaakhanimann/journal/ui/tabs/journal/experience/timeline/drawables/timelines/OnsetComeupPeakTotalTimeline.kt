@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -26,7 +26,6 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.dottedStroke
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
 
 data class OnsetComeupPeakTotalTimeline(
     val onset: FullDurationRange,
@@ -81,44 +80,6 @@ data class OnsetComeupPeakTotalTimeline(
             },
             color = color,
             style = density.dottedStroke
-        )
-    }
-
-    override fun drawTimeLineShape(
-        drawScope: DrawScope,
-        height: Float,
-        startX: Float,
-        pixelsPerSec: Float,
-        color: Color,
-        density: Density
-    ) {
-        drawScope.drawPath(
-            path = Path().apply {
-                // path over top
-                val onsetStartMinX = startX + (onset.minInSeconds * pixelsPerSec)
-                val comeupEndMinX = onsetStartMinX + (comeup.minInSeconds * pixelsPerSec)
-                val peakEndMaxX =
-                    startX + ((onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds) * pixelsPerSec)
-                val offsetEndMaxX = startX + (total.maxInSeconds * pixelsPerSec)
-                moveTo(onsetStartMinX, height)
-                lineTo(x = comeupEndMinX, y = 0f)
-                lineTo(x = peakEndMaxX, y = 0f)
-                lineTo(x = offsetEndMaxX, y = height)
-                // path bottom back
-                val onsetStartMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
-                val comeupEndMaxX =
-                    onsetStartMaxX + (comeup.maxInSeconds * pixelsPerSec)
-                val peakEndMinX =
-                    startX + ((onset.minInSeconds + comeup.minInSeconds + peak.minInSeconds) * pixelsPerSec)
-                val offsetEndMinX =
-                    startX + (total.minInSeconds * pixelsPerSec)
-                lineTo(x = offsetEndMinX, y = height)
-                lineTo(x = peakEndMinX, y = 0f)
-                lineTo(x = comeupEndMaxX, y = 0f)
-                lineTo(x = onsetStartMaxX, y = height)
-                close()
-            },
-            color = color.copy(alpha = shapeAlpha)
         )
     }
 }

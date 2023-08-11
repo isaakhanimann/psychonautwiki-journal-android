@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -24,15 +24,6 @@ import androidx.compose.ui.unit.Density
 
 interface TimelineDrawable {
     fun drawTimeLine(
-        drawScope: DrawScope,
-        height: Float,
-        startX: Float,
-        pixelsPerSec: Float,
-        color: Color,
-        density: Density
-    )
-
-    fun drawTimeLineShape(
         drawScope: DrawScope,
         height: Float,
         startX: Float,

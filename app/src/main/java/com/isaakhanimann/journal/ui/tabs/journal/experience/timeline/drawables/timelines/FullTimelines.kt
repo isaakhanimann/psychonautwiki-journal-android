@@ -28,6 +28,7 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
 import java.time.Duration
 import java.time.Instant
 
@@ -162,17 +163,18 @@ data class FullTimelines(
         color: Color,
         density: Density
     ) {
+        val path = Path().apply {
+            val firstPoint = finalPoints.first()
+            val rest = finalPoints.drop(1)
+            val firstHeightInPx = firstPoint.y*height
+            moveTo(x = firstPoint.x*pixelsPerSec, y = height - firstHeightInPx)
+            for (point in rest) {
+                val heightInPx = point.y*height
+                lineTo(x = point.x*pixelsPerSec, y = height - heightInPx)
+            }
+        }
         drawScope.drawPath(
-            path = Path().apply {
-                val firstPoint = finalPoints.first()
-                val rest = finalPoints.drop(1)
-                val firstHeightInPx = firstPoint.y*height
-                moveTo(x = firstPoint.x*pixelsPerSec, y = height - firstHeightInPx)
-                for (point in rest) {
-                    val heightInPx = point.y*height
-                    lineTo(x = point.x*pixelsPerSec, y = height - heightInPx)
-                }
-            },
+            path = path,
             color = color,
             style = density.normalStroke
         )
@@ -185,45 +187,11 @@ data class FullTimelines(
                 )
             }
         }
-    }
-
-    override fun drawTimeLineShape(
-        drawScope: DrawScope,
-        height: Float,
-        startX: Float,
-        pixelsPerSec: Float,
-        color: Color,
-        density: Density
-    ) {
-//        drawScope.drawPath(
-//            path = Path().apply {
-//                // path over top
-//                val onsetStartMinX = startX + (onset.minInSeconds * pixelsPerSec)
-//                val comeupEndMinX = onsetStartMinX + (comeup.minInSeconds * pixelsPerSec)
-//                val peakEndMaxX =
-//                    startX + ((onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds) * pixelsPerSec)
-//                val offsetEndMaxX =
-//                    peakEndMaxX + (offset.maxInSeconds * pixelsPerSec)
-//                moveTo(onsetStartMinX, height)
-//                lineTo(x = comeupEndMinX, y = 0f)
-//                lineTo(x = peakEndMaxX, y = 0f)
-//                lineTo(x = offsetEndMaxX, y = height)
-//                // path bottom back
-//                val onsetStartMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
-//                val comeupEndMaxX =
-//                    onsetStartMaxX + (comeup.maxInSeconds * pixelsPerSec)
-//                val peakEndMinX =
-//                    startX + ((onset.minInSeconds + comeup.minInSeconds + peak.minInSeconds) * pixelsPerSec)
-//                val offsetEndMinX =
-//                    peakEndMinX + (offset.minInSeconds * pixelsPerSec)
-//                lineTo(x = offsetEndMinX, y = height)
-//                lineTo(x = peakEndMinX, y = 0f)
-//                lineTo(x = comeupEndMaxX, y = 0f)
-//                lineTo(x = onsetStartMaxX, y = height)
-//                close()
-//            },
-//            color = color.copy(alpha = shapeAlpha)
-//        )
+        path.close()
+        drawScope.drawPath(
+            path = path,
+            color = color.copy(alpha = shapeAlpha)
+        )
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeWidth
 
 data class OnsetComeupPeakTimeline(
     val onset: FullDurationRange,
@@ -70,38 +68,6 @@ data class OnsetComeupPeakTimeline(
             },
             color = color,
             style = density.normalStroke
-        )
-    }
-
-    override fun drawTimeLineShape(
-        drawScope: DrawScope,
-        height: Float,
-        startX: Float,
-        pixelsPerSec: Float,
-        color: Color,
-        density: Density
-    ) {
-        drawScope.drawPath(
-            path = Path().apply {
-                val onsetEndMinX = startX + (onset.minInSeconds * pixelsPerSec)
-                val comeupEndMinX = onsetEndMinX + (comeup.minInSeconds * pixelsPerSec)
-                moveTo(onsetEndMinX, height)
-                lineTo(x = comeupEndMinX, y = 0f)
-                val onsetEndMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
-                val comeupEndMaxX =
-                    onsetEndMaxX + (comeup.maxInSeconds * pixelsPerSec)
-                lineTo(x = comeupEndMaxX, y = 0f)
-                val peakEndMaxX = comeupEndMaxX + (peak.maxInSeconds * pixelsPerSec)
-                val peakEndMinX = comeupEndMinX + (peak.minInSeconds * pixelsPerSec)
-                lineTo(x = peakEndMaxX, y = 0f)
-                lineTo(x = peakEndMaxX, y = density.shapeWidth)
-                lineTo(x = peakEndMinX, y = density.shapeWidth)
-                lineTo(x = peakEndMinX, y = 0f)
-                lineTo(x = comeupEndMaxX, y = 0f)
-                lineTo(x = onsetEndMaxX, y = height)
-                close()
-            },
-            color = color.copy(alpha = shapeAlpha)
         )
     }
 }

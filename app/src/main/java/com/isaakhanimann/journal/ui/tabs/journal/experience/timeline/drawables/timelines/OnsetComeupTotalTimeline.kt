@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -26,7 +26,6 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.dottedStroke
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
 
 data class OnsetComeupTotalTimeline(
     val onset: FullDurationRange,
@@ -78,49 +77,6 @@ data class OnsetComeupTotalTimeline(
             },
             color = color,
             style = density.dottedStroke
-        )
-    }
-
-    override fun drawTimeLineShape(
-        drawScope: DrawScope,
-        height: Float,
-        startX: Float,
-        pixelsPerSec: Float,
-        color: Color,
-        density: Density
-    ) {
-        drawScope.drawPath(
-            path = Path().apply {
-                val onsetStartMinX = startX + (onset.minInSeconds * pixelsPerSec)
-                val comeupEndMinX = onsetStartMinX + (comeup.minInSeconds * pixelsPerSec)
-                val offsetEndMaxX = startX + (total.maxInSeconds * pixelsPerSec)
-                val onsetStartMaxX = startX + (onset.maxInSeconds * pixelsPerSec)
-                val comeupEndMaxX =
-                    onsetStartMaxX + (comeup.maxInSeconds * pixelsPerSec)
-                val offsetEndMinX =
-                    startX + (total.minInSeconds * pixelsPerSec)
-                moveTo(onsetStartMinX, height)
-                lineTo(x = comeupEndMinX, y = 0f)
-                lineTo(x = comeupEndMaxX, y = 0f)
-                startSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = comeupEndMaxX,
-                    startY = 0f,
-                    endX = offsetEndMaxX,
-                    endY = height
-                )
-                lineTo(x = offsetEndMinX, y = height)
-                endSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = offsetEndMinX,
-                    endX = comeupEndMinX,
-                    endY = 0f
-                )
-                lineTo(x = comeupEndMaxX, y = 0f)
-                lineTo(x = onsetStartMaxX, y = height)
-                close()
-            },
-            color = color.copy(alpha = shapeAlpha)
         )
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.dottedStroke
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
 
 data class TotalTimeline(
     val total: FullDurationRange,
@@ -65,43 +64,8 @@ data class TotalTimeline(
         )
     }
 
-    override fun drawTimeLineShape(
-        drawScope: DrawScope,
-        height: Float,
-        startX: Float,
-        pixelsPerSec: Float,
-        color: Color,
-        density: Density
-    ) {
-        drawScope.drawPath(
-            path = Path().apply {
-                // path over top
-                val totalMinX = total.minInSeconds * pixelsPerSec
-                val totalMaxX = total.maxInSeconds * pixelsPerSec
-                moveTo(x = startX + (totalMinX / 2), y = 0f)
-                startSmoothLineTo(
-                    smoothnessBetween0And1 = percentSmoothness,
-                    startX = startX + (totalMinX / 2),
-                    startY = 0f,
-                    endX = startX + totalMaxX,
-                    endY = height
-                )
-                lineTo(x = startX + totalMaxX, y = height)
-                // path bottom back
-                lineTo(x = startX + totalMinX, y = height)
-                endSmoothLineTo(
-                    smoothnessBetween0And1 = percentSmoothness,
-                    startX = startX + totalMinX,
-                    endX = startX + (totalMinX / 2),
-                    endY = 0f
-                )
-                close()
-            },
-            color = color.copy(alpha = shapeAlpha)
-        )
-    }
-
     override val widthInSeconds: Float = total.maxInSeconds
+
     override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float>? {
         return null
     }
