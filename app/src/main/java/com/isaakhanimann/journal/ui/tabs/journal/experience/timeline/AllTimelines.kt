@@ -43,13 +43,11 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.GroupDrawable
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
@@ -154,11 +152,12 @@ fun AllTimelines(
                 inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight + strokeWidth) {
                     val canvasHeightWithVerticalLine = size.height
                     model.groupDrawables.forEach { group ->
-                        drawGroup(
-                            groupDrawable = group,
-                            isDarkTheme = isDarkTheme,
+                        val color = group.color.getComposeColor(isDarkTheme)
+                        group.drawTimeLine(
+                            drawScope = this,
+                            height = canvasHeightWithVerticalLine,
                             pixelsPerSec = pixelsPerSec,
-                            canvasHeightOuter = canvasHeightWithVerticalLine,
+                            color = color,
                             density = density
                         )
                     }
@@ -208,26 +207,6 @@ fun AllTimelines(
                 )
             }
         }
-    }
-}
-
-fun DrawScope.drawGroup(
-    groupDrawable: GroupDrawable,
-    isDarkTheme: Boolean,
-    pixelsPerSec: Float,
-    canvasHeightOuter: Float,
-    density: Density
-) {
-    val color = groupDrawable.color.getComposeColor(isDarkTheme)
-    for (drawable in groupDrawable.timelineDrawables) {
-        drawable.drawTimeLine(
-            drawScope = this,
-            height = canvasHeightOuter,
-            startX = 0f,
-            pixelsPerSec = pixelsPerSec,
-            color = color,
-            density = density
-        )
     }
 }
 

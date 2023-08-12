@@ -29,24 +29,21 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStrok
 
 data class OnsetTimeline(
     val onset: FullDurationRange,
+    val ingestionTimeRelativeToStartInSeconds: Float
 ) : TimelineDrawable {
 
-    override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float>? {
-        return null
-    }
-
-    override val widthInSeconds: Float =
-        onset.maxInSeconds
+    override val endOfLineRelativeToStartInSeconds: Float =
+        ingestionTimeRelativeToStartInSeconds + onset.maxInSeconds
 
     override fun drawTimeLine(
         drawScope: DrawScope,
         height: Float,
-        startX: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
     ) {
         val weight = 0.5f
+        val startX = ingestionTimeRelativeToStartInSeconds*pixelsPerSec
         val onsetEndX =
             startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
         drawScope.drawPath(
@@ -60,11 +57,12 @@ data class OnsetTimeline(
     }
 }
 
-fun RoaDuration.toOnsetTimeline(): OnsetTimeline? {
+fun RoaDuration.toOnsetTimeline(ingestionTimeRelativeToStartInSeconds: Float): OnsetTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     return if (fullOnset != null) {
         OnsetTimeline(
             onset = fullOnset,
+            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds
         )
     } else {
         null

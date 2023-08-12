@@ -29,24 +29,21 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStrok
 data class OnsetComeupTimeline(
     val onset: FullDurationRange,
     val comeup: FullDurationRange,
+    val ingestionTimeRelativeToStartInSeconds: Float
 ) : TimelineDrawable {
 
-    override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float>? {
-        return null
-    }
-
-    override val widthInSeconds: Float =
-        onset.maxInSeconds + comeup.maxInSeconds
+    override val endOfLineRelativeToStartInSeconds: Float =
+        ingestionTimeRelativeToStartInSeconds + onset.maxInSeconds + comeup.maxInSeconds
 
     override fun drawTimeLine(
         drawScope: DrawScope,
         height: Float,
-        startX: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
     ) {
         val weight = 0.5f
+        val startX = ingestionTimeRelativeToStartInSeconds*pixelsPerSec
         val onsetEndX =
             startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
         val comeupEndX =
@@ -63,13 +60,14 @@ data class OnsetComeupTimeline(
     }
 }
 
-fun RoaDuration.toOnsetComeupTimeline(): OnsetComeupTimeline? {
+fun RoaDuration.toOnsetComeupTimeline(ingestionTimeRelativeToStartInSeconds: Float): OnsetComeupTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
     return if (fullOnset != null && fullComeup != null) {
         OnsetComeupTimeline(
             onset = fullOnset,
-            comeup = fullComeup
+            comeup = fullComeup,
+            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds
         )
     } else {
         null

@@ -30,25 +30,22 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStrok
 data class OnsetTotalTimeline(
     val onset: FullDurationRange,
     val total: FullDurationRange,
-    val totalWeight: Float
+    val totalWeight: Float,
+    val ingestionTimeRelativeToStartInSeconds: Float
 ) : TimelineDrawable {
 
-    override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float>? {
-        return null
-    }
-
-    override val widthInSeconds: Float =
-        total.maxInSeconds
+    override val endOfLineRelativeToStartInSeconds: Float =
+        ingestionTimeRelativeToStartInSeconds + total.maxInSeconds
 
     override fun drawTimeLine(
         drawScope: DrawScope,
         height: Float,
-        startX: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
     ) {
         val onsetWeight = 0.5f
+        val startX = ingestionTimeRelativeToStartInSeconds*pixelsPerSec
         val onsetEndX =
             startX + (onset.interpolateAtValueInSeconds(onsetWeight) * pixelsPerSec)
         drawScope.drawPath(
@@ -83,14 +80,15 @@ data class OnsetTotalTimeline(
     }
 }
 
-fun RoaDuration.toOnsetTotalTimeline(totalWeight: Float): OnsetTotalTimeline? {
+fun RoaDuration.toOnsetTotalTimeline(totalWeight: Float, ingestionTimeRelativeToStartInSeconds: Float): OnsetTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullTotal = total?.toFullDurationRange()
     return if (fullOnset != null && fullTotal != null) {
         OnsetTotalTimeline(
             onset = fullOnset,
             total = fullTotal,
-            totalWeight = totalWeight
+            totalWeight = totalWeight,
+            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds
         )
     } else {
         null

@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.WeightedLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
@@ -38,7 +38,7 @@ data class FullTimelines(
     val comeup: FullDurationRange,
     val peak: FullDurationRange,
     val offset: FullDurationRange,
-    val weightedLines: List<AllTimelinesModel.WeightedLine>,
+    val weightedLines: List<WeightedLine>,
     val startTimeGraph: Instant,
     ) : TimelineDrawable {
 
@@ -145,21 +145,12 @@ data class FullTimelines(
         this.finalPoints = sortedPoints
     }
 
-    override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float> {
-        val startRange =
-            startDurationInSeconds + onset.interpolateAtValueInSeconds(0.5f) + comeup.interpolateAtValueInSeconds(
-                0.5f
-            )
-        return startRange..(startRange + peak.interpolateAtValueInSeconds(0.5f))
-    }
-
-    override val widthInSeconds: Float =
+    override val endOfLineRelativeToStartInSeconds: Float =
         finalPoints.maxOf { it.x }
 
     override fun drawTimeLine(
         drawScope: DrawScope,
         height: Float,
-        startX: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
@@ -198,7 +189,7 @@ data class FullTimelines(
     }
 }
 
-fun RoaDuration.toFullTimelines(weightedLines: List<AllTimelinesModel.WeightedLine>, startTimeGraph: Instant): FullTimelines? {
+fun RoaDuration.toFullTimelines(weightedLines: List<WeightedLine>, startTimeGraph: Instant): FullTimelines? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
     val fullPeak = peak?.toFullDurationRange()

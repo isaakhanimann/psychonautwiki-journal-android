@@ -23,8 +23,6 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.GroupDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.IngestionDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines.FullTimelines
 import java.time.Duration
 import java.time.Instant
 import kotlin.math.max
@@ -44,12 +42,6 @@ class AllTimelinesModel(
         val color: AdaptiveColor,
         val roaDuration: RoaDuration?,
         val weightedLines: List<WeightedLine>
-    )
-
-    data class WeightedLine(
-        val startTime: Instant,
-        val horizontalWeight: Float,
-        val height: Float
     )
 
     init {
@@ -74,19 +66,8 @@ class AllTimelinesModel(
             )
         }
         this.groupDrawables = groupDrawables
-//        val ingestionDrawablesWithoutInsets = dataForLines.map { dataForOneLine ->
-//            IngestionDrawable(
-//                startTimeGraph = startTime,
-//                color = dataForOneLine.color,
-//                ingestionTime = dataForOneLine.startTime,
-//                roaDuration = dataForOneLine.roaDuration,
-//                height = dataForOneLine.height,
-//                peakAndOffsetWeight = dataForOneLine.horizontalWeight
-//            )
-//        }
-//        ingestionDrawables = updateInsets(ingestionDrawablesWithoutInsets)
         val maxWidthIngestions: Float = groupDrawables.maxOfOrNull {
-            it.getMaxWidth()
+            it.endOfLineRelativeToStartInSeconds
         } ?: 0f
         val latestRating = ratingTimes.maxOrNull()
         val maxWidthRating: Float = if (latestRating != null) {
@@ -96,47 +77,5 @@ class AllTimelinesModel(
         }
         widthInSeconds = max(maxWidthIngestions, max(maxWidthRating, 4.hours.inWholeSeconds.toFloat())) + 10.minutes.inWholeSeconds.toFloat()
         axisDrawable = AxisDrawable(startTime, widthInSeconds)
-    }
-
-    companion object {
-        private fun updateInsets(ingestionDrawables: List<IngestionDrawable>): List<IngestionDrawable> {
-            val results = mutableListOf<IngestionDrawable>()
-            for (i in ingestionDrawables.indices) {
-                val currentDrawable = ingestionDrawables[i]
-                val otherDrawables = ingestionDrawables.take(i)
-                val insetTimes = getInsetTimes(
-                    ingestionDrawable = currentDrawable,
-                    otherDrawables = otherDrawables
-                )
-                currentDrawable.insetTimes = insetTimes
-                results.add(currentDrawable)
-            }
-            return results
-        }
-
-        private fun getInsetTimes(
-            ingestionDrawable: IngestionDrawable,
-            otherDrawables: List<IngestionDrawable>
-        ): Int {
-            val currentFullTimelines =
-                ingestionDrawable.timelineDrawable as? FullTimelines ?: return 0
-            val otherFullTimelinePeakRangesWithSameHeight: List<ClosedRange<Float>> =
-                otherDrawables
-                    .filter { it.height == ingestionDrawable.height }
-                    .mapNotNull {
-                        return@mapNotNull it.timelineDrawable?.getPeakDurationRangeInSeconds(
-                            startDurationInSeconds = it.ingestionPointDistanceFromStartInSeconds
-                        )
-                    }
-            val currentRange =
-                currentFullTimelines.getPeakDurationRangeInSeconds(startDurationInSeconds = ingestionDrawable.ingestionPointDistanceFromStartInSeconds)
-            var insetTimes = 0
-            for (otherRange in otherFullTimelinePeakRangesWithSameHeight) {
-                val isOverlap =
-                    currentRange.start <= otherRange.endInclusive && otherRange.start <= currentRange.endInclusive
-                if (isOverlap) insetTimes++
-            }
-            return insetTimes
-        }
     }
 }

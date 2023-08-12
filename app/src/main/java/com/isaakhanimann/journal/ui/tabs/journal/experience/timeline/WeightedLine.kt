@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Isaak Hanimann.
+ * Copyright (c) 2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -16,20 +16,12 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables
+package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.unit.Density
+import java.time.Instant
 
-interface TimelineDrawable {
-    fun drawTimeLine(
-        drawScope: DrawScope,
-        height: Float,
-        pixelsPerSec: Float,
-        color: Color,
-        density: Density
-    )
-
-    val endOfLineRelativeToStartInSeconds: Float
-}
+data class WeightedLine(
+    val startTime: Instant,
+    val horizontalWeight: Float,
+    val height: Float
+)

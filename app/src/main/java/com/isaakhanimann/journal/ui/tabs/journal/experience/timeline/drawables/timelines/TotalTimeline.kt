@@ -30,12 +30,14 @@ data class TotalTimeline(
     val total: FullDurationRange,
     val totalWeight: Float,
     val percentSmoothness: Float = 0.5f,
+    val ingestionTimeRelativeToStartInSeconds: Float
 ) : TimelineDrawable {
+
+    override val endOfLineRelativeToStartInSeconds: Float = ingestionTimeRelativeToStartInSeconds + total.maxInSeconds
 
     override fun drawTimeLine(
         drawScope: DrawScope,
         height: Float,
-        startX: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
@@ -44,6 +46,7 @@ data class TotalTimeline(
             path = Path().apply {
                 val totalMinX = total.minInSeconds * pixelsPerSec
                 val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
+                val startX = ingestionTimeRelativeToStartInSeconds*pixelsPerSec
                 moveTo(startX, height)
                 endSmoothLineTo(
                     smoothnessBetween0And1 = percentSmoothness,
@@ -63,18 +66,12 @@ data class TotalTimeline(
             style = density.dottedStroke
         )
     }
-
-    override val widthInSeconds: Float = total.maxInSeconds
-
-    override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float>? {
-        return null
-    }
 }
 
-fun RoaDuration.toTotalTimeline(totalWeight: Float): TotalTimeline? {
+fun RoaDuration.toTotalTimeline(totalWeight: Float, ingestionTimeRelativeToStartInSeconds: Float): TotalTimeline? {
     val fullTotal = total?.toFullDurationRange()
     return if (fullTotal != null) {
-        TotalTimeline(total = fullTotal, totalWeight = totalWeight)
+        TotalTimeline(total = fullTotal, totalWeight = totalWeight, ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds)
     } else {
         null
     }

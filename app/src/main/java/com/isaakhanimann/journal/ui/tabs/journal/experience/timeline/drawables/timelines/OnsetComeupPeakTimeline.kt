@@ -30,29 +30,22 @@ data class OnsetComeupPeakTimeline(
     val onset: FullDurationRange,
     val comeup: FullDurationRange,
     val peak: FullDurationRange,
-    val peakWeight: Float
+    val peakWeight: Float,
+    val ingestionTimeRelativeToStartInSeconds: Float
 ) : TimelineDrawable {
 
-    override fun getPeakDurationRangeInSeconds(startDurationInSeconds: Float): ClosedRange<Float> {
-        val startRange =
-            startDurationInSeconds + onset.interpolateAtValueInSeconds(0.5f) + comeup.interpolateAtValueInSeconds(
-                0.5f
-            )
-        return startRange..(startRange + peak.interpolateAtValueInSeconds(peakWeight))
-    }
-
-    override val widthInSeconds: Float =
-        onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds
+    override val endOfLineRelativeToStartInSeconds: Float =
+        ingestionTimeRelativeToStartInSeconds + onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds
 
     override fun drawTimeLine(
         drawScope: DrawScope,
         height: Float,
-        startX: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
     ) {
         val weight = 0.5f
+        val startX = ingestionTimeRelativeToStartInSeconds*pixelsPerSec
         val onsetEndX =
             startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
         val comeupEndX =
@@ -72,7 +65,7 @@ data class OnsetComeupPeakTimeline(
     }
 }
 
-fun RoaDuration.toOnsetComeupPeakTimeline(peakWeight: Float): OnsetComeupPeakTimeline? {
+fun RoaDuration.toOnsetComeupPeakTimeline(peakWeight: Float, ingestionTimeRelativeToStartInSeconds: Float): OnsetComeupPeakTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
     val fullPeak = peak?.toFullDurationRange()
@@ -81,7 +74,8 @@ fun RoaDuration.toOnsetComeupPeakTimeline(peakWeight: Float): OnsetComeupPeakTim
             onset = fullOnset,
             comeup = fullComeup,
             peak = fullPeak,
-            peakWeight = peakWeight
+            peakWeight = peakWeight,
+            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds
         )
     } else {
         null
