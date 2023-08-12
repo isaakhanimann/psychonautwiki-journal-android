@@ -33,6 +33,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -44,6 +45,7 @@ class AddTimedNoteViewModel @Inject constructor(
 ) : ViewModel() {
     var note by mutableStateOf("")
     var color by mutableStateOf(AdaptiveColor.BLUE)
+    var isPartOfTimeline by mutableStateOf(true)
     val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var alreadyUsedColors by mutableStateOf(emptyList<AdaptiveColor>())
@@ -60,6 +62,12 @@ class AddTimedNoteViewModel @Inject constructor(
                 !alreadyUsedColors.contains(it)
             }
             color = otherColors.randomOrNull() ?: AdaptiveColor.BLUE
+            val lastIngestionTime = ingestionsWithCompanions.maxOfOrNull { it.ingestion.time }
+            if (lastIngestionTime != null) {
+                if (Duration.between(lastIngestionTime, Instant.now()).toHours() > 12) {
+                    isPartOfTimeline = false
+                }
+            }
         }
     }
 
@@ -67,6 +75,10 @@ class AddTimedNoteViewModel @Inject constructor(
         viewModelScope.launch {
             localDateTimeFlow.emit(newLocalDateTime)
         }
+    }
+
+    fun onChangeIsPartOfTimeline(newIsPartOfTimeline: Boolean) {
+        isPartOfTimeline = newIsPartOfTimeline
     }
 
     fun onChangeNote(newNote: String) {
@@ -85,7 +97,8 @@ class AddTimedNoteViewModel @Inject constructor(
                     creationDate = Instant.now(),
                     note = note,
                     color = color,
-                    experienceId = experienceId
+                    experienceId = experienceId,
+                    isPartOfTimeline = isPartOfTimeline
                 )
                 experienceRepo.insert(newTimedNote)
             }

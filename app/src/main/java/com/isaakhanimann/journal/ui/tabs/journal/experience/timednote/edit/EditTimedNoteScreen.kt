@@ -74,7 +74,9 @@ fun EditTimedNoteScreen(
             onColorChange = viewModel::onChangeColor,
             modifier = Modifier.padding(padding),
             alreadyUsedColors = viewModel.alreadyUsedColorsFlow.collectAsState().value,
-            otherColors = viewModel.otherColorsFlow.collectAsState().value
+            otherColors = viewModel.otherColorsFlow.collectAsState().value,
+            isPartOfTimeline = viewModel.isPartOfTimeline,
+            onChangeOfIsPartOfTimeline = viewModel::onChangeIsPartOfTimeline
         )
     }
 }

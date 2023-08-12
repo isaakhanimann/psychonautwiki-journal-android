@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ColorPicker
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.TimePickerSection
 import java.time.LocalDateTime
 
@@ -69,6 +70,8 @@ fun TimedNoteScreenContentPreview() {
                 .padding(padding),
             alreadyUsedColors = alreadyUsedColors,
             otherColors = otherColors,
+            isPartOfTimeline = true,
+            onChangeOfIsPartOfTimeline = {}
         )
     }
 }
@@ -84,6 +87,8 @@ fun TimedNoteScreenContent(
     onColorChange: (AdaptiveColor) -> Unit,
     alreadyUsedColors: List<AdaptiveColor>,
     otherColors: List<AdaptiveColor>,
+    isPartOfTimeline: Boolean,
+    onChangeOfIsPartOfTimeline: (Boolean) -> Unit,
     modifier: Modifier
 ) {
     Column(
@@ -91,7 +96,6 @@ fun TimedNoteScreenContent(
             .padding(10.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         OutlinedTextField(
             value = note,
@@ -105,12 +109,29 @@ fun TimedNoteScreenContent(
                 .weight(1f)
                 .fillMaxWidth()
         )
-        ColorPicker(
-            selectedColor = color,
-            onChangeOfColor = onColorChange,
-            alreadyUsedColors = alreadyUsedColors,
-            otherColors = otherColors
-        )
+        Spacer(modifier = Modifier.height(5.dp))
+        CardWithTitle(title = "Add to timeline") {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Switch(checked = isPartOfTimeline, onCheckedChange = onChangeOfIsPartOfTimeline)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    ColorPicker(
+                        selectedColor = color,
+                        onChangeOfColor = onColorChange,
+                        alreadyUsedColors = alreadyUsedColors,
+                        otherColors = otherColors
+                    )
+                }
+            }
+        }
         TimePickerSection(selectedTime = selectedTime, onTimeChange = onTimeChange)
     }
 }

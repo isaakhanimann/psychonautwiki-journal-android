@@ -44,6 +44,7 @@ class EditTimedNoteViewModel @Inject constructor(
 ) : ViewModel() {
     var note by mutableStateOf("")
     var color by mutableStateOf(AdaptiveColor.BLUE)
+    var isPartOfTimeline by mutableStateOf(true)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var timedNote: TimedNote? = null
     val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
@@ -61,6 +62,7 @@ class EditTimedNoteViewModel @Inject constructor(
             }
             note = loadedNote.note
             color = loadedNote.color
+            isPartOfTimeline = loadedNote.isPartOfTimeline
         }
     }
 
@@ -69,6 +71,10 @@ class EditTimedNoteViewModel @Inject constructor(
         viewModelScope.launch {
             localDateTimeFlow.emit(newLocalDateTime)
         }
+    }
+
+    fun onChangeIsPartOfTimeline(newIsPartOfTimeline: Boolean) {
+        isPartOfTimeline = newIsPartOfTimeline
     }
 
     fun onChangeNote(newNote: String) {
@@ -80,7 +86,7 @@ class EditTimedNoteViewModel @Inject constructor(
     }
 
     private val ingestionsFlow = experienceRepo.getIngestionsWithCompanionsFlow(experienceId)
-    private val timedNotesFlow = experienceRepo.getTimedNotesFlow(experienceId)
+    private val timedNotesFlow = experienceRepo.getTimedNotesFlowSorted(experienceId)
 
     val alreadyUsedColorsFlow: StateFlow<List<AdaptiveColor>> =
         ingestionsFlow.combine(timedNotesFlow) { ingestions, notes ->
@@ -119,6 +125,7 @@ class EditTimedNoteViewModel @Inject constructor(
                 it.time = selectedInstant
                 it.note = note
                 it.color = color
+                it.isPartOfTimeline = isPartOfTimeline
                 experienceRepo.update(it)
             }
         }

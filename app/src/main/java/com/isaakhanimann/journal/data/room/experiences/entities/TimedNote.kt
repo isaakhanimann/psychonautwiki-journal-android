@@ -30,5 +30,6 @@ data class TimedNote(
     var time: Instant,
     var note: String,
     var color: AdaptiveColor,
-    var experienceId: Int
+    var experienceId: Int,
+    var isPartOfTimeline: Boolean
 )

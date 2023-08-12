@@ -105,7 +105,11 @@ fun AllTimelines(
         Text(text = "Insufficient Data for Timeline")
     } else {
         val model: AllTimelinesModel = remember(dataForEffectLines, dataForRatings) {
-            AllTimelinesModel(dataForEffectLines, dataForRatings)
+            AllTimelinesModel(
+                dataForLines = dataForEffectLines,
+                dataForRatings = dataForRatings,
+                timedNotes = dataForTimedNotes
+            )
         }
         val isDarkTheme = isSystemInDarkTheme()
         val density = LocalDensity.current

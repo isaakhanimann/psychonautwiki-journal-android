@@ -123,6 +123,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
 
     suspend fun getExperience(id: Int): Experience? = experienceDao.getExperience(id)
     suspend fun getIngestionsWithCompanions(experienceId: Int) = experienceDao.getIngestionsWithCompanions(experienceId)
+    suspend fun getIngestions(experienceId: Int) = experienceDao.getIngestions(experienceId)
     suspend fun getRating(id: Int): ShulginRating? = experienceDao.getRating(id)
     suspend fun getTimedNote(id: Int): TimedNote? = experienceDao.getTimedNote(id)
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
@@ -143,8 +144,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getTimedNotesFlow(experienceId: Int) =
-        experienceDao.getTimedNotesFlow(experienceId)
+    fun getTimedNotesFlowSorted(experienceId: Int) =
+        experienceDao.getTimedNotesFlowSorted(experienceId)
             .flowOn(Dispatchers.IO)
             .conflate()
 

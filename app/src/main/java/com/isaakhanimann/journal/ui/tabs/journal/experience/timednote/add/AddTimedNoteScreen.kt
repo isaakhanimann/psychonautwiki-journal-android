@@ -61,7 +61,9 @@ fun AddTimedNoteScreen(
             onColorChange = viewModel::onChangeColor,
             modifier = Modifier.padding(padding),
             alreadyUsedColors = viewModel.alreadyUsedColors,
-            otherColors = viewModel.otherColors
+            otherColors = viewModel.otherColors,
+            isPartOfTimeline = viewModel.isPartOfTimeline,
+            onChangeOfIsPartOfTimeline = viewModel::onChangeIsPartOfTimeline
         )
     }
 }

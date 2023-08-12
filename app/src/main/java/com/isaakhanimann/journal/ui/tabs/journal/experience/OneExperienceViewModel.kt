@@ -103,7 +103,7 @@ class OneExperienceViewModel @Inject constructor(
             )
 
     val timedNotesFlow =
-        experienceRepo.getTimedNotesFlow(experienceId)
+        experienceRepo.getTimedNotesFlowSorted(experienceId)
             .stateIn(
                 initialValue = emptyList(),
                 scope = viewModelScope,

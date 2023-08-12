@@ -323,9 +323,10 @@ fun OneExperienceScreen(
                                     )
                                 }
                             },
-                            dataForTimedNotes = oneExperienceScreenModel.timedNotes.map {
-                                DataForOneTimedNote(time = it.time, color = it.color)
-                            },
+                            dataForTimedNotes = oneExperienceScreenModel.timedNotes.filter { it.isPartOfTimeline }
+                                .map {
+                                    DataForOneTimedNote(time = it.time, color = it.color)
+                                },
                             isShowingCurrentTime = true,
                             modifier = Modifier
                                 .fillMaxWidth()

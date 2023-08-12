@@ -25,13 +25,13 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.A
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.GroupDrawable
 import java.time.Duration
 import java.time.Instant
-import kotlin.math.max
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 class AllTimelinesModel(
     dataForLines: List<DataForOneEffectLine>,
-    dataForRatings: List<DataForOneRating>
+    dataForRatings: List<DataForOneRating>,
+    timedNotes: List<DataForOneTimedNote>
 ) {
     val startTime: Instant
     val widthInSeconds: Float
@@ -47,7 +47,7 @@ class AllTimelinesModel(
     init {
         val ratingTimes = dataForRatings.map { it.time }
         val ingestionTimes = dataForLines.map { it.startTime }
-
+        val noteTimes = timedNotes.map { it.time }
         val substanceGroups = dataForLines.groupBy { it.substanceName }.map { entry ->
             val lines = entry.value
             val color = lines.first().color
@@ -55,7 +55,7 @@ class AllTimelinesModel(
             val weightedLines = lines.map { WeightedLine(it.startTime, it.horizontalWeight, it.height) }
             SubstanceGroup(color, roaDuration, weightedLines)
         }
-        val allStartTimeCandidates = ratingTimes + ingestionTimes
+        val allStartTimeCandidates = ratingTimes + ingestionTimes + noteTimes
         startTime = allStartTimeCandidates.reduce { acc, date -> if (acc.isBefore(date)) acc else date }
         val groupDrawables = substanceGroups.map { group ->
             GroupDrawable(
@@ -75,7 +75,14 @@ class AllTimelinesModel(
         } else {
             0f
         }
-        widthInSeconds = max(maxWidthIngestions, max(maxWidthRating, 2.hours.inWholeSeconds.toFloat())) + 10.minutes.inWholeSeconds.toFloat()
+        val latestNote = noteTimes.maxOrNull()
+        val maxWidthNote: Float = if (latestNote != null) {
+            Duration.between(startTime, latestNote).seconds.toFloat()
+        } else {
+            0f
+        }
+        val maxCandidates = listOf(maxWidthIngestions, maxWidthRating, maxWidthNote, 2.hours.inWholeSeconds.toFloat())
+        widthInSeconds = maxCandidates.max() + 10.minutes.inWholeSeconds.toFloat()
         axisDrawable = AxisDrawable(startTime, widthInSeconds)
     }
 }

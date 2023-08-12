@@ -30,8 +30,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeText
@@ -40,14 +40,9 @@ import java.time.temporal.ChronoUnit
 
 @Preview(showBackground = true)
 @Composable
-fun TimedNoteRowPreview() {
+fun TimedNoteRowPreview(@PreviewParameter(TimedNotePreviewProvider::class) timedNote: TimedNote) {
     TimedNoteRow(
-        timedNote = TimedNote(
-            time = Instant.now(),
-            note = "Hello my name is",
-            color = AdaptiveColor.PURPLE,
-            experienceId = 0
-        ),
+        timedNote = timedNote,
         timeDisplayOption = TimeDisplayOption.REGULAR,
         startTime = Instant.now().minus(3, ChronoUnit.HOURS),
         modifier = Modifier.fillMaxWidth()
@@ -73,28 +68,35 @@ fun TimedNoteRow(
             .fillMaxHeight()
             .width(strokeWidth)
             .padding(vertical = 5.dp)) {
-            val strokeWidthPx = strokeWidth.toPx()
-            drawLine(
-                color = timedNote.color.getComposeColor(isDarkTheme),
-                start = Offset(x = size.width/2, y = 0f),
-                end = Offset(x = size.width/2, y = size.height),
-                strokeWidth = strokeWidthPx,
-                cap = StrokeCap.Round,
-                pathEffect = PathEffect.dashPathEffect(
-                    floatArrayOf(
-                        strokeWidthPx,
-                        strokeWidthPx * 2
+            if (timedNote.isPartOfTimeline) {
+                val strokeWidthPx = strokeWidth.toPx()
+                drawLine(
+                    color = timedNote.color.getComposeColor(isDarkTheme),
+                    start = Offset(x = size.width/2, y = 0f),
+                    end = Offset(x = size.width/2, y = size.height),
+                    strokeWidth = strokeWidthPx,
+                    cap = StrokeCap.Round,
+                    pathEffect = PathEffect.dashPathEffect(
+                        floatArrayOf(
+                            strokeWidthPx,
+                            strokeWidthPx * 2
+                        )
                     )
                 )
-            )
+            }
         }
         Column {
-            TimeText(
-                time = timedNote.time,
-                timeDisplayOption = timeDisplayOption,
-                startTime = startTime,
-                style = MaterialTheme.typography.titleMedium
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(15.dp), verticalAlignment = Alignment.Bottom) {
+                TimeText(
+                    time = timedNote.time,
+                    timeDisplayOption = timeDisplayOption,
+                    startTime = startTime,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                if (!timedNote.isPartOfTimeline) {
+                    Text(text = "(Not in timeline)", style = MaterialTheme.typography.bodySmall)
+                }
+            }
             Text(text = timedNote.note, style = MaterialTheme.typography.bodyLarge)
         }
     }

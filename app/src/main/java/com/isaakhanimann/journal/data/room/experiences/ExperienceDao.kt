@@ -115,6 +115,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion WHERE experienceId =:experienceId")
     suspend fun getIngestionsWithCompanions(experienceId: Int): List<IngestionWithCompanion>
 
+    @Query("SELECT * FROM ingestion WHERE experienceId =:experienceId")
+    suspend fun getIngestions(experienceId: Int): List<Ingestion>
+
     @Query("SELECT * FROM shulginrating WHERE id =:id")
     suspend fun getRating(id: Int): ShulginRating?
 
@@ -319,8 +322,8 @@ interface ExperienceDao {
     @Query("SELECT * FROM shulginrating WHERE experienceId = :experienceId")
     fun getRatingsFlow(experienceId: Int): Flow<List<ShulginRating>>
 
-    @Query("SELECT * FROM timednote WHERE experienceId = :experienceId")
-    fun getTimedNotesFlow(experienceId: Int): Flow<List<TimedNote>>
+    @Query("SELECT * FROM timednote WHERE experienceId = :experienceId ORDER BY time")
+    fun getTimedNotesFlowSorted(experienceId: Int): Flow<List<TimedNote>>
 
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC LIMIT 1")
     suspend fun getLastIngestion(substanceName: String): Ingestion?

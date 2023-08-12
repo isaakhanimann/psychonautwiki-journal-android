@@ -296,7 +296,8 @@ class OneExperienceScreenPreviewProvider :
                     )!!,
                     note = "Onset start",
                     color = AdaptiveColor.PURPLE,
-                    experienceId = 0
+                    experienceId = 0,
+                    isPartOfTimeline = true
                 ),
                 TimedNote(
                     creationDate = getInstant(
@@ -315,7 +316,8 @@ class OneExperienceScreenPreviewProvider :
                     )!!,
                     note = "Peak start and this is a note that spans multiple lines, so long that we can see what a bigger layout looks like.",
                     color = AdaptiveColor.BLUE,
-                    experienceId = 0
+                    experienceId = 0,
+                    isPartOfTimeline = true
                 )
             )
         )

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "982f9a572879a46da6fe8fce93dfd037",
+    "identityHash": "ec0db2ea1dada25b63d69bb1c0639b50",
     "entities": [
       {
         "tableName": "Experience",
@@ -262,7 +262,7 @@
       },
       {
         "tableName": "TimedNote",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `creationDate` INTEGER NOT NULL, `time` INTEGER NOT NULL, `note` TEXT NOT NULL, `color` TEXT NOT NULL, `experienceId` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `creationDate` INTEGER NOT NULL, `time` INTEGER NOT NULL, `note` TEXT NOT NULL, `color` TEXT NOT NULL, `experienceId` INTEGER NOT NULL, `isPartOfTimeline` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -299,6 +299,12 @@
             "columnName": "experienceId",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "isPartOfTimeline",
+            "columnName": "isPartOfTimeline",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -314,7 +320,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '982f9a572879a46da6fe8fce93dfd037')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ec0db2ea1dada25b63d69bb1c0639b50')"
     ]
   }
 }
