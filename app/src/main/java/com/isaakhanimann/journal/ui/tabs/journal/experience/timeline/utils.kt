@@ -32,6 +32,7 @@ val Density.normalStroke: Stroke
         return Stroke(
             width = width,
             cap = StrokeCap.Round,
+            pathEffect = PathEffect.cornerPathEffect(15f)
         )
     }
 

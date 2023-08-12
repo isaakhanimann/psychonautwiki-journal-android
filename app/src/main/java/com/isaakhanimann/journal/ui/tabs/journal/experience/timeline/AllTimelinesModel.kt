@@ -75,7 +75,7 @@ class AllTimelinesModel(
         } else {
             0f
         }
-        widthInSeconds = max(maxWidthIngestions, max(maxWidthRating, 4.hours.inWholeSeconds.toFloat())) + 10.minutes.inWholeSeconds.toFloat()
+        widthInSeconds = max(maxWidthIngestions, max(maxWidthRating, 2.hours.inWholeSeconds.toFloat())) + 10.minutes.inWholeSeconds.toFloat()
         axisDrawable = AxisDrawable(startTime, widthInSeconds)
     }
 }
