@@ -21,17 +21,11 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -92,7 +86,6 @@ fun AllTimelinesPreview(
             ),
         ),
         isShowingCurrentTime = true,
-        navigateToExplainTimeline = {},
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
@@ -106,7 +99,6 @@ fun AllTimelines(
     dataForRatings: List<DataForOneRating>,
     dataForTimedNotes: List<DataForOneTimedNote>,
     isShowingCurrentTime: Boolean,
-    navigateToExplainTimeline: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (dataForEffectLines.isEmpty()) {
@@ -143,68 +135,60 @@ fun AllTimelines(
             delay(oneSec)
             currentTime = Instant.now()
         }
-        Box(contentAlignment = Alignment.TopEnd) {
-            Canvas(modifier = modifier) {
-                val canvasWithLabelsHeight = size.height
-                val labelsHeight = axisLabelSize.toPx()
-                val canvasWidth = size.width
-                val pixelsPerSec = canvasWidth / model.widthInSeconds
-                inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight + strokeWidth) {
-                    val canvasHeightWithVerticalLine = size.height
-                    model.groupDrawables.forEach { group ->
-                        group.drawTimeLine(
-                            drawScope = this,
-                            height = canvasHeightWithVerticalLine,
-                            pixelsPerSec = pixelsPerSec,
-                            color = group.color.getComposeColor(isDarkTheme),
-                            density = density
-                        )
-                    }
-                    dataForRatings.forEach { dataForOneRating ->
-                        drawRating(
-                            startTime = model.startTime,
-                            ratingTime = dataForOneRating.time,
-                            pixelsPerSec = pixelsPerSec,
-                            canvasHeightOuter = canvasHeightWithVerticalLine,
-                            rating = dataForOneRating.option,
-                            textPaint = ratingTextPaint
-                        )
-                    }
-                    dataForTimedNotes.forEach { dataForOneTimedNote ->
-                        drawTimedNote(
-                            startTime = model.startTime,
-                            noteTime = dataForOneTimedNote.time,
-                            color = dataForOneTimedNote.color,
-                            pixelsPerSec = pixelsPerSec,
-                            canvasHeightOuter = canvasHeightWithVerticalLine,
-                            isDarkTheme = isDarkTheme
-                        )
-                    }
-                    if (isShowingCurrentTime) {
-                        drawCurrentTime(
-                            startTime = model.startTime,
-                            timelineWidthInSeconds = model.widthInSeconds,
-                            currentTime = currentTime,
-                            pixelsPerSec = pixelsPerSec,
-                            isDarkTheme = isDarkTheme,
-                            canvasHeightOuter = canvasHeightWithVerticalLine,
-                        )
-                    }
+        Canvas(modifier = modifier) {
+            val canvasWithLabelsHeight = size.height
+            val labelsHeight = axisLabelSize.toPx()
+            val canvasWidth = size.width
+            val pixelsPerSec = canvasWidth / model.widthInSeconds
+            inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight + strokeWidth) {
+                val canvasHeightWithVerticalLine = size.height
+                model.groupDrawables.forEach { group ->
+                    group.drawTimeLine(
+                        drawScope = this,
+                        height = canvasHeightWithVerticalLine,
+                        pixelsPerSec = pixelsPerSec,
+                        color = group.color.getComposeColor(isDarkTheme),
+                        density = density
+                    )
                 }
-                drawAxis(
-                    axisDrawable = model.axisDrawable,
-                    pixelsPerSec = pixelsPerSec,
-                    canvasWidth = canvasWidth,
-                    canvasHeight = canvasWithLabelsHeight,
-                    textPaint = axisLabelTextPaint
-                )
+                dataForRatings.forEach { dataForOneRating ->
+                    drawRating(
+                        startTime = model.startTime,
+                        ratingTime = dataForOneRating.time,
+                        pixelsPerSec = pixelsPerSec,
+                        canvasHeightOuter = canvasHeightWithVerticalLine,
+                        rating = dataForOneRating.option,
+                        textPaint = ratingTextPaint
+                    )
+                }
+                dataForTimedNotes.forEach { dataForOneTimedNote ->
+                    drawTimedNote(
+                        startTime = model.startTime,
+                        noteTime = dataForOneTimedNote.time,
+                        color = dataForOneTimedNote.color,
+                        pixelsPerSec = pixelsPerSec,
+                        canvasHeightOuter = canvasHeightWithVerticalLine,
+                        isDarkTheme = isDarkTheme
+                    )
+                }
+                if (isShowingCurrentTime) {
+                    drawCurrentTime(
+                        startTime = model.startTime,
+                        timelineWidthInSeconds = model.widthInSeconds,
+                        currentTime = currentTime,
+                        pixelsPerSec = pixelsPerSec,
+                        isDarkTheme = isDarkTheme,
+                        canvasHeightOuter = canvasHeightWithVerticalLine,
+                    )
+                }
             }
-            IconButton(onClick = navigateToExplainTimeline) {
-                Icon(
-                    imageVector = Icons.Outlined.Info,
-                    contentDescription = "Timeline Disclaimer"
-                )
-            }
+            drawAxis(
+                axisDrawable = model.axisDrawable,
+                pixelsPerSec = pixelsPerSec,
+                canvasWidth = canvasWidth,
+                canvasHeight = canvasWithLabelsHeight,
+                textPaint = axisLabelTextPaint
+            )
         }
     }
 }
@@ -253,7 +237,7 @@ fun DrawScope.drawRating(
         strokeWidth = 4.dp.toPx(),
         cap = StrokeCap.Round
     )
-    var y = verticalLineHeight + 1.5f*lineHeight
+    var y = verticalLineHeight + 1.5f * lineHeight
     drawContext.canvas.nativeCanvas.apply {
         for (line in lines) {
             drawText(

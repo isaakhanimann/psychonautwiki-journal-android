@@ -25,6 +25,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
@@ -291,7 +292,18 @@ fun OneExperienceScreen(
             val verticalCardPadding = 4.dp
             if (effectTimelines.isNotEmpty()) {
                 Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                    CardTitle(title = "Effect Timeline")
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        CardTitle(title = "Effect Timeline")
+                        IconButton(onClick = navigateToExplainTimeline) {
+                            Icon(
+                                imageVector = Icons.Outlined.Info,
+                                contentDescription = "Timeline Disclaimer"
+                            )
+                        }
+                    }
                     Column(
                         modifier = Modifier
                             .padding(horizontal = horizontalPadding)
@@ -315,7 +327,6 @@ fun OneExperienceScreen(
                                 DataForOneTimedNote(time = it.time, color = it.color)
                             },
                             isShowingCurrentTime = true,
-                            navigateToExplainTimeline = navigateToExplainTimeline,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)

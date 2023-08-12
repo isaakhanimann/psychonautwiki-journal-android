@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -22,8 +22,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+
+@Composable
+fun SectionText(text: AnnotatedString) {
+    Text(
+        text = text,
+        textAlign = TextAlign.Left,
+        modifier = Modifier.padding(vertical = 5.dp)
+    )
+}
 
 @Composable
 fun SectionText(text: String) {

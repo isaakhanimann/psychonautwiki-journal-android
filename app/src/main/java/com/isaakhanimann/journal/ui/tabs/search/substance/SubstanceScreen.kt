@@ -336,6 +336,13 @@ fun SubstanceScreen(
                                     )
                                 }
                             }
+                            Spacer(modifier = Modifier.weight(1f))
+                            IconButton(onClick = navigateToExplainTimeline) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Info,
+                                    contentDescription = "Timeline Disclaimer"
+                                )
+                            }
                         }
                         VerticalSpace()
                         val dataForEffectLines = remember(roasWithDurationsDefined, ingestionTime) {
@@ -355,7 +362,6 @@ fun SubstanceScreen(
                             dataForRatings = emptyList(),
                             dataForTimedNotes = emptyList(),
                             isShowingCurrentTime = false,
-                            navigateToExplainTimeline = navigateToExplainTimeline,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)
