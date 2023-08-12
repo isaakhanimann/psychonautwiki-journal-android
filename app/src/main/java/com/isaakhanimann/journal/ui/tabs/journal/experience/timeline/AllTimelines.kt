@@ -151,7 +151,7 @@ fun AllTimelines(
                 val labelsHeight = axisLabelSize.toPx()
                 val canvasWidth = size.width
                 val pixelsPerSec = canvasWidth / model.widthInSeconds
-                inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight) {
+                inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight + strokeWidth) {
                     val canvasHeightWithVerticalLine = size.height
                     model.groupDrawables.forEach { group ->
                         drawGroup(

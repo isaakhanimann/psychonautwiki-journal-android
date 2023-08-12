@@ -29,6 +29,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimeline
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.strokeWidth
 import java.time.Duration
 import java.time.Instant
 
@@ -178,6 +179,13 @@ data class FullTimelines(
             color = color,
             style = density.normalStroke
         )
+        path.lineTo(x = finalPoints.last().x*pixelsPerSec, y = height + drawScope.strokeWidth/2)
+        path.lineTo(x = finalPoints.first().x*pixelsPerSec, y = height + drawScope.strokeWidth/2)
+        path.close()
+        drawScope.drawPath(
+            path = path,
+            color = color.copy(alpha = shapeAlpha)
+        )
         for (point in finalPoints) {
             if (point.isIngestionPoint) {
                 drawScope.drawCircle(
@@ -187,11 +195,6 @@ data class FullTimelines(
                 )
             }
         }
-        path.close()
-        drawScope.drawPath(
-            path = path,
-            color = color.copy(alpha = shapeAlpha)
-        )
     }
 }
 
