@@ -36,9 +36,6 @@ val Density.normalStroke: Stroke
         )
     }
 
-val Density.shapeWidth: Float
-    get() = strokeWidth * 3
-
 val Density.strokeWidth: Float get() = strokeWidthInDp.toPx()
 
 val Density.dottedStroke: Stroke

@@ -33,7 +33,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 fun VerticalLine(color: AdaptiveColor) {
     val isDarkTheme = isSystemInDarkTheme()
     Surface(
-        shape = RoundedCornerShape(size = 1.dp),
+        shape = RoundedCornerShape(size = 2.dp),
         color = color.getComposeColor(isDarkTheme),
         modifier = Modifier
             .fillMaxHeight()
