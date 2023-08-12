@@ -23,13 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.WeightedLine
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.strokeWidth
 import java.time.Duration
 import java.time.Instant
 
@@ -181,7 +177,7 @@ data class FullTimelines(
             if (point.isIngestionPoint) {
                 drawScope.drawCircle(
                     color = color,
-                    radius = with(density) { 7.dp.toPx() },
+                    radius = density.ingestionDotRadius,
                     center = Offset(x = point.x*pixelsPerSec, y = height - point.y*height)
                 )
             }

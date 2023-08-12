@@ -152,12 +152,11 @@ fun AllTimelines(
                 inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight + strokeWidth) {
                     val canvasHeightWithVerticalLine = size.height
                     model.groupDrawables.forEach { group ->
-                        val color = group.color.getComposeColor(isDarkTheme)
                         group.drawTimeLine(
                             drawScope = this,
                             height = canvasHeightWithVerticalLine,
                             pixelsPerSec = pixelsPerSec,
-                            color = color,
+                            color = group.color.getComposeColor(isDarkTheme),
                             density = density
                         )
                     }

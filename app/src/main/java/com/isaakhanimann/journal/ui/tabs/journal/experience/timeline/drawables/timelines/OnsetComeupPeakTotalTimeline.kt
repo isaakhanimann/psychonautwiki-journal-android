@@ -18,14 +18,14 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.dottedStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
 
 data class OnsetComeupPeakTotalTimeline(
     val onset: FullDurationRange,
@@ -64,15 +64,33 @@ data class OnsetComeupPeakTotalTimeline(
             color = color,
             style = density.normalStroke
         )
+        val offsetEndX =
+            startX + (total.interpolateAtValueInSeconds(peakAndTotalWeight) * pixelsPerSec)
         drawScope.drawPath(
             path = Path().apply {
                 moveTo(x = peakEndX, y = 0f)
-                val offsetEndX =
-                    startX + (total.interpolateAtValueInSeconds(peakAndTotalWeight) * pixelsPerSec)
                 lineTo(x = offsetEndX, y = height)
             },
             color = color,
             style = density.dottedStroke
+        )
+        val combinedPath = Path().apply {
+            val alignedHeight = height + drawScope.strokeWidth/2
+            moveTo(x = startX, y = alignedHeight)
+            lineTo(x = onsetEndX, y = alignedHeight)
+            lineTo(x = comeupEndX, y = 0f)
+            lineTo(x = peakEndX, y = 0f)
+            lineTo(x = offsetEndX, y = alignedHeight)
+            close()
+        }
+        drawScope.drawPath(
+            path = combinedPath,
+            color = color.copy(alpha = shapeAlpha)
+        )
+        drawScope.drawCircle(
+            color = color,
+            radius = density.ingestionDotRadius,
+            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
         )
     }
 }

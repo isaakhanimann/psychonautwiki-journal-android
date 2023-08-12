@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -50,5 +50,10 @@ val Density.dottedStroke: Stroke
             pathEffect = PathEffect.dashPathEffect(floatArrayOf(space, length))
         )
     }
+
+private val ingestionDotRadiusInDp = 7.dp
+
+val Density.ingestionDotRadius: Float get() = ingestionDotRadiusInDp.toPx()
+
 
 const val shapeAlpha = 0.3f

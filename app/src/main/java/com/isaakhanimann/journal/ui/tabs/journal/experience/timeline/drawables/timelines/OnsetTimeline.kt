@@ -18,12 +18,14 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ingestionDotRadius
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
 
 
@@ -53,6 +55,11 @@ data class OnsetTimeline(
             },
             color = color,
             style = density.normalStroke
+        )
+        drawScope.drawCircle(
+            color = color,
+            radius = density.ingestionDotRadius,
+            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
         )
     }
 }

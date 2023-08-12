@@ -18,13 +18,17 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ingestionDotRadius
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.shapeAlpha
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.strokeWidth
 
 data class OnsetComeupTimeline(
     val onset: FullDurationRange,
@@ -48,14 +52,27 @@ data class OnsetComeupTimeline(
             startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
         val comeupEndX =
             onsetEndX + (comeup.interpolateAtValueInSeconds(weight) * pixelsPerSec)
+        val path = Path().apply {
+            moveTo(x = startX, y = height)
+            lineTo(x = onsetEndX, y = height)
+            lineTo(x = comeupEndX, y = 0f)
+        }
         drawScope.drawPath(
-            path = Path().apply {
-                moveTo(x = startX, y = height)
-                lineTo(x = onsetEndX, y = height)
-                lineTo(x = comeupEndX, y = 0f)
-            },
+            path = path,
             color = color,
             style = density.normalStroke
+        )
+        path.lineTo(x = comeupEndX, y = height + drawScope.strokeWidth/2)
+        path.lineTo(x = startX, y = height + drawScope.strokeWidth/2)
+        path.close()
+        drawScope.drawPath(
+            path = path,
+            color = color.copy(alpha = shapeAlpha)
+        )
+        drawScope.drawCircle(
+            color = color,
+            radius = density.ingestionDotRadius,
+            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
         )
     }
 }

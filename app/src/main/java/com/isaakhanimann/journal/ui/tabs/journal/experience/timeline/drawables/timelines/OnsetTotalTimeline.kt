@@ -18,14 +18,14 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.dottedStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
 
 data class OnsetTotalTimeline(
     val onset: FullDurationRange,
@@ -56,26 +56,39 @@ data class OnsetTotalTimeline(
             color = color,
             style = density.normalStroke
         )
+        val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
+        val path = Path().apply {
+            moveTo(x = onsetEndX, y = height)
+            endSmoothLineTo(
+                smoothnessBetween0And1 = 0.5f,
+                startX = onsetEndX,
+                endX = startX + (totalX / 2f),
+                endY = 0f
+            )
+            startSmoothLineTo(
+                smoothnessBetween0And1 = 0.5f,
+                startX = startX + (totalX / 2f),
+                startY = 0f,
+                endX = startX + totalX,
+                endY = height
+            )
+        }
         drawScope.drawPath(
-            path = Path().apply {
-                moveTo(x = onsetEndX, y = height)
-                val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
-                endSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = onsetEndX,
-                    endX = startX + (totalX / 2f),
-                    endY = 0f
-                )
-                startSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = startX + (totalX / 2f),
-                    startY = 0f,
-                    endX = startX + totalX,
-                    endY = height
-                )
-            },
+            path = path,
             color = color,
             style = density.dottedStroke
+        )
+        path.lineTo(x = startX + totalX, y = height + drawScope.strokeWidth/2)
+        path.lineTo(x = startX, y = height + drawScope.strokeWidth/2)
+        path.close()
+        drawScope.drawPath(
+            path = path,
+            color = color.copy(alpha = shapeAlpha)
+        )
+        drawScope.drawCircle(
+            color = color,
+            radius = density.ingestionDotRadius,
+            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
         )
     }
 }

@@ -18,14 +18,14 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.dottedStroke
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStroke
 
 data class OnsetComeupTotalTimeline(
     val onset: FullDurationRange,
@@ -51,29 +51,55 @@ data class OnsetComeupTotalTimeline(
             startX + (onset.interpolateAtValueInSeconds(onsetAndComeupWeight) * pixelsPerSec)
         val comeupEndX =
             onsetEndX + (comeup.interpolateAtValueInSeconds(onsetAndComeupWeight) * pixelsPerSec)
+        val path1 = Path().apply {
+            moveTo(x = startX, y = height)
+            lineTo(x = onsetEndX, y = height)
+            lineTo(x = comeupEndX, y = 0f)
+        }
         drawScope.drawPath(
-            path = Path().apply {
-                moveTo(x = startX, y = height)
-                lineTo(x = onsetEndX, y = height)
-                lineTo(x = comeupEndX, y = 0f)
-            },
+            path = path1,
             color = color,
             style = density.normalStroke
         )
+        val offsetEndX = startX + (total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec)
+        val path2 = Path().apply {
+            moveTo(x = comeupEndX, y = 0f)
+            startSmoothLineTo(
+                smoothnessBetween0And1 = 0.5f,
+                startX = comeupEndX,
+                startY = 0f,
+                endX = offsetEndX,
+                endY = height
+            )
+        }
         drawScope.drawPath(
-            path = Path().apply {
-                moveTo(x = comeupEndX, y = 0f)
-                val offsetEndX = startX + (total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec)
-                startSmoothLineTo(
-                    smoothnessBetween0And1 = 0.5f,
-                    startX = comeupEndX,
-                    startY = 0f,
-                    endX = offsetEndX,
-                    endY = height
-                )
-            },
+            path = path2,
             color = color,
             style = density.dottedStroke
+        )
+        val combinedPath = Path().apply {
+            moveTo(x = startX, y = height)
+            lineTo(x = onsetEndX, y = height)
+            lineTo(x = comeupEndX, y = 0f)
+            startSmoothLineTo(
+                smoothnessBetween0And1 = 0.5f,
+                startX = comeupEndX,
+                startY = 0f,
+                endX = offsetEndX,
+                endY = height
+            )
+            lineTo(x = offsetEndX, y = height + drawScope.strokeWidth/2)
+            lineTo(x = startX, y = height + drawScope.strokeWidth/2)
+            close()
+        }
+        drawScope.drawPath(
+            path = combinedPath,
+            color = color.copy(alpha = shapeAlpha)
+        )
+        drawScope.drawCircle(
+            color = color,
+            radius = density.ingestionDotRadius,
+            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
         )
     }
 }
