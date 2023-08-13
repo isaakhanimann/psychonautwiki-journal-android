@@ -64,7 +64,8 @@ class OneExperienceScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
-                            stomachFullness = StomachFullness.EMPTY
+                            stomachFullness = StomachFullness.EMPTY,
+                            consumerName = null
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "MDMA",
@@ -122,7 +123,8 @@ class OneExperienceScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
-                            stomachFullness = StomachFullness.EMPTY
+                            stomachFullness = StomachFullness.EMPTY,
+                            consumerName = null
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Cocaine",
@@ -176,7 +178,8 @@ class OneExperienceScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = null,
-                            stomachFullness = StomachFullness.EMPTY
+                            stomachFullness = StomachFullness.EMPTY,
+                            consumerName = null
                         ),
                         substanceCompanion = SubstanceCompanion(
                             substanceName = "Cocaine",

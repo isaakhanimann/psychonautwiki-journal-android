@@ -64,7 +64,8 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
-                                stomachFullness = StomachFullness.EMPTY
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "MDMA",
@@ -87,7 +88,8 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
-                                stomachFullness = StomachFullness.EMPTY
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Cocaine",
@@ -110,7 +112,8 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
-                                stomachFullness = StomachFullness.EMPTY
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Ketamine",
@@ -158,7 +161,8 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
-                                stomachFullness = StomachFullness.EMPTY
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "MDMA",
@@ -199,7 +203,8 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
-                                stomachFullness = StomachFullness.EMPTY
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Cocaine",
@@ -222,7 +227,8 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
-                                stomachFullness = StomachFullness.EMPTY
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Ketamine",
@@ -270,7 +276,8 @@ class JournalScreenPreviewProvider :
                                 units = "µg",
                                 experienceId = 0,
                                 notes = null,
-                                stomachFullness = StomachFullness.EMPTY
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "LSD",
@@ -293,7 +300,8 @@ class JournalScreenPreviewProvider :
                                 units = "mg",
                                 experienceId = 0,
                                 notes = null,
-                                stomachFullness = StomachFullness.EMPTY
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null
                             ),
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Cocaine",

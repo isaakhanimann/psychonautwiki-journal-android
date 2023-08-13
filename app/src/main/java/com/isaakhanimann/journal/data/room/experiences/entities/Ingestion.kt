@@ -36,5 +36,6 @@ data class Ingestion(
     var units: String?,
     var experienceId: Int,
     var notes: String?,
-    var stomachFullness: StomachFullness?
+    var stomachFullness: StomachFullness?,
+    var consumerName: String?
 )

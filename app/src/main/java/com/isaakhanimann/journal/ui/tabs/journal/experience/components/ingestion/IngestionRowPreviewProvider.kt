@@ -41,7 +41,8 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     units = "mg",
                     experienceId = 0,
                     notes = "This is a very long note which I wrote to see how it looks like if the note spans more than one line in the ingestion row.",
-                    stomachFullness = StomachFullness.EMPTY
+                    stomachFullness = StomachFullness.EMPTY,
+                    consumerName = null
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "MDMA",
@@ -62,7 +63,8 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     units = "mg",
                     experienceId = 0,
                     notes = "This is a very long note which I wrote to see how it looks like if the note spans more than one line in the ingestion row.",
-                    stomachFullness = StomachFullness.EMPTY
+                    stomachFullness = StomachFullness.EMPTY,
+                    consumerName = null
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "2C-B",
@@ -83,7 +85,8 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     units = "µg",
                     experienceId = 0,
                     notes = null,
-                    stomachFullness = StomachFullness.EMPTY
+                    stomachFullness = StomachFullness.EMPTY,
+                    consumerName = null
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "LSD",

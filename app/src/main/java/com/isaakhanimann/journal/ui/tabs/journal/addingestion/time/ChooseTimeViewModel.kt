@@ -56,8 +56,18 @@ class ChooseTimeViewModel @Inject constructor(
     val localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var enteredTitle by mutableStateOf(LocalDateTime.now().getStringOfPattern("dd MMMM yyyy"))
     val isEnteredTitleOk get() = enteredTitle.isNotEmpty()
+    var consumerName by mutableStateOf("")
+
 
     private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()
+
+    val sortedConsumerNamesFlow = experienceRepo.getSortedIngestions(limit = 200).map { ingestions ->
+        return@map ingestions.mapNotNull { it.consumerName }.distinct()
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     private val experienceWithIngestionsToAddToFlow: Flow<ExperienceWithIngestions?> =
         sortedExperiencesFlow.combine(localDateTimeFlow) { sortedExperiences, localDateTime ->
@@ -101,6 +111,10 @@ class ChooseTimeViewModel @Inject constructor(
     fun changeTitle(newTitle: String) {
         enteredTitle = newTitle
         hasTitleBeenChanged = true
+    }
+
+    fun changeConsumerName(newName: String) {
+        consumerName = newName
     }
 
     val previousNotesFlow: StateFlow<List<String>> =
@@ -194,7 +208,7 @@ class ChooseTimeViewModel @Inject constructor(
         }
     }
 
-    suspend fun createAndSaveIngestion() {
+    private suspend fun createAndSaveIngestion() {
         val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
         val oldIdToUse = experienceWithIngestionsToAddToFlow.firstOrNull()?.experience?.id
         val userWantsToCreateANewExperience =
@@ -204,6 +218,9 @@ class ChooseTimeViewModel @Inject constructor(
             color = selectedColor
         )
         val ingestionTime = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+        val consumerNameNonBlank = consumerName.ifBlank {
+            null
+        }
         if (userWantsToCreateANewExperience || oldIdToUse == null) {
             val newExperience = Experience(
                 id = newIdToUse,
@@ -222,14 +239,14 @@ class ChooseTimeViewModel @Inject constructor(
                 units = units,
                 experienceId = newExperience.id,
                 notes = note,
-                stomachFullness = null // todo: allow to add real stomach fullness
+                stomachFullness = null, // todo: allow to add real stomach fullness
+                consumerName = consumerNameNonBlank
             )
             experienceRepo.insertIngestionExperienceAndCompanion(
                 ingestion = newIngestion,
                 experience = newExperience,
                 substanceCompanion = substanceCompanion
             )
-
         } else {
             val newIngestion = Ingestion(
                 substanceName = substanceName,
@@ -240,7 +257,8 @@ class ChooseTimeViewModel @Inject constructor(
                 units = units,
                 experienceId = oldIdToUse,
                 notes = note,
-                stomachFullness = null // todo: allow to add real stomach fullness
+                stomachFullness = null, // todo: allow to add real stomach fullness
+                consumerName = consumerNameNonBlank
             )
             experienceRepo.insertIngestionAndCompanion(
                 ingestion = newIngestion,

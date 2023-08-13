@@ -89,6 +89,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion ORDER BY time DESC LIMIT :limit")
     fun getSortedIngestionsWithSubstanceCompanionsFlow(limit: Int): Flow<List<IngestionWithCompanion>>
 
+    @Query("SELECT * FROM ingestion ORDER BY time DESC LIMIT :limit")
+    fun getSortedIngestions(limit: Int): Flow<List<Ingestion>>
+
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
     fun getSortedIngestionsFlow(): Flow<List<Ingestion>>
 
@@ -284,7 +287,8 @@ interface ExperienceDao {
                     units = ingestionSerializable.units,
                     experienceId = experienceID,
                     notes = ingestionSerializable.notes,
-                    stomachFullness = ingestionSerializable.stomachFullness
+                    stomachFullness = ingestionSerializable.stomachFullness,
+                    consumerName = null
                 )
                 insert(newIngestion)
             }

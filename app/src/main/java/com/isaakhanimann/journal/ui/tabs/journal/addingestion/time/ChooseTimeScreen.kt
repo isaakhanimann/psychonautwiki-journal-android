@@ -23,16 +23,18 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -44,8 +46,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 
@@ -78,7 +82,10 @@ fun ChooseTimeScreen(
         substanceName = viewModel.substanceName,
         enteredTitle = viewModel.enteredTitle,
         onChangeOfEnteredTitle = viewModel::changeTitle,
-        isEnteredTitleOk = viewModel.isEnteredTitleOk
+        isEnteredTitleOk = viewModel.isEnteredTitleOk,
+        consumerName = viewModel.consumerName,
+        onChangeOfConsumerName = viewModel::changeConsumerName,
+        consumerNamesSorted = viewModel.sortedConsumerNamesFlow.collectAsState().value
     )
 }
 
@@ -111,7 +118,10 @@ fun ChooseTimeScreenPreview() {
         substanceName = "LSD",
         enteredTitle = "This is my title",
         onChangeOfEnteredTitle = {},
-        isEnteredTitleOk = true
+        isEnteredTitleOk = true,
+        consumerName = "",
+        onChangeOfConsumerName = {},
+        consumerNamesSorted = listOf("Isaak", "Marc", "Eve")
     )
 }
 
@@ -136,8 +146,18 @@ fun ChooseTimeScreen(
     substanceName: String,
     enteredTitle: String,
     onChangeOfEnteredTitle: (String) -> Unit,
-    isEnteredTitleOk: Boolean
+    isEnteredTitleOk: Boolean,
+    consumerName: String,
+    onChangeOfConsumerName: (String) -> Unit,
+    consumerNamesSorted: List<String>
 ) {
+    var isPresentingBottomSheet by rememberSaveable { mutableStateOf(false) }
+    val skipPartiallyExpanded by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = skipPartiallyExpanded
+    )
+    val focusManager = LocalFocusManager.current
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName Ingestion") }) },
         floatingActionButton = {
@@ -174,17 +194,7 @@ fun ChooseTimeScreen(
                     .padding(horizontal = horizontalPadding)
             ) {
                 Spacer(modifier = Modifier.height(3.dp))
-                if (isShowingColorPicker) {
-                    MyCard(title = "$substanceName Color") {
-                        ColorPicker(
-                            selectedColor = selectedColor,
-                            onChangeOfColor = onChangeColor,
-                            alreadyUsedColors = alreadyUsedColors,
-                            otherColors = otherColors
-                        )
-                    }
-                }
-                MyCard(title = "Time") {
+                CardWithTitle(title = "Time") {
                     DatePickerButton(
                         localDateTime = localDateTime,
                         onChange = onChangeDateOrTime,
@@ -198,7 +208,7 @@ fun ChooseTimeScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                MyCard(title = "Experience") {
+                CardWithTitle(title = "Experience", modifier = Modifier.fillMaxWidth()) {
                     val isCloseToExperience = experienceTitleToAddTo != null
                     AnimatedVisibility(visible = isCloseToExperience) {
                         Row(
@@ -209,7 +219,6 @@ fun ChooseTimeScreen(
                         }
                     }
                     AnimatedVisibility(visible = !isCloseToExperience || !isChecked) {
-                        val focusManager = LocalFocusManager.current
                         OutlinedTextField(
                             value = enteredTitle,
                             onValueChange = onChangeOfEnteredTitle,
@@ -227,49 +236,127 @@ fun ChooseTimeScreen(
                         )
                     }
                 }
-                MyCard(title = "Notes") {
+                ElevatedCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = horizontalPadding)
+                    ) {
+                        Text(
+                            text = "Consumed by: ",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        TextButton(onClick = { isPresentingBottomSheet = !isPresentingBottomSheet }) {
+                            if (consumerName.isBlank()) {
+                                Text(text = "Me")
+                            } else {
+                                Text(text = consumerName)
+                            }
+                        }
+                    }
+                }
+                CardWithTitle(title = "Notes") {
                     NoteSection(
                         previousNotes,
                         note,
                         onNoteChange
                     )
                 }
+                if (isShowingColorPicker) {
+                    CardWithTitle(title = "$substanceName Color", modifier = Modifier.fillMaxWidth()) {
+                        ColorPicker(
+                            selectedColor = selectedColor,
+                            onChangeOfColor = onChangeColor,
+                            alreadyUsedColors = alreadyUsedColors,
+                            otherColors = otherColors
+                        )
+                    }
+                }
                 Spacer(modifier = Modifier.height(3.dp))
+            }
+        }
+    }
+    if (isPresentingBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { isPresentingBottomSheet = false },
+            sheetState = bottomSheetState,
+            windowInsets = BottomSheetDefaults.windowInsets
+        ) {
+            OutlinedTextField(
+                value = consumerName,
+                onValueChange = onChangeOfConsumerName,
+                leadingIcon = { Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = "Consumer"
+                )},
+                keyboardActions = KeyboardActions(onDone = {
+                    focusManager.clearFocus()
+                    scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                        if (!bottomSheetState.isVisible) {
+                            isPresentingBottomSheet = false
+                        }
+                    }
+                }),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                    capitalization = KeyboardCapitalization.Words
+                ),
+                placeholder = { Text("Consumer name") },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = horizontalPadding)
+            )
+            LazyColumn {
+                item {
+                    ListItem(
+                        headlineContent = { Text("Me") },
+                        leadingContent = {
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = "Consumer"
+                            )
+                        },
+                        modifier = Modifier.clickable {
+                            onChangeOfConsumerName("")
+                            scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                                if (!bottomSheetState.isVisible) {
+                                    isPresentingBottomSheet = false
+                                }
+                            }
+                        }
+                    )
+                }
+                items(consumerNamesSorted) { consumerName ->
+                    ListItem(
+                        headlineContent = { Text(consumerName) },
+                        leadingContent = {
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = "Consumer"
+                            )
+                        },
+                        modifier = Modifier.clickable {
+                            onChangeOfConsumerName(consumerName)
+                            scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                                if (!bottomSheetState.isVisible) {
+                                    isPresentingBottomSheet = false
+                                }
+                            }
+                        }
+                    )
+                }
             }
         }
     }
 }
 
-
-@Composable
-fun MyCard(
-    title: String,
-    modifier: Modifier = Modifier,
-    content: @Composable (ColumnScope.() -> Unit)
-) {
-    ElevatedCard(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(
-                horizontal = horizontalPadding,
-                vertical = 5.dp
-            )
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(3.dp))
-            content()
-            Spacer(modifier = Modifier.height(3.dp))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteSection(
     previousNotes: List<String>,

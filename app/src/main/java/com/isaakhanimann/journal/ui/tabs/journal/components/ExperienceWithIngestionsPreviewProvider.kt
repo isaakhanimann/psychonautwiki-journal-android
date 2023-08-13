@@ -49,7 +49,8 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        stomachFullness = StomachFullness.EMPTY
+                        stomachFullness = StomachFullness.EMPTY,
+                        consumerName = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -66,7 +67,8 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        stomachFullness = null
+                        stomachFullness = null,
+                        consumerName = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -83,7 +85,8 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        stomachFullness = null
+                        stomachFullness = null,
+                        consumerName = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -132,7 +135,8 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        stomachFullness = null
+                        stomachFullness = null,
+                        consumerName = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -149,7 +153,8 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         units = "mg",
                         experienceId = 0,
                         notes = null,
-                        stomachFullness = null
+                        stomachFullness = null,
+                        consumerName = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
