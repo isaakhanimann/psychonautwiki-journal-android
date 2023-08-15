@@ -23,15 +23,21 @@ import androidx.room.Relation
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
+import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
 import java.time.Instant
 
-data class ExperienceWithIngestionsAndRatings(
+data class ExperienceWithIngestionsTimedNotesAndRatings(
     @Embedded val experience: Experience,
     @Relation(
         entity = Ingestion::class,
         parentColumn = "id",
         entityColumn = "experienceId"
     ) val ingestions: List<Ingestion>,
+    @Relation(
+        entity = TimedNote::class,
+        parentColumn = "id",
+        entityColumn = "experienceId"
+    ) val timedNotes: List<TimedNote>,
     @Relation(
         entity = ShulginRating::class,
         parentColumn = "id",

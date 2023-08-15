@@ -18,10 +18,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.settings
 
-import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
-import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
-import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
-import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.*
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import kotlinx.serialization.Serializable
 import java.time.Instant
@@ -42,7 +39,8 @@ data class ExperienceSerializable(
     val isFavorite: Boolean = false,
     val ingestions: List<IngestionSerializable>,
     val location: LocationSerializable?,
-    val ratings: List<RatingSerializable>
+    val ratings: List<RatingSerializable>,
+    val timedNotes: List<TimedNoteSerializable> = emptyList()
 )
 
 @Serializable
@@ -62,7 +60,8 @@ data class IngestionSerializable(
     var isDoseAnEstimate: Boolean,
     var units: String?,
     var notes: String?,
-    var stomachFullness: StomachFullness?
+    var stomachFullness: StomachFullness?,
+    var consumerName: String? = null
 )
 
 @Serializable
@@ -70,4 +69,13 @@ data class LocationSerializable(
     val name: String,
     val latitude: Double?,
     val longitude: Double?
+)
+
+@Serializable
+data class TimedNoteSerializable(
+    @Serializable(with= InstantSerializer::class) var creationDate: Instant,
+    @Serializable(with= InstantSerializer::class) var time: Instant,
+    var note: String,
+    var color: AdaptiveColor,
+    var isPartOfTimeline: Boolean
 )

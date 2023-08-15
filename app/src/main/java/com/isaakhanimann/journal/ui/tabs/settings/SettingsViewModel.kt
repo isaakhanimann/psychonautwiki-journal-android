@@ -72,7 +72,7 @@ class SettingsViewModel @Inject constructor(
     fun exportFile(uri: Uri) {
         viewModelScope.launch {
             val experiencesWithIngestionsAndRatings =
-                experienceRepository.getAllExperiencesWithIngestionsAndRatingsSorted()
+                experienceRepository.getAllExperiencesWithIngestionsTimedNotesAndRatingsSorted()
             val experiencesSerializable = experiencesWithIngestionsAndRatings.map {
                 val location = it.experience.location
                 return@map ExperienceSerializable(
@@ -91,7 +91,8 @@ class SettingsViewModel @Inject constructor(
                             isDoseAnEstimate = ingestion.isDoseAnEstimate,
                             units = ingestion.units,
                             notes = ingestion.notes,
-                            stomachFullness = ingestion.stomachFullness
+                            stomachFullness = ingestion.stomachFullness,
+                            consumerName = ingestion.consumerName
                         )
                     },
                     location = if (location != null) {
@@ -108,6 +109,15 @@ class SettingsViewModel @Inject constructor(
                             option = rating.option,
                             time = rating.time,
                             creationDate = rating.creationDate
+                        )
+                    },
+                    timedNotes = it.timedNotes.map { timedNote ->
+                        TimedNoteSerializable(
+                            creationDate = timedNote.creationDate,
+                            time = timedNote.time,
+                            note = timedNote.note,
+                            color = timedNote.color,
+                            isPartOfTimeline = timedNote.isPartOfTimeline
                         )
                     }
                 )

@@ -54,7 +54,7 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM experience ORDER BY sortDate")
-    suspend fun getAllExperiencesWithIngestionsAndRatingsSorted(): List<ExperienceWithIngestionsAndRatings>
+    suspend fun getAllExperiencesWithIngestionsTimedNotesAndRatingsSorted(): List<ExperienceWithIngestionsTimedNotesAndRatings>
 
     @Query("SELECT * FROM customsubstance")
     suspend fun getAllCustomSubstances(): List<CustomSubstance>
@@ -186,6 +186,7 @@ interface ExperienceDao {
     @Transaction
     suspend fun deleteEverything() {
         deleteAllIngestions()
+        deleteAllTimedNotes()
         deleteAllExperiences()
         deleteAllSubstanceCompanions()
         deleteAllCustomSubstances()
@@ -203,6 +204,10 @@ interface ExperienceDao {
     @Transaction
     @Query("DELETE FROM ingestion")
     suspend fun deleteAllIngestions()
+
+    @Transaction
+    @Query("DELETE FROM timedNote")
+    suspend fun deleteAllTimedNotes()
 
     @Transaction
     @Query("DELETE FROM ingestion WHERE experienceId = :experienceId")
@@ -288,9 +293,20 @@ interface ExperienceDao {
                     experienceId = experienceID,
                     notes = ingestionSerializable.notes,
                     stomachFullness = ingestionSerializable.stomachFullness,
-                    consumerName = null
+                    consumerName = ingestionSerializable.consumerName
                 )
                 insert(newIngestion)
+            }
+            experienceSerializable.timedNotes.forEach { timedNoteSerializable ->
+                val newTimedNote = TimedNote(
+                    time = timedNoteSerializable.time,
+                    creationDate = timedNoteSerializable.creationDate,
+                    experienceId = experienceID,
+                    isPartOfTimeline = timedNoteSerializable.isPartOfTimeline,
+                    color = timedNoteSerializable.color,
+                    note = timedNoteSerializable.note
+                )
+                insert(newTimedNote)
             }
             experienceSerializable.ratings.forEach { ratingSerializable ->
                 val newRating = ShulginRating(
