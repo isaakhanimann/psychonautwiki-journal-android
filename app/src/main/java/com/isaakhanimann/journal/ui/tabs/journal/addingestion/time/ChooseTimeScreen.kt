@@ -244,8 +244,10 @@ fun ChooseTimeScreen(
                             text = "Consumed by: ${consumerName.ifBlank { "Me" }}",
                             style = MaterialTheme.typography.titleMedium
                         )
-                        TextButton(onClick = { isPresentingBottomSheet = !isPresentingBottomSheet }) {
-                            Text(text = "Choose other consumer")
+                        if (consumerNamesSorted.isNotEmpty() || consumerName.isNotBlank()) {
+                            TextButton(onClick = { isPresentingBottomSheet = !isPresentingBottomSheet }) {
+                                Text(text = "Choose other consumer")
+                            }
                         }
                         var showNewConsumerTextField by remember { mutableStateOf(false) }
                         Row(

@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 
 @Composable
@@ -40,17 +41,18 @@ fun CardWithTitle(
     content: @Composable (ColumnScope.() -> Unit)
 ) {
     ElevatedCard(modifier = modifier.padding(vertical = 5.dp)) {
-        Column(
-            Modifier
-                .padding(horizontal = innerPaddingHorizontal)
-                .padding(bottom = 5.dp)
-        ) {
+        Column(modifier = Modifier.padding(bottom = 5.dp)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(vertical = 3.dp)
+                modifier = Modifier.padding(vertical = 3.dp, horizontal = horizontalPadding)
             )
-            content()
+            Column(
+                Modifier
+                    .padding(horizontal = innerPaddingHorizontal)
+            ) {
+                content()
+            }
         }
     }
 }

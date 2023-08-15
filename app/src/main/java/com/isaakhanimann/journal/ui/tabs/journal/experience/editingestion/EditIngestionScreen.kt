@@ -146,7 +146,8 @@ fun EditIngestionScreen(
     var isPresentingBottomSheet by rememberSaveable { mutableStateOf(false) }
     val skipPartiallyExpanded by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
+    val bottomSheetState =
+        rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -324,20 +325,33 @@ fun EditIngestionScreen(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             ) {
-                Column(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 3.dp
+                    )
+                ) {
                     Text(
                         text = "Consumed by: ${consumerName.ifBlank { "Me" }}",
                         style = MaterialTheme.typography.titleMedium
                     )
-                    TextButton(onClick = { isPresentingBottomSheet = !isPresentingBottomSheet }) {
-                        Text(text = "Choose other consumer")
+                    if (consumerNamesSorted.isNotEmpty() || consumerName.isNotBlank()) {
+                        TextButton(onClick = {
+                            isPresentingBottomSheet = !isPresentingBottomSheet
+                        }) {
+                            Text(text = "Choose other consumer")
+                        }
                     }
                     var showNewConsumerTextField by remember { mutableStateOf(false) }
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Switch(checked = showNewConsumerTextField, onCheckedChange = {showNewConsumerTextField = !showNewConsumerTextField})
+                        Switch(
+                            checked = showNewConsumerTextField,
+                            onCheckedChange = {
+                                showNewConsumerTextField = !showNewConsumerTextField
+                            })
                         Text("Enter new consumer")
                     }
                     AnimatedVisibility(visible = showNewConsumerTextField) {
