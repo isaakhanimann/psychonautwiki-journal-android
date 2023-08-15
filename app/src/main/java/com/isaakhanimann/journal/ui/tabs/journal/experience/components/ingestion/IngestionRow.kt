@@ -27,8 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.journal.ui.tabs.journal.experience.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.*
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import java.time.Instant
 import java.time.temporal.ChronoUnit

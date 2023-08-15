@@ -37,14 +37,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
-import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.FULL_STOMACH_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.timednote.TimedNoteRow
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.OneExperienceScreenModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
 import com.isaakhanimann.journal.ui.theme.JournalTheme
@@ -83,7 +82,8 @@ fun OneExperienceScreen(
         interactions = viewModel.interactionsFlow.collectAsState().value,
         interactionExplanations = viewModel.interactionExplanationsFlow.collectAsState().value,
         ratings = viewModel.ratingsFlow.collectAsState().value,
-        timedNotes = viewModel.timedNotesFlow.collectAsState().value
+        timedNotes = viewModel.timedNotesFlow.collectAsState().value,
+        consumersWithIngestions = viewModel.consumersWithIngestionsFlow.collectAsState().value
     )
     OneExperienceScreen(
         oneExperienceScreenModel = oneExperienceScreenModel,
@@ -264,32 +264,8 @@ fun OneExperienceScreen(
                 .padding(padding)
                 .padding(horizontal = horizontalPadding)
         ) {
-            val elements = oneExperienceScreenModel.ingestionElements
-            val effectTimelines = remember(elements) {
-                elements.map { oneElement ->
-                    val horizontalWeight = if (oneElement.numDots == null) {
-                        0.5f
-                    } else if (oneElement.numDots > 4) {
-                        1f
-                    } else {
-                        oneElement.numDots.toFloat() / 4f
-                    }
-                    return@map DataForOneEffectLine(
-                        substanceName = oneElement.ingestionWithCompanion.ingestion.substanceName,
-                        roaDuration = oneElement.roaDuration,
-                        height = getHeightBetween0And1(
-                            ingestion = oneElement.ingestionWithCompanion.ingestion,
-                            allIngestions = elements.map { it.ingestionWithCompanion.ingestion }
-                        ),
-                        horizontalWeight = horizontalWeight,
-                        color = oneElement.ingestionWithCompanion.substanceCompanion?.color
-                            ?: AdaptiveColor.RED,
-                        startTime = oneElement.ingestionWithCompanion.ingestion.time
-                    )
-                }
-            }
             val verticalCardPadding = 4.dp
-            if (effectTimelines.isNotEmpty()) {
+            if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
                 Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -306,8 +282,8 @@ fun OneExperienceScreen(
                             .padding(bottom = 10.dp),
                         verticalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
-                        AllTimelines(
-                            dataForEffectLines = effectTimelines,
+                        ExperienceEffectTimelines(
+                            ingestionElements = oneExperienceScreenModel.ingestionElements,
                             dataForRatings = oneExperienceScreenModel.ratings.mapNotNull {
                                 val ratingTime = it.time
                                 return@mapNotNull if (ratingTime == null) {
@@ -322,11 +298,7 @@ fun OneExperienceScreen(
                             dataForTimedNotes = oneExperienceScreenModel.timedNotes.filter { it.isPartOfTimeline }
                                 .map {
                                     DataForOneTimedNote(time = it.time, color = it.color)
-                                },
-                            isShowingCurrentTime = true,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
+                                }
                         )
                         if (oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanion.ingestion.administrationRoute == AdministrationRoute.ORAL }) {
                             Text(
@@ -483,6 +455,40 @@ fun OneExperienceScreen(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Edit Notes"
                             )
+                        }
+                    }
+                }
+            }
+            oneExperienceScreenModel.consumersWithIngestions.forEach { consumerWithIngestions ->
+                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                    CardTitle(title = consumerWithIngestions.consumerName)
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = horizontalPadding)
+                            .padding(bottom = 10.dp),
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        ExperienceEffectTimelines(
+                            ingestionElements = consumerWithIngestions.ingestionElements,
+                            dataForRatings = emptyList(),
+                            dataForTimedNotes = emptyList()
+                        )
+                    }
+                    Divider()
+                    consumerWithIngestions.ingestionElements.forEachIndexed { index, ingestionElement ->
+                        IngestionRow(
+                            ingestionElement = ingestionElement,
+                            timeDisplayOption = timeDisplayOption,
+                            startTime = oneExperienceScreenModel.firstIngestionTime,
+                            modifier = Modifier
+                                .clickable {
+                                    navigateToIngestionScreen(ingestionElement.ingestionWithCompanion.ingestion.id)
+                                }
+                                .fillMaxWidth()
+                                .padding(vertical = 5.dp, horizontal = horizontalPadding)
+                        )
+                        if (index < consumerWithIngestions.ingestionElements.size - 1) {
+                            Divider()
                         }
                     }
                 }

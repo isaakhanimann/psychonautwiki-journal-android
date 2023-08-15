@@ -27,6 +27,7 @@ import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.*
 import com.isaakhanimann.journal.ui.utils.getInstant
 
 class OneExperienceScreenPreviewProvider :
@@ -46,177 +47,7 @@ class OneExperienceScreenPreviewProvider :
             notes = "Some Notes",
             locationName = "Zurich",
             isShowingAddIngestionButton = true,
-            ingestionElements = listOf(
-                IngestionElement(
-                    ingestionWithCompanion = IngestionWithCompanion(
-                        ingestion = Ingestion(
-                            substanceName = "MDMA",
-                            time = getInstant(
-                                year = 2022,
-                                month = 2,
-                                day = 19,
-                                hourOfDay = 20,
-                                minute = 5
-                            )!!,
-                            administrationRoute = AdministrationRoute.ORAL,
-                            dose = 90.0,
-                            isDoseAnEstimate = false,
-                            units = "mg",
-                            experienceId = 0,
-                            notes = null,
-                            stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null
-                        ),
-                        substanceCompanion = SubstanceCompanion(
-                            substanceName = "MDMA",
-                            color = AdaptiveColor.PINK
-                        )
-                    ),
-                    roaDuration = RoaDuration(
-                        onset = DurationRange(
-                            min = 30f,
-                            max = 45f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        comeup = DurationRange(
-                            min = 15f,
-                            max = 30f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        peak = DurationRange(
-                            min = 1.5f,
-                            max = 2.5f,
-                            units = DurationUnits.HOURS
-                        ),
-                        offset = DurationRange(
-                            min = 1f,
-                            max = 1.5f,
-                            units = DurationUnits.HOURS
-                        ),
-                        total = DurationRange(
-                            min = 3f,
-                            max = 6f,
-                            units = DurationUnits.HOURS
-                        ),
-                        afterglow = DurationRange(
-                            min = 12f,
-                            max = 48f,
-                            units = DurationUnits.HOURS
-                        )
-                    ),
-                    numDots = 2
-                ),
-                IngestionElement(
-                    ingestionWithCompanion = IngestionWithCompanion(
-                        ingestion = Ingestion(
-                            substanceName = "Cocaine",
-                            time = getInstant(
-                                year = 2022,
-                                month = 2,
-                                day = 19,
-                                hourOfDay = 23,
-                                minute = 5
-                            )!!,
-                            administrationRoute = AdministrationRoute.INSUFFLATED,
-                            dose = 80.0,
-                            isDoseAnEstimate = false,
-                            units = "mg",
-                            experienceId = 0,
-                            notes = null,
-                            stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null
-                        ),
-                        substanceCompanion = SubstanceCompanion(
-                            substanceName = "Cocaine",
-                            color = AdaptiveColor.BLUE
-                        )
-                    ),
-                    roaDuration = RoaDuration(
-                        onset = DurationRange(
-                            min = 1f,
-                            max = 10f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        comeup = DurationRange(
-                            min = 5f,
-                            max = 15f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        peak = DurationRange(
-                            min = 15f,
-                            max = 30f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        offset = DurationRange(
-                            min = 10f,
-                            max = 30f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        total = DurationRange(
-                            min = 10f,
-                            max = 90f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        afterglow = null
-                    ),
-                    numDots = 3
-                ),
-                IngestionElement(
-                    ingestionWithCompanion = IngestionWithCompanion(
-                        ingestion = Ingestion(
-                            substanceName = "Cocaine",
-                            time = getInstant(
-                                year = 2022,
-                                month = 2,
-                                day = 20,
-                                hourOfDay = 1,
-                                minute = 15
-                            )!!,
-                            administrationRoute = AdministrationRoute.INSUFFLATED,
-                            dose = 50.0,
-                            isDoseAnEstimate = false,
-                            units = "mg",
-                            experienceId = 0,
-                            notes = null,
-                            stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null
-                        ),
-                        substanceCompanion = SubstanceCompanion(
-                            substanceName = "Cocaine",
-                            color = AdaptiveColor.BLUE
-                        )
-                    ),
-                    roaDuration = RoaDuration(
-                        onset = DurationRange(
-                            min = 1f,
-                            max = 10f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        comeup = DurationRange(
-                            min = 5f,
-                            max = 15f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        peak = DurationRange(
-                            min = 15f,
-                            max = 30f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        offset = DurationRange(
-                            min = 10f,
-                            max = 30f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        total = DurationRange(
-                            min = 10f,
-                            max = 90f,
-                            units = DurationUnits.MINUTES
-                        ),
-                        afterglow = null
-                    ),
-                    numDots = 2
-                )
-            ),
+            ingestionElements = ingestionElements,
             cumulativeDoses = listOf(
                 CumulativeDose(
                     substanceName = "Cocaine",
@@ -322,7 +153,186 @@ class OneExperienceScreenPreviewProvider :
                     experienceId = 0,
                     isPartOfTimeline = true
                 )
+            ),
+            consumersWithIngestions = listOf(
+                ConsumerWithIngestions(consumerName = "David", ingestionElements = ingestionElements),
+                ConsumerWithIngestions(consumerName = "Laura", ingestionElements = ingestionElements),
+                ConsumerWithIngestions(consumerName = "Lorene", ingestionElements = ingestionElements),
             )
         )
     )
+
+    companion object {
+        val ingestionElements = listOf<IngestionElement>(
+            IngestionElement(
+                ingestionWithCompanion = IngestionWithCompanion(
+                    ingestion = Ingestion(
+                        substanceName = "MDMA",
+                        time = getInstant(
+                            year = 2022,
+                            month = 2,
+                            day = 19,
+                            hourOfDay = 20,
+                            minute = 5
+                        )!!,
+                        administrationRoute = AdministrationRoute.ORAL,
+                        dose = 90.0,
+                        isDoseAnEstimate = false,
+                        units = "mg",
+                        experienceId = 0,
+                        notes = null,
+                        stomachFullness = StomachFullness.EMPTY,
+                        consumerName = null
+                    ),
+                    substanceCompanion = SubstanceCompanion(
+                        substanceName = "MDMA",
+                        color = AdaptiveColor.PINK
+                    )
+                ),
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 30f,
+                        max = 45f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 1.5f,
+                        max = 2.5f,
+                        units = DurationUnits.HOURS
+                    ),
+                    offset = DurationRange(
+                        min = 1f,
+                        max = 1.5f,
+                        units = DurationUnits.HOURS
+                    ),
+                    total = DurationRange(
+                        min = 3f,
+                        max = 6f,
+                        units = DurationUnits.HOURS
+                    ),
+                    afterglow = DurationRange(
+                        min = 12f,
+                        max = 48f,
+                        units = DurationUnits.HOURS
+                    )
+                ),
+                numDots = 2
+            ),
+            IngestionElement(
+                ingestionWithCompanion = IngestionWithCompanion(
+                    ingestion = Ingestion(
+                        substanceName = "Cocaine",
+                        time = getInstant(
+                            year = 2022,
+                            month = 2,
+                            day = 19,
+                            hourOfDay = 23,
+                            minute = 5
+                        )!!,
+                        administrationRoute = AdministrationRoute.INSUFFLATED,
+                        dose = 80.0,
+                        isDoseAnEstimate = false,
+                        units = "mg",
+                        experienceId = 0,
+                        notes = null,
+                        stomachFullness = StomachFullness.EMPTY,
+                        consumerName = null
+                    ),
+                    substanceCompanion = SubstanceCompanion(
+                        substanceName = "Cocaine",
+                        color = AdaptiveColor.BLUE
+                    )
+                ),
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 1f,
+                        max = 10f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 5f,
+                        max = 15f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    offset = DurationRange(
+                        min = 10f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    total = DurationRange(
+                        min = 10f,
+                        max = 90f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    afterglow = null
+                ),
+                numDots = 3
+            ),
+            IngestionElement(
+                ingestionWithCompanion = IngestionWithCompanion(
+                    ingestion = Ingestion(
+                        substanceName = "Cocaine",
+                        time = getInstant(
+                            year = 2022,
+                            month = 2,
+                            day = 20,
+                            hourOfDay = 1,
+                            minute = 15
+                        )!!,
+                        administrationRoute = AdministrationRoute.INSUFFLATED,
+                        dose = 50.0,
+                        isDoseAnEstimate = false,
+                        units = "mg",
+                        experienceId = 0,
+                        notes = null,
+                        stomachFullness = StomachFullness.EMPTY,
+                        consumerName = null
+                    ),
+                    substanceCompanion = SubstanceCompanion(
+                        substanceName = "Cocaine",
+                        color = AdaptiveColor.BLUE
+                    )
+                ),
+                roaDuration = RoaDuration(
+                    onset = DurationRange(
+                        min = 1f,
+                        max = 10f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    comeup = DurationRange(
+                        min = 5f,
+                        max = 15f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    peak = DurationRange(
+                        min = 15f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    offset = DurationRange(
+                        min = 10f,
+                        max = 30f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    total = DurationRange(
+                        min = 10f,
+                        max = 90f,
+                        units = DurationUnits.MINUTES
+                    ),
+                    afterglow = null
+                ),
+                numDots = 2
+            )
+        )
+    }
 }

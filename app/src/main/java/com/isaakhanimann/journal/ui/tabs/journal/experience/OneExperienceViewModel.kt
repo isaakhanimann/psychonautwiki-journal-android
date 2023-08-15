@@ -23,17 +23,18 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
-import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.InteractionChecker
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.ConsumerWithIngestions
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.InteractionExplanation
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -162,7 +163,25 @@ class OneExperienceViewModel @Inject constructor(
             }
         }
 
-    val ingestionElementsFlow = ingestionsWithAssociatedDataFlow.map {
+    private val myIngestionsWithAssociatedDataFlow = ingestionsWithAssociatedDataFlow.map { ingestions ->
+        ingestions.filter { it.ingestionWithCompanion.ingestion.consumerName == null }
+    }
+
+    val consumersWithIngestionsFlow = ingestionsWithAssociatedDataFlow.map { ingestions ->
+        val otherIngestions = ingestions.filter { it.ingestionWithCompanion.ingestion.consumerName != null }
+        val groupedByConsumer = otherIngestions.groupBy { it.ingestionWithCompanion.ingestion.consumerName }
+        return@map groupedByConsumer.mapNotNull { entry ->
+            val consumerName = entry.key ?: return@mapNotNull null
+            val sortedIngestionsWith = entry.value.sortedBy { it.ingestionWithCompanion.ingestion.time }
+            ConsumerWithIngestions(consumerName = consumerName, ingestionElements = getIngestionElements(sortedIngestionsWith = sortedIngestionsWith))
+        }
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
+    val ingestionElementsFlow = myIngestionsWithAssociatedDataFlow.map {
         getIngestionElements(it)
     }.stateIn(
         initialValue = emptyList(),
@@ -170,7 +189,7 @@ class OneExperienceViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
-    val cumulativeDosesFlow = ingestionsWithAssociatedDataFlow.map {
+    val cumulativeDosesFlow = myIngestionsWithAssociatedDataFlow.map {
         getCumulativeDoses(it)
     }.stateIn(
         initialValue = emptyList(),
@@ -264,37 +283,3 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 }
-
-data class OneExperienceScreenModel(
-    val isFavorite: Boolean,
-    val title: String,
-    val firstIngestionTime: Instant,
-    val notes: String,
-    val locationName: String,
-    val isShowingAddIngestionButton: Boolean,
-    val ingestionElements: List<IngestionElement>,
-    val cumulativeDoses: List<CumulativeDose>,
-    val interactions: List<Interaction>,
-    val interactionExplanations: List<InteractionExplanation>,
-    val ratings: List<ShulginRating>,
-    val timedNotes: List<TimedNote>
-)
-
-data class CumulativeDose(
-    val substanceName: String,
-    val cumulativeDose: Double,
-    val units: String?,
-    val isEstimate: Boolean,
-    val numDots: Int?
-)
-
-data class IngestionElement(
-    val ingestionWithCompanion: IngestionWithCompanion,
-    val roaDuration: RoaDuration?,
-    val numDots: Int?
-)
-
-data class InteractionExplanation(
-    val name: String,
-    val url: String
-)

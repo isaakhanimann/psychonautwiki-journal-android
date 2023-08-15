@@ -25,7 +25,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.journal.experience.IngestionElement
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import java.time.Instant
 
 class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
