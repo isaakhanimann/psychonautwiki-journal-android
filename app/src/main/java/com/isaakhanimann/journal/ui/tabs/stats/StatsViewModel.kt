@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -21,8 +21,8 @@ package com.isaakhanimann.journal.ui.tabs.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -64,7 +64,9 @@ class StatsViewModel @Inject constructor(
         experienceRepo.getSortedExperiencesWithIngestionsFlow()
 
     private val areThereAnyIngestionsFlow = allExperiencesSortedFlow.map { all ->
-        all.any { it.ingestions.isNotEmpty() }
+        all.any { experience ->
+            experience.ingestions.any { it.consumerName == null }
+        }
     }
 
     private val relevantExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
@@ -100,7 +102,7 @@ class StatsViewModel @Inject constructor(
         companions: List<SubstanceCompanion>
     ): List<ColorCount> {
         return experiences.map { experience ->
-            experience.ingestions.map { it.substanceName }.toSet()
+            experience.ingestions.filter { it.consumerName == null }.map { it.substanceName }.toSet()
         }.flatten()
             .groupBy { it }.values.mapNotNull { sameNames ->
                 val name =
@@ -116,9 +118,9 @@ class StatsViewModel @Inject constructor(
 
     private val statsFlowItem: Flow<List<StatItem>> =
         relevantExperiencesSortedFlow.combine(companionFlow) { experiencesWithIngestions, companions ->
-            val allIngestions = experiencesWithIngestions.flatMap { it.ingestions }
+            val allIngestions = experiencesWithIngestions.flatMap { experience -> experience.ingestions.filter { it.consumerName == null } }
             val experienceNamesMap =
-                experiencesWithIngestions.map { e -> e.ingestions.map { it.substanceName }.toSet() }
+                experiencesWithIngestions.map { e -> e.ingestions.filter { it.consumerName == null }.map { it.substanceName }.toSet() }
                     .flatten().groupBy { it }
             val map = allIngestions.groupBy { it.substanceName }
             return@combine map.values.mapNotNull { groupedIngestions ->
