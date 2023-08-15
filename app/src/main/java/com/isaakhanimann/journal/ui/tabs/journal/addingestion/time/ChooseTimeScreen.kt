@@ -241,23 +241,44 @@ fun ChooseTimeScreen(
                         .fillMaxWidth()
                         .padding(vertical = 4.dp)
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = horizontalPadding)
-                    ) {
+                    Column(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)) {
                         Text(
-                            text = "Consumed by: ",
+                            text = "Consumed by: ${consumerName.ifBlank { "Me" }}",
                             style = MaterialTheme.typography.titleMedium
                         )
                         TextButton(onClick = { isPresentingBottomSheet = !isPresentingBottomSheet }) {
-                            if (consumerName.isBlank()) {
-                                Text(text = "Me")
-                            } else {
-                                Text(text = consumerName)
-                            }
+                            Text(text = "Choose other consumer")
+                        }
+                        var showNewConsumerTextField by remember { mutableStateOf(false) }
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Switch(checked = showNewConsumerTextField, onCheckedChange = {showNewConsumerTextField = !showNewConsumerTextField})
+                            Text("Enter new consumer")
+                        }
+                        AnimatedVisibility(visible = showNewConsumerTextField) {
+                            OutlinedTextField(
+                                value = consumerName,
+                                onValueChange = onChangeOfConsumerName,
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Person,
+                                        contentDescription = "Consumer"
+                                    )
+                                },
+                                keyboardActions = KeyboardActions(onDone = {
+                                    focusManager.clearFocus()
+                                }),
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Done,
+                                    capitalization = KeyboardCapitalization.Words
+                                ),
+                                placeholder = { Text("New consumer name") },
+                                singleLine = true,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
                         }
                     }
                 }
@@ -288,31 +309,6 @@ fun ChooseTimeScreen(
             sheetState = bottomSheetState,
             windowInsets = BottomSheetDefaults.windowInsets
         ) {
-            OutlinedTextField(
-                value = consumerName,
-                onValueChange = onChangeOfConsumerName,
-                leadingIcon = { Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "Consumer"
-                )},
-                keyboardActions = KeyboardActions(onDone = {
-                    focusManager.clearFocus()
-                    scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
-                        if (!bottomSheetState.isVisible) {
-                            isPresentingBottomSheet = false
-                        }
-                    }
-                }),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done,
-                    capitalization = KeyboardCapitalization.Words
-                ),
-                placeholder = { Text("Consumer name") },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = horizontalPadding)
-            )
             LazyColumn {
                 item {
                     ListItem(
