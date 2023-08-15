@@ -22,6 +22,8 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,11 +32,14 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +51,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithT
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 
@@ -75,7 +81,10 @@ fun EditIngestionScreen(
             navigateBack()
         },
         localDateTime = viewModel.localDateTimeFlow.collectAsState().value,
-        onTimeChange = viewModel::onChangeTime
+        onTimeChange = viewModel::onChangeTime,
+        consumerName = viewModel.consumerName,
+        onChangeConsumerName = viewModel::onChangeConsumerName,
+        consumerNamesSorted = viewModel.sortedConsumerNamesFlow.collectAsState().value
     )
 }
 
@@ -101,7 +110,10 @@ fun EditIngestionScreenPreview() {
             deleteIngestion = {},
             onDone = {},
             localDateTime = LocalDateTime.now(),
-            onTimeChange = {}
+            onTimeChange = {},
+            consumerName = "",
+            onChangeConsumerName = {},
+            consumerNamesSorted = listOf("Dave", "Ali")
         )
     }
 }
@@ -127,7 +139,14 @@ fun EditIngestionScreen(
     onDone: () -> Unit,
     localDateTime: LocalDateTime,
     onTimeChange: (LocalDateTime) -> Unit,
+    consumerName: String,
+    onChangeConsumerName: (String) -> Unit,
+    consumerNamesSorted: List<String>
 ) {
+    var isPresentingBottomSheet by rememberSaveable { mutableStateOf(false) }
+    val skipPartiallyExpanded by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -298,6 +317,100 @@ fun EditIngestionScreen(
                             }
                         }
                     }
+                }
+            }
+            ElevatedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Column(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)) {
+                    Text(
+                        text = "Consumed by: ${consumerName.ifBlank { "Me" }}",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    TextButton(onClick = { isPresentingBottomSheet = !isPresentingBottomSheet }) {
+                        Text(text = "Choose other consumer")
+                    }
+                    var showNewConsumerTextField by remember { mutableStateOf(false) }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Switch(checked = showNewConsumerTextField, onCheckedChange = {showNewConsumerTextField = !showNewConsumerTextField})
+                        Text("Enter new consumer")
+                    }
+                    AnimatedVisibility(visible = showNewConsumerTextField) {
+                        OutlinedTextField(
+                            value = consumerName,
+                            onValueChange = onChangeConsumerName,
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Person,
+                                    contentDescription = "Consumer"
+                                )
+                            },
+                            keyboardActions = KeyboardActions(onDone = {
+                                focusManager.clearFocus()
+                            }),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                imeAction = ImeAction.Done,
+                                capitalization = KeyboardCapitalization.Words
+                            ),
+                            placeholder = { Text("New consumer name") },
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
+                }
+            }
+        }
+    }
+    if (isPresentingBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { isPresentingBottomSheet = false },
+            sheetState = bottomSheetState,
+            windowInsets = BottomSheetDefaults.windowInsets
+        ) {
+            LazyColumn {
+                item {
+                    ListItem(
+                        headlineContent = { Text("Me") },
+                        leadingContent = {
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = "Consumer"
+                            )
+                        },
+                        modifier = Modifier.clickable {
+                            onChangeConsumerName("")
+                            scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                                if (!bottomSheetState.isVisible) {
+                                    isPresentingBottomSheet = false
+                                }
+                            }
+                        }
+                    )
+                }
+                items(consumerNamesSorted) { consumerName ->
+                    ListItem(
+                        headlineContent = { Text(consumerName) },
+                        leadingContent = {
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = "Consumer"
+                            )
+                        },
+                        modifier = Modifier.clickable {
+                            onChangeConsumerName(consumerName)
+                            scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                                if (!bottomSheetState.isVisible) {
+                                    isPresentingBottomSheet = false
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }

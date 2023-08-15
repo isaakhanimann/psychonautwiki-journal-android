@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -50,6 +50,7 @@ class EditIngestionViewModel @Inject constructor(
     var units by mutableStateOf("")
     var experienceId by mutableStateOf(1)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
+    var consumerName by mutableStateOf("")
 
     init {
         val id = state.get<Int>(INGESTION_ID_KEY)!!
@@ -62,14 +63,27 @@ class EditIngestionViewModel @Inject constructor(
             dose = ing.dose?.toReadableString() ?: ""
             isKnown = ing.dose != null
             units = ing.units ?: ""
+            consumerName = ing.consumerName ?: ""
             localDateTimeFlow.emit(ing.time.getLocalDateTime())
         }
     }
+
+    val sortedConsumerNamesFlow = experienceRepo.getSortedIngestions(limit = 200).map { ingestions ->
+        return@map ingestions.mapNotNull { it.consumerName }.distinct()
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     fun onChangeTime(newLocalDateTime: LocalDateTime) {
         viewModelScope.launch {
             localDateTimeFlow.emit(newLocalDateTime)
         }
+    }
+
+    fun onChangeConsumerName(newName: String) {
+        consumerName = newName
     }
 
     fun toggleIsKnown() {
@@ -106,6 +120,9 @@ class EditIngestionViewModel @Inject constructor(
                 it.dose = if (isKnown) dose.toDoubleOrNull() else null
                 it.units = units
                 it.time = selectedInstant
+                if (consumerName.isNotBlank()) {
+                    it.consumerName = consumerName
+                }
                 experienceRepo.update(it)
             }
         }

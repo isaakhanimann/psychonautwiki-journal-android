@@ -154,9 +154,7 @@ fun ChooseTimeScreen(
     var isPresentingBottomSheet by rememberSaveable { mutableStateOf(false) }
     val skipPartiallyExpanded by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = skipPartiallyExpanded
-    )
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
     val focusManager = LocalFocusManager.current
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName Ingestion") }) },
