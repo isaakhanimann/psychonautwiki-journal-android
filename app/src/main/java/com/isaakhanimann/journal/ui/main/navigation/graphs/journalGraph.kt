@@ -36,9 +36,6 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTime
 import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
-import com.isaakhanimann.journal.ui.tabs.settings.FAQScreen
-import com.isaakhanimann.journal.ui.tabs.settings.SettingsScreen
-import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsScreen
 
 
 fun NavGraphBuilder.journalGraph(navController: NavController) {
@@ -57,14 +54,6 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 navigateToSettings = navController::navigateToSettings
             )
         }
-        composableWithTransitions(NoArgumentRouter.SettingsRouter.route) {
-            SettingsScreen(
-                navigateToFAQ = navController::navigateToFAQ,
-                navigateToComboSettings = navController::navigateToComboSettings,
-            )
-        }
-        composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
-        composableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
         composableWithTransitions(
             ArgumentRouter.EditExperienceRouter.route,
             arguments = ArgumentRouter.EditExperienceRouter.args

@@ -29,7 +29,7 @@ sealed class NoArgumentRouter(val route: String) {
     object ExplainTimelineOnJournalTabRouter :
         NoArgumentRouter(route = "explainTimelineOnJournalTab")
 
-    object SettingsRouter : NoArgumentRouter(route = "settingsChild")
+    object SettingsRouter : NoArgumentRouter(route = "settings")
     object DosageExplanationRouterOnSaferTab :
         NoArgumentRouter(route = "dosageExplanationOnSaferTab")
 

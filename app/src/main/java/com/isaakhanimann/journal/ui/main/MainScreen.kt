@@ -37,7 +37,7 @@ import com.isaakhanimann.journal.ui.main.navigation.graphs.*
 import com.isaakhanimann.journal.ui.main.navigation.routers.*
 import com.isaakhanimann.journal.ui.utils.keyboard.isKeyboardOpen
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel()
@@ -52,10 +52,11 @@ fun MainScreen(
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
                         val tabs = listOf(
-                            TabRouter.Journal,
                             TabRouter.Statistics,
+                            TabRouter.Journal,
                             TabRouter.Search,
-                            TabRouter.SaferUse
+                            TabRouter.SaferUse,
+                            TabRouter.Settings
                         )
                         tabs.forEach { tab ->
                             val isSelected =
@@ -96,6 +97,7 @@ fun MainScreen(
                     statsGraph(navController)
                     searchGraph(navController)
                     saferGraph(navController)
+                    settingsGraph(navController)
                 }
             }
     } else {
