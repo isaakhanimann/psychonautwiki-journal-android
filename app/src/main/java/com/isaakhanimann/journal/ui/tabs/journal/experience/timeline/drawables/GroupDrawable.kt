@@ -87,7 +87,9 @@ class GroupDrawable(
                                         )
                                     }
                                     onsets.ifEmpty {
-                                        emptyList()
+                                        weightedLines.map {
+                                            NoTimeline(ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime))
+                                        }
                                     }
                                 }
                             }
