@@ -29,7 +29,9 @@ fun getHeightBetween0And1(
         .mapNotNull { it.dose }
         .maxOrNull()
     return ingestion.dose.let { doseSnap ->
-        if (max == null || doseSnap == null) {
+        if (doseSnap == 0.0) {
+            0.01f
+        } else if (max == null || max == 0.0 || doseSnap == null) {
             1f
         } else {
             doseSnap.div(max).toFloat()
