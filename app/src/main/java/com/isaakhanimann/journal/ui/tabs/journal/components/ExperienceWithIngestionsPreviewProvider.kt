@@ -19,7 +19,14 @@
 package com.isaakhanimann.journal.ui.tabs.journal.components
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.*
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.Experience
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.entities.Location
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
+import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
+import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -154,7 +161,25 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         experienceId = 0,
                         notes = null,
                         stomachFullness = null,
-                        consumerName = null
+                        consumerName = "David"
+                    ),
+                    substanceCompanion = SubstanceCompanion(
+                        substanceName = "Cocaine",
+                        color = AdaptiveColor.BLUE
+                    )
+                ),
+                IngestionWithCompanion(
+                    ingestion = Ingestion(
+                        substanceName = "Cocaine",
+                        time = Instant.now(),
+                        administrationRoute = AdministrationRoute.INSUFFLATED,
+                        dose = 20.0,
+                        isDoseAnEstimate = false,
+                        units = "mg",
+                        experienceId = 0,
+                        notes = null,
+                        stomachFullness = null,
+                        consumerName = "Sven"
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",

@@ -94,6 +94,13 @@ fun ExperienceRow(
                     Text(text = rating)
                 }
             }
+            val consumerNames = remember(ingestions) {
+                ingestions.mapNotNull { it.ingestion.consumerName }.distinct()
+                    .joinToString(separator = ", ")
+            }
+            if (consumerNames.isNotEmpty()) {
+                Text(text = "With: $consumerNames", style = MaterialTheme.typography.labelSmall)
+            }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
