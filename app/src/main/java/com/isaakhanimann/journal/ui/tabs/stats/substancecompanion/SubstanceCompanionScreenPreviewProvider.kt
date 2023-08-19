@@ -19,7 +19,11 @@
 package com.isaakhanimann.journal.ui.tabs.stats.substancecompanion
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.*
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.Experience
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
+import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.utils.getInstant
 
@@ -71,7 +75,8 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            stomachFullness = StomachFullness.EMPTY
+                            stomachFullness = StomachFullness.EMPTY,
+                            consumerName = null
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
@@ -88,7 +93,8 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            stomachFullness = StomachFullness.EMPTY
+                            stomachFullness = StomachFullness.EMPTY,
+                            consumerName = null
                         )
                     )
                 ),
@@ -131,7 +137,8 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            stomachFullness = StomachFullness.EMPTY
+                            stomachFullness = StomachFullness.EMPTY,
+                            consumerName = null
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
@@ -148,7 +155,8 @@ class SubstanceCompanionScreenPreviewProvider :
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
-                            stomachFullness = StomachFullness.EMPTY
+                            stomachFullness = StomachFullness.EMPTY,
+                            consumerName = null
                         )
                     )
                 )
