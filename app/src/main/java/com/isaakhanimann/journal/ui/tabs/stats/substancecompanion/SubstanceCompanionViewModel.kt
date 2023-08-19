@@ -31,7 +31,13 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.utils.getTimeDifferenceText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
 import javax.inject.Inject
@@ -67,24 +73,26 @@ class SubstanceCompanionViewModel @Inject constructor(
         experienceRepo.getSortedIngestionsWithExperienceFlow(substanceName)
             .combine(currentTimeFlow) { sortedIngestionsWithExperiences, currentTime ->
                 val experiencesWithIngestions =
-                    sortedIngestionsWithExperiences.groupBy { it.experience.id }
+                    sortedIngestionsWithExperiences.groupBy { it.ingestion.experienceId }
                 var lastDate = currentTime
                 val allIngestionBursts: MutableList<IngestionsBurst> = mutableListOf()
                 for (oneExperience in experiencesWithIngestions) {
                     val experience = oneExperience.value.firstOrNull()?.experience ?: continue
-                    val newInstant = experience.sortDate
+                    val ingestionsSorted = oneExperience.value.map { it.ingestion }.sortedBy { it.time }
+                    val experienceStart = ingestionsSorted.first().time
+                    val experienceEnd = ingestionsSorted.last().time
                     val diffText = getTimeDifferenceText(
-                        fromInstant = newInstant,
+                        fromInstant = experienceEnd,
                         toInstant = lastDate
                     )
                     allIngestionBursts.add(
                         IngestionsBurst(
                             timeUntil = diffText,
                             experience = experience,
-                            ingestions = oneExperience.value.map { it.ingestion }
+                            ingestions = ingestionsSorted
                         )
                     )
-                    lastDate = newInstant
+                    lastDate = experienceStart
                 }
                 return@combine allIngestionBursts
             }.stateIn(
