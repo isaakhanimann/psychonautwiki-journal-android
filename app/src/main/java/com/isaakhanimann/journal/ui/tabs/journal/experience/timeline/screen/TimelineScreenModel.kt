@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Isaak Hanimann.
+ * Copyright (c) 2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -16,15 +16,14 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui
+package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.screen
 
-const val DOSE_DISCLAIMER =
-    "Always start with lower doses due to differences between individual body weight, tolerance, metabolism, and personal sensitivity."
-
-const val VOLUMETRIC_DOSE_ARTICLE_URL = "https://psychonautwiki.org/wiki/Volumetric_liquid_dosing"
-
-const val VERSION_NAME = "7.0"
-
-const val FULL_STOMACH_DISCLAIMER = "A full stomach delays the onset of oral ingestions by approx. 3 hours."
-
-const val ME = "Me"
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
+import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
+data class TimelineScreenModel(
+    val title: String,
+    val ingestionElements: List<IngestionElement>,
+    val ratings: List<ShulginRating>,
+    val timedNotes: List<TimedNote>,
+)

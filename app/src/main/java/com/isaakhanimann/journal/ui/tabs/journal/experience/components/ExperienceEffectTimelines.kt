@@ -18,12 +18,9 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
@@ -34,7 +31,8 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneT
 fun ExperienceEffectTimelines(
     ingestionElements: List<IngestionElement>,
     dataForRatings: List<DataForOneRating>,
-    dataForTimedNotes: List<DataForOneTimedNote>
+    dataForTimedNotes: List<DataForOneTimedNote>,
+    modifier: Modifier
 ) {
     val effectTimelines = remember(ingestionElements) {
         ingestionElements.map { oneElement ->
@@ -64,8 +62,6 @@ fun ExperienceEffectTimelines(
         dataForRatings = dataForRatings,
         dataForTimedNotes = dataForTimedNotes,
         isShowingCurrentTime = true,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
+        modifier = modifier
     )
 }

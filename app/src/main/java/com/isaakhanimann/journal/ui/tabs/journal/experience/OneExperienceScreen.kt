@@ -39,6 +39,7 @@ import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.FULL_STOMACH_DISCLAIMER
+import com.isaakhanimann.journal.ui.ME
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
@@ -64,6 +65,7 @@ fun OneExperienceScreen(
     navigateToAddTimedNoteScreen: () -> Unit,
     navigateToEditRatingScreen: (ratingId: Int) -> Unit,
     navigateToEditTimedNoteScreen: (timedNoteId: Int) -> Unit,
+    navigateToTimelineScreen: (consumerName: String) -> Unit,
     navigateBack: () -> Unit,
 ) {
     val ingestionsWithCompanions = viewModel.ingestionsWithCompanionsFlow.collectAsState().value
@@ -100,7 +102,8 @@ fun OneExperienceScreen(
         navigateToEditRatingScreen = navigateToEditRatingScreen,
         navigateToEditTimedNoteScreen = navigateToEditTimedNoteScreen,
         timeDisplayOption = viewModel.timeDisplayOption.value,
-        onChangeTimeDisplayOption = { viewModel.timeDisplayOption.value = it }
+        onChangeTimeDisplayOption = { viewModel.timeDisplayOption.value = it },
+        navigateToTimelineScreen = navigateToTimelineScreen
     )
 }
 
@@ -128,7 +131,8 @@ fun ExperienceScreenPreview(
             navigateToEditRatingScreen = {},
             navigateToEditTimedNoteScreen = {},
             timeDisplayOption = TimeDisplayOption.RELATIVE_TO_START,
-            onChangeTimeDisplayOption = {}
+            onChangeTimeDisplayOption = {},
+            navigateToTimelineScreen = {}
         )
     }
 }
@@ -151,7 +155,8 @@ fun OneExperienceScreen(
     navigateToEditTimedNoteScreen: (timedNoteId: Int) -> Unit,
     timeDisplayOption: TimeDisplayOption,
     onChangeTimeDisplayOption: (TimeDisplayOption) -> Unit,
-) {
+    navigateToTimelineScreen: (consumerName: String) -> Unit,
+    ) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -298,7 +303,10 @@ fun OneExperienceScreen(
                             dataForTimedNotes = oneExperienceScreenModel.timedNotes.filter { it.isPartOfTimeline }
                                 .map {
                                     DataForOneTimedNote(time = it.time, color = it.color)
-                                }
+                                },
+                            modifier = Modifier.fillMaxWidth().height(200.dp).clickable {
+                                navigateToTimelineScreen(ME)
+                            }
                         )
                         if (oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanion.ingestion.administrationRoute == AdministrationRoute.ORAL }) {
                             Text(
@@ -471,7 +479,10 @@ fun OneExperienceScreen(
                         ExperienceEffectTimelines(
                             ingestionElements = consumerWithIngestions.ingestionElements,
                             dataForRatings = emptyList(),
-                            dataForTimedNotes = emptyList()
+                            dataForTimedNotes = emptyList(),
+                            modifier = Modifier.fillMaxWidth().height(200.dp).clickable {
+                                navigateToTimelineScreen(consumerWithIngestions.consumerName)
+                            }
                         )
                     }
                     Divider()

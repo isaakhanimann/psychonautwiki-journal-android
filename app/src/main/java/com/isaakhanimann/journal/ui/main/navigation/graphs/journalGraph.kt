@@ -23,7 +23,21 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.*
+import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
+import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
+import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddRating
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddTimedNote
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditExperience
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditRating
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditTimedNote
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExperience
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExplainTimelineOnJournalTab
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToIngestion
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSettings
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToTimelineScreen
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLInJournalTab
 import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.edit.EditExperienceScreen
@@ -33,6 +47,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.edit.EditRati
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timednote.add.AddTimedNoteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timednote.edit.EditTimedNoteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.screen.TimelineScreen
 import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
@@ -84,6 +99,12 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
         ) {
             EditTimedNoteScreen(navigateBack = navController::popBackStack)
         }
+        composableWithTransitions(
+            ArgumentRouter.TimelineScreenRouter.route,
+            arguments = ArgumentRouter.TimelineScreenRouter.args
+        ) {
+            TimelineScreen()
+        }
         composableWithTransitions(NoArgumentRouter.VolumetricDosingOnJournalTabRouter.route) {
             VolumetricDosingScreen(
                 navigateToVolumetricLiquidDosingArticle = {
@@ -113,8 +134,11 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 },
                 navigateToURL = navController::navigateToURLInJournalTab,
                 navigateToEditRatingScreen = navController::navigateToEditRating,
-                navigateToEditTimedNoteScreen = {
-                    navController.navigateToEditTimedNote(timedNoteId = it, experienceId = experienceId)
+                navigateToTimelineScreen = { consumerName ->
+                    navController.navigateToTimelineScreen(consumerName, experienceId)
+                },
+                navigateToEditTimedNoteScreen = { timedNoteID ->
+                    navController.navigateToEditTimedNote(timedNoteId = timedNoteID, experienceId = experienceId)
                 }
             )
         }

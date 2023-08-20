@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets
 
 // argument keys
 const val EXPERIENCE_ID_KEY = "experienceId"
+const val CONSUMER_NAME_KEY = "consumerName"
 const val RATING_ID_KEY = "ratingId"
 const val TIMED_NOTE_ID_KEY = "timedNoteId"
 const val INGESTION_ID_KEY = "ingestionId"
@@ -41,6 +42,7 @@ const val CATEGORY_KEY = "category"
 
 // route starts
 private const val ROUTE_START_EXPERIENCES = "experiences/"
+private const val ROUTE_START_TIMELINE_SCREEN = "timeline/"
 private const val ROUTE_START_INGESTIONS = "ingestions/"
 private const val ROUTE_START_EDIT_EXPERIENCE = "editExperience/"
 private const val ROUTE_START_ADD_RATING = "addRating/"
@@ -98,6 +100,14 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         route = "$ROUTE_START_EDIT_TIMED_NOTE{$TIMED_NOTE_ID_KEY}/{$EXPERIENCE_ID_KEY}",
         args = listOf(
             navArgument(TIMED_NOTE_ID_KEY) { type = NavType.IntType },
+            navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType }
+        )
+    )
+
+    object TimelineScreenRouter : ArgumentRouter(
+        route = "$ROUTE_START_TIMELINE_SCREEN{$CONSUMER_NAME_KEY}/{$EXPERIENCE_ID_KEY}",
+        args = listOf(
+            navArgument(CONSUMER_NAME_KEY) { type = NavType.StringType },
             navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType }
         )
     )
@@ -221,6 +231,10 @@ fun NavController.navigateToEditRating(ratingId: Int) {
 
 fun NavController.navigateToEditTimedNote(timedNoteId: Int, experienceId: Int) {
     navigate("$ROUTE_START_EDIT_TIMED_NOTE$timedNoteId/$experienceId")
+}
+
+fun NavController.navigateToTimelineScreen(consumerName: String, experienceId: Int) {
+    navigate("$ROUTE_START_TIMELINE_SCREEN$consumerName/$experienceId")
 }
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {
