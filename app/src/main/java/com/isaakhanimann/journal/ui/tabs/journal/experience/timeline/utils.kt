@@ -54,4 +54,4 @@ private val ingestionDotRadiusInDp = 7.dp
 val Density.ingestionDotRadius: Float get() = ingestionDotRadiusInDp.toPx()
 
 
-const val shapeAlpha = 0.3f
+const val shapeAlpha = 0.25f
