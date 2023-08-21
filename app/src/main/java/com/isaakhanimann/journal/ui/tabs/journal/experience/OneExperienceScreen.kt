@@ -25,6 +25,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.ExposurePlus2
+import androidx.compose.material.icons.outlined.NoteAdd
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
@@ -162,15 +167,45 @@ fun OneExperienceScreen(
             TopAppBar(
                 title = { Text(oneExperienceScreenModel.title) },
                 actions = {
-                    var isShowingDeleteDialog by remember { mutableStateOf(false) }
-                    IconButton(
-                        onClick = { isShowingDeleteDialog = true },
+                    var areTimeOptionsExpanded by remember { mutableStateOf(false) }
+                    IconButton(onClick = { areTimeOptionsExpanded = true }) {
+                        if (timeDisplayOption == TimeDisplayOption.REGULAR) {
+                            Icon(Icons.Outlined.Timer, contentDescription = "Time Regular")
+                        } else {
+                            Icon(Icons.Filled.Timer, contentDescription = "Regular Time")
+                        }
+                    }
+                    DropdownMenu(
+                        expanded = areTimeOptionsExpanded,
+                        onDismissRequest = { areTimeOptionsExpanded = false }
                     ) {
+                        TimeDisplayOption.values().forEach { option ->
+                            DropdownMenuItem(
+                                text = { Text(option.text) },
+                                onClick = {
+                                    onChangeTimeDisplayOption(option)
+                                    areTimeOptionsExpanded = false
+                                },
+                                leadingIcon = {
+                                    if (option == timeDisplayOption) {
+                                        Icon(
+                                            Icons.Filled.Check,
+                                            contentDescription = "Check",
+                                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                    }
+                    var areEditOptionsExpanded by remember { mutableStateOf(false) }
+                    IconButton(onClick = { areEditOptionsExpanded = true }) {
                         Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Delete Experience",
+                            Icons.Default.Edit,
+                            contentDescription = "Edit Options",
                         )
                     }
+                    var isShowingDeleteDialog by remember { mutableStateOf(false) }
                     AnimatedVisibility(visible = isShowingDeleteDialog) {
                         AlertDialog(
                             onDismissRequest = { isShowingDeleteDialog = false },
@@ -200,50 +235,111 @@ fun OneExperienceScreen(
                             }
                         )
                     }
-                    IconButton(onClick = navigateToEditExperienceScreen) {
-                        Icon(
-                            Icons.Default.Edit,
-                            contentDescription = "Edit Experience",
-                        )
-                    }
-                    val isFavorite = oneExperienceScreenModel.isFavorite
-                    IconToggleButton(checked = isFavorite, onCheckedChange = saveIsFavorite) {
-                        if (isFavorite) {
-                            Icon(Icons.Filled.Star, contentDescription = "Is Favorite")
-                        } else {
-                            Icon(Icons.Outlined.StarOutline, contentDescription = "Is not Favorite")
-                        }
-                    }
-                    var isExpanded by remember { mutableStateOf(false) }
-                    IconButton(onClick = { isExpanded = true }) {
-                        if (timeDisplayOption == TimeDisplayOption.REGULAR) {
-                            Icon(Icons.Outlined.Timer, contentDescription = "Time Regular")
-                        } else {
-                            Icon(Icons.Filled.Timer, contentDescription = "Regular Time")
-                        }
-                    }
                     DropdownMenu(
-                        expanded = isExpanded,
-                        onDismissRequest = { isExpanded = false }
+                        expanded = areEditOptionsExpanded,
+                        onDismissRequest = { areEditOptionsExpanded = false }
                     ) {
-                        TimeDisplayOption.values().forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text("Edit Title/Notes/Location") },
+                            onClick = {
+                                navigateToEditExperienceScreen()
+                                areEditOptionsExpanded = false
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Outlined.Edit,
+                                    contentDescription = "Edit Experience",
+                                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                                )
+                            }
+                        )
+                        val isFavorite = oneExperienceScreenModel.isFavorite
+                        if (isFavorite) {
                             DropdownMenuItem(
-                                text = { Text(option.text) },
+                                text = { Text("Unmark Favorite") },
                                 onClick = {
-                                    onChangeTimeDisplayOption(option)
-                                    isExpanded = false
+                                    saveIsFavorite(false)
+                                    areEditOptionsExpanded = false
                                 },
                                 leadingIcon = {
-                                    if (option == timeDisplayOption) {
-                                        Icon(
-                                            Icons.Filled.Check,
-                                            contentDescription = "Check",
-                                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                                        )
-                                    }
+                                    Icon(
+                                        Icons.Filled.Star,
+                                        contentDescription = "Unmark Favorite",
+                                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                                    )
+                                }
+                            )
+                        } else {
+                            DropdownMenuItem(
+                                text = { Text("Mark Favorite") },
+                                onClick = {
+                                    saveIsFavorite(true)
+                                    areEditOptionsExpanded = false
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        Icons.Outlined.StarOutline,
+                                        contentDescription = "Mark Favorite",
+                                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                                    )
                                 }
                             )
                         }
+                        DropdownMenuItem(
+                            text = { Text("Delete Experience") },
+                            onClick = {
+                                isShowingDeleteDialog = true
+                                areEditOptionsExpanded = false
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Outlined.Delete,
+                                    contentDescription = "Delete Experience",
+                                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                                )
+                            }
+                        )
+                    }
+
+                    var areAddOptionsExpanded by remember { mutableStateOf(false) }
+                    IconButton(onClick = { areAddOptionsExpanded = true }) {
+                        Icon(
+                            Icons.Outlined.Add,
+                            contentDescription = "Add Options",
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = areAddOptionsExpanded,
+                        onDismissRequest = { areAddOptionsExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Add Timed Note") },
+                            onClick = {
+                                navigateToAddTimedNoteScreen()
+                                areAddOptionsExpanded = false
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Outlined.NoteAdd,
+                                    contentDescription = "Add timed note",
+                                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                                )
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Add Shulgin Rating") },
+                            onClick = {
+                                navigateToAddRatingScreen()
+                                areAddOptionsExpanded = false
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Outlined.ExposurePlus2,
+                                    contentDescription = "Add Shulgin rating",
+                                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                                )
+                            }
+                        )
                     }
                 }
             )
@@ -304,9 +400,12 @@ fun OneExperienceScreen(
                                 .map {
                                     DataForOneTimedNote(time = it.time, color = it.color)
                                 },
-                            modifier = Modifier.fillMaxWidth().height(200.dp).clickable {
-                                navigateToTimelineScreen(ME)
-                            }
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .clickable {
+                                    navigateToTimelineScreen(ME)
+                                }
                         )
                         if (oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanion.ingestion.administrationRoute == AdministrationRoute.ORAL }) {
                             Text(
@@ -361,15 +460,14 @@ fun OneExperienceScreen(
                     }
                 }
             }
-            Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                if (oneExperienceScreenModel.timedNotes.isEmpty()) {
-                    AddTimedNoteButton(navigateToAddTimedNoteScreen)
-                } else {
+            val timedNotes = oneExperienceScreenModel.timedNotes
+            if (timedNotes.isNotEmpty()) {
+                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Timed Notes")
-                    if (oneExperienceScreenModel.timedNotes.isNotEmpty()) {
+                    if (timedNotes.isNotEmpty()) {
                         Divider()
                     }
-                    oneExperienceScreenModel.timedNotes.forEach { timedNote ->
+                    timedNotes.forEachIndexed { index, timedNote ->
                         TimedNoteRow(
                             timedNote = timedNote,
                             timeDisplayOption = timeDisplayOption,
@@ -381,20 +479,19 @@ fun OneExperienceScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
-                        Divider()
+                        if (index < timedNotes.size-1) {
+                            Divider()
+                        }
                     }
-                    AddTimedNoteButton(navigateToAddTimedNoteScreen)
                 }
             }
-            Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                if (oneExperienceScreenModel.ratings.isEmpty()) {
-                    AddShulginRatingButton(navigateToAddRatingScreen)
-                } else {
+            if (oneExperienceScreenModel.ratings.isNotEmpty()) {
+                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Shulgin Ratings")
                     Divider()
                     val ratingsWithTime =
                         oneExperienceScreenModel.ratings.filter { it.time != null }
-                    ratingsWithTime.forEach { rating ->
+                    ratingsWithTime.forEachIndexed { index, rating ->
                         RatingRow(
                             rating = rating,
                             timeDisplayOption = timeDisplayOption,
@@ -406,11 +503,16 @@ fun OneExperienceScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp, horizontal = horizontalPadding)
                         )
-                        Divider()
+                        if (index < ratingsWithTime.size-1) {
+                            Divider()
+                        }
                     }
                     val overallRating =
                         oneExperienceScreenModel.ratings.firstOrNull { it.time == null }
                     if (overallRating != null) {
+                        if (ratingsWithTime.isNotEmpty()) {
+                            Divider()
+                        }
                         RatingRow(
                             rating = overallRating,
                             timeDisplayOption = timeDisplayOption,
@@ -422,26 +524,12 @@ fun OneExperienceScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp, horizontal = horizontalPadding)
                         )
-                        Divider()
                     }
-                    AddShulginRatingButton(navigateToAddRatingScreen)
                 }
             }
-            Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                if (oneExperienceScreenModel.notes.isEmpty()) {
-                    TextButton(
-                        onClick = navigateToEditExperienceScreen,
-                        modifier = Modifier.padding(horizontal = 5.dp)
-                    ) {
-                        Icon(
-                            Icons.Filled.Edit,
-                            contentDescription = "Edit",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Add Notes")
-                    }
-                } else {
+            val notes = oneExperienceScreenModel.notes
+            if (notes.isNotBlank()) {
+                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Notes")
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -480,9 +568,12 @@ fun OneExperienceScreen(
                             ingestionElements = consumerWithIngestions.ingestionElements,
                             dataForRatings = emptyList(),
                             dataForTimedNotes = emptyList(),
-                            modifier = Modifier.fillMaxWidth().height(200.dp).clickable {
-                                navigateToTimelineScreen(consumerWithIngestions.consumerName)
-                            }
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .clickable {
+                                    navigateToTimelineScreen(consumerWithIngestions.consumerName)
+                                }
                         )
                     }
                     Divider()
@@ -541,35 +632,5 @@ fun OneExperienceScreen(
             }
             Spacer(modifier = Modifier.height(60.dp))
         }
-    }
-}
-
-@Composable
-fun AddShulginRatingButton(navigateToAddRatingScreen: () -> Unit) {
-    TextButton(
-        onClick = navigateToAddRatingScreen,
-    ) {
-        Icon(
-            Icons.Filled.Add,
-            contentDescription = "Add",
-            modifier = Modifier.size(ButtonDefaults.IconSize)
-        )
-        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        Text("Add Shulgin Rating")
-    }
-}
-
-@Composable
-fun AddTimedNoteButton(navigateToAddTimedNoteScreen: () -> Unit) {
-    TextButton(
-        onClick = navigateToAddTimedNoteScreen,
-    ) {
-        Icon(
-            Icons.Filled.Add,
-            contentDescription = "Add",
-            modifier = Modifier.size(ButtonDefaults.IconSize)
-        )
-        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        Text("Add Timed Note")
     }
 }
