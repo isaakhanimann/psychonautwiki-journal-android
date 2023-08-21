@@ -63,7 +63,8 @@ fun AddTimedNoteScreen(
             alreadyUsedColors = viewModel.alreadyUsedColors,
             otherColors = viewModel.otherColors,
             isPartOfTimeline = viewModel.isPartOfTimeline,
-            onChangeOfIsPartOfTimeline = viewModel::onChangeIsPartOfTimeline
+            onChangeOfIsPartOfTimeline = viewModel::onChangeIsPartOfTimeline,
+            shouldFocusTextFieldOnAppear = true
         )
     }
 }

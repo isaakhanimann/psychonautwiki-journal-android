@@ -19,13 +19,19 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience.timednote
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,7 +82,6 @@ fun TimedNoteScreenContentPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimedNoteScreenContent(
     selectedTime: LocalDateTime,
@@ -89,8 +94,16 @@ fun TimedNoteScreenContent(
     otherColors: List<AdaptiveColor>,
     isPartOfTimeline: Boolean,
     onChangeOfIsPartOfTimeline: (Boolean) -> Unit,
+    shouldFocusTextFieldOnAppear: Boolean = false,
     modifier: Modifier
 ) {
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    LaunchedEffect(Unit) {
+        if (shouldFocusTextFieldOnAppear) {
+            focusRequester.requestFocus()
+        }
+    }
     Column(
         modifier = modifier
             .padding(10.dp)
@@ -102,12 +115,16 @@ fun TimedNoteScreenContent(
             onValueChange = onNoteChange,
             label = { Text(text = "Note") },
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Default,
+                imeAction = ImeAction.Done,
                 capitalization = KeyboardCapitalization.Sentences
             ),
+            keyboardActions = KeyboardActions(onDone = {
+                focusManager.clearFocus()
+            }),
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
+                .focusRequester(focusRequester)
         )
         Spacer(modifier = Modifier.height(5.dp))
         CardWithTitle(title = "Add to timeline") {
