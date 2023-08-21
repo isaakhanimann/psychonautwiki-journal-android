@@ -212,16 +212,10 @@ fun SubstanceScreen(
                             Column(
                                 modifier = Modifier.padding(vertical = 5.dp)
                             ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    RouteColorCircle(roa.route)
-                                    Spacer(modifier = Modifier.width(10.dp))
-                                    Text(
-                                        text = roa.route.displayText,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                }
+                                Text(
+                                    text = roa.route.displayText,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
                                 if (roa.roaDose == null) {
                                     Text(text = "No dosage info")
                                 } else {
