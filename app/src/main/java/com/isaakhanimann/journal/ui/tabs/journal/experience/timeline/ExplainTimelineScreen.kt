@@ -58,11 +58,11 @@ fun ExplainTimelineScreen() {
             VerticalSpace()
             CardWithTitle(title = "Simplifying Assumptions") {
                 val text = buildAnnotatedString {
-                    append("To be able to draw the timeline with the given data it makes multiple simplifying assumptions that are often ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append("false")
+                    append("To be able to draw the timeline with the given data multiple ")
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
+                        append("often false")
                     }
-                    append(":")
+                    append(" simplifying assumptions are made:")
                 }
                 SectionText(text = text)
                 BulletPoints(

@@ -91,14 +91,15 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.SpaceEvenly,
         ) {
             val configuration = LocalConfiguration.current
             val screenWidth = configuration.screenWidthDp.toFloat()
             var canvasWidth by remember { mutableStateOf(screenWidth) }
+            val timelineHeight = 270.dp
             Box(
                 modifier = Modifier
-                    .height(200.dp)
+                    .height(timelineHeight)
                     .horizontalScroll(rememberScrollState())
             ) {
                 ExperienceEffectTimelines(
@@ -119,7 +120,7 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
                             DataForOneTimedNote(time = it.time, color = it.color)
                         },
                     modifier = Modifier
-                        .height(200.dp)
+                        .height(timelineHeight)
                         .width(canvasWidth.dp)
                         .padding(horizontal = horizontalPadding)
                 )
