@@ -238,7 +238,7 @@ fun DrawScope.drawRating(
         color = Color.Gray,
         start = Offset(x = timeStartX, y = 0f),
         end = Offset(x = timeStartX, y = verticalLineHeight),
-        strokeWidth = 4.dp.toPx(),
+        strokeWidth = 3.dp.toPx(),
         cap = StrokeCap.Round
     )
     var y = verticalLineHeight + 1.5f * lineHeight
