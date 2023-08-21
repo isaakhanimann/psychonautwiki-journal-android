@@ -35,7 +35,6 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditTimedN
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExperience
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExplainTimelineOnJournalTab
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToIngestion
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSettings
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToTimelineScreen
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLInJournalTab
 import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
@@ -65,8 +64,7 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 navigateToExperiencePopNothing = {
                     navController.navigateToExperience(experienceId = it)
                 },
-                navigateToAddIngestion = navController::navigateToAddIngestion,
-                navigateToSettings = navController::navigateToSettings
+                navigateToAddIngestion = navController::navigateToAddIngestion
             )
         }
         composableWithTransitions(

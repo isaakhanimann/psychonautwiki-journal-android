@@ -28,7 +28,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.SearchOff
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
@@ -54,14 +53,12 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    navigateToSettings: () -> Unit,
     viewModel: JournalViewModel = hiltViewModel()
 ) {
     val currentAndPrevious = viewModel.currentAndPreviousExperiences.collectAsState().value
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToAddIngestion = navigateToAddIngestion,
-        navigateToSettings = navigateToSettings,
         isFavoriteEnabled = viewModel.isFavoriteEnabledFlow.collectAsState().value,
         onChangeIsFavorite = viewModel::onChangeFavorite,
         isTimeRelativeToNow = viewModel.isTimeRelativeToNow.value,
@@ -86,7 +83,6 @@ fun ExperiencesScreenPreview(
         JournalScreen(
             navigateToExperiencePopNothing = {},
             navigateToAddIngestion = {},
-            navigateToSettings = {},
             isFavoriteEnabled = false,
             onChangeIsFavorite = {},
             isTimeRelativeToNow = true,
@@ -106,7 +102,6 @@ fun ExperiencesScreenPreview(
 fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
-    navigateToSettings: () -> Unit,
     isFavoriteEnabled: Boolean,
     onChangeIsFavorite: (Boolean) -> Unit,
     isTimeRelativeToNow: Boolean,
@@ -122,14 +117,6 @@ fun JournalScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Experiences") },
-                navigationIcon = {
-                    IconButton(onClick = navigateToSettings) {
-                        Icon(
-                            imageVector = Icons.Outlined.Settings,
-                            contentDescription = "Settings"
-                        )
-                    }
-                },
                 actions = {
                     IconToggleButton(
                         checked = isTimeRelativeToNow,
