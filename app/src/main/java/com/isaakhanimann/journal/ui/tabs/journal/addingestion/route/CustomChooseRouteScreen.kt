@@ -57,7 +57,7 @@ fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit, substance
                         horizontalArrangement = Arrangement.spacedBy(spacing.dp)
                     ) {
                         chunk.forEach { route ->
-                            Card(
+                            ElevatedCard(
                                 modifier = Modifier
                                     .clickable {
                                         onRouteTap(route)

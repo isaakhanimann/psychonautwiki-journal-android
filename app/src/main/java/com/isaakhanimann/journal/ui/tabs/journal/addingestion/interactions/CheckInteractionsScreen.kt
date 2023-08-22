@@ -147,7 +147,7 @@ fun CheckInteractionsScreen(
                     Text(text = "No interactions found... check other sources.")
                 }
             } else {
-                Card(
+                ElevatedCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(

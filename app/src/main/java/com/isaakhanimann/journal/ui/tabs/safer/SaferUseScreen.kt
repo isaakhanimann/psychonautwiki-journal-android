@@ -40,7 +40,6 @@ import com.isaakhanimann.journal.ui.tabs.search.substance.CollapsibleSection
 import com.isaakhanimann.journal.ui.tabs.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.theme.verticalPaddingCards
-import androidx.compose.material3.ElevatedCard as Card
 
 @Preview
 @Composable
@@ -262,7 +261,7 @@ fun SaferUseScreen(
                 }
                 VerticalSpace()
             }
-            Card(
+            ElevatedCard(
                 modifier = Modifier.padding(
                     horizontal = horizontalPadding,
                     vertical = verticalPaddingCards

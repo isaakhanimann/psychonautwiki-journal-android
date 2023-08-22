@@ -38,7 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
-import androidx.compose.material3.ElevatedCard as Card
 
 
 @Composable
@@ -119,8 +118,8 @@ fun StatsScreen(
                     exit = fadeOut()
                 ) {
                     val isDarkTheme = isSystemInDarkTheme()
-                    AnimatedContent(targetState = statsModel.selectedOption) {
-                        Card(
+                    AnimatedContent(targetState = statsModel.selectedOption, label = "") {
+                        ElevatedCard(
                             modifier = Modifier.padding(
                                 horizontal = horizontalPadding,
                                 vertical = 10.dp

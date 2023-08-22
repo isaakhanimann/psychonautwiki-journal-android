@@ -171,7 +171,7 @@ fun ChooseRouteScreen(
                                 horizontalArrangement = Arrangement.spacedBy(spacing.dp)
                             ) {
                                 otherRouteChunk.forEach { route ->
-                                    Card(
+                                    ElevatedCard(
                                         modifier = Modifier
                                             .clickable {
                                                 onRouteTapped(route)
@@ -200,7 +200,7 @@ fun ChooseRouteScreen(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(spacing.dp),
                     ) {
-                        Card(
+                        ElevatedCard(
                             modifier = Modifier
                                 .clickable {
                                     onChangeShowOther(true)
@@ -219,7 +219,7 @@ fun ChooseRouteScreen(
                             }
                         }
                         pwRoutes.forEach { route ->
-                            Card(
+                            ElevatedCard(
                                 modifier = Modifier
                                     .clickable {
                                         onRouteTapped(route)

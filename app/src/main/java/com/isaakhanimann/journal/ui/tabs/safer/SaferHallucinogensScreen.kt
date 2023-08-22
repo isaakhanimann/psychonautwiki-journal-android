@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.material3.ElevatedCard as Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,7 +49,7 @@ fun SaferHallucinogensScreen() {
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
         ) {
-            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)) {
+            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)) {
                 Text(
                     text = "The information below is exclusively tailored for the use and experimentation with hallucinogens such as psychedelics, dissociatives, and deliriants.",
                     modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 5.dp)

@@ -62,7 +62,6 @@ import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.absoluteValue
-import androidx.compose.material3.ElevatedCard as Card
 
 @Composable
 fun SubstanceScreen(
@@ -142,7 +141,7 @@ fun SubstanceScreen(
                 .padding(padding)
         ) {
             if (!substance.isApproved) {
-                Card(
+                ElevatedCard(
                     modifier = Modifier
                         .padding(
                             horizontal = horizontalPadding,
@@ -165,7 +164,7 @@ fun SubstanceScreen(
             val categories = substanceWithCategories.categories
             if (substance.summary != null || categories.isNotEmpty()) {
                 VerticalSpace()
-                Card(
+                ElevatedCard(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
                         vertical = verticalPaddingCards
@@ -385,7 +384,10 @@ fun SubstanceScreen(
                                     Spacer(modifier = Modifier.height(3.dp))
                                     RoaDurationView(roaDuration = roaDuration)
                                     if (roa.route == AdministrationRoute.ORAL) {
-                                        Text(text = FULL_STOMACH_DISCLAIMER, style = MaterialTheme.typography.bodySmall)
+                                        Text(
+                                            text = FULL_STOMACH_DISCLAIMER,
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
                                     }
                                 }
                             }

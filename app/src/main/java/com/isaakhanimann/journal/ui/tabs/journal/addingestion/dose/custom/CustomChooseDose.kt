@@ -172,7 +172,7 @@ fun CustomChooseDose(
         ) {
             LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(4.dp))
-            Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
@@ -211,7 +211,7 @@ fun CustomChooseDose(
                 }
             }
             AnimatedVisibility(visible = isValidDose) {
-                Card(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                     Column(
                         modifier = Modifier.padding(
                             horizontal = horizontalPadding,

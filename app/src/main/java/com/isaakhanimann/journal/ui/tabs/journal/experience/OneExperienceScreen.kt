@@ -55,7 +55,6 @@ import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.Instant
-import androidx.compose.material3.ElevatedCard as Card
 
 @Composable
 fun OneExperienceScreen(
@@ -366,7 +365,7 @@ fun OneExperienceScreen(
         ) {
             val verticalCardPadding = 4.dp
             if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
-                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
@@ -416,7 +415,7 @@ fun OneExperienceScreen(
                 }
             }
             if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
-                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(
                         title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern(
                             "EEE, dd MMM yyyy"
@@ -445,7 +444,7 @@ fun OneExperienceScreen(
             }
             val cumulativeDoses = oneExperienceScreenModel.cumulativeDoses
             if (cumulativeDoses.isNotEmpty()) {
-                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Cumulative Dose")
                     cumulativeDoses.forEachIndexed { index, cumulativeDose ->
                         CumulativeDoseRow(
@@ -461,7 +460,7 @@ fun OneExperienceScreen(
             }
             val timedNotes = oneExperienceScreenModel.timedNotes
             if (timedNotes.isNotEmpty()) {
-                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Timed Notes")
                     if (timedNotes.isNotEmpty()) {
                         Divider()
@@ -485,7 +484,7 @@ fun OneExperienceScreen(
                 }
             }
             if (oneExperienceScreenModel.ratings.isNotEmpty()) {
-                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Shulgin Ratings")
                     Divider()
                     val ratingsWithTime =
@@ -528,7 +527,7 @@ fun OneExperienceScreen(
             }
             val notes = oneExperienceScreenModel.notes
             if (notes.isNotBlank()) {
-                Card(modifier = Modifier.padding(vertical = verticalCardPadding).fillMaxWidth().clickable { navigateToEditExperienceScreen() }) {
+                ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding).fillMaxWidth().clickable { navigateToEditExperienceScreen() }) {
                     CardTitle(title = "Notes")
                     Column(modifier = Modifier
                         .padding(horizontal = horizontalPadding)
@@ -543,7 +542,7 @@ fun OneExperienceScreen(
                 }
             }
             oneExperienceScreenModel.consumersWithIngestions.forEach { consumerWithIngestions ->
-                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = consumerWithIngestions.consumerName)
                     Column(
                         modifier = Modifier
@@ -584,7 +583,7 @@ fun OneExperienceScreen(
             }
             val interactions = oneExperienceScreenModel.interactions
             AnimatedVisibility(visible = interactions.isNotEmpty()) {
-                Card(
+                ElevatedCard(
                     modifier = Modifier
                         .padding(vertical = verticalCardPadding)
                 ) {
