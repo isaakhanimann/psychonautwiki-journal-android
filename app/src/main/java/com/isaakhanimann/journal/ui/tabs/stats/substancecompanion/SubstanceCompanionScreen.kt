@@ -116,7 +116,7 @@ fun SubstanceCompanionScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                Card(modifier = Modifier.padding(vertical = 5.dp)) {
+                ElevatedCard(modifier = Modifier.padding(vertical = 5.dp)) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(
@@ -134,14 +134,10 @@ fun SubstanceCompanionScreen(
                     }
                 }
                 if (tolerance != null || crossTolerances.isNotEmpty()) {
-                    CardWithTitle(title = "Tolerance") {
+                    CardWithTitle(title = "Tolerance", modifier = Modifier.fillMaxWidth()) {
                         ToleranceSection(
                             tolerance = tolerance,
-                            crossTolerances = crossTolerances,
-                            modifier = Modifier.padding(
-                                vertical = 5.dp,
-                                horizontal = horizontalPadding
-                            )
+                            crossTolerances = crossTolerances
                         )
                     }
                 }
@@ -149,7 +145,7 @@ fun SubstanceCompanionScreen(
             }
             items(ingestionBursts) { burst ->
                 TimeArrowUp(timeText = burst.timeUntil)
-                Card(modifier = Modifier.padding(vertical = 5.dp)) {
+                ElevatedCard(modifier = Modifier.padding(vertical = 5.dp)) {
                     Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
