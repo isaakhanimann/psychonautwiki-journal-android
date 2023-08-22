@@ -34,7 +34,6 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -529,28 +528,16 @@ fun OneExperienceScreen(
             }
             val notes = oneExperienceScreenModel.notes
             if (notes.isNotBlank()) {
-                Card(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                Card(modifier = Modifier.padding(vertical = verticalCardPadding).fillMaxWidth().clickable { navigateToEditExperienceScreen() }) {
                     CardTitle(title = "Notes")
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = horizontalPadding)
+                    Column(modifier = Modifier
+                        .padding(horizontal = horizontalPadding)
+                        .padding(bottom = 10.dp)
                     ) {
-                        Column(modifier = Modifier.padding(vertical = 10.dp)) {
-                            Text(text = oneExperienceScreenModel.notes)
-                            if (oneExperienceScreenModel.locationName.isNotBlank()) {
-                                Spacer(modifier = Modifier.height(5.dp))
-                                Text(text = "Location: ${oneExperienceScreenModel.locationName}")
-                            }
-                        }
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        IconButton(onClick = navigateToEditExperienceScreen) {
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit Notes"
-                            )
+                        Text(text = oneExperienceScreenModel.notes)
+                        if (oneExperienceScreenModel.locationName.isNotBlank()) {
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(text = "Location: ${oneExperienceScreenModel.locationName}")
                         }
                     }
                 }
