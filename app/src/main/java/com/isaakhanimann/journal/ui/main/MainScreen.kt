@@ -16,8 +16,6 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-@file:OptIn(ExperimentalAnimationApi::class)
-
 package com.isaakhanimann.journal.ui.main
 
 import androidx.compose.animation.*
@@ -67,10 +65,10 @@ fun MainScreen(
                                 selected = isSelected,
                                 onClick = {
                                     if (isSelected) {
-                                        navController.popBackStack(
-                                            route = tab.childRoute,
-                                            inclusive = false
-                                        )
+                                        val isAlreadyOnTopOfTab = tabs.any { it.childRoute == currentDestination?.route }
+                                        if (!isAlreadyOnTopOfTab) {
+                                            navController.popBackStack()
+                                        }
                                     } else {
                                         navController.navigate(tab.route) {
                                             popUpTo(navController.graph.findStartDestination().id) {
