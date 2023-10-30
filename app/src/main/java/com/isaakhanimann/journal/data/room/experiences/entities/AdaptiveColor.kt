@@ -128,67 +128,58 @@ enum class AdaptiveColor {
                 Color(red = 162, green = 132, blue = 94)
             }
         }
-    }
+    },
     KHAKI {
         override fun getComposeColor(isDarkTheme: Boolean): Color {
             return if (isDarkTheme) {
-                Color(red = 195, green = 176, blue = 145)
-            } else {
                 Color(red = 203, green = 183, blue = 137)
+            } else {
+                Color(red = 195, green = 176, blue = 145)
             }
         }
     },
     CORAL {
         override fun getComposeColor(isDarkTheme: Boolean): Color {
             return if (isDarkTheme) {
-                Color(red = 248, green = 131, blue = 121)
-            } else {
                 Color(red = 255, green = 131, blue = 121)
+            } else {
+                Color(red = 248, green = 131, blue = 121)
             }
         }
     },
     FUCHSIA {
         override fun getComposeColor(isDarkTheme: Boolean): Color {
             return if (isDarkTheme) {
-                Color(red = 200, green = 76, blue = 146)
-            } else {
                 Color(red = 214, green = 68, blue = 146)
+            } else {
+                Color(red = 200, green = 76, blue = 146)
             }
         }
     },
     LAVENDER {
         override fun getComposeColor(isDarkTheme: Boolean): Color {
             return if (isDarkTheme) {
-                Color(red = 150, green = 123, blue = 182)
-            } else {
                 Color(red = 173, green = 123, blue = 182)
-            }
-        }
-    },
-    INDIGO {
-        override fun getComposeColor(isDarkTheme: Boolean): Color {
-            return if (isDarkTheme) {
-                Color(red = 75, green = 0, blue = 130)
             } else {
-                Color(red = 74, green = 0, blue = 111)
+                Color(red = 150, green = 123, blue = 182)
             }
         }
     },
     MAROON {
         override fun getComposeColor(isDarkTheme: Boolean): Color {
             return if (isDarkTheme) {
-                Color(red = 110, green = 0, blue = 0)
-            } else {
                 Color(red = 128, green = 0, blue = 0)
+            } else {
+                Color(red = 110, green = 0, blue = 0)
             }
         }
     },
     OLIVE {
         override fun getComposeColor(isDarkTheme: Boolean): Color {
             return if (isDarkTheme) {
-                Color(red = 128, green = 128, blue = 0)
-            } else {
                 Color(red = 140, green = 140, blue = 0)
+            } else {
+                Color(red = 128, green = 128, blue = 0)
             }
         }
     };
