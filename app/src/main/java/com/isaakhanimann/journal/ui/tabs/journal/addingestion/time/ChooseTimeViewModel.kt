@@ -31,12 +31,24 @@ import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.main.navigation.routers.*
+import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.DOSE_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.IS_ESTIMATE_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.UNITS_KEY
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -179,7 +191,7 @@ class ChooseTimeViewModel @Inject constructor(
                 isShowingColorPicker = true
                 val alreadyUsedColors = allCompanions.map { it.color }
                 val otherColors = AdaptiveColor.values().filter { !alreadyUsedColors.contains(it) }
-                selectedColor = otherColors.randomOrNull() ?: AdaptiveColor.values().random()
+                selectedColor = otherColors.filter { it.isPreferred }.randomOrNull() ?: otherColors.randomOrNull() ?: AdaptiveColor.values().random()
             } else {
                 selectedColor = thisCompanion.color
             }
