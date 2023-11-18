@@ -22,17 +22,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.substances.repositories.SearchRepository
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 
@@ -77,7 +73,7 @@ class JournalViewModel @Inject constructor(
         }
     }
 
-    val currentAndPreviousExperiences =
+    val experiences =
         experienceRepo.getSortedExperienceWithIngestionsCompanionsAndRatingsFlow()
             .combine(searchTextFlow) { experiencesWithIngestions, searchText ->
                 Pair(first = experiencesWithIngestions, second = searchText)
@@ -86,11 +82,7 @@ class JournalViewModel @Inject constructor(
                 val experiencesWithIngestions = pair.first
                 val searchText = pair.second
                 val filtered = if (searchText.isEmpty() && !isFavoriteEnabled) {
-                    if (isFavoriteEnabled) {
-                        experiencesWithIngestions.filter { it.experience.isFavorite }
-                    } else {
-                        experiencesWithIngestions
-                    }
+                    experiencesWithIngestions
                 } else {
                     val matchingSubstances = searchRepository.getMatchingSubstances(
                         searchText = searchText,
@@ -116,30 +108,11 @@ class JournalViewModel @Inject constructor(
                         }
                     }
                 }
-                val current = filtered.firstOrNull { experience ->
-                    experience.ingestionsWithCompanions.any {
-                        it.ingestion.time > Instant.now().minus(
-                            hourLimitToSeparateIngestions, ChronoUnit.HOURS
-                        )
-                    }
-                }
-                val previous = if (current != null) filtered.drop(1) else filtered
-                return@combine CurrentAndPreviousExperiences(
-                    currentExperience = current,
-                    previousExperiences = previous
-                )
+                return@combine filtered
             }
             .stateIn(
-                initialValue = CurrentAndPreviousExperiences(
-                    currentExperience = null,
-                    previousExperiences = emptyList()
-                ),
+                initialValue = emptyList(),
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000)
             )
 }
-
-data class CurrentAndPreviousExperiences(
-    val currentExperience: ExperienceWithIngestionsCompanionsAndRatings?,
-    val previousExperiences: List<ExperienceWithIngestionsCompanionsAndRatings>
-)

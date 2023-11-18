@@ -40,11 +40,9 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.ui.tabs.journal.components.ExperienceRow
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -55,7 +53,7 @@ fun JournalScreen(
     navigateToAddIngestion: () -> Unit,
     viewModel: JournalViewModel = hiltViewModel()
 ) {
-    val currentAndPrevious = viewModel.currentAndPreviousExperiences.collectAsState().value
+    val experiences = viewModel.experiences.collectAsState().value
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToAddIngestion = navigateToAddIngestion,
@@ -67,8 +65,7 @@ fun JournalScreen(
         onChangeSearchText = viewModel::search,
         isSearchEnabled = viewModel.isSearchEnabled.value,
         onChangeIsSearchEnabled = viewModel::onChangeOfIsSearchEnabled,
-        currentExperience = currentAndPrevious.currentExperience,
-        previousExperiences = currentAndPrevious.previousExperiences
+        experiences = experiences
     )
 }
 
@@ -91,8 +88,7 @@ fun ExperiencesScreenPreview(
             onChangeSearchText = {},
             isSearchEnabled = true,
             onChangeIsSearchEnabled = {},
-            currentExperience = experiences.firstOrNull(),
-            previousExperiences = experiences.drop(1)
+            experiences = experiences
         )
     }
 }
@@ -110,8 +106,7 @@ fun JournalScreen(
     onChangeSearchText: (String) -> Unit,
     isSearchEnabled: Boolean,
     onChangeIsSearchEnabled: (Boolean) -> Unit,
-    currentExperience: ExperienceWithIngestionsCompanionsAndRatings?,
-    previousExperiences: List<ExperienceWithIngestionsCompanionsAndRatings>,
+    experiences: List<ExperienceWithIngestionsCompanionsAndRatings>,
 ) {
     Scaffold(
         topBar = {
@@ -174,7 +169,6 @@ fun JournalScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Top
             ) {
@@ -213,9 +207,9 @@ fun JournalScreen(
                             ),
                             singleLine = true
                         )
-                        if (currentExperience == null && previousExperiences.isEmpty() && isSearchEnabled && searchText.isNotEmpty()) {
+                        if (experiences.isEmpty() && isSearchEnabled && searchText.isNotEmpty()) {
                             if (isFavoriteEnabled) {
-                                Column(modifier = Modifier.padding(vertical = 5.dp)) {
+                                Column(modifier = Modifier.padding(horizontalPadding)) {
                                     Text(
                                         text = "No Results",
                                         style = MaterialTheme.typography.titleMedium
@@ -226,7 +220,7 @@ fun JournalScreen(
                                     )
                                 }
                             } else {
-                                Column(modifier = Modifier.padding(vertical = 5.dp)) {
+                                Column(modifier = Modifier.padding(horizontalPadding)) {
                                     Text(
                                         text = "No Results",
                                         style = MaterialTheme.typography.titleMedium
@@ -240,40 +234,20 @@ fun JournalScreen(
                         }
                     }
                 }
-                AnimatedVisibility(visible = !isSearchEnabled) {
-                    if (currentExperience != null) {
-                        CardWithTitle(title = "Current", innerPaddingHorizontal = 0.dp) {
-                            Divider()
-                            ExperienceRow(
-                                currentExperience,
-                                navigateToExperienceScreen = {
-                                    navigateToExperiencePopNothing(currentExperience.experience.id)
-                                },
-                                isTimeRelativeToNow = isTimeRelativeToNow
-                            )
-                        }
-                    }
-
-                }
-                if (previousExperiences.isNotEmpty()) {
-                    CardWithTitle(title = "Previous", innerPaddingHorizontal = 0.dp) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(experiences) { experienceWithIngestions ->
+                        ExperienceRow(
+                            experienceWithIngestions,
+                            navigateToExperienceScreen = {
+                                navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
+                            },
+                            isTimeRelativeToNow = isTimeRelativeToNow
+                        )
                         Divider()
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            items(previousExperiences) { experienceWithIngestions ->
-                                ExperienceRow(
-                                    experienceWithIngestions,
-                                    navigateToExperienceScreen = {
-                                        navigateToExperiencePopNothing(experienceWithIngestions.experience.id)
-                                    },
-                                    isTimeRelativeToNow = isTimeRelativeToNow
-                                )
-                                Divider()
-                            }
-                        }
                     }
                 }
             }
-            if (currentExperience == null && previousExperiences.isEmpty() && !isSearchEnabled) {
+            if (experiences.isEmpty() && !isSearchEnabled) {
                 if (isFavoriteEnabled) {
                     EmptyScreenDisclaimer(
                         title = "No Favorites",
