@@ -18,4 +18,4 @@
 
 package com.isaakhanimann.journal.ui.tabs.search.substance.roa
 
-fun Double.toReadableString() = this.toString().removeSuffix(".0")
+fun Double.toReadableString() = String.format("%.3f", this).replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
