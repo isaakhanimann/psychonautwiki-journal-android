@@ -18,12 +18,13 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -38,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
@@ -90,17 +92,19 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(padding)
+                .padding(top = 3.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
         ) {
             val configuration = LocalConfiguration.current
             val screenWidth = configuration.screenWidthDp.toFloat()
             var canvasWidth by remember { mutableStateOf(screenWidth) }
-            val timelineHeight = 270.dp
+            val isOrientationPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
             Box(
                 modifier = Modifier
-                    .height(timelineHeight)
-                    .horizontalScroll(rememberScrollState())
+                    .weight(1f)
+                    .horizontalScroll(rememberScrollState()),
+                contentAlignment = Alignment.Center
             ) {
                 ExperienceEffectTimelines(
                     ingestionElements = timelineScreenModel.ingestionElements,
@@ -120,7 +124,7 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
                             DataForOneTimedNote(time = it.time, color = it.color)
                         },
                     modifier = Modifier
-                        .height(timelineHeight)
+                        .fillMaxHeight(if (isOrientationPortrait) 0.5f else 1f)
                         .width(canvasWidth.dp)
                         .padding(horizontal = horizontalPadding)
                 )
