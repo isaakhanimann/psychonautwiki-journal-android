@@ -123,6 +123,13 @@ fun DrugTestingScreen() {
                     url = "https://www.drugs-test.nl/en/testlocations/"
                 )
             }
+            CardWithTesting(title = "Slovenia") {
+                TestingServiceItem(
+                    name = "DrogArt",
+                    city = "Various locations",
+                    url = "https://www.drogart.org/testirne-tocke/"
+                )
+            }
             CardWithTesting(title = "Spain") {
                 TestingServiceItem(
                     name = "Energy Control",
@@ -161,6 +168,7 @@ fun DrugTestingScreen() {
                     url = "https://www.gassenarbeit.ch/angebote/dilu"
                 )
             }
+
             CardWithTesting(title = "United Kingdom") {
                 TestingServiceItem(
                     name = "The Loop",
