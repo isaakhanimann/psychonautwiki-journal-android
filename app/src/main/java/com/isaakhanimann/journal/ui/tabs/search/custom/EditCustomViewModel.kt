@@ -30,6 +30,8 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,7 +48,7 @@ class EditCustomViewModel @Inject constructor(
     val isValid get() = name.isNotBlank() && units.isNotBlank()
 
     init {
-        val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
+        val substanceName = URLDecoder.decode(state.get<String>(SUBSTANCE_NAME_KEY)!!, StandardCharsets.UTF_8.toString())
         viewModelScope.launch {
             val customSubstance =
                 experienceRepo.getCustomSubstanceFlow(substanceName).firstOrNull() ?: return@launch

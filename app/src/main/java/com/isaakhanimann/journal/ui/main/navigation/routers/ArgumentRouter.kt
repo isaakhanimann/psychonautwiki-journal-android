@@ -257,7 +257,8 @@ fun NavController.navigateToURLInSaferTab(url: String) {
 }
 
 fun NavController.navigateToEditCustomSubstance(substanceName: String) {
-    navigate(ROUTE_START_EDIT_CUSTOM + substanceName)
+    val encodedSubstanceName = URLEncoder.encode(substanceName, StandardCharsets.UTF_8.toString())
+    navigate(ROUTE_START_EDIT_CUSTOM + encodedSubstanceName)
 }
 
 fun NavController.navigateToChooseCustomRoute(substanceName: String) {
