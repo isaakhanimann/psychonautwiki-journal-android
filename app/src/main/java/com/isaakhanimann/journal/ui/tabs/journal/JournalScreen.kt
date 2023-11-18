@@ -235,6 +235,11 @@ fun JournalScreen(
                     }
                 }
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    if (experiences.isNotEmpty()) {
+                        item {
+                            Divider()
+                        }
+                    }
                     items(experiences) { experienceWithIngestions ->
                         ExperienceRow(
                             experienceWithIngestions,
