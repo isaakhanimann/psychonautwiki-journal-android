@@ -27,7 +27,14 @@ import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompani
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
@@ -71,7 +78,7 @@ class StatsViewModel @Inject constructor(
 
     private val relevantExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
         allExperiencesSortedFlow.combine(startDateFlow) { experiences, startDate ->
-            return@combine experiences.takeWhile { it.sortInstant > startDate }
+            return@combine experiences.dropWhile { it.sortInstant > Instant.now() }.takeWhile { it.sortInstant > startDate }
         }
 
     private val companionFlow = experienceRepo.getAllSubstanceCompanionsFlow()
