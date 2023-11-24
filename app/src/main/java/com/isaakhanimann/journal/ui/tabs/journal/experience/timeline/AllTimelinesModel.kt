@@ -38,7 +38,7 @@ class AllTimelinesModel(
     val groupDrawables: List<GroupDrawable>
     val axisDrawable: AxisDrawable
 
-    data class SubstanceGroup(
+    data class RoaGroup(
         val color: AdaptiveColor,
         val roaDuration: RoaDuration?,
         val weightedLines: List<WeightedLine>
@@ -48,16 +48,19 @@ class AllTimelinesModel(
         val ratingTimes = dataForRatings.map { it.time }
         val ingestionTimes = dataForLines.map { it.startTime }
         val noteTimes = timedNotes.map { it.time }
-        val substanceGroups = dataForLines.groupBy { it.substanceName }.map { entry ->
-            val lines = entry.value
-            val color = lines.first().color
-            val roaDuration = lines.first().roaDuration
-            val weightedLines = lines.map { WeightedLine(it.startTime, it.horizontalWeight, it.height) }
-            SubstanceGroup(color, roaDuration, weightedLines)
+        val roaGroups = dataForLines.groupBy { it.substanceName }.flatMap { substanceGroup ->
+            val linesPerSubstance = substanceGroup.value
+            return@flatMap linesPerSubstance.groupBy { it.route }.map { routeGroup ->
+                val linesPerRoute = routeGroup.value
+                return@map RoaGroup(
+                    linesPerRoute.first().color,
+                    linesPerRoute.first().roaDuration,
+                    linesPerRoute.map { WeightedLine(it.startTime, it.horizontalWeight, it.height) })
+            }
         }
         val allStartTimeCandidates = ratingTimes + ingestionTimes + noteTimes
         startTime = allStartTimeCandidates.reduce { acc, date -> if (acc.isBefore(date)) acc else date }
-        val groupDrawables = substanceGroups.map { group ->
+        val groupDrawables = roaGroups.map { group ->
             GroupDrawable(
                 startTimeGraph = startTime,
                 color = group.color,

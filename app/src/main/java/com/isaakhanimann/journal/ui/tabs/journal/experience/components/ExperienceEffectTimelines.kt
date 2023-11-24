@@ -45,6 +45,7 @@ fun ExperienceEffectTimelines(
             }
             return@map DataForOneEffectLine(
                 substanceName = oneElement.ingestionWithCompanion.ingestion.substanceName,
+                route = oneElement.ingestionWithCompanion.ingestion.administrationRoute,
                 roaDuration = oneElement.roaDuration,
                 height = getHeightBetween0And1(
                     ingestion = oneElement.ingestionWithCompanion.ingestion,

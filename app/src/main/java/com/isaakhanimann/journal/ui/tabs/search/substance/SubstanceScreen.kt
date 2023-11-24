@@ -342,6 +342,7 @@ fun SubstanceScreen(
                             roasWithDurationsDefined.mapIndexed { index, roa ->
                                 DataForOneEffectLine(
                                     substanceName = "name$index",
+                                    route = roa.route,
                                     roaDuration = roa.roaDuration,
                                     height = 1f,
                                     horizontalWeight = 0.5f,

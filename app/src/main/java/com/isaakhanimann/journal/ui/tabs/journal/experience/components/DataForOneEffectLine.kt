@@ -19,11 +19,13 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import java.time.Instant
 
 data class DataForOneEffectLine(
     val substanceName: String,
+    val route: AdministrationRoute,
     val roaDuration: RoaDuration?,
     val height: Float,
     val horizontalWeight: Float,

@@ -20,6 +20,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
@@ -33,6 +34,7 @@ class TimelinesPreviewProvider :
         listOf(
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.SUBLINGUAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -54,6 +56,7 @@ class TimelinesPreviewProvider :
         listOf(
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.SUBCUTANEOUS,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -79,6 +82,7 @@ class TimelinesPreviewProvider :
         listOf(
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.BUCCAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -104,6 +108,7 @@ class TimelinesPreviewProvider :
         listOf(
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.INTRAVENOUS,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -133,6 +138,7 @@ class TimelinesPreviewProvider :
         listOf(
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.SMOKED,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -166,6 +172,7 @@ class TimelinesPreviewProvider :
         listOf(
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -195,6 +202,7 @@ class TimelinesPreviewProvider :
         listOf(
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.INSUFFLATED,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -234,6 +242,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -273,6 +282,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -312,6 +322,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name2",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = null,
                     comeup = null,
@@ -333,6 +344,7 @@ class TimelinesPreviewProvider :
         listOf(
             DataForOneEffectLine(
                 substanceName = "name",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -372,6 +384,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name2",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -411,6 +424,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name3",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -450,6 +464,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name4",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -489,6 +504,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name5",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -528,6 +544,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "nam6",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -567,6 +584,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name7",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -606,6 +624,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name8",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -645,6 +664,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name9",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -684,6 +704,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name10",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -723,6 +744,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name11",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -762,6 +784,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name12",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -801,6 +824,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name13",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -840,6 +864,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name14",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -881,6 +906,7 @@ class TimelinesPreviewProvider :
         listOf(
             DataForOneEffectLine(
                 substanceName = "name15",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
@@ -920,6 +946,7 @@ class TimelinesPreviewProvider :
             ),
             DataForOneEffectLine(
                 substanceName = "name16",
+                route = AdministrationRoute.ORAL,
                 roaDuration = RoaDuration(
                     onset = DurationRange(
                         min = 20f,
