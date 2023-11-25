@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 sealed class NoArgumentRouter(val route: String) {
     object StatsRouter : NoArgumentRouter(route = "stats")
     object CombinationSettingsRouter : NoArgumentRouter(route = "combinationSettings")
+    object SubstanceColorsRouter : NoArgumentRouter(route = "substanceColors")
     object FAQRouter : NoArgumentRouter(route = "faqRoute")
     object ExplainTimelineOnSearchTabRouter : NoArgumentRouter(route = "explainTimelineOnSearchTab")
     object ExplainTimelineOnJournalTabRouter :
@@ -64,6 +65,9 @@ sealed class NoArgumentRouter(val route: String) {
 
 fun NavController.navigateToComboSettings() {
     navigate(NoArgumentRouter.CombinationSettingsRouter.route)
+}
+fun NavController.navigateToSubstanceColors() {
+    navigate(NoArgumentRouter.SubstanceColorsRouter.route)
 }
 
 fun NavController.navigateToReagentTesting() {

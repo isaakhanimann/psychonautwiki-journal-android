@@ -26,8 +26,10 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToComboSettings
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToFAQ
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceColors
 import com.isaakhanimann.journal.ui.tabs.settings.FAQScreen
 import com.isaakhanimann.journal.ui.tabs.settings.SettingsScreen
+import com.isaakhanimann.journal.ui.tabs.settings.colors.SubstanceColorsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsScreen
 
 fun NavGraphBuilder.settingsGraph(navController: NavController) {
@@ -41,9 +43,11 @@ fun NavGraphBuilder.settingsGraph(navController: NavController) {
             SettingsScreen(
                 navigateToFAQ = navController::navigateToFAQ,
                 navigateToComboSettings = navController::navigateToComboSettings,
+                navigateToSubstanceColors = navController::navigateToSubstanceColors
             )
         }
         composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
         composableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
+        composableWithTransitions(NoArgumentRouter.SubstanceColorsRouter.route) { SubstanceColorsScreen() }
     }
 }

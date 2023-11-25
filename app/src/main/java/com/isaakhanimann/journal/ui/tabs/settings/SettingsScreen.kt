@@ -52,6 +52,7 @@ fun SettingsPreview() {
         deleteEverything = {},
         navigateToFAQ = {},
         navigateToComboSettings = {},
+        navigateToSubstanceColors = {},
         importFile = {},
         exportFile = {},
         snackbarHostState = remember { SnackbarHostState() },
@@ -63,10 +64,12 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     navigateToFAQ: () -> Unit,
     navigateToComboSettings: () -> Unit,
+    navigateToSubstanceColors: () -> Unit,
 ) {
     SettingsScreen(
         navigateToFAQ = navigateToFAQ,
         navigateToComboSettings = navigateToComboSettings,
+        navigateToSubstanceColors = navigateToSubstanceColors,
         deleteEverything = viewModel::deleteEverything,
         importFile = viewModel::importFile,
         exportFile = viewModel::exportFile,
@@ -79,6 +82,7 @@ fun SettingsScreen(
 fun SettingsScreen(
     navigateToFAQ: () -> Unit,
     navigateToComboSettings: () -> Unit,
+    navigateToSubstanceColors: () -> Unit,
     deleteEverything: () -> Unit,
     importFile: (uri: Uri) -> Unit,
     exportFile: (uri: Uri) -> Unit,
@@ -99,14 +103,6 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            CardWithTitle(title = "Interactions", innerPaddingHorizontal = 0.dp) {
-                SettingsButton(
-                    imageVector = Icons.Outlined.WarningAmber,
-                    text = "Interaction Settings"
-                ) {
-                    navigateToComboSettings()
-                }
-            }
             val uriHandler = LocalUriHandler.current
             CardWithTitle(title = "Feedback", innerPaddingHorizontal = 0.dp) {
                 SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
@@ -274,6 +270,21 @@ fun SettingsScreen(
                         .padding(horizontal = 15.dp)
                         .padding(vertical = 10.dp)
                 )
+            }
+            CardWithTitle(title = "UI", innerPaddingHorizontal = 0.dp) {
+                SettingsButton(
+                    imageVector = Icons.Outlined.WarningAmber,
+                    text = "Interaction Settings"
+                ) {
+                    navigateToComboSettings()
+                }
+                Divider()
+                SettingsButton(
+                    imageVector = Icons.Outlined.Palette,
+                    text = "Substance Colors"
+                ) {
+                    navigateToSubstanceColors()
+                }
             }
         }
     }
