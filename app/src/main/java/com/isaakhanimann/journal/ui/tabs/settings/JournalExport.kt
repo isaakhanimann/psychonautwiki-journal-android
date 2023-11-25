@@ -18,7 +18,11 @@
 
 package com.isaakhanimann.journal.ui.tabs.settings
 
-import com.isaakhanimann.journal.data.room.experiences.entities.*
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
+import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
+import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import kotlinx.serialization.Serializable
 import java.time.Instant
@@ -38,7 +42,7 @@ data class ExperienceSerializable(
     @Serializable(with= InstantSerializer::class) val sortDate: Instant,
     val isFavorite: Boolean = false,
     val ingestions: List<IngestionSerializable>,
-    val location: LocationSerializable?,
+    val location: LocationSerializable? = null,
     val ratings: List<RatingSerializable>,
     val timedNotes: List<TimedNoteSerializable> = emptyList()
 )
@@ -46,7 +50,7 @@ data class ExperienceSerializable(
 @Serializable
 data class RatingSerializable(
     @Serializable(with= ShulginRatingOptionSerializer::class) val option: ShulginRatingOption,
-    @Serializable(with= InstantSerializer::class) var time: Instant?,
+    @Serializable(with= InstantSerializer::class) var time: Instant? = null,
     @Serializable(with= InstantSerializer::class) var creationDate: Instant? = Instant.now()
 )
 
@@ -56,19 +60,19 @@ data class IngestionSerializable(
     @Serializable(with= InstantSerializer::class) var time: Instant,
     @Serializable(with= InstantSerializer::class) var creationDate: Instant? = Instant.now(),
     val administrationRoute: AdministrationRoute,
-    var dose: Double?,
+    var dose: Double? = null,
     var isDoseAnEstimate: Boolean,
-    var units: String?,
-    var notes: String?,
-    var stomachFullness: StomachFullness?,
+    var units: String? = null,
+    var notes: String? = null,
+    var stomachFullness: StomachFullness? = null,
     var consumerName: String? = null
 )
 
 @Serializable
 data class LocationSerializable(
     val name: String,
-    val latitude: Double?,
-    val longitude: Double?
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )
 
 @Serializable
