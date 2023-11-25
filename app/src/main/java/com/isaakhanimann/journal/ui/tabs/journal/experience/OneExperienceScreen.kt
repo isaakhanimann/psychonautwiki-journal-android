@@ -104,8 +104,8 @@ fun OneExperienceScreen(
         navigateToURL = navigateToURL,
         navigateToEditRatingScreen = navigateToEditRatingScreen,
         navigateToEditTimedNoteScreen = navigateToEditTimedNoteScreen,
-        timeDisplayOption = viewModel.timeDisplayOption.value,
-        onChangeTimeDisplayOption = { viewModel.timeDisplayOption.value = it },
+        timeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value,
+        onChangeTimeDisplayOption = viewModel::saveTimeDisplayOption,
         navigateToTimelineScreen = navigateToTimelineScreen
     )
 }
@@ -527,7 +527,10 @@ fun OneExperienceScreen(
             }
             val notes = oneExperienceScreenModel.notes
             if (notes.isNotBlank()) {
-                ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding).fillMaxWidth().clickable { navigateToEditExperienceScreen() }) {
+                ElevatedCard(modifier = Modifier
+                    .padding(vertical = verticalCardPadding)
+                    .fillMaxWidth()
+                    .clickable { navigateToEditExperienceScreen() }) {
                     CardTitle(title = "Notes")
                     Column(modifier = Modifier
                         .padding(horizontal = horizontalPadding)

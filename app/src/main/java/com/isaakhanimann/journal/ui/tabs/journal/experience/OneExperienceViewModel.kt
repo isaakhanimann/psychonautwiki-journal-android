@@ -18,7 +18,6 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,10 +35,19 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDos
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.InteractionExplanation
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsStorage
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -50,11 +58,22 @@ class OneExperienceViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     private val substanceRepo: SubstanceRepository,
     private val interactionChecker: InteractionChecker,
+    private val userPreferences: UserPreferences,
     combinationSettingsStorage: CombinationSettingsStorage,
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val timeDisplayOption = mutableStateOf(TimeDisplayOption.REGULAR)
+    val timeDisplayOptionFlow = userPreferences.timeDisplayOptionFlow.stateIn(
+        initialValue = TimeDisplayOption.REGULAR,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
+    fun saveTimeDisplayOption(timeDisplayOption: TimeDisplayOption) {
+        viewModelScope.launch {
+            userPreferences.saveTimeDisplayOption(timeDisplayOption)
+        }
+    }
 
     private val experienceId: Int
 
