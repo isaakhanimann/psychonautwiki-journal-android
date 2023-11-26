@@ -41,9 +41,9 @@ data class ExperienceSerializable(
     @Serializable(with= InstantSerializer::class) val creationDate: Instant = Instant.now(),
     @Serializable(with= InstantSerializer::class) val sortDate: Instant,
     val isFavorite: Boolean = false,
-    val ingestions: List<IngestionSerializable>,
+    val ingestions: List<IngestionSerializable> = emptyList(),
     val location: LocationSerializable? = null,
-    val ratings: List<RatingSerializable>,
+    val ratings: List<RatingSerializable> = emptyList(),
     val timedNotes: List<TimedNoteSerializable> = emptyList()
 )
 
