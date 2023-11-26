@@ -21,35 +21,45 @@ package com.isaakhanimann.journal.ui.tabs.settings.colors
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ColorPicker
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubstanceColorsScreen(
     viewModel: SubstanceColorsViewModel = hiltViewModel(),
 ) {
-    SubstanceColorsScreenContent(substanceCompanions = viewModel.substanceCompanionsFlow.collectAsState().value)
+    SubstanceColorsScreenContent(
+        substanceCompanions = viewModel.substanceCompanionsFlow.collectAsState().value,
+        updateColor = viewModel::updateColor,
+        alreadyUsedColors = viewModel.alreadyUsedColorsFlow.collectAsState().value,
+        otherColors = viewModel.otherColorsFlow.collectAsState().value
+    )
 }
 
 @Preview
 @Composable
 fun SubstanceColorsScreenPreview() {
+    val alreadyUsedColors = listOf(AdaptiveColor.OLIVE, AdaptiveColor.AUBURN)
+    val otherColors = AdaptiveColor.values().filter { !alreadyUsedColors.contains(it) }
     SubstanceColorsScreenContent(
         substanceCompanions = listOf(
             SubstanceCompanion(substanceName = "Substance 1", color = AdaptiveColor.AUBURN),
@@ -59,14 +69,21 @@ fun SubstanceColorsScreenPreview() {
                 color = AdaptiveColor.YELLOW
             ),
             SubstanceCompanion(substanceName = "Substance 4", color = AdaptiveColor.OLIVE),
-        )
+        ),
+        updateColor = { _, _ -> },
+        alreadyUsedColors = alreadyUsedColors,
+        otherColors = otherColors
+
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubstanceColorsScreenContent(
-    substanceCompanions: List<SubstanceCompanion>
+    substanceCompanions: List<SubstanceCompanion>,
+    updateColor: (color: AdaptiveColor, substanceName: String) -> Unit,
+    alreadyUsedColors: List<AdaptiveColor>,
+    otherColors: List<AdaptiveColor>
 ) {
     Scaffold(
         topBar = {
@@ -81,16 +98,24 @@ fun SubstanceColorsScreenContent(
         ) {
             items(substanceCompanions) { substanceCompanion ->
                 Row(
-                    modifier = Modifier.padding(vertical = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = substanceCompanion.substanceName)
-//                    ColorPicker(
-//                        selectedColor = substanceCompanion.color,
-//                        onChangeOfColor = ,
-//                        alreadyUsedColors = ,
-//                        otherColors =
-//                    )
+                    Text(
+                        text = substanceCompanion.substanceName,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    ColorPicker(
+                        selectedColor = substanceCompanion.color,
+                        onChangeOfColor = {
+                            updateColor(it, substanceCompanion.substanceName)
+                        },
+                        alreadyUsedColors = alreadyUsedColors,
+                        otherColors = otherColors
+                    )
                 }
                 Divider()
             }
