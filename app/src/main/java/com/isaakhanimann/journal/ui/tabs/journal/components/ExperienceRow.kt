@@ -114,7 +114,7 @@ fun ExperienceRow(
                 } else {
                     Text(
                         text = experienceWithIngestionsCompanionsAndRatings.sortInstant.getStringOfPattern(
-                            "dd MMM yy"
+                            "EEE, dd MMM yyyy"
                         ),
                         style = timeStyle
                     )
