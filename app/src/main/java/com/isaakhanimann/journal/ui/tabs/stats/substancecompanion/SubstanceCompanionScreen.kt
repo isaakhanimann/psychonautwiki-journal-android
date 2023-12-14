@@ -159,7 +159,7 @@ fun SubstanceCompanionScreen(
                                 style = MaterialTheme.typography.titleMedium,
                             )
                             Text(
-                                text = burst.experience.sortDate.getStringOfPattern("dd MMMM yyyy"),
+                                text = burst.experience.sortDate.getStringOfPattern("EEE, dd MMM yyyy"),
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }

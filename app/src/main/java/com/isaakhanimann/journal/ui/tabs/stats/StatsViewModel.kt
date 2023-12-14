@@ -63,7 +63,7 @@ class StatsViewModel @Inject constructor(
 
     private val startDateTextFlow = startDateFlow.map {
         val dateTime = LocalDateTime.ofInstant(it, ZoneId.systemDefault())
-        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+        val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")
         return@map dateTime.format(formatter)
     }
 
