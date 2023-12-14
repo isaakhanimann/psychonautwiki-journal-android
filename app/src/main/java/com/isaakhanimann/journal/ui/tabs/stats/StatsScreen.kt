@@ -119,35 +119,26 @@ fun StatsScreen(
                 ) {
                     val isDarkTheme = isSystemInDarkTheme()
                     AnimatedContent(targetState = statsModel.selectedOption, label = "") {
-                        ElevatedCard(
-                            modifier = Modifier.padding(
-                                horizontal = horizontalPadding,
-                                vertical = 10.dp
+                        Column {
+                            Text(
+                                text = "Experiences since ${statsModel.startDateText}",
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.padding(start = 10.dp, top = 5.dp)
                             )
-                        ) {
+                            Text(
+                                text = "Substance counted once per experience",
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(
+                                    start = 10.dp,
+                                    bottom = 10.dp
+                                )
+                            )
+                            BarChart(
+                                buckets = statsModel.chartBuckets,
+                                startDateText = statsModel.startDateText
+                            )
+                            Divider()
                             LazyColumn {
-                                item {
-                                    Column {
-                                        Text(
-                                            text = "Experiences since ${statsModel.startDateText}",
-                                            style = MaterialTheme.typography.titleMedium,
-                                            modifier = Modifier.padding(start = 10.dp, top = 5.dp)
-                                        )
-                                        Text(
-                                            text = "Substance counted once per experience",
-                                            style = MaterialTheme.typography.bodySmall,
-                                            modifier = Modifier.padding(
-                                                start = 10.dp,
-                                                bottom = 10.dp
-                                            )
-                                        )
-                                        BarChart(
-                                            buckets = statsModel.chartBuckets,
-                                            startDateText = statsModel.startDateText
-                                        )
-                                        Divider()
-                                    }
-                                }
                                 items(statsModel.statItems.size) { i ->
                                     Column {
                                         val subStat = statsModel.statItems[i]
