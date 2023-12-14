@@ -21,6 +21,8 @@ package com.isaakhanimann.journal.ui.tabs.stats.substancecompanion
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -44,7 +46,8 @@ import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 
 @Composable
 fun SubstanceCompanionScreen(
-    viewModel: SubstanceCompanionViewModel = hiltViewModel()
+    viewModel: SubstanceCompanionViewModel = hiltViewModel(),
+    navigateToSubstanceInfo: (String) -> Unit
 ) {
     val companion = viewModel.thisCompanionFlow.collectAsState().value
     if (companion == null) {
@@ -60,7 +63,8 @@ fun SubstanceCompanionScreen(
             alreadyUsedColors = viewModel.alreadyUsedColorsFlow.collectAsState().value,
             otherColors = viewModel.otherColorsFlow.collectAsState().value,
             tolerance = viewModel.tolerance,
-            crossTolerances = viewModel.crossTolerances
+            crossTolerances = viewModel.crossTolerances,
+            navigateToSubstanceInfo = navigateToSubstanceInfo,
         )
     }
 }
@@ -88,6 +92,7 @@ fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionScreenPreviewP
                 "dopamine",
                 "stimulant"
             ),
+            navigateToSubstanceInfo = {},
         )
     }
 }
@@ -101,11 +106,21 @@ fun SubstanceCompanionScreen(
     alreadyUsedColors: List<AdaptiveColor>,
     otherColors: List<AdaptiveColor>,
     tolerance: Tolerance?,
-    crossTolerances: List<String>
+    crossTolerances: List<String>,
+    navigateToSubstanceInfo: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(substanceCompanion.substanceName) })
+            TopAppBar(title = { Text(substanceCompanion.substanceName) },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            navigateToSubstanceInfo(substanceCompanion.substanceName)
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Outlined.Info, contentDescription = null)
+                    }
+                })
         }
     ) { padding ->
         LazyColumn(

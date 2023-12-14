@@ -26,6 +26,7 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceCompanionScreen
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceScreen
 import com.isaakhanimann.journal.ui.tabs.stats.StatsScreen
 import com.isaakhanimann.journal.ui.tabs.stats.substancecompanion.SubstanceCompanionScreen
 
@@ -48,7 +49,11 @@ fun NavGraphBuilder.statsGraph(navController: NavController) {
             ArgumentRouter.SubstanceCompanionRouter.route,
             arguments = ArgumentRouter.SubstanceCompanionRouter.args
         ) {
-            SubstanceCompanionScreen()
+            SubstanceCompanionScreen(
+                navigateToSubstanceInfo = {
+                    navController.navigateToSubstanceScreen(substanceName = it)
+                },
+            )
         }
     }
 }
