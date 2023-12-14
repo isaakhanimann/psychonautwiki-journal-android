@@ -34,7 +34,7 @@ sealed class TabRouter(
         route = "journalTab",
         childRoute = NoArgumentRouter.JournalRouter.route,
         resourceId = R.string.journal,
-        icon = Icons.Outlined.Timeline
+        icon = Icons.Outlined.Book
     )
 
     object Statistics : TabRouter(
@@ -47,7 +47,7 @@ sealed class TabRouter(
     object Search : TabRouter(
         route = "searchTab",
         childRoute = NoArgumentRouter.SearchRouter.route,
-        resourceId = R.string.search,
+        resourceId = R.string.substances,
         icon = Icons.Outlined.Search
     )
 

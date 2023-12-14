@@ -111,7 +111,7 @@ fun JournalScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Experiences") },
+                title = { Text("Journal") },
                 actions = {
                     IconToggleButton(
                         checked = isTimeRelativeToNow,

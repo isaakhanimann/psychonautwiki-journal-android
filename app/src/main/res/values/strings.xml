@@ -20,8 +20,8 @@
     <string name="app_name">Journal</string>
     <string name="journal">Journal</string>
     <string name="ingestions">Ingestions</string>
-    <string name="search">Search</string>
-    <string name="safer">Safer</string>
-    <string name="stats">Stats</string>
+    <string name="substances">Substances</string>
+    <string name="safer">Safer Use</string>
+    <string name="stats">Statistics</string>
     <string name="settings">Settings</string>
 </resources>
