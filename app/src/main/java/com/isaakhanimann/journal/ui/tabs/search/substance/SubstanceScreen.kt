@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Timeline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -72,6 +73,7 @@ fun SubstanceScreen(
     navigateToExplainTimeline: () -> Unit,
     navigateToArticle: (url: String) -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
+    navigateToSubstanceCompanion: (substanceName: String) -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
     SubstanceScreen(
@@ -82,6 +84,7 @@ fun SubstanceScreen(
         navigateToCategoryScreen = navigateToCategoryScreen,
         navigateToExplainTimeline = navigateToExplainTimeline,
         navigateToURL = navigateToArticle,
+        navigateToSubstanceCompanion = navigateToSubstanceCompanion,
         substanceWithCategories = viewModel.substanceWithCategories
     )
 }
@@ -100,6 +103,7 @@ fun SubstanceScreenPreview(
             navigateToExplainTimeline = {},
             navigateToURL = {},
             navigateToCategoryScreen = {},
+            navigateToSubstanceCompanion = {},
             substanceWithCategories = substanceWithCategories
         )
     }
@@ -115,12 +119,21 @@ fun SubstanceScreen(
     navigateToExplainTimeline: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
+    navigateToSubstanceCompanion: (substanceName: String) -> Unit,
     substanceWithCategories: SubstanceWithCategories
 ) {
     val substance = substanceWithCategories.substance
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(substance.name) })
+            TopAppBar(title = { Text(substance.name) }, actions = {
+                IconButton(
+                    onClick = {
+                        navigateToSubstanceCompanion(substance.name)
+                    }
+                ) {
+                    Icon(imageVector = Icons.Outlined.Timeline, contentDescription = null)
+                }
+            })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(

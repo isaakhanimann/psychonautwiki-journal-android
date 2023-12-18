@@ -40,6 +40,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ColorPicker
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.ToleranceSection
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
+import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
@@ -54,7 +55,12 @@ fun SubstanceCompanionScreen(
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
-        ) {}
+        ) {
+            EmptyScreenDisclaimer(
+                title = "No Recorded Consumption Data",
+                description = "Statistics will be displayed once you've recorded at least one instance of consumption for this substance."
+            )
+        }
     } else {
         SubstanceCompanionScreen(
             substanceCompanion = companion,
