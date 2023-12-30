@@ -18,4 +18,6 @@
 
 package com.isaakhanimann.journal.ui.tabs.search.substance.roa
 
-fun Double.toReadableString() = String.format("%.3f", this).replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
+import java.util.Locale
+
+fun Double.toReadableString() = String.format(Locale.US, "%.3f", this).replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
