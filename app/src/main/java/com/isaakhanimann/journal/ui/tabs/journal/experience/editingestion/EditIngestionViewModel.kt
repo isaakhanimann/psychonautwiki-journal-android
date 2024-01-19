@@ -120,9 +120,7 @@ class EditIngestionViewModel @Inject constructor(
                 it.dose = if (isKnown) dose.toDoubleOrNull() else null
                 it.units = units
                 it.time = selectedInstant
-                if (consumerName.isNotBlank()) {
-                    it.consumerName = consumerName
-                }
+                it.consumerName = consumerName.ifBlank { null }
                 experienceRepo.update(it)
             }
         }
