@@ -71,6 +71,7 @@ class SubstanceCompanionViewModel @Inject constructor(
 
     val ingestionBurstsFlow: StateFlow<List<IngestionsBurst>> =
         experienceRepo.getSortedIngestionsWithExperienceFlow(substanceName)
+            .map { list -> list.filter { it.ingestion.consumerName == null } }
             .combine(currentTimeFlow) { sortedIngestionsWithExperiences, currentTime ->
                 val experiencesWithIngestions =
                     sortedIngestionsWithExperiences.groupBy { it.ingestion.experienceId }
