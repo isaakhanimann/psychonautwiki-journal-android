@@ -37,10 +37,10 @@ fun TimeRelativeToStartText(
 ) {
     val duration = Duration.between(startTime, time)
     val relativeTime = when {
-        duration.toDays() > 3 -> "${duration.toDays()} days"
-        duration.toHours() > 24 -> "${roundToOneDecimal(duration.toHours().toDouble()/24.0)} days"
-        duration.toHours() > 1 -> "${roundToOneDecimal(duration.toMinutes().toDouble()/60.0)} hours"
-        duration.toMinutes() > 0 -> "${duration.toMinutes()} minutes"
+        duration.toDays() > 3 -> "${duration.toDays()} days in"
+        duration.toHours() > 24 -> "${roundToOneDecimal(duration.toHours().toDouble()/24.0)} days in"
+        duration.toHours() > 1 -> "${roundToOneDecimal(duration.toMinutes().toDouble()/60.0)} hours in"
+        duration.toMinutes() > 0 -> "${duration.toMinutes()} minutes in"
         else -> "Start"
     }
     Text(
