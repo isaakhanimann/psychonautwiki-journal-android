@@ -60,7 +60,8 @@ fun SubstanceCompanionScreen(
             alreadyUsedColors = viewModel.alreadyUsedColorsFlow.collectAsState().value,
             otherColors = viewModel.otherColorsFlow.collectAsState().value,
             tolerance = viewModel.tolerance,
-            crossTolerances = viewModel.crossTolerances
+            crossTolerances = viewModel.crossTolerances,
+            consumerName = viewModel.consumerName
         )
     }
 }
@@ -101,11 +102,17 @@ fun SubstanceCompanionScreen(
     alreadyUsedColors: List<AdaptiveColor>,
     otherColors: List<AdaptiveColor>,
     tolerance: Tolerance?,
-    crossTolerances: List<String>
+    crossTolerances: List<String>,
+    consumerName: String? = null
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(substanceCompanion.substanceName) })
+            val title = if (consumerName == null) {
+                substanceCompanion.substanceName
+            } else {
+                "${substanceCompanion.substanceName} ($consumerName)"
+            }
+            TopAppBar(title = { Text(title) })
         }
     ) { padding ->
         LazyColumn(

@@ -27,6 +27,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
+import com.isaakhanimann.journal.ui.main.navigation.routers.CONSUMER_NAME_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.utils.getTimeDifferenceText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -57,6 +58,7 @@ class SubstanceCompanionViewModel @Inject constructor(
     }
 
     private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
+    val consumerName = state.get<String>(CONSUMER_NAME_KEY)
 
     private val substance = substanceRepo.getSubstance(substanceName)
     val tolerance = substance?.tolerance
@@ -71,7 +73,7 @@ class SubstanceCompanionViewModel @Inject constructor(
 
     val ingestionBurstsFlow: StateFlow<List<IngestionsBurst>> =
         experienceRepo.getSortedIngestionsWithExperienceFlow(substanceName)
-            .map { list -> list.filter { it.ingestion.consumerName == null } }
+            .map { list -> list.filter { it.ingestion.consumerName == consumerName } }
             .combine(currentTimeFlow) { sortedIngestionsWithExperiences, currentTime ->
                 val experiencesWithIngestions =
                     sortedIngestionsWithExperiences.groupBy { it.ingestion.experienceId }
