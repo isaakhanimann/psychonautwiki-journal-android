@@ -18,15 +18,21 @@
 
 package com.isaakhanimann.journal.ui.tabs.stats
 
-import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -42,12 +48,14 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun StatsScreen(
     viewModel: StatsViewModel = hiltViewModel(),
-    navigateToSubstanceCompanion: (substanceName: String) -> Unit,
+    navigateToSubstanceCompanion: (substanceName: String, consumerName: String?) -> Unit,
 ) {
     StatsScreen(
         navigateToSubstanceCompanion = navigateToSubstanceCompanion,
         onTapOption = viewModel::onTapOption,
         statsModel = viewModel.statsModelFlow.collectAsState().value,
+        onChangeConsumerName = viewModel::onChangeConsumer,
+        consumerNamesSorted = viewModel.sortedConsumerNamesFlow.collectAsState().value
     )
 }
 
@@ -60,24 +68,73 @@ fun StatsPreview(
 ) {
     JournalTheme {
         StatsScreen(
-            navigateToSubstanceCompanion = {},
+            navigateToSubstanceCompanion = { _, _ -> },
             onTapOption = {},
-            statsModel = statsModel
+            statsModel = statsModel,
+            onChangeConsumerName = {},
+            consumerNamesSorted = listOf("Me", "Someone else")
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsScreen(
-    navigateToSubstanceCompanion: (substanceName: String) -> Unit,
+    navigateToSubstanceCompanion: (substanceName: String, consumerName: String?) -> Unit,
     onTapOption: (option: TimePickerOption) -> Unit,
     statsModel: StatsModel,
+    onChangeConsumerName: (String?) -> Unit,
+    consumerNamesSorted: List<String>
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Statistics") }
+                title = { Text(if (statsModel.consumerName == null) "Statistics" else "Statistics for ${statsModel.consumerName}") },
+                actions = {
+                    var isConsumerSelectionExpanded by remember { mutableStateOf(false) }
+                    IconButton(onClick = { isConsumerSelectionExpanded = true }) {
+                        Icon(Icons.Outlined.Person, contentDescription = "Consumer")
+                    }
+                    DropdownMenu(
+                        expanded = isConsumerSelectionExpanded,
+                        onDismissRequest = { isConsumerSelectionExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Me") },
+                            onClick = {
+                                onChangeConsumerName(null)
+                                isConsumerSelectionExpanded = false
+                            },
+                            leadingIcon = {
+                                if (statsModel.consumerName == null) {
+                                    Icon(
+                                        Icons.Filled.Check,
+                                        contentDescription = "Check",
+                                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                                    )
+                                }
+                            }
+                        )
+                        consumerNamesSorted.forEach { consumerName ->
+                            DropdownMenuItem(
+                                text = { Text(consumerName) },
+                                onClick = {
+                                    onChangeConsumerName(consumerName)
+                                    isConsumerSelectionExpanded = false
+                                },
+                                leadingIcon = {
+                                    if (statsModel.consumerName == consumerName) {
+                                        Icon(
+                                            Icons.Filled.Check,
+                                            contentDescription = "Check",
+                                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
             )
         }
     ) { padding ->
@@ -132,7 +189,10 @@ fun StatsScreen(
                                             .fillMaxWidth()
                                             .height(intrinsicSize = IntrinsicSize.Min)
                                             .clickable {
-                                                navigateToSubstanceCompanion(subStat.substanceName)
+                                                navigateToSubstanceCompanion(
+                                                    subStat.substanceName,
+                                                    statsModel.consumerName
+                                                )
                                             }
                                             .padding(
                                                 horizontal = horizontalPadding,

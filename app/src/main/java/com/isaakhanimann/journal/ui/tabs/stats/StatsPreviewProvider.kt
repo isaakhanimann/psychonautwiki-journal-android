@@ -28,6 +28,7 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
             selectedOption = TimePickerOption.DAYS_7,
             areThereAnyIngestions = true,
             startDateText = "22. June 2022",
+            consumerName = null,
             statItems = listOf(
                 StatItem(
                     substanceName = "LSD",
