@@ -91,39 +91,23 @@ fun StatsScreen(
             TopAppBar(
                 title = { Text(if (statsModel.consumerName == null) "Statistics" else "Statistics for ${statsModel.consumerName}") },
                 actions = {
-                    var isConsumerSelectionExpanded by remember { mutableStateOf(false) }
-                    IconButton(onClick = { isConsumerSelectionExpanded = true }) {
-                        Icon(Icons.Outlined.Person, contentDescription = "Consumer")
-                    }
-                    DropdownMenu(
-                        expanded = isConsumerSelectionExpanded,
-                        onDismissRequest = { isConsumerSelectionExpanded = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text("Me") },
-                            onClick = {
-                                onChangeConsumerName(null)
-                                isConsumerSelectionExpanded = false
-                            },
-                            leadingIcon = {
-                                if (statsModel.consumerName == null) {
-                                    Icon(
-                                        Icons.Filled.Check,
-                                        contentDescription = "Check",
-                                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                                    )
-                                }
-                            }
-                        )
-                        consumerNamesSorted.forEach { consumerName ->
+                    if (consumerNamesSorted.isNotEmpty()) {
+                        var isConsumerSelectionExpanded by remember { mutableStateOf(false) }
+                        IconButton(onClick = { isConsumerSelectionExpanded = true }) {
+                            Icon(Icons.Outlined.Person, contentDescription = "Consumer")
+                        }
+                        DropdownMenu(
+                            expanded = isConsumerSelectionExpanded,
+                            onDismissRequest = { isConsumerSelectionExpanded = false }
+                        ) {
                             DropdownMenuItem(
-                                text = { Text(consumerName) },
+                                text = { Text("Me") },
                                 onClick = {
-                                    onChangeConsumerName(consumerName)
+                                    onChangeConsumerName(null)
                                     isConsumerSelectionExpanded = false
                                 },
                                 leadingIcon = {
-                                    if (statsModel.consumerName == consumerName) {
+                                    if (statsModel.consumerName == null) {
                                         Icon(
                                             Icons.Filled.Check,
                                             contentDescription = "Check",
@@ -132,6 +116,24 @@ fun StatsScreen(
                                     }
                                 }
                             )
+                            consumerNamesSorted.forEach { consumerName ->
+                                DropdownMenuItem(
+                                    text = { Text(consumerName) },
+                                    onClick = {
+                                        onChangeConsumerName(consumerName)
+                                        isConsumerSelectionExpanded = false
+                                    },
+                                    leadingIcon = {
+                                        if (statsModel.consumerName == consumerName) {
+                                            Icon(
+                                                Icons.Filled.Check,
+                                                contentDescription = "Check",
+                                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                                            )
+                                        }
+                                    }
+                                )
+                            }
                         }
                     }
                 }
