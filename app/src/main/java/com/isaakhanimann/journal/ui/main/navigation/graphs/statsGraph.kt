@@ -39,8 +39,8 @@ fun NavGraphBuilder.statsGraph(navController: NavController) {
             route = NoArgumentRouter.StatsRouter.route,
         ) {
             StatsScreen(
-                navigateToSubstanceCompanion = {
-                    navController.navigateToSubstanceCompanionScreen(substanceName = it)
+                navigateToSubstanceCompanion = {substanceName, consumerName ->
+                    navController.navigateToSubstanceCompanionScreen(substanceName = substanceName, consumerName=consumerName)
                 }
             )
         }

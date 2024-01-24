@@ -158,9 +158,10 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     )
 
     object SubstanceCompanionRouter : ArgumentRouter(
-        route = "$ROUTE_START_SUBSTANCE_COMPANION{$SUBSTANCE_NAME_KEY}",
+        route = "$ROUTE_START_SUBSTANCE_COMPANION{$SUBSTANCE_NAME_KEY}/?$CONSUMER_NAME_KEY={$CONSUMER_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
+            navArgument(CONSUMER_NAME_KEY) { nullable = true },
         )
     )
 
@@ -265,8 +266,8 @@ fun NavController.navigateToChooseCustomRoute(substanceName: String) {
     navigate(ROUTE_START_CHOOSE_ROUTE_CUSTOM + substanceName)
 }
 
-fun NavController.navigateToSubstanceCompanionScreen(substanceName: String) {
-    navigate(ROUTE_START_SUBSTANCE_COMPANION + substanceName)
+fun NavController.navigateToSubstanceCompanionScreen(substanceName: String, consumerName: String?) {
+    navigate("$ROUTE_START_SUBSTANCE_COMPANION$substanceName/?$CONSUMER_NAME_KEY=$consumerName")
 }
 
 fun NavController.navigateToCategoryScreen(categoryName: String) {
