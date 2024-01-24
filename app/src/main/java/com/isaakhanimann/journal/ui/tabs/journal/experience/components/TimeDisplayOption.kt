@@ -19,7 +19,9 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 
 enum class TimeDisplayOption {
-    RELATIVE_TO_NOW {
+    AUTO {
+        override val text = "Auto"
+    }, RELATIVE_TO_NOW {
         override val text = "Time Relative To Now"
     }, RELATIVE_TO_START {
         override val text = "Time Relative To Start"

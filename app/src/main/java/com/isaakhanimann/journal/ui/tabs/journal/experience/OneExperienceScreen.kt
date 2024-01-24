@@ -139,7 +139,7 @@ fun OneExperienceScreen(
         navigateToURL = navigateToURL,
         navigateToEditRatingScreen = navigateToEditRatingScreen,
         navigateToEditTimedNoteScreen = navigateToEditTimedNoteScreen,
-        timeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value,
+        rawTimeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value,
         onChangeTimeDisplayOption = viewModel::saveTimeDisplayOption,
         navigateToTimelineScreen = navigateToTimelineScreen
     )
@@ -168,7 +168,7 @@ fun ExperienceScreenPreview(
             navigateToURL = {},
             navigateToEditRatingScreen = {},
             navigateToEditTimedNoteScreen = {},
-            timeDisplayOption = TimeDisplayOption.RELATIVE_TO_START,
+            rawTimeDisplayOption = TimeDisplayOption.RELATIVE_TO_START,
             onChangeTimeDisplayOption = {},
             navigateToTimelineScreen = {}
         )
@@ -191,10 +191,19 @@ fun OneExperienceScreen(
     saveIsFavorite: (Boolean) -> Unit,
     navigateToEditRatingScreen: (ratingId: Int) -> Unit,
     navigateToEditTimedNoteScreen: (timedNoteId: Int) -> Unit,
-    timeDisplayOption: TimeDisplayOption,
+    rawTimeDisplayOption: TimeDisplayOption,
     onChangeTimeDisplayOption: (TimeDisplayOption) -> Unit,
     navigateToTimelineScreen: (consumerName: String) -> Unit,
     ) {
+    val timeDisplayOption = if (rawTimeDisplayOption == TimeDisplayOption.AUTO) {
+        if (oneExperienceScreenModel.isShowingAddIngestionButton) {
+            TimeDisplayOption.RELATIVE_TO_NOW
+        } else {
+            TimeDisplayOption.RELATIVE_TO_START
+        }
+    } else {
+        rawTimeDisplayOption
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -202,11 +211,7 @@ fun OneExperienceScreen(
                 actions = {
                     var areTimeOptionsExpanded by remember { mutableStateOf(false) }
                     IconButton(onClick = { areTimeOptionsExpanded = true }) {
-                        if (timeDisplayOption == TimeDisplayOption.REGULAR) {
-                            Icon(Icons.Outlined.Timer, contentDescription = "Time Regular")
-                        } else {
-                            Icon(Icons.Filled.Timer, contentDescription = "Regular Time")
-                        }
+                        Icon(Icons.Outlined.Timer, contentDescription = "Time Display Option")
                     }
                     DropdownMenu(
                         expanded = areTimeOptionsExpanded,
@@ -220,7 +225,7 @@ fun OneExperienceScreen(
                                     areTimeOptionsExpanded = false
                                 },
                                 leadingIcon = {
-                                    if (option == timeDisplayOption) {
+                                    if (option == rawTimeDisplayOption) {
                                         Icon(
                                             Icons.Filled.Check,
                                             contentDescription = "Check",
