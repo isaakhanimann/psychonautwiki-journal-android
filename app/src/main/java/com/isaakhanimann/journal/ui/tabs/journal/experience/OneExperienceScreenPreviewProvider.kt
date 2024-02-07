@@ -19,7 +19,13 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.isaakhanimann.journal.data.room.experiences.entities.*
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
+import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
+import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.InteractionType
@@ -27,7 +33,11 @@ import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
-import com.isaakhanimann.journal.ui.tabs.journal.experience.models.*
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.ConsumerWithIngestions
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.InteractionExplanation
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.OneExperienceScreenModel
 import com.isaakhanimann.journal.ui.utils.getInstant
 
 class OneExperienceScreenPreviewProvider :
@@ -46,7 +56,7 @@ class OneExperienceScreenPreviewProvider :
             )!!,
             notes = "Some Notes",
             locationName = "Zurich",
-            isShowingAddIngestionButton = true,
+            isCurrentExperience = true,
             ingestionElements = ingestionElements,
             cumulativeDoses = listOf(
                 CumulativeDose(

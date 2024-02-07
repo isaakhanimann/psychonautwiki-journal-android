@@ -37,7 +37,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
@@ -79,6 +78,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardTitle
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CumulativeDoseRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ExperienceEffectTimelines
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.InteractionRow
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
@@ -116,7 +116,7 @@ fun OneExperienceScreen(
             ?: experience?.sortDate ?: Instant.now(),
         notes = experience?.text ?: "",
         locationName = experience?.location?.name ?: "",
-        isShowingAddIngestionButton = viewModel.isShowingAddIngestionButtonFlow.collectAsState().value,
+        isCurrentExperience = viewModel.isCurrentExperienceFlow.collectAsState().value,
         ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
         cumulativeDoses = viewModel.cumulativeDosesFlow.collectAsState().value,
         interactions = viewModel.interactionsFlow.collectAsState().value,
@@ -139,7 +139,8 @@ fun OneExperienceScreen(
         navigateToURL = navigateToURL,
         navigateToEditRatingScreen = navigateToEditRatingScreen,
         navigateToEditTimedNoteScreen = navigateToEditTimedNoteScreen,
-        rawTimeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value,
+        savedTimeDisplayOption = viewModel.savedTimeDisplayOption.collectAsState().value,
+        timeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value,
         onChangeTimeDisplayOption = viewModel::saveTimeDisplayOption,
         navigateToTimelineScreen = navigateToTimelineScreen
     )
@@ -168,7 +169,8 @@ fun ExperienceScreenPreview(
             navigateToURL = {},
             navigateToEditRatingScreen = {},
             navigateToEditTimedNoteScreen = {},
-            rawTimeDisplayOption = TimeDisplayOption.RELATIVE_TO_START,
+            savedTimeDisplayOption = SavedTimeDisplayOption.RELATIVE_TO_START,
+            timeDisplayOption = TimeDisplayOption.RELATIVE_TO_START,
             onChangeTimeDisplayOption = {},
             navigateToTimelineScreen = {}
         )
@@ -191,19 +193,11 @@ fun OneExperienceScreen(
     saveIsFavorite: (Boolean) -> Unit,
     navigateToEditRatingScreen: (ratingId: Int) -> Unit,
     navigateToEditTimedNoteScreen: (timedNoteId: Int) -> Unit,
-    rawTimeDisplayOption: TimeDisplayOption,
-    onChangeTimeDisplayOption: (TimeDisplayOption) -> Unit,
+    savedTimeDisplayOption: SavedTimeDisplayOption,
+    timeDisplayOption: TimeDisplayOption,
+    onChangeTimeDisplayOption: (SavedTimeDisplayOption) -> Unit,
     navigateToTimelineScreen: (consumerName: String) -> Unit,
     ) {
-    val timeDisplayOption = if (rawTimeDisplayOption == TimeDisplayOption.AUTO) {
-        if (oneExperienceScreenModel.isShowingAddIngestionButton) {
-            TimeDisplayOption.RELATIVE_TO_NOW
-        } else {
-            TimeDisplayOption.RELATIVE_TO_START
-        }
-    } else {
-        rawTimeDisplayOption
-    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -217,7 +211,7 @@ fun OneExperienceScreen(
                         expanded = areTimeOptionsExpanded,
                         onDismissRequest = { areTimeOptionsExpanded = false }
                     ) {
-                        TimeDisplayOption.values().forEach { option ->
+                        SavedTimeDisplayOption.values().forEach { option ->
                             DropdownMenuItem(
                                 text = { Text(option.text) },
                                 onClick = {
@@ -225,7 +219,7 @@ fun OneExperienceScreen(
                                     areTimeOptionsExpanded = false
                                 },
                                 leadingIcon = {
-                                    if (option == rawTimeDisplayOption) {
+                                    if (option == savedTimeDisplayOption) {
                                         Icon(
                                             Icons.Filled.Check,
                                             contentDescription = "Check",
@@ -383,7 +377,7 @@ fun OneExperienceScreen(
             )
         },
         floatingActionButton = {
-            if (oneExperienceScreenModel.isShowingAddIngestionButton) {
+            if (oneExperienceScreenModel.isCurrentExperience) {
                 ExtendedFloatingActionButton(
                     onClick = addIngestion,
                     icon = {

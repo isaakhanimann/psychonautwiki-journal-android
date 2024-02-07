@@ -18,7 +18,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 
-enum class TimeDisplayOption {
+enum class SavedTimeDisplayOption {
     AUTO {
         override val text = "Auto"
     }, RELATIVE_TO_NOW {
@@ -30,4 +30,9 @@ enum class TimeDisplayOption {
     };
 
     abstract val text: String
+}
+
+
+enum class TimeDisplayOption {
+    RELATIVE_TO_NOW , RELATIVE_TO_START, REGULAR;
 }

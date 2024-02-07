@@ -22,7 +22,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -34,16 +34,16 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
         val KEY_TIME_DISPLAY_OPTION = stringPreferencesKey("key_time_display_option")
     }
 
-    suspend fun saveTimeDisplayOption(value: TimeDisplayOption) {
+    suspend fun saveTimeDisplayOption(value: SavedTimeDisplayOption) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.KEY_TIME_DISPLAY_OPTION] = value.name
         }
     }
 
-    val timeDisplayOptionFlow: Flow<TimeDisplayOption> = dataStore.data
+    val savedTimeDisplayOptionFlow: Flow<SavedTimeDisplayOption> = dataStore.data
         .map { preferences ->
-            val name = preferences[PreferencesKeys.KEY_TIME_DISPLAY_OPTION] ?: TimeDisplayOption.REGULAR.name
-            TimeDisplayOption.valueOf(name)
+            val name = preferences[PreferencesKeys.KEY_TIME_DISPLAY_OPTION] ?: SavedTimeDisplayOption.REGULAR.name
+            SavedTimeDisplayOption.valueOf(name)
         }
 }
 
