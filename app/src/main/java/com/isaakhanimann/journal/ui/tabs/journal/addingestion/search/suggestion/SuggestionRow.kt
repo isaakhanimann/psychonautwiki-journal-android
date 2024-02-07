@@ -18,8 +18,15 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
@@ -29,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.ColorCircle
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceSuggestion
@@ -48,7 +54,7 @@ fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) s
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SuggestionRow(
     substanceRow: SubstanceSuggestion,
@@ -83,7 +89,7 @@ fun SuggestionRow(
                     modifier = Modifier.padding(top = 3.dp)
                 )
                 Spacer(modifier = Modifier.width(5.dp))
-                FlowRow(mainAxisSpacing = 5.dp) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                     routeWithDoses.doses.forEach { previousDose ->
                         SuggestionChip(
                             onClick = {

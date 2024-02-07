@@ -20,7 +20,13 @@ package com.isaakhanimann.journal.ui.tabs.search.substancerow
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,7 +37,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.ui.tabs.search.CategoryModel
 import com.isaakhanimann.journal.ui.tabs.search.SubstanceModel
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -44,6 +49,7 @@ fun SubstanceRowPreview(
     SubstanceRow(substanceModel = substanceModel, onTap = {})
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SubstanceRow(
     substanceModel: SubstanceModel,
@@ -66,8 +72,8 @@ fun SubstanceRow(
             Text(text = commaSeparatedNames, style = MaterialTheme.typography.bodySmall)
         }
         FlowRow(
-            mainAxisSpacing = 3.dp,
-            crossAxisSpacing = 3.dp,
+            horizontalArrangement = Arrangement.spacedBy(3.dp),
+            verticalArrangement = Arrangement.spacedBy(3.dp),
             modifier = Modifier.padding(vertical = 3.dp)
         ) {
             substanceModel.categories.forEach {

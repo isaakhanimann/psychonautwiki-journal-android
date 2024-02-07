@@ -20,7 +20,10 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.time
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,7 +48,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowRow
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 
 @Preview
@@ -160,6 +162,7 @@ fun ColorDialog(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CircleColorButtons(
     colors: List<AdaptiveColor>,
@@ -168,8 +171,8 @@ fun CircleColorButtons(
     val isDarkTheme = isSystemInDarkTheme()
     val spacing = 5.dp
     FlowRow(
-        mainAxisSpacing = spacing,
-        crossAxisSpacing = spacing
+        horizontalArrangement = Arrangement.spacedBy(spacing),
+        verticalArrangement = Arrangement.spacedBy(spacing)
     ) {
         val shape = RoundedCornerShape(8.dp)
         colors.forEach { color ->
