@@ -18,15 +18,19 @@
 
 package com.isaakhanimann.journal.ui.main.navigation
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.composable
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.composableWithTransitions(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
@@ -81,8 +85,7 @@ fun NavGraphBuilder.composableWithTransitions(
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class)
-fun AnimatedContentScope<NavBackStackEntry>.isChangingTab(): Boolean {
+fun AnimatedContentTransitionScope<NavBackStackEntry>.isChangingTab(): Boolean {
     // check grandparents because in a tab graph there can be another nested graph such as addIngestion
     val initialParent = initialState.destination.parent
     val initialGrandParent = initialParent?.parent

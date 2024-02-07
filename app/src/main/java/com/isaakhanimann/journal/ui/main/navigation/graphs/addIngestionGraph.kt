@@ -18,13 +18,28 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.navigation
+import androidx.navigation.navigation
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.*
+import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
+import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
+import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.URL_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddCustom
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAdministrationRouteExplanationScreen
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCheckInteractions
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCheckSaferUse
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseCustomRoute
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseDose
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseDoseCustom
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseRoute
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseTimeAndMaybeColor
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferSniffingOnJournalTab
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLInJournalTab
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToVolumetricDosingScreenOnJournalTab
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChooseDoseScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.custom.CustomChooseDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.CheckInteractionsScreen
@@ -35,7 +50,6 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestio
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ChooseTimeScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
     navigation(
         startDestination = NoArgumentRouter.AddIngestionSearchRouter.route,
