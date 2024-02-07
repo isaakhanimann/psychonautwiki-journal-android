@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Isaak Hanimann.
+ * Copyright (c) 2024. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -16,27 +16,20 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.data.room.experiences.entities
+package com.isaakhanimann.journal.data.room.experiences.relations
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import java.time.Instant
+import androidx.room.Embedded
+import androidx.room.Relation
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 
-@Entity
-data class Ingestion(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val substanceName: String,
-    var time: Instant,
-    var creationDate: Instant? = Instant.now(),
-    val administrationRoute: AdministrationRoute,
-    var dose: Double?,
-    var isDoseAnEstimate: Boolean,
-    var units: String?,
-    var experienceId: Int,
-    var notes: String?,
-    var stomachFullness: StomachFullness?,
-    var consumerName: String?,
-    val customUnitId: Int?
+data class IngestionWithCustomUnit(
+    @Embedded
+    var ingestion: Ingestion,
+
+    @Relation(
+        parentColumn = "customUnitId",
+        entityColumn = "id"
+    )
+    var customUnit: CustomUnit?
 )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023. Isaak Hanimann.
+ * Copyright (c) 2024. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -24,19 +24,18 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import java.time.Instant
 
 @Entity
-data class Ingestion(
+data class CustomUnit(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val substanceName: String,
-    var time: Instant,
-    var creationDate: Instant? = Instant.now(),
+    val name: String,
+    val creationDate: Instant = Instant.now(),
     val administrationRoute: AdministrationRoute,
-    var dose: Double?,
-    var isDoseAnEstimate: Boolean,
-    var units: String?,
-    var experienceId: Int,
-    var notes: String?,
-    var stomachFullness: StomachFullness?,
-    var consumerName: String?,
-    val customUnitId: Int?
+    val dose: Double?,
+    val estimatedDoseVariance: Double?,
+    val isEstimate: Boolean,
+    val isArchived: Boolean,
+    val unit: String,
+    val originalUnit: String,
+    val note: String
 )
