@@ -52,6 +52,5 @@ fun TimeText(
                 style = style
             )
         }
-        else -> {}
     }
 }

@@ -29,6 +29,7 @@ import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepositor
 import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.InteractionChecker
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.ConsumerWithIngestions
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
@@ -63,15 +64,9 @@ class OneExperienceViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val timeDisplayOptionFlow = userPreferences.timeDisplayOptionFlow.stateIn(
-        initialValue = TimeDisplayOption.REGULAR,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
-
-    fun saveTimeDisplayOption(timeDisplayOption: TimeDisplayOption) {
+    fun saveTimeDisplayOption(savedTimeDisplayOption: SavedTimeDisplayOption) {
         viewModelScope.launch {
-            userPreferences.saveTimeDisplayOption(timeDisplayOption)
+            userPreferences.saveTimeDisplayOption(savedTimeDisplayOption)
         }
     }
 
@@ -143,7 +138,7 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
-    val isShowingAddIngestionButtonFlow =
+    val isCurrentExperienceFlow =
         ingestionsWithCompanionsFlow.combine(currentTimeFlow) { ingestionsWithCompanions, currentTime ->
             val ingestionTimes =
                 ingestionsWithCompanions.map { it.ingestion.time }
@@ -155,6 +150,25 @@ class OneExperienceViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000)
         )
+
+    val savedTimeDisplayOption = userPreferences.savedTimeDisplayOptionFlow.stateIn(
+        initialValue = SavedTimeDisplayOption.REGULAR,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
+    val timeDisplayOptionFlow = userPreferences.savedTimeDisplayOptionFlow.combine(isCurrentExperienceFlow) {  savedOption: SavedTimeDisplayOption, isCurrentExperience: Boolean ->
+        when(savedOption) {
+            SavedTimeDisplayOption.AUTO -> if (isCurrentExperience) TimeDisplayOption.RELATIVE_TO_NOW else TimeDisplayOption.RELATIVE_TO_START
+            SavedTimeDisplayOption.RELATIVE_TO_NOW -> TimeDisplayOption.RELATIVE_TO_NOW
+            SavedTimeDisplayOption.RELATIVE_TO_START -> TimeDisplayOption.RELATIVE_TO_START
+            SavedTimeDisplayOption.REGULAR -> TimeDisplayOption.REGULAR
+        }
+    }.stateIn(
+        initialValue = TimeDisplayOption.REGULAR,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     private val sortedIngestionsWithCompanionsFlow =
         ingestionsWithCompanionsFlow.map { ingestionsWithCompanions ->
