@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.isaakhanimann.journal.ui.tabs.journal.components.roundToOneDecimal
+import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -41,7 +42,9 @@ fun TimeRelativeToStartText(
         duration.toHours() > 24 -> "${roundToOneDecimal(duration.toHours().toDouble()/24.0)} days in"
         duration.toHours() > 1 -> "${roundToOneDecimal(duration.toMinutes().toDouble()/60.0)} hours in"
         duration.toMinutes() > 0 -> "${duration.toMinutes()} minutes in"
-        else -> "Start"
+        duration.toMillis() > 0 -> "${(duration.toMillis()/1000).toInt()} seconds in"
+        else -> time.getStringOfPattern("EEE HH:mm")
+
     }
     Text(
         text = relativeTime,
