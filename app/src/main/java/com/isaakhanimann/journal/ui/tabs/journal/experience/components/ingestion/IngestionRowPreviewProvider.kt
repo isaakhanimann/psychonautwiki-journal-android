@@ -38,11 +38,13 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
                     isDoseAnEstimate = false,
+                    estimatedDoseVariance = null,
                     units = "mg",
                     experienceId = 0,
                     notes = "This is a very long note which I wrote to see how it looks like if the note spans more than one line in the ingestion row.",
                     stomachFullness = StomachFullness.EMPTY,
-                    consumerName = null
+                    consumerName = null,
+                    customUnitId = null
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "MDMA",
@@ -60,11 +62,13 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
                     isDoseAnEstimate = false,
+                    estimatedDoseVariance = null,
                     units = "mg",
                     experienceId = 0,
                     notes = "This is a very long note which I wrote to see how it looks like if the note spans more than one line in the ingestion row.",
                     stomachFullness = StomachFullness.EMPTY,
-                    consumerName = null
+                    consumerName = null,
+                    customUnitId = null
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "2C-B",
@@ -82,11 +86,13 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = null,
                     isDoseAnEstimate = false,
+                    estimatedDoseVariance = null,
                     units = "µg",
                     experienceId = 0,
                     notes = null,
                     stomachFullness = StomachFullness.EMPTY,
-                    consumerName = null
+                    consumerName = null,
+                    customUnitId = null
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "LSD",

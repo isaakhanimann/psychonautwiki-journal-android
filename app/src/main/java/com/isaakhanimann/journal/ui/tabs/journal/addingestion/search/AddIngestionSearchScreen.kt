@@ -21,7 +21,13 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -32,8 +38,25 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -47,7 +70,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.SuggestionRow
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceSuggestion
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceRouteSuggestion
 import com.isaakhanimann.journal.ui.tabs.search.SubstanceModel
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
@@ -58,7 +81,7 @@ fun AddIngestionSearchScreen(
     navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseVariance: Double?, customUnitId: Int?) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
@@ -72,7 +95,7 @@ fun AddIngestionSearchScreen(
         navigateToChooseTime = navigateToChooseTime,
         navigateToDose = navigateToDose,
         navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
-        substanceSuggestions = viewModel.filteredSuggestions.collectAsState().value,
+        substanceRouteSuggestions = viewModel.filteredSuggestions.collectAsState().value,
         searchText = viewModel.searchTextFlow.collectAsState().value,
         onChangeSearchText = {
             viewModel.updateSearchText(it)
@@ -90,10 +113,10 @@ fun AddIngestionSearchScreen(
     navigateToCheckSaferUse: (substanceName: String) -> Unit,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean) -> Unit,
+    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseVariance: Double?, customUnitId: Int?) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
-    substanceSuggestions: List<SubstanceSuggestion>,
+    substanceRouteSuggestions: List<SubstanceRouteSuggestion>,
     searchText: String,
     onChangeSearchText: (searchText: String) -> Unit,
     filteredSubstances: List<SubstanceModel>,
@@ -154,19 +177,19 @@ fun AddIngestionSearchScreen(
                 singleLine = true
             )
             LazyColumn {
-                if (substanceSuggestions.isNotEmpty()) {
+                if (substanceRouteSuggestions.isNotEmpty()) {
                     stickyHeader {
                         SectionHeader(title = "Quick Logging")
                     }
                 }
-                itemsIndexed(substanceSuggestions) { index, substanceRow ->
+                itemsIndexed(substanceRouteSuggestions) { index, substanceRow ->
                     SuggestionRow(
-                        substanceRow = substanceRow,
+                        substanceRouteSuggestion = substanceRow,
                         navigateToDose = navigateToDose,
                         navigateToCustomDose = navigateToCustomDose,
                         navigateToChooseTime = navigateToChooseTime
                     )
-                    if (index < substanceSuggestions.size - 1) {
+                    if (index < substanceRouteSuggestions.size - 1) {
                         Divider()
                     }
                 }

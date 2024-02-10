@@ -18,9 +18,26 @@
 
 package com.isaakhanimann.journal.data.room.experiences
 
-import androidx.room.*
-import com.isaakhanimann.journal.data.room.experiences.entities.*
-import com.isaakhanimann.journal.data.room.experiences.relations.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import androidx.room.Update
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.Experience
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.entities.Location
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
+import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsTimedNotesAndRatings
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
 import com.isaakhanimann.journal.ui.tabs.settings.JournalExport
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
@@ -289,11 +306,13 @@ interface ExperienceDao {
                     administrationRoute = ingestionSerializable.administrationRoute,
                     dose = ingestionSerializable.dose,
                     isDoseAnEstimate = ingestionSerializable.isDoseAnEstimate,
+                    estimatedDoseVariance = ingestionSerializable.estimatedDoseVariance,
                     units = ingestionSerializable.units,
                     experienceId = experienceID,
                     notes = ingestionSerializable.notes,
                     stomachFullness = ingestionSerializable.stomachFullness,
-                    consumerName = ingestionSerializable.consumerName
+                    consumerName = ingestionSerializable.consumerName,
+                    customUnitId = ingestionSerializable.customUnitId
                 )
                 insert(newIngestion)
             }

@@ -20,20 +20,46 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -54,7 +80,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun ChooseDoseScreen(
-    navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?) -> Unit,
+    navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseVariance: Double?) -> Unit,
     navigateToVolumetricDosingScreenOnJournalTab: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
@@ -69,6 +95,8 @@ fun ChooseDoseScreen(
         doseText = viewModel.doseText,
         doseRemark = viewModel.substance.dosageRemark,
         onChangeDoseText = viewModel::onDoseTextChange,
+        estimatedDoseVarianceText = viewModel.estimatedDoseVarianceText,
+        onChangeEstimatedDoseVarianceText = viewModel::onEstimatedDoseVarianceChange,
         isValidDose = viewModel.isValidDose,
         isEstimate = viewModel.isEstimate,
         onChangeIsEstimate = {
@@ -78,7 +106,8 @@ fun ChooseDoseScreen(
             navigateToChooseTimeAndMaybeColor(
                 viewModel.units,
                 viewModel.isEstimate,
-                viewModel.dose
+                viewModel.dose,
+                viewModel.estimatedDoseVariance
             )
         },
         navigateToURL = navigateToURL,
@@ -86,6 +115,7 @@ fun ChooseDoseScreen(
             navigateToChooseTimeAndMaybeColor(
                 viewModel.units,
                 false,
+                null,
                 null
             )
         },
@@ -114,8 +144,10 @@ fun ChooseDoseScreenPreview(
         roaDose = roaDose,
         administrationRoute = AdministrationRoute.INSUFFLATED,
         doseText = "5",
-        doseRemark = "This is a dose remark",
         onChangeDoseText = {},
+        estimatedDoseVarianceText = "",
+        onChangeEstimatedDoseVarianceText = {},
+        doseRemark = "This is a dose remark",
         isValidDose = true,
         isEstimate = false,
         onChangeIsEstimate = {},
@@ -145,6 +177,8 @@ fun ChooseDoseScreenPreview2() {
         administrationRoute = AdministrationRoute.ORAL,
         doseText = "5",
         onChangeDoseText = {},
+        estimatedDoseVarianceText = "",
+        onChangeEstimatedDoseVarianceText = {},
         isValidDose = true,
         isEstimate = false,
         onChangeIsEstimate = {},
@@ -174,6 +208,8 @@ fun ChooseDoseScreen(
     doseRemark: String?,
     doseText: String,
     onChangeDoseText: (String) -> Unit,
+    estimatedDoseVarianceText: String,
+    onChangeEstimatedDoseVarianceText: (String) -> Unit,
     isValidDose: Boolean,
     isEstimate: Boolean,
     onChangeIsEstimate: (Boolean) -> Unit,
@@ -237,7 +273,7 @@ fun ChooseDoseScreen(
                         vertical = 10.dp
                     )
                 ) {
-                    if (doseRemark != null && doseRemark.isNotBlank()) {
+                    if (!doseRemark.isNullOrBlank()) {
                         Text(text = doseRemark)
                     }
                     Spacer(modifier = Modifier.height(5.dp))
@@ -337,6 +373,28 @@ fun ChooseDoseScreen(
                     ) {
                         Text("Is Estimate", style = MaterialTheme.typography.titleMedium)
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                    }
+                    AnimatedVisibility(visible = isEstimate) {
+                        OutlinedTextField(
+                            value = estimatedDoseVarianceText,
+                            onValueChange = onChangeEstimatedDoseVarianceText,
+                            textStyle = textStyle,
+                            label = { Text("Estimated variance", style = textStyle) },
+                            isError = !isValidDose,
+                            trailingIcon = {
+                                Text(
+                                    text = units,
+                                    style = textStyle,
+                                    modifier = Modifier.padding(horizontal = horizontalPadding)
+                                )
+                            },
+                            keyboardActions = KeyboardActions(onDone = {
+                                focusManager.clearFocus()
+                            }),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
                 }
             }

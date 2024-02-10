@@ -19,12 +19,32 @@
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models
 
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import java.time.Instant
 
-data class SubstanceSuggestion(
+data class SubstanceRouteSuggestion(
     val color: AdaptiveColor,
+    val route: AdministrationRoute,
     val substanceName: String,
-    val isCustom: Boolean,
-    val routesWithDoses: List<RouteWithDoses>,
+    val isCustomSubstance: Boolean,
+    val dosesAndUnit: List<DoseAndUnit>,
+    val customUnitDoses: List<CustomUnitDose>,
+    val customUnits: List<CustomUnit>,
     val lastUsed: Instant
 )
+
+data class DoseAndUnit(
+    val dose: Double?,
+    val unit: String?,
+    val isEstimate: Boolean,
+    val estimatedDoseVariance: Double?
+)
+
+data class CustomUnitDose(
+    val dose: Double,
+    val isEstimate: Boolean,
+    val estimatedDoseVariance: Double?,
+    val customUnit: CustomUnit
+)
+

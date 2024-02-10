@@ -53,11 +53,13 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
+                        estimatedDoseVariance = null,
                         units = "mg",
                         experienceId = 0,
                         notes = null,
                         stomachFullness = StomachFullness.EMPTY,
-                        consumerName = null
+                        consumerName = null,
+                        customUnitId = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -71,11 +73,13 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 30.0,
                         isDoseAnEstimate = false,
+                        estimatedDoseVariance = null,
                         units = "mg",
                         experienceId = 0,
                         notes = null,
                         stomachFullness = null,
-                        consumerName = null
+                        consumerName = null,
+                        customUnitId = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -89,11 +93,13 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 20.0,
                         isDoseAnEstimate = false,
+                        estimatedDoseVariance = null,
                         units = "mg",
                         experienceId = 0,
                         notes = null,
                         stomachFullness = null,
-                        consumerName = null
+                        consumerName = null,
+                        customUnitId = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -139,11 +145,13 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
+                        estimatedDoseVariance = null,
                         units = "mg",
                         experienceId = 0,
                         notes = null,
                         stomachFullness = null,
-                        consumerName = null
+                        consumerName = null,
+                        customUnitId = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -157,11 +165,13 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 20.0,
                         isDoseAnEstimate = false,
+                        estimatedDoseVariance = null,
                         units = "mg",
                         experienceId = 0,
                         notes = null,
                         stomachFullness = null,
-                        consumerName = "David"
+                        consumerName = "David",
+                        customUnitId = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -175,11 +185,13 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 20.0,
                         isDoseAnEstimate = false,
+                        estimatedDoseVariance = null,
                         units = "mg",
                         experienceId = 0,
                         notes = null,
                         stomachFullness = null,
-                        consumerName = "Sven"
+                        consumerName = "Sven",
+                        customUnitId = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",

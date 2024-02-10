@@ -72,11 +72,13 @@ class SubstanceCompanionScreenPreviewProvider :
                             administrationRoute = AdministrationRoute.INSUFFLATED,
                             dose = 20.0,
                             isDoseAnEstimate = false,
+                            estimatedDoseVariance = null,
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
                             stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null
+                            consumerName = null,
+                            customUnitId = null
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
@@ -90,11 +92,13 @@ class SubstanceCompanionScreenPreviewProvider :
                             administrationRoute = AdministrationRoute.INSUFFLATED,
                             dose = 30.0,
                             isDoseAnEstimate = false,
+                            estimatedDoseVariance = null,
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
                             stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null
+                            consumerName = null,
+                            customUnitId = null
                         )
                     )
                 ),
@@ -134,11 +138,13 @@ class SubstanceCompanionScreenPreviewProvider :
                             administrationRoute = AdministrationRoute.INSUFFLATED,
                             dose = 10.0,
                             isDoseAnEstimate = false,
+                            estimatedDoseVariance = null,
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
                             stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null
+                            consumerName = null,
+                            customUnitId = null
                         ),
                         Ingestion(
                             substanceName = "Cocaine",
@@ -152,11 +158,13 @@ class SubstanceCompanionScreenPreviewProvider :
                             administrationRoute = AdministrationRoute.INSUFFLATED,
                             dose = 20.0,
                             isDoseAnEstimate = false,
+                            estimatedDoseVariance = null,
                             units = "mg",
                             experienceId = 0,
                             notes = "This is one note",
                             stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null
+                            consumerName = null,
+                            customUnitId = null
                         )
                     )
                 )
