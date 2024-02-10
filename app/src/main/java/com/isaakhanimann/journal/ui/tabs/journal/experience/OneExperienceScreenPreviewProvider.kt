@@ -173,7 +173,7 @@ class OneExperienceScreenPreviewProvider :
     )
 
     companion object {
-        val ingestionElements = listOf<IngestionElement>(
+        val ingestionElements = listOf(
             IngestionElement(
                 ingestionWithCompanion = IngestionWithCompanion(
                     ingestion = Ingestion(
@@ -188,11 +188,13 @@ class OneExperienceScreenPreviewProvider :
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
+                        estimatedDoseVariance = null,
                         units = "mg",
                         experienceId = 0,
                         notes = null,
                         stomachFullness = StomachFullness.EMPTY,
-                        consumerName = null
+                        consumerName = null,
+                        customUnitId = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
@@ -247,11 +249,13 @@ class OneExperienceScreenPreviewProvider :
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 80.0,
                         isDoseAnEstimate = false,
+                        estimatedDoseVariance = null,
                         units = "mg",
                         experienceId = 0,
                         notes = null,
                         stomachFullness = StomachFullness.EMPTY,
-                        consumerName = null
+                        consumerName = null,
+                        customUnitId = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
@@ -302,11 +306,13 @@ class OneExperienceScreenPreviewProvider :
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 50.0,
                         isDoseAnEstimate = false,
+                        estimatedDoseVariance = null,
                         units = "mg",
                         experienceId = 0,
                         notes = null,
                         stomachFullness = StomachFullness.EMPTY,
-                        consumerName = null
+                        consumerName = null,
+                        customUnitId = null
                     ),
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",

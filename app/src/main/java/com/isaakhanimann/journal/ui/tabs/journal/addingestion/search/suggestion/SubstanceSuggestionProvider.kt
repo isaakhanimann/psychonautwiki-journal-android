@@ -21,77 +21,85 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.PreviousDose
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.RouteWithDoses
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceSuggestion
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.DoseAndUnit
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceRouteSuggestion
 import com.isaakhanimann.journal.ui.utils.getInstant
 
-class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceSuggestion> {
-    override val values: Sequence<SubstanceSuggestion> = sequenceOf(
-        SubstanceSuggestion(
+class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSuggestion> {
+    override val values: Sequence<SubstanceRouteSuggestion> = sequenceOf(
+        SubstanceRouteSuggestion(
             color = AdaptiveColor.PINK,
+            route = AdministrationRoute.ORAL,
             substanceName = "MDMA",
-            isCustom = false,
-            routesWithDoses = listOf(
-                RouteWithDoses(
-                    route = AdministrationRoute.ORAL,
-                    doses = listOf(
-                        PreviousDose(
-                            dose = 50.0,
-                            unit = "mg",
-                            isEstimate = false
-                        ),
-                        PreviousDose(
-                            dose = 100.0,
-                            unit = "mg",
-                            isEstimate = false
-                        ),
-                        PreviousDose(
-                            dose = null,
-                            unit = "mg",
-                            isEstimate = false
-                        )
-                    )
-                )
+            isCustomSubstance = false,
+            dosesAndUnit = listOf(
+                DoseAndUnit(
+                    dose = 50.0,
+                    unit = "mg",
+                    isEstimate = false,
+                    estimatedDoseVariance = null
+                ),
+                DoseAndUnit(
+                    dose = 100.0,
+                    unit = "mg",
+                    isEstimate = false,
+                    estimatedDoseVariance = null
+                ),
+                DoseAndUnit(
+                    dose = null,
+                    unit = "mg",
+                    isEstimate = false,
+                    estimatedDoseVariance = null
+                ),
             ),
+            customUnitDoses = emptyList(),
+            customUnits = emptyList(),
             lastUsed = getInstant(year = 2023, month = 4, day = 10, hourOfDay = 5, minute = 20)!!
         ),
-        SubstanceSuggestion(
+        SubstanceRouteSuggestion(
             color = AdaptiveColor.BLUE,
+            route = AdministrationRoute.INSUFFLATED,
             substanceName = "Amphetamine",
-            isCustom = false,
-            routesWithDoses = listOf(
-                RouteWithDoses(
-                    route = AdministrationRoute.INSUFFLATED,
-                    doses = listOf(
-                        PreviousDose(
-                            dose = 10.0,
-                            unit = "mg",
-                            isEstimate = false
-                        ),
-                        PreviousDose(
-                            dose = 20.0,
-                            unit = "mg",
-                            isEstimate = false
-                        ),
-                        PreviousDose(
-                            dose = null,
-                            unit = "mg",
-                            isEstimate = false
-                        )
-                    )
+            isCustomSubstance = false,
+            dosesAndUnit = listOf(
+                DoseAndUnit(
+                    dose = 10.0,
+                    unit = "mg",
+                    isEstimate = false,
+                    estimatedDoseVariance = null
                 ),
-                RouteWithDoses(
-                    route = AdministrationRoute.ORAL,
-                    doses = listOf(
-                        PreviousDose(
-                            dose = 30.0,
-                            unit = "mg",
-                            isEstimate = false
-                        )
-                    )
-                )
+                DoseAndUnit(
+                    dose = 20.0,
+                    unit = "mg",
+                    isEstimate = false,
+                    estimatedDoseVariance = null
+                ),
+                DoseAndUnit(
+                    dose = null,
+                    unit = "mg",
+                    isEstimate = false,
+                    estimatedDoseVariance = null
+                ),
             ),
+            customUnitDoses = emptyList(),
+            customUnits = emptyList(),
+            lastUsed = getInstant(year = 2023, month = 3, day = 10, hourOfDay = 5, minute = 20)!!
+        ),
+        SubstanceRouteSuggestion(
+            color = AdaptiveColor.BLUE,
+            route = AdministrationRoute.ORAL,
+            substanceName = "Amphetamine",
+            isCustomSubstance = false,
+            dosesAndUnit = listOf(
+                DoseAndUnit(
+                    dose = 20.0,
+                    unit = "mg",
+                    isEstimate = false,
+                    estimatedDoseVariance = null
+                ),
+            ),
+            customUnitDoses = emptyList(),
+            customUnits = emptyList(),
             lastUsed = getInstant(year = 2023, month = 3, day = 10, hourOfDay = 5, minute = 20)!!
         )
     )

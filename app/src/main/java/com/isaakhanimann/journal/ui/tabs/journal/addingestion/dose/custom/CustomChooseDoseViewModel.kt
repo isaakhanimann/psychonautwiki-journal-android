@@ -45,6 +45,7 @@ class CustomChooseDoseViewModel @Inject constructor(
     var units by mutableStateOf("mg")
     var isEstimate by mutableStateOf(false)
     var doseText by mutableStateOf("")
+    var estimatedDoseVarianceText by mutableStateOf("")
     var purityText by mutableStateOf("100")
     private val purity: Double?
         get() {
@@ -74,10 +75,15 @@ class CustomChooseDoseViewModel @Inject constructor(
             }
         }
     val dose: Double? get() = doseText.toDoubleOrNull()
+    val estimatedDoseVariance: Double? get() = estimatedDoseVarianceText.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
 
     fun onDoseTextChange(newDoseText: String) {
         doseText = newDoseText.replace(oldChar = ',', newChar = '.')
+    }
+
+    fun onEstimatedDoseVarianceTextChange(newVarianceText: String) {
+        estimatedDoseVarianceText = newVarianceText.replace(oldChar = ',', newChar = '.')
     }
 
     init {

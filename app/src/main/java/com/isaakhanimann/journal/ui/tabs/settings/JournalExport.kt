@@ -62,10 +62,12 @@ data class IngestionSerializable(
     val administrationRoute: AdministrationRoute,
     var dose: Double? = null,
     var isDoseAnEstimate: Boolean,
+    var estimatedDoseVariance: Double? = null,
     var units: String? = null,
     var notes: String? = null,
     var stomachFullness: StomachFullness? = null,
-    var consumerName: String? = null
+    var consumerName: String? = null,
+    var customUnitId: Int? = null
 )
 
 @Serializable

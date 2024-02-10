@@ -32,7 +32,9 @@ import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompani
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_UNIT_ID_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.DOSE_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.ESTIMATED_DOSE_VARIANCE_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.IS_ESTIMATE_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.UNITS_KEY
@@ -142,6 +144,8 @@ class ChooseTimeViewModel @Inject constructor(
     private val dose: Double?
     private val units: String?
     private val isEstimate: Boolean
+    private val estimatedDoseVariance: Double?
+    private val customUnitId: Int?
     private var substanceCompanion: SubstanceCompanion? = null
 
     private val companionFlow = experienceRepo.getAllSubstanceCompanionsFlow()
@@ -175,6 +179,8 @@ class ChooseTimeViewModel @Inject constructor(
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         dose = state.get<String>(DOSE_KEY)?.toDoubleOrNull()
+        estimatedDoseVariance = state.get<String>(ESTIMATED_DOSE_VARIANCE_KEY)?.toDoubleOrNull()
+        customUnitId = state.get<String>(CUSTOM_UNIT_ID_KEY)?.toIntOrNull()
         units = state.get<String>(UNITS_KEY)?.let {
             if (it == "null") {
                 null
@@ -248,11 +254,13 @@ class ChooseTimeViewModel @Inject constructor(
                 administrationRoute = administrationRoute,
                 dose = dose,
                 isDoseAnEstimate = isEstimate,
+                estimatedDoseVariance = estimatedDoseVariance,
                 units = units,
                 experienceId = newExperience.id,
                 notes = note,
                 stomachFullness = null, // todo: allow to add real stomach fullness
-                consumerName = consumerNameNonBlank
+                consumerName = consumerNameNonBlank,
+                customUnitId = customUnitId
             )
             experienceRepo.insertIngestionExperienceAndCompanion(
                 ingestion = newIngestion,
@@ -266,11 +274,13 @@ class ChooseTimeViewModel @Inject constructor(
                 administrationRoute = administrationRoute,
                 dose = dose,
                 isDoseAnEstimate = isEstimate,
+                estimatedDoseVariance = estimatedDoseVariance,
                 units = units,
                 experienceId = oldIdToUse,
                 notes = note,
                 stomachFullness = null, // todo: allow to add real stomach fullness
-                consumerName = consumerNameNonBlank
+                consumerName = consumerNameNonBlank,
+                customUnitId = customUnitId
             )
             experienceRepo.insertIngestionAndCompanion(
                 ingestion = newIngestion,
