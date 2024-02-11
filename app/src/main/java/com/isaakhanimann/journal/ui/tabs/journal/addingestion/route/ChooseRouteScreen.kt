@@ -19,17 +19,31 @@
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.route
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,9 +64,9 @@ fun ChooseRouteScreen(
     viewModel: ChooseRouteViewModel = hiltViewModel()
 ) {
     ChooseRouteScreen(
-        shouldShowOther = viewModel.shouldShowOtherRoutes,
-        onChangeShowOther = {
-            viewModel.shouldShowOtherRoutes = it
+        showOtherRoutes = viewModel.showOtherRoutes,
+        onChangeOfShowOtherRoutes = {
+            viewModel.showOtherRoutes = it
         },
         pwRoutes = viewModel.pwRoutes,
         otherRoutesChunked = viewModel.otherRoutesChunked,
@@ -86,8 +100,8 @@ fun ChooseRouteScreenPreview() {
     }
     val otherRoutesChunked = otherRoutes.chunked(2)
     ChooseRouteScreen(
-        shouldShowOther = false,
-        onChangeShowOther = {},
+        showOtherRoutes = false,
+        onChangeOfShowOtherRoutes = {},
         pwRoutes = pwRoutes,
         otherRoutesChunked = otherRoutesChunked,
         onRouteTapped = {},
@@ -103,8 +117,8 @@ fun ChooseRouteScreenPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseRouteScreen(
-    shouldShowOther: Boolean,
-    onChangeShowOther: (Boolean) -> Unit,
+    showOtherRoutes: Boolean,
+    onChangeOfShowOtherRoutes: (Boolean) -> Unit,
     pwRoutes: List<AdministrationRoute>,
     otherRoutesChunked: List<List<AdministrationRoute>>,
     onRouteTapped: (route: AdministrationRoute) -> Unit,
@@ -120,8 +134,8 @@ fun ChooseRouteScreen(
             TopAppBar(
                 title = { Text("$substanceName Route") },
                 navigationIcon = {
-                    if (shouldShowOther && pwRoutes.isNotEmpty()) {
-                        IconButton(onClick = { onChangeShowOther(false) }) {
+                    if (showOtherRoutes && pwRoutes.isNotEmpty()) {
+                        IconButton(onClick = { onChangeOfShowOtherRoutes(false) }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = "Back"
@@ -142,7 +156,6 @@ fun ChooseRouteScreen(
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             LinearProgressIndicator(progress = 0.5f, modifier = Modifier.fillMaxWidth())
-            val spacing = 6
             AnimatedVisibility(visible = isShowingInjectionDialog) {
                 InjectionDialog(
                     navigateToNext = navigateWithCurrentRoute,
@@ -150,92 +163,13 @@ fun ChooseRouteScreen(
                     dismiss = dismissInjectionDialog
                 )
             }
-            Column(
-                modifier = Modifier.padding(10.dp),
-                verticalArrangement = Arrangement.spacedBy(spacing.dp)
-            ) {
-                val isShowingOther = shouldShowOther || pwRoutes.isEmpty()
-                AnimatedVisibility(
-                    visible = isShowingOther,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(spacing.dp)
-                    ) {
-                        otherRoutesChunked.forEach { otherRouteChunk ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f),
-                                horizontalArrangement = Arrangement.spacedBy(spacing.dp)
-                            ) {
-                                otherRouteChunk.forEach { route ->
-                                    ElevatedCard(
-                                        modifier = Modifier
-                                            .clickable {
-                                                onRouteTapped(route)
-                                            }
-                                            .fillMaxHeight()
-                                            .weight(1f)
-                                    ) {
-                                        RouteBox(
-                                            route = route,
-                                            titleStyle = MaterialTheme.typography.headlineSmall
-                                        )
-                                    }
-                                }
-                                if (otherRouteChunk.size == 1) {
-                                    Box(modifier = Modifier.weight(1f))
-                                }
-                            }
-                        }
-                    }
-                }
-                AnimatedVisibility(
-                    visible = !isShowingOther,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(spacing.dp),
-                    ) {
-                        ElevatedCard(
-                            modifier = Modifier
-                                .clickable {
-                                    onChangeShowOther(true)
-                                }
-                                .fillMaxWidth()
-                                .weight(5f)
-                        ) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                Text(
-                                    text = "Other Routes",
-                                    style = MaterialTheme.typography.headlineSmall
-                                )
-                            }
-                        }
-                        pwRoutes.forEach { route ->
-                            ElevatedCard(
-                                modifier = Modifier
-                                    .clickable {
-                                        onRouteTapped(route)
-                                    }
-                                    .fillMaxWidth()
-                                    .weight(5f)
-                            ) {
-                                RouteBox(
-                                    route = route,
-                                    titleStyle = MaterialTheme.typography.headlineSmall
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            AdministrationRoutePicker(
+                showOtherRoutes = showOtherRoutes,
+                onChangeOfShowOtherRoutes = onChangeOfShowOtherRoutes,
+                pwRoutes = pwRoutes,
+                otherRoutesChunked = otherRoutesChunked,
+                onRouteTapped = onRouteTapped
+            )
         }
     }
 }

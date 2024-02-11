@@ -58,9 +58,11 @@ private const val ROUTE_START_CHOOSE_DOSE_CUSTOM = "chooseDoseCustom/"
 private const val ROUTE_START_SUBSTANCES = "substances/"
 private const val ROUTE_START_CHECK_INTERACTIONS = "checkInteractionsSkipNothing/"
 private const val ROUTE_START_CHECK_SAFER_USE = "checkSaferUse/"
-private const val ROUTE_START_CHOOSE_ROUTE = "chooseRoute/"
+private const val ROUTE_START_CHOOSE_ROUTE_OF_ADD_INGESTION = "chooseRouteOfAddIngestion/"
+private const val ROUTE_START_OF_ADD_CUSTOM_UNIT = "chooseRouteOfAddCustomUnit/"
 private const val ROUTE_START_CHOOSE_DOSE = "chooseDose/"
 private const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
+private const val ROUTE_START_FINISH_ADD_CUSTOM_UNIT = "finishAddCustomUnit/"
 private const val ROUTE_START_SUBSTANCE_COMPANION = "substancesCompanion/"
 private const val ROUTE_START_CATEGORY = "category/"
 private const val ROUTE_START_URL = "url/"
@@ -186,8 +188,15 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         )
     )
 
-    object ChooseRouteRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_ROUTE{$SUBSTANCE_NAME_KEY}",
+    object ChooseRouteOfAddIngestionRouter : ArgumentRouter(
+        route = "$ROUTE_START_CHOOSE_ROUTE_OF_ADD_INGESTION{$SUBSTANCE_NAME_KEY}",
+        args = listOf(
+            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
+        )
+    )
+
+    object ChooseRouteOfAddCustomUnitRouter : ArgumentRouter(
+        route = "$ROUTE_START_OF_ADD_CUSTOM_UNIT{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
         )
@@ -211,6 +220,14 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
             navArgument(DOSE_KEY) { nullable = true },
             navArgument(ESTIMATED_DOSE_VARIANCE_KEY) { nullable = true },
             navArgument(CUSTOM_UNIT_ID_KEY) { nullable = true },
+        )
+    )
+
+    object FinishAddCustomUnitRouter : ArgumentRouter(
+        route = "$ROUTE_START_FINISH_ADD_CUSTOM_UNIT{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}",
+        args = listOf(
+            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
+            navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType }
         )
     )
 }
@@ -294,9 +311,14 @@ fun NavController.navigateToCheckSaferUse(substanceName: String) {
     navigate("$ROUTE_START_CHECK_SAFER_USE$substanceName")
 }
 
-fun NavController.navigateToChooseRoute(substanceName: String) {
-    navigate("$ROUTE_START_CHOOSE_ROUTE$substanceName")
+fun NavController.navigateToChooseRouteOfAddIngestion(substanceName: String) {
+    navigate("$ROUTE_START_CHOOSE_ROUTE_OF_ADD_INGESTION$substanceName")
 }
+
+fun NavController.navigateToChooseRouteOfAddCustomUnit(substanceName: String) {
+    navigate("$ROUTE_START_OF_ADD_CUSTOM_UNIT$substanceName")
+}
+
 
 fun NavController.navigateToChooseDose(
     substanceName: String,
@@ -322,4 +344,11 @@ fun NavController.navigateToChooseTimeAndMaybeColor(
     customUnitId: Int?
 ) {
     navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose/?$ESTIMATED_DOSE_VARIANCE_KEY=$estimatedDoseVariance/?$CUSTOM_UNIT_ID_KEY=$customUnitId")
+}
+
+fun NavController.navigateToFinishAddCustomUnit(
+    substanceName: String,
+    administrationRoute: AdministrationRoute
+) {
+    navigate("$ROUTE_START_FINISH_ADD_CUSTOM_UNIT$substanceName/${administrationRoute.name}")
 }

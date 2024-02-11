@@ -18,9 +18,12 @@
 
 package com.isaakhanimann.journal.ui.tabs.settings.customunits.add
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun AddCustomUnitsScreen() {
-
+fun FinishAddCustomUnitScreen(
+    dismissAddCustomUnit: () -> Unit
+) {
+    Text(text = "Finish add custom unit")
 }

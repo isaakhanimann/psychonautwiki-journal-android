@@ -37,7 +37,7 @@ class ChooseRouteViewModel @Inject constructor(
     val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
     val substance = substanceRepo.getSubstance(substanceName)
 
-    var shouldShowOtherRoutes by mutableStateOf(false)
+    var showOtherRoutes by mutableStateOf(false)
     val pwRoutes = substance?.roas?.map { it.route } ?: emptyList()
     private val otherRoutes = AdministrationRoute.values().filter { route ->
         !pwRoutes.contains(route)
