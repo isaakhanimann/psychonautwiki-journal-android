@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "da48a877538dd07755c972e6dcead44a",
+    "identityHash": "c470c572039744d73538ce6853e92f9d",
     "entities": [
       {
         "tableName": "Experience",
@@ -333,12 +333,98 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "CustomUnit",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `substanceName` TEXT NOT NULL, `name` TEXT NOT NULL, `creationDate` INTEGER NOT NULL, `administrationRoute` TEXT NOT NULL, `dose` REAL, `estimatedDoseVariance` REAL, `isEstimate` INTEGER NOT NULL, `isArchived` INTEGER NOT NULL, `unit` TEXT NOT NULL, `originalUnit` TEXT NOT NULL, `note` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "substanceName",
+            "columnName": "substanceName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creationDate",
+            "columnName": "creationDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "administrationRoute",
+            "columnName": "administrationRoute",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dose",
+            "columnName": "dose",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "estimatedDoseVariance",
+            "columnName": "estimatedDoseVariance",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isEstimate",
+            "columnName": "isEstimate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isArchived",
+            "columnName": "isArchived",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originalUnit",
+            "columnName": "originalUnit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'da48a877538dd07755c972e6dcead44a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c470c572039744d73538ce6853e92f9d')"
     ]
   }
 }

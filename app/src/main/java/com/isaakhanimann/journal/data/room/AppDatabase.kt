@@ -24,6 +24,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.isaakhanimann.journal.data.room.experiences.ExperienceDao
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.InstantConverter
@@ -34,7 +35,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
 @TypeConverters(InstantConverter::class)
 @Database(
     version = 5,
-    entities = [Experience::class, Ingestion::class, SubstanceCompanion::class, CustomSubstance::class, ShulginRating::class, TimedNote::class],
+    entities = [Experience::class, Ingestion::class, SubstanceCompanion::class, CustomSubstance::class, ShulginRating::class, TimedNote::class, CustomUnit::class],
     autoMigrations = [
         AutoMigration (from = 1, to = 2),
         AutoMigration (from = 2, to = 3),

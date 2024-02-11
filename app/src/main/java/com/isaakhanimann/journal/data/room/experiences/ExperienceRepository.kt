@@ -18,8 +18,17 @@
 
 package com.isaakhanimann.journal.data.room.experiences
 
-import com.isaakhanimann.journal.data.room.experiences.entities.*
-import com.isaakhanimann.journal.data.room.experiences.relations.*
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.Experience
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
+import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsTimedNotesAndRatings
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
 import com.isaakhanimann.journal.ui.tabs.settings.JournalExport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -242,6 +251,12 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
         .flowOn(Dispatchers.IO)
         .conflate()
 
+    fun getAllCustomUnitsFlow(isArchived: Boolean) = experienceDao.getSortedCustomUnitsFlow(isArchived)
+        .flowOn(Dispatchers.IO)
+        .conflate()
+
     fun getSubstanceCompanionFlow(substanceName: String) =
         experienceDao.getSubstanceCompanionFlow(substanceName)
+            .flowOn(Dispatchers.IO)
+            .conflate()
 }

@@ -23,14 +23,44 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.ContactSupport
+import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.material.icons.outlined.FileDownload
+import androidx.compose.material.icons.outlined.FileUpload
+import androidx.compose.material.icons.outlined.Medication
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.QuestionAnswer
+import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.VolunteerActivism
+import androidx.compose.material.icons.outlined.WarningAmber
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -53,6 +83,7 @@ fun SettingsPreview() {
         navigateToFAQ = {},
         navigateToComboSettings = {},
         navigateToSubstanceColors = {},
+        navigateToCustomUnits = {},
         importFile = {},
         exportFile = {},
         snackbarHostState = remember { SnackbarHostState() },
@@ -65,11 +96,13 @@ fun SettingsScreen(
     navigateToFAQ: () -> Unit,
     navigateToComboSettings: () -> Unit,
     navigateToSubstanceColors: () -> Unit,
+    navigateToCustomUnits: () -> Unit,
 ) {
     SettingsScreen(
         navigateToFAQ = navigateToFAQ,
         navigateToComboSettings = navigateToComboSettings,
         navigateToSubstanceColors = navigateToSubstanceColors,
+        navigateToCustomUnits = navigateToCustomUnits,
         deleteEverything = viewModel::deleteEverything,
         importFile = viewModel::importFile,
         exportFile = viewModel::exportFile,
@@ -83,6 +116,7 @@ fun SettingsScreen(
     navigateToFAQ: () -> Unit,
     navigateToComboSettings: () -> Unit,
     navigateToSubstanceColors: () -> Unit,
+    navigateToCustomUnits: () -> Unit,
     deleteEverything: () -> Unit,
     importFile: (uri: Uri) -> Unit,
     exportFile: (uri: Uri) -> Unit,
@@ -284,6 +318,13 @@ fun SettingsScreen(
                     text = "Substance Colors"
                 ) {
                     navigateToSubstanceColors()
+                }
+                Divider()
+                SettingsButton(
+                    imageVector = Icons.Outlined.Medication,
+                    text = "Custom Units"
+                ) {
+                    navigateToCustomUnits()
                 }
             }
         }
