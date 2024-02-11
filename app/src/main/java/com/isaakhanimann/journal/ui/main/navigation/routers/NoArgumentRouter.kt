@@ -27,6 +27,7 @@ sealed class NoArgumentRouter(val route: String) {
     object SubstanceColorsRouter : NoArgumentRouter(route = "substanceColors")
     object CustomUnitsRouter : NoArgumentRouter(route = "customUnits")
     object AddCustomUnitsRouter : NoArgumentRouter(route = "addCustomUnits")
+    object AddCustomUnitsSearchSubstanceRouter : NoArgumentRouter(route = "addCustomUnitsSearch")
     object FAQRouter : NoArgumentRouter(route = "faqRoute")
     object ExplainTimelineOnSearchTabRouter : NoArgumentRouter(route = "explainTimelineOnSearchTab")
     object ExplainTimelineOnJournalTabRouter :
@@ -74,10 +75,6 @@ fun NavController.navigateToSubstanceColors() {
 
 fun NavController.navigateToCustomUnits() {
     navigate(NoArgumentRouter.CustomUnitsRouter.route)
-}
-
-fun NavController.navigateToAddCustomUnits() {
-    navigate(NoArgumentRouter.AddCustomUnitsRouter.route)
 }
 
 fun NavController.navigateToReagentTesting() {

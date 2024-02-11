@@ -25,7 +25,6 @@ import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddCustomUnits
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToComboSettings
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCustomUnits
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditCustomUnit
@@ -36,7 +35,6 @@ import com.isaakhanimann.journal.ui.tabs.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.colors.SubstanceColorsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.CustomUnitsScreen
-import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.AddCustomUnitsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.edit.EditCustomUnitScreen
 
 fun NavGraphBuilder.settingsGraph(navController: NavController) {
@@ -57,7 +55,7 @@ fun NavGraphBuilder.settingsGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
         composableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
         composableWithTransitions(NoArgumentRouter.SubstanceColorsRouter.route) { SubstanceColorsScreen() }
-        composableWithTransitions(NoArgumentRouter.AddCustomUnitsRouter.route) { AddCustomUnitsScreen() }
+        addCustomUnitGraph(navController)
         composableWithTransitions(NoArgumentRouter.CustomUnitsRouter.route) {
             CustomUnitsScreen(
                 navigateToAddCustomUnit = navController::navigateToAddCustomUnits,

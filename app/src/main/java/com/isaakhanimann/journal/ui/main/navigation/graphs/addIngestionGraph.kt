@@ -35,7 +35,7 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCheckSafer
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseCustomRoute
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseDose
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseDoseCustom
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseRoute
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseRouteOfAddIngestion
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseTimeAndMaybeColor
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferSniffingOnJournalTab
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLInJournalTab
@@ -82,7 +82,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigateToChooseDose(substanceName, route)
                 },
                 navigateToChooseRoute = { substanceName ->
-                    navController.navigateToChooseRoute(substanceName)
+                    navController.navigateToChooseRouteOfAddIngestion(substanceName)
                 },
                 navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom
             )
@@ -95,7 +95,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToNext = {
                     val args = backStackEntry.arguments!!
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
-                    navController.navigateToChooseRoute(substanceName = substanceName)
+                    navController.navigateToChooseRouteOfAddIngestion(substanceName = substanceName)
                 },
                 navigateToURL = navController::navigateToURLInJournalTab
             )
@@ -121,8 +121,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             UrlScreen(url = url)
         }
         composableWithTransitions(
-            ArgumentRouter.ChooseRouteRouter.route,
-            arguments = ArgumentRouter.ChooseRouteRouter.args
+            ArgumentRouter.ChooseRouteOfAddIngestionRouter.route,
+            arguments = ArgumentRouter.ChooseRouteOfAddIngestionRouter.args
         ) { backStackEntry ->
             val args = backStackEntry.arguments!!
             val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!

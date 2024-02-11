@@ -137,6 +137,28 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
+            CardWithTitle(title = "UI", innerPaddingHorizontal = 0.dp) {
+                SettingsButton(
+                    imageVector = Icons.Outlined.WarningAmber,
+                    text = "Interaction Settings"
+                ) {
+                    navigateToComboSettings()
+                }
+                Divider()
+                SettingsButton(
+                    imageVector = Icons.Outlined.Palette,
+                    text = "Substance Colors"
+                ) {
+                    navigateToSubstanceColors()
+                }
+                Divider()
+                SettingsButton(
+                    imageVector = Icons.Outlined.Medication,
+                    text = "Custom Units"
+                ) {
+                    navigateToCustomUnits()
+                }
+            }
             val uriHandler = LocalUriHandler.current
             CardWithTitle(title = "Feedback", innerPaddingHorizontal = 0.dp) {
                 SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
@@ -304,28 +326,6 @@ fun SettingsScreen(
                         .padding(horizontal = 15.dp)
                         .padding(vertical = 10.dp)
                 )
-            }
-            CardWithTitle(title = "UI", innerPaddingHorizontal = 0.dp) {
-                SettingsButton(
-                    imageVector = Icons.Outlined.WarningAmber,
-                    text = "Interaction Settings"
-                ) {
-                    navigateToComboSettings()
-                }
-                Divider()
-                SettingsButton(
-                    imageVector = Icons.Outlined.Palette,
-                    text = "Substance Colors"
-                ) {
-                    navigateToSubstanceColors()
-                }
-                Divider()
-                SettingsButton(
-                    imageVector = Icons.Outlined.Medication,
-                    text = "Custom Units"
-                ) {
-                    navigateToCustomUnits()
-                }
             }
         }
     }
