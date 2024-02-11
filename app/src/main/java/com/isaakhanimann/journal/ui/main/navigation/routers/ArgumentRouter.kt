@@ -46,6 +46,7 @@ const val CATEGORY_KEY = "category"
 private const val ROUTE_START_EXPERIENCES = "experiences/"
 private const val ROUTE_START_TIMELINE_SCREEN = "timeline/"
 private const val ROUTE_START_INGESTIONS = "ingestions/"
+private const val ROUTE_START_EDIT_CUSTOM_UNIT = "editCustomUnit/"
 private const val ROUTE_START_EDIT_EXPERIENCE = "editExperience/"
 private const val ROUTE_START_ADD_RATING = "addRating/"
 private const val ROUTE_START_ADD_TIMED_NOTE = "addTimedNote/"
@@ -76,6 +77,10 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     object IngestionRouter : ArgumentRouter(
         route = "$ROUTE_START_INGESTIONS{$INGESTION_ID_KEY}",
         args = listOf(navArgument(INGESTION_ID_KEY) { type = NavType.IntType })
+    )
+    object EditCustomUnitRouter : ArgumentRouter(
+        route = "$ROUTE_START_EDIT_CUSTOM_UNIT{$CUSTOM_UNIT_ID_KEY}",
+        args = listOf(navArgument(CUSTOM_UNIT_ID_KEY) { type = NavType.IntType })
     )
 
     object EditExperienceRouter : ArgumentRouter(
@@ -216,6 +221,9 @@ fun NavController.navigateToExperience(experienceId: Int) {
 
 fun NavController.navigateToIngestion(ingestionId: Int) {
     navigate(ROUTE_START_INGESTIONS + ingestionId)
+}
+fun NavController.navigateToEditCustomUnit(customUnitId: Int) {
+    navigate(ROUTE_START_EDIT_CUSTOM_UNIT + customUnitId)
 }
 
 fun NavController.navigateToEditExperience(experienceId: Int) {

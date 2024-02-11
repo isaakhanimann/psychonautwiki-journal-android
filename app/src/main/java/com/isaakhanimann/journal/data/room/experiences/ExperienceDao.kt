@@ -26,6 +26,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.Location
@@ -393,6 +394,9 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM timednote")
     fun getAllTimedNotesFlow(): Flow<List<TimedNote>>
+
+    @Query("SELECT * FROM customunit WHERE isArchived = :isArchived ORDER BY creationDate DESC")
+    fun getSortedCustomUnitsFlow(isArchived: Boolean): Flow<List<CustomUnit>>
 
     @Query("SELECT * FROM timednote")
     suspend fun getAllTimedNotes(): List<TimedNote>
