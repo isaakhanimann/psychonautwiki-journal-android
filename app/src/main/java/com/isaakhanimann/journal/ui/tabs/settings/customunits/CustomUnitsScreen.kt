@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.settings.customunits
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
+import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
@@ -118,18 +120,30 @@ fun CustomUnitsScreenContent(
             )
         }
     ) { padding ->
-        LazyColumn(
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .padding(padding)
-                .padding(horizontal = horizontalPadding)
                 .fillMaxSize()
+                .padding(padding)
         ) {
-            items(customUnits) { customUnit ->
-                CustomUnitRow(
-                    customUnit = customUnit,
-                    navigateToEditCustomUnit = navigateToEditCustomUnit
+            LazyColumn(
+                modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
+                    .fillMaxSize()
+            ) {
+                items(customUnits) { customUnit ->
+                    CustomUnitRow(
+                        customUnit = customUnit,
+                        navigateToEditCustomUnit = navigateToEditCustomUnit
+                    )
+                    Divider()
+                }
+            }
+            if (customUnits.isEmpty()) {
+                EmptyScreenDisclaimer(
+                    title = "No Custom Units Yet",
+                    description = "Add your first unit."
                 )
-                Divider()
             }
         }
     }
