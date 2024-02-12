@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.data.room.experiences
 
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
@@ -43,6 +44,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun insert(experience: Experience) = experienceDao.insert(experience)
     suspend fun insert(ingestion: Ingestion) = experienceDao.insert(ingestion)
     suspend fun insert(rating: ShulginRating) = experienceDao.insert(rating)
+    suspend fun insert(customUnit: CustomUnit) = experienceDao.insert(customUnit)
     suspend fun insert(timedNote: TimedNote) = experienceDao.insert(timedNote)
     suspend fun update(experience: Experience) = experienceDao.update(experience)
     suspend fun update(ingestion: Ingestion) = experienceDao.update(ingestion)

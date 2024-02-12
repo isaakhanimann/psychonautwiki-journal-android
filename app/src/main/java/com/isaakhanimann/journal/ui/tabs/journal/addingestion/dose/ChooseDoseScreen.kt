@@ -380,7 +380,6 @@ fun ChooseDoseScreen(
                             onValueChange = onChangeEstimatedDoseVarianceText,
                             textStyle = textStyle,
                             label = { Text("Estimated variance", style = textStyle) },
-                            isError = !isValidDose,
                             trailingIcon = {
                                 Text(
                                     text = units,
