@@ -31,11 +31,11 @@ data class CustomUnit(
     val name: String,
     val creationDate: Instant = Instant.now(),
     val administrationRoute: AdministrationRoute,
-    val dose: Double?,
-    val estimatedDoseVariance: Double?,
-    val isEstimate: Boolean,
-    val isArchived: Boolean,
-    val unit: String,
+    var dose: Double?,
+    var estimatedDoseVariance: Double?,
+    var isEstimate: Boolean,
+    var isArchived: Boolean,
+    var unit: String,
     val originalUnit: String,
-    val note: String
+    var note: String
 )
