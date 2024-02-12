@@ -32,7 +32,7 @@ fun FloatingDoneButton(onDone: ()->Unit) {
         icon = {
             Icon(
                 Icons.Filled.Done,
-                contentDescription = "Done Icon"
+                contentDescription = "Done"
             )
         },
         text = { Text("Done") }
