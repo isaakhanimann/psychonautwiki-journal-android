@@ -27,18 +27,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -53,6 +48,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -61,7 +58,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.CurrentDoseClassInfo
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.OptionalDosageUnitDisclaimer
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
@@ -78,6 +74,8 @@ fun FinishAddCustomUnitScreen(
         dismiss = {
             viewModel.createSaveAndDismissAfter(dismiss = dismissAddCustomUnit)
         },
+        name = viewModel.name,
+        onChangeOfName = viewModel::onChangeOfName,
         doseText = viewModel.doseText,
         onChangeDoseText = viewModel::onChangeOfDose,
         estimatedDoseVarianceText = viewModel.estimatedDoseVarianceText,
@@ -86,8 +84,12 @@ fun FinishAddCustomUnitScreen(
         onChangeIsEstimate = viewModel::onChangeOfIsEstimate,
         currentDoseClass = viewModel.currentDoseClass,
         isShowingUnitsField = viewModel.roaDose?.units?.isBlank() ?: true,
-        units = viewModel.unit,
-        onChangeOfUnits = viewModel::onChangeOfUnit
+        unit = viewModel.unit,
+        onChangeOfUnits = viewModel::onChangeOfUnit,
+        originalUnit = viewModel.originalUnit,
+        onChangeOfOriginalUnit = viewModel::onChangeOfOriginalUnit,
+        note = viewModel.note,
+        onChangeOfNote = viewModel::onChangeOfNote
     )
 }
 
@@ -100,16 +102,22 @@ private fun FinishAddCustomUnitScreenPreview(
         substanceName = "Example",
         roaDose = roaDose,
         dismiss = {},
+        name = "Pink rocket",
+        onChangeOfName = {},
         doseText = "10",
         onChangeDoseText = {},
         estimatedDoseVarianceText = "",
         onChangeEstimatedDoseVarianceText = {},
-        isEstimate = false,
+        isEstimate = true,
         onChangeIsEstimate = {},
         currentDoseClass = DoseClass.LIGHT,
         isShowingUnitsField = false,
-        units = "spoon",
-        onChangeOfUnits = {}
+        unit = "pill",
+        onChangeOfUnits = {},
+        originalUnit = "mg",
+        onChangeOfOriginalUnit = {},
+        note = "",
+        onChangeOfNote = {}
     )
 }
 
@@ -119,6 +127,8 @@ private fun FinishAddCustomUnitScreenContent(
     substanceName: String,
     roaDose: RoaDose?,
     dismiss: () -> Unit,
+    name: String,
+    onChangeOfName: (String) -> Unit,
     doseText: String,
     onChangeDoseText: (String) -> Unit,
     estimatedDoseVarianceText: String,
@@ -127,8 +137,12 @@ private fun FinishAddCustomUnitScreenContent(
     onChangeIsEstimate: (Boolean) -> Unit,
     currentDoseClass: DoseClass?,
     isShowingUnitsField: Boolean,
-    units: String,
+    unit: String,
     onChangeOfUnits: (units: String) -> Unit,
+    originalUnit: String,
+    onChangeOfOriginalUnit: (String) -> Unit,
+    note: String,
+    onChangeOfNote: (String) -> Unit
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName Unit") }) },
@@ -144,6 +158,16 @@ private fun FinishAddCustomUnitScreenContent(
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(4.dp))
+            val textStyle = MaterialTheme.typography.titleMedium
+            val focusRequesterName = remember { FocusRequester() }
+            val focusRequesterUnit = remember { FocusRequester() }
+            val focusRequesterNote = remember { FocusRequester() }
+            val focusRequesterDose = remember { FocusRequester() }
+            val focusManager = LocalFocusManager.current
+
+            LaunchedEffect(Unit) {
+                focusRequesterName.requestFocus()
+            }
             ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                 Column(
                     modifier = Modifier.padding(
@@ -151,24 +175,45 @@ private fun FinishAddCustomUnitScreenContent(
                         vertical = 10.dp
                     )
                 ) {
-                    Spacer(modifier = Modifier.height(5.dp))
-                    if (roaDose != null) {
-                        RoaDoseView(roaDose = roaDose)
-                    } else {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Warning,
-                                contentDescription = "Dosage Warning"
-                            )
-                            Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                            Text(
-                                text = "There is no dosage info for this administration route. Research dosages somewhere else.",
-                            )
-                        }
-                    }
-                    OptionalDosageUnitDisclaimer(substanceName)
+                    OutlinedTextField(
+                        value = name,
+                        onValueChange = onChangeOfName,
+                        textStyle = textStyle,
+                        singleLine = true,
+                        label = { Text(text = "Name to identify") },
+                        keyboardActions = KeyboardActions(onNext = { focusRequesterUnit.requestFocus() }),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            capitalization = KeyboardCapitalization.Words
+                        ),
+                        modifier = Modifier.fillMaxWidth().focusRequester(focusRequesterName)
+
+                    )
+                    OutlinedTextField(
+                        value = unit,
+                        onValueChange = onChangeOfUnits,
+                        textStyle = textStyle,
+                        singleLine = true,
+                        label = { Text(text = "Unit in singular form") },
+                        placeholder = { Text(text = "e.g. pill, spray, spoon") },
+                        keyboardActions = KeyboardActions(onNext = { focusRequesterNote.requestFocus() }),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            capitalization = KeyboardCapitalization.None
+                        ),
+                        modifier = Modifier.fillMaxWidth().focusRequester(focusRequesterUnit)
+                    )
+                    OutlinedTextField(
+                        value = note,
+                        onValueChange = onChangeOfNote,
+                        label = { Text(text = "Note") },
+                        keyboardActions = KeyboardActions(onNext = { focusRequesterDose.requestFocus() }),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            capitalization = KeyboardCapitalization.Sentences
+                        ),
+                        modifier = Modifier.fillMaxWidth().focusRequester(focusRequesterNote)
+                    )
                 }
             }
             ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
@@ -179,43 +224,37 @@ private fun FinishAddCustomUnitScreenContent(
                     )
                 ) {
                     if (roaDose != null) {
+                        RoaDoseView(roaDose = roaDose)
                         AnimatedVisibility(visible = currentDoseClass != null) {
                             if (currentDoseClass != null) {
                                 CurrentDoseClassInfo(currentDoseClass, roaDose)
                             }
                         }
                     }
-                    val focusManager = LocalFocusManager.current
-                    val focusRequester = remember { FocusRequester() }
-                    val textStyle = MaterialTheme.typography.titleMedium
-                    LaunchedEffect(Unit) {
-                        focusRequester.requestFocus()
-                    }
                     OutlinedTextField(
                         value = doseText,
                         onValueChange = onChangeDoseText,
                         textStyle = textStyle,
-                        label = { Text("Dose", style = textStyle) },
+                        label = { Text("Dose per ${unit}", style = textStyle) },
                         trailingIcon = {
                             Text(
-                                text = units,
+                                text = roaDose?.units ?: "",
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
                         },
                         keyboardActions = KeyboardActions(onDone = {
-                            focusManager.clearFocus()
+                            focusRequesterDose.freeFocus()
                         }),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .focusRequester(focusRequester)
+                            .fillMaxWidth().focusRequester(focusRequesterDose)
                     )
                     if (isShowingUnitsField) {
                         OutlinedTextField(
-                            value = units,
-                            onValueChange = onChangeOfUnits,
+                            value = originalUnit,
+                            onValueChange = onChangeOfOriginalUnit,
                             label = { Text("Units") },
                             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -226,16 +265,16 @@ private fun FinishAddCustomUnitScreenContent(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            OutlinedButton(onClick = { onChangeOfUnits("µg") }) {
+                            OutlinedButton(onClick = { onChangeOfOriginalUnit("µg") }) {
                                 Text(text = "µg")
                             }
-                            OutlinedButton(onClick = { onChangeOfUnits("mg") }) {
+                            OutlinedButton(onClick = { onChangeOfOriginalUnit("mg") }) {
                                 Text(text = "mg")
                             }
-                            OutlinedButton(onClick = { onChangeOfUnits("g") }) {
+                            OutlinedButton(onClick = { onChangeOfOriginalUnit("g") }) {
                                 Text(text = "g")
                             }
-                            OutlinedButton(onClick = { onChangeOfUnits("mL") }) {
+                            OutlinedButton(onClick = { onChangeOfOriginalUnit("mL") }) {
                                 Text(text = "mL")
                             }
                         }
@@ -252,10 +291,10 @@ private fun FinishAddCustomUnitScreenContent(
                             value = estimatedDoseVarianceText,
                             onValueChange = onChangeEstimatedDoseVarianceText,
                             textStyle = textStyle,
-                            label = { Text("Estimated variance", style = textStyle) },
+                            label = { Text("Estimated variance per ${unit}", style = textStyle) },
                             trailingIcon = {
                                 Text(
-                                    text = units,
+                                    text = originalUnit,
                                     style = textStyle,
                                     modifier = Modifier.padding(horizontal = horizontalPadding)
                                 )
