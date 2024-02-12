@@ -174,17 +174,13 @@ fun CustomUnitRow(
 }
 
 fun CustomUnit.getDoseOfOneUnitDescription(): String {
-    return if (this.dose != null) {
+    return this.dose?.let { unwrappedDose ->
         if (this.isEstimate) {
-            if (this.estimatedDoseVariance != null) {
-                "${this.dose.toReadableString()}±${this.estimatedDoseVariance.toReadableString()} ${this.originalUnit}"
-            } else {
-                "~${this.dose.toReadableString()} ${this.originalUnit}"
-            }
+            this.estimatedDoseVariance?.let { estimatedDoseVarianceUnwrapped ->
+                "${unwrappedDose.toReadableString()}±${estimatedDoseVarianceUnwrapped.toReadableString()} ${this.originalUnit}"
+            } ?: "~${unwrappedDose.toReadableString()} ${this.originalUnit}"
         } else {
-            "${this.dose} ${this.originalUnit}"
+            "${unwrappedDose.toReadableString()} ${this.originalUnit}"
         }
-    } else {
-        "Unknown dose"
-    }
+    } ?: "Unknown dose"
 }

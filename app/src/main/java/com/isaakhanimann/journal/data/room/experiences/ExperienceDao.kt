@@ -145,6 +145,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM timednote WHERE id =:id")
     suspend fun getTimedNote(id: Int): TimedNote?
 
+    @Query("SELECT * FROM customunit WHERE id =:id")
+    suspend fun getCustomUnit(id: Int): CustomUnit?
+
     @Query("SELECT * FROM experience WHERE id =:id")
     fun getExperienceFlow(id: Int): Flow<Experience?>
 
@@ -179,6 +182,9 @@ interface ExperienceDao {
     suspend fun update(rating: ShulginRating)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(customUnit: CustomUnit)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(timedNote: TimedNote)
 
     @Delete
@@ -200,6 +206,9 @@ interface ExperienceDao {
 
     @Delete
     suspend fun delete(ingestion: Ingestion)
+
+    @Delete
+    suspend fun delete(customUnit: CustomUnit)
 
     @Transaction
     suspend fun deleteEverything() {

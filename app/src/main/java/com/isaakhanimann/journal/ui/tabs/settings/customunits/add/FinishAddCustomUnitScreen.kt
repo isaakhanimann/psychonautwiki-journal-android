@@ -22,6 +22,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -152,161 +153,209 @@ private fun FinishAddCustomUnitScreenContent(
             }
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(modifier = Modifier.height(4.dp))
-            val textStyle = MaterialTheme.typography.titleMedium
-            val focusRequesterName = remember { FocusRequester() }
-            val focusRequesterUnit = remember { FocusRequester() }
-            val focusRequesterNote = remember { FocusRequester() }
-            val focusRequesterDose = remember { FocusRequester() }
-            val focusManager = LocalFocusManager.current
+        EditCustomUnitSections(
+            padding = padding,
+            roaDose = roaDose,
+            name = name,
+            onChangeOfName = onChangeOfName,
+            doseText = doseText,
+            onChangeDoseText = onChangeDoseText,
+            estimatedDoseVarianceText = estimatedDoseVarianceText,
+            onChangeEstimatedDoseVarianceText = onChangeEstimatedDoseVarianceText,
+            isEstimate = isEstimate,
+            onChangeIsEstimate = onChangeIsEstimate,
+            currentDoseClass = currentDoseClass,
+            isShowingUnitsField = isShowingUnitsField,
+            unit = unit,
+            onChangeOfUnits = onChangeOfUnits,
+            originalUnit = originalUnit,
+            onChangeOfOriginalUnit = onChangeOfOriginalUnit,
+            note = note,
+            onChangeOfNote = onChangeOfNote)
+    }
+}
 
-            LaunchedEffect(Unit) {
-                focusRequesterName.requestFocus()
-            }
-            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
-                Column(
-                    modifier = Modifier.padding(
-                        horizontal = horizontalPadding,
-                        vertical = 10.dp
-                    )
-                ) {
-                    OutlinedTextField(
-                        value = name,
-                        onValueChange = onChangeOfName,
-                        textStyle = textStyle,
-                        singleLine = true,
-                        label = { Text(text = "Name to identify") },
-                        keyboardActions = KeyboardActions(onNext = { focusRequesterUnit.requestFocus() }),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Next,
-                            capitalization = KeyboardCapitalization.Words
-                        ),
-                        modifier = Modifier.fillMaxWidth().focusRequester(focusRequesterName)
+@Composable
+fun EditCustomUnitSections(
+    padding: PaddingValues,
+    roaDose: RoaDose?,
+    name: String,
+    onChangeOfName: (String) -> Unit,
+    doseText: String,
+    onChangeDoseText: (String) -> Unit,
+    estimatedDoseVarianceText: String,
+    onChangeEstimatedDoseVarianceText: (String) -> Unit,
+    isEstimate: Boolean,
+    onChangeIsEstimate: (Boolean) -> Unit,
+    currentDoseClass: DoseClass?,
+    isShowingUnitsField: Boolean,
+    unit: String,
+    onChangeOfUnits: (units: String) -> Unit,
+    originalUnit: String,
+    onChangeOfOriginalUnit: (String) -> Unit,
+    note: String,
+    onChangeOfNote: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(padding)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Spacer(modifier = Modifier.height(4.dp))
+        val textStyle = MaterialTheme.typography.titleMedium
+        val focusRequesterName = remember { FocusRequester() }
+        val focusRequesterUnit = remember { FocusRequester() }
+        val focusRequesterNote = remember { FocusRequester() }
+        val focusRequesterDose = remember { FocusRequester() }
+        val focusManager = LocalFocusManager.current
+        LaunchedEffect(Unit) {
+            focusRequesterName.requestFocus()
+        }
+        ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            Column(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 10.dp
+                )
+            ) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = onChangeOfName,
+                    textStyle = textStyle,
+                    singleLine = true,
+                    label = { Text(text = "Name to identify") },
+                    keyboardActions = KeyboardActions(onNext = { focusRequesterUnit.requestFocus() }),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequesterName)
 
-                    )
-                    OutlinedTextField(
-                        value = unit,
-                        onValueChange = onChangeOfUnits,
-                        textStyle = textStyle,
-                        singleLine = true,
-                        label = { Text(text = "Unit in singular form") },
-                        placeholder = { Text(text = "e.g. pill, spray, spoon") },
-                        keyboardActions = KeyboardActions(onNext = { focusRequesterNote.requestFocus() }),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Next,
-                            capitalization = KeyboardCapitalization.None
-                        ),
-                        modifier = Modifier.fillMaxWidth().focusRequester(focusRequesterUnit)
-                    )
-                    OutlinedTextField(
-                        value = note,
-                        onValueChange = onChangeOfNote,
-                        label = { Text(text = "Note") },
-                        keyboardActions = KeyboardActions(onNext = { focusRequesterDose.requestFocus() }),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Next,
-                            capitalization = KeyboardCapitalization.Sentences
-                        ),
-                        modifier = Modifier.fillMaxWidth().focusRequester(focusRequesterNote)
-                    )
-                }
+                )
+                OutlinedTextField(
+                    value = unit,
+                    onValueChange = onChangeOfUnits,
+                    textStyle = textStyle,
+                    singleLine = true,
+                    label = { Text(text = "Unit in singular form") },
+                    placeholder = { Text(text = "e.g. pill, spray, spoon") },
+                    keyboardActions = KeyboardActions(onNext = { focusRequesterNote.requestFocus() }),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.None
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequesterUnit)
+                )
+                OutlinedTextField(
+                    value = note,
+                    onValueChange = onChangeOfNote,
+                    label = { Text(text = "Note") },
+                    keyboardActions = KeyboardActions(onNext = { focusRequesterDose.requestFocus() }),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.Sentences
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequesterNote)
+                )
             }
-            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
-                Column(
-                    modifier = Modifier.padding(
-                        horizontal = horizontalPadding,
-                        vertical = 10.dp
-                    )
-                ) {
-                    if (roaDose != null) {
-                        RoaDoseView(roaDose = roaDose)
-                        AnimatedVisibility(visible = currentDoseClass != null) {
-                            if (currentDoseClass != null) {
-                                CurrentDoseClassInfo(currentDoseClass, roaDose)
-                            }
+        }
+        ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            Column(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 10.dp
+                )
+            ) {
+                if (roaDose != null) {
+                    RoaDoseView(roaDose = roaDose)
+                    AnimatedVisibility(visible = currentDoseClass != null) {
+                        if (currentDoseClass != null) {
+                            CurrentDoseClassInfo(currentDoseClass, roaDose)
                         }
                     }
+                }
+                OutlinedTextField(
+                    value = doseText,
+                    onValueChange = onChangeDoseText,
+                    textStyle = textStyle,
+                    label = { Text("Dose per $unit", style = textStyle) },
+                    trailingIcon = {
+                        Text(
+                            text = roaDose?.units ?: "",
+                            style = textStyle,
+                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                        )
+                    },
+                    keyboardActions = KeyboardActions(onDone = {
+                        focusRequesterDose.freeFocus()
+                    }),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequesterDose)
+                )
+                if (isShowingUnitsField) {
                     OutlinedTextField(
-                        value = doseText,
-                        onValueChange = onChangeDoseText,
+                        value = originalUnit,
+                        onValueChange = onChangeOfOriginalUnit,
+                        label = { Text("Units") },
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        OutlinedButton(onClick = { onChangeOfOriginalUnit("µg") }) {
+                            Text(text = "µg")
+                        }
+                        OutlinedButton(onClick = { onChangeOfOriginalUnit("mg") }) {
+                            Text(text = "mg")
+                        }
+                        OutlinedButton(onClick = { onChangeOfOriginalUnit("g") }) {
+                            Text(text = "g")
+                        }
+                        OutlinedButton(onClick = { onChangeOfOriginalUnit("mL") }) {
+                            Text(text = "mL")
+                        }
+                    }
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
+                ) {
+                    Text("Is Estimate", style = MaterialTheme.typography.titleMedium)
+                    Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                }
+                AnimatedVisibility(visible = isEstimate) {
+                    OutlinedTextField(
+                        value = estimatedDoseVarianceText,
+                        onValueChange = onChangeEstimatedDoseVarianceText,
                         textStyle = textStyle,
-                        label = { Text("Dose per ${unit}", style = textStyle) },
+                        label = { Text("Estimated variance per $unit", style = textStyle) },
                         trailingIcon = {
                             Text(
-                                text = roaDose?.units ?: "",
+                                text = originalUnit,
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
                         },
                         keyboardActions = KeyboardActions(onDone = {
-                            focusRequesterDose.freeFocus()
+                            focusManager.clearFocus()
                         }),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth().focusRequester(focusRequesterDose)
+                        modifier = Modifier.fillMaxWidth()
                     )
-                    if (isShowingUnitsField) {
-                        OutlinedTextField(
-                            value = originalUnit,
-                            onValueChange = onChangeOfOriginalUnit,
-                            label = { Text("Units") },
-                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            OutlinedButton(onClick = { onChangeOfOriginalUnit("µg") }) {
-                                Text(text = "µg")
-                            }
-                            OutlinedButton(onClick = { onChangeOfOriginalUnit("mg") }) {
-                                Text(text = "mg")
-                            }
-                            OutlinedButton(onClick = { onChangeOfOriginalUnit("g") }) {
-                                Text(text = "g")
-                            }
-                            OutlinedButton(onClick = { onChangeOfOriginalUnit("mL") }) {
-                                Text(text = "mL")
-                            }
-                        }
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
-                    ) {
-                        Text("Is Estimate", style = MaterialTheme.typography.titleMedium)
-                        Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
-                    }
-                    AnimatedVisibility(visible = isEstimate) {
-                        OutlinedTextField(
-                            value = estimatedDoseVarianceText,
-                            onValueChange = onChangeEstimatedDoseVarianceText,
-                            textStyle = textStyle,
-                            label = { Text("Estimated variance per ${unit}", style = textStyle) },
-                            trailingIcon = {
-                                Text(
-                                    text = originalUnit,
-                                    style = textStyle,
-                                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                                )
-                            },
-                            keyboardActions = KeyboardActions(onDone = {
-                                focusManager.clearFocus()
-                            }),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
                 }
             }
         }

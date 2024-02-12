@@ -49,6 +49,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun update(experience: Experience) = experienceDao.update(experience)
     suspend fun update(ingestion: Ingestion) = experienceDao.update(ingestion)
     suspend fun update(rating: ShulginRating) = experienceDao.update(rating)
+    suspend fun update(customUnit: CustomUnit) = experienceDao.update(customUnit)
     suspend fun update(timedNote: TimedNote) = experienceDao.update(timedNote)
     suspend fun insertIngestionExperienceAndCompanion(
         ingestion: Ingestion,
@@ -75,6 +76,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun deleteEverything() = experienceDao.deleteEverything()
 
     suspend fun delete(ingestion: Ingestion) = experienceDao.delete(ingestion)
+    suspend fun delete(customUnit: CustomUnit) = experienceDao.delete(customUnit)
 
     suspend fun deleteEverythingOfExperience(experienceId: Int) =
         experienceDao.deleteEverythingOfExperience(experienceId)
@@ -137,6 +139,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getIngestions(experienceId: Int) = experienceDao.getIngestions(experienceId)
     suspend fun getRating(id: Int): ShulginRating? = experienceDao.getRating(id)
     suspend fun getTimedNote(id: Int): TimedNote? = experienceDao.getTimedNote(id)
+    suspend fun getCustomUnit(id: Int): CustomUnit? = experienceDao.getCustomUnit(id)
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
     fun getIngestionWithExperienceFlow(id: Int) = experienceDao.getIngestionWithExperienceFlow(id)
     fun getIngestionWithCompanionFlow(id: Int) = experienceDao.getIngestionWithCompanionFlow(id)
