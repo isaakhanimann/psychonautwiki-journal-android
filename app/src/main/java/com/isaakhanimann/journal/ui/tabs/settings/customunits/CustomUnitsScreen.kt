@@ -128,7 +128,6 @@ fun CustomUnitsScreenContent(
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
                     .fillMaxSize()
             ) {
                 items(customUnits) { customUnit ->
@@ -160,7 +159,7 @@ fun CustomUnitRow(
                 navigateToEditCustomUnit(customUnit.id)
             }
             .fillMaxWidth()
-            .padding(vertical = 10.dp),
+            .padding(vertical = 10.dp, horizontal = horizontalPadding),
         horizontalAlignment = Alignment.Start
     ) {
         Text(

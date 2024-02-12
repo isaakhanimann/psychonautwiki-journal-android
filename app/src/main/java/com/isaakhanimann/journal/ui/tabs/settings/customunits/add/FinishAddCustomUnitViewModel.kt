@@ -41,7 +41,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FinishAddCustomUnitViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
-    private val substanceRepository: SubstanceRepository,
+    substanceRepository: SubstanceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
     val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
@@ -65,6 +65,12 @@ class FinishAddCustomUnitViewModel @Inject constructor(
         unit = newUnit
     }
 
+    var originalUnit by mutableStateOf("")
+
+    fun onChangeOfOriginalUnit(newUnit: String) {
+        originalUnit = newUnit
+    }
+
     var doseText by mutableStateOf("")
     fun onChangeOfDose(newDose: String) {
         doseText = newDose
@@ -85,10 +91,15 @@ class FinishAddCustomUnitViewModel @Inject constructor(
 
     var note by mutableStateOf("")
 
+    fun onChangeOfNote(newNote: String) {
+        note = newNote
+    }
+
     init {
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         roaDose = substance.getRoa(administrationRoute)?.roaDose
+        originalUnit = roaDose?.units ?: ""
     }
 
     fun createSaveAndDismissAfter(dismiss: () -> Unit) {
