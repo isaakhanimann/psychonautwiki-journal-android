@@ -16,25 +16,15 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.settings.customunits
+package com.isaakhanimann.journal.ui.tabs.settings.customunits.archive
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -43,33 +33,27 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
+import com.isaakhanimann.journal.ui.tabs.settings.customunits.CustomUnitRow
 import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
-import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
-fun CustomUnitsScreen(
-    viewModel: CustomUnitsViewModel = hiltViewModel(),
+fun CustomUnitArchiveScreen(
+    viewModel: CustomUnitArchiveViewModel = hiltViewModel(),
     navigateToEditCustomUnit: (customUnitId: Int) -> Unit,
-    navigateToAddCustomUnit: () -> Unit,
-    navigateToCustomUnitArchive: () -> Unit,
-    ) {
-    CustomUnitsScreenContent(
+) {
+    CustomUnitArchiveScreenContent(
         customUnits = viewModel.customUnitsFlow.collectAsState().value,
         navigateToEditCustomUnit = navigateToEditCustomUnit,
-        navigateToAddCustomUnit = navigateToAddCustomUnit,
-        navigateToCustomUnitArchive = navigateToCustomUnitArchive
     )
 }
 
 @Preview
 @Composable
-fun CustomUnitsScreenPreview() {
-    CustomUnitsScreenContent(
+fun CustomUnitArchiveScreenPreview() {
+    CustomUnitArchiveScreenContent(
         customUnits = listOf(
             CustomUnit(
                 substanceName = "Substance 1",
@@ -97,39 +81,18 @@ fun CustomUnitsScreenPreview() {
             ),
         ),
         navigateToEditCustomUnit = { _ -> },
-        navigateToAddCustomUnit = {},
-        navigateToCustomUnitArchive = {}
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomUnitsScreenContent(
+fun CustomUnitArchiveScreenContent(
     customUnits: List<CustomUnit>,
     navigateToEditCustomUnit: (customUnitId: Int) -> Unit,
-    navigateToAddCustomUnit: () -> Unit,
-    navigateToCustomUnitArchive: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Custom Units") },
-                actions = {
-                    IconButton(onClick = navigateToCustomUnitArchive) {
-                        Icon(Icons.Default.Inventory, contentDescription = "Go to archive")
-                    }
-                })
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = navigateToAddCustomUnit,
-                icon = {
-                    Icon(Icons.Default.Add, contentDescription = "Add custom unit")
-                },
-                text = {
-                    Text(text = "Custom Unit")
-                }
-            )
+            TopAppBar(title = { Text("Custom Unit Archive") })
         }
     ) { padding ->
         Box(
@@ -152,47 +115,10 @@ fun CustomUnitsScreenContent(
             }
             if (customUnits.isEmpty()) {
                 EmptyScreenDisclaimer(
-                    title = "No Custom Units Yet",
-                    description = "Add your first unit."
+                    title = "No Archived Units Yet",
+                    description = "You can archive units when you edit them with the archive button on the top right."
                 )
             }
         }
     }
-}
-
-@Composable
-fun CustomUnitRow(
-    customUnit: CustomUnit,
-    navigateToEditCustomUnit: (customUnitId: Int) -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .clickable {
-                navigateToEditCustomUnit(customUnit.id)
-            }
-            .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = horizontalPadding),
-        horizontalAlignment = Alignment.Start
-    ) {
-        Text(
-            text = "${customUnit.substanceName} (${customUnit.name})",
-            style = MaterialTheme.typography.titleMedium
-        )
-        Text(
-            text = "${customUnit.getDoseOfOneUnitDescription()} per ${customUnit.unit}",
-            style = MaterialTheme.typography.titleSmall
-        )
-    }
-}
-
-fun CustomUnit.getDoseOfOneUnitDescription(): String {
-    return this.dose?.let { unwrappedDose ->
-        if (this.isEstimate) {
-            this.estimatedDoseVariance?.let { estimatedDoseVarianceUnwrapped ->
-                "${unwrappedDose.toReadableString()}±${estimatedDoseVarianceUnwrapped.toReadableString()} ${this.originalUnit}"
-            } ?: "~${unwrappedDose.toReadableString()} ${this.originalUnit}"
-        } else {
-            "${unwrappedDose.toReadableString()} ${this.originalUnit}"
-        }
-    } ?: "Unknown dose"
 }
