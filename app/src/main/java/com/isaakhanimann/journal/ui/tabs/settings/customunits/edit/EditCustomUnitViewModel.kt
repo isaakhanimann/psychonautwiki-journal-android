@@ -30,7 +30,6 @@ import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_UNIT_ID_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -45,13 +44,15 @@ class EditCustomUnitViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    var customUnit: CustomUnit? = null
+    private var customUnit: CustomUnit? = null
     init {
         val customUnitId = state.get<Int>(CUSTOM_UNIT_ID_KEY)!!
         viewModelScope.launch {
             val customUnit = experienceRepo.getCustomUnit(customUnitId)
             this@EditCustomUnitViewModel.customUnit = customUnit
             if (customUnit != null) {
+                substanceName = customUnit.substanceName
+                val substance = substanceRepository.getSubstance(customUnit.substanceName)!!
                 roaDose = substance.getRoa(customUnit.administrationRoute)?.roaDose
                 originalUnit = roaDose?.units ?: ""
                 name = customUnit.name
@@ -65,13 +66,11 @@ class EditCustomUnitViewModel @Inject constructor(
         }
     }
 
-    val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
-
-    val substance = substanceRepository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY)!!)!!
-
     var roaDose: RoaDose? = null
 
     var name by mutableStateOf("")
+
+    var substanceName by mutableStateOf("")
 
     val currentDoseClass: DoseClass? get() = roaDose?.getDoseClass(ingestionDose = dose)
 
