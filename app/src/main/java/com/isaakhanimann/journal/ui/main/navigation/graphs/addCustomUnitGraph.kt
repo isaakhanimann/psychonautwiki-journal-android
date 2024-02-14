@@ -21,17 +21,15 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseRouteOfAddCustomUnit
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToFinishAddCustomUnit
-import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.FinishAddCustomUnitScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseRouteDuringAddCustomUnitScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseSubstanceScreen
+import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.FinishAddCustomUnitScreen
 
 fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
     navigation(
@@ -63,11 +61,7 @@ fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
         composableWithTransitions(
             ArgumentRouter.FinishAddCustomUnitRouter.route,
             arguments = ArgumentRouter.FinishAddCustomUnitRouter.args
-        ) { backStackEntry ->
-            val args = backStackEntry.arguments!!
-            val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
-            val route =
-                AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
+        ) {
             FinishAddCustomUnitScreen(
                 dismissAddCustomUnit = navController::dismissAddCustomUnits,
             )
@@ -77,6 +71,9 @@ fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
 
 fun NavController.navigateToAddCustomUnits() {
     navigate(NoArgumentRouter.AddCustomUnitsRouter.route)
+}
+fun NavController.navigateToCustomUnitArchive() {
+    navigate(NoArgumentRouter.CustomUnitArchiveRouter.route)
 }
 
 fun NavController.dismissAddCustomUnits() {

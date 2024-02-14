@@ -27,6 +27,7 @@ sealed class NoArgumentRouter(val route: String) {
     object SubstanceColorsRouter : NoArgumentRouter(route = "substanceColors")
     object CustomUnitsRouter : NoArgumentRouter(route = "customUnits")
     object AddCustomUnitsRouter : NoArgumentRouter(route = "addCustomUnits")
+    object CustomUnitArchiveRouter : NoArgumentRouter(route = "customUnitArchive")
     object AddCustomUnitsSearchSubstanceRouter : NoArgumentRouter(route = "addCustomUnitsSearch")
     object FAQRouter : NoArgumentRouter(route = "faqRoute")
     object ExplainTimelineOnSearchTabRouter : NoArgumentRouter(route = "explainTimelineOnSearchTab")

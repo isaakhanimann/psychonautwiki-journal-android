@@ -35,6 +35,7 @@ import com.isaakhanimann.journal.ui.tabs.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.colors.SubstanceColorsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.CustomUnitsScreen
+import com.isaakhanimann.journal.ui.tabs.settings.customunits.archive.CustomUnitArchiveScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.edit.EditCustomUnitScreen
 
 fun NavGraphBuilder.settingsGraph(navController: NavController) {
@@ -55,11 +56,15 @@ fun NavGraphBuilder.settingsGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
         composableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
         composableWithTransitions(NoArgumentRouter.SubstanceColorsRouter.route) { SubstanceColorsScreen() }
+        composableWithTransitions(NoArgumentRouter.CustomUnitArchiveRouter.route) {
+            CustomUnitArchiveScreen(navigateToEditCustomUnit = navController::navigateToEditCustomUnit)
+        }
         addCustomUnitGraph(navController)
         composableWithTransitions(NoArgumentRouter.CustomUnitsRouter.route) {
             CustomUnitsScreen(
                 navigateToAddCustomUnit = navController::navigateToAddCustomUnits,
-                navigateToEditCustomUnit = navController::navigateToEditCustomUnit
+                navigateToEditCustomUnit = navController::navigateToEditCustomUnit,
+                navigateToCustomUnitArchive = navController::navigateToCustomUnitArchive
             )
         }
         composableWithTransitions(
