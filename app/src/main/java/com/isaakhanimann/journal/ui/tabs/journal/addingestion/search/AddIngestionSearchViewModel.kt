@@ -69,6 +69,21 @@ class AddIngestionSearchViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
+    private val customUnitsFlow = experienceRepo.getAllCustomUnitsFlow(false)
+
+    val filteredCustomUnitsFlow = combine(customUnitsFlow, filteredSubstancesFlow, searchTextFlow) { customUnit, filteredSubstances, searchText ->
+            customUnit.filter { custom ->
+                filteredSubstances.any { it.name == custom.substanceName } || custom.name.contains(
+                    other = searchText,
+                    ignoreCase = true
+                )
+            }
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
+
     private val customSubstancesFlow = experienceRepo.getCustomSubstancesFlow()
 
     val filteredCustomSubstancesFlow =
