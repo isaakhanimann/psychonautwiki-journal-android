@@ -19,13 +19,11 @@
 package com.isaakhanimann.journal.ui.tabs.settings.customunits.edit
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Unarchive
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -146,9 +143,8 @@ private fun EditCustomUnitScreenContent(
                     var isShowingDeleteDialog by remember { mutableStateOf(false) }
                     IconButton(onClick = { isShowingDeleteDialog = true }) {
                         Icon(
-                            Icons.Outlined.Delete,
-                            contentDescription = "Delete Custom Unit",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                            Icons.Default.Delete,
+                            contentDescription = "Delete Custom Unit"
                         )
                     }
                     AnimatedVisibility(visible = isShowingDeleteDialog) {
@@ -158,7 +154,7 @@ private fun EditCustomUnitScreenContent(
                                 Text(text = "Delete Custom Unit?")
                             },
                             text = {
-                                Text("This will affect all ingestions that are using it. If you used it consider archiving it instead.")
+                                Text("This will affect all ingestions that are using it. Consider archiving it instead.")
                             },
                             confirmButton = {
                                 TextButton(
@@ -180,17 +176,17 @@ private fun EditCustomUnitScreenContent(
                         )
                     }
                     if (isArchived) {
-                        IconButton(onClick = { onChangeOfIsArchived(true)}) {
-                            Icon(
-                                Icons.Default.Archive,
-                                contentDescription = "Archive",
-                            )
-                        }
-                    } else {
                         IconButton(onClick = { onChangeOfIsArchived(false)}) {
                             Icon(
                                 Icons.Default.Unarchive,
                                 contentDescription = "Unarchive",
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = { onChangeOfIsArchived(true)}) {
+                            Icon(
+                                Icons.Default.Archive,
+                                contentDescription = "Archive",
                             )
                         }
                     }

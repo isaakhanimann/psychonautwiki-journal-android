@@ -293,7 +293,7 @@ fun EditCustomUnitSections(
                         )
                     },
                     keyboardActions = KeyboardActions(onDone = {
-                        focusRequesterDose.freeFocus()
+                        focusManager.clearFocus()
                     }),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
