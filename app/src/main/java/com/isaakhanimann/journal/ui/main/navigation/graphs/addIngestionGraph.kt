@@ -84,7 +84,10 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToChooseRoute = { substanceName ->
                     navController.navigateToChooseRouteOfAddIngestion(substanceName)
                 },
-                navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom
+                navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom,
+                navigateToCustomUnitChooseDose = {
+                    // Todo
+                }
             )
         }
         composableWithTransitions(

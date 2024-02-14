@@ -67,6 +67,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.SuggestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceRouteSuggestion
@@ -82,6 +83,7 @@ fun AddIngestionSearchScreen(
     navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseVariance: Double?, customUnitId: Int?) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
+    navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
 ) {
@@ -94,12 +96,14 @@ fun AddIngestionSearchScreen(
         navigateToChooseTime = navigateToChooseTime,
         navigateToDose = navigateToDose,
         navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
+        navigateToCustomUnitChooseDose = navigateToCustomUnitChooseDose,
         substanceRouteSuggestions = viewModel.filteredSuggestions.collectAsState().value,
         searchText = viewModel.searchTextFlow.collectAsState().value,
         onChangeSearchText = {
             viewModel.updateSearchText(it)
         },
         filteredSubstances = viewModel.filteredSubstancesFlow.collectAsState().value,
+        filteredCustomUnits = viewModel.filteredCustomUnitsFlow.collectAsState().value,
         filteredCustomSubstances = viewModel.filteredCustomSubstancesFlow.collectAsState().value
     )
 }
@@ -115,10 +119,12 @@ fun AddIngestionSearchScreen(
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseVariance: Double?, customUnitId: Int?) -> Unit,
     navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
+    navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     substanceRouteSuggestions: List<SubstanceRouteSuggestion>,
     searchText: String,
     onChangeSearchText: (searchText: String) -> Unit,
     filteredSubstances: List<SubstanceModel>,
+    filteredCustomUnits: List<CustomUnit>,
     filteredCustomSubstances: List<CustomSubstance>
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -208,6 +214,19 @@ fun AddIngestionSearchScreen(
                         navigateToCustomSubstanceChooseRoute(customSubstance.name)
                     })
                     if (index < filteredCustomSubstances.size - 1) {
+                        Divider()
+                    }
+                }
+                if (filteredCustomUnits.isNotEmpty()) {
+                    stickyHeader {
+                        SectionHeader(title = "Custom Units")
+                    }
+                }
+                itemsIndexed(filteredCustomUnits) { index, customUnit ->
+                    CustomUnitRowAddIngestion(
+                        customUnit = customUnit,
+                        navigateToCustomUnitChooseDose = navigateToCustomUnitChooseDose)
+                    if (index < filteredCustomUnits.size - 1) {
                         Divider()
                     }
                 }
