@@ -21,6 +21,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import java.time.Instant
 
 data class SubstanceRouteSuggestion(
@@ -46,5 +47,90 @@ data class CustomUnitDose(
     val isEstimate: Boolean,
     val estimatedDoseVariance: Double?,
     val customUnit: CustomUnit
-)
+) {
+    val calculatedDose: Double?
+        get() {
+            return customUnit.dose?.let { dosePerUnit ->
+                return customUnit.estimatedDoseVariance?.let { customDoseVariance ->
+                    if (isEstimate && estimatedDoseVariance != null) {
+                        val minDose = dose - estimatedDoseVariance
+                        val maxDose = dose + estimatedDoseVariance
+                        val minCustomDose = dosePerUnit - customDoseVariance
+                        val maxCustomDose = dosePerUnit + customDoseVariance
+                        val minResult = minDose * minCustomDose
+                        val maxResult = maxDose * maxCustomDose
+                        return (minResult + maxResult) / 2
+                    } else {
+                        return dose * dosePerUnit
+                    }
+                } ?: (dose * dosePerUnit)
+            }
+        }
+
+    val calculatedDoseVariance: Double?
+        get() {
+            return customUnit.dose?.let { dosePerUnit ->
+                return customUnit.estimatedDoseVariance?.let { customDoseVariance ->
+                    if (isEstimate && estimatedDoseVariance != null) {
+                        val minDose = dose - estimatedDoseVariance
+                        val maxDose = dose + estimatedDoseVariance
+                        val minCustomDose = dosePerUnit - customDoseVariance
+                        val maxCustomDose = dosePerUnit + customDoseVariance
+                        val minResult = minDose * minCustomDose
+                        val maxResult = maxDose * maxCustomDose
+                        val result = (minResult + maxResult) / 2
+                        return maxResult - result
+                    } else {
+                        return dose * customDoseVariance
+                    }
+                } ?: run {
+                    if (estimatedDoseVariance != null && isEstimate) {
+                        return estimatedDoseVariance * dosePerUnit
+                    } else {
+                        return null
+                    }
+                }
+            }
+        }
+
+    // 20 mg or 20±2 mg
+    val calculatedDoseDescription: String? get()
+    {
+        return calculatedDose?.let { calculatedDoseUnwrapped ->
+            calculatedDoseVariance?.let {
+                return "${calculatedDoseUnwrapped.toReadableString()}±${it.toReadableString()} ${customUnit.originalUnit}"
+            } ?: run {
+                val description = "${calculatedDoseUnwrapped.toReadableString()} ${customUnit.originalUnit}"
+                if (isEstimate || customUnit.isEstimate) {
+                    return "~" + description
+                } else {
+                    return description
+                }
+            }
+        }
+    }
+
+    // 2 pills
+    val doseDescription: String get()
+    {
+        val description = dose.toStringWith(unit = customUnit.unit)
+        if (isEstimate) {
+            if (estimatedDoseVariance != null) {
+                return "${dose.toReadableString()}±${estimatedDoseVariance.toStringWith(unit = customUnit.unit)}"
+            } else {
+                return "~$description"
+            }
+        } else {
+            return description
+        }
+    }
+}
+
+fun Double.toStringWith(unit: String): String {
+    return if (this != 1.0) {
+        "${this.toReadableString()} $unit"
+    } else {
+        "${this.toReadableString()} ${unit}s"
+    }
+}
 
