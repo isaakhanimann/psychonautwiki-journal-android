@@ -41,7 +41,7 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferSniff
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLInJournalTab
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToVolumetricDosingScreenOnJournalTab
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChooseDoseScreen
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.custom.CustomChooseDose
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customsubstance.CustomChooseDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.CheckInteractionsScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomChooseRouteScreen

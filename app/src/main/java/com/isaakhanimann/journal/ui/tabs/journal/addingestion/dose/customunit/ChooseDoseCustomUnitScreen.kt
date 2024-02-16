@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Isaak Hanimann.
+ * Copyright (c) 2022-2023. Isaak Hanimann.
  * This file is part of PsychonautWiki Journal.
  *
  * PsychonautWiki Journal is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
  */
 
-package com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.custom
+package com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customunit
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -34,8 +33,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.QuestionMark
-import androidx.compose.material.icons.outlined.Article
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,135 +44,131 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.PurityCalculation
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.UnknownDoseDialog
+import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
+import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.CurrentDoseClassInfo
+import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
+import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
-fun CustomChooseDose(
+fun ChooseDoseCustomUnitScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseVariance: Double?) -> Unit,
-    navigateToSaferSniffingScreen: () -> Unit,
-    navigateToURL: (url: String) -> Unit,
-    viewModel: CustomChooseDoseViewModel = hiltViewModel()
+    viewModel: ChooseDoseCustomUnitViewModel = hiltViewModel()
 ) {
-    CustomChooseDose(
-        navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
-        substanceName = viewModel.substanceName,
-        administrationRoute = viewModel.administrationRoute,
-        doseText = viewModel.doseText,
-        onChangeDoseText = viewModel::onDoseTextChange,
-        estimatedDoseVarianceText = viewModel.estimatedDoseVarianceText,
-        onChangeEstimatedVarianceText = viewModel::onEstimatedDoseVarianceTextChange,
-        isValidDose = viewModel.isValidDose,
-        isEstimate = viewModel.isEstimate,
-        onChangeIsEstimate = {
-            viewModel.isEstimate = it
-        },
-        navigateToNext = {
-            navigateToChooseTimeAndMaybeColor(
-                viewModel.units,
-                viewModel.isEstimate,
-                viewModel.dose,
-                viewModel.estimatedDoseVariance
-            )
-        },
-        navigateToURL = navigateToURL,
-        useUnknownDoseAndNavigate = {
-            navigateToChooseTimeAndMaybeColor(
-                viewModel.units,
-                false,
-                null,
-                null
-            )
-        },
-        purityText = viewModel.purityText,
-        onPurityChange = {
-            viewModel.purityText = it
-        },
-        isValidPurity = viewModel.isPurityValid,
-        convertedDoseAndUnitText = viewModel.rawDoseWithUnit,
-        units = viewModel.units
-    )
+    viewModel.customUnit?.let {
+        ChooseDoseCustomUnitScreen(
+            customUnit = it,
+            roaDose = viewModel.roaDose,
+            doseText = viewModel.doseText,
+            doseRemark = viewModel.doseRemark,
+            onChangeDoseText = viewModel::onDoseTextChange,
+            estimatedDoseVarianceText = viewModel.estimatedDoseVarianceText,
+            onChangeEstimatedDoseVarianceText = viewModel::onEstimatedDoseVarianceChange,
+            isValidDose = viewModel.isValidDose,
+            isEstimate = viewModel.isEstimate,
+            onChangeIsEstimate = {
+                viewModel.isEstimate = it
+            },
+            navigateToNext = {
+                navigateToChooseTimeAndMaybeColor(
+                    "todo", // Todo
+                    viewModel.isEstimate,
+                    viewModel.dose,
+                    viewModel.estimatedDoseVariance
+                )
+            },
+            useUnknownDoseAndNavigate = {
+                navigateToChooseTimeAndMaybeColor(
+                    "todo", // Todo
+                    false,
+                    null,
+                    null
+                )
+            },
+            currentDoseClass = viewModel.currentDoseClass,
+            customUnitCalculationText = viewModel.customUnitCalculationText,
+        )
+    }
 }
 
 @Preview
 @Composable
-fun CustomChooseDosePreview() {
-    CustomChooseDose(
-        navigateToSaferSniffingScreen = {},
-        substanceName = "Example Substance",
-        administrationRoute = AdministrationRoute.INSUFFLATED,
+fun ChooseDoseCustomUnitScreenPreview(
+    @PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDose,
+) {
+    ChooseDoseCustomUnitScreen(
+        customUnit = CustomUnit(
+            substanceName = "Example Substance",
+            administrationRoute = AdministrationRoute.ORAL,
+            dose = 10.0,
+            estimatedDoseVariance = null,
+            isEstimate = false,
+            isArchived = false,
+            originalUnit = "mg",
+            name = "Big Spoon",
+            unit = "spoon",
+            note = "Note about custom unit dose"
+        ),
+        roaDose = roaDose,
         doseText = "5",
         onChangeDoseText = {},
         estimatedDoseVarianceText = "",
-        onChangeEstimatedVarianceText = {},
+        onChangeEstimatedDoseVarianceText = {},
+        doseRemark = "This is a dose remark",
         isValidDose = true,
         isEstimate = false,
         onChangeIsEstimate = {},
         navigateToNext = {},
-        navigateToURL = {},
         useUnknownDoseAndNavigate = {},
-        purityText = "20",
-        onPurityChange = {},
-        isValidPurity = true,
-        convertedDoseAndUnitText = "25 mg",
-        units = "mg"
+        currentDoseClass = DoseClass.THRESHOLD,
+        customUnitCalculationText = "2 pills x 20 mg = 40 mg",
     )
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomChooseDose(
-    navigateToSaferSniffingScreen: () -> Unit,
-    substanceName: String,
-    administrationRoute: AdministrationRoute,
+fun ChooseDoseCustomUnitScreen(
+    customUnit: CustomUnit,
+    roaDose: RoaDose?,
+    doseRemark: String?,
     doseText: String,
     onChangeDoseText: (String) -> Unit,
     estimatedDoseVarianceText: String,
-    onChangeEstimatedVarianceText: (String) -> Unit,
+    onChangeEstimatedDoseVarianceText: (String) -> Unit,
     isValidDose: Boolean,
     isEstimate: Boolean,
     onChangeIsEstimate: (Boolean) -> Unit,
     navigateToNext: () -> Unit,
-    navigateToURL: (url: String) -> Unit,
     useUnknownDoseAndNavigate: () -> Unit,
-    purityText: String,
-    onPurityChange: (purity: String) -> Unit,
-    isValidPurity: Boolean,
-    convertedDoseAndUnitText: String?,
-    units: String
+    currentDoseClass: DoseClass?,
+    customUnitCalculationText: String?,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(administrationRoute.displayText + " " + substanceName + " Dosage") },
+            TopAppBar(
+                title = { Text("${customUnit.substanceName} (${customUnit.name})") },
                 actions = {
-                    var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
-                    IconButton(onClick = { isShowingUnknownDoseDialog = true }) {
+                    IconButton(onClick = useUnknownDoseAndNavigate) {
                         Icon(
                             imageVector = Icons.Default.QuestionMark,
                             contentDescription = "Log Unknown Dose"
-                        )
-                    }
-                    AnimatedVisibility(visible = isShowingUnknownDoseDialog) {
-                        UnknownDoseDialog(
-                            useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
-                            dismiss = { isShowingUnknownDoseDialog = false }
                         )
                     }
                 })
@@ -209,8 +202,35 @@ fun CustomChooseDose(
                         vertical = 10.dp
                     )
                 ) {
+                    if (!doseRemark.isNullOrBlank()) {
+                        Text(text = doseRemark)
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                    if (roaDose != null) {
+                        RoaDoseView(roaDose = roaDose)
+                    }
+                }
+            }
+            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    )
+                ) {
+                    if (roaDose != null) {
+                        AnimatedVisibility(visible = currentDoseClass != null) {
+                            if (currentDoseClass != null) {
+                                CurrentDoseClassInfo(currentDoseClass, roaDose)
+                            }
+                        }
+                    }
                     val focusManager = LocalFocusManager.current
+                    val focusRequester = remember { FocusRequester() }
                     val textStyle = MaterialTheme.typography.titleMedium
+                    LaunchedEffect(Unit) {
+                        focusRequester.requestFocus()
+                    }
                     OutlinedTextField(
                         value = doseText,
                         onValueChange = onChangeDoseText,
@@ -219,7 +239,7 @@ fun CustomChooseDose(
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
-                                text = units,
+                                text = customUnit.unit,
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
@@ -229,7 +249,9 @@ fun CustomChooseDose(
                         }),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester)
                     )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -241,13 +263,12 @@ fun CustomChooseDose(
                     AnimatedVisibility(visible = isEstimate) {
                         OutlinedTextField(
                             value = estimatedDoseVarianceText,
-                            onValueChange = onChangeEstimatedVarianceText,
+                            onValueChange = onChangeEstimatedDoseVarianceText,
                             textStyle = textStyle,
                             label = { Text("Estimated variance", style = textStyle) },
-                            isError = !isValidDose,
                             trailingIcon = {
                                 Text(
-                                    text = units,
+                                    text = customUnit.unit,
                                     style = textStyle,
                                     modifier = Modifier.padding(horizontal = horizontalPadding)
                                 )
@@ -260,37 +281,6 @@ fun CustomChooseDose(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
-                }
-            }
-            AnimatedVisibility(visible = isValidDose) {
-                ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
-                    Column(
-                        modifier = Modifier.padding(
-                            horizontal = horizontalPadding,
-                            vertical = 10.dp
-                        )
-                    ) {
-                        PurityCalculation(
-                            purityText = purityText,
-                            onPurityChange = onPurityChange,
-                            convertedDoseAndUnitText = convertedDoseAndUnitText,
-                            isValidPurity = isValidPurity
-                        )
-                    }
-                }
-            }
-            if (administrationRoute == AdministrationRoute.INSUFFLATED) {
-                TextButton(onClick = navigateToSaferSniffingScreen) {
-                    Text(text = "Safer Sniffing")
-                }
-            } else if (administrationRoute == AdministrationRoute.RECTAL) {
-                TextButton(onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) }) {
-                    Icon(
-                        Icons.Outlined.Article,
-                        contentDescription = "Open Link"
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer Plugging")
                 }
             }
         }
