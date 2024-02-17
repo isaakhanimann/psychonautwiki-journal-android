@@ -20,6 +20,8 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customunit
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -62,7 +64,6 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.CurrentDoseClassInfo
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -72,9 +73,9 @@ fun ChooseDoseCustomUnitScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseVariance: Double?) -> Unit,
     viewModel: ChooseDoseCustomUnitViewModel = hiltViewModel()
 ) {
-    viewModel.customUnit?.let {
+    viewModel.customUnit?.let { customUnitUnwrapped ->
         ChooseDoseCustomUnitScreen(
-            customUnit = it,
+            customUnit = customUnitUnwrapped,
             roaDose = viewModel.roaDose,
             doseText = viewModel.doseText,
             doseRemark = viewModel.doseRemark,
@@ -213,16 +214,23 @@ fun ChooseDoseCustomUnitScreen(
             }
             ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                 Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
                         vertical = 10.dp
                     )
                 ) {
                     if (roaDose != null) {
-                        AnimatedVisibility(visible = currentDoseClass != null) {
-                            if (currentDoseClass != null) {
-                                CurrentDoseClassInfo(currentDoseClass, roaDose)
-                            }
+                        CustomUnitRoaDoseView(roaDose, customUnit)
+                    }
+                    AnimatedVisibility(visible = currentDoseClass != null && customUnitCalculationText != null) {
+                        if (currentDoseClass != null && customUnitCalculationText != null) {
+                            val doseColor = currentDoseClass.getComposeColor(isSystemInDarkTheme())
+                            Text(
+                                text = customUnitCalculationText,
+                                color = doseColor,
+                                style = MaterialTheme.typography.labelLarge
+                            )
                         }
                     }
                     val focusManager = LocalFocusManager.current
