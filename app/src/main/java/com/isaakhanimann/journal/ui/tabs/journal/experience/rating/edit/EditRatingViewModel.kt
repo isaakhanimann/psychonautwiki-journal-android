@@ -42,7 +42,7 @@ class EditRatingViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    val ratingId: Int
+    private val ratingId: Int
     var selectedRatingOption by mutableStateOf(ShulginRatingOption.TWO_PLUS)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var rating: ShulginRating? = null
@@ -54,12 +54,10 @@ class EditRatingViewModel @Inject constructor(
         viewModelScope.launch {
             val loadedRating = experienceRepo.getRating(id = ratingId) ?: return@launch
             rating = loadedRating
-            loadedRating.time.let { time ->
-                if (time == null) {
-                    isOverallRating.value = true
-                } else {
-                    localDateTimeFlow.emit(time.getLocalDateTime())
-                }
+            loadedRating.time?.also { time ->
+                localDateTimeFlow.emit(time.getLocalDateTime())
+            } ?: run {
+                isOverallRating.value = true
             }
             selectedRatingOption = loadedRating.option
         }
@@ -87,7 +85,7 @@ class EditRatingViewModel @Inject constructor(
         viewModelScope.launch {
             val selectedInstant = localDateTimeFlow.firstOrNull()?.getInstant() ?: return@launch
             rating?.let {
-                it.time = selectedInstant
+                it.time = if (isOverallRating.value) null else selectedInstant
                 it.option = selectedRatingOption
                 experienceRepo.update(it)
             }
