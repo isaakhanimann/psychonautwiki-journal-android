@@ -300,7 +300,8 @@ class OneExperienceViewModel @Inject constructor(
                     val groupedIngestions = grouped.value
                     if (groupedIngestions.size <= 1) return@mapNotNull null
                     if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.dose == null }) return@mapNotNull null
-                    val units = groupedIngestions.first().ingestionWithCompanionAndCustomUnit.originalUnit ?: return@mapNotNull null
+                    val firstIngestion = groupedIngestions.first().ingestionWithCompanionAndCustomUnit
+                    val units = firstIngestion.originalUnit ?: return@mapNotNull null
                     if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.originalUnit != units }) return@mapNotNull null
                     val isEstimate =
                         groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.isDoseAnEstimate || it.ingestionWithCompanionAndCustomUnit.customUnit?.isEstimate ?: false }
@@ -318,7 +319,8 @@ class OneExperienceViewModel @Inject constructor(
                         units = units,
                         isEstimate = isEstimate,
                         cumulativeDoseVariance = cumulativeDoseVariance,
-                        numDots = numDots
+                        numDots = numDots,
+                        route = firstIngestion.ingestion.administrationRoute
                     )
                 }
         }

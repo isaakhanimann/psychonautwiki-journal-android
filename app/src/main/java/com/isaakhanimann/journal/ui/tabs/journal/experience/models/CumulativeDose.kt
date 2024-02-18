@@ -18,6 +18,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.models
 
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 
 data class CumulativeDose(
@@ -26,7 +27,8 @@ data class CumulativeDose(
     val units: String,
     val isEstimate: Boolean,
     val cumulativeDoseVariance: Double?,
-    val numDots: Int?
+    val numDots: Int?,
+    val route: AdministrationRoute
 ) {
     val doseDescription: String get()
     {

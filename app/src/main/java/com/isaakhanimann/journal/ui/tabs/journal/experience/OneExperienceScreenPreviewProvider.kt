@@ -65,7 +65,8 @@ class OneExperienceScreenPreviewProvider :
                     units = "mg",
                     isEstimate = false,
                     cumulativeDoseVariance = 12.0,
-                    numDots = 6
+                    numDots = 6,
+                    route = AdministrationRoute.INSUFFLATED
                 )
             ),
             interactions = listOf(
