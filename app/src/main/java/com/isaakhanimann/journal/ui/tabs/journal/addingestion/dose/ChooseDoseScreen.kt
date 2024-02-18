@@ -35,7 +35,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
-import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
@@ -45,7 +44,6 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -226,23 +224,7 @@ fun ChooseDoseScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("$substanceName ${administrationRoute.displayText} Dose") },
-                actions = {
-                    var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
-                    IconButton(onClick = { isShowingUnknownDoseDialog = true }) {
-                        Icon(
-                            imageVector = Icons.Default.QuestionMark,
-                            contentDescription = "Log Unknown Dose"
-                        )
-                    }
-                    AnimatedVisibility(visible = isShowingUnknownDoseDialog) {
-                        UnknownDoseDialog(
-                            useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
-                            dismiss = { isShowingUnknownDoseDialog = false }
-                        )
-                    }
-                })
+            TopAppBar(title = { Text("$substanceName ${administrationRoute.displayText} Dose") })
         },
         floatingActionButton = {
             if (isValidDose) {
@@ -418,6 +400,16 @@ fun ChooseDoseScreen(
                         )
                     }
                 }
+            }
+            var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
+            TextButton(onClick = { isShowingUnknownDoseDialog = true }) {
+                Text(text = "Log unknown dose")
+            }
+            AnimatedVisibility(visible = isShowingUnknownDoseDialog) {
+                UnknownDoseDialog(
+                    useUnknownDoseAndNavigate = useUnknownDoseAndNavigate,
+                    dismiss = { isShowingUnknownDoseDialog = false }
+                )
             }
             if (administrationRoute == AdministrationRoute.INSUFFLATED) {
                 TextButton(onClick = navigateToSaferSniffingScreen) {
