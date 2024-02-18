@@ -154,7 +154,10 @@ fun SuggestionRow(
                 SuggestionChip(onClick = {
                     navigateToCustomUnitChooseDose(customUnit.id)
                 }, label = {
-                    Text(text = "Enter " + customUnit.unit)
+                    Column {
+                        Text(text = customUnit.name, style = MaterialTheme.typography.labelSmall)
+                        Text(text = "Enter " + customUnit.unit)
+                    }
                 })
             }
         }
