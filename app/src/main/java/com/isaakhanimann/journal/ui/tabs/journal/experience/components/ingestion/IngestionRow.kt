@@ -88,12 +88,25 @@ fun IngestionRow(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row(verticalAlignment = Alignment.Bottom) {
-                    Text(
-                        text = ingestionWithCompanionAndCustomUnit.doseDescription,
-                        style = MaterialTheme.typography.titleSmall)
-                    Text(text = " " + ingestion.administrationRoute.displayText,
-                        style = MaterialTheme.typography.bodySmall)
+                Column {
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text(
+                            text = ingestionWithCompanionAndCustomUnit.doseDescription,
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                        if (customUnit == null) {
+                            Text(
+                                text = " " + ingestion.administrationRoute.displayText,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                    }
+                    ingestionWithCompanionAndCustomUnit.customUnitDose?.calculatedDoseDescription?.let {
+                        Text(
+                            text = "= $it ${ingestion.administrationRoute.displayText}",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
                 val numDots = ingestionElement.numDots
                 if (numDots != null) {
