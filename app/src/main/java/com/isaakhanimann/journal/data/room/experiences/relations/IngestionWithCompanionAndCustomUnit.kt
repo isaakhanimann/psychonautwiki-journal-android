@@ -46,6 +46,8 @@ data class IngestionWithCompanionAndCustomUnit(
     val originalUnit: String? get() = customUnit?.originalUnit ?: ingestion.units
     val pureDose: Double? get() = customUnitDose?.calculatedDose ?: ingestion.dose
 
+    val isEstimate: Boolean get() = ingestion.isDoseAnEstimate || customUnit?.isEstimate ?: false
+
     val pureDoseVariance: Double? get() = customUnitDose?.calculatedDoseVariance ?: ingestion.estimatedDoseVariance
 
     val customUnitDose: CustomUnitDose? get() = ingestion.dose?.let { doseUnwrapped ->

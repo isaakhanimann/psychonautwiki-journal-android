@@ -100,6 +100,10 @@ interface ExperienceDao {
     fun getSortedExperiencesWithIngestionsFlow(): Flow<List<ExperienceWithIngestions>>
 
     @Transaction
+    @Query("SELECT * FROM experience ORDER BY sortDate DESC")
+    fun getSortedExperiencesWithIngestionsAndCustomUnitsFlow(): Flow<List<ExperienceWithIngestionsAndCompanions>>
+
+    @Transaction
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
     fun getSortedIngestionsWithSubstanceCompanionsFlow(): Flow<List<IngestionWithCompanionAndCustomUnit>>
 
@@ -269,6 +273,7 @@ interface ExperienceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(rating: ShulginRating)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(customUnit: CustomUnit)
 
