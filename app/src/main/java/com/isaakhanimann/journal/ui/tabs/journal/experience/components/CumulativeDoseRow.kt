@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
 
 @Composable
@@ -37,9 +38,12 @@ fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.titleMedium)
+        Text(
+            text = cumulativeDose.substanceName + " ${cumulativeDose.route.displayText}",
+            style = MaterialTheme.typography.titleMedium
+        )
         Column(horizontalAlignment = Alignment.End) {
-            Text(text = cumulativeDose.doseDescription)
+            Text(text = cumulativeDose.doseDescription, style = MaterialTheme.typography.titleSmall)
             val numDots = cumulativeDose.numDots
             if (numDots != null) {
                 DotRows(numDots = numDots)
@@ -58,7 +62,8 @@ fun CumulativeDoseRowPreview() {
             units = "mg",
             isEstimate = false,
             cumulativeDoseVariance = 12.0,
-            numDots = 6
+            numDots = 6,
+            route = AdministrationRoute.INSUFFLATED
         ), modifier = Modifier.fillMaxWidth()
     )
 }
