@@ -21,13 +21,14 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
-import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 
 @Composable
 fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
@@ -38,11 +39,26 @@ fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
     ) {
         Text(text = cumulativeDose.substanceName, style = MaterialTheme.typography.titleMedium)
         Column(horizontalAlignment = Alignment.End) {
-            Text(text = (if (cumulativeDose.isEstimate) "~" else "") + cumulativeDose.cumulativeDose.toReadableString() + " " + cumulativeDose.units)
+            Text(text = cumulativeDose.doseDescription)
             val numDots = cumulativeDose.numDots
             if (numDots != null) {
                 DotRows(numDots = numDots)
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CumulativeDoseRowPreview() {
+    CumulativeDoseRow(
+        cumulativeDose = CumulativeDose(
+            substanceName = "Cocaine",
+            cumulativeDose = 60.0,
+            units = "mg",
+            isEstimate = false,
+            cumulativeDoseVariance = 12.0,
+            numDots = 6
+        ), modifier = Modifier.fillMaxWidth()
+    )
 }
