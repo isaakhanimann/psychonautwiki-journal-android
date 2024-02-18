@@ -236,9 +236,6 @@ class ChooseTimeViewModel @Inject constructor(
             color = selectedColor
         )
         val ingestionTime = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
-        val consumerNameNonBlank = consumerName.ifBlank {
-            null
-        }
         if (userWantsToCreateANewExperience || oldIdToUse == null) {
             val newExperience = Experience(
                 id = newIdToUse,
@@ -248,44 +245,35 @@ class ChooseTimeViewModel @Inject constructor(
                 sortDate = ingestionTime,
                 location = null // todo: allow to add real location
             )
-            val newIngestion = Ingestion(
-                substanceName = substanceName,
-                time = ingestionTime,
-                administrationRoute = administrationRoute,
-                dose = dose,
-                isDoseAnEstimate = isEstimate,
-                estimatedDoseVariance = estimatedDoseVariance,
-                units = units,
-                experienceId = newExperience.id,
-                notes = note,
-                stomachFullness = null, // todo: allow to add real stomach fullness
-                consumerName = consumerNameNonBlank,
-                customUnitId = customUnitId
-            )
+            val newIngestion = createNewIngestion(newExperience.id)
             experienceRepo.insertIngestionExperienceAndCompanion(
                 ingestion = newIngestion,
                 experience = newExperience,
                 substanceCompanion = substanceCompanion
             )
         } else {
-            val newIngestion = Ingestion(
-                substanceName = substanceName,
-                time = ingestionTime,
-                administrationRoute = administrationRoute,
-                dose = dose,
-                isDoseAnEstimate = isEstimate,
-                estimatedDoseVariance = estimatedDoseVariance,
-                units = units,
-                experienceId = oldIdToUse,
-                notes = note,
-                stomachFullness = null, // todo: allow to add real stomach fullness
-                consumerName = consumerNameNonBlank,
-                customUnitId = customUnitId
-            )
+            val newIngestion = createNewIngestion(oldIdToUse)
             experienceRepo.insertIngestionAndCompanion(
                 ingestion = newIngestion,
                 substanceCompanion = substanceCompanion
             )
         }
     }
+
+    private suspend fun createNewIngestion(experienceId: Int) = Ingestion(
+        substanceName = substanceName,
+        time = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant(),
+        administrationRoute = administrationRoute,
+        dose = dose,
+        isDoseAnEstimate = isEstimate,
+        estimatedDoseVariance = estimatedDoseVariance,
+        units = units,
+        experienceId = experienceId,
+        notes = note,
+        stomachFullness = null, // todo: allow to add real stomach fullness
+        consumerName = consumerName.ifBlank {
+            null
+        },
+        customUnitId = customUnitId
+    )
 }

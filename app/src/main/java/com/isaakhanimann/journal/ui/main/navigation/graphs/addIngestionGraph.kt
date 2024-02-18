@@ -35,6 +35,7 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCheckSafer
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseCustomRoute
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseDose
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseDoseCustom
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseDoseCustomUnit
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseRouteOfAddIngestion
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseTimeAndMaybeColor
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferSniffingOnJournalTab
@@ -42,6 +43,7 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLInJourn
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToVolumetricDosingScreenOnJournalTab
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChooseDoseScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customsubstance.CustomChooseDose
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customunit.ChooseDoseCustomUnitScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.CheckInteractionsScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.ChooseRouteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomChooseRouteScreen
@@ -85,9 +87,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigateToChooseRouteOfAddIngestion(substanceName)
                 },
                 navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom,
-                navigateToCustomUnitChooseDose = {
-                    // Todo
-                }
+                navigateToCustomUnitChooseDose = navController::navigateToChooseDoseCustomUnit
             )
         }
         composableWithTransitions(
@@ -122,6 +122,12 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             val args = backStackEntry.arguments!!
             val url = args.getString(URL_KEY)!!
             UrlScreen(url = url)
+        }
+        composableWithTransitions(
+            ArgumentRouter.ChooseDoseCustomUnitRouter.route,
+            arguments = ArgumentRouter.ChooseDoseCustomUnitRouter.args
+        ) {
+            ChooseDoseCustomUnitScreen(navigateToChooseTimeAndMaybeColor = navController::navigateToChooseTimeAndMaybeColor)
         }
         composableWithTransitions(
             ArgumentRouter.ChooseRouteOfAddIngestionRouter.route,
