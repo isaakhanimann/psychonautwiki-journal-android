@@ -439,7 +439,7 @@ fun OneExperienceScreen(
                                     navigateToTimelineScreen(ME)
                                 }
                         )
-                        if (oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanion.ingestion.administrationRoute == AdministrationRoute.ORAL }) {
+                        if (oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }) {
                             Text(
                                 text = FULL_STOMACH_DISCLAIMER,
                                 style = MaterialTheme.typography.bodySmall
@@ -465,7 +465,7 @@ fun OneExperienceScreen(
                             startTime = oneExperienceScreenModel.firstIngestionTime,
                             modifier = Modifier
                                 .clickable {
-                                    navigateToIngestionScreen(ingestionElement.ingestionWithCompanion.ingestion.id)
+                                    navigateToIngestionScreen(ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.id)
                                 }
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
@@ -607,7 +607,7 @@ fun OneExperienceScreen(
                             startTime = oneExperienceScreenModel.firstIngestionTime,
                             modifier = Modifier
                                 .clickable {
-                                    navigateToIngestionScreen(ingestionElement.ingestionWithCompanion.ingestion.id)
+                                    navigateToIngestionScreen(ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.id)
                                 }
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)

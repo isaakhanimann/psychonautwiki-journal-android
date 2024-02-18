@@ -32,7 +32,7 @@ data class ExperienceWithIngestionsCompanionsAndRatings(
         entity = Ingestion::class,
         parentColumn = "id",
         entityColumn = "experienceId"
-    ) val ingestionsWithCompanions: List<IngestionWithCompanion>,
+    ) val ingestionsWithCompanions: List<IngestionWithCompanionAndCustomUnit>,
     @Relation(
         entity = ShulginRating::class,
         parentColumn = "id",

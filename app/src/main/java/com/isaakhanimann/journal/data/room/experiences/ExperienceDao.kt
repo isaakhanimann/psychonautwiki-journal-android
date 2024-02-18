@@ -37,7 +37,7 @@ import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithI
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsTimedNotesAndRatings
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
 import com.isaakhanimann.journal.ui.tabs.settings.JournalExport
 import kotlinx.coroutines.flow.Flow
@@ -101,11 +101,11 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM ingestion ORDER BY time DESC")
-    fun getSortedIngestionsWithSubstanceCompanionsFlow(): Flow<List<IngestionWithCompanion>>
+    fun getSortedIngestionsWithSubstanceCompanionsFlow(): Flow<List<IngestionWithCompanionAndCustomUnit>>
 
     @Transaction
     @Query("SELECT * FROM ingestion ORDER BY time DESC LIMIT :limit")
-    fun getSortedIngestionsWithSubstanceCompanionsFlow(limit: Int): Flow<List<IngestionWithCompanion>>
+    fun getSortedIngestionsWithSubstanceCompanionsFlow(limit: Int): Flow<List<IngestionWithCompanionAndCustomUnit>>
 
     @Query("SELECT * FROM ingestion ORDER BY time DESC LIMIT :limit")
     fun getSortedIngestions(limit: Int): Flow<List<Ingestion>>
@@ -134,7 +134,7 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM ingestion WHERE experienceId =:experienceId")
-    suspend fun getIngestionsWithCompanions(experienceId: Int): List<IngestionWithCompanion>
+    suspend fun getIngestionsWithCompanions(experienceId: Int): List<IngestionWithCompanionAndCustomUnit>
 
     @Query("SELECT * FROM ingestion WHERE experienceId =:experienceId")
     suspend fun getIngestions(experienceId: Int): List<Ingestion>
@@ -167,7 +167,7 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM ingestion WHERE id =:id")
-    fun getIngestionWithCompanionFlow(id: Int): Flow<IngestionWithCompanion?>
+    fun getIngestionWithCompanionFlow(id: Int): Flow<IngestionWithCompanionAndCustomUnit?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(experience: Experience): Long
@@ -368,7 +368,7 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM ingestion WHERE experienceId = :experienceId")
-    fun getIngestionsWithCompanionsFlow(experienceId: Int): Flow<List<IngestionWithCompanion>>
+    fun getIngestionsWithCompanionsFlow(experienceId: Int): Flow<List<IngestionWithCompanionAndCustomUnit>>
 
     @Query("SELECT * FROM shulginrating WHERE experienceId = :experienceId")
     fun getRatingsFlow(experienceId: Int): Flow<List<ShulginRating>>

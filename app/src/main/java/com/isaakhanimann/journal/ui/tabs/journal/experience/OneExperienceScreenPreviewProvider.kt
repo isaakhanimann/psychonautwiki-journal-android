@@ -26,7 +26,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOpt
 import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.InteractionType
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
@@ -175,7 +175,7 @@ class OneExperienceScreenPreviewProvider :
     companion object {
         val ingestionElements = listOf(
             IngestionElement(
-                ingestionWithCompanion = IngestionWithCompanion(
+                ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                     ingestion = Ingestion(
                         substanceName = "MDMA",
                         time = getInstant(
@@ -199,7 +199,8 @@ class OneExperienceScreenPreviewProvider :
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
                         color = AdaptiveColor.PINK
-                    )
+                    ),
+                    customUnit = null
                 ),
                 roaDuration = RoaDuration(
                     onset = DurationRange(
@@ -236,7 +237,7 @@ class OneExperienceScreenPreviewProvider :
                 numDots = 2
             ),
             IngestionElement(
-                ingestionWithCompanion = IngestionWithCompanion(
+                ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
                         time = getInstant(
@@ -260,7 +261,8 @@ class OneExperienceScreenPreviewProvider :
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
                         color = AdaptiveColor.BLUE
-                    )
+                    ),
+                    customUnit = null
                 ),
                 roaDuration = RoaDuration(
                     onset = DurationRange(
@@ -293,7 +295,7 @@ class OneExperienceScreenPreviewProvider :
                 numDots = 3
             ),
             IngestionElement(
-                ingestionWithCompanion = IngestionWithCompanion(
+                ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
                         time = getInstant(
@@ -317,7 +319,8 @@ class OneExperienceScreenPreviewProvider :
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
                         color = AdaptiveColor.BLUE
-                    )
+                    ),
+                    customUnit = null
                 ),
                 roaDuration = RoaDuration(
                     onset = DurationRange(

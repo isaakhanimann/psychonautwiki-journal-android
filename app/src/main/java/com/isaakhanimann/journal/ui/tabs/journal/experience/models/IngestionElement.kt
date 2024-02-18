@@ -18,11 +18,11 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.models
 
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 
 data class IngestionElement(
-    val ingestionWithCompanion: IngestionWithCompanion,
+    val ingestionWithCompanionAndCustomUnit: IngestionWithCompanionAndCustomUnit,
     val roaDuration: RoaDuration?,
     val numDots: Int?
 )

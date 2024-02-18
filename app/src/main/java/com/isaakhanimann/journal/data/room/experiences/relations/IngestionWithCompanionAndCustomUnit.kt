@@ -20,10 +20,13 @@ package com.isaakhanimann.journal.data.room.experiences.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.CustomUnitDose
+import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 
-data class IngestionWithCompanion(
+data class IngestionWithCompanionAndCustomUnit(
     @Embedded
     var ingestion: Ingestion,
 
@@ -31,5 +34,26 @@ data class IngestionWithCompanion(
         parentColumn = "substanceName",
         entityColumn = "substanceName"
     )
-    var substanceCompanion: SubstanceCompanion?
-)
+    var substanceCompanion: SubstanceCompanion?,
+
+    @Relation(
+        parentColumn = "customUnitId",
+        entityColumn = "id"
+    )
+    var customUnit: CustomUnit?
+) {
+    private val customUnitDose: CustomUnitDose? get() = ingestion.dose?.let { doseUnwrapped ->
+        customUnit?.let { customUnitUnwrapped ->
+            CustomUnitDose(
+                dose = doseUnwrapped,
+                isEstimate = ingestion.isDoseAnEstimate,
+                estimatedDoseVariance = ingestion.estimatedDoseVariance,
+                customUnit = customUnitUnwrapped)
+        }
+    }
+    val doseDescription: String get() = customUnitDose?.doseDescription ?: ingestion.dose?.let {
+        val isEstimateText = if (ingestion.isDoseAnEstimate) "~" else ""
+        val doseText = it.toReadableString()
+        return@let "$isEstimateText$doseText ${ingestion.units}"
+    } ?: "Unknown Dose"
+}

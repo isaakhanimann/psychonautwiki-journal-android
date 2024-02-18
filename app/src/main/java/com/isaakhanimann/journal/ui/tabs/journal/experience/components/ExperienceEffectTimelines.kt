@@ -44,17 +44,17 @@ fun ExperienceEffectTimelines(
                 oneElement.numDots.toFloat() / 4f
             }
             return@map DataForOneEffectLine(
-                substanceName = oneElement.ingestionWithCompanion.ingestion.substanceName,
-                route = oneElement.ingestionWithCompanion.ingestion.administrationRoute,
+                substanceName = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.substanceName,
+                route = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute,
                 roaDuration = oneElement.roaDuration,
                 height = getHeightBetween0And1(
-                    ingestion = oneElement.ingestionWithCompanion.ingestion,
-                    allIngestions = ingestionElements.map { it.ingestionWithCompanion.ingestion }
+                    ingestion = oneElement.ingestionWithCompanionAndCustomUnit.ingestion,
+                    allIngestions = ingestionElements.map { it.ingestionWithCompanionAndCustomUnit.ingestion }
                 ),
                 horizontalWeight = horizontalWeight,
-                color = oneElement.ingestionWithCompanion.substanceCompanion?.color
+                color = oneElement.ingestionWithCompanionAndCustomUnit.substanceCompanion?.color
                     ?: AdaptiveColor.RED,
-                startTime = oneElement.ingestionWithCompanion.ingestion.time
+                startTime = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.time
             )
         }
     }

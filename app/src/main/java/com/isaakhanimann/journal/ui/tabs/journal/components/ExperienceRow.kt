@@ -39,7 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 
@@ -132,7 +132,7 @@ fun ExperienceRow(
 }
 
 @Composable
-fun ColorRectangle(ingestions: List<IngestionWithCompanion>) {
+fun ColorRectangle(ingestions: List<IngestionWithCompanionAndCustomUnit>) {
     val isDarkTheme = isSystemInDarkTheme()
     val width = 11.dp
     val cornerRadius = 3.dp

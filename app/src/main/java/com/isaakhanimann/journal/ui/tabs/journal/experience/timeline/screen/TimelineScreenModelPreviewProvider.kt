@@ -26,7 +26,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOpt
 import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationUnits
@@ -127,7 +127,7 @@ class TimelineScreenModelPreviewProvider :
     companion object {
         val ingestionElements = listOf(
             IngestionElement(
-                ingestionWithCompanion = IngestionWithCompanion(
+                ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                     ingestion = Ingestion(
                         substanceName = "MDMA",
                         time = getInstant(
@@ -151,7 +151,8 @@ class TimelineScreenModelPreviewProvider :
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "MDMA",
                         color = AdaptiveColor.PINK
-                    )
+                    ),
+                    customUnit = null
                 ),
                 roaDuration = RoaDuration(
                     onset = DurationRange(
@@ -188,7 +189,7 @@ class TimelineScreenModelPreviewProvider :
                 numDots = 2
             ),
             IngestionElement(
-                ingestionWithCompanion = IngestionWithCompanion(
+                ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
                         time = getInstant(
@@ -212,7 +213,8 @@ class TimelineScreenModelPreviewProvider :
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
                         color = AdaptiveColor.BLUE
-                    )
+                    ),
+                    customUnit = null
                 ),
                 roaDuration = RoaDuration(
                     onset = DurationRange(
@@ -245,7 +247,7 @@ class TimelineScreenModelPreviewProvider :
                 numDots = 3
             ),
             IngestionElement(
-                ingestionWithCompanion = IngestionWithCompanion(
+                ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
                         time = getInstant(
@@ -269,7 +271,8 @@ class TimelineScreenModelPreviewProvider :
                     substanceCompanion = SubstanceCompanion(
                         substanceName = "Cocaine",
                         color = AdaptiveColor.BLUE
-                    )
+                    ),
+                    customUnit = null
                 ),
                 roaDuration = RoaDuration(
                     onset = DurationRange(
