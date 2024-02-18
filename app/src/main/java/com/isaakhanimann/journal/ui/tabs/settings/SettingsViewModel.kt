@@ -26,7 +26,6 @@ import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -88,11 +87,13 @@ class SettingsViewModel @Inject constructor(
                             creationDate = ingestion.creationDate,
                             administrationRoute = ingestion.administrationRoute,
                             dose = ingestion.dose,
+                            estimatedDoseVariance = ingestion.estimatedDoseVariance,
                             isDoseAnEstimate = ingestion.isDoseAnEstimate,
                             units = ingestion.units,
                             notes = ingestion.notes,
                             stomachFullness = ingestion.stomachFullness,
-                            consumerName = ingestion.consumerName
+                            consumerName = ingestion.consumerName,
+                            customUnitId = ingestion.customUnitId
                         )
                     },
                     location = if (location != null) {
@@ -122,10 +123,27 @@ class SettingsViewModel @Inject constructor(
                     }
                 )
             }
+            val customUnitsSerializable = experienceRepository.getAllCustomUnitsSorted().map {
+                CustomUnitSerializable(
+                    id = it.id,
+                    substanceName = it.substanceName,
+                    name = it.name,
+                    creationDate = it.creationDate,
+                    administrationRoute = it.administrationRoute,
+                    dose = it.dose,
+                    estimatedDoseVariance = it.estimatedDoseVariance,
+                    isEstimate = it.isEstimate,
+                    isArchived = it.isArchived,
+                    unit = it.unit,
+                    originalUnit = it.originalUnit,
+                    note = it.note
+                )
+            }
             val journalExport = JournalExport(
                 experiences = experiencesSerializable,
                 substanceCompanions = experienceRepository.getAllSubstanceCompanions(),
-                customSubstances = experienceRepository.getAllCustomSubstances()
+                customSubstances = experienceRepository.getAllCustomSubstances(),
+                customUnits = customUnitsSerializable
             )
             try {
                 val jsonList = Json.encodeToString(journalExport)
@@ -140,7 +158,6 @@ class SettingsViewModel @Inject constructor(
                     duration = SnackbarDuration.Short
                 )
             }
-
         }
     }
 

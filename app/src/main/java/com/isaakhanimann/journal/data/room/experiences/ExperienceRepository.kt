@@ -188,6 +188,9 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getAllExperiencesWithIngestionsTimedNotesAndRatingsSorted(): List<ExperienceWithIngestionsTimedNotesAndRatings> =
         experienceDao.getAllExperiencesWithIngestionsTimedNotesAndRatingsSorted()
 
+    suspend fun getAllCustomUnitsSorted(): List<CustomUnit> =
+        experienceDao.getAllCustomUnitsSorted()
+
     suspend fun getAllCustomSubstances(): List<CustomSubstance> =
         experienceDao.getAllCustomSubstances()
 

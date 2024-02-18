@@ -74,6 +74,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM experience ORDER BY sortDate")
     suspend fun getAllExperiencesWithIngestionsTimedNotesAndRatingsSorted(): List<ExperienceWithIngestionsTimedNotesAndRatings>
 
+    @Query("SELECT * FROM customunit ORDER BY creationDate")
+    suspend fun getAllCustomUnitsSorted(): List<CustomUnit>
+
     @Query("SELECT * FROM customsubstance")
     suspend fun getAllCustomSubstances(): List<CustomSubstance>
 
@@ -222,6 +225,7 @@ interface ExperienceDao {
         deleteAllSubstanceCompanions()
         deleteAllCustomSubstances()
         deleteAllRatings()
+        deleteAllCustomUnits()
     }
 
     @Transaction
@@ -255,6 +259,10 @@ interface ExperienceDao {
     @Transaction
     @Query("DELETE FROM shulginrating")
     suspend fun deleteAllRatings()
+
+    @Transaction
+    @Query("DELETE FROM customunit")
+    suspend fun deleteAllCustomUnits()
 
     @Transaction
     @Query("DELETE FROM experience")
@@ -356,6 +364,24 @@ interface ExperienceDao {
         }
         journalExport.substanceCompanions.forEach { insert(it) }
         journalExport.customSubstances.forEach { insert(it) }
+        journalExport.customUnits.forEach {
+            insert(
+                CustomUnit(
+                    id = it.id,
+                    substanceName = it.substanceName,
+                    name = it.name,
+                    creationDate = it.creationDate,
+                    administrationRoute = it.administrationRoute,
+                    dose = it.dose,
+                    estimatedDoseVariance = it.estimatedDoseVariance,
+                    isEstimate = it.isEstimate,
+                    isArchived = it.isArchived,
+                    unit = it.unit,
+                    originalUnit = it.originalUnit,
+                    note = it.note
+                )
+            )
+        }
     }
 
     @Transaction

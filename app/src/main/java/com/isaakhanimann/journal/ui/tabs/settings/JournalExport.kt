@@ -29,9 +29,10 @@ import java.time.Instant
 
 @Serializable
 data class JournalExport(
-    val experiences: List<ExperienceSerializable>,
-    val substanceCompanions: List<SubstanceCompanion>,
-    val customSubstances: List<CustomSubstance>
+    val experiences: List<ExperienceSerializable> = emptyList(),
+    val substanceCompanions: List<SubstanceCompanion> = emptyList(),
+    val customSubstances: List<CustomSubstance> = emptyList(),
+    val customUnits: List<CustomUnitSerializable> = emptyList()
 )
 
 @Serializable
@@ -45,6 +46,22 @@ data class ExperienceSerializable(
     val location: LocationSerializable? = null,
     val ratings: List<RatingSerializable> = emptyList(),
     val timedNotes: List<TimedNoteSerializable> = emptyList()
+)
+
+@Serializable
+data class CustomUnitSerializable (
+    val id: Int = 0,
+    val substanceName: String,
+    val name: String,
+    @Serializable(with= InstantSerializer::class) val creationDate: Instant = Instant.now(),
+    val administrationRoute: AdministrationRoute,
+    var dose: Double? = null,
+    var estimatedDoseVariance: Double? = null,
+    var isEstimate: Boolean,
+    var isArchived: Boolean,
+    var unit: String,
+    val originalUnit: String,
+    var note: String
 )
 
 @Serializable
