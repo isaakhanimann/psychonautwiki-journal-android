@@ -49,6 +49,7 @@ fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) s
     SuggestionRow(
         substanceRouteSuggestion = substanceRouteSuggestion,
         navigateToDose = { _: String, _: AdministrationRoute -> },
+        navigateToCustomUnitChooseDose = {},
         navigateToCustomDose = { _: String, _: AdministrationRoute -> },
         navigateToChooseTime = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean, _: Double?, _: Int? -> }
     )
@@ -59,6 +60,7 @@ fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) s
 fun SuggestionRow(
     substanceRouteSuggestion: SubstanceRouteSuggestion,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseVariance: Double?, customUnitId: Int?) -> Unit,
 ) {
@@ -132,14 +134,26 @@ fun SuggestionRow(
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
             substanceRouteSuggestion.customUnitDoses.forEach { customUnitDose ->
-                SuggestionChip(onClick = { /*TODO*/ }, label = {
-                    Text(text = customUnitDose.dose.toReadableString() + " " + customUnitDose.customUnit.unit)
+                SuggestionChip(onClick = {
+                    navigateToChooseTime(
+                        customUnitDose.customUnit.substanceName,
+                        customUnitDose.customUnit.administrationRoute,
+                        customUnitDose.dose,
+                        customUnitDose.customUnit.unit,
+                        customUnitDose.isEstimate,
+                        customUnitDose.estimatedDoseVariance,
+                        customUnitDose.customUnit.id
+                    )
+                }, label = {
+                    Text(text = customUnitDose.doseDescription)
                 })
             }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
             substanceRouteSuggestion.customUnits.forEach { customUnit ->
-                SuggestionChip(onClick = { /*TODO*/ }, label = {
+                SuggestionChip(onClick = {
+                    navigateToCustomUnitChooseDose(customUnit.id)
+                }, label = {
                     Text(text = "Enter " + customUnit.unit)
                 })
             }

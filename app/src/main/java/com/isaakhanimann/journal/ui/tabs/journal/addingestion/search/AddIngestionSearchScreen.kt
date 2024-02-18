@@ -191,6 +191,7 @@ fun AddIngestionSearchScreen(
                     SuggestionRow(
                         substanceRouteSuggestion = substanceRow,
                         navigateToDose = navigateToDose,
+                        navigateToCustomUnitChooseDose = navigateToCustomUnitChooseDose,
                         navigateToCustomDose = navigateToCustomDose,
                         navigateToChooseTime = navigateToChooseTime
                     )
