@@ -480,6 +480,9 @@ fun OneExperienceScreen(
             if (cumulativeDoses.isNotEmpty()) {
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Cumulative Dose")
+                    if (cumulativeDoses.isNotEmpty()) {
+                        Divider()
+                    }
                     cumulativeDoses.forEachIndexed { index, cumulativeDose ->
                         CumulativeDoseRow(
                             cumulativeDose = cumulativeDose, modifier = Modifier
