@@ -38,7 +38,7 @@ import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithI
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsTimedNotesAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperienceAndCustomUnit
 import com.isaakhanimann.journal.ui.tabs.settings.JournalExport
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
@@ -127,7 +127,7 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC")
-    fun getSortedIngestionsWithExperienceFlow(substanceName: String): Flow<List<IngestionWithExperience>>
+    fun getSortedIngestionsWithExperienceAndCustomUnitFlow(substanceName: String): Flow<List<IngestionWithExperienceAndCustomUnit>>
 
     @Query("SELECT * FROM experience WHERE id =:id")
     suspend fun getExperience(id: Int): Experience?
@@ -153,14 +153,14 @@ interface ExperienceDao {
 
     @Transaction
     @Query("SELECT * FROM ingestion WHERE id =:id")
-    fun getIngestionWithExperienceFlow(id: Int): Flow<IngestionWithExperience?>
+    fun getIngestionWithExperienceFlow(id: Int): Flow<IngestionWithExperienceAndCustomUnit?>
 
     @Transaction
     @Query("SELECT * FROM ingestion WHERE time > :fromInstant AND time < :toInstant")
     fun getIngestionWithExperiencesFlow(
         fromInstant: Instant,
         toInstant: Instant
-    ): Flow<List<IngestionWithExperience>>
+    ): Flow<List<IngestionWithExperienceAndCustomUnit>>
 
     @Query("SELECT * FROM ingestion WHERE id =:id")
     fun getIngestionFlow(id: Int): Flow<Ingestion?>
