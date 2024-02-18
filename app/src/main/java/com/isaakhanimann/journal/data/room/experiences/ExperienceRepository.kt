@@ -29,7 +29,7 @@ import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithI
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsTimedNotesAndRatings
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperience
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithExperienceAndCustomUnit
 import com.isaakhanimann.journal.ui.tabs.settings.JournalExport
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -126,7 +126,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     fun getIngestionsWithExperiencesFlow(
         fromInstant: Instant,
         toInstant: Instant
-    ): Flow<List<IngestionWithExperience>> =
+    ): Flow<List<IngestionWithExperienceAndCustomUnit>> =
         experienceDao.getIngestionWithExperiencesFlow(fromInstant, toInstant)
             .flowOn(Dispatchers.IO)
             .conflate()
@@ -243,8 +243,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
-    fun getSortedIngestionsWithExperienceFlow(substanceName: String) =
-        experienceDao.getSortedIngestionsWithExperienceFlow(substanceName)
+    fun getSortedIngestionsWithExperienceAndCustomUnitFlow(substanceName: String) =
+        experienceDao.getSortedIngestionsWithExperienceAndCustomUnitFlow(substanceName)
             .flowOn(Dispatchers.IO)
             .conflate()
 

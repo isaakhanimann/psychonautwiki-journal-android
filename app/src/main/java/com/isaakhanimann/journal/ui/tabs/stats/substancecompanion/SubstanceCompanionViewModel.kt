@@ -23,12 +23,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.navigation.routers.CONSUMER_NAME_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.CustomUnitDose
+import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.utils.getTimeDifferenceText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -72,7 +75,7 @@ class SubstanceCompanionViewModel @Inject constructor(
         )
 
     val ingestionBurstsFlow: StateFlow<List<IngestionsBurst>> =
-        experienceRepo.getSortedIngestionsWithExperienceFlow(substanceName)
+        experienceRepo.getSortedIngestionsWithExperienceAndCustomUnitFlow(substanceName)
             .map { list -> list.filter { it.ingestion.consumerName == consumerName } }
             .combine(currentTimeFlow) { sortedIngestionsWithExperiences, currentTime ->
                 val experiencesWithIngestions =
@@ -81,9 +84,12 @@ class SubstanceCompanionViewModel @Inject constructor(
                 val allIngestionBursts: MutableList<IngestionsBurst> = mutableListOf()
                 for (oneExperience in experiencesWithIngestions) {
                     val experience = oneExperience.value.firstOrNull()?.experience ?: continue
-                    val ingestionsSorted = oneExperience.value.map { it.ingestion }.sortedBy { it.time }
-                    val experienceStart = ingestionsSorted.first().time
-                    val experienceEnd = ingestionsSorted.last().time
+                    val ingestionsSorted = oneExperience.value.map { IngestionsBurst.IngestionAndCustomUnit(
+                        ingestion = it.ingestion,
+                        customUnit = it.customUnit
+                    ) }.sortedBy { it.ingestion.time }
+                    val experienceStart = ingestionsSorted.first().ingestion.time
+                    val experienceEnd = ingestionsSorted.last().ingestion.time
                     val diffText = getTimeDifferenceText(
                         fromInstant = experienceEnd,
                         toInstant = lastDate
@@ -140,5 +146,28 @@ class SubstanceCompanionViewModel @Inject constructor(
 data class IngestionsBurst(
     val timeUntil: String,
     val experience: Experience,
-    val ingestions: List<Ingestion>
-)
+    val ingestions: List<IngestionAndCustomUnit>
+) {
+    data class IngestionAndCustomUnit(
+        val ingestion: Ingestion,
+        val customUnit: CustomUnit?
+    ) {
+        private val customUnitDose: CustomUnitDose?
+            get() = ingestion.dose?.let { doseUnwrapped ->
+                customUnit?.let { customUnitUnwrapped ->
+                    CustomUnitDose(
+                        dose = doseUnwrapped,
+                        isEstimate = ingestion.isDoseAnEstimate,
+                        estimatedDoseVariance = ingestion.estimatedDoseVariance,
+                        customUnit = customUnitUnwrapped
+                    )
+                }
+            }
+        val doseDescription: String
+            get() = customUnitDose?.doseDescription ?: ingestion.dose?.let {
+                val isEstimateText = if (ingestion.isDoseAnEstimate) "~" else ""
+                val doseText = it.toReadableString()
+                return@let "$isEstimateText$doseText ${ingestion.units}"
+            } ?: "Unknown Dose"
+    }
+}

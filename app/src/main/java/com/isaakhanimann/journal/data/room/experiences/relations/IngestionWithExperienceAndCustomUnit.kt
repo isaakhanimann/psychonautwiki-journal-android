@@ -20,10 +20,11 @@ package com.isaakhanimann.journal.data.room.experiences.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 
-data class IngestionWithExperience(
+data class IngestionWithExperienceAndCustomUnit(
     @Embedded
     var ingestion: Ingestion,
 
@@ -31,5 +32,11 @@ data class IngestionWithExperience(
         parentColumn = "experienceId",
         entityColumn = "id"
     )
-    var experience: Experience
+    var experience: Experience,
+
+    @Relation(
+        parentColumn = "customUnitId",
+        entityColumn = "id"
+    )
+    var customUnit: CustomUnit?
 )

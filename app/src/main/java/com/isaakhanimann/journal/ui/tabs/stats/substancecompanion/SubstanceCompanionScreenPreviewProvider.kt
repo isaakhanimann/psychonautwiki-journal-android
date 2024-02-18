@@ -60,45 +60,51 @@ class SubstanceCompanionScreenPreviewProvider :
                         location = null
                     ),
                     ingestions = listOf(
-                        Ingestion(
-                            substanceName = "Cocaine",
-                            time = getInstant(
-                                year = 2022,
-                                month = 7,
-                                day = 20,
-                                hourOfDay = 14,
-                                minute = 20
-                            )!!,
-                            administrationRoute = AdministrationRoute.INSUFFLATED,
-                            dose = 20.0,
-                            isDoseAnEstimate = false,
-                            estimatedDoseVariance = null,
-                            units = "mg",
-                            experienceId = 0,
-                            notes = "This is one note",
-                            stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null,
-                            customUnitId = null
+                        IngestionsBurst.IngestionAndCustomUnit(
+                            ingestion = Ingestion(
+                                substanceName = "Cocaine",
+                                time = getInstant(
+                                    year = 2022,
+                                    month = 7,
+                                    day = 20,
+                                    hourOfDay = 14,
+                                    minute = 20
+                                )!!,
+                                administrationRoute = AdministrationRoute.INSUFFLATED,
+                                dose = 20.0,
+                                isDoseAnEstimate = false,
+                                estimatedDoseVariance = null,
+                                units = "mg",
+                                experienceId = 0,
+                                notes = "This is one note",
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null,
+                                customUnitId = null
+                            ),
+                            customUnit = null
                         ),
-                        Ingestion(
-                            substanceName = "Cocaine",
-                            time = getInstant(
-                                year = 2022,
-                                month = 7,
-                                day = 20,
-                                hourOfDay = 13,
-                                minute = 40
-                            )!!,
-                            administrationRoute = AdministrationRoute.INSUFFLATED,
-                            dose = 30.0,
-                            isDoseAnEstimate = false,
-                            estimatedDoseVariance = null,
-                            units = "mg",
-                            experienceId = 0,
-                            notes = "This is one note",
-                            stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null,
-                            customUnitId = null
+                        IngestionsBurst.IngestionAndCustomUnit(
+                            ingestion = Ingestion(
+                                substanceName = "Cocaine",
+                                time = getInstant(
+                                    year = 2022,
+                                    month = 7,
+                                    day = 20,
+                                    hourOfDay = 13,
+                                    minute = 40
+                                )!!,
+                                administrationRoute = AdministrationRoute.INSUFFLATED,
+                                dose = 30.0,
+                                isDoseAnEstimate = false,
+                                estimatedDoseVariance = null,
+                                units = "mg",
+                                experienceId = 0,
+                                notes = "This is one note",
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null,
+                                customUnitId = null
+                            ),
+                            customUnit = null
                         )
                     )
                 ),
@@ -126,45 +132,51 @@ class SubstanceCompanionScreenPreviewProvider :
                         location = null
                     ),
                     ingestions = listOf(
-                        Ingestion(
-                            substanceName = "Cocaine",
-                            time = getInstant(
-                                year = 2022,
-                                month = 7,
-                                day = 4,
-                                hourOfDay = 14,
-                                minute = 20
-                            )!!,
-                            administrationRoute = AdministrationRoute.INSUFFLATED,
-                            dose = 10.0,
-                            isDoseAnEstimate = false,
-                            estimatedDoseVariance = null,
-                            units = "mg",
-                            experienceId = 0,
-                            notes = "This is one note",
-                            stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null,
-                            customUnitId = null
+                        IngestionsBurst.IngestionAndCustomUnit(
+                            ingestion = Ingestion(
+                                substanceName = "Cocaine",
+                                time = getInstant(
+                                    year = 2022,
+                                    month = 7,
+                                    day = 4,
+                                    hourOfDay = 14,
+                                    minute = 20
+                                )!!,
+                                administrationRoute = AdministrationRoute.INSUFFLATED,
+                                dose = 10.0,
+                                isDoseAnEstimate = false,
+                                estimatedDoseVariance = null,
+                                units = "mg",
+                                experienceId = 0,
+                                notes = "This is one note",
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null,
+                                customUnitId = null
+                            ),
+                            customUnit = null
                         ),
-                        Ingestion(
-                            substanceName = "Cocaine",
-                            time = getInstant(
-                                year = 2022,
-                                month = 7,
-                                day = 4,
-                                hourOfDay = 13,
-                                minute = 40
-                            )!!,
-                            administrationRoute = AdministrationRoute.INSUFFLATED,
-                            dose = 20.0,
-                            isDoseAnEstimate = false,
-                            estimatedDoseVariance = null,
-                            units = "mg",
-                            experienceId = 0,
-                            notes = "This is one note",
-                            stomachFullness = StomachFullness.EMPTY,
-                            consumerName = null,
-                            customUnitId = null
+                        IngestionsBurst.IngestionAndCustomUnit(
+                            ingestion = Ingestion(
+                                substanceName = "Cocaine",
+                                time = getInstant(
+                                    year = 2022,
+                                    month = 7,
+                                    day = 4,
+                                    hourOfDay = 13,
+                                    minute = 40
+                                )!!,
+                                administrationRoute = AdministrationRoute.INSUFFLATED,
+                                dose = 20.0,
+                                isDoseAnEstimate = false,
+                                estimatedDoseVariance = null,
+                                units = "mg",
+                                experienceId = 0,
+                                notes = "This is one note",
+                                stomachFullness = StomachFullness.EMPTY,
+                                consumerName = null,
+                                customUnitId = null
+                            ),
+                            customUnit = null
                         )
                     )
                 )

@@ -18,10 +18,22 @@
 
 package com.isaakhanimann.journal.ui.tabs.stats.substancecompanion
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -31,13 +43,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.classes.Tolerance
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ColorPicker
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.ToleranceSection
-import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
@@ -172,7 +182,7 @@ fun SubstanceCompanionScreen(
                         }
                         Divider()
                         burst.ingestions.forEachIndexed { index, ingestion ->
-                            IngestionRow(ingestion = ingestion)
+                            IngestionRow(ingestionAndCustomUnit = ingestion)
                             if (index < burst.ingestions.size - 1) {
                                 Divider()
                             }
@@ -185,23 +195,15 @@ fun SubstanceCompanionScreen(
 }
 
 @Composable
-fun IngestionRow(ingestion: Ingestion) {
+fun IngestionRow(ingestionAndCustomUnit: IngestionsBurst.IngestionAndCustomUnit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        ingestion.dose?.also {
-            Text(
-                text = "${if (ingestion.isDoseAnEstimate) "~" else ""}${it.toReadableString()} ${ingestion.units} ${ingestion.administrationRoute.displayText}",
-            )
-        } ?: run {
-            Text(
-                text = "Unknown Dose ${ingestion.administrationRoute.displayText}",
-            )
-        }
-        val dateString = ingestion.time.getStringOfPattern("HH:mm")
+        Text(text = ingestionAndCustomUnit.doseDescription + " ${ingestionAndCustomUnit.ingestion.administrationRoute.displayText}")
+        val dateString = ingestionAndCustomUnit.ingestion.time.getStringOfPattern("HH:mm")
         Text(text = dateString)
     }
 }
