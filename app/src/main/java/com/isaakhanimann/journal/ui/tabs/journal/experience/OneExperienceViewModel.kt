@@ -22,7 +22,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
@@ -176,7 +176,7 @@ class OneExperienceViewModel @Inject constructor(
         }
 
     private data class IngestionWithAssociatedData(
-        val ingestionWithCompanion: IngestionWithCompanion,
+        val ingestionWithCompanionAndCustomUnit: IngestionWithCompanionAndCustomUnit,
         val roaDuration: RoaDuration?,
         val roaDose: RoaDose?
     )
@@ -189,7 +189,7 @@ class OneExperienceViewModel @Inject constructor(
                     ?.getRoa(ingestion.administrationRoute)
                 val roaDuration = roa?.roaDuration
                 IngestionWithAssociatedData(
-                    ingestionWithCompanion = oneIngestionWithComp,
+                    ingestionWithCompanionAndCustomUnit = oneIngestionWithComp,
                     roaDuration = roaDuration,
                     roaDose = roa?.roaDose
                 )
@@ -197,15 +197,15 @@ class OneExperienceViewModel @Inject constructor(
         }
 
     private val myIngestionsWithAssociatedDataFlow = ingestionsWithAssociatedDataFlow.map { ingestions ->
-        ingestions.filter { it.ingestionWithCompanion.ingestion.consumerName == null }
+        ingestions.filter { it.ingestionWithCompanionAndCustomUnit.ingestion.consumerName == null }
     }
 
     val consumersWithIngestionsFlow = ingestionsWithAssociatedDataFlow.map { ingestions ->
-        val otherIngestions = ingestions.filter { it.ingestionWithCompanion.ingestion.consumerName != null }
-        val groupedByConsumer = otherIngestions.groupBy { it.ingestionWithCompanion.ingestion.consumerName }
+        val otherIngestions = ingestions.filter { it.ingestionWithCompanionAndCustomUnit.ingestion.consumerName != null }
+        val groupedByConsumer = otherIngestions.groupBy { it.ingestionWithCompanionAndCustomUnit.ingestion.consumerName }
         return@map groupedByConsumer.mapNotNull { entry ->
             val consumerName = entry.key ?: return@mapNotNull null
-            val sortedIngestionsWith = entry.value.sortedBy { it.ingestionWithCompanion.ingestion.time }
+            val sortedIngestionsWith = entry.value.sortedBy { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
             ConsumerWithIngestions(consumerName = consumerName, ingestionElements = getIngestionElements(sortedIngestionsWith = sortedIngestionsWith))
         }
     }.stateIn(
@@ -234,11 +234,11 @@ class OneExperienceViewModel @Inject constructor(
         return sortedIngestionsWith.map { ingestionWith ->
             val numDots =
                 ingestionWith.roaDose?.getNumDots(
-                    ingestionWith.ingestionWithCompanion.ingestion.dose,
-                    ingestionUnits = ingestionWith.ingestionWithCompanion.ingestion.units
+                    ingestionWith.ingestionWithCompanionAndCustomUnit.ingestion.dose,
+                    ingestionUnits = ingestionWith.ingestionWithCompanionAndCustomUnit.ingestion.units
                 )
             IngestionElement(
-                ingestionWithCompanion = ingestionWith.ingestionWithCompanion,
+                ingestionWithCompanionAndCustomUnit = ingestionWith.ingestionWithCompanionAndCustomUnit,
                 roaDuration = ingestionWith.roaDuration,
                 numDots = numDots
             )
@@ -289,17 +289,17 @@ class OneExperienceViewModel @Inject constructor(
 
     private companion object {
         fun getCumulativeDoses(ingestions: List<IngestionWithAssociatedData>): List<CumulativeDose> {
-            return ingestions.groupBy { it.ingestionWithCompanion.ingestion.substanceName }
+            return ingestions.groupBy { it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName }
                 .mapNotNull { grouped ->
                     val groupedIngestions = grouped.value
                     if (groupedIngestions.size <= 1) return@mapNotNull null
-                    if (groupedIngestions.any { it.ingestionWithCompanion.ingestion.dose == null }) return@mapNotNull null
-                    val units = groupedIngestions.first().ingestionWithCompanion.ingestion.units
-                    if (groupedIngestions.any { it.ingestionWithCompanion.ingestion.units != units }) return@mapNotNull null
+                    if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.dose == null }) return@mapNotNull null
+                    val units = groupedIngestions.first().ingestionWithCompanionAndCustomUnit.ingestion.units
+                    if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.units != units }) return@mapNotNull null
                     val isEstimate =
-                        groupedIngestions.any { it.ingestionWithCompanion.ingestion.isDoseAnEstimate }
+                        groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.isDoseAnEstimate }
                     val cumulativeDose =
-                        groupedIngestions.mapNotNull { it.ingestionWithCompanion.ingestion.dose }
+                        groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.ingestion.dose }
                             .sum()
                     val numDots = groupedIngestions.first().roaDose?.getNumDots(
                         ingestionDose = cumulativeDose,

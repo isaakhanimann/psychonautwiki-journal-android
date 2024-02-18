@@ -28,7 +28,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOpt
 import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.utils.getInstant
 import java.time.Instant
@@ -55,7 +55,7 @@ class JournalScreenPreviewProvider :
                         location = Location(name = "Max place", longitude = 4.0, latitude = 5.0)
                     ),
                     ingestionsWithCompanions = listOf(
-                        IngestionWithCompanion(
+                        IngestionWithCompanionAndCustomUnit(
                             ingestion = Ingestion(
                                 substanceName = "MDMA",
                                 time = getInstant(
@@ -79,9 +79,10 @@ class JournalScreenPreviewProvider :
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "MDMA",
                                 color = AdaptiveColor.PINK
-                            )
+                            ),
+                            customUnit = null
                         ),
-                        IngestionWithCompanion(
+                        IngestionWithCompanionAndCustomUnit(
                             ingestion = Ingestion(
                                 substanceName = "Cocaine",
                                 time = getInstant(
@@ -105,9 +106,10 @@ class JournalScreenPreviewProvider :
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Cocaine",
                                 color = AdaptiveColor.BLUE
-                            )
+                            ),
+                            customUnit = null
                         ),
-                        IngestionWithCompanion(
+                        IngestionWithCompanionAndCustomUnit(
                             ingestion = Ingestion(
                                 substanceName = "Ketamine",
                                 time = getInstant(
@@ -131,7 +133,8 @@ class JournalScreenPreviewProvider :
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Ketamine",
                                 color = AdaptiveColor.MINT
-                            )
+                            ),
+                            customUnit = null
                         )
                     ),
                     ratings = listOf(
@@ -158,7 +161,7 @@ class JournalScreenPreviewProvider :
                         location = Location(name = "Max place", longitude = 4.0, latitude = 5.0)
                     ),
                     ingestionsWithCompanions = listOf(
-                        IngestionWithCompanion(
+                        IngestionWithCompanionAndCustomUnit(
                             ingestion = Ingestion(
                                 substanceName = "MDMA",
                                 time = getInstant(
@@ -182,7 +185,8 @@ class JournalScreenPreviewProvider :
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "MDMA",
                                 color = AdaptiveColor.PINK
-                            )
+                            ),
+                            customUnit = null
                         )
                     ),
                     ratings = listOf()
@@ -202,7 +206,7 @@ class JournalScreenPreviewProvider :
                         location = Location(name = "Max place", longitude = 4.0, latitude = 5.0)
                     ),
                     ingestionsWithCompanions = listOf(
-                        IngestionWithCompanion(
+                        IngestionWithCompanionAndCustomUnit(
                             ingestion = Ingestion(
                                 substanceName = "Cocaine",
                                 time = getInstant(
@@ -226,9 +230,10 @@ class JournalScreenPreviewProvider :
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Cocaine",
                                 color = AdaptiveColor.BLUE
-                            )
+                            ),
+                            customUnit = null
                         ),
-                        IngestionWithCompanion(
+                        IngestionWithCompanionAndCustomUnit(
                             ingestion = Ingestion(
                                 substanceName = "Ketamine",
                                 time = getInstant(
@@ -252,7 +257,8 @@ class JournalScreenPreviewProvider :
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Ketamine",
                                 color = AdaptiveColor.MINT
-                            )
+                            ),
+                            customUnit = null
                         )
                     ),
                     ratings = listOf(
@@ -279,7 +285,7 @@ class JournalScreenPreviewProvider :
                         location = Location(name = "Max place", longitude = 4.0, latitude = 5.0)
                     ),
                     ingestionsWithCompanions = listOf(
-                        IngestionWithCompanion(
+                        IngestionWithCompanionAndCustomUnit(
                             ingestion = Ingestion(
                                 substanceName = "LSD",
                                 time = getInstant(
@@ -303,9 +309,10 @@ class JournalScreenPreviewProvider :
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "LSD",
                                 color = AdaptiveColor.PURPLE
-                            )
+                            ),
+                            customUnit = null
                         ),
-                        IngestionWithCompanion(
+                        IngestionWithCompanionAndCustomUnit(
                             ingestion = Ingestion(
                                 substanceName = "Cocaine",
                                 time = getInstant(
@@ -329,7 +336,8 @@ class JournalScreenPreviewProvider :
                             substanceCompanion = SubstanceCompanion(
                                 substanceName = "Cocaine",
                                 color = AdaptiveColor.BLUE
-                            )
+                            ),
+                            customUnit = null
                         )
                     ),
                     ratings = listOf()

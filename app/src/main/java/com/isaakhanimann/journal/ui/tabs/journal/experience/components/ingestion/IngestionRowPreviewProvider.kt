@@ -20,10 +20,11 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestio
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import java.time.Instant
@@ -31,7 +32,7 @@ import java.time.Instant
 class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
     override val values: Sequence<IngestionElement> = sequenceOf(
         IngestionElement(
-            ingestionWithCompanion = IngestionWithCompanion(
+            ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                 ingestion = Ingestion(
                     substanceName = "MDMA",
                     time = Instant.now(),
@@ -49,37 +50,51 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "MDMA",
                     color = AdaptiveColor.PINK
-                )
+                ),
+                customUnit = null
             ),
             roaDuration = null,
             numDots = 2
         ),
         IngestionElement(
-            ingestionWithCompanion = IngestionWithCompanion(
+            ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                 ingestion = Ingestion(
                     substanceName = "2C-B",
                     time = Instant.now(),
                     administrationRoute = AdministrationRoute.ORAL,
-                    dose = 90.0,
+                    dose = 1.5,
                     isDoseAnEstimate = false,
                     estimatedDoseVariance = null,
-                    units = "mg",
+                    units = "pill",
                     experienceId = 0,
                     notes = "This is a very long note which I wrote to see how it looks like if the note spans more than one line in the ingestion row.",
                     stomachFullness = StomachFullness.EMPTY,
                     consumerName = null,
-                    customUnitId = null
+                    customUnitId = 2
                 ),
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "2C-B",
                     color = AdaptiveColor.GREEN
+                ),
+                customUnit = CustomUnit(
+                    id = 2,
+                    substanceName = "2C-B",
+                    name = "Red rocket",
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = 14.0,
+                    estimatedDoseVariance = 4.0,
+                    isEstimate = true,
+                    isArchived = false,
+                    unit = "pill",
+                    originalUnit = "mg",
+                    note = "this is a note"
                 )
             ),
             roaDuration = null,
             numDots = 8
         ),
         IngestionElement(
-            ingestionWithCompanion = IngestionWithCompanion(
+            ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                 ingestion = Ingestion(
                     substanceName = "LSD",
                     time = Instant.now(),
@@ -97,7 +112,8 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                 substanceCompanion = SubstanceCompanion(
                     substanceName = "LSD",
                     color = AdaptiveColor.BLUE
-                )
+                ),
+                customUnit = null
             ),
             roaDuration = null,
             numDots = null

@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.repositories.SearchRepository
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.DoseAndUnit
@@ -118,7 +118,7 @@ class AddIngestionSearchViewModel @Inject constructor(
 
 
     private fun getSubstanceSuggestions(
-        ingestions: List<IngestionWithCompanion>,
+        ingestions: List<IngestionWithCompanionAndCustomUnit>,
         customSubstances: List<CustomSubstance>
     ): List<SubstanceRouteSuggestion> {
         val grouped = ingestions.groupBy { it.ingestion.substanceName }

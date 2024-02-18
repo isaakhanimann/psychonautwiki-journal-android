@@ -18,7 +18,12 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,13 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.*
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DotRows
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
-import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionElement: IngestionElement) {
     IngestionRow(
@@ -52,40 +58,46 @@ fun IngestionRow(
     startTime: Instant,
     modifier: Modifier = Modifier,
 ) {
-    val ingestionWithCompanion = ingestionElement.ingestionWithCompanion
-    val ingestion = ingestionWithCompanion.ingestion
+    val ingestionWithCompanionAndCustomUnit = ingestionElement.ingestionWithCompanionAndCustomUnit
+    val ingestion = ingestionWithCompanionAndCustomUnit.ingestion
+    val customUnit = ingestionWithCompanionAndCustomUnit.customUnit
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier.height(intrinsicSize = IntrinsicSize.Min)
     ) {
-        VerticalLine(color = ingestionWithCompanion.substanceCompanion!!.color)
+        VerticalLine(color = ingestionWithCompanionAndCustomUnit.substanceCompanion!!.color)
         Column {
-            Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                Column(modifier = Modifier.weight(1f)) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val customUnitName = if (customUnit != null) " (${customUnit.name})" else ""
+                Text(
+                    text = ingestion.substanceName + customUnitName,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                TimeText(
+                    time = ingestion.time,
+                    timeDisplayOption = timeDisplayOption,
+                    startTime = startTime,
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(verticalAlignment = Alignment.Bottom) {
                     Text(
-                        text = ingestion.substanceName,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    TimeText(
-                        time = ingestion.time,
-                        timeDisplayOption = timeDisplayOption,
-                        startTime = startTime,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                        text = ingestionWithCompanionAndCustomUnit.doseDescription,
+                        style = MaterialTheme.typography.titleSmall)
+                    Text(text = " " + ingestion.administrationRoute.displayText,
+                        style = MaterialTheme.typography.bodySmall)
                 }
-                Column(horizontalAlignment = Alignment.End) {
-                    ingestion.dose?.also {
-                        val isEstimateText = if (ingestion.isDoseAnEstimate) "~" else ""
-                        val doseText = it.toReadableString()
-                        Text(text = "${ingestion.administrationRoute.displayText} $isEstimateText$doseText ${ingestion.units}")
-                    } ?: run {
-                        Text(text = "${ingestion.administrationRoute.displayText} Unknown Dose")
-                    }
-                    val numDots = ingestionElement.numDots
-                    if (numDots != null) {
-                        DotRows(numDots = numDots)
-                    }
+                val numDots = ingestionElement.numDots
+                if (numDots != null) {
+                    DotRows(numDots = numDots)
                 }
             }
             val note = ingestion.notes

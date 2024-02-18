@@ -22,7 +22,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
@@ -81,7 +81,7 @@ class TimelineScreenViewModel @Inject constructor(
         }
 
     private data class IngestionWithAssociatedData(
-        val ingestionWithCompanion: IngestionWithCompanion,
+        val ingestionWithCompanionAndCustomUnit: IngestionWithCompanionAndCustomUnit,
         val roaDuration: RoaDuration?,
         val roaDose: RoaDose?
     )
@@ -94,7 +94,7 @@ class TimelineScreenViewModel @Inject constructor(
                     ?.getRoa(ingestion.administrationRoute)
                 val roaDuration = roa?.roaDuration
                 IngestionWithAssociatedData(
-                    ingestionWithCompanion = oneIngestionWithComp,
+                    ingestionWithCompanionAndCustomUnit = oneIngestionWithComp,
                     roaDuration = roaDuration,
                     roaDose = roa?.roaDose
                 )
@@ -113,11 +113,11 @@ class TimelineScreenViewModel @Inject constructor(
         return sortedIngestionsWith.map { ingestionWith ->
             val numDots =
                 ingestionWith.roaDose?.getNumDots(
-                    ingestionWith.ingestionWithCompanion.ingestion.dose,
-                    ingestionUnits = ingestionWith.ingestionWithCompanion.ingestion.units
+                    ingestionWith.ingestionWithCompanionAndCustomUnit.ingestion.dose,
+                    ingestionUnits = ingestionWith.ingestionWithCompanionAndCustomUnit.ingestion.units
                 )
             IngestionElement(
-                ingestionWithCompanion = ingestionWith.ingestionWithCompanion,
+                ingestionWithCompanionAndCustomUnit = ingestionWith.ingestionWithCompanionAndCustomUnit,
                 roaDuration = ingestionWith.roaDuration,
                 numDots = numDots
             )
