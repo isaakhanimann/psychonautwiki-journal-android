@@ -24,7 +24,8 @@ import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
-import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -75,17 +76,17 @@ class StatsViewModel @Inject constructor(
         return@map dateTime.format(formatter)
     }
 
-    private val allExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
-        experienceRepo.getSortedExperiencesWithIngestionsFlow()
+    private val allExperiencesSortedFlow: Flow<List<ExperienceWithIngestionsAndCompanions>> =
+        experienceRepo.getSortedExperiencesWithIngestionsAndCustomUnitsFlow()
 
     private val areThereAnyIngestionsFlow =
         allExperiencesSortedFlow.combine(consumerFlow) { experiences, consumerName ->
             experiences.any { experience ->
-                experience.ingestions.any { it.consumerName == consumerName }
+                experience.ingestionsWithCompanionAndCustomUnit.any { it.ingestion.consumerName == consumerName }
             }
         }
 
-    private val relevantExperiencesSortedFlow: Flow<List<ExperienceWithIngestions>> =
+    private val relevantExperiencesSortedFlow: Flow<List<ExperienceWithIngestionsAndCompanions>> =
         allExperiencesSortedFlow.combine(startDateFlow) { experiences, startDate ->
             return@combine experiences.dropWhile { it.sortInstant > Instant.now() }
                 .takeWhile { it.sortInstant > startDate }
@@ -96,7 +97,7 @@ class StatsViewModel @Inject constructor(
     private val experienceChartBucketsFlow: Flow<List<List<ColorCount>>> =
         relevantExperiencesSortedFlow.combine(optionFlow) { sortedExperiences, option ->
             var remainingExperiences = sortedExperiences
-            val buckets = mutableListOf<List<ExperienceWithIngestions>>()
+            val buckets = mutableListOf<List<ExperienceWithIngestionsAndCompanions>>()
             var startInstant = Instant.now()
             for (i in 0 until option.bucketCount) {
                 startInstant = startInstant.minus(option.oneBucketSize)
@@ -121,13 +122,13 @@ class StatsViewModel @Inject constructor(
         }
 
     private fun getColorCountsForExperiences(
-        experiences: List<ExperienceWithIngestions>,
+        experiences: List<ExperienceWithIngestionsAndCompanions>,
         companions: List<SubstanceCompanion>,
         consumerName: String?
     ): List<ColorCount> {
         return experiences.map { experience ->
-            experience.ingestions.filter { it.consumerName == consumerName }
-                .map { it.substanceName }.toSet()
+            experience.ingestionsWithCompanionAndCustomUnit.filter { it.ingestion.consumerName == consumerName }
+                .map { it.ingestion.substanceName }.toSet()
         }.flatten()
             .groupBy { it }.values.mapNotNull { sameNames ->
                 val name =
@@ -141,34 +142,34 @@ class StatsViewModel @Inject constructor(
             }.sortedByDescending { it.count }
     }
 
-    private val statsFlowItem: Flow<List<StatItem>> =
-        relevantExperiencesSortedFlow.combine(consumerFlow) { experiencesWithIngestions, consumerName ->
-            val allIngestions =
-                experiencesWithIngestions.flatMap { experience -> experience.ingestions.filter { it.consumerName == consumerName } }
-            val experienceNamesMap =
-                experiencesWithIngestions.map { e ->
-                    e.ingestions.filter { it.consumerName == consumerName }.map { it.substanceName }
-                        .toSet()
-                }
-                    .flatten().groupBy { it }
-            val map = allIngestions.groupBy { it.substanceName }
-            return@combine Pair(map, experienceNamesMap)
-        }.combine(companionFlow) { pair, companions ->
-            return@combine pair.first.values.mapNotNull { groupedIngestions ->
-                val name = groupedIngestions.firstOrNull()?.substanceName ?: return@mapNotNull null
-                val oneCompanion =
-                    companions.firstOrNull { it.substanceName == name } ?: return@mapNotNull null
-                val experienceCounts = pair.second[name]?.size ?: 0
-                StatItem(
-                    substanceName = name,
-                    color = oneCompanion.color,
-                    experienceCount = experienceCounts,
-                    ingestionCount = groupedIngestions.size,
-                    routeCounts = getRouteCounts(groupedIngestions),
-                    totalDose = getTotalDose(groupedIngestions)
-                )
-            }.sortedByDescending { it.experienceCount }
-        }
+    private val statsFlowItem: Flow<List<StatItem>> = combine(
+        relevantExperiencesSortedFlow,
+        consumerFlow,
+        companionFlow
+    ) { relevantExperiencesSorted, consumerName, companions ->
+        val allIngestions =
+            relevantExperiencesSorted.flatMap { experience -> experience.ingestionsWithCompanionAndCustomUnit.filter { it.ingestion.consumerName == consumerName } }
+        val experienceNamesMap =
+            relevantExperiencesSorted.map { experience ->
+                experience.ingestionsWithCompanionAndCustomUnit.filter { it.ingestion.consumerName == consumerName }.map { it.ingestion.substanceName }
+                    .toSet()
+            }.flatten().groupBy { it }
+        val map = allIngestions.groupBy { it.ingestion.substanceName }
+        return@combine map.values.mapNotNull { groupedIngestions ->
+            val name = groupedIngestions.firstOrNull()?.ingestion?.substanceName ?: return@mapNotNull null
+            val oneCompanion =
+                companions.firstOrNull { it.substanceName == name } ?: return@mapNotNull null
+            val experienceCounts = experienceNamesMap[name]?.size ?: 0
+            StatItem(
+                substanceName = name,
+                color = oneCompanion.color,
+                experienceCount = experienceCounts,
+                ingestionCount = groupedIngestions.size,
+                routeCounts = getRouteCounts(groupedIngestions.map { it.ingestion }),
+                totalDose = getTotalDose(groupedIngestions)
+            )
+        }.sortedByDescending { it.experienceCount }
+    }
 
     private fun getRouteCounts(groupedIngestions: List<Ingestion>): List<RouteCount> {
         val routeMap = groupedIngestions.groupBy { it.administrationRoute }
@@ -178,12 +179,17 @@ class StatsViewModel @Inject constructor(
         }
     }
 
-    private fun getTotalDose(groupedIngestions: List<Ingestion>): TotalDose? {
-        val units = groupedIngestions.firstOrNull()?.units ?: return null
-        if (groupedIngestions.any { it.units != units || it.dose == null }) return null
-        val sumDose = groupedIngestions.sumOf { it.dose ?: 0.0 }
-        val isEstimate = groupedIngestions.any { it.isDoseAnEstimate }
-        return TotalDose(dose = sumDose, units = units, isEstimate = isEstimate)
+    private fun getTotalDose(groupedIngestions: List<IngestionWithCompanionAndCustomUnit>): TotalDose? {
+        val units = groupedIngestions.firstOrNull()?.originalUnit ?: return null
+        if (groupedIngestions.any { it.originalUnit != units || it.pureDose == null }) return null
+        val sumDose = groupedIngestions.sumOf { it.pureDose ?: 0.0 }
+        val sumVariances = groupedIngestions.sumOf { it.pureDoseVariance ?: 0.0 }
+        val isEstimate = groupedIngestions.any { it.isEstimate }
+        return TotalDose(
+            dose = sumDose,
+            units = units,
+            isEstimate = isEstimate,
+            estimatedDoseVariance = sumVariances.takeIf { it > 0 })
     }
 
     val statsModelFlow: StateFlow<StatsModel> =
@@ -258,7 +264,8 @@ data class RouteCount(
 data class TotalDose(
     val dose: Double,
     val units: String,
-    val isEstimate: Boolean
+    val isEstimate: Boolean,
+    val estimatedDoseVariance: Double?
 )
 
 enum class TimePickerOption {
