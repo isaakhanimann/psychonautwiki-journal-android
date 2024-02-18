@@ -232,11 +232,17 @@ class OneExperienceViewModel @Inject constructor(
 
     private fun getIngestionElements(sortedIngestionsWith: List<IngestionWithAssociatedData>): List<IngestionElement> {
         return sortedIngestionsWith.map { ingestionWith ->
-            val numDots =
+            val numDots = if (ingestionWith.ingestionWithCompanionAndCustomUnit.customUnit != null) {
+                ingestionWith.roaDose?.getNumDots(
+                    ingestionDose = ingestionWith.ingestionWithCompanionAndCustomUnit.customUnitDose?.calculatedDose,
+                    ingestionUnits = ingestionWith.ingestionWithCompanionAndCustomUnit.customUnit?.originalUnit
+                )
+            } else {
                 ingestionWith.roaDose?.getNumDots(
                     ingestionWith.ingestionWithCompanionAndCustomUnit.ingestion.dose,
                     ingestionUnits = ingestionWith.ingestionWithCompanionAndCustomUnit.ingestion.units
                 )
+            }
             IngestionElement(
                 ingestionWithCompanionAndCustomUnit = ingestionWith.ingestionWithCompanionAndCustomUnit,
                 roaDuration = ingestionWith.roaDuration,

@@ -42,7 +42,7 @@ data class IngestionWithCompanionAndCustomUnit(
     )
     var customUnit: CustomUnit?
 ) {
-    private val customUnitDose: CustomUnitDose? get() = ingestion.dose?.let { doseUnwrapped ->
+    val customUnitDose: CustomUnitDose? get() = ingestion.dose?.let { doseUnwrapped ->
         customUnit?.let { customUnitUnwrapped ->
             CustomUnitDose(
                 dose = doseUnwrapped,
