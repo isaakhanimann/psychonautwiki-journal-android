@@ -57,6 +57,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,6 +69,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.Category
 import com.isaakhanimann.journal.data.substances.classes.SubstanceWithCategories
@@ -75,6 +77,7 @@ import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
 import com.isaakhanimann.journal.ui.FULL_STOMACH_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChasingTheDragonText
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.OptionalDosageUnitDisclaimer
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customunit.CustomUnitRoaDoseView
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
@@ -110,7 +113,8 @@ fun SubstanceScreen(
         navigateToCategoryScreen = navigateToCategoryScreen,
         navigateToExplainTimeline = navigateToExplainTimeline,
         navigateToURL = navigateToArticle,
-        substanceWithCategories = viewModel.substanceWithCategories
+        substanceWithCategories = viewModel.substanceWithCategories,
+        customUnits = viewModel.customUnitsFlow.collectAsState().value
     )
 }
 
@@ -128,7 +132,10 @@ fun SubstanceScreenPreview(
             navigateToExplainTimeline = {},
             navigateToURL = {},
             navigateToCategoryScreen = {},
-            substanceWithCategories = substanceWithCategories
+            substanceWithCategories = substanceWithCategories,
+            customUnits = listOf(
+                CustomUnit.mdmaSample
+            )
         )
     }
 }
@@ -143,7 +150,8 @@ fun SubstanceScreen(
     navigateToExplainTimeline: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
-    substanceWithCategories: SubstanceWithCategories
+    substanceWithCategories: SubstanceWithCategories,
+    customUnits: List<CustomUnit>
 ) {
     val substance = substanceWithCategories.substance
     Scaffold(
@@ -247,6 +255,20 @@ fun SubstanceScreen(
                                     Text(text = "No dosage info")
                                 } else {
                                     RoaDoseView(roaDose = roa.roaDose)
+                                }
+                                roa.roaDose?.let { roaDose ->
+                                    val customUnitsForRoute =
+                                        customUnits.filter { it.administrationRoute == roa.route }
+                                    customUnitsForRoute.forEach { customUnit ->
+                                        Text(
+                                            text = customUnit.name,
+                                            style = MaterialTheme.typography.titleSmall
+                                        )
+                                        CustomUnitRoaDoseView(
+                                            roaDose = roaDose,
+                                            customUnit = customUnit
+                                        )
+                                    }
                                 }
                                 val bio = roa.bioavailability
                                 if (bio != null) {
