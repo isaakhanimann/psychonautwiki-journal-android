@@ -20,7 +20,9 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.CustomUnitDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.DoseAndUnit
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceRouteSuggestion
 import com.isaakhanimann.journal.ui.utils.getInstant
@@ -52,8 +54,24 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
                     estimatedDoseVariance = null
                 ),
             ),
-            customUnitDoses = emptyList(),
-            customUnits = emptyList(),
+            customUnitDoses = listOf(
+                CustomUnitDose(
+                    dose = 2.0,
+                    isEstimate = false,
+                    estimatedDoseVariance = null,
+                    customUnit = CustomUnit.mdmaSample
+                ),
+                CustomUnitDose(
+                    dose = 2.0,
+                    isEstimate = false,
+                    estimatedDoseVariance = null,
+                    customUnit = CustomUnit.twoCBSample
+                )
+            ),
+            customUnits = listOf(
+                CustomUnit.mdmaSample,
+                CustomUnit.twoCBSample
+            ),
             lastUsed = getInstant(year = 2023, month = 4, day = 10, hourOfDay = 5, minute = 20)!!
         ),
         SubstanceRouteSuggestion(

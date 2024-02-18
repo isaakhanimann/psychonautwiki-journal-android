@@ -25,6 +25,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.repositories.SearchRepository
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.CustomUnitDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.DoseAndUnit
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceRouteSuggestion
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -139,16 +140,27 @@ class AddIngestionSearchViewModel @Inject constructor(
                         route = routeEntry.key,
                         substanceName = substanceName,
                         isCustomSubstance = isCustomSubstance,
-                        dosesAndUnit = routeEntry.value.map { ingestionWithCompanion ->
+                        dosesAndUnit = routeEntry.value.filter { it.customUnit == null }.map { ingestionWithCustomUnit ->
                             DoseAndUnit(
-                                dose = ingestionWithCompanion.ingestion.dose,
-                                unit = ingestionWithCompanion.ingestion.units,
-                                isEstimate = ingestionWithCompanion.ingestion.isDoseAnEstimate,
-                                estimatedDoseVariance = ingestionWithCompanion.ingestion.estimatedDoseVariance
+                                dose = ingestionWithCustomUnit.ingestion.dose,
+                                unit = ingestionWithCustomUnit.ingestion.units,
+                                isEstimate = ingestionWithCustomUnit.ingestion.isDoseAnEstimate,
+                                estimatedDoseVariance = ingestionWithCustomUnit.ingestion.estimatedDoseVariance
                             )
                         }.distinct().take(6),
-                        customUnitDoses = emptyList(), // Todo
-                        customUnits = emptyList(), // todo
+                        customUnitDoses = routeEntry.value.mapNotNull { ingestionWithCustomUnit ->
+                            val ingestion = ingestionWithCustomUnit.ingestion
+                            val dose = ingestion.dose ?: return@mapNotNull null
+                            ingestionWithCustomUnit.customUnit?.let {
+                                CustomUnitDose(
+                                    dose = dose,
+                                    isEstimate = ingestion.isDoseAnEstimate,
+                                    estimatedDoseVariance = ingestion.estimatedDoseVariance,
+                                    customUnit = it
+                                )
+                            }
+                        },
+                        customUnits = filteredCustomUnitsFlow.value,
                         lastUsed = routeEntry.value.maxOfOrNull { it.ingestion.time } ?: Instant.now()
                     )
                 }

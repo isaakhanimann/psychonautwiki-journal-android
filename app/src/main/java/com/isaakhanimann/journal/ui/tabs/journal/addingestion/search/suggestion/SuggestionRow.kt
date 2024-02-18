@@ -145,16 +145,17 @@ fun SuggestionRow(
                         customUnitDose.customUnit.id
                     )
                 }, label = {
-                    Text(text = customUnitDose.doseDescription)
+                    Column(modifier = Modifier.padding(vertical = 5.dp)) {
+                        Text(text = customUnitDose.customUnit.name, style = MaterialTheme.typography.labelSmall)
+                        Text(text = customUnitDose.doseDescription)
+                    }
                 })
             }
-        }
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
             substanceRouteSuggestion.customUnits.forEach { customUnit ->
                 SuggestionChip(onClick = {
                     navigateToCustomUnitChooseDose(customUnit.id)
                 }, label = {
-                    Column {
+                    Column(modifier = Modifier.padding(vertical = 5.dp)) {
                         Text(text = customUnit.name, style = MaterialTheme.typography.labelSmall)
                         Text(text = "Enter " + customUnit.unit)
                     }
