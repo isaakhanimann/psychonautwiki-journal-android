@@ -18,17 +18,17 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 
 fun getHeightBetween0And1(
-    ingestion: Ingestion,
-    allIngestions: List<Ingestion>
+    ingestion: IngestionWithCompanionAndCustomUnit,
+    allIngestions: List<IngestionWithCompanionAndCustomUnit>
 ): Float {
     val max = allIngestions
-        .filter { it.substanceName == ingestion.substanceName }
-        .mapNotNull { it.dose }
+        .filter { it.ingestion.substanceName == ingestion.ingestion.substanceName }
+        .mapNotNull { it.pureDose }
         .maxOrNull()
-    return ingestion.dose.let { doseSnap ->
+    return ingestion.pureDose.let { doseSnap ->
         if (doseSnap == 0.0) {
             0.01f
         } else if (max == null || max == 0.0 || doseSnap == null) {

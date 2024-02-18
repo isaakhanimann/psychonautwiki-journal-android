@@ -48,8 +48,8 @@ fun ExperienceEffectTimelines(
                 route = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute,
                 roaDuration = oneElement.roaDuration,
                 height = getHeightBetween0And1(
-                    ingestion = oneElement.ingestionWithCompanionAndCustomUnit.ingestion,
-                    allIngestions = ingestionElements.map { it.ingestionWithCompanionAndCustomUnit.ingestion }
+                    ingestion = oneElement.ingestionWithCompanionAndCustomUnit,
+                    allIngestions = ingestionElements.map { it.ingestionWithCompanionAndCustomUnit }
                 ),
                 horizontalWeight = horizontalWeight,
                 color = oneElement.ingestionWithCompanionAndCustomUnit.substanceCompanion?.color
