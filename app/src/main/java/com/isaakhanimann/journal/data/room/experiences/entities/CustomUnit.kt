@@ -38,4 +38,32 @@ data class CustomUnit(
     var unit: String,
     val originalUnit: String,
     var note: String
-)
+) {
+    companion object {
+        var mdmaSample = CustomUnit(
+            substanceName = "MDMA",
+            name = "Capsule",
+            administrationRoute = AdministrationRoute.ORAL,
+            dose = 40.0,
+            estimatedDoseVariance = null,
+            isEstimate = false,
+            isArchived = false,
+            unit = "capsule",
+            originalUnit = "mg",
+            note = "this is a note"
+        )
+
+        var twoCBSample = CustomUnit(
+            substanceName = "2C-B",
+            name = "Pink rocket",
+            administrationRoute = AdministrationRoute.ORAL,
+            dose = 14.0,
+            estimatedDoseVariance = 4.0,
+            isEstimate = true,
+            isArchived = false,
+            unit = "pill",
+            originalUnit = "mg",
+            note = "this is a note"
+        )
+    }
+}
