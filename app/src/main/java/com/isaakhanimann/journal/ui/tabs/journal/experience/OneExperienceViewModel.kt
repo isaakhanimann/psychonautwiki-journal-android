@@ -300,13 +300,14 @@ class OneExperienceViewModel @Inject constructor(
                     val groupedIngestions = grouped.value
                     if (groupedIngestions.size <= 1) return@mapNotNull null
                     if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.dose == null }) return@mapNotNull null
-                    val units = groupedIngestions.first().ingestionWithCompanionAndCustomUnit.ingestion.units
-                    if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.units != units }) return@mapNotNull null
+                    val units = groupedIngestions.first().ingestionWithCompanionAndCustomUnit.originalUnit ?: return@mapNotNull null
+                    if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.originalUnit != units }) return@mapNotNull null
                     val isEstimate =
-                        groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.isDoseAnEstimate }
+                        groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.isDoseAnEstimate || it.ingestionWithCompanionAndCustomUnit.customUnit?.isEstimate ?: false }
                     val cumulativeDose =
-                        groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.ingestion.dose }
+                        groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.pureDose }
                             .sum()
+                    val cumulativeDoseVariance = groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.pureDoseVariance }.sum()
                     val numDots = groupedIngestions.first().roaDose?.getNumDots(
                         ingestionDose = cumulativeDose,
                         ingestionUnits = units
@@ -316,6 +317,7 @@ class OneExperienceViewModel @Inject constructor(
                         cumulativeDose = cumulativeDose,
                         units = units,
                         isEstimate = isEstimate,
+                        cumulativeDoseVariance = cumulativeDoseVariance,
                         numDots = numDots
                     )
                 }

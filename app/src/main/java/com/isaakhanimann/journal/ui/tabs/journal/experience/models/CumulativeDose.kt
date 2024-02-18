@@ -18,10 +18,27 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.models
 
+import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
+
 data class CumulativeDose(
     val substanceName: String,
     val cumulativeDose: Double,
-    val units: String?,
+    val units: String,
     val isEstimate: Boolean,
+    val cumulativeDoseVariance: Double?,
     val numDots: Int?
-)
+) {
+    val doseDescription: String get()
+    {
+        val description = cumulativeDose.toReadableString() + " $units"
+        return if (isEstimate) {
+            if (cumulativeDoseVariance != null) {
+                "${cumulativeDose.toReadableString()}±${cumulativeDoseVariance.toReadableString()} $units"
+            } else {
+                "~$description"
+            }
+        } else {
+            description
+        }
+    }
+}
