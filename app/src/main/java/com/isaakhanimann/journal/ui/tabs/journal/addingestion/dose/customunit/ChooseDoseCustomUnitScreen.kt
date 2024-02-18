@@ -70,7 +70,15 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun ChooseDoseCustomUnitScreen(
-    navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseVariance: Double?) -> Unit,
+    navigateToChooseTimeAndMaybeColor: (
+        substanceName: String,
+        administrationRoute: AdministrationRoute,
+        units: String?,
+        isEstimate: Boolean,
+        dose: Double?,
+        estimatedDoseVariance: Double?,
+        customUnitId: Int?
+    ) -> Unit,
     viewModel: ChooseDoseCustomUnitViewModel = hiltViewModel()
 ) {
     viewModel.customUnit?.let { customUnitUnwrapped ->
@@ -89,18 +97,24 @@ fun ChooseDoseCustomUnitScreen(
             },
             navigateToNext = {
                 navigateToChooseTimeAndMaybeColor(
-                    "todo", // Todo
+                    customUnitUnwrapped.substanceName,
+                    customUnitUnwrapped.administrationRoute,
+                    customUnitUnwrapped.unit,
                     viewModel.isEstimate,
                     viewModel.dose,
-                    viewModel.estimatedDoseVariance
+                    viewModel.estimatedDoseVariance,
+                    customUnitUnwrapped.id
                 )
             },
             useUnknownDoseAndNavigate = {
                 navigateToChooseTimeAndMaybeColor(
-                    "todo", // Todo
+                    customUnitUnwrapped.substanceName,
+                    customUnitUnwrapped.administrationRoute,
+                    customUnitUnwrapped.unit,
                     false,
                     null,
-                    null
+                    null,
+                    customUnitUnwrapped.id
                 )
             },
             currentDoseClass = viewModel.currentDoseClass,
@@ -196,7 +210,12 @@ fun ChooseDoseCustomUnitScreen(
         ) {
             LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(4.dp))
-            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
@@ -212,7 +231,12 @@ fun ChooseDoseCustomUnitScreen(
                     }
                 }
             }
-            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.padding(
