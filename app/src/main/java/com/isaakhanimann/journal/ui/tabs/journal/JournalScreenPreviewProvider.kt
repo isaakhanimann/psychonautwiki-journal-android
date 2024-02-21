@@ -342,7 +342,6 @@ class JournalScreenPreviewProvider :
                     ),
                     ratings = listOf()
                 ),
-            ),
-            listOf()
+            )
         )
 }

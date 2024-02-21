@@ -58,6 +58,7 @@ sealed class NoArgumentRouter(val route: String) {
     object SaferStimulants : NoArgumentRouter(route = "saferStimulants")
     object ReagentTestingRouter : NoArgumentRouter(route = "reagentTesting")
     object AddIngestionRouter : NoArgumentRouter(route = "addIngestions")
+    object CalendarRouter : NoArgumentRouter(route = "calendar")
     object AddIngestionSearchRouter : NoArgumentRouter(route = "addIngestionsSearch")
     object AddCustomRouter : NoArgumentRouter(route = "addCustom")
     object SearchRouter :

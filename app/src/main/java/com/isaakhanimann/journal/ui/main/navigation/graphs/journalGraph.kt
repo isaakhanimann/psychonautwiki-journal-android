@@ -38,6 +38,7 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToIngestion
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToTimelineScreen
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLInJournalTab
 import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
+import com.isaakhanimann.journal.ui.tabs.journal.calendar.CalendarJournalScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.edit.EditExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.editingestion.EditIngestionScreen
@@ -61,10 +62,9 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
             route = NoArgumentRouter.JournalRouter.route,
         ) {
             JournalScreen(
-                navigateToExperiencePopNothing = {
-                    navController.navigateToExperience(experienceId = it)
-                },
-                navigateToAddIngestion = navController::navigateToAddIngestion
+                navigateToExperiencePopNothing = navController::navigateToExperience,
+                navigateToAddIngestion = navController::navigateToAddIngestion,
+                navigateToCalendar = navController::navigateToCalendar
             )
         }
         composableWithTransitions(
@@ -136,7 +136,10 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                     navController.navigateToTimelineScreen(consumerName, experienceId)
                 },
                 navigateToEditTimedNoteScreen = { timedNoteID ->
-                    navController.navigateToEditTimedNote(timedNoteId = timedNoteID, experienceId = experienceId)
+                    navController.navigateToEditTimedNote(
+                        timedNoteId = timedNoteID,
+                        experienceId = experienceId
+                    )
                 }
             )
         }
@@ -150,5 +153,11 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.ExplainTimelineOnJournalTabRouter.route) { ExplainTimelineScreen() }
         composableWithTransitions(NoArgumentRouter.DosageExplanationRouterOnSearchTab.route) { DoseExplanationScreen() }
         composableWithTransitions(NoArgumentRouter.SaferSniffingOnJournalTab.route) { SaferSniffingScreen() }
+        composableWithTransitions(NoArgumentRouter.CalendarRouter.route) {
+            CalendarJournalScreen(
+                navigateToExperiencePopNothing = navController::navigateToExperience,
+                navigateToAddIngestion = navController::navigateToAddIngestion
+            )
+        }
     }
 }

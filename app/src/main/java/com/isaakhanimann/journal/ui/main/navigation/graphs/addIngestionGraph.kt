@@ -226,6 +226,10 @@ fun NavController.navigateToAddIngestion() {
     navigate(NoArgumentRouter.AddIngestionRouter.route)
 }
 
+fun NavController.navigateToCalendar() {
+    navigate(NoArgumentRouter.CalendarRouter.route)
+}
+
 fun NavController.dismissAddIngestionScreens() {
     popBackStack(route = NoArgumentRouter.AddIngestionRouter.route, inclusive = true)
 }
