@@ -141,6 +141,10 @@ interface ExperienceDao {
     suspend fun getExperience(id: Int): Experience?
 
     @Transaction
+    @Query("SELECT * FROM experience WHERE id =:id")
+    suspend fun getExperienceWithIngestionsCompanionsAndRatings(id: Int): ExperienceWithIngestionsCompanionsAndRatings?
+
+    @Transaction
     @Query("SELECT * FROM ingestion WHERE experienceId =:experienceId")
     suspend fun getIngestionsWithCompanions(experienceId: Int): List<IngestionWithCompanionAndCustomUnit>
 

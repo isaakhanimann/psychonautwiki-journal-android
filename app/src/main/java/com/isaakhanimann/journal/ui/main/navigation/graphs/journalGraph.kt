@@ -156,7 +156,6 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
         composableWithTransitions(NoArgumentRouter.CalendarRouter.route) {
             CalendarJournalScreen(
                 navigateToExperiencePopNothing = navController::navigateToExperience,
-                navigateToAddIngestion = navController::navigateToAddIngestion
             )
         }
     }

@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.journal.calendar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,33 +28,37 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
-import com.isaakhanimann.journal.ui.tabs.journal.JournalScreenPreviewProvider
-import com.isaakhanimann.journal.ui.tabs.journal.JournalViewModel
+import com.isaakhanimann.journal.ui.tabs.journal.components.ExperienceRow
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.kizitonwose.calendar.compose.VerticalCalendar
@@ -63,32 +68,12 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import kotlinx.coroutines.launch
 import java.time.YearMonth
 
-@Composable
-fun CalendarJournalScreen(
-    navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
-    navigateToAddIngestion: () -> Unit,
-    viewModel: JournalViewModel = hiltViewModel()
-) {
-    val experiences = viewModel.experiences.collectAsState().value
-    CalendarJournalScreen(
-        navigateToExperiencePopNothing = navigateToExperiencePopNothing,
-        navigateToAddIngestion = navigateToAddIngestion,
-        experiences = experiences
-    )
-}
-
 @Preview
 @Composable
-fun CalendarJournalScreenPreview(
-    @PreviewParameter(
-        JournalScreenPreviewProvider::class,
-    ) experiences: List<ExperienceWithIngestionsCompanionsAndRatings>,
-) {
+fun CalendarJournalScreenPreview() {
     JournalTheme {
         CalendarJournalScreen(
-            navigateToExperiencePopNothing = {},
-            navigateToAddIngestion = {},
-            experiences = experiences
+            navigateToExperiencePopNothing = {}
         )
     }
 }
@@ -97,8 +82,6 @@ fun CalendarJournalScreenPreview(
 @Composable
 fun CalendarJournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
-    navigateToAddIngestion: () -> Unit,
-    experiences: List<ExperienceWithIngestionsCompanionsAndRatings>,
 ) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusYears(20) }
@@ -122,16 +105,50 @@ fun CalendarJournalScreen(
                             state.animateScrollToMonth(YearMonth.now())
                         }
                     }) {
-                       Text(text = "Today")
+                        Text(text = "Today")
                     }
                 }
             )
         },
     ) { padding ->
+        val sheetState = rememberModalBottomSheetState()
+        var showBottomSheet by remember { mutableStateOf(false) }
+        var experienceIdsToShowInSheet: List<Int> by remember {
+            mutableStateOf(emptyList())
+        }
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                sheetState = sheetState
+            ) {
+                val scope = rememberCoroutineScope()
+                SheetContent(
+                    experienceIds = experienceIdsToShowInSheet,
+                    navigateToExperiencePopNothing = navigateToExperiencePopNothing,
+                    dismissSheet = {
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+                    })
+            }
+        }
         VerticalCalendar(
             modifier = Modifier.padding(padding),
             state = state,
-            dayContent = { Day(it) },
+            dayContent = { calendarDay ->
+                Day(
+                    calendarDay,
+                    navigateToExperiencePopNothing,
+                    chooseBetweenExperiences = { experienceIds ->
+                        experienceIdsToShowInSheet = experienceIds
+                        showBottomSheet = true
+                    }
+                )
+            },
             contentPadding = PaddingValues(horizontalPadding),
             monthHeader = {
                 Text(
@@ -140,14 +157,62 @@ fun CalendarJournalScreen(
                 )
             }
         )
-
     }
 }
 
 @Composable
-fun Day(day: CalendarDay) {
+fun SheetContent(
+    experienceIds: List<Int>,
+    navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
+    dismissSheet: () -> Unit
+) {
+    LazyColumn {
+        items(experienceIds) { experienceId ->
+            ExperienceRowWithFetch(
+                experienceId = experienceId,
+                navigateToExperiencePopNothing,
+                dismissSheet
+            )
+            Divider()
+        }
+    }
+}
+
+@Composable
+fun ExperienceRowWithFetch(
+    experienceId: Int,
+    navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
+    dismissSheet: () -> Unit
+) {
+    val viewModel: ExperienceFetchViewModel = hiltViewModel()
+    val experienceState: MutableState<ExperienceWithIngestionsCompanionsAndRatings?> = remember {
+        mutableStateOf(
+            null
+        )
+    }
+    LaunchedEffect(key1 = experienceId) {
+        experienceState.value = viewModel.getExperience(experienceId)
+    }
+    experienceState.value?.let { experience ->
+        ExperienceRow(
+            experience,
+            navigateToExperienceScreen = {
+                dismissSheet()
+                navigateToExperiencePopNothing(experienceId)
+            },
+            isTimeRelativeToNow = false
+        )
+    }
+}
+
+@Composable
+fun Day(
+    day: CalendarDay,
+    navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
+    chooseBetweenExperiences: (experienceIds: List<Int>) -> Unit
+) {
     val viewModel: DayViewModel = hiltViewModel()
-    val experienceInfo: MutableState<ExperienceInfo> = remember {
+    val experienceInfoState: MutableState<ExperienceInfo> = remember {
         mutableStateOf(
             ExperienceInfo(
                 experienceIds = emptyList(),
@@ -156,14 +221,21 @@ fun Day(day: CalendarDay) {
         )
     }
     LaunchedEffect(key1 = day.date) {
-        experienceInfo.value = viewModel.getExperienceInfo(day)
+        experienceInfoState.value = viewModel.getExperienceInfo(day)
     }
+    val experienceInfos = experienceInfoState.value
     Box(
         modifier = Modifier
-            .aspectRatio(1f), // This is important for square sizing!
+            .aspectRatio(1f) // This is important for square sizing!
+            .clickable {
+                if (experienceInfos.experienceIds.count() == 1) {
+                    navigateToExperiencePopNothing(experienceInfos.experienceIds.first())
+                } else if (experienceInfos.experienceIds.count() > 1) {
+                    chooseBetweenExperiences(experienceInfos.experienceIds)
+                }
+            },
         contentAlignment = Alignment.Center
     ) {
-        val experienceInfos = experienceInfo.value
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             if (experienceInfos.experienceIds.isEmpty()) {
                 Text(
