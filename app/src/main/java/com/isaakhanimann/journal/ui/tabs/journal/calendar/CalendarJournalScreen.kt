@@ -224,16 +224,20 @@ fun Day(
         experienceInfoState.value = viewModel.getExperienceInfo(day)
     }
     val experienceInfos = experienceInfoState.value
+    val aspectRatioModifier = Modifier.aspectRatio(1f) // This is important for square sizing!
+    val modifier = if (experienceInfos.experienceIds.count() == 1) {
+        aspectRatioModifier.clickable {
+            navigateToExperiencePopNothing(experienceInfos.experienceIds.first())
+        }
+    } else if (experienceInfos.experienceIds.count() > 1) {
+        aspectRatioModifier.clickable {
+            chooseBetweenExperiences(experienceInfos.experienceIds)
+        }
+    } else {
+        aspectRatioModifier
+    }
     Box(
-        modifier = Modifier
-            .aspectRatio(1f) // This is important for square sizing!
-            .clickable {
-                if (experienceInfos.experienceIds.count() == 1) {
-                    navigateToExperiencePopNothing(experienceInfos.experienceIds.first())
-                } else if (experienceInfos.experienceIds.count() > 1) {
-                    chooseBetweenExperiences(experienceInfos.experienceIds)
-                }
-            },
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
