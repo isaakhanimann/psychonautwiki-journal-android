@@ -169,8 +169,9 @@ interface ExperienceDao {
         toInstant: Instant
     ): Flow<List<IngestionWithExperienceAndCustomUnit>>
 
+    @Transaction
     @Query("SELECT * FROM ingestion WHERE id =:id")
-    fun getIngestionFlow(id: Int): Flow<Ingestion?>
+    fun getIngestionFlow(id: Int): Flow<IngestionWithCompanionAndCustomUnit?>
 
     @Transaction
     @Query("SELECT * FROM ingestion WHERE id =:id")

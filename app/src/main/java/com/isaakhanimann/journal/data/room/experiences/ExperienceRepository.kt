@@ -146,6 +146,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun getTimedNote(id: Int): TimedNote? = experienceDao.getTimedNote(id)
     suspend fun getCustomUnit(id: Int): CustomUnit? = experienceDao.getCustomUnit(id)
     fun getIngestionFlow(id: Int) = experienceDao.getIngestionFlow(id)
+        .flowOn(Dispatchers.IO)
+        .conflate()
     fun getIngestionWithExperienceFlow(id: Int) = experienceDao.getIngestionWithExperienceFlow(id)
     fun getIngestionWithCompanionFlow(id: Int) = experienceDao.getIngestionWithCompanionFlow(id)
     fun getExperienceWithIngestionsAndCompanionsFlow(experienceId: Int) =

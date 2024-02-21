@@ -25,13 +25,20 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.ui.main.navigation.routers.INGESTION_ID_KEY
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -51,11 +58,14 @@ class EditIngestionViewModel @Inject constructor(
     var experienceId by mutableStateOf(1)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var consumerName by mutableStateOf("")
+    var customUnit: CustomUnit? by mutableStateOf(null)
 
     init {
         val id = state.get<Int>(INGESTION_ID_KEY)!!
         viewModelScope.launch {
-            val ing = experienceRepo.getIngestionFlow(id = id).first() ?: return@launch
+            val ingestionAndCustomUnit =
+                experienceRepo.getIngestionFlow(id = id).first() ?: return@launch
+            val ing = ingestionAndCustomUnit.ingestion
             ingestion = ing
             note = ing.notes ?: ""
             isEstimate = ing.isDoseAnEstimate
@@ -65,16 +75,18 @@ class EditIngestionViewModel @Inject constructor(
             units = ing.units ?: ""
             consumerName = ing.consumerName ?: ""
             localDateTimeFlow.emit(ing.time.getLocalDateTime())
+            customUnit = ingestionAndCustomUnit.customUnit
         }
     }
 
-    val sortedConsumerNamesFlow = experienceRepo.getSortedIngestions(limit = 200).map { ingestions ->
-        return@map ingestions.mapNotNull { it.consumerName }.distinct()
-    }.stateIn(
-        initialValue = emptyList(),
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    val sortedConsumerNamesFlow =
+        experienceRepo.getSortedIngestions(limit = 200).map { ingestions ->
+            return@map ingestions.mapNotNull { it.consumerName }.distinct()
+        }.stateIn(
+            initialValue = emptyList(),
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     fun onChangeTime(newLocalDateTime: LocalDateTime) {
         viewModelScope.launch {

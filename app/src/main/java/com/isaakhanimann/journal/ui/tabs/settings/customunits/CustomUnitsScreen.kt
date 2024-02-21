@@ -46,7 +46,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
-import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -71,30 +70,8 @@ fun CustomUnitsScreen(
 fun CustomUnitsScreenPreview() {
     CustomUnitsScreenContent(
         customUnits = listOf(
-            CustomUnit(
-                substanceName = "Substance 1",
-                name = "Spoon",
-                administrationRoute = AdministrationRoute.ORAL,
-                dose = 10.0,
-                estimatedDoseVariance = 2.0,
-                isEstimate = true,
-                isArchived = false,
-                unit = "spoon",
-                originalUnit = "mg",
-                note = ""
-            ),
-            CustomUnit(
-                substanceName = "Substance 2",
-                name = "Red pill",
-                administrationRoute = AdministrationRoute.ORAL,
-                dose = 20.0,
-                estimatedDoseVariance = 2.0,
-                isEstimate = true,
-                isArchived = false,
-                unit = "pill",
-                originalUnit = "mg",
-                note = ""
-            ),
+            CustomUnit.mdmaSample,
+            CustomUnit.twoCBSample
         ),
         navigateToEditCustomUnit = { _ -> },
         navigateToAddCustomUnit = {},
@@ -182,6 +159,12 @@ fun CustomUnitRow(
             text = "${customUnit.getDoseOfOneUnitDescription()} per ${customUnit.unit}",
             style = MaterialTheme.typography.titleSmall
         )
+        if (customUnit.note.isNotBlank()) {
+            Text(
+                text = customUnit.note,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
     }
 }
 
