@@ -18,10 +18,16 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.calendar
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,15 +39,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.ui.tabs.journal.JournalScreenPreviewProvider
 import com.isaakhanimann.journal.ui.tabs.journal.JournalViewModel
@@ -142,17 +154,70 @@ fun CalendarJournalScreen(
 @Composable
 fun Day(day: CalendarDay) {
     val viewModel: DayViewModel = hiltViewModel()
+    val experienceInfo: MutableState<ExperienceInfo> = remember {
+        mutableStateOf(
+            ExperienceInfo(
+                experienceIds = emptyList(),
+                colors = emptyList()
+            )
+        )
+    }
     LaunchedEffect(key1 = day.date) {
-        viewModel.setExperienceInfo(day)
+        experienceInfo.value = viewModel.getExperienceInfo(day)
     }
     Box(
         modifier = Modifier
             .aspectRatio(1f), // This is important for square sizing!
         contentAlignment = Alignment.Center
     ) {
-        val experienceInfos = viewModel.experienceInfosFlow.collectAsState().value
-        Text(
-            modifier = Modifier.alpha(if (experienceInfos.experienceIds.isEmpty()) 0.2f else 1f),
-            text = day.date.dayOfMonth.toString())
+        val experienceInfos = experienceInfo.value
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            if (experienceInfos.experienceIds.isEmpty()) {
+                Text(
+                    text = day.date.dayOfMonth.toString(),
+                    color = Color.LightGray
+                )
+            } else {
+                Text(
+                    text = day.date.dayOfMonth.toString(),
+                )
+            }
+            HorizontalColorRectangle(
+                modifier = Modifier
+                    .height(7.dp)
+                    .fillMaxWidth(fraction = 0.7f)
+                    .clip(RoundedCornerShape(2.dp)),
+                colors = experienceInfos.colors
+            )
+        }
+    }
+}
+
+@Composable
+fun HorizontalColorRectangle(
+    modifier: Modifier,
+    colors: List<AdaptiveColor>
+) {
+    val isDarkTheme = isSystemInDarkTheme()
+    if (colors.size >= 2) {
+        val brush = remember(colors) {
+            val composeColors = colors.map { it.getComposeColor(isDarkTheme) }
+            Brush.horizontalGradient(colors = composeColors)
+        }
+        Box(
+            modifier = modifier
+                .background(brush),
+        ) {}
+    } else if (colors.size == 1) {
+        Box(
+            modifier = modifier
+                .background(
+                    colors.first().getComposeColor(isDarkTheme)
+                ),
+        ) {}
+    } else {
+        Box(
+            modifier = modifier
+        ) {}
     }
 }

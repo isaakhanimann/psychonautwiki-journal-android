@@ -19,14 +19,11 @@
 package com.isaakhanimann.journal.ui.tabs.journal.calendar
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.kizitonwose.calendar.core.CalendarDay
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -35,26 +32,17 @@ class DayViewModel @Inject constructor(
     val experienceRepo: ExperienceRepository,
 ) : ViewModel() {
 
-    val experienceInfosFlow =
-        MutableStateFlow(ExperienceInfo(experienceIds = emptyList(), colors = emptyList()))
-
-    fun setExperienceInfo(day: CalendarDay) {
+    suspend fun getExperienceInfo(day: CalendarDay): ExperienceInfo {
         val startOfDay = day.date.atStartOfDay().getInstant()
         val endOfDay = startOfDay.plusMillis(24 * 60 * 60 * 1000)
-        viewModelScope.launch {
-            experienceRepo.getIngestionsWithExperiencesFlow(
-                fromInstant = startOfDay,
-                toInstant = endOfDay
-            ).collect { ingestions ->
-                val experienceInfos = ExperienceInfo(
-                    experienceIds = ingestions.map { it.experience.id }.toSet().toList(),
-                    colors = emptyList()
-                )
-                experienceInfosFlow.emit(
-                    experienceInfos
-                )
-            }
-        }
+        val ingestions = experienceRepo.getIngestionsWithCompanions(
+            fromInstant = startOfDay,
+            toInstant = endOfDay
+        )
+        return ExperienceInfo(
+            experienceIds = ingestions.map { it.ingestion.experienceId }.toSet().toList(),
+            colors = ingestions.mapNotNull { it.substanceCompanion?.color }
+        )
     }
 }
 
