@@ -220,7 +220,7 @@ fun Day(
             )
         )
     }
-    LaunchedEffect(key1 = day.date) {
+    LaunchedEffect(Unit) {
         experienceInfoState.value = viewModel.getExperienceInfo(day)
     }
     val experienceInfos = experienceInfoState.value
