@@ -215,6 +215,9 @@ fun ChooseDoseCustomUnitScreen(
                     if (!doseRemark.isNullOrBlank()) {
                         Text(text = doseRemark)
                     }
+                    if (customUnit.note.isNotBlank()) {
+                        Text("${customUnit.name}: ${customUnit.note}")
+                    }
                     Spacer(modifier = Modifier.height(5.dp))
                     if (roaDose != null) {
                         RoaDoseView(roaDose = roaDose)
