@@ -39,8 +39,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.Period
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -67,7 +69,7 @@ class StatsViewModel @Inject constructor(
     }
 
     private val startDateFlow = _optionFlow.map {
-        return@map Instant.now().minus(it.allBucketSizes)
+        return@map Instant.now().getEndOfDay().minus(it.allBucketSizes)
     }
 
     private val startDateTextFlow = startDateFlow.map {
@@ -88,7 +90,7 @@ class StatsViewModel @Inject constructor(
 
     private val relevantExperiencesSortedFlow: Flow<List<ExperienceWithIngestionsAndCompanions>> =
         allExperiencesSortedFlow.combine(startDateFlow) { experiences, startDate ->
-            return@combine experiences.dropWhile { it.sortInstant > Instant.now() }
+            return@combine experiences.dropWhile { it.sortInstant > Instant.now().getEndOfDay() }
                 .takeWhile { it.sortInstant > startDate }
         }
 
@@ -98,7 +100,7 @@ class StatsViewModel @Inject constructor(
         relevantExperiencesSortedFlow.combine(optionFlow) { sortedExperiences, option ->
             var remainingExperiences = sortedExperiences
             val buckets = mutableListOf<List<ExperienceWithIngestionsAndCompanions>>()
-            var startInstant = Instant.now()
+            var startInstant = Instant.now().getEndOfDay()
             for (i in 0 until option.bucketCount) {
                 startInstant = startInstant.minus(option.oneBucketSize)
                 val experiencesForBucket =
@@ -317,4 +319,10 @@ enum class TimePickerOption {
     abstract val bucketCount: Int
     abstract val oneBucketSize: Period
     abstract val allBucketSizes: Period
+}
+
+fun Instant.getEndOfDay(): Instant {
+    return this.atOffset(ZoneOffset.UTC)
+        .with(LocalTime.of(23,59,59, this.nano))
+        .toInstant();
 }
