@@ -119,7 +119,9 @@ fun EditIngestionScreen(
         consumerName = viewModel.consumerName,
         onChangeConsumerName = viewModel::onChangeConsumerName,
         consumerNamesSorted = viewModel.sortedConsumerNamesFlow.collectAsState().value,
-        customUnit = viewModel.customUnit
+        customUnit = viewModel.customUnit,
+        onCustomUnitChange = viewModel::onChangeCustomUnit,
+        otherCustomUnits = viewModel.otherCustomUnits.collectAsState().value
     )
 }
 
@@ -149,7 +151,9 @@ fun EditIngestionScreenPreview() {
             consumerName = "",
             onChangeConsumerName = {},
             consumerNamesSorted = listOf("Dave", "Ali"),
-            customUnit = null
+            customUnit = null,
+            onCustomUnitChange = {},
+            otherCustomUnits = emptyList()
         )
     }
 }
@@ -178,7 +182,9 @@ fun EditIngestionScreen(
     consumerName: String,
     onChangeConsumerName: (String) -> Unit,
     consumerNamesSorted: List<String>,
-    customUnit: CustomUnit?
+    customUnit: CustomUnit?,
+    onCustomUnitChange: (CustomUnit?) -> Unit,
+    otherCustomUnits: List<CustomUnit>
 ) {
     var isPresentingBottomSheet by rememberSaveable { mutableStateOf(false) }
     val skipPartiallyExpanded by remember { mutableStateOf(false) }
@@ -293,6 +299,34 @@ fun EditIngestionScreen(
                         ) {
                             Checkbox(checked = isEstimate, onCheckedChange = { toggleIsEstimate() })
                             Text("Dose is an estimate")
+                        }
+                        if (otherCustomUnits.isNotEmpty()) {
+                            var isShowingDropDownMenu by remember { mutableStateOf(false) }
+                            Box(
+                                modifier = Modifier
+                                    .wrapContentSize(Alignment.TopEnd)
+                            ) {
+                                OutlinedButton(
+                                    onClick = { isShowingDropDownMenu = true },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(text = "Custom unit: ${customUnit?.name ?: "no selection"}")
+                                }
+                                DropdownMenu(
+                                    expanded = isShowingDropDownMenu,
+                                    onDismissRequest = { isShowingDropDownMenu = false }
+                                ) {
+                                    otherCustomUnits.forEach { unit ->
+                                        DropdownMenuItem(
+                                            text = { Text(unit.name) },
+                                            onClick = {
+                                                onCustomUnitChange(unit)
+                                                isShowingDropDownMenu = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                 }

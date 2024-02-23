@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience.editingestion
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
@@ -35,6 +36,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -49,16 +51,26 @@ class EditIngestionViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
+    var ingestionFlow: MutableStateFlow<Ingestion?> = MutableStateFlow(null)
     var ingestion: Ingestion? = null
     var note by mutableStateOf("")
     var isEstimate by mutableStateOf(false)
     var isKnown by mutableStateOf(true)
     var dose by mutableStateOf("")
     var units by mutableStateOf("")
-    var experienceId by mutableStateOf(1)
+    var experienceId by mutableIntStateOf(1)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var consumerName by mutableStateOf("")
     var customUnit: CustomUnit? by mutableStateOf(null)
+    val otherCustomUnits = experienceRepo.getAllCustomUnitsFlow(false).combine(ingestionFlow) { customUnits, ing ->
+        customUnits.filter {customUnit ->
+            customUnit.administrationRoute == ing?.administrationRoute && customUnit.substanceName == ing.substanceName && customUnit.id != ing.customUnitId
+        }
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     init {
         val id = state.get<Int>(INGESTION_ID_KEY)!!
@@ -66,6 +78,7 @@ class EditIngestionViewModel @Inject constructor(
             val ingestionAndCustomUnit =
                 experienceRepo.getIngestionFlow(id = id).first() ?: return@launch
             val ing = ingestionAndCustomUnit.ingestion
+            ingestionFlow.emit(ing)
             ingestion = ing
             note = ing.notes ?: ""
             isEstimate = ing.isDoseAnEstimate
@@ -87,6 +100,13 @@ class EditIngestionViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000)
         )
+
+    fun onChangeCustomUnit(newCustomUnit: CustomUnit?) {
+        customUnit = newCustomUnit
+        newCustomUnit?.unit?.let {
+            units = it
+        }
+    }
 
     fun onChangeTime(newLocalDateTime: LocalDateTime) {
         viewModelScope.launch {
@@ -131,6 +151,7 @@ class EditIngestionViewModel @Inject constructor(
                 it.experienceId = experienceId
                 it.dose = if (isKnown) dose.toDoubleOrNull() else null
                 it.units = units
+                it.customUnitId = customUnit?.id
                 it.time = selectedInstant
                 it.consumerName = consumerName.ifBlank { null }
                 experienceRepo.update(it)

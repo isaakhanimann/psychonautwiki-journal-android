@@ -39,5 +39,5 @@ data class Ingestion(
     var notes: String?,
     var stomachFullness: StomachFullness?,
     var consumerName: String?,
-    val customUnitId: Int?
+    var customUnitId: Int?
 )
