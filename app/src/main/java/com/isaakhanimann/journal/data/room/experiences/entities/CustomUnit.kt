@@ -36,7 +36,7 @@ data class CustomUnit(
     var isEstimate: Boolean,
     var isArchived: Boolean,
     var unit: String,
-    val originalUnit: String,
+    var originalUnit: String,
     var note: String
 ) {
     companion object {

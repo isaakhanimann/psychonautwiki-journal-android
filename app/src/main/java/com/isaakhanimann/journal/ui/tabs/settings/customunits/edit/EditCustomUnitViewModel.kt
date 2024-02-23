@@ -54,7 +54,7 @@ class EditCustomUnitViewModel @Inject constructor(
                 substanceName = customUnit.substanceName
                 val substance = substanceRepository.getSubstance(customUnit.substanceName)!!
                 roaDose = substance.getRoa(customUnit.administrationRoute)?.roaDose
-                originalUnit = roaDose?.units ?: ""
+                originalUnit = customUnit.originalUnit
                 name = customUnit.name
                 unit = customUnit.unit
                 doseText = customUnit.dose?.toReadableString() ?: ""
@@ -124,6 +124,7 @@ class EditCustomUnitViewModel @Inject constructor(
             customUnit?.let {
                 it.dose = dose
                 it.isEstimate = isEstimate
+                it.originalUnit = originalUnit
                 it.estimatedDoseVariance = estimatedDoseVariance
                 it.isArchived = isArchived
                 it.unit = unit

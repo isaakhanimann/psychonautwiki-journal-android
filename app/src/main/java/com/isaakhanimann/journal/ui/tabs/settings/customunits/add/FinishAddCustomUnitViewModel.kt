@@ -121,7 +121,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
             estimatedDoseVariance = estimatedDoseVariance,
             isArchived = false,
             unit = unit,
-            originalUnit = substance.getRoa(administrationRoute)?.roaDose?.units ?: "",
+            originalUnit = originalUnit,
             note = note
         )
         experienceRepo.insert(customUnit)
