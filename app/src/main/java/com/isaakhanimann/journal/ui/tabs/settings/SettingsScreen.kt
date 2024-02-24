@@ -139,10 +139,10 @@ fun SettingsScreen(
         ) {
             CardWithTitle(title = "UI", innerPaddingHorizontal = 0.dp) {
                 SettingsButton(
-                    imageVector = Icons.Outlined.WarningAmber,
-                    text = "Interaction Settings"
+                    imageVector = Icons.Outlined.Medication,
+                    text = "Custom Units"
                 ) {
-                    navigateToComboSettings()
+                    navigateToCustomUnits()
                 }
                 Divider()
                 SettingsButton(
@@ -153,28 +153,12 @@ fun SettingsScreen(
                 }
                 Divider()
                 SettingsButton(
-                    imageVector = Icons.Outlined.Medication,
-                    text = "Custom Units"
+                    imageVector = Icons.Outlined.WarningAmber,
+                    text = "Interaction Settings"
                 ) {
-                    navigateToCustomUnits()
+                    navigateToComboSettings()
                 }
-            }
-            val uriHandler = LocalUriHandler.current
-            CardWithTitle(title = "Feedback", innerPaddingHorizontal = 0.dp) {
-                SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
-                    navigateToFAQ()
-                }
-                Divider()
-                SettingsButton(
-                    imageVector = Icons.Outlined.ContactSupport,
-                    text = "Question / Feedback / Bug Report"
-                ) {
-                    uriHandler.openUri("https://t.me/isaakhanimann")
-                }
-                Divider()
-                SettingsButton(imageVector = Icons.Outlined.VolunteerActivism, text = "Donate") {
-                    uriHandler.openUri("https://www.buymeacoffee.com/isaakhanimann")
-                }
+
             }
             CardWithTitle(title = "App Data", innerPaddingHorizontal = 0.dp) {
                 var isShowingExportDialog by remember { mutableStateOf(false) }
@@ -301,6 +285,23 @@ fun SettingsScreen(
                             }
                         }
                     )
+                }
+            }
+            val uriHandler = LocalUriHandler.current
+            CardWithTitle(title = "Feedback", innerPaddingHorizontal = 0.dp) {
+                SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
+                    navigateToFAQ()
+                }
+                Divider()
+                SettingsButton(
+                    imageVector = Icons.Outlined.ContactSupport,
+                    text = "Question / Feedback / Bug Report"
+                ) {
+                    uriHandler.openUri("https://t.me/isaakhanimann")
+                }
+                Divider()
+                SettingsButton(imageVector = Icons.Outlined.VolunteerActivism, text = "Donate") {
+                    uriHandler.openUri("https://www.buymeacoffee.com/isaakhanimann")
                 }
             }
             CardWithTitle(title = "App", innerPaddingHorizontal = 0.dp) {
