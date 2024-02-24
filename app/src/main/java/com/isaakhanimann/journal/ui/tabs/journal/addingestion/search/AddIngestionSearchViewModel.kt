@@ -160,7 +160,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                                 )
                             }
                         },
-                        customUnits = filteredCustomUnitsFlow.value,
+                        customUnits = filteredCustomUnitsFlow.value.filter { it.substanceName == substanceName && it.administrationRoute == routeEntry.key },
                         lastUsed = routeEntry.value.maxOfOrNull { it.ingestion.time } ?: Instant.now()
                     )
                 }
