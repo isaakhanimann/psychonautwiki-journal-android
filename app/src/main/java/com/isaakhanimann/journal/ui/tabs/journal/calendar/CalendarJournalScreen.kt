@@ -66,6 +66,7 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.YearMonth
 
 @Preview
@@ -236,12 +237,19 @@ fun Day(
     } else {
         aspectRatioModifier
     }
+    val now = LocalDate.now()
+    val isToday = day.date.year == now.year && day.date.monthValue == now.monthValue && day.date.dayOfMonth == now.dayOfMonth
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            if (experienceInfos.experienceIds.isEmpty()) {
+            if (isToday) {
+                Text(
+                    text = day.date.dayOfMonth.toString(),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            } else if (experienceInfos.experienceIds.isEmpty()) {
                 Text(
                     text = day.date.dayOfMonth.toString(),
                     color = if (isSystemInDarkTheme()) Color.Gray else Color.LightGray
