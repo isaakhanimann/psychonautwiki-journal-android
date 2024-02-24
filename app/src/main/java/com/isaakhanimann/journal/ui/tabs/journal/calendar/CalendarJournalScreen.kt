@@ -103,7 +103,7 @@ fun CalendarJournalScreen(
                     val coroutineScope = rememberCoroutineScope()
                     TextButton(onClick = {
                         coroutineScope.launch {
-                            state.animateScrollToMonth(YearMonth.now())
+                            state.animateScrollToMonth(YearMonth.now().minusMonths(1))
                         }
                     }) {
                         Text(text = "Today")
