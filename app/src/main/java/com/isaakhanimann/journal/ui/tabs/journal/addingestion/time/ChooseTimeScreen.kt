@@ -31,8 +31,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -40,30 +38,26 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,7 +74,6 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithT
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 
@@ -182,10 +175,6 @@ fun ChooseTimeScreen(
     onChangeOfConsumerName: (String) -> Unit,
     consumerNamesSorted: List<String>
 ) {
-    var isPresentingBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val skipPartiallyExpanded by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
     val focusManager = LocalFocusManager.current
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName Ingestion") }) },
@@ -261,14 +250,53 @@ fun ChooseTimeScreen(
                         .fillMaxWidth()
                         .padding(vertical = 4.dp)
                 ) {
-                    Column(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)) {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = horizontalPadding,
+                            vertical = 3.dp
+                        )
+                    ) {
                         Text(
                             text = "Consumed by: ${consumerName.ifBlank { "Me" }}",
                             style = MaterialTheme.typography.titleMedium
                         )
                         if (consumerNamesSorted.isNotEmpty() || consumerName.isNotBlank()) {
-                            TextButton(onClick = { isPresentingBottomSheet = !isPresentingBottomSheet }) {
+                            var areConsumerNamesExpanded by remember { mutableStateOf(false) }
+                            TextButton(onClick = { areConsumerNamesExpanded = true }) {
                                 Text(text = "Choose other consumer")
+                            }
+                            DropdownMenu(
+                                expanded = areConsumerNamesExpanded,
+                                onDismissRequest = { areConsumerNamesExpanded = false }
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text("Me") },
+                                    onClick = {
+                                        onChangeOfConsumerName("")
+                                        areConsumerNamesExpanded = false
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Default.Person,
+                                            contentDescription = "Consumer"
+                                        )
+                                    }
+                                )
+                                consumerNamesSorted.forEach { consumerName ->
+                                    DropdownMenuItem(
+                                        text = { Text(consumerName) },
+                                        onClick = {
+                                            onChangeOfConsumerName(consumerName)
+                                            areConsumerNamesExpanded = false
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Default.Person,
+                                                contentDescription = "Consumer"
+                                            )
+                                        }
+                                    )
+                                }
                             }
                         }
                         var showNewConsumerTextField by remember { mutableStateOf(false) }
@@ -276,7 +304,11 @@ fun ChooseTimeScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Switch(checked = showNewConsumerTextField, onCheckedChange = {showNewConsumerTextField = !showNewConsumerTextField})
+                            Switch(
+                                checked = showNewConsumerTextField,
+                                onCheckedChange = {
+                                    showNewConsumerTextField = !showNewConsumerTextField
+                                })
                             Text("Enter new consumer")
                         }
                         AnimatedVisibility(visible = showNewConsumerTextField) {
@@ -312,7 +344,10 @@ fun ChooseTimeScreen(
                     )
                 }
                 if (isShowingColorPicker) {
-                    CardWithTitle(title = "$substanceName Color", modifier = Modifier.fillMaxWidth()) {
+                    CardWithTitle(
+                        title = "$substanceName Color",
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         ColorPicker(
                             selectedColor = selectedColor,
                             onChangeOfColor = onChangeColor,
@@ -322,54 +357,6 @@ fun ChooseTimeScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(3.dp))
-            }
-        }
-    }
-    if (isPresentingBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = { isPresentingBottomSheet = false },
-            sheetState = bottomSheetState,
-            windowInsets = BottomSheetDefaults.windowInsets
-        ) {
-            LazyColumn {
-                item {
-                    ListItem(
-                        headlineContent = { Text("Me") },
-                        leadingContent = {
-                            Icon(
-                                Icons.Default.Person,
-                                contentDescription = "Consumer"
-                            )
-                        },
-                        modifier = Modifier.clickable {
-                            onChangeOfConsumerName("")
-                            scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
-                                if (!bottomSheetState.isVisible) {
-                                    isPresentingBottomSheet = false
-                                }
-                            }
-                        }
-                    )
-                }
-                items(consumerNamesSorted) { consumerName ->
-                    ListItem(
-                        headlineContent = { Text(consumerName) },
-                        leadingContent = {
-                            Icon(
-                                Icons.Default.Person,
-                                contentDescription = "Consumer"
-                            )
-                        },
-                        modifier = Modifier.clickable {
-                            onChangeOfConsumerName(consumerName)
-                            scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
-                                if (!bottomSheetState.isVisible) {
-                                    isPresentingBottomSheet = false
-                                }
-                            }
-                        }
-                    )
-                }
             }
         }
     }
