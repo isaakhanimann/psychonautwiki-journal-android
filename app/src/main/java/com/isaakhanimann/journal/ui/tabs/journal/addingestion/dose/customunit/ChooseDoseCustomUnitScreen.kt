@@ -247,7 +247,7 @@ fun ChooseDoseCustomUnitScreen(
                         vertical = 10.dp
                     )
                 ) {
-                    if (roaDose != null) {
+                    if (roaDose != null && customUnit.dose != null) {
                         CustomUnitRoaDoseView(roaDose, customUnit)
                     }
                     val focusManager = LocalFocusManager.current
