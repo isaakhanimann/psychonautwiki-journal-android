@@ -35,6 +35,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Add
@@ -66,6 +67,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -127,6 +129,8 @@ fun OneExperienceScreen(
     )
     OneExperienceScreen(
         oneExperienceScreenModel = oneExperienceScreenModel,
+        isOralDisclaimerHidden = viewModel.isOralTimelineDisclaimerHidden.collectAsState().value,
+        onChangeIsOralDisclaimerHidden = viewModel::saveOralDisclaimerIsHidden,
         addIngestion = navigateToAddIngestionSearch,
         deleteExperience = viewModel::deleteExperience,
         navigateToEditExperienceScreen = navigateToEditExperienceScreen,
@@ -157,6 +161,8 @@ fun ExperienceScreenPreview(
     JournalTheme {
         OneExperienceScreen(
             oneExperienceScreenModel = oneExperienceScreenModel,
+            isOralDisclaimerHidden = false,
+            onChangeIsOralDisclaimerHidden = {},
             addIngestion = {},
             deleteExperience = {},
             navigateToEditExperienceScreen = {},
@@ -181,6 +187,8 @@ fun ExperienceScreenPreview(
 @Composable
 fun OneExperienceScreen(
     oneExperienceScreenModel: OneExperienceScreenModel,
+    isOralDisclaimerHidden: Boolean,
+    onChangeIsOralDisclaimerHidden: (Boolean) -> Unit,
     addIngestion: () -> Unit,
     deleteExperience: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
@@ -439,11 +447,21 @@ fun OneExperienceScreen(
                                     navigateToTimelineScreen(ME)
                                 }
                         )
-                        if (oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }) {
-                            Text(
-                                text = FULL_STOMACH_DISCLAIMER,
-                                style = MaterialTheme.typography.bodySmall
-                            )
+                        val hasOralIngestion = oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }
+                        if (hasOralIngestion && !isOralDisclaimerHidden) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = FULL_STOMACH_DISCLAIMER,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                IconButton(onClick = { onChangeIsOralDisclaimerHidden(true)}) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Close Disclaimer"
+                                    )
+                                }
+                            }
                         }
                     }
                 }

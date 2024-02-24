@@ -70,6 +70,18 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
+    val isOralTimelineDisclaimerHidden = userPreferences.isOralDisclaimerHiddenFlow.stateIn(
+        initialValue = true,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
+    fun saveOralDisclaimerIsHidden(isOralDisclaimerHidden: Boolean) {
+        viewModelScope.launch {
+            userPreferences.saveOralDisclaimerIsHidden(isOralDisclaimerHidden)
+        }
+    }
+
     private val experienceId: Int
 
     private val localIsFavoriteFlow = MutableStateFlow(false)

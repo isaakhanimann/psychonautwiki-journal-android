@@ -20,6 +20,7 @@ package com.isaakhanimann.journal.ui.tabs.settings.combinations
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
@@ -32,6 +33,7 @@ import javax.inject.Singleton
 class UserPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
     private object PreferencesKeys {
         val KEY_TIME_DISPLAY_OPTION = stringPreferencesKey("key_time_display_option")
+        val KEY_HIDE_ORAL_DISCLAIMER = booleanPreferencesKey("key_hide_oral_disclaimer")
     }
 
     suspend fun saveTimeDisplayOption(value: SavedTimeDisplayOption) {
@@ -44,6 +46,17 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
         .map { preferences ->
             val name = preferences[PreferencesKeys.KEY_TIME_DISPLAY_OPTION] ?: SavedTimeDisplayOption.REGULAR.name
             SavedTimeDisplayOption.valueOf(name)
+        }
+
+    suspend fun saveOralDisclaimerIsHidden(value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.KEY_HIDE_ORAL_DISCLAIMER] = value
+        }
+    }
+
+    val isOralDisclaimerHiddenFlow: Flow<Boolean> = dataStore.data
+        .map { preferences ->
+            preferences[PreferencesKeys.KEY_HIDE_ORAL_DISCLAIMER] ?: false
         }
 }
 
