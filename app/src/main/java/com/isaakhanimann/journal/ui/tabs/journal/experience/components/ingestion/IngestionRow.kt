@@ -97,10 +97,10 @@ fun IngestionRow(
                     append(ingestionWithCompanionAndCustomUnit.doseDescription)
                     withStyle(style = SpanStyle(color = if (isSystemInDarkTheme()) Color.Gray else Color.LightGray )) {
                         if (customUnit == null) {
-                            append(" " + ingestion.administrationRoute.displayText)
+                            append(" " + ingestion.administrationRoute.displayText.lowercase())
                         }
                         ingestionWithCompanionAndCustomUnit.customUnitDose?.calculatedDoseDescription?.let {
-                            append(" = $it ${ingestion.administrationRoute.displayText}")
+                            append(" = $it ${ingestion.administrationRoute.displayText.lowercase()}")
                         }
                     }
                 }
