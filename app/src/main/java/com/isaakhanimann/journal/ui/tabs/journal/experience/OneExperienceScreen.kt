@@ -497,7 +497,7 @@ fun OneExperienceScreen(
             val cumulativeDoses = oneExperienceScreenModel.cumulativeDoses
             if (cumulativeDoses.isNotEmpty()) {
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                    CardTitle(title = "Cumulative Dose")
+                    CardTitle(title = "My Cumulative Doses")
                     if (cumulativeDoses.isNotEmpty()) {
                         Divider()
                     }
