@@ -222,6 +222,16 @@ fun ChooseDoseCustomUnitScreen(
                     if (roaDose != null) {
                         RoaDoseView(roaDose = roaDose)
                     }
+                    AnimatedVisibility(visible = currentDoseClass != null && customUnitCalculationText != null) {
+                        if (currentDoseClass != null && customUnitCalculationText != null) {
+                            val doseColor = currentDoseClass.getComposeColor(isSystemInDarkTheme())
+                            Text(
+                                text = customUnitCalculationText,
+                                color = doseColor,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    }
                 }
             }
             ElevatedCard(
@@ -239,16 +249,6 @@ fun ChooseDoseCustomUnitScreen(
                 ) {
                     if (roaDose != null) {
                         CustomUnitRoaDoseView(roaDose, customUnit)
-                    }
-                    AnimatedVisibility(visible = currentDoseClass != null && customUnitCalculationText != null) {
-                        if (currentDoseClass != null && customUnitCalculationText != null) {
-                            val doseColor = currentDoseClass.getComposeColor(isSystemInDarkTheme())
-                            Text(
-                                text = customUnitCalculationText,
-                                color = doseColor,
-                                style = MaterialTheme.typography.labelLarge
-                            )
-                        }
                     }
                     val focusManager = LocalFocusManager.current
                     val focusRequester = remember { FocusRequester() }
