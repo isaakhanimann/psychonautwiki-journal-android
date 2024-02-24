@@ -91,7 +91,7 @@ fun CalendarJournalScreen(
     val state = rememberCalendarState(
         startMonth = startMonth,
         endMonth = endMonth,
-        firstVisibleMonth = currentMonth,
+        firstVisibleMonth = currentMonth.minusMonths(1),
         firstDayOfWeek = firstDayOfWeek
     )
     Scaffold(
