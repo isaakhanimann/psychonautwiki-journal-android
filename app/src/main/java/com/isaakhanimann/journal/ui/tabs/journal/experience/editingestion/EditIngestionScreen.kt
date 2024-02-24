@@ -103,6 +103,8 @@ fun EditIngestionScreen(
         toggleIsKnown = viewModel::toggleIsKnown,
         dose = viewModel.dose,
         onDoseChange = { viewModel.dose = it },
+        estimatedDoseVariance = viewModel.estimatedDoseVariance,
+        onEstimatedDoseVarianceChange = viewModel::onChangeEstimatedDoseVariance,
         units = viewModel.units,
         onUnitsChange = { viewModel.units = it },
         experiences = viewModel.relevantExperiences.collectAsState().value,
@@ -138,6 +140,8 @@ fun EditIngestionScreenPreview() {
             toggleIsKnown = {},
             dose = "5",
             onDoseChange = {},
+            estimatedDoseVariance = "",
+            onEstimatedDoseVarianceChange = {},
             units = "mg",
             onUnitsChange = {},
             experiences = emptyList(),
@@ -169,6 +173,8 @@ fun EditIngestionScreen(
     toggleIsKnown: () -> Unit,
     dose: String,
     onDoseChange: (String) -> Unit,
+    estimatedDoseVariance: String,
+    onEstimatedDoseVarianceChange: (String) -> Unit,
     units: String,
     onUnitsChange: (String) -> Unit,
     experiences: List<ExperienceOption>,
@@ -300,6 +306,25 @@ fun EditIngestionScreen(
                             Checkbox(checked = isEstimate, onCheckedChange = { toggleIsEstimate() })
                             Text("Dose is an estimate")
                         }
+                        AnimatedVisibility(visible = isEstimate) {
+                            OutlinedTextField(
+                                value = estimatedDoseVariance,
+                                onValueChange = onEstimatedDoseVarianceChange,
+                                label = { Text("Estimated variance") },
+                                trailingIcon = {
+                                    Text(
+                                        text = units,
+                                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                                    )
+                                },
+                                keyboardActions = KeyboardActions(onDone = {
+                                    focusManager.clearFocus()
+                                }),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                singleLine = true,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                         if (otherCustomUnits.isNotEmpty()) {
                             var isShowingDropDownMenu by remember { mutableStateOf(false) }
                             Box(
@@ -310,7 +335,7 @@ fun EditIngestionScreen(
                                     onClick = { isShowingDropDownMenu = true },
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    Text(text = "Custom unit: ${customUnit?.name ?: "no selection"}")
+                                    Text(text = "Unit: ${customUnit?.name ?: "Default"}")
                                 }
                                 DropdownMenu(
                                     expanded = isShowingDropDownMenu,

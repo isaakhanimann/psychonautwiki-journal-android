@@ -57,6 +57,7 @@ class EditIngestionViewModel @Inject constructor(
     var isEstimate by mutableStateOf(false)
     var isKnown by mutableStateOf(true)
     var dose by mutableStateOf("")
+    var estimatedDoseVariance by mutableStateOf("")
     var units by mutableStateOf("")
     var experienceId by mutableIntStateOf(1)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
@@ -71,6 +72,10 @@ class EditIngestionViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
     )
+
+    fun onChangeEstimatedDoseVariance(newEstimatedDoseVariance: String) {
+        estimatedDoseVariance = newEstimatedDoseVariance
+    }
 
     init {
         val id = state.get<Int>(INGESTION_ID_KEY)!!
@@ -150,6 +155,7 @@ class EditIngestionViewModel @Inject constructor(
                 it.isDoseAnEstimate = isEstimate
                 it.experienceId = experienceId
                 it.dose = if (isKnown) dose.toDoubleOrNull() else null
+                it.estimatedDoseVariance = if (isEstimate) estimatedDoseVariance.toDoubleOrNull() else null
                 it.units = units
                 it.customUnitId = customUnit?.id
                 it.time = selectedInstant
