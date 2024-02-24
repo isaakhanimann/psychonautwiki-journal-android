@@ -37,7 +37,7 @@ data class SubstanceRouteSuggestion(
 
 data class DoseAndUnit(
     val dose: Double?,
-    val unit: String?,
+    val unit: String,
     val isEstimate: Boolean,
     val estimatedDoseVariance: Double?
 )

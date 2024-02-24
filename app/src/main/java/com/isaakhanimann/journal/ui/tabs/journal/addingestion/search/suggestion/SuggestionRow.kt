@@ -111,9 +111,19 @@ fun SuggestionRow(
                     },
                     label = {
                         if (doseAndUnit.dose != null) {
-                            val estimate =
-                                if (doseAndUnit.isEstimate) "~" else ""
-                            Text(text = "$estimate${doseAndUnit.dose.toReadableString()} ${doseAndUnit.unit ?: ""}")
+                            val description = "${doseAndUnit.dose.toReadableString()} ${doseAndUnit.unit}"
+                            if (doseAndUnit.isEstimate) {
+                                if (doseAndUnit.estimatedDoseVariance != null) {
+                                    Text(
+                                        text = "${doseAndUnit.dose.toReadableString()}±${
+                                            doseAndUnit.estimatedDoseVariance.toReadableString()} ${doseAndUnit.unit}"
+                                    )
+                                } else {
+                                    Text(text = "~$description")
+                                }
+                            } else {
+                                Text(text = description)
+                            }
                         } else {
                             Text(text = "Unknown")
                         }
@@ -146,7 +156,10 @@ fun SuggestionRow(
                     )
                 }, label = {
                     Column(modifier = Modifier.padding(vertical = 5.dp)) {
-                        Text(text = customUnitDose.customUnit.name, style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            text = customUnitDose.customUnit.name,
+                            style = MaterialTheme.typography.labelSmall
+                        )
                         Text(text = customUnitDose.doseDescription)
                     }
                 })

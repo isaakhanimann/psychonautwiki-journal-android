@@ -143,7 +143,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                         dosesAndUnit = routeEntry.value.filter { it.customUnit == null }.map { ingestionWithCustomUnit ->
                             DoseAndUnit(
                                 dose = ingestionWithCustomUnit.ingestion.dose,
-                                unit = ingestionWithCustomUnit.ingestion.units,
+                                unit = ingestionWithCustomUnit.ingestion.units ?: ingestionWithCustomUnit.customUnit?.unit ?: "",
                                 isEstimate = ingestionWithCustomUnit.ingestion.isDoseAnEstimate,
                                 estimatedDoseVariance = ingestionWithCustomUnit.ingestion.estimatedDoseVariance
                             )
