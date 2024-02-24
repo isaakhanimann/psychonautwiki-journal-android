@@ -38,16 +38,17 @@ fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = cumulativeDose.substanceName + " ${cumulativeDose.route.displayText}",
-            style = MaterialTheme.typography.titleMedium
-        )
-        Column(horizontalAlignment = Alignment.End) {
+        Column(horizontalAlignment = Alignment.Start) {
+            Text(
+                text = cumulativeDose.substanceName + " ${cumulativeDose.route.displayText}",
+                style = MaterialTheme.typography.titleMedium
+            )
             Text(text = cumulativeDose.doseDescription, style = MaterialTheme.typography.titleSmall)
-            val numDots = cumulativeDose.numDots
-            if (numDots != null) {
-                DotRows(numDots = numDots)
-            }
+
+        }
+        val numDots = cumulativeDose.numDots
+        if (numDots != null) {
+            DotRows(numDots = numDots)
         }
     }
 }
