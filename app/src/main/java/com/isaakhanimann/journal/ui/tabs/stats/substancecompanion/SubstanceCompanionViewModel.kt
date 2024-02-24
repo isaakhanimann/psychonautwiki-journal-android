@@ -118,7 +118,7 @@ data class IngestionsBurst(
         val ingestion: Ingestion,
         val customUnit: CustomUnit?
     ) {
-        private val customUnitDose: CustomUnitDose?
+        val customUnitDose: CustomUnitDose?
             get() = ingestion.dose?.let { doseUnwrapped ->
                 customUnit?.let { customUnitUnwrapped ->
                     CustomUnitDose(
@@ -130,10 +130,19 @@ data class IngestionsBurst(
                 }
             }
         val doseDescription: String
-            get() = customUnitDose?.doseDescription ?: ingestion.dose?.let {
-                val isEstimateText = if (ingestion.isDoseAnEstimate) "~" else ""
-                val doseText = it.toReadableString()
-                return@let "$isEstimateText$doseText ${ingestion.units}"
-            } ?: "Unknown Dose"
+            get() = customUnitDose?.doseDescription ?: ingestionDoseDescription
+
+        private val ingestionDoseDescription get() = ingestion.dose?.let { dose ->
+            ingestion.estimatedDoseVariance?.let { estimatedDoseVariance ->
+                "${dose.toReadableString()}±${estimatedDoseVariance.toReadableString()} ${ingestion.units}"
+            } ?: run {
+                val description = "${dose.toReadableString()} ${ingestion.units}"
+                if (ingestion.isDoseAnEstimate) {
+                    "~$description"
+                } else {
+                    description
+                }
+            }
+        } ?: "Unknown Dose"
     }
 }

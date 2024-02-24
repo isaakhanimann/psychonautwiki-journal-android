@@ -18,6 +18,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.stats.substancecompanion
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -170,7 +175,18 @@ fun IngestionRow(ingestionAndCustomUnit: IngestionsBurst.IngestionAndCustomUnit)
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = ingestionAndCustomUnit.doseDescription + " ${ingestionAndCustomUnit.ingestion.administrationRoute.displayText}")
+        val text = buildAnnotatedString {
+            append(ingestionAndCustomUnit.doseDescription)
+            withStyle(style = SpanStyle(color = if (isSystemInDarkTheme()) Color.Gray else Color.LightGray )) {
+                if (ingestionAndCustomUnit.customUnit == null) {
+                    append(" " + ingestionAndCustomUnit.ingestion.administrationRoute.displayText.lowercase())
+                }
+                ingestionAndCustomUnit.customUnitDose?.calculatedDoseDescription?.let {
+                    append(" = $it ${ingestionAndCustomUnit.ingestion.administrationRoute.displayText.lowercase()}")
+                }
+            }
+        }
+        Text(text = text, style = MaterialTheme.typography.titleSmall)
         val dateString = ingestionAndCustomUnit.ingestion.time.getStringOfPattern("HH:mm")
         Text(text = dateString)
     }
