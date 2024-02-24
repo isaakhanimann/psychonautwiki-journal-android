@@ -213,7 +213,7 @@ fun ChooseDoseCustomUnitScreen(
                     )
                 ) {
                     if (!doseRemark.isNullOrBlank()) {
-                        Text(text = doseRemark)
+                        Text(text = doseRemark, style = MaterialTheme.typography.bodySmall)
                     }
                     if (customUnit.note.isNotBlank()) {
                         Text("${customUnit.name}: ${customUnit.note}")
