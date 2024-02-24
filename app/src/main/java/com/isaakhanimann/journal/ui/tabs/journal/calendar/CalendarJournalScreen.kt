@@ -244,7 +244,7 @@ fun Day(
             if (experienceInfos.experienceIds.isEmpty()) {
                 Text(
                     text = day.date.dayOfMonth.toString(),
-                    color = Color.LightGray
+                    color = if (isSystemInDarkTheme()) Color.Gray else Color.LightGray
                 )
             } else {
                 Text(
