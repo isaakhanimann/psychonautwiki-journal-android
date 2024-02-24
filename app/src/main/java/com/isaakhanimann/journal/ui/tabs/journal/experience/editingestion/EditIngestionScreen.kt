@@ -276,17 +276,19 @@ fun EditIngestionScreen(
                 }
                 AnimatedVisibility(visible = isKnown) {
                     Column {
-                        OutlinedTextField(
-                            value = units,
-                            onValueChange = onUnitsChange,
-                            label = { Text(text = "Units") },
-                            modifier = Modifier.fillMaxWidth(),
-                            keyboardActions = KeyboardActions(onDone = {
-                                focusManager.clearFocus()
-                            }),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                            singleLine = true
-                        )
+                        if (customUnit==null) {
+                            OutlinedTextField(
+                                value = units,
+                                onValueChange = onUnitsChange,
+                                label = { Text(text = "Units") },
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardActions = KeyboardActions(onDone = {
+                                    focusManager.clearFocus()
+                                }),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                                singleLine = true
+                            )
+                        }
                         OutlinedTextField(
                             value = dose,
                             onValueChange = onDoseChange,
