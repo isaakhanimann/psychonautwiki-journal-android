@@ -256,7 +256,7 @@ fun ChooseDoseScreen(
                     )
                 ) {
                     if (!doseRemark.isNullOrBlank()) {
-                        Text(text = doseRemark)
+                        Text(text = doseRemark, style = MaterialTheme.typography.bodySmall)
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                     if (roaDose != null) {
@@ -276,7 +276,7 @@ fun ChooseDoseScreen(
                         }
                     }
                     OptionalDosageUnitDisclaimer(substanceName)
-                    Text(text = DOSE_DISCLAIMER)
+                    Text(text = DOSE_DISCLAIMER, style = MaterialTheme.typography.bodySmall)
                 }
             }
             ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {

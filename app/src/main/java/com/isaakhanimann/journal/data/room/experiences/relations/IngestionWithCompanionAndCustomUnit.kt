@@ -48,20 +48,32 @@ data class IngestionWithCompanionAndCustomUnit(
 
     val isEstimate: Boolean get() = ingestion.isDoseAnEstimate || customUnit?.isEstimate ?: false
 
-    val pureDoseVariance: Double? get() = customUnitDose?.calculatedDoseVariance ?: ingestion.estimatedDoseVariance
+    val pureDoseVariance: Double?
+        get() = customUnitDose?.calculatedDoseVariance ?: ingestion.estimatedDoseVariance
 
-    val customUnitDose: CustomUnitDose? get() = ingestion.dose?.let { doseUnwrapped ->
-        customUnit?.let { customUnitUnwrapped ->
-            CustomUnitDose(
-                dose = doseUnwrapped,
-                isEstimate = ingestion.isDoseAnEstimate,
-                estimatedDoseVariance = ingestion.estimatedDoseVariance,
-                customUnit = customUnitUnwrapped)
+    val customUnitDose: CustomUnitDose?
+        get() = ingestion.dose?.let { doseUnwrapped ->
+            customUnit?.let { customUnitUnwrapped ->
+                CustomUnitDose(
+                    dose = doseUnwrapped,
+                    isEstimate = ingestion.isDoseAnEstimate,
+                    estimatedDoseVariance = ingestion.estimatedDoseVariance,
+                    customUnit = customUnitUnwrapped
+                )
+            }
         }
-    }
-    val doseDescription: String get() = customUnitDose?.doseDescription ?: ingestion.dose?.let {
-        val isEstimateText = if (ingestion.isDoseAnEstimate) "~" else ""
-        val doseText = it.toReadableString()
-        return@let "$isEstimateText$doseText ${ingestion.units}"
+    val doseDescription: String get() = customUnitDose?.doseDescription ?: ingestionDoseDescription
+
+    private val ingestionDoseDescription get() = ingestion.dose?.let { dose ->
+        ingestion.estimatedDoseVariance?.let { estimatedDoseVariance ->
+            "${dose.toReadableString()}±${estimatedDoseVariance.toReadableString()} ${ingestion.units}"
+        } ?: run {
+            val description = "${dose.toReadableString()} ${ingestion.units}"
+            if (isEstimate) {
+                "~$description"
+            } else {
+                description
+            }
+        }
     } ?: "Unknown Dose"
 }

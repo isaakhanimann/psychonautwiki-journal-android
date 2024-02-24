@@ -102,7 +102,7 @@ data class CustomUnitDose(
             } ?: run {
                 val description = "${calculatedDoseUnwrapped.toReadableString()} ${customUnit.originalUnit}"
                 if (isEstimate || customUnit.isEstimate) {
-                    return "~" + description
+                    return "~$description"
                 } else {
                     return description
                 }
