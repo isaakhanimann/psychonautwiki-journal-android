@@ -42,10 +42,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.classes.Tolerance
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ColorPicker
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.ToleranceSection
 import com.isaakhanimann.journal.ui.theme.JournalTheme
@@ -66,9 +64,6 @@ fun SubstanceCompanionScreen(
         SubstanceCompanionScreen(
             substanceCompanion = companion,
             ingestionBursts = viewModel.ingestionBurstsFlow.collectAsState().value,
-            onChangeColor = { viewModel.updateColor(it) },
-            alreadyUsedColors = viewModel.alreadyUsedColorsFlow.collectAsState().value,
-            otherColors = viewModel.otherColorsFlow.collectAsState().value,
             tolerance = viewModel.tolerance,
             crossTolerances = viewModel.crossTolerances,
             consumerName = viewModel.consumerName
@@ -79,17 +74,10 @@ fun SubstanceCompanionScreen(
 @Preview
 @Composable
 fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionScreenPreviewProvider::class) pair: Pair<SubstanceCompanion, List<IngestionsBurst>>) {
-    val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK)
-    val otherColors = AdaptiveColor.values().filter { color ->
-        !alreadyUsedColors.contains(color)
-    }
     JournalTheme {
         SubstanceCompanionScreen(
             substanceCompanion = pair.first,
             ingestionBursts = pair.second,
-            onChangeColor = {},
-            alreadyUsedColors = alreadyUsedColors,
-            otherColors = otherColors,
             tolerance = Tolerance(
                 full = "with prolonged use",
                 half = "two weeks",
@@ -108,9 +96,6 @@ fun SubstanceCompanionPreview(@PreviewParameter(SubstanceCompanionScreenPreviewP
 fun SubstanceCompanionScreen(
     substanceCompanion: SubstanceCompanion,
     ingestionBursts: List<IngestionsBurst>,
-    onChangeColor: (AdaptiveColor) -> Unit,
-    alreadyUsedColors: List<AdaptiveColor>,
-    otherColors: List<AdaptiveColor>,
     tolerance: Tolerance?,
     crossTolerances: List<String>,
     consumerName: String? = null
@@ -133,23 +118,6 @@ fun SubstanceCompanionScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                ElevatedCard(modifier = Modifier.padding(vertical = 5.dp)) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(
-                            horizontal = 10.dp,
-                            vertical = 5.dp
-                        )
-                    ) {
-                        Text(text = "Color", style = MaterialTheme.typography.titleMedium)
-                        ColorPicker(
-                            selectedColor = substanceCompanion.color,
-                            onChangeOfColor = onChangeColor,
-                            alreadyUsedColors = alreadyUsedColors,
-                            otherColors = otherColors
-                        )
-                    }
-                }
                 if (tolerance != null || crossTolerances.isNotEmpty()) {
                     CardWithTitle(title = "Tolerance", modifier = Modifier.fillMaxWidth()) {
                         ToleranceSection(

@@ -22,7 +22,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
-import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
@@ -42,13 +41,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
 class SubstanceCompanionViewModel @Inject constructor(
-    private val experienceRepo: ExperienceRepository,
+    experienceRepo: ExperienceRepository,
     substanceRepo: SubstanceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
@@ -109,38 +107,6 @@ class SubstanceCompanionViewModel @Inject constructor(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000)
             )
-
-    private val companionsFlow = experienceRepo.getAllSubstanceCompanionsFlow()
-
-    val alreadyUsedColorsFlow: StateFlow<List<AdaptiveColor>> =
-        companionsFlow.map { companions ->
-            companions.map { it.color }.distinct()
-        }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
-
-    val otherColorsFlow: StateFlow<List<AdaptiveColor>> =
-        alreadyUsedColorsFlow.map { alreadyUsedColors ->
-            AdaptiveColor.values().filter {
-                !alreadyUsedColors.contains(it)
-            }
-        }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
-
-
-    fun updateColor(color: AdaptiveColor) {
-        viewModelScope.launch {
-            thisCompanionFlow.value?.let {
-                it.color = color
-                experienceRepo.update(substanceCompanion = it)
-            }
-        }
-    }
 }
 
 data class IngestionsBurst(
