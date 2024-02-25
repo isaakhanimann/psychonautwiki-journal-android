@@ -111,12 +111,14 @@ fun SuggestionRow(
                     },
                     label = {
                         if (doseAndUnit.dose != null) {
-                            val description = "${doseAndUnit.dose.toReadableString()} ${doseAndUnit.unit}"
+                            val description =
+                                "${doseAndUnit.dose.toReadableString()} ${doseAndUnit.unit}"
                             if (doseAndUnit.isEstimate) {
                                 if (doseAndUnit.estimatedDoseVariance != null) {
                                     Text(
                                         text = "${doseAndUnit.dose.toReadableString()}±${
-                                            doseAndUnit.estimatedDoseVariance.toReadableString()} ${doseAndUnit.unit}"
+                                            doseAndUnit.estimatedDoseVariance.toReadableString()
+                                        } ${doseAndUnit.unit}"
                                     )
                                 } else {
                                     Text(text = "~$description")
@@ -130,17 +132,22 @@ fun SuggestionRow(
                     },
                 )
             }
-            SuggestionChip(onClick = {
-                if (substanceRouteSuggestion.isCustomSubstance) {
-                    navigateToCustomDose(
-                        substanceRouteSuggestion.substanceName, substanceRouteSuggestion.route
-                    )
-                } else {
-                    navigateToDose(
-                        substanceRouteSuggestion.substanceName, substanceRouteSuggestion.route
-                    )
-                }
-            }, label = { Text("Other") })
+            val pureDoseUnit = substanceRouteSuggestion.dosesAndUnit.firstOrNull()?.unit
+            if (pureDoseUnit != null) {
+                SuggestionChip(onClick = {
+                    if (substanceRouteSuggestion.isCustomSubstance) {
+                        navigateToCustomDose(
+                            substanceRouteSuggestion.substanceName, substanceRouteSuggestion.route
+                        )
+                    } else {
+                        navigateToDose(
+                            substanceRouteSuggestion.substanceName, substanceRouteSuggestion.route
+                        )
+                    }
+                }, label = {
+                    Text("Enter $pureDoseUnit")
+                })
+            }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
             substanceRouteSuggestion.customUnitDoses.forEach { customUnitDose ->
