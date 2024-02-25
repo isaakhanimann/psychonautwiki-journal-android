@@ -18,7 +18,6 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -95,7 +94,7 @@ fun IngestionRow(
             ) {
                 val text = buildAnnotatedString {
                     append(ingestionWithCompanionAndCustomUnit.doseDescription)
-                    withStyle(style = SpanStyle(color = if (isSystemInDarkTheme()) Color.Gray else Color.LightGray )) {
+                    withStyle(style = SpanStyle(color = Color.Gray)) {
                         if (customUnit == null) {
                             append(" " + ingestion.administrationRoute.displayText.lowercase())
                         }
