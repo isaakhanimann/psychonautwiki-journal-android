@@ -99,6 +99,21 @@ fun AdministrationRoutePicker(
             Column(
                 verticalArrangement = Arrangement.spacedBy(spacing.dp),
             ) {
+                pwRoutes.forEach { route ->
+                    ElevatedCard(
+                        modifier = Modifier
+                            .clickable {
+                                onRouteTapped(route)
+                            }
+                            .fillMaxWidth()
+                            .weight(5f)
+                    ) {
+                        RouteBox(
+                            route = route,
+                            titleStyle = MaterialTheme.typography.headlineSmall
+                        )
+                    }
+                }
                 ElevatedCard(
                     modifier = Modifier
                         .clickable {
@@ -114,21 +129,6 @@ fun AdministrationRoutePicker(
                         Text(
                             text = "Other Routes",
                             style = MaterialTheme.typography.headlineSmall
-                        )
-                    }
-                }
-                pwRoutes.forEach { route ->
-                    ElevatedCard(
-                        modifier = Modifier
-                            .clickable {
-                                onRouteTapped(route)
-                            }
-                            .fillMaxWidth()
-                            .weight(5f)
-                    ) {
-                        RouteBox(
-                            route = route,
-                            titleStyle = MaterialTheme.typography.headlineSmall
                         )
                     }
                 }
