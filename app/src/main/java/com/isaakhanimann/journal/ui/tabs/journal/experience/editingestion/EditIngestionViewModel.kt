@@ -51,7 +51,7 @@ class EditIngestionViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    var ingestionFlow: MutableStateFlow<Ingestion?> = MutableStateFlow(null)
+    private var ingestionFlow: MutableStateFlow<Ingestion?> = MutableStateFlow(null)
     var ingestion: Ingestion? = null
     var note by mutableStateOf("")
     var isEstimate by mutableStateOf(false)
@@ -87,6 +87,7 @@ class EditIngestionViewModel @Inject constructor(
             ingestion = ing
             note = ing.notes ?: ""
             isEstimate = ing.isDoseAnEstimate
+            estimatedDoseVariance = ing.estimatedDoseVariance?.toReadableString() ?: ""
             experienceId = ing.experienceId
             dose = ing.dose?.toReadableString() ?: ""
             isKnown = ing.dose != null
