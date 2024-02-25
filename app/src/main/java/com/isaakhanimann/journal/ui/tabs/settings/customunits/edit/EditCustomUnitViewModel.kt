@@ -125,7 +125,7 @@ class EditCustomUnitViewModel @Inject constructor(
                 it.dose = dose
                 it.isEstimate = isEstimate
                 it.originalUnit = originalUnit
-                it.estimatedDoseVariance = estimatedDoseVariance
+                it.estimatedDoseVariance = if (isEstimate) estimatedDoseVariance else null
                 it.isArchived = isArchived
                 it.unit = unit
                 it.note = note

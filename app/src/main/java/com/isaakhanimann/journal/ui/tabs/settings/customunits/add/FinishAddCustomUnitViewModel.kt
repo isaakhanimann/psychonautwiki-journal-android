@@ -118,7 +118,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
             administrationRoute = administrationRoute,
             dose = dose,
             isEstimate = isEstimate,
-            estimatedDoseVariance = estimatedDoseVariance,
+            estimatedDoseVariance = if (isEstimate) estimatedDoseVariance else null,
             isArchived = false,
             unit = unit,
             originalUnit = originalUnit,
