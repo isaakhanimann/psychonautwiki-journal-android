@@ -81,7 +81,7 @@ fun ColorPicker(
         shape = shape,
         color = selectedColor.getComposeColor(isDarkTheme),
         modifier = Modifier
-            .size(60.dp)
+            .size(50.dp)
             .clip(shape)
             .clickable(onClick = { isColorPickerVisible = true })
     ) {
