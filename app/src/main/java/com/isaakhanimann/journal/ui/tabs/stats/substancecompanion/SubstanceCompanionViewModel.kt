@@ -124,7 +124,7 @@ data class IngestionsBurst(
                     CustomUnitDose(
                         dose = doseUnwrapped,
                         isEstimate = ingestion.isDoseAnEstimate,
-                        estimatedDoseVariance = ingestion.estimatedDoseVariance,
+                        estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation,
                         customUnit = customUnitUnwrapped
                     )
                 }
@@ -133,8 +133,8 @@ data class IngestionsBurst(
             get() = customUnitDose?.doseDescription ?: ingestionDoseDescription
 
         private val ingestionDoseDescription get() = ingestion.dose?.let { dose ->
-            ingestion.estimatedDoseVariance?.let { estimatedDoseVariance ->
-                "${dose.toReadableString()}±${estimatedDoseVariance.toReadableString()} ${ingestion.units}"
+            ingestion.estimatedDoseStandardDeviation?.let { estimatedDoseStandardDeviation ->
+                "${dose.toReadableString()}±${estimatedDoseStandardDeviation.toReadableString()} ${ingestion.units}"
             } ?: run {
                 val description = "${dose.toReadableString()} ${ingestion.units}"
                 if (ingestion.isDoseAnEstimate) {

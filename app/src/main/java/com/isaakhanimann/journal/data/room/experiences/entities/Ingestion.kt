@@ -33,7 +33,7 @@ data class Ingestion(
     val administrationRoute: AdministrationRoute,
     var dose: Double?,
     var isDoseAnEstimate: Boolean,
-    var estimatedDoseVariance: Double?,
+    var estimatedDoseStandardDeviation: Double?,
     var units: String?,
     var experienceId: Int,
     var notes: String?,

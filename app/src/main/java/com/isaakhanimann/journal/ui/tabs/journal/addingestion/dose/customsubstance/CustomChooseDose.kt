@@ -68,7 +68,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun CustomChooseDose(
-    navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseVariance: Double?) -> Unit,
+    navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseStandardDeviation: Double?) -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     viewModel: CustomChooseDoseViewModel = hiltViewModel()
@@ -79,8 +79,8 @@ fun CustomChooseDose(
         administrationRoute = viewModel.administrationRoute,
         doseText = viewModel.doseText,
         onChangeDoseText = viewModel::onDoseTextChange,
-        estimatedDoseVarianceText = viewModel.estimatedDoseVarianceText,
-        onChangeEstimatedVarianceText = viewModel::onEstimatedDoseVarianceTextChange,
+        estimatedDoseStandardDeviationText = viewModel.estimatedDoseDeviationText,
+        onChangeEstimatedStandardDeviationText = viewModel::onEstimatedDoseStandardDeviationTextChange,
         isValidDose = viewModel.isValidDose,
         isEstimate = viewModel.isEstimate,
         onChangeIsEstimate = {
@@ -91,7 +91,7 @@ fun CustomChooseDose(
                 viewModel.units,
                 viewModel.isEstimate,
                 viewModel.dose,
-                viewModel.estimatedDoseVariance
+                viewModel.estimatedDoseStandardDeviation
             )
         },
         navigateToURL = navigateToURL,
@@ -122,8 +122,8 @@ fun CustomChooseDosePreview() {
         administrationRoute = AdministrationRoute.INSUFFLATED,
         doseText = "5",
         onChangeDoseText = {},
-        estimatedDoseVarianceText = "",
-        onChangeEstimatedVarianceText = {},
+        estimatedDoseStandardDeviationText = "",
+        onChangeEstimatedStandardDeviationText = {},
         isValidDose = true,
         isEstimate = false,
         onChangeIsEstimate = {},
@@ -147,8 +147,8 @@ fun CustomChooseDose(
     administrationRoute: AdministrationRoute,
     doseText: String,
     onChangeDoseText: (String) -> Unit,
-    estimatedDoseVarianceText: String,
-    onChangeEstimatedVarianceText: (String) -> Unit,
+    estimatedDoseStandardDeviationText: String,
+    onChangeEstimatedStandardDeviationText: (String) -> Unit,
     isValidDose: Boolean,
     isEstimate: Boolean,
     onChangeIsEstimate: (Boolean) -> Unit,
@@ -240,10 +240,10 @@ fun CustomChooseDose(
                     }
                     AnimatedVisibility(visible = isEstimate) {
                         OutlinedTextField(
-                            value = estimatedDoseVarianceText,
-                            onValueChange = onChangeEstimatedVarianceText,
+                            value = estimatedDoseStandardDeviationText,
+                            onValueChange = onChangeEstimatedStandardDeviationText,
                             textStyle = textStyle,
-                            label = { Text("Estimated variance", style = textStyle) },
+                            label = { Text("Estimated standard deviation", style = textStyle) },
                             isError = !isValidDose,
                             trailingIcon = {
                                 Text(

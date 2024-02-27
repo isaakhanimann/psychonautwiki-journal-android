@@ -185,13 +185,13 @@ class StatsViewModel @Inject constructor(
         val units = groupedIngestions.firstOrNull()?.originalUnit ?: return null
         if (groupedIngestions.any { it.originalUnit != units || it.pureDose == null }) return null
         val sumDose = groupedIngestions.sumOf { it.pureDose ?: 0.0 }
-        val sumVariances = groupedIngestions.sumOf { it.pureDoseVariance ?: 0.0 }
+        val sumStandardDeviations = groupedIngestions.sumOf { it.pureDoseStandardDeviation ?: 0.0 }
         val isEstimate = groupedIngestions.any { it.isEstimate }
         return TotalDose(
             dose = sumDose,
             units = units,
             isEstimate = isEstimate,
-            estimatedDoseVariance = sumVariances.takeIf { it > 0 })
+            estimatedDoseStandardDeviation = sumStandardDeviations.takeIf { it > 0 })
     }
 
     val statsModelFlow: StateFlow<StatsModel> =
@@ -267,7 +267,7 @@ data class TotalDose(
     val dose: Double,
     val units: String,
     val isEstimate: Boolean,
-    val estimatedDoseVariance: Double?
+    val estimatedDoseStandardDeviation: Double?
 )
 
 enum class TimePickerOption {

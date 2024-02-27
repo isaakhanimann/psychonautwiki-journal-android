@@ -36,7 +36,7 @@ const val SUBSTANCE_NAME_KEY = "substanceName"
 const val URL_KEY = "url"
 const val ADMINISTRATION_ROUTE_KEY = "administrationRoute"
 const val DOSE_KEY = "dose"
-const val ESTIMATED_DOSE_VARIANCE_KEY = "estimatedDoseVariance"
+const val ESTIMATED_DOSE_STANDARD_DEVIATION_KEY = "estimatedDoseStandardDeviation"
 const val CUSTOM_UNIT_ID_KEY = "customUnitId"
 const val IS_ESTIMATE_KEY = "isEstimate"
 const val UNITS_KEY = "units"
@@ -218,14 +218,14 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     )
 
     object ChooseTimeRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_TIME{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$ESTIMATED_DOSE_VARIANCE_KEY={$ESTIMATED_DOSE_VARIANCE_KEY}/?$CUSTOM_UNIT_ID_KEY={$CUSTOM_UNIT_ID_KEY}",
+        route = "$ROUTE_START_CHOOSE_TIME{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY={$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY}/?$CUSTOM_UNIT_ID_KEY={$CUSTOM_UNIT_ID_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
             navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType },
             navArgument(IS_ESTIMATE_KEY) { type = NavType.BoolType },
             navArgument(UNITS_KEY) { nullable = true },
             navArgument(DOSE_KEY) { nullable = true },
-            navArgument(ESTIMATED_DOSE_VARIANCE_KEY) { nullable = true },
+            navArgument(ESTIMATED_DOSE_STANDARD_DEVIATION_KEY) { nullable = true },
             navArgument(CUSTOM_UNIT_ID_KEY) { nullable = true },
         )
     )
@@ -352,10 +352,10 @@ fun NavController.navigateToChooseTimeAndMaybeColor(
     units: String?,
     isEstimate: Boolean,
     dose: Double?,
-    estimatedDoseVariance: Double?,
+    estimatedDoseStandardDeviation: Double?,
     customUnitId: Int?
 ) {
-    navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose/?$ESTIMATED_DOSE_VARIANCE_KEY=$estimatedDoseVariance/?$CUSTOM_UNIT_ID_KEY=$customUnitId")
+    navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose/?$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY=$estimatedDoseStandardDeviation/?$CUSTOM_UNIT_ID_KEY=$customUnitId")
 }
 
 fun NavController.navigateToFinishAddCustomUnit(

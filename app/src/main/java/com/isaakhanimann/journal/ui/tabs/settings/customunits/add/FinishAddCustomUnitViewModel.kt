@@ -77,11 +77,11 @@ class FinishAddCustomUnitViewModel @Inject constructor(
     }
     val dose: Double? get() = doseText.toDoubleOrNull()
 
-    var estimatedDoseVarianceText by mutableStateOf("")
-    fun onChangeOfEstimatedDoseVariance(newEstimatedDoseVariance: String) {
-        estimatedDoseVarianceText = newEstimatedDoseVariance
+    var estimatedDoseDeviationText by mutableStateOf("")
+    fun onChangeOfEstimatedDoseDeviation(newEstimatedDoseDeviation: String) {
+        estimatedDoseDeviationText = newEstimatedDoseDeviation
     }
-    val estimatedDoseVariance: Double? get() = estimatedDoseVarianceText.toDoubleOrNull()
+    val estimatedDoseDeviation: Double? get() = estimatedDoseDeviationText.toDoubleOrNull()
 
 
     var isEstimate by mutableStateOf(false)
@@ -118,7 +118,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
             administrationRoute = administrationRoute,
             dose = dose,
             isEstimate = isEstimate,
-            estimatedDoseVariance = if (isEstimate) estimatedDoseVariance else null,
+            estimatedDoseStandardDeviation = if (isEstimate) estimatedDoseDeviation else null,
             isArchived = false,
             unit = unit,
             originalUnit = originalUnit,

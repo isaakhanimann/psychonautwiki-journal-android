@@ -62,7 +62,7 @@ fun CumulativeDoseRowPreview() {
             cumulativeDose = 60.0,
             units = "mg",
             isEstimate = false,
-            cumulativeDoseVariance = 12.0,
+            cumulativeDoseStandardDeviation = 12.0,
             numDots = 6,
             route = AdministrationRoute.INSUFFLATED
         ), modifier = Modifier.fillMaxWidth()

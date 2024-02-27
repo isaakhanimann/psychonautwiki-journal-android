@@ -78,7 +78,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun ChooseDoseScreen(
-    navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseVariance: Double?) -> Unit,
+    navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseStandardDeviation: Double?) -> Unit,
     navigateToVolumetricDosingScreenOnJournalTab: () -> Unit,
     navigateToURL: (url: String) -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
@@ -93,8 +93,8 @@ fun ChooseDoseScreen(
         doseText = viewModel.doseText,
         doseRemark = viewModel.substance.dosageRemark,
         onChangeDoseText = viewModel::onDoseTextChange,
-        estimatedDoseVarianceText = viewModel.estimatedDoseVarianceText,
-        onChangeEstimatedDoseVarianceText = viewModel::onEstimatedDoseVarianceChange,
+        estimatedDoseStandardDeviationText = viewModel.estimatedDoseStandardDeviationText,
+        onChangeEstimatedDoseStandardDeviationText = viewModel::onEstimatedDoseStandardDeviationChange,
         isValidDose = viewModel.isValidDose,
         isEstimate = viewModel.isEstimate,
         onChangeIsEstimate = {
@@ -105,7 +105,7 @@ fun ChooseDoseScreen(
                 viewModel.units,
                 viewModel.isEstimate,
                 viewModel.dose,
-                viewModel.estimatedDoseVariance
+                viewModel.estimatedDoseStandardDeviation
             )
         },
         navigateToURL = navigateToURL,
@@ -143,8 +143,8 @@ fun ChooseDoseScreenPreview(
         administrationRoute = AdministrationRoute.INSUFFLATED,
         doseText = "5",
         onChangeDoseText = {},
-        estimatedDoseVarianceText = "",
-        onChangeEstimatedDoseVarianceText = {},
+        estimatedDoseStandardDeviationText = "",
+        onChangeEstimatedDoseStandardDeviationText = {},
         doseRemark = "This is a dose remark",
         isValidDose = true,
         isEstimate = false,
@@ -175,8 +175,8 @@ fun ChooseDoseScreenPreview2() {
         administrationRoute = AdministrationRoute.ORAL,
         doseText = "5",
         onChangeDoseText = {},
-        estimatedDoseVarianceText = "",
-        onChangeEstimatedDoseVarianceText = {},
+        estimatedDoseStandardDeviationText = "",
+        onChangeEstimatedDoseStandardDeviationText = {},
         isValidDose = true,
         isEstimate = false,
         onChangeIsEstimate = {},
@@ -206,8 +206,8 @@ fun ChooseDoseScreen(
     doseRemark: String?,
     doseText: String,
     onChangeDoseText: (String) -> Unit,
-    estimatedDoseVarianceText: String,
-    onChangeEstimatedDoseVarianceText: (String) -> Unit,
+    estimatedDoseStandardDeviationText: String,
+    onChangeEstimatedDoseStandardDeviationText: (String) -> Unit,
     isValidDose: Boolean,
     isEstimate: Boolean,
     onChangeIsEstimate: (Boolean) -> Unit,
@@ -358,10 +358,10 @@ fun ChooseDoseScreen(
                     }
                     AnimatedVisibility(visible = isEstimate) {
                         OutlinedTextField(
-                            value = estimatedDoseVarianceText,
-                            onValueChange = onChangeEstimatedDoseVarianceText,
+                            value = estimatedDoseStandardDeviationText,
+                            onValueChange = onChangeEstimatedDoseStandardDeviationText,
                             textStyle = textStyle,
-                            label = { Text("Estimated variance", style = textStyle) },
+                            label = { Text("Estimated standard deviation", style = textStyle) },
                             trailingIcon = {
                                 Text(
                                     text = units,

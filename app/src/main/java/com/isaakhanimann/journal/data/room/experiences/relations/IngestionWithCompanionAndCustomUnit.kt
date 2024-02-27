@@ -48,8 +48,8 @@ data class IngestionWithCompanionAndCustomUnit(
 
     val isEstimate: Boolean get() = ingestion.isDoseAnEstimate || customUnit?.isEstimate ?: false
 
-    val pureDoseVariance: Double?
-        get() = customUnitDose?.calculatedDoseVariance ?: ingestion.estimatedDoseVariance
+    val pureDoseStandardDeviation: Double?
+        get() = customUnitDose?.calculatedDoseStandardDeviation ?: ingestion.estimatedDoseStandardDeviation
 
     val customUnitDose: CustomUnitDose?
         get() = ingestion.dose?.let { doseUnwrapped ->
@@ -57,7 +57,7 @@ data class IngestionWithCompanionAndCustomUnit(
                 CustomUnitDose(
                     dose = doseUnwrapped,
                     isEstimate = ingestion.isDoseAnEstimate,
-                    estimatedDoseVariance = ingestion.estimatedDoseVariance,
+                    estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation,
                     customUnit = customUnitUnwrapped
                 )
             }
@@ -65,8 +65,8 @@ data class IngestionWithCompanionAndCustomUnit(
     val doseDescription: String get() = customUnitDose?.doseDescription ?: ingestionDoseDescription
 
     private val ingestionDoseDescription get() = ingestion.dose?.let { dose ->
-        ingestion.estimatedDoseVariance?.let { estimatedDoseVariance ->
-            "${dose.toReadableString()}±${estimatedDoseVariance.toReadableString()} ${ingestion.units}"
+        ingestion.estimatedDoseStandardDeviation?.let { estimatedDoseDeviation ->
+            "${dose.toReadableString()}±${estimatedDoseDeviation.toReadableString()} ${ingestion.units}"
         } ?: run {
             val description = "${dose.toReadableString()} ${ingestion.units}"
             if (isEstimate) {

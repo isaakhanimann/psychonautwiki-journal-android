@@ -103,8 +103,8 @@ fun EditIngestionScreen(
         toggleIsKnown = viewModel::toggleIsKnown,
         dose = viewModel.dose,
         onDoseChange = { viewModel.dose = it },
-        estimatedDoseVariance = viewModel.estimatedDoseVariance,
-        onEstimatedDoseVarianceChange = viewModel::onChangeEstimatedDoseVariance,
+        estimatedDoseStandardDeviation = viewModel.estimatedDoseStandardDeviation,
+        onEstimatedDoseStandardDeviationChange = viewModel::onChangeEstimatedDoseStandardDeviation,
         units = viewModel.units,
         onUnitsChange = { viewModel.units = it },
         experiences = viewModel.relevantExperiences.collectAsState().value,
@@ -140,8 +140,8 @@ fun EditIngestionScreenPreview() {
             toggleIsKnown = {},
             dose = "5",
             onDoseChange = {},
-            estimatedDoseVariance = "",
-            onEstimatedDoseVarianceChange = {},
+            estimatedDoseStandardDeviation = "",
+            onEstimatedDoseStandardDeviationChange = {},
             units = "mg",
             onUnitsChange = {},
             experiences = emptyList(),
@@ -173,8 +173,8 @@ fun EditIngestionScreen(
     toggleIsKnown: () -> Unit,
     dose: String,
     onDoseChange: (String) -> Unit,
-    estimatedDoseVariance: String,
-    onEstimatedDoseVarianceChange: (String) -> Unit,
+    estimatedDoseStandardDeviation: String,
+    onEstimatedDoseStandardDeviationChange: (String) -> Unit,
     units: String,
     onUnitsChange: (String) -> Unit,
     experiences: List<ExperienceOption>,
@@ -310,9 +310,9 @@ fun EditIngestionScreen(
                         }
                         AnimatedVisibility(visible = isEstimate) {
                             OutlinedTextField(
-                                value = estimatedDoseVariance,
-                                onValueChange = onEstimatedDoseVarianceChange,
-                                label = { Text("Estimated variance") },
+                                value = estimatedDoseStandardDeviation,
+                                onValueChange = onEstimatedDoseStandardDeviationChange,
+                                label = { Text("Estimated standard deviation") },
                                 trailingIcon = {
                                     Text(
                                         text = units,

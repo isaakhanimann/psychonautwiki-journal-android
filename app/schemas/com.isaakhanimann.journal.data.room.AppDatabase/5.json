@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "c470c572039744d73538ce6853e92f9d",
+    "identityHash": "5d66df11b1779271b3f5465b105e2d77",
     "entities": [
       {
         "tableName": "Experience",
@@ -74,7 +74,7 @@
       },
       {
         "tableName": "Ingestion",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `substanceName` TEXT NOT NULL, `time` INTEGER NOT NULL, `creationDate` INTEGER, `administrationRoute` TEXT NOT NULL, `dose` REAL, `isDoseAnEstimate` INTEGER NOT NULL, `estimatedDoseVariance` REAL, `units` TEXT, `experienceId` INTEGER NOT NULL, `notes` TEXT, `stomachFullness` TEXT, `consumerName` TEXT, `customUnitId` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `substanceName` TEXT NOT NULL, `time` INTEGER NOT NULL, `creationDate` INTEGER, `administrationRoute` TEXT NOT NULL, `dose` REAL, `isDoseAnEstimate` INTEGER NOT NULL, `estimatedDoseStandardDeviation` REAL, `units` TEXT, `experienceId` INTEGER NOT NULL, `notes` TEXT, `stomachFullness` TEXT, `consumerName` TEXT, `customUnitId` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -119,8 +119,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "estimatedDoseVariance",
-            "columnName": "estimatedDoseVariance",
+            "fieldPath": "estimatedDoseStandardDeviation",
+            "columnName": "estimatedDoseStandardDeviation",
             "affinity": "REAL",
             "notNull": false
           },
@@ -336,7 +336,7 @@
       },
       {
         "tableName": "CustomUnit",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `substanceName` TEXT NOT NULL, `name` TEXT NOT NULL, `creationDate` INTEGER NOT NULL, `administrationRoute` TEXT NOT NULL, `dose` REAL, `estimatedDoseVariance` REAL, `isEstimate` INTEGER NOT NULL, `isArchived` INTEGER NOT NULL, `unit` TEXT NOT NULL, `originalUnit` TEXT NOT NULL, `note` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `substanceName` TEXT NOT NULL, `name` TEXT NOT NULL, `creationDate` INTEGER NOT NULL, `administrationRoute` TEXT NOT NULL, `dose` REAL, `estimatedDoseStandardDeviation` REAL, `isEstimate` INTEGER NOT NULL, `isArchived` INTEGER NOT NULL, `unit` TEXT NOT NULL, `originalUnit` TEXT NOT NULL, `note` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -375,8 +375,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "estimatedDoseVariance",
-            "columnName": "estimatedDoseVariance",
+            "fieldPath": "estimatedDoseStandardDeviation",
+            "columnName": "estimatedDoseStandardDeviation",
             "affinity": "REAL",
             "notNull": false
           },
@@ -424,7 +424,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c470c572039744d73538ce6853e92f9d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5d66df11b1779271b3f5465b105e2d77')"
     ]
   }
 }

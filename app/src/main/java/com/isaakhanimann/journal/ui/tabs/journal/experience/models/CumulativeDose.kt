@@ -26,7 +26,7 @@ data class CumulativeDose(
     val cumulativeDose: Double,
     val units: String,
     val isEstimate: Boolean,
-    val cumulativeDoseVariance: Double?,
+    val cumulativeDoseStandardDeviation: Double?,
     val numDots: Int?,
     val route: AdministrationRoute
 ) {
@@ -34,8 +34,8 @@ data class CumulativeDose(
     {
         val description = cumulativeDose.toReadableString() + " $units"
         return if (isEstimate) {
-            if (cumulativeDoseVariance != null) {
-                "${cumulativeDose.toReadableString()}±${cumulativeDoseVariance.toReadableString()} $units"
+            if (cumulativeDoseStandardDeviation != null) {
+                "${cumulativeDose.toReadableString()}±${cumulativeDoseStandardDeviation.toReadableString()} $units"
             } else {
                 "~$description"
             }

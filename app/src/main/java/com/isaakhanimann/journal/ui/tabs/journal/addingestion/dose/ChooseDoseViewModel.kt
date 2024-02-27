@@ -44,7 +44,7 @@ class ChooseDoseViewModel @Inject constructor(
     val roaDose: RoaDose?
     var isEstimate by mutableStateOf(false)
     var doseText by mutableStateOf("")
-    var estimatedDoseVarianceText by mutableStateOf("")
+    var estimatedDoseStandardDeviationText by mutableStateOf("")
     var purityText by mutableStateOf("100")
     var units by mutableStateOf("")
     private val purity: Double?
@@ -75,7 +75,7 @@ class ChooseDoseViewModel @Inject constructor(
             }
         }
     val dose: Double? get() = doseText.toDoubleOrNull()
-    val estimatedDoseVariance: Double? get() = estimatedDoseVarianceText.toDoubleOrNull()
+    val estimatedDoseStandardDeviation: Double? get() = estimatedDoseStandardDeviationText.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
     val currentDoseClass: DoseClass? get() = roaDose?.getDoseClass(ingestionDose = dose)
 
@@ -83,8 +83,8 @@ class ChooseDoseViewModel @Inject constructor(
         doseText = newDoseText.replace(oldChar = ',', newChar = '.')
     }
 
-    fun onEstimatedDoseVarianceChange(newEstimatedVarianceText: String) {
-        estimatedDoseVarianceText = newEstimatedVarianceText.replace(oldChar = ',', newChar = '.')
+    fun onEstimatedDoseStandardDeviationChange(newEstimatedStandardDeviationText: String) {
+        estimatedDoseStandardDeviationText = newEstimatedStandardDeviationText.replace(oldChar = ',', newChar = '.')
     }
 
     init {

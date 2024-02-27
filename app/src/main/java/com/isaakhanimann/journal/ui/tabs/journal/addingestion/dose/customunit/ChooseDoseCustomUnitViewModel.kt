@@ -62,7 +62,7 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
     // editable fields
     var doseText by mutableStateOf("")
     var isEstimate by mutableStateOf(false)
-    var estimatedDoseVarianceText by mutableStateOf("")
+    var estimatedDoseDeviationText by mutableStateOf("")
 
     fun onDoseTextChange(newDoseText: String) {
         doseText = newDoseText.replace(oldChar = ',', newChar = '.')
@@ -72,12 +72,12 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
         isEstimate = newIsEstimate
     }
 
-    fun onEstimatedDoseVarianceChange(newEstimatedVarianceText: String) {
-        estimatedDoseVarianceText = newEstimatedVarianceText.replace(oldChar = ',', newChar = '.')
+    fun onEstimatedDoseDeviationChange(newEstimatedDeviationText: String) {
+        estimatedDoseDeviationText = newEstimatedDeviationText.replace(oldChar = ',', newChar = '.')
     }
 
     val dose: Double? get() = doseText.toDoubleOrNull()
-    val estimatedDoseVariance: Double? get() = estimatedDoseVarianceText.toDoubleOrNull()
+    val estimatedDoseDeviation: Double? get() = estimatedDoseDeviationText.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
 
     val customUnitDose: CustomUnitDose?
@@ -87,7 +87,7 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
                     CustomUnitDose(
                         dose = doseUnwrapped,
                         isEstimate = isEstimate,
-                        estimatedDoseVariance = estimatedDoseVariance,
+                        estimatedDoseStandardDeviation = estimatedDoseDeviation,
                         customUnit = it
                     )
                 }

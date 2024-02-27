@@ -62,7 +62,7 @@ fun SuggestionRow(
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseVariance: Double?, customUnitId: Int?) -> Unit,
+    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -94,7 +94,7 @@ fun SuggestionRow(
                                 doseAndUnit.dose,
                                 doseAndUnit.unit,
                                 doseAndUnit.isEstimate,
-                                doseAndUnit.estimatedDoseVariance,
+                                doseAndUnit.estimatedDoseStandardDeviation,
                                 null
                             )
                         } else {
@@ -104,7 +104,7 @@ fun SuggestionRow(
                                 doseAndUnit.dose,
                                 doseAndUnit.unit,
                                 doseAndUnit.isEstimate,
-                                doseAndUnit.estimatedDoseVariance,
+                                doseAndUnit.estimatedDoseStandardDeviation,
                                 null
                             )
                         }
@@ -114,10 +114,10 @@ fun SuggestionRow(
                             val description =
                                 "${doseAndUnit.dose.toReadableString()} ${doseAndUnit.unit}"
                             if (doseAndUnit.isEstimate) {
-                                if (doseAndUnit.estimatedDoseVariance != null) {
+                                if (doseAndUnit.estimatedDoseStandardDeviation != null) {
                                     Text(
                                         text = "${doseAndUnit.dose.toReadableString()}±${
-                                            doseAndUnit.estimatedDoseVariance.toReadableString()
+                                            doseAndUnit.estimatedDoseStandardDeviation.toReadableString()
                                         } ${doseAndUnit.unit}"
                                     )
                                 } else {
@@ -158,7 +158,7 @@ fun SuggestionRow(
                         customUnitDose.dose,
                         customUnitDose.customUnit.unit,
                         customUnitDose.isEstimate,
-                        customUnitDose.estimatedDoseVariance,
+                        customUnitDose.estimatedDoseStandardDeviation,
                         customUnitDose.customUnit.id
                     )
                 }, label = {

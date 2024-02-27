@@ -39,32 +39,32 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
                     dose = 50.0,
                     unit = "mg",
                     isEstimate = false,
-                    estimatedDoseVariance = null
+                    estimatedDoseStandardDeviation = null
                 ),
                 DoseAndUnit(
                     dose = 100.0,
                     unit = "mg",
                     isEstimate = false,
-                    estimatedDoseVariance = null
+                    estimatedDoseStandardDeviation = null
                 ),
                 DoseAndUnit(
                     dose = null,
                     unit = "mg",
                     isEstimate = false,
-                    estimatedDoseVariance = null
+                    estimatedDoseStandardDeviation = null
                 ),
             ),
             customUnitDoses = listOf(
                 CustomUnitDose(
                     dose = 2.0,
                     isEstimate = false,
-                    estimatedDoseVariance = null,
+                    estimatedDoseStandardDeviation = null,
                     customUnit = CustomUnit.mdmaSample
                 ),
                 CustomUnitDose(
                     dose = 2.0,
                     isEstimate = false,
-                    estimatedDoseVariance = null,
+                    estimatedDoseStandardDeviation = null,
                     customUnit = CustomUnit.twoCBSample
                 )
             ),
@@ -84,19 +84,19 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
                     dose = 10.0,
                     unit = "mg",
                     isEstimate = false,
-                    estimatedDoseVariance = null
+                    estimatedDoseStandardDeviation = null
                 ),
                 DoseAndUnit(
                     dose = 20.0,
                     unit = "mg",
                     isEstimate = false,
-                    estimatedDoseVariance = null
+                    estimatedDoseStandardDeviation = null
                 ),
                 DoseAndUnit(
                     dose = null,
                     unit = "mg",
                     isEstimate = false,
-                    estimatedDoseVariance = null
+                    estimatedDoseStandardDeviation = null
                 ),
             ),
             customUnitDoses = emptyList(),
@@ -113,7 +113,7 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
                     dose = 20.0,
                     unit = "mg",
                     isEstimate = false,
-                    estimatedDoseVariance = null
+                    estimatedDoseStandardDeviation = null
                 ),
             ),
             customUnitDoses = emptyList(),

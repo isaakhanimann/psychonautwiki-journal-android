@@ -320,7 +320,7 @@ class OneExperienceViewModel @Inject constructor(
                     val cumulativeDose =
                         groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.pureDose }
                             .sum()
-                    val cumulativeDoseVariance = groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.pureDoseVariance }.sum()
+                    val cumulativeDoseStandardDeviation = groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.pureDoseStandardDeviation }.sum()
                     val numDots = groupedIngestions.first().roaDose?.getNumDots(
                         ingestionDose = cumulativeDose,
                         ingestionUnits = units
@@ -330,7 +330,7 @@ class OneExperienceViewModel @Inject constructor(
                         cumulativeDose = cumulativeDose,
                         units = units,
                         isEstimate = isEstimate,
-                        cumulativeDoseVariance = cumulativeDoseVariance,
+                        cumulativeDoseStandardDeviation = cumulativeDoseStandardDeviation,
                         numDots = numDots,
                         route = firstIngestion.ingestion.administrationRoute
                     )

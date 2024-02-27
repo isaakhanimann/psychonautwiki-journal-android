@@ -251,8 +251,8 @@ fun StatsScreen(
                                             val cumulativeDose = subStat.totalDose
                                             if (cumulativeDose != null) {
                                                 if (cumulativeDose.isEstimate) {
-                                                    if (cumulativeDose.estimatedDoseVariance != null) {
-                                                        Text(text = "total ${cumulativeDose.dose.toReadableString()}±${cumulativeDose.estimatedDoseVariance.toReadableString()} ${cumulativeDose.units}")
+                                                    if (cumulativeDose.estimatedDoseStandardDeviation != null) {
+                                                        Text(text = "total ${cumulativeDose.dose.toReadableString()}±${cumulativeDose.estimatedDoseStandardDeviation.toReadableString()} ${cumulativeDose.units}")
                                                     } else {
                                                         Text(text = "total ~${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
                                                     }

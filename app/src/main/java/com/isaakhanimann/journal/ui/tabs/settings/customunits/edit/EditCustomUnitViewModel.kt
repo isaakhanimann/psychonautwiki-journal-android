@@ -58,7 +58,7 @@ class EditCustomUnitViewModel @Inject constructor(
                 name = customUnit.name
                 unit = customUnit.unit
                 doseText = customUnit.dose?.toReadableString() ?: ""
-                estimatedDoseVarianceText = customUnit.estimatedDoseVariance?.toReadableString() ?: ""
+                estimatedDoseDeviationText = customUnit.estimatedDoseStandardDeviation?.toReadableString() ?: ""
                 isEstimate = customUnit.isEstimate
                 isArchived = customUnit.isArchived
                 note = customUnit.note
@@ -96,11 +96,11 @@ class EditCustomUnitViewModel @Inject constructor(
     }
     val dose: Double? get() = doseText.toDoubleOrNull()
 
-    var estimatedDoseVarianceText by mutableStateOf("")
-    fun onChangeOfEstimatedDoseVariance(newEstimatedDoseVariance: String) {
-        estimatedDoseVarianceText = newEstimatedDoseVariance
+    var estimatedDoseDeviationText by mutableStateOf("")
+    fun onChangeOfEstimatedDoseDeviation(newEstimatedDoseDeviation: String) {
+        estimatedDoseDeviationText = newEstimatedDoseDeviation
     }
-    val estimatedDoseVariance: Double? get() = estimatedDoseVarianceText.toDoubleOrNull()
+    val estimatedDoseStandardDeviation: Double? get() = estimatedDoseDeviationText.toDoubleOrNull()
 
 
     var isEstimate by mutableStateOf(false)
@@ -125,7 +125,7 @@ class EditCustomUnitViewModel @Inject constructor(
                 it.dose = dose
                 it.isEstimate = isEstimate
                 it.originalUnit = originalUnit
-                it.estimatedDoseVariance = if (isEstimate) estimatedDoseVariance else null
+                it.estimatedDoseStandardDeviation = if (isEstimate) estimatedDoseStandardDeviation else null
                 it.isArchived = isArchived
                 it.unit = unit
                 it.note = note

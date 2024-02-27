@@ -45,7 +45,7 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                         dose = 500.0,
                         units = "ug",
                         isEstimate = false,
-                        estimatedDoseVariance = null
+                        estimatedDoseStandardDeviation = null
                     )
                 ),
                 StatItem(
@@ -67,7 +67,7 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                         dose = 950.0,
                         units = "mg",
                         isEstimate = true,
-                        estimatedDoseVariance = 50.0
+                        estimatedDoseStandardDeviation = 50.0
                     )
                 ),
                 StatItem(
@@ -98,7 +98,7 @@ class StatsPreviewProvider : PreviewParameterProvider<StatsModel> {
                         dose = 30.0,
                         units = "mg",
                         isEstimate = true,
-                        estimatedDoseVariance = 5.0
+                        estimatedDoseStandardDeviation = 5.0
                     )
                 )
             ),

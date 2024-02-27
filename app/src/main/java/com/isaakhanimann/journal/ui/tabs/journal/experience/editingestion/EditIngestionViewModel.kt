@@ -57,7 +57,7 @@ class EditIngestionViewModel @Inject constructor(
     var isEstimate by mutableStateOf(false)
     var isKnown by mutableStateOf(true)
     var dose by mutableStateOf("")
-    var estimatedDoseVariance by mutableStateOf("")
+    var estimatedDoseStandardDeviation by mutableStateOf("")
     var units by mutableStateOf("")
     var experienceId by mutableIntStateOf(1)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
@@ -73,8 +73,8 @@ class EditIngestionViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
-    fun onChangeEstimatedDoseVariance(newEstimatedDoseVariance: String) {
-        estimatedDoseVariance = newEstimatedDoseVariance
+    fun onChangeEstimatedDoseStandardDeviation(newEstimatedDoseStandardDeviation: String) {
+        estimatedDoseStandardDeviation = newEstimatedDoseStandardDeviation
     }
 
     init {
@@ -87,7 +87,7 @@ class EditIngestionViewModel @Inject constructor(
             ingestion = ing
             note = ing.notes ?: ""
             isEstimate = ing.isDoseAnEstimate
-            estimatedDoseVariance = ing.estimatedDoseVariance?.toReadableString() ?: ""
+            estimatedDoseStandardDeviation = ing.estimatedDoseStandardDeviation?.toReadableString() ?: ""
             experienceId = ing.experienceId
             dose = ing.dose?.toReadableString() ?: ""
             isKnown = ing.dose != null
@@ -156,7 +156,7 @@ class EditIngestionViewModel @Inject constructor(
                 it.isDoseAnEstimate = isEstimate
                 it.experienceId = experienceId
                 it.dose = if (isKnown) dose.toDoubleOrNull() else null
-                it.estimatedDoseVariance = if (isEstimate) estimatedDoseVariance.toDoubleOrNull() else null
+                it.estimatedDoseStandardDeviation = if (isEstimate) estimatedDoseStandardDeviation.toDoubleOrNull() else null
                 it.units = units
                 it.customUnitId = customUnit?.id
                 it.time = selectedInstant

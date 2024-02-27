@@ -39,24 +39,24 @@ data class DoseAndUnit(
     val dose: Double?,
     val unit: String,
     val isEstimate: Boolean,
-    val estimatedDoseVariance: Double?
+    val estimatedDoseStandardDeviation: Double?
 )
 
 data class CustomUnitDose(
     val dose: Double,
     val isEstimate: Boolean,
-    val estimatedDoseVariance: Double?,
+    val estimatedDoseStandardDeviation: Double?,
     val customUnit: CustomUnit
 ) {
     val calculatedDose: Double?
         get() {
             return customUnit.dose?.let { dosePerUnit ->
-                return customUnit.estimatedDoseVariance?.let { customDoseVariance ->
-                    if (isEstimate && estimatedDoseVariance != null) {
-                        val minDose = dose - estimatedDoseVariance
-                        val maxDose = dose + estimatedDoseVariance
-                        val minCustomDose = dosePerUnit - customDoseVariance
-                        val maxCustomDose = dosePerUnit + customDoseVariance
+                return customUnit.estimatedDoseStandardDeviation?.let { customDoseDeviation ->
+                    if (isEstimate && estimatedDoseStandardDeviation != null) {
+                        val minDose = dose - estimatedDoseStandardDeviation
+                        val maxDose = dose + estimatedDoseStandardDeviation
+                        val minCustomDose = dosePerUnit - customDoseDeviation
+                        val maxCustomDose = dosePerUnit + customDoseDeviation
                         val minResult = minDose * minCustomDose
                         val maxResult = maxDose * maxCustomDose
                         return (minResult + maxResult) / 2
@@ -67,25 +67,25 @@ data class CustomUnitDose(
             }
         }
 
-    val calculatedDoseVariance: Double?
+    val calculatedDoseStandardDeviation: Double?
         get() {
             return customUnit.dose?.let { dosePerUnit ->
-                return customUnit.estimatedDoseVariance?.let { customDoseVariance ->
-                    if (isEstimate && estimatedDoseVariance != null) {
-                        val minDose = dose - estimatedDoseVariance
-                        val maxDose = dose + estimatedDoseVariance
-                        val minCustomDose = dosePerUnit - customDoseVariance
-                        val maxCustomDose = dosePerUnit + customDoseVariance
+                return customUnit.estimatedDoseStandardDeviation?.let { customDoseDeviation ->
+                    if (isEstimate && estimatedDoseStandardDeviation != null) {
+                        val minDose = dose - estimatedDoseStandardDeviation
+                        val maxDose = dose + estimatedDoseStandardDeviation
+                        val minCustomDose = dosePerUnit - customDoseDeviation
+                        val maxCustomDose = dosePerUnit + customDoseDeviation
                         val minResult = minDose * minCustomDose
                         val maxResult = maxDose * maxCustomDose
                         val result = (minResult + maxResult) / 2
                         return maxResult - result
                     } else {
-                        return dose * customDoseVariance
+                        return dose * customDoseDeviation
                     }
                 } ?: run {
-                    if (estimatedDoseVariance != null && isEstimate) {
-                        return estimatedDoseVariance * dosePerUnit
+                    if (estimatedDoseStandardDeviation != null && isEstimate) {
+                        return estimatedDoseStandardDeviation * dosePerUnit
                     } else {
                         return null
                     }
@@ -97,7 +97,7 @@ data class CustomUnitDose(
     val calculatedDoseDescription: String? get()
     {
         return calculatedDose?.let { calculatedDoseUnwrapped ->
-            calculatedDoseVariance?.let {
+            calculatedDoseStandardDeviation?.let {
                 return "${calculatedDoseUnwrapped.toReadableString()}±${it.toReadableString()} ${customUnit.originalUnit}"
             } ?: run {
                 val description = "${calculatedDoseUnwrapped.toReadableString()} ${customUnit.originalUnit}"
@@ -115,8 +115,8 @@ data class CustomUnitDose(
     {
         val description = dose.toStringWith(unit = customUnit.unit)
         return if (isEstimate) {
-            if (estimatedDoseVariance != null) {
-                "${dose.toReadableString()}±${estimatedDoseVariance.toStringWith(unit = customUnit.unit)}"
+            if (estimatedDoseStandardDeviation != null) {
+                "${dose.toReadableString()}±${estimatedDoseStandardDeviation.toStringWith(unit = customUnit.unit)}"
             } else {
                 "~$description"
             }

@@ -75,7 +75,7 @@ fun ChooseDoseCustomUnitScreen(
         units: String?,
         isEstimate: Boolean,
         dose: Double?,
-        estimatedDoseVariance: Double?,
+        estimatedDoseStandardDeviation: Double?,
         customUnitId: Int?
     ) -> Unit,
     viewModel: ChooseDoseCustomUnitViewModel = hiltViewModel()
@@ -87,8 +87,8 @@ fun ChooseDoseCustomUnitScreen(
             doseText = viewModel.doseText,
             doseRemark = viewModel.doseRemark,
             onChangeDoseText = viewModel::onDoseTextChange,
-            estimatedDoseVarianceText = viewModel.estimatedDoseVarianceText,
-            onChangeEstimatedDoseVarianceText = viewModel::onEstimatedDoseVarianceChange,
+            estimatedDoseDeviationText = viewModel.estimatedDoseDeviationText,
+            onChangeEstimatedDoseDeviationText = viewModel::onEstimatedDoseDeviationChange,
             isValidDose = viewModel.isValidDose,
             isEstimate = viewModel.isEstimate,
             onChangeIsEstimate = {
@@ -101,7 +101,7 @@ fun ChooseDoseCustomUnitScreen(
                     customUnitUnwrapped.unit,
                     viewModel.isEstimate,
                     viewModel.dose,
-                    viewModel.estimatedDoseVariance,
+                    viewModel.estimatedDoseDeviation,
                     customUnitUnwrapped.id
                 )
             },
@@ -132,7 +132,7 @@ fun ChooseDoseCustomUnitScreenPreview(
             substanceName = "Example Substance",
             administrationRoute = AdministrationRoute.ORAL,
             dose = 10.0,
-            estimatedDoseVariance = null,
+            estimatedDoseStandardDeviation = null,
             isEstimate = false,
             isArchived = false,
             originalUnit = "mg",
@@ -143,8 +143,8 @@ fun ChooseDoseCustomUnitScreenPreview(
         roaDose = roaDose,
         doseText = "5",
         onChangeDoseText = {},
-        estimatedDoseVarianceText = "",
-        onChangeEstimatedDoseVarianceText = {},
+        estimatedDoseDeviationText = "",
+        onChangeEstimatedDoseDeviationText = {},
         doseRemark = "This is a dose remark",
         isValidDose = true,
         isEstimate = false,
@@ -164,8 +164,8 @@ fun ChooseDoseCustomUnitScreen(
     doseRemark: String?,
     doseText: String,
     onChangeDoseText: (String) -> Unit,
-    estimatedDoseVarianceText: String,
-    onChangeEstimatedDoseVarianceText: (String) -> Unit,
+    estimatedDoseDeviationText: String,
+    onChangeEstimatedDoseDeviationText: (String) -> Unit,
     isValidDose: Boolean,
     isEstimate: Boolean,
     onChangeIsEstimate: (Boolean) -> Unit,
@@ -287,10 +287,10 @@ fun ChooseDoseCustomUnitScreen(
                     }
                     AnimatedVisibility(visible = isEstimate) {
                         OutlinedTextField(
-                            value = estimatedDoseVarianceText,
-                            onValueChange = onChangeEstimatedDoseVarianceText,
+                            value = estimatedDoseDeviationText,
+                            onValueChange = onChangeEstimatedDoseDeviationText,
                             textStyle = textStyle,
-                            label = { Text("Estimated variance", style = textStyle) },
+                            label = { Text("Estimated standard deviation", style = textStyle) },
                             trailingIcon = {
                                 Text(
                                     text = customUnit.unit,

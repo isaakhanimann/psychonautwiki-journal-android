@@ -34,7 +34,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_UNIT_ID_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.DOSE_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.ESTIMATED_DOSE_VARIANCE_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.ESTIMATED_DOSE_STANDARD_DEVIATION_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.IS_ESTIMATE_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.UNITS_KEY
@@ -144,7 +144,7 @@ class ChooseTimeViewModel @Inject constructor(
     private val dose: Double?
     private val units: String?
     private val isEstimate: Boolean
-    private val estimatedDoseVariance: Double?
+    private val estimatedDoseStandardDeviation: Double?
     private val customUnitId: Int?
     private var substanceCompanion: SubstanceCompanion? = null
 
@@ -179,7 +179,7 @@ class ChooseTimeViewModel @Inject constructor(
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         dose = state.get<String>(DOSE_KEY)?.toDoubleOrNull()
-        estimatedDoseVariance = state.get<String>(ESTIMATED_DOSE_VARIANCE_KEY)?.toDoubleOrNull()
+        estimatedDoseStandardDeviation = state.get<String>(ESTIMATED_DOSE_STANDARD_DEVIATION_KEY)?.toDoubleOrNull()
         customUnitId = state.get<String>(CUSTOM_UNIT_ID_KEY)?.toIntOrNull()
         units = state.get<String>(UNITS_KEY)?.let {
             if (it == "null") {
@@ -266,7 +266,7 @@ class ChooseTimeViewModel @Inject constructor(
         administrationRoute = administrationRoute,
         dose = dose,
         isDoseAnEstimate = isEstimate,
-        estimatedDoseVariance = estimatedDoseVariance,
+        estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
         units = units,
         experienceId = experienceId,
         notes = note,

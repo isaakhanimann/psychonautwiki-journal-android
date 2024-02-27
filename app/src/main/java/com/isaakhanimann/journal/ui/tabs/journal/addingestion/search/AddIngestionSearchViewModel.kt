@@ -145,7 +145,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                                 dose = ingestionWithCustomUnit.ingestion.dose,
                                 unit = ingestionWithCustomUnit.ingestion.units ?: ingestionWithCustomUnit.customUnit?.unit ?: "",
                                 isEstimate = ingestionWithCustomUnit.ingestion.isDoseAnEstimate,
-                                estimatedDoseVariance = ingestionWithCustomUnit.ingestion.estimatedDoseVariance
+                                estimatedDoseStandardDeviation = ingestionWithCustomUnit.ingestion.estimatedDoseStandardDeviation
                             )
                         }.distinct().take(6),
                         customUnitDoses = routeEntry.value.mapNotNull { ingestionWithCustomUnit ->
@@ -155,7 +155,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                                 CustomUnitDose(
                                     dose = dose,
                                     isEstimate = ingestion.isDoseAnEstimate,
-                                    estimatedDoseVariance = ingestion.estimatedDoseVariance,
+                                    estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation,
                                     customUnit = it
                                 )
                             }
