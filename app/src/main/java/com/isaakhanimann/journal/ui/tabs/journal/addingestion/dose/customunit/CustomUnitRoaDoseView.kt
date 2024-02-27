@@ -28,8 +28,8 @@ import kotlin.math.round
 fun CustomUnitRoaDoseView(roaDose: RoaDose, customUnit: CustomUnit) {
     fun convertToNewUnit(oldDose: Double?): Double? {
         return customUnit.dose?.let { dosePerUnit ->
-            if (oldDose !=null) {
-                return@let roundToOneDecimalPlace(oldDose/dosePerUnit)
+            if (oldDose != null) {
+                return@let roundToSensibly(oldDose / dosePerUnit)
             } else {
                 return@let null
             }
@@ -44,6 +44,12 @@ fun CustomUnitRoaDoseView(roaDose: RoaDose, customUnit: CustomUnit) {
     )
 }
 
-fun roundToOneDecimalPlace(num: Double): Double {
-    return round(num * 10) / 10
+fun roundToSensibly(num: Double): Double {
+    return if (num > 100) {
+        round(num)
+    } else if (num > 10) {
+        round(num * 10.0) / 10.0
+    } else {
+        round(num * 100.0) / 100.0
+    }
 }
