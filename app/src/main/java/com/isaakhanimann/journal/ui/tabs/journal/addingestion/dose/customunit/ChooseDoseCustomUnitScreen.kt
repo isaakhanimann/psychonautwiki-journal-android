@@ -63,6 +63,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.asPlural
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -86,9 +87,11 @@ fun ChooseDoseCustomUnitScreen(
             roaDose = viewModel.roaDose,
             doseText = viewModel.doseText,
             doseRemark = viewModel.doseRemark,
+            dose = viewModel.dose,
             onChangeDoseText = viewModel::onDoseTextChange,
             estimatedDoseDeviationText = viewModel.estimatedDoseDeviationText,
             onChangeEstimatedDoseDeviationText = viewModel::onEstimatedDoseDeviationChange,
+            estimatedDoseDeviation = viewModel.estimatedDoseDeviation,
             isValidDose = viewModel.isValidDose,
             isEstimate = viewModel.isEstimate,
             onChangeIsEstimate = {
@@ -142,9 +145,11 @@ fun ChooseDoseCustomUnitScreenPreview(
         ),
         roaDose = roaDose,
         doseText = "5",
+        dose = 5.0,
         onChangeDoseText = {},
         estimatedDoseDeviationText = "",
         onChangeEstimatedDoseDeviationText = {},
+        estimatedDoseDeviation = null,
         doseRemark = "This is a dose remark",
         isValidDose = true,
         isEstimate = false,
@@ -162,9 +167,11 @@ fun ChooseDoseCustomUnitScreen(
     customUnit: CustomUnit,
     roaDose: RoaDose?,
     doseRemark: String?,
+    dose: Double?,
     doseText: String,
     onChangeDoseText: (String) -> Unit,
     estimatedDoseDeviationText: String,
+    estimatedDoseDeviation: Double?,
     onChangeEstimatedDoseDeviationText: (String) -> Unit,
     isValidDose: Boolean,
     isEstimate: Boolean,
@@ -264,7 +271,7 @@ fun ChooseDoseCustomUnitScreen(
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
-                                text = customUnit.unit,
+                                text = customUnit.unit.asPlural(dose ?: 2.0),
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
@@ -293,7 +300,7 @@ fun ChooseDoseCustomUnitScreen(
                             label = { Text("Estimated standard deviation", style = textStyle) },
                             trailingIcon = {
                                 Text(
-                                    text = customUnit.unit,
+                                    text = customUnit.unit.asPlural(estimatedDoseDeviation ?: 2.0),
                                     style = textStyle,
                                     modifier = Modifier.padding(horizontal = horizontalPadding)
                                 )

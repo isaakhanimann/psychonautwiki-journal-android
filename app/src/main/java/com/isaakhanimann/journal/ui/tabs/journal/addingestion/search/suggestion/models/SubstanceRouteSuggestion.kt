@@ -98,7 +98,7 @@ data class CustomUnitDose(
         val description = dose.toStringWith(unit = customUnit.unit)
         return if (isEstimate) {
             if (estimatedDoseStandardDeviation != null) {
-                "${dose.toReadableString()}±${estimatedDoseStandardDeviation.toStringWith(unit = customUnit.unit)}"
+                "${dose.toReadableString()}±${estimatedDoseStandardDeviation.toReadableString()} ${customUnit.unit.asPlural(dose)}"
             } else {
                 "~$description"
             }
@@ -113,6 +113,14 @@ fun Double.toStringWith(unit: String): String {
         "${this.toReadableString()} ${unit}s"
     } else {
         "${this.toReadableString()} $unit"
+    }
+}
+
+fun String.asPlural(basedOn: Double): String {
+    return if (basedOn > 1 && !this.endsWith("s")) {
+        "${this}s"
+    } else {
+        this
     }
 }
 
