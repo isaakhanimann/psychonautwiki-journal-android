@@ -306,7 +306,7 @@ fun EditIngestionScreen(
                             modifier = Modifier.clickable(onClick = toggleIsEstimate)
                         ) {
                             Checkbox(checked = isEstimate, onCheckedChange = { toggleIsEstimate() })
-                            Text("Dose is an estimate")
+                            Text("Estimate")
                         }
                         AnimatedVisibility(visible = isEstimate) {
                             OutlinedTextField(

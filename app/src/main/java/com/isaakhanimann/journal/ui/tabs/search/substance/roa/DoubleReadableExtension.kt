@@ -20,4 +20,13 @@ package com.isaakhanimann.journal.ui.tabs.search.substance.roa
 
 import java.util.Locale
 
-fun Double.toReadableString() = String.format(Locale.US, "%.3f", this).replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
+fun Double.toReadableString(): String {
+    val format = if (this > 100) {
+        "%.0f"
+    } else if (this > 10) {
+        "%.1f"
+    } else {
+        "%.2f"
+    }
+    return String.format(Locale.US, format, this).replace("0*$".toRegex(), "").replace("\\.$".toRegex(), "")
+}
