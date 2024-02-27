@@ -89,6 +89,11 @@ class FinishAddCustomUnitViewModel @Inject constructor(
         isEstimate = newIsEstimate
     }
 
+    var isArchived by mutableStateOf(false)
+    fun onChangeOfIsArchived(newIsArchived: Boolean) {
+        isArchived = newIsArchived
+    }
+
     var note by mutableStateOf("")
 
     fun onChangeOfNote(newNote: String) {
@@ -119,7 +124,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
             dose = dose,
             isEstimate = isEstimate,
             estimatedDoseStandardDeviation = if (isEstimate) estimatedDoseDeviation else null,
-            isArchived = false,
+            isArchived = isArchived,
             unit = unit,
             originalUnit = originalUnit,
             note = note

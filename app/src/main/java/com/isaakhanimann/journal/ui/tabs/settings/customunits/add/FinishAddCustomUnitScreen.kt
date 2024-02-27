@@ -19,7 +19,6 @@
 package com.isaakhanimann.journal.ui.tabs.settings.customunits.add
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,13 +31,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -90,7 +89,9 @@ fun FinishAddCustomUnitScreen(
         originalUnit = viewModel.originalUnit,
         onChangeOfOriginalUnit = viewModel::onChangeOfOriginalUnit,
         note = viewModel.note,
-        onChangeOfNote = viewModel::onChangeOfNote
+        onChangeOfNote = viewModel::onChangeOfNote,
+        isArchived = viewModel.isArchived,
+        onChangeOfIsArchived = viewModel::onChangeOfIsArchived
     )
 }
 
@@ -118,7 +119,9 @@ private fun FinishAddCustomUnitScreenPreview(
         originalUnit = "mg",
         onChangeOfOriginalUnit = {},
         note = "",
-        onChangeOfNote = {}
+        onChangeOfNote = {},
+        isArchived = false,
+        onChangeOfIsArchived = {}
     )
 }
 
@@ -143,7 +146,9 @@ private fun FinishAddCustomUnitScreenContent(
     originalUnit: String,
     onChangeOfOriginalUnit: (String) -> Unit,
     note: String,
-    onChangeOfNote: (String) -> Unit
+    onChangeOfNote: (String) -> Unit,
+    isArchived: Boolean,
+    onChangeOfIsArchived: (Boolean) -> Unit,
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName Unit") }) },
@@ -171,7 +176,9 @@ private fun FinishAddCustomUnitScreenContent(
             originalUnit = originalUnit,
             onChangeOfOriginalUnit = onChangeOfOriginalUnit,
             note = note,
-            onChangeOfNote = onChangeOfNote)
+            onChangeOfNote = onChangeOfNote,
+            isArchived = isArchived,
+            onChangeOfIsArchived = onChangeOfIsArchived)
     }
 }
 
@@ -194,7 +201,9 @@ fun EditCustomUnitSections(
     originalUnit: String,
     onChangeOfOriginalUnit: (String) -> Unit,
     note: String,
-    onChangeOfNote: (String) -> Unit
+    onChangeOfNote: (String) -> Unit,
+    isArchived: Boolean,
+    onChangeOfIsArchived: (Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -331,10 +340,10 @@ fun EditCustomUnitSections(
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
+                    Switch(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                     Text("Estimate", style = MaterialTheme.typography.titleMedium)
-                    Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                 }
                 AnimatedVisibility(visible = isEstimate) {
                     OutlinedTextField(
@@ -357,6 +366,23 @@ fun EditCustomUnitSections(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
+            }
+        }
+        ElevatedCard(modifier = Modifier
+            .padding(horizontal = horizontalPadding, vertical = 4.dp)
+            .fillMaxWidth()) {
+            Column(modifier = Modifier.padding(
+                horizontal = horizontalPadding,
+                vertical = 10.dp
+            )) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    Switch(checked = isArchived, onCheckedChange = onChangeOfIsArchived)
+                    Text("Archive", style = MaterialTheme.typography.titleMedium)
+                }
+                Text("Archived custom units don't show up when adding ingestions")
             }
         }
     }

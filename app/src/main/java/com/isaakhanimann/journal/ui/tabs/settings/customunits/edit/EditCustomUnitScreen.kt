@@ -20,9 +20,7 @@ package com.isaakhanimann.journal.ui.tabs.settings.customunits.edit
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Unarchive
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -175,21 +173,6 @@ private fun EditCustomUnitScreenContent(
                             }
                         )
                     }
-                    if (isArchived) {
-                        IconButton(onClick = { onChangeOfIsArchived(false)}) {
-                            Icon(
-                                Icons.Default.Unarchive,
-                                contentDescription = "Unarchive",
-                            )
-                        }
-                    } else {
-                        IconButton(onClick = { onChangeOfIsArchived(true)}) {
-                            Icon(
-                                Icons.Default.Archive,
-                                contentDescription = "Archive",
-                            )
-                        }
-                    }
                 }
             )
         },
@@ -217,7 +200,9 @@ private fun EditCustomUnitScreenContent(
             originalUnit = originalUnit,
             onChangeOfOriginalUnit = onChangeOfOriginalUnit,
             note = note,
-            onChangeOfNote = onChangeOfNote
+            onChangeOfNote = onChangeOfNote,
+            isArchived = isArchived,
+            onChangeOfIsArchived = onChangeOfIsArchived
         )
     }
 }
