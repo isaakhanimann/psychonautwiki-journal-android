@@ -23,6 +23,8 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import java.time.Instant
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 data class SubstanceRouteSuggestion(
     val color: AdaptiveColor,
@@ -48,47 +50,27 @@ data class CustomUnitDose(
     val estimatedDoseStandardDeviation: Double?,
     val customUnit: CustomUnit
 ) {
-    val calculatedDose: Double?
-        get() {
-            return customUnit.dose?.let { dosePerUnit ->
-                return customUnit.estimatedDoseStandardDeviation?.let { customDoseDeviation ->
-                    if (isEstimate && estimatedDoseStandardDeviation != null) {
-                        val minDose = dose - estimatedDoseStandardDeviation
-                        val maxDose = dose + estimatedDoseStandardDeviation
-                        val minCustomDose = dosePerUnit - customDoseDeviation
-                        val maxCustomDose = dosePerUnit + customDoseDeviation
-                        val minResult = minDose * minCustomDose
-                        val maxResult = maxDose * maxCustomDose
-                        return (minResult + maxResult) / 2
-                    } else {
-                        return dose * dosePerUnit
-                    }
-                } ?: (dose * dosePerUnit)
-            }
-        }
+    val calculatedDose: Double? get() = customUnit.dose?.let { dosePerUnit ->
+        dose * dosePerUnit
+    }
 
+    // https://www.mathsisfun.com/data/standard-deviation.html
+    // https://en.m.wikipedia.org/wiki/Distribution_of_the_product_of_two_random_variables
+    // Var(X*Y) = (Var(X) + E(X)^2)*(Var(Y) + E(Y)^2) - E(X)^2 * E(Y)^2
     val calculatedDoseStandardDeviation: Double?
         get() {
-            return customUnit.dose?.let { dosePerUnit ->
-                return customUnit.estimatedDoseStandardDeviation?.let { customDoseDeviation ->
-                    if (isEstimate && estimatedDoseStandardDeviation != null) {
-                        val minDose = dose - estimatedDoseStandardDeviation
-                        val maxDose = dose + estimatedDoseStandardDeviation
-                        val minCustomDose = dosePerUnit - customDoseDeviation
-                        val maxCustomDose = dosePerUnit + customDoseDeviation
-                        val minResult = minDose * minCustomDose
-                        val maxResult = maxDose * maxCustomDose
-                        val result = (minResult + maxResult) / 2
-                        return maxResult - result
-                    } else {
-                        return dose * customDoseDeviation
-                    }
-                } ?: run {
-                    if (estimatedDoseStandardDeviation != null && isEstimate) {
-                        return estimatedDoseStandardDeviation * dosePerUnit
-                    } else {
-                        return null
-                    }
+            return customUnit.dose?.let { expectationY ->
+                val standardDeviationY = if (customUnit.isEstimate) (customUnit.estimatedDoseStandardDeviation ?: 0.0) else 0.0
+                val expectationX = dose
+                val standardDeviationX = if (isEstimate) (estimatedDoseStandardDeviation ?: 0.0) else 0.0
+                val sum1 = standardDeviationX.pow(2) + expectationX.pow(2)
+                val sum2 = standardDeviationY.pow(2) + expectationY.pow(2)
+                val expectations = expectationX.pow(2) * expectationY.pow(2)
+                val productVariance = sum1*sum2 - expectations
+                if (productVariance > 0.0000001) {
+                    return sqrt(productVariance)
+                } else {
+                    return null
                 }
             }
         }
