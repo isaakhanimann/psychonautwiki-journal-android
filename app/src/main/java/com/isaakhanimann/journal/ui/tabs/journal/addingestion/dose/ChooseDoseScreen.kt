@@ -353,7 +353,7 @@ fun ChooseDoseScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
                     ) {
-                        Text("Is Estimate", style = MaterialTheme.typography.titleMedium)
+                        Text("Estimate", style = MaterialTheme.typography.titleMedium)
                         Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                     }
                     AnimatedVisibility(visible = isEstimate) {
