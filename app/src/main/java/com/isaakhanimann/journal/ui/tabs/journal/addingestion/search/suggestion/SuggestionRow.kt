@@ -27,6 +27,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Keyboard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
@@ -137,16 +140,23 @@ fun SuggestionRow(
                 SuggestionChip(onClick = {
                     if (substanceRouteSuggestion.isCustomSubstance) {
                         navigateToCustomDose(
-                            substanceRouteSuggestion.substanceName, substanceRouteSuggestion.route
+                            substanceRouteSuggestion.substanceName,
+                            substanceRouteSuggestion.route
                         )
                     } else {
                         navigateToDose(
-                            substanceRouteSuggestion.substanceName, substanceRouteSuggestion.route
+                            substanceRouteSuggestion.substanceName,
+                            substanceRouteSuggestion.route
                         )
                     }
                 }, label = {
                     Text("Enter $pureDoseUnit")
-                })
+                }, icon = {
+                        Icon(
+                            imageVector = Icons.Default.Keyboard,
+                            contentDescription = "Keyboard"
+                        )
+                    })
             }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -179,6 +189,11 @@ fun SuggestionRow(
                         Text(text = customUnit.name, style = MaterialTheme.typography.labelSmall)
                         Text(text = "Enter " + customUnit.unit)
                     }
+                }, icon = {
+                    Icon(
+                        imageVector = Icons.Default.Keyboard,
+                        contentDescription = "Keyboard"
+                    )
                 })
             }
         }
