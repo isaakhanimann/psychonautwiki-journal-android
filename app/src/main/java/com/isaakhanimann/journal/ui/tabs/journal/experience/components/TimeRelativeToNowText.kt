@@ -21,7 +21,11 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.isaakhanimann.journal.ui.tabs.journal.components.roundToOneDecimal
@@ -29,6 +33,7 @@ import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 @Composable
 fun TimeRelativeToNowText(
@@ -43,14 +48,69 @@ fun TimeRelativeToNowText(
         }
     }
     val duration = Duration.between(time, now.value)
+    val isInPast = time < now.value
     val relativeTime = when {
-        duration.toDays() > 500 -> "${roundToOneDecimal(duration.toDays().toDouble()/365.0)} years ago"
-        duration.toDays() > 60 -> "${roundToOneDecimal(duration.toDays().toDouble()/30.0)} months ago"
-        duration.toDays() > 20 -> "${roundToOneDecimal(duration.toDays().toDouble()/7.0)} weeks ago"
-        duration.toHours() > 24 -> "${roundToOneDecimal(duration.toHours().toDouble()/24.0)} days ago"
-        duration.toHours() > 0 -> "${roundToOneDecimal(duration.toMinutes().toDouble()/60.0)} hours ago"
-        duration.toMinutes() > 0 -> "${duration.toMinutes()} minutes ago"
-        else -> "just now"
+        duration.toDays().absoluteValue > 500 -> {
+            val years = roundToOneDecimal(duration.toDays().toDouble().absoluteValue / 365.0)
+            if (isInPast) {
+                "$years years ago"
+            } else {
+                "in $years years"
+            }
+        }
+
+        duration.toDays().absoluteValue > 60 -> {
+            val months = roundToOneDecimal(duration.toDays().toDouble().absoluteValue / 30.0)
+            if (isInPast) {
+                "$months months ago"
+            } else {
+                "in $months months"
+            }
+        }
+
+        duration.toDays().absoluteValue > 20 -> {
+            val weeks = roundToOneDecimal(duration.toDays().toDouble().absoluteValue / 7.0)
+            if (isInPast) {
+                "$weeks weeks ago"
+            } else {
+                "in $weeks weeks"
+            }
+        }
+
+        duration.toHours().absoluteValue > 24 -> {
+            val days = roundToOneDecimal(duration.toHours().toDouble().absoluteValue / 24.0)
+            if (isInPast) {
+                "$days days ago"
+            } else {
+                "in $days days"
+            }
+        }
+
+        duration.toHours().absoluteValue > 0 -> {
+            val hours = roundToOneDecimal(duration.toMinutes().toDouble().absoluteValue / 60.0)
+            if (isInPast) {
+                "$hours hours ago"
+            } else {
+                "in $hours hours"
+            }
+        }
+
+        duration.toMinutes().absoluteValue > 0 -> {
+            val minutes = duration.toMinutes().absoluteValue
+            if (isInPast) {
+                "$minutes minutes ago"
+            } else {
+                "in $minutes minutes"
+            }
+        }
+
+        else -> {
+            if (isInPast) {
+                "just now"
+            } else {
+                "now"
+            }
+        }
     }
     Text(
         text = relativeTime,
