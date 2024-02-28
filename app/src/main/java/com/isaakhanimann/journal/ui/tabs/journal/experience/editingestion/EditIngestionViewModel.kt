@@ -128,8 +128,8 @@ class EditIngestionViewModel @Inject constructor(
         isKnown = isKnown.not()
     }
 
-    fun toggleIsEstimate() {
-        isEstimate = isEstimate.not()
+    fun onChangeIsEstimate(newIsEstimate: Boolean) {
+        isEstimate = newIsEstimate
     }
 
     val relevantExperiences: StateFlow<List<ExperienceOption>> = localDateTimeFlow.map {

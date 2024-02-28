@@ -19,7 +19,6 @@
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customunit
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateNext
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -43,6 +41,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -287,10 +286,10 @@ fun ChooseDoseCustomUnitScreen(
                     )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable { onChangeIsEstimate(isEstimate.not()) }
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
+                        Switch(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                         Text("Estimate", style = MaterialTheme.typography.titleMedium)
-                        Checkbox(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
                     }
                     AnimatedVisibility(visible = isEstimate) {
                         OutlinedTextField(

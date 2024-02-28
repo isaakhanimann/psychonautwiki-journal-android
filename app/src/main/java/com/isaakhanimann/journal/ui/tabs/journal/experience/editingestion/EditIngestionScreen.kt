@@ -98,7 +98,7 @@ fun EditIngestionScreen(
         note = viewModel.note,
         onNoteChange = { viewModel.note = it },
         isEstimate = viewModel.isEstimate,
-        toggleIsEstimate = viewModel::toggleIsEstimate,
+        onChangeIsEstimate = viewModel::onChangeIsEstimate,
         isKnown = viewModel.isKnown,
         toggleIsKnown = viewModel::toggleIsKnown,
         dose = viewModel.dose,
@@ -135,7 +135,7 @@ fun EditIngestionScreenPreview() {
             note = "This is my note",
             onNoteChange = {},
             isEstimate = false,
-            toggleIsEstimate = {},
+            onChangeIsEstimate = {},
             isKnown = true,
             toggleIsKnown = {},
             dose = "5",
@@ -168,7 +168,7 @@ fun EditIngestionScreen(
     note: String,
     onNoteChange: (String) -> Unit,
     isEstimate: Boolean,
-    toggleIsEstimate: () -> Unit,
+    onChangeIsEstimate: (Boolean) -> Unit,
     isKnown: Boolean,
     toggleIsKnown: () -> Unit,
     dose: String,
@@ -303,10 +303,10 @@ fun EditIngestionScreen(
                         )
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable(onClick = toggleIsEstimate)
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
                         ) {
-                            Checkbox(checked = isEstimate, onCheckedChange = { toggleIsEstimate() })
-                            Text("Estimate")
+                            Switch(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                            Text("Estimate", style = MaterialTheme.typography.titleMedium)
                         }
                         AnimatedVisibility(visible = isEstimate) {
                             OutlinedTextField(
