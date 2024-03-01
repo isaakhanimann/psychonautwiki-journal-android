@@ -152,12 +152,17 @@ class AddIngestionSearchViewModel @Inject constructor(
                             val ingestion = ingestionWithCustomUnit.ingestion
                             val dose = ingestion.dose ?: return@mapNotNull null
                             ingestionWithCustomUnit.customUnit?.let {
-                                CustomUnitDose(
-                                    dose = dose,
-                                    isEstimate = ingestion.isDoseAnEstimate,
-                                    estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation,
-                                    customUnit = it
-                                )
+                                if (!it.isArchived) {
+                                   CustomUnitDose(
+                                        dose = dose,
+                                        isEstimate = ingestion.isDoseAnEstimate,
+                                        estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation,
+                                        customUnit = it
+                                    )
+                                } else {
+                                    null
+                                }
+
                             }
                         },
                         customUnits = filteredCustomUnitsFlow.value.filter { it.substanceName == substanceName && it.administrationRoute == routeEntry.key },
