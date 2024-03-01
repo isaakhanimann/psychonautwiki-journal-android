@@ -37,7 +37,7 @@ class SubstanceViewModel @Inject constructor(
 ) : ViewModel() {
     val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
     val substanceWithCategories = substanceRepo.getSubstanceWithCategories(substanceName)!!
-    val customUnitsFlow = experienceRepo.getAllCustomUnitsFlow(isArchived = false).stateIn(
+    val customUnitsFlow = experienceRepo.getCustomUnitsFlow(isArchived = false).stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)

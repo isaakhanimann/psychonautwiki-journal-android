@@ -453,6 +453,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM customunit WHERE isArchived = :isArchived ORDER BY creationDate DESC")
     fun getSortedCustomUnitsFlow(isArchived: Boolean): Flow<List<CustomUnit>>
 
+    @Query("SELECT * FROM customunit ORDER BY creationDate DESC")
+    fun getAllCustomUnitsFlow(): Flow<List<CustomUnit>>
+
     @Query("SELECT * FROM timednote")
     suspend fun getAllTimedNotes(): List<TimedNote>
 

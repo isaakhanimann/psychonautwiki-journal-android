@@ -33,7 +33,7 @@ class CustomUnitArchiveViewModel @Inject constructor(
     experienceRepository: ExperienceRepository,
 ) : ViewModel() {
 
-    val customUnitsFlow: StateFlow<List<CustomUnit>> = experienceRepository.getAllCustomUnitsFlow(true).stateIn(
+    val customUnitsFlow: StateFlow<List<CustomUnit>> = experienceRepository.getCustomUnitsFlow(true).stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)

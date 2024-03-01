@@ -274,7 +274,11 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
         .flowOn(Dispatchers.IO)
         .conflate()
 
-    fun getAllCustomUnitsFlow(isArchived: Boolean) = experienceDao.getSortedCustomUnitsFlow(isArchived)
+    fun getCustomUnitsFlow(isArchived: Boolean) = experienceDao.getSortedCustomUnitsFlow(isArchived)
+        .flowOn(Dispatchers.IO)
+        .conflate()
+
+    fun getAllCustomUnitsFlow() = experienceDao.getAllCustomUnitsFlow()
         .flowOn(Dispatchers.IO)
         .conflate()
 

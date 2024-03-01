@@ -63,7 +63,7 @@ class EditIngestionViewModel @Inject constructor(
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var consumerName by mutableStateOf("")
     var customUnit: CustomUnit? by mutableStateOf(null)
-    val otherCustomUnits = experienceRepo.getAllCustomUnitsFlow(false).combine(ingestionFlow) { customUnits, ing ->
+    val otherCustomUnits = experienceRepo.getAllCustomUnitsFlow().combine(ingestionFlow) { customUnits, ing ->
         customUnits.filter {customUnit ->
             customUnit.administrationRoute == ing?.administrationRoute && customUnit.substanceName == ing.substanceName && customUnit.id != ing.customUnitId
         }
