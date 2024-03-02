@@ -64,6 +64,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -212,60 +213,62 @@ fun Day(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     chooseBetweenExperiences: (experienceIds: List<Int>) -> Unit
 ) {
-    val viewModel: DayViewModel = hiltViewModel()
-    val experienceInfoState: MutableState<ExperienceInfo> = remember {
-        mutableStateOf(
-            ExperienceInfo(
-                experienceIds = emptyList(),
-                colors = emptyList()
+    if (day.position == DayPosition.MonthDate) {
+        val viewModel: DayViewModel = hiltViewModel()
+        val experienceInfoState: MutableState<ExperienceInfo> = remember {
+            mutableStateOf(
+                ExperienceInfo(
+                    experienceIds = emptyList(),
+                    colors = emptyList()
+                )
             )
-        )
-    }
-    LaunchedEffect(Unit) {
-        experienceInfoState.value = viewModel.getExperienceInfo(day)
-    }
-    val experienceInfos = experienceInfoState.value
-    val aspectRatioModifier = Modifier.aspectRatio(1f) // This is important for square sizing!
-    val modifier = if (experienceInfos.experienceIds.count() == 1) {
-        aspectRatioModifier.clickable {
-            navigateToExperiencePopNothing(experienceInfos.experienceIds.first())
         }
-    } else if (experienceInfos.experienceIds.count() > 1) {
-        aspectRatioModifier.clickable {
-            chooseBetweenExperiences(experienceInfos.experienceIds)
+        LaunchedEffect(Unit) {
+            experienceInfoState.value = viewModel.getExperienceInfo(day)
         }
-    } else {
-        aspectRatioModifier
-    }
-    val now = LocalDate.now()
-    val isToday = day.date.year == now.year && day.date.monthValue == now.monthValue && day.date.dayOfMonth == now.dayOfMonth
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            if (isToday) {
-                Text(
-                    text = day.date.dayOfMonth.toString(),
-                    color = MaterialTheme.colorScheme.secondary
-                )
-            } else if (experienceInfos.experienceIds.isEmpty()) {
-                Text(
-                    text = day.date.dayOfMonth.toString(),
-                    color = if (isSystemInDarkTheme()) Color.Gray else Color.LightGray
-                )
-            } else {
-                Text(
-                    text = day.date.dayOfMonth.toString(),
+        val experienceInfos = experienceInfoState.value
+        val aspectRatioModifier = Modifier.aspectRatio(1f) // This is important for square sizing!
+        val modifier = if (experienceInfos.experienceIds.count() == 1) {
+            aspectRatioModifier.clickable {
+                navigateToExperiencePopNothing(experienceInfos.experienceIds.first())
+            }
+        } else if (experienceInfos.experienceIds.count() > 1) {
+            aspectRatioModifier.clickable {
+                chooseBetweenExperiences(experienceInfos.experienceIds)
+            }
+        } else {
+            aspectRatioModifier
+        }
+        val now = LocalDate.now()
+        val isToday = day.date.year == now.year && day.date.monthValue == now.monthValue && day.date.dayOfMonth == now.dayOfMonth
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                if (isToday) {
+                    Text(
+                        text = day.date.dayOfMonth.toString(),
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                } else if (experienceInfos.experienceIds.isEmpty()) {
+                    Text(
+                        text = day.date.dayOfMonth.toString(),
+                        color = if (isSystemInDarkTheme()) Color.Gray else Color.LightGray
+                    )
+                } else {
+                    Text(
+                        text = day.date.dayOfMonth.toString(),
+                    )
+                }
+                HorizontalColorRectangle(
+                    modifier = Modifier
+                        .height(7.dp)
+                        .fillMaxWidth(fraction = 0.7f)
+                        .clip(RoundedCornerShape(2.dp)),
+                    colors = experienceInfos.colors
                 )
             }
-            HorizontalColorRectangle(
-                modifier = Modifier
-                    .height(7.dp)
-                    .fillMaxWidth(fraction = 0.7f)
-                    .clip(RoundedCornerShape(2.dp)),
-                colors = experienceInfos.colors
-            )
         }
     }
 }
