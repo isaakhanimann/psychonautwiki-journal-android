@@ -76,7 +76,7 @@ fun IngestionRow(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                val customUnitName = if (customUnit != null) " (${customUnit.name})" else ""
+                val customUnitName = if (customUnit != null) ", ${customUnit.name}" else ""
                 Text(
                     text = ingestion.substanceName + customUnitName,
                     style = MaterialTheme.typography.titleMedium
