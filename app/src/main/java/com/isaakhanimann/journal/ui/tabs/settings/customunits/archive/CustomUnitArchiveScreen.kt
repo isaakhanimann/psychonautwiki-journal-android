@@ -116,7 +116,7 @@ fun CustomUnitArchiveScreenContent(
             if (customUnits.isEmpty()) {
                 EmptyScreenDisclaimer(
                     title = "No Archived Units Yet",
-                    description = "You can archive units when you edit them with the archive button on the top right."
+                    description = "Archived units don't show up when adding ingestions"
                 )
             }
         }
