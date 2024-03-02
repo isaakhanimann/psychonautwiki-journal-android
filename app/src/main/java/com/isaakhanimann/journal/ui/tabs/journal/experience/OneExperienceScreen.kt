@@ -205,7 +205,7 @@ fun OneExperienceScreen(
     timeDisplayOption: TimeDisplayOption,
     onChangeTimeDisplayOption: (SavedTimeDisplayOption) -> Unit,
     navigateToTimelineScreen: (consumerName: String) -> Unit,
-    ) {
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -406,7 +406,26 @@ fun OneExperienceScreen(
                 .padding(horizontal = horizontalPadding)
         ) {
             val verticalCardPadding = 4.dp
-            if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
+            val ingestionElements = oneExperienceScreenModel.ingestionElements
+            val dataForRatings = oneExperienceScreenModel.ratings.mapNotNull {
+                val ratingTime = it.time
+                return@mapNotNull if (ratingTime == null) {
+                    null
+                } else {
+                    DataForOneRating(
+                        time = ratingTime,
+                        option = it.option
+                    )
+                }
+            }
+            val dataForTimedNotes =
+                oneExperienceScreenModel.timedNotes.filter { it.isPartOfTimeline }
+                    .map {
+                        DataForOneTimedNote(time = it.time, color = it.color)
+                    }
+            val isWorthDrawing =
+                ingestionElements.isNotEmpty() && !(ingestionElements.all { it.roaDuration == null } && dataForRatings.isEmpty() && dataForTimedNotes.isEmpty())
+            if (isWorthDrawing) {
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -425,21 +444,8 @@ fun OneExperienceScreen(
                     ) {
                         ExperienceEffectTimelines(
                             ingestionElements = oneExperienceScreenModel.ingestionElements,
-                            dataForRatings = oneExperienceScreenModel.ratings.mapNotNull {
-                                val ratingTime = it.time
-                                return@mapNotNull if (ratingTime == null) {
-                                    null
-                                } else {
-                                    DataForOneRating(
-                                        time = ratingTime,
-                                        option = it.option
-                                    )
-                                }
-                            },
-                            dataForTimedNotes = oneExperienceScreenModel.timedNotes.filter { it.isPartOfTimeline }
-                                .map {
-                                    DataForOneTimedNote(time = it.time, color = it.color)
-                                },
+                            dataForRatings = dataForRatings,
+                            dataForTimedNotes = dataForTimedNotes,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)
@@ -447,7 +453,8 @@ fun OneExperienceScreen(
                                     navigateToTimelineScreen(ME)
                                 }
                         )
-                        val hasOralIngestion = oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }
+                        val hasOralIngestion =
+                            oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }
                         if (hasOralIngestion && !isOralDisclaimerHidden) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
@@ -455,7 +462,7 @@ fun OneExperienceScreen(
                                     style = MaterialTheme.typography.bodySmall,
                                     modifier = Modifier.weight(1f)
                                 )
-                                IconButton(onClick = { onChangeIsOralDisclaimerHidden(true)}) {
+                                IconButton(onClick = { onChangeIsOralDisclaimerHidden(true) }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
                                         contentDescription = "Close Disclaimer"
@@ -532,7 +539,7 @@ fun OneExperienceScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
-                        if (index < timedNotes.size-1) {
+                        if (index < timedNotes.size - 1) {
                             Divider()
                         }
                     }
@@ -556,7 +563,7 @@ fun OneExperienceScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp, horizontal = horizontalPadding)
                         )
-                        if (index < ratingsWithTime.size-1) {
+                        if (index < ratingsWithTime.size - 1) {
                             Divider()
                         }
                     }
@@ -587,9 +594,10 @@ fun OneExperienceScreen(
                     .fillMaxWidth()
                     .clickable { navigateToEditExperienceScreen() }) {
                     CardTitle(title = "Notes")
-                    Column(modifier = Modifier
-                        .padding(horizontal = horizontalPadding)
-                        .padding(bottom = 10.dp)
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = horizontalPadding)
+                            .padding(bottom = 10.dp)
                     ) {
                         Text(text = oneExperienceScreenModel.notes)
                         if (oneExperienceScreenModel.locationName.isNotBlank()) {
