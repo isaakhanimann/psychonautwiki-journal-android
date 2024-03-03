@@ -19,5 +19,8 @@ class DoubleReadableExtensionKtTest {
         assertEquals("333", (1000.0/3.0).toReadableString())
         assertEquals("33.3", (100.0/3.0).toReadableString())
         assertEquals("1.67", 1.66666.toReadableString())
+        assertEquals("123", 122.66666.toReadableString())
+        assertEquals("122", 122.33333.toReadableString())
+        assertEquals("44.4", 44.4444.toReadableString())
     }
 }

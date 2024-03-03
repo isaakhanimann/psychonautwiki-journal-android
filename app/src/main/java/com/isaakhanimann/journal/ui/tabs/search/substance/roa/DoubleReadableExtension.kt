@@ -19,10 +19,11 @@
 package com.isaakhanimann.journal.ui.tabs.search.substance.roa
 
 import java.util.Locale
+import kotlin.math.roundToInt
 
 fun Double.toReadableString(): String {
     if (this>100) {
-        return this.toInt().toString()
+        return this.roundToInt().toString()
     }
     val format = if (this > 10) {
         "%.1f"
