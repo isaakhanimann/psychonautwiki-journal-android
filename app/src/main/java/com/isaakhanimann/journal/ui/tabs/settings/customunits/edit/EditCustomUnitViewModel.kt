@@ -123,6 +123,7 @@ class EditCustomUnitViewModel @Inject constructor(
         viewModelScope.launch {
             customUnit?.let {
                 it.dose = dose
+                it.name = name
                 it.isEstimate = isEstimate
                 it.originalUnit = originalUnit
                 it.estimatedDoseStandardDeviation = if (isEstimate) estimatedDoseStandardDeviation else null

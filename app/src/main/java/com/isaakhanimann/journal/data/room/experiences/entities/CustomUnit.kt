@@ -28,7 +28,7 @@ data class CustomUnit(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val substanceName: String,
-    val name: String,
+    var name: String,
     val creationDate: Instant = Instant.now(),
     val administrationRoute: AdministrationRoute,
     var dose: Double?,
