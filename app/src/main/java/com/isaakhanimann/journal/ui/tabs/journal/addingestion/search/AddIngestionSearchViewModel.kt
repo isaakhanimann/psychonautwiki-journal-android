@@ -159,7 +159,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                             }
 
                         }
-                    }
+                    }.distinct().take(6)
                     val customUnits = filteredCustomUnitsFlow.value.filter { it.substanceName == substanceName && it.administrationRoute == routeEntry.key }
                     if (dosesAndUnit.isEmpty() && customUnitDoses.isEmpty() && customUnits.isEmpty()) {
                         return@mapNotNull null
