@@ -38,12 +38,12 @@ fun TimeRelativeToStartText(
 ) {
     val duration = Duration.between(startTime, time)
     val relativeTime = when {
-        duration.toDays() > 3 -> "t+${duration.toDays()} days"
-        duration.toHours() > 24 -> "t+${roundToOneDecimal(duration.toHours().toDouble()/24.0)} days in"
-        duration.toHours() > 1 -> "t+${roundToOneDecimal(duration.toMinutes().toDouble()/60.0)} hours in"
-        duration.toMinutes() > 0 -> "t+${duration.toMinutes()} minutes"
-        duration.toMillis() > 0 -> "t+${(duration.toMillis()/1000).toInt()} seconds"
-        else -> "t=" + time.getStringOfPattern("EEE HH:mm")
+        duration.toDays() > 3 -> "+ ${duration.toDays()} d"
+        duration.toHours() > 24 -> "+ ${roundToOneDecimal(duration.toHours().toDouble()/24.0)} d"
+        duration.toHours() > 1 -> "+ ${roundToOneDecimal(duration.toMinutes().toDouble()/60.0)} h"
+        duration.toMinutes() > 0 -> "+ ${duration.toMinutes()} min"
+        duration.toMillis() > 0 -> "+ ${(duration.toMillis()/1000).toInt()} s"
+        else -> time.getStringOfPattern("EEE HH:mm")
 
     }
     Text(
