@@ -34,7 +34,7 @@ data class CumulativeDose(
     {
         val description = cumulativeDose.toReadableString() + " $units"
         return if (isEstimate) {
-            if (cumulativeDoseStandardDeviation != null) {
+            if (cumulativeDoseStandardDeviation != null && cumulativeDoseStandardDeviation > 0) {
                 "${cumulativeDose.toReadableString()}±${cumulativeDoseStandardDeviation.toReadableString()} $units"
             } else {
                 "~$description"

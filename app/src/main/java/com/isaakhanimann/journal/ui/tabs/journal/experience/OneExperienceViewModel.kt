@@ -345,7 +345,7 @@ class OneExperienceViewModel @Inject constructor(
                                 cumulativeDose = cumulativeDose,
                                 units = units,
                                 isEstimate = isEstimate,
-                                cumulativeDoseStandardDeviation = cumulativeDoseStandardDeviation,
+                                cumulativeDoseStandardDeviation = if (cumulativeDoseStandardDeviation > 0) cumulativeDoseStandardDeviation else null,
                                 numDots = numDots,
                                 route = firstIngestion.ingestion.administrationRoute
                             )
