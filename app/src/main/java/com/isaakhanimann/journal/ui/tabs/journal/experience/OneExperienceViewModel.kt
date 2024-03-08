@@ -33,6 +33,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTime
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.ConsumerWithIngestions
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeRouteAndDose
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.InteractionExplanation
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsStorage
@@ -317,39 +318,46 @@ class OneExperienceViewModel @Inject constructor(
     private companion object {
         fun getCumulativeDoses(ingestions: List<IngestionWithAssociatedData>): List<CumulativeDose> {
             return ingestions.groupBy { it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName }
-                .flatMap { groupedBySubstanceName ->
+                .map { groupedBySubstanceName ->
                     val ingestionsOfSameSubstance = groupedBySubstanceName.value
-                    return@flatMap ingestionsOfSameSubstance.groupBy { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute }
-                        .mapNotNull { groupedByRoute ->
-                            val groupedIngestions = groupedByRoute.value
-                            if (groupedIngestions.size <= 1) return@mapNotNull null
-                            if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.dose == null }) return@mapNotNull null
-                            val firstIngestion =
-                                groupedIngestions.first().ingestionWithCompanionAndCustomUnit
-                            val units = firstIngestion.originalUnit ?: return@mapNotNull null
-                            if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.originalUnit != units }) return@mapNotNull null
-                            val isEstimate =
-                                groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.isDoseAnEstimate || it.ingestionWithCompanionAndCustomUnit.customUnit?.isEstimate ?: false }
-                            val cumulativeDose =
-                                groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.pureDose }
-                                    .sum()
-                            val cumulativeDoseStandardDeviation =
-                                groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.pureDoseStandardDeviation }
-                                    .sum()
-                            val numDots = groupedIngestions.first().roaDose?.getNumDots(
-                                ingestionDose = cumulativeDose,
-                                ingestionUnits = units
-                            )
-                            CumulativeDose(
-                                substanceName = groupedBySubstanceName.key,
-                                cumulativeDose = cumulativeDose,
-                                units = units,
-                                isEstimate = isEstimate,
-                                cumulativeDoseStandardDeviation = if (cumulativeDoseStandardDeviation > 0) cumulativeDoseStandardDeviation else null,
-                                numDots = numDots,
-                                route = firstIngestion.ingestion.administrationRoute
-                            )
-                        }
+                    val cumulativeRouteDose =
+                        ingestionsOfSameSubstance.groupBy { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute }
+                            .mapNotNull { groupedByRoute ->
+                                val groupedIngestions = groupedByRoute.value
+                                if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.dose == null }) return@mapNotNull null
+                                val firstIngestion =
+                                    groupedIngestions.first().ingestionWithCompanionAndCustomUnit
+                                val units = firstIngestion.originalUnit ?: return@mapNotNull null
+                                if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.originalUnit != units }) return@mapNotNull null
+                                val isEstimate =
+                                    groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.isDoseAnEstimate || it.ingestionWithCompanionAndCustomUnit.customUnit?.isEstimate ?: false }
+                                val cumulativeDose =
+                                    groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.pureDose }
+                                        .sum()
+                                val cumulativeDoseStandardDeviation =
+                                    groupedIngestions.mapNotNull { it.ingestionWithCompanionAndCustomUnit.pureDoseStandardDeviation }
+                                        .sum()
+                                val numDots = groupedIngestions.first().roaDose?.getNumDots(
+                                    ingestionDose = cumulativeDose,
+                                    ingestionUnits = units
+                                )
+                                CumulativeRouteAndDose(
+                                    cumulativeDose = cumulativeDose,
+                                    units = units,
+                                    isEstimate = isEstimate,
+                                    cumulativeDoseStandardDeviation = if (cumulativeDoseStandardDeviation > 0) cumulativeDoseStandardDeviation else null,
+                                    numDots = numDots,
+                                    route = firstIngestion.ingestion.administrationRoute,
+                                    hasMoreThanOneIngestion = groupedIngestions.size > 1
+                                )
+                            }
+                    return@map CumulativeDose(
+                        substanceName = groupedBySubstanceName.key,
+                        cumulativeRouteAndDose = cumulativeRouteDose
+                    )
+                }
+                .filter {
+                    it.cumulativeRouteAndDose.isNotEmpty() && it.cumulativeRouteAndDose.any { it.hasMoreThanOneIngestion }
                 }
         }
     }

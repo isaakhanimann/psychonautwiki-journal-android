@@ -23,12 +23,17 @@ import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 
 data class CumulativeDose(
     val substanceName: String,
+    val cumulativeRouteAndDose: List<CumulativeRouteAndDose>
+)
+
+data class CumulativeRouteAndDose(
     val cumulativeDose: Double,
     val units: String,
     val isEstimate: Boolean,
     val cumulativeDoseStandardDeviation: Double?,
     val numDots: Int?,
-    val route: AdministrationRoute
+    val route: AdministrationRoute,
+    val hasMoreThanOneIngestion: Boolean
 ) {
     val doseDescription: String get()
     {

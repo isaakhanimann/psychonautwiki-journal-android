@@ -35,6 +35,7 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.ConsumerWithIngestions
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeRouteAndDose
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.InteractionExplanation
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.OneExperienceScreenModel
@@ -61,12 +62,17 @@ class OneExperienceScreenPreviewProvider :
             cumulativeDoses = listOf(
                 CumulativeDose(
                     substanceName = "Cocaine",
-                    cumulativeDose = 60.0,
-                    units = "mg",
-                    isEstimate = false,
-                    cumulativeDoseStandardDeviation = 12.0,
-                    numDots = 6,
-                    route = AdministrationRoute.INSUFFLATED
+                    cumulativeRouteAndDose = listOf(
+                        CumulativeRouteAndDose(
+                            cumulativeDose = 60.0,
+                            units = "mg",
+                            isEstimate = false,
+                            cumulativeDoseStandardDeviation = 12.0,
+                            numDots = 6,
+                            route = AdministrationRoute.INSUFFLATED,
+                            hasMoreThanOneIngestion = true
+                        )
+                    )
                 )
             ),
             interactions = listOf(

@@ -27,28 +27,42 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeRouteAndDose
 
 @Composable
 fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
-    Row(
+    Column(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(horizontalAlignment = Alignment.Start) {
-            Text(
-                text = cumulativeDose.substanceName + " ${cumulativeDose.route.displayText}",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(text = cumulativeDose.doseDescription, style = MaterialTheme.typography.titleSmall)
-
-        }
-        val numDots = cumulativeDose.numDots
-        if (numDots != null) {
-            DotRows(numDots = numDots)
+        Text(
+            text = cumulativeDose.substanceName,
+            style = MaterialTheme.typography.titleMedium
+        )
+        cumulativeDose.cumulativeRouteAndDose.forEach { cumulativeRouteAndDose ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                val text = buildAnnotatedString {
+                    append(cumulativeRouteAndDose.doseDescription)
+                    withStyle(style = SpanStyle(color = Color.Gray)) {
+                        append(" " + cumulativeRouteAndDose.route.displayText.lowercase())
+                    }
+                }
+                Text(text = text, style = MaterialTheme.typography.titleSmall)
+                val numDots = cumulativeRouteAndDose.numDots
+                if (numDots != null) {
+                    DotRows(numDots = numDots)
+                }
+            }
         }
     }
 }
@@ -58,13 +72,27 @@ fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
 fun CumulativeDoseRowPreview() {
     CumulativeDoseRow(
         cumulativeDose = CumulativeDose(
-            substanceName = "Cocaine",
-            cumulativeDose = 60.0,
-            units = "mg",
-            isEstimate = false,
-            cumulativeDoseStandardDeviation = 12.0,
-            numDots = 6,
-            route = AdministrationRoute.INSUFFLATED
+            substanceName = "Amphetamine",
+            cumulativeRouteAndDose = listOf(
+                CumulativeRouteAndDose(
+                    cumulativeDose = 30.0,
+                    units = "mg",
+                    isEstimate = false,
+                    cumulativeDoseStandardDeviation = 12.0,
+                    numDots = 6,
+                    route = AdministrationRoute.INSUFFLATED,
+                    hasMoreThanOneIngestion = true
+                ),
+                CumulativeRouteAndDose(
+                    cumulativeDose = 25.0,
+                    units = "mg",
+                    isEstimate = false,
+                    cumulativeDoseStandardDeviation = 12.0,
+                    numDots = 5,
+                    route = AdministrationRoute.ORAL,
+                    hasMoreThanOneIngestion = true
+                )
+            )
         ), modifier = Modifier.fillMaxWidth()
     )
 }
