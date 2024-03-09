@@ -27,9 +27,11 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToComboSettings
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCustomUnits
+import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToDonate
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditCustomUnit
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToFAQ
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceColors
+import com.isaakhanimann.journal.ui.tabs.settings.DonateScreen
 import com.isaakhanimann.journal.ui.tabs.settings.FAQScreen
 import com.isaakhanimann.journal.ui.tabs.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.colors.SubstanceColorsScreen
@@ -50,10 +52,12 @@ fun NavGraphBuilder.settingsGraph(navController: NavController) {
                 navigateToFAQ = navController::navigateToFAQ,
                 navigateToComboSettings = navController::navigateToComboSettings,
                 navigateToSubstanceColors = navController::navigateToSubstanceColors,
-                navigateToCustomUnits = navController::navigateToCustomUnits
+                navigateToCustomUnits = navController::navigateToCustomUnits,
+                navigateToDonate = navController::navigateToDonate
             )
         }
         composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }
+        composableWithTransitions(NoArgumentRouter.DonateRouter.route) { DonateScreen() }
         composableWithTransitions(NoArgumentRouter.CombinationSettingsRouter.route) { CombinationSettingsScreen() }
         composableWithTransitions(NoArgumentRouter.SubstanceColorsRouter.route) { SubstanceColorsScreen() }
         composableWithTransitions(NoArgumentRouter.CustomUnitArchiveRouter.route) {

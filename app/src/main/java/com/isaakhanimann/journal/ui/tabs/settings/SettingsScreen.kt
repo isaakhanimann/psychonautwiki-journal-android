@@ -84,6 +84,7 @@ fun SettingsPreview() {
         navigateToComboSettings = {},
         navigateToSubstanceColors = {},
         navigateToCustomUnits = {},
+        navigateToDonate = {},
         importFile = {},
         exportFile = {},
         snackbarHostState = remember { SnackbarHostState() },
@@ -97,12 +98,14 @@ fun SettingsScreen(
     navigateToComboSettings: () -> Unit,
     navigateToSubstanceColors: () -> Unit,
     navigateToCustomUnits: () -> Unit,
+    navigateToDonate: () -> Unit,
 ) {
     SettingsScreen(
         navigateToFAQ = navigateToFAQ,
         navigateToComboSettings = navigateToComboSettings,
         navigateToSubstanceColors = navigateToSubstanceColors,
         navigateToCustomUnits = navigateToCustomUnits,
+        navigateToDonate = navigateToDonate,
         deleteEverything = viewModel::deleteEverything,
         importFile = viewModel::importFile,
         exportFile = viewModel::exportFile,
@@ -117,6 +120,7 @@ fun SettingsScreen(
     navigateToComboSettings: () -> Unit,
     navigateToSubstanceColors: () -> Unit,
     navigateToCustomUnits: () -> Unit,
+    navigateToDonate: () -> Unit,
     deleteEverything: () -> Unit,
     importFile: (uri: Uri) -> Unit,
     exportFile: (uri: Uri) -> Unit,
@@ -301,7 +305,7 @@ fun SettingsScreen(
                 }
                 Divider()
                 SettingsButton(imageVector = Icons.Outlined.VolunteerActivism, text = "Donate") {
-                    uriHandler.openUri("https://www.buymeacoffee.com/isaakhanimann")
+                    navigateToDonate()
                 }
             }
             CardWithTitle(title = "App", innerPaddingHorizontal = 0.dp) {
