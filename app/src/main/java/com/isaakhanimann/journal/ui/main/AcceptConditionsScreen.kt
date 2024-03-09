@@ -20,17 +20,25 @@ package com.isaakhanimann.journal.ui.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,18 +62,25 @@ fun AcceptConditionsScreen(
             .padding(10.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        val checkedState0 = remember { mutableStateOf(false) }
-        val checkedState1 = remember { mutableStateOf(false) }
-        val checkedState2 = remember { mutableStateOf(false) }
-        val checkedState3 = remember { mutableStateOf(false) }
+        var checkedState0 by remember { mutableStateOf(false) }
+        var checkedState1 by remember { mutableStateOf(false) }
+        var checkedState2 by remember { mutableStateOf(false) }
+        var checkedState3 by remember { mutableStateOf(false) }
         val allIsChecked =
-            checkedState0.value && checkedState1.value && checkedState2.value && checkedState3.value
+            checkedState0 && checkedState1 && checkedState2 && checkedState3
         val painter =
             if (allIsChecked) painterResource(R.drawable.eye_open) else painterResource(R.drawable.eye_closed)
         Image(
             painter = painter,
             contentDescription = "PsychonautWiki eye",
             modifier = Modifier
+                .clip(RoundedCornerShape(30.dp))
+                .clickable {
+                    checkedState0 = true
+                    checkedState1 = true
+                    checkedState2 = true
+                    checkedState3 = true
+                }
                 .fillMaxWidth(0.4f)
                 .padding(bottom = 10.dp)
         )
@@ -75,43 +90,43 @@ fun AcceptConditionsScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
-                    checkedState0.value = checkedState0.value.not()
+                    checkedState0 = checkedState0.not()
                 }) {
                 Checkbox(
-                    checked = checkedState0.value,
-                    onCheckedChange = { checkedState0.value = it }
+                    checked = checkedState0,
+                    onCheckedChange = { checkedState0 = it }
                 )
                 Text(text = "I acknowledge that I am the only one responsible for my actions, especially when deciding to use drugs.")
             }
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
-                    checkedState1.value = checkedState1.value.not()
+                    checkedState1 = checkedState1.not()
                 }) {
                 Checkbox(
-                    checked = checkedState1.value,
-                    onCheckedChange = { checkedState1.value = it }
+                    checked = checkedState1,
+                    onCheckedChange = { checkedState1 = it }
                 )
                 Text(text = "I'm going to use this app for mitigating the risks of my or somebody else’s substance use.")
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
-                    checkedState2.value = checkedState2.value.not()
+                    checkedState2 = checkedState2.not()
                 }
             ) {
                 Checkbox(
-                    checked = checkedState2.value,
-                    onCheckedChange = { checkedState2.value = it }
+                    checked = checkedState2,
+                    onCheckedChange = { checkedState2 = it }
                 )
                 Text(text = "I acknowledge that the data in this app might be inaccurate or incomplete.")
             }
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.clickable {
-                    checkedState3.value = checkedState3.value.not()
+                    checkedState3 = checkedState3.not()
                 }) {
                 Checkbox(
-                    checked = checkedState3.value,
-                    onCheckedChange = { checkedState3.value = it }
+                    checked = checkedState3,
+                    onCheckedChange = { checkedState3 = it }
                 )
                 Text(text = "I’m going to seek professional help before attempting to self-medicate.")
             }
