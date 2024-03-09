@@ -297,7 +297,7 @@ fun SettingsScreen(
                     imageVector = Icons.Outlined.ContactSupport,
                     text = "Question / Feedback / Bug Report"
                 ) {
-                    uriHandler.openUri("https://t.me/isaakhanimann")
+                    uriHandler.openUri("https://t.me/+ss8uZhBF6g00MTY8")
                 }
                 Divider()
                 SettingsButton(imageVector = Icons.Outlined.VolunteerActivism, text = "Donate") {
