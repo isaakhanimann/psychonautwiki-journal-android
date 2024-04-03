@@ -156,6 +156,11 @@ fun DrugTestingScreen() {
                     city = "Various locations",
                     url = "https://www.kykeonanalytics.com"
                 )
+                TestingServiceItem(
+                    name = "Ai Laket",
+                    city = "Vitoria-Gasteiz, Bilbo and Donosti",
+                    url = "https://ailaket.com/proyectos/punto-fijo/"
+                )
             }
             CardWithTesting(title = "Switzerland") {
                 TestingServiceItem(
