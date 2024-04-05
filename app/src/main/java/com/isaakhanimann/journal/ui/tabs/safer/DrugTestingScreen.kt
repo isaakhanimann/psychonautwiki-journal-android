@@ -32,9 +32,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Biotech
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -72,13 +72,13 @@ fun DrugTestingScreen() {
                     city = "Innsbruck",
                     url = "https://www.drogenarbeitz6.at/drug-checking.html"
                 )
-                Divider()
+                HorizontalDivider()
                 TestingServiceItem(
                     name = "Checkit!",
                     city = "Vienna",
                     url = "https://checkit.wien/drug-checking-2/"
                 )
-                Divider()
+                HorizontalDivider()
                 TestingServiceItem(
                     name = "Triptalks",
                     city = "Graz",
@@ -91,7 +91,7 @@ fun DrugTestingScreen() {
                     city = "Saint-Gilles",
                     url = "https://www.modusvivendi-be.org"
                 )
-                Divider()
+                HorizontalDivider()
                 TestingServiceItem(
                     name = "Exaequo @ Rainbowhouse",
                     city = "Brussels",
@@ -111,13 +111,13 @@ fun DrugTestingScreen() {
                     city = "Dunkerque",
                     url = "https://www.associationmichel.com/caarud-mediane-722/le-caarud-mediane-743/"
                 )
-                Divider()
+                HorizontalDivider()
                 TestingServiceItem(
                     name = "Le MAS - CAARUD Pause diabolo",
                     city = "Lyon",
                     url = "https://www.mas-asso.fr/service/pause-diabolo/"
                 )
-                Divider()
+                HorizontalDivider()
                 TestingServiceItem(
                     name = "Centre \"Les Wads\"",
                     city = "Metz",
@@ -168,25 +168,25 @@ fun DrugTestingScreen() {
                     city = "Basel",
                     url = "https://de.saferdancebasel.ch/drugchecking"
                 )
-                Divider()
+                HorizontalDivider()
                 TestingServiceItem(
                     name = "DIB / rave it safe",
                     city = "Bern, Biel",
                     url = "https://www.raveitsafe.ch/angebotsdetails/dib-drug-checking-bern/"
                 )
-                Divider()
+                HorizontalDivider()
                 TestingServiceItem(
                     name = "Nuit Blanche",
                     city = "Geneva",
                     url = "https://nuit-blanche.ch/drug-checking/"
                 )
-                Divider()
+                HorizontalDivider()
                 TestingServiceItem(
                     name = "DIZ / Saferparty",
                     city = "Zurich",
                     url = "https://en.saferparty.ch/angebote/drug-checking"
                 )
-                Divider()
+                HorizontalDivider()
                 TestingServiceItem(
                     name = "DILU Luzern",
                     city = "Luzern",
@@ -230,7 +230,7 @@ fun CardWithTesting(
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
             Spacer(modifier = Modifier.height(5.dp))
-            Divider()
+            HorizontalDivider()
             content()
         }
     }

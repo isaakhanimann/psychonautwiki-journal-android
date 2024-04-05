@@ -89,12 +89,12 @@ Reagents can only determine the presence, not the quantity or purity, of a parti
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-                    Divider()
+                    HorizontalDivider()
                     val uriHandler = LocalUriHandler.current
                     TextButton(onClick = { uriHandler.openUri("https://dancesafe.org/testing-kit-instructions/") }) {
                         Text(text = "DanceSafe")
                     }
-                    Divider()
+                    HorizontalDivider()
                     TextButton(onClick = { uriHandler.openUri("https://bunkpolice.com") }) {
                         Text(text = "Bunk Police")
                     }

@@ -142,13 +142,13 @@ fun SearchScreen(
                         ), onTap = {
                             onCustomSubstanceTap(customSubstance.name)
                         })
-                        Divider()
+                        HorizontalDivider()
                     }
                     items(filteredSubstances) { substance ->
                         SubstanceRow(substanceModel = substance, onTap = {
                             onSubstanceTap(substance)
                         })
-                        Divider()
+                        HorizontalDivider()
                     }
 
                     item {

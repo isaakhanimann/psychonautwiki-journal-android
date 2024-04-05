@@ -44,8 +44,8 @@ import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -148,14 +148,14 @@ fun SettingsScreen(
                 ) {
                     navigateToCustomUnits()
                 }
-                Divider()
+                HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.Outlined.Palette,
                     text = "Substance Colors"
                 ) {
                     navigateToSubstanceColors()
                 }
-                Divider()
+                HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.Outlined.WarningAmber,
                     text = "Interaction Settings"
@@ -208,7 +208,7 @@ fun SettingsScreen(
                         }
                     )
                 }
-                Divider()
+                HorizontalDivider()
                 var isShowingImportDialog by remember { mutableStateOf(false) }
                 SettingsButton(imageVector = Icons.Outlined.FileDownload, text = "Import File") {
                     isShowingImportDialog = true
@@ -247,7 +247,7 @@ fun SettingsScreen(
                         }
                     )
                 }
-                Divider()
+                HorizontalDivider()
                 var isShowingDeleteDialog by remember { mutableStateOf(false) }
                 SettingsButton(
                     imageVector = Icons.Outlined.DeleteForever,
@@ -296,14 +296,14 @@ fun SettingsScreen(
                 SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
                     navigateToFAQ()
                 }
-                Divider()
+                HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.Outlined.ContactSupport,
                     text = "Question / Feedback / Bug Report"
                 ) {
                     uriHandler.openUri("https://t.me/+ss8uZhBF6g00MTY8")
                 }
-                Divider()
+                HorizontalDivider()
                 SettingsButton(imageVector = Icons.Outlined.VolunteerActivism, text = "Donate") {
                     navigateToDonate()
                 }
@@ -312,7 +312,7 @@ fun SettingsScreen(
                 SettingsButton(imageVector = Icons.Outlined.Code, text = "Source Code") {
                     uriHandler.openUri("https://github.com/isaakhanimann/psychonautwiki-journal-android")
                 }
-                Divider()
+                HorizontalDivider()
                 val context = LocalContext.current
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
@@ -323,7 +323,7 @@ fun SettingsScreen(
                 SettingsButton(imageVector = Icons.Outlined.Share, text = "Share") {
                     context.startActivity(shareIntent)
                 }
-                Divider()
+                HorizontalDivider()
                 Text(
                     text = "Version $VERSION_NAME",
                     style = MaterialTheme.typography.labelLarge,

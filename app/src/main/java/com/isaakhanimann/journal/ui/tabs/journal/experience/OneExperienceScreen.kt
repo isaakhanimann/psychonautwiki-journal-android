@@ -47,12 +47,12 @@ import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -481,7 +481,7 @@ fun OneExperienceScreen(
                         )
                     )
                     if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
-                        Divider()
+                        HorizontalDivider()
                     }
                     oneExperienceScreenModel.ingestionElements.forEachIndexed { index, ingestionElement ->
                         IngestionRow(
@@ -496,7 +496,7 @@ fun OneExperienceScreen(
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
                         if (index < oneExperienceScreenModel.ingestionElements.size - 1) {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                 }
@@ -506,7 +506,7 @@ fun OneExperienceScreen(
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "My Cumulative Doses")
                     if (cumulativeDoses.isNotEmpty()) {
-                        Divider()
+                        HorizontalDivider()
                     }
                     cumulativeDoses.forEachIndexed { index, cumulativeDose ->
                         CumulativeDoseRow(
@@ -515,7 +515,7 @@ fun OneExperienceScreen(
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
                         if (index < cumulativeDoses.size - 1) {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                 }
@@ -525,7 +525,7 @@ fun OneExperienceScreen(
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Timed Notes")
                     if (timedNotes.isNotEmpty()) {
-                        Divider()
+                        HorizontalDivider()
                     }
                     timedNotes.forEachIndexed { index, timedNote ->
                         TimedNoteRow(
@@ -540,7 +540,7 @@ fun OneExperienceScreen(
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
                         if (index < timedNotes.size - 1) {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                 }
@@ -548,7 +548,7 @@ fun OneExperienceScreen(
             if (oneExperienceScreenModel.ratings.isNotEmpty()) {
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Shulgin Ratings")
-                    Divider()
+                    HorizontalDivider()
                     val ratingsWithTime =
                         oneExperienceScreenModel.ratings.filter { it.time != null }
                     ratingsWithTime.forEachIndexed { index, rating ->
@@ -564,14 +564,14 @@ fun OneExperienceScreen(
                                 .padding(vertical = 8.dp, horizontal = horizontalPadding)
                         )
                         if (index < ratingsWithTime.size - 1) {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                     val overallRating =
                         oneExperienceScreenModel.ratings.firstOrNull { it.time == null }
                     if (overallRating != null) {
                         if (ratingsWithTime.isNotEmpty()) {
-                            Divider()
+                            HorizontalDivider()
                         }
                         RatingRow(
                             rating = overallRating,
@@ -628,7 +628,7 @@ fun OneExperienceScreen(
                                 }
                         )
                     }
-                    Divider()
+                    HorizontalDivider()
                     consumerWithIngestions.ingestionElements.forEachIndexed { index, ingestionElement ->
                         IngestionRow(
                             ingestionElement = ingestionElement,
@@ -642,7 +642,7 @@ fun OneExperienceScreen(
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
                         if (index < consumerWithIngestions.ingestionElements.size - 1) {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                 }
@@ -657,7 +657,7 @@ fun OneExperienceScreen(
                     interactions.forEachIndexed { index, interaction ->
                         InteractionRow(interaction = interaction)
                         if (index < interactions.size - 1) {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                     Spacer(modifier = Modifier.height(5.dp))

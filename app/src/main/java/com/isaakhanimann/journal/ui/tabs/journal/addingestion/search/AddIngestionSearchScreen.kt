@@ -39,8 +39,8 @@ import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -196,7 +196,7 @@ fun AddIngestionSearchScreen(
                         navigateToChooseTime = navigateToChooseTime
                     )
                     if (index < substanceRouteSuggestions.size - 1) {
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 if (filteredCustomSubstances.isNotEmpty()) {
@@ -215,7 +215,7 @@ fun AddIngestionSearchScreen(
                         navigateToCustomSubstanceChooseRoute(customSubstance.name)
                     })
                     if (index < filteredCustomSubstances.size - 1) {
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 if (filteredCustomUnits.isNotEmpty()) {
@@ -228,7 +228,7 @@ fun AddIngestionSearchScreen(
                         customUnit = customUnit,
                         navigateToCustomUnitChooseDose = navigateToCustomUnitChooseDose)
                     if (index < filteredCustomUnits.size - 1) {
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 if (filteredSubstances.isNotEmpty()) {
@@ -247,7 +247,7 @@ fun AddIngestionSearchScreen(
                         }
                     })
                     if (index < filteredSubstances.size - 1) {
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
                 item {

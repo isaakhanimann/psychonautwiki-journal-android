@@ -41,13 +41,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.Update
-import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -163,7 +163,7 @@ fun SubstanceScreen(
                 onClick = { navigateToURL(substance.url) },
                 icon = {
                     Icon(
-                        Icons.Outlined.Article,
+                        Icons.Outlined.OpenInBrowser,
                         contentDescription = "Open Link"
                     )
                 },
@@ -241,7 +241,7 @@ fun SubstanceScreen(
                         if (substance.dosageRemark != null) {
                             Text(text = substance.dosageRemark)
                             Spacer(modifier = Modifier.height(10.dp))
-                            Divider()
+                            HorizontalDivider()
                         }
                         roasWithDosesDefined.forEach { roa ->
                             Column(
@@ -281,14 +281,14 @@ fun SubstanceScreen(
                                     )
                                 }
                             }
-                            Divider()
+                            HorizontalDivider()
                         }
                         VerticalSpace()
                         OptionalDosageUnitDisclaimer(substance.name)
                         Text(text = DOSE_DISCLAIMER)
                         VerticalSpace()
                         if (substance.roas.any { it.roaDose?.shouldUseVolumetricDosing == true }) {
-                            Divider()
+                            HorizontalDivider()
                             TextButton(onClick = navigateToVolumetricDosingScreen) {
                                 Icon(
                                     Icons.Outlined.Info,
@@ -299,7 +299,7 @@ fun SubstanceScreen(
                                 Text("Volumetric Dosing")
                             }
                         }
-                        Divider()
+                        HorizontalDivider()
                         TextButton(onClick = navigateToDosageExplanationScreen) {
                             Icon(
                                 Icons.Outlined.Info,
@@ -411,7 +411,7 @@ fun SubstanceScreen(
                                 .height(200.dp)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Divider()
+                        HorizontalDivider()
                         roasWithDurationsDefined.forEachIndexed { index, roa ->
                             Column(
                                 modifier = Modifier.padding(
@@ -443,7 +443,7 @@ fun SubstanceScreen(
                                 }
                             }
                             if (index < roasWithDurationsDefined.size - 1) {
-                                Divider()
+                                HorizontalDivider()
                             }
                         }
                         VerticalSpace()
@@ -527,7 +527,7 @@ fun SubstanceScreen(
                                     modifier = Modifier.padding(horizontal = horizontalPadding)
                                 )
                             }
-                            Divider()
+                            HorizontalDivider()
                         }
                         if (substance.isStimulant) {
                             TextButton(onClick = navigateToSaferStimulantsScreen) {
@@ -536,7 +536,7 @@ fun SubstanceScreen(
                                     modifier = Modifier.padding(horizontal = horizontalPadding)
                                 )
                             }
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                 }

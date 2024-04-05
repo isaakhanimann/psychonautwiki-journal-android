@@ -39,9 +39,9 @@ import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
@@ -263,7 +263,7 @@ fun JournalScreen(
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     if (experiences.isNotEmpty()) {
                         item {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                     items(experiences) { experienceWithIngestions ->
@@ -274,7 +274,7 @@ fun JournalScreen(
                             },
                             isTimeRelativeToNow = isTimeRelativeToNow
                         )
-                        Divider()
+                        HorizontalDivider()
                     }
                 }
             }
