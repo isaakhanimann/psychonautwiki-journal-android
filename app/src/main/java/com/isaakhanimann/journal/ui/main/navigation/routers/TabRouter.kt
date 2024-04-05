@@ -20,7 +20,11 @@ package com.isaakhanimann.journal.ui.main.navigation.routers
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.Book
+import androidx.compose.material.icons.outlined.HealthAndSafety
+import androidx.compose.material.icons.outlined.Medication
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.isaakhanimann.journal.R
 
@@ -44,11 +48,11 @@ sealed class TabRouter(
         icon = Icons.Outlined.BarChart
     )
 
-    object Search : TabRouter(
-        route = "searchTab",
-        childRoute = NoArgumentRouter.SearchRouter.route,
-        resourceId = R.string.search,
-        icon = Icons.Outlined.Search
+    object Substances : TabRouter(
+        route = "substancesTab",
+        childRoute = NoArgumentRouter.SubstancesRouter.route,
+        resourceId = R.string.substances,
+        icon = Icons.Outlined.Medication
     )
 
     object SaferUse : TabRouter(

@@ -62,7 +62,7 @@ sealed class NoArgumentRouter(val route: String) {
     object CalendarRouter : NoArgumentRouter(route = "calendar")
     object AddIngestionSearchRouter : NoArgumentRouter(route = "addIngestionsSearch")
     object AddCustomRouter : NoArgumentRouter(route = "addCustom")
-    object SearchRouter :
+    object SubstancesRouter :
         NoArgumentRouter(route = "searchChild") // child because there is already a route for the tabs
 
     object JournalRouter : NoArgumentRouter(route = "journalChild")

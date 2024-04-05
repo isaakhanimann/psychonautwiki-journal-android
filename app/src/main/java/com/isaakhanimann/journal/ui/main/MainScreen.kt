@@ -59,7 +59,7 @@ fun MainScreen(
                         val tabs = listOf(
                             TabRouter.Statistics,
                             TabRouter.Journal,
-                            TabRouter.Search,
+                            TabRouter.Substances,
                             TabRouter.SaferUse,
                             TabRouter.Settings
                         )
