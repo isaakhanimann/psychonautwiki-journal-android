@@ -36,7 +36,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -98,7 +98,7 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
         ) {
             val configuration = LocalConfiguration.current
             val screenWidth = configuration.screenWidthDp.toFloat()
-            var canvasWidth by remember { mutableStateOf(screenWidth) }
+            var canvasWidth by remember { mutableFloatStateOf(screenWidth) }
             val isOrientationPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
             Box(
                 modifier = Modifier
