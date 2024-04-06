@@ -105,6 +105,13 @@ fun DrugTestingScreen() {
                     url = "http://www.vch.ca/public-health/harm-reduction/overdose-prevention-response/drug-checking"
                 )
             }
+            CardWithTesting(title = "Germany") {
+                TestingServiceItem(
+                    name = "Drugchecking",
+                    city = "Berlin",
+                    url = "https://drugchecking.berlin"
+                )
+            }
             CardWithTesting(title = "France") {
                 TestingServiceItem(
                     name = "Asso Michel - CAARUD Médiane",
