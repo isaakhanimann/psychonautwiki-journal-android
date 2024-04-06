@@ -66,7 +66,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddCustomSubstance(
     navigateBack: () -> Unit,
-    viewModel: AddCustomViewModel = hiltViewModel()
+    viewModel: AddCustomSubstanceViewModel = hiltViewModel()
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -97,7 +97,7 @@ fun AddCustomSubstance(
 @Composable
 fun EditCustomSubstance(
     navigateBack: () -> Unit,
-    viewModel: EditCustomViewModel = hiltViewModel()
+    viewModel: EditCustomSubstanceViewModel = hiltViewModel()
 ) {
     AddOrEditCustomSubstance(
         name = viewModel.name,
