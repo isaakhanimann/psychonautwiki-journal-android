@@ -31,8 +31,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.Code
-import androidx.compose.material.icons.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.FileUpload
@@ -298,7 +298,7 @@ fun SettingsScreen(
                 }
                 HorizontalDivider()
                 SettingsButton(
-                    imageVector = Icons.Outlined.ContactSupport,
+                    imageVector = Icons.AutoMirrored.Outlined.ContactSupport,
                     text = "Question / Feedback / Bug Report"
                 ) {
                     uriHandler.openUri("https://t.me/+ss8uZhBF6g00MTY8")

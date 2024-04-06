@@ -279,14 +279,6 @@ enum class TimePickerOption {
         override val oneBucketSize: Period = Period.ofDays(1)
         override val allBucketSizes: Period = Period.ofDays(7)
     },
-    DAYS_30 {
-        override val displayText = "30D"
-        override val longDisplayText = "Last Month"
-        override val tabIndex = 1
-        override val bucketCount = 30
-        override val oneBucketSize: Period = Period.ofDays(1)
-        override val allBucketSizes: Period = Period.ofDays(30)
-    },
     WEEKS_26 {
         override val displayText = "26W"
         override val longDisplayText = "Half Year"
@@ -295,22 +287,6 @@ enum class TimePickerOption {
         override val oneBucketSize: Period =
             Period.ofDays(7) // the max time unit that can be used for subtraction is days
         override val allBucketSizes: Period = Period.ofDays(7 * bucketCount)
-    },
-    MONTHS_12 {
-        override val displayText = "12M"
-        override val longDisplayText = "Last Year"
-        override val tabIndex = 3
-        override val bucketCount = 12
-        override val oneBucketSize: Period = Period.ofDays(30)
-        override val allBucketSizes: Period = Period.ofDays(30 * bucketCount)
-    },
-    YEARS_10 {
-        override val displayText = "10Y"
-        override val longDisplayText = "10 Years"
-        override val tabIndex = 4
-        override val bucketCount = 10
-        override val oneBucketSize: Period = Period.ofDays(365)
-        override val allBucketSizes: Period = Period.ofDays(365 * bucketCount)
     };
 
     abstract val displayText: String
@@ -324,5 +300,5 @@ enum class TimePickerOption {
 fun Instant.getEndOfDay(): Instant {
     return this.atOffset(ZoneOffset.UTC)
         .with(LocalTime.of(23,59,59, this.nano))
-        .toInstant();
+        .toInstant()
 }

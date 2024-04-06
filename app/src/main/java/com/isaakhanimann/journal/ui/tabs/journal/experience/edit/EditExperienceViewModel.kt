@@ -45,8 +45,8 @@ class EditExperienceViewModel @Inject constructor(
     val isEnteredTitleOk get() = enteredTitle.isNotEmpty()
     var enteredText by mutableStateOf("")
     var enteredLocation by mutableStateOf("")
-    var oldLongitude: Double? = null
-    var oldLatitude: Double? = null
+    private var oldLongitude: Double? = null
+    private var oldLatitude: Double? = null
 
 
     init {

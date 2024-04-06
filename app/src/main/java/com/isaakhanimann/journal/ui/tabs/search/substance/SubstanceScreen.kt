@@ -42,7 +42,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.OpenInBrowser
+import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -163,8 +163,8 @@ fun SubstanceScreen(
                 onClick = { navigateToURL(substance.url) },
                 icon = {
                     Icon(
-                        Icons.Outlined.OpenInBrowser,
-                        contentDescription = "Open Link"
+                        Icons.Outlined.Newspaper,
+                        contentDescription = "Open PW article"
                     )
                 },
                 text = { Text("More Info") },

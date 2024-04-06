@@ -32,9 +32,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NavigateNext
+import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.QuestionMark
-import androidx.compose.material.icons.outlined.Article
+import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -186,7 +186,7 @@ fun CustomChooseDose(
                     onClick = navigateToNext,
                     icon = {
                         Icon(
-                            Icons.Filled.NavigateNext,
+                            Icons.AutoMirrored.Filled.NavigateNext,
                             contentDescription = "Next"
                         )
                     },
@@ -200,7 +200,10 @@ fun CustomChooseDose(
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
         ) {
-            LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
+            LinearProgressIndicator(
+                progress = { 0.67f },
+                modifier = Modifier.fillMaxWidth(),
+            )
             Spacer(modifier = Modifier.height(4.dp))
             ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
                 Column(
@@ -286,7 +289,7 @@ fun CustomChooseDose(
             } else if (administrationRoute == AdministrationRoute.RECTAL) {
                 TextButton(onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) }) {
                     Icon(
-                        Icons.Outlined.Article,
+                        Icons.Outlined.Newspaper,
                         contentDescription = "Open Link"
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))

@@ -32,7 +32,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NavigateNext
+import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -190,7 +190,7 @@ fun ChooseDoseCustomUnitScreen(
                     onClick = navigateToNext,
                     icon = {
                         Icon(
-                            Icons.Filled.NavigateNext,
+                            Icons.AutoMirrored.Filled.NavigateNext,
                             contentDescription = "Next"
                         )
                     },
@@ -204,7 +204,10 @@ fun ChooseDoseCustomUnitScreen(
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
         ) {
-            LinearProgressIndicator(progress = 0.67f, modifier = Modifier.fillMaxWidth())
+            LinearProgressIndicator(
+                progress = { 0.67f },
+                modifier = Modifier.fillMaxWidth(),
+            )
             Spacer(modifier = Modifier.height(4.dp))
             ElevatedCard(
                 modifier = Modifier.padding(

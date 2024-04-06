@@ -68,10 +68,6 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
         doseText = newDoseText.replace(oldChar = ',', newChar = '.')
     }
 
-    fun onIsEstimateChange(newIsEstimate: Boolean) {
-        isEstimate = newIsEstimate
-    }
-
     fun onEstimatedDoseDeviationChange(newEstimatedDeviationText: String) {
         estimatedDoseDeviationText = newEstimatedDeviationText.replace(oldChar = ',', newChar = '.')
     }
@@ -80,7 +76,7 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
     val estimatedDoseDeviation: Double? get() = estimatedDoseDeviationText.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
 
-    val customUnitDose: CustomUnitDose?
+    private val customUnitDose: CustomUnitDose?
         get() {
             return dose?.let { doseUnwrapped ->
                 return@let customUnit?.let {

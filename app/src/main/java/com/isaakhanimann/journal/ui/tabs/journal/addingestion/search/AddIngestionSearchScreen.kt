@@ -140,7 +140,10 @@ fun AddIngestionSearchScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            LinearProgressIndicator(progress = 0.17f, modifier = Modifier.fillMaxWidth())
+            LinearProgressIndicator(
+                progress = { 0.17f },
+                modifier = Modifier.fillMaxWidth(),
+            )
             TextField(
                 value = searchText,
                 onValueChange = { value ->

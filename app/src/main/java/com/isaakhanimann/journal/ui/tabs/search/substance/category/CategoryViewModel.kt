@@ -30,6 +30,6 @@ class CategoryViewModel @Inject constructor(
     substanceRepo: SubstanceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    val categoryName = state.get<String>(CATEGORY_KEY)!!
+    private val categoryName = state.get<String>(CATEGORY_KEY)!!
     val category = substanceRepo.getCategory(categoryName)
 }

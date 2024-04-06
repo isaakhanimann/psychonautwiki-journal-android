@@ -195,7 +195,10 @@ fun ChooseTimeScreen(
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
         ) {
-            LinearProgressIndicator(progress = 0.9f, modifier = Modifier.fillMaxWidth())
+            LinearProgressIndicator(
+                progress = { 0.9f },
+                modifier = Modifier.fillMaxWidth(),
+            )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier

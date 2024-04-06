@@ -19,7 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NavigateNext
+import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -32,7 +32,7 @@ fun NextFAB(navigateToNext: () -> Unit) {
         onClick = navigateToNext,
         icon = {
             Icon(
-                Icons.Filled.NavigateNext,
+                Icons.AutoMirrored.Filled.NavigateNext,
                 contentDescription = "Next"
             )
         },

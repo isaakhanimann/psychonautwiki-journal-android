@@ -24,7 +24,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.*
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +35,6 @@ import com.google.accompanist.web.LoadingState
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UrlScreen(url: String) {
     val context = LocalContext.current
@@ -56,7 +58,8 @@ fun UrlScreen(url: String) {
             val loadingState = state.loadingState
             if (loadingState is LoadingState.Loading) {
                 LinearProgressIndicator(
-                    progress = loadingState.progress, modifier = Modifier.fillMaxWidth()
+                    progress = { loadingState.progress },
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
             WebView(

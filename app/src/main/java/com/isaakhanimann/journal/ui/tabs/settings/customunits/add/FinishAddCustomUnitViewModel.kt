@@ -81,7 +81,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
     fun onChangeOfEstimatedDoseDeviation(newEstimatedDoseDeviation: String) {
         estimatedDoseDeviationText = newEstimatedDoseDeviation
     }
-    val estimatedDoseDeviation: Double? get() = estimatedDoseDeviationText.toDoubleOrNull()
+    private val estimatedDoseDeviation: Double? get() = estimatedDoseDeviationText.toDoubleOrNull()
 
 
     var isEstimate by mutableStateOf(false)

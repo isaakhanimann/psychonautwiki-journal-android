@@ -29,10 +29,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -137,7 +137,7 @@ fun ChooseRouteScreen(
                     if (showOtherRoutes && pwRoutes.isNotEmpty()) {
                         IconButton(onClick = { onChangeOfShowOtherRoutes(false) }) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back"
                             )
                         }
@@ -155,7 +155,10 @@ fun ChooseRouteScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            LinearProgressIndicator(progress = 0.5f, modifier = Modifier.fillMaxWidth())
+            LinearProgressIndicator(
+                progress = { 0.5f },
+                modifier = Modifier.fillMaxWidth(),
+            )
             AnimatedVisibility(visible = isShowingInjectionDialog) {
                 InjectionDialog(
                     navigateToNext = navigateWithCurrentRoute,
@@ -260,7 +263,7 @@ fun SaferInjectionLink(navigateToURL: (url: String) -> Unit) {
         navigateToURL(AdministrationRoute.saferInjectionArticleURL)
     }) {
         Icon(
-            Icons.Outlined.Article,
+            Icons.Outlined.Newspaper,
             contentDescription = "Open Link",
             modifier = Modifier.size(ButtonDefaults.IconSize),
         )

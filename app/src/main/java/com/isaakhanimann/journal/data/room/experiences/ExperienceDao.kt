@@ -61,16 +61,6 @@ interface ExperienceDao {
     )
     suspend fun getLatestIngestionOfEverySubstanceSinceDate(instant: Instant): List<Ingestion>
 
-    @Query("SELECT * FROM ingestion WHERE time > :instant")
-    suspend fun getIngestionsSinceDate(instant: Instant): List<Ingestion>
-
-    @Query("SELECT * FROM ingestion")
-    suspend fun getAllIngestions(): List<Ingestion>
-
-    @Transaction
-    @Query("SELECT * FROM experience ORDER BY sortDate")
-    suspend fun getAllExperiencesWithIngestionsSorted(): List<ExperienceWithIngestions>
-
     @Transaction
     @Query("SELECT * FROM experience ORDER BY sortDate")
     suspend fun getAllExperiencesWithIngestionsTimedNotesAndRatingsSorted(): List<ExperienceWithIngestionsTimedNotesAndRatings>
@@ -147,9 +137,6 @@ interface ExperienceDao {
     @Transaction
     @Query("SELECT * FROM ingestion WHERE experienceId =:experienceId")
     suspend fun getIngestionsWithCompanions(experienceId: Int): List<IngestionWithCompanionAndCustomUnit>
-
-    @Query("SELECT * FROM ingestion WHERE experienceId =:experienceId")
-    suspend fun getIngestions(experienceId: Int): List<Ingestion>
 
     @Query("SELECT * FROM shulginrating WHERE id =:id")
     suspend fun getRating(id: Int): ShulginRating?
@@ -458,9 +445,6 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM customunit ORDER BY creationDate DESC")
     fun getAllCustomUnitsFlow(): Flow<List<CustomUnit>>
-
-    @Query("SELECT * FROM timednote")
-    suspend fun getAllTimedNotes(): List<TimedNote>
 
     @Query("SELECT * FROM timednote WHERE experienceId =:experienceId")
     suspend fun getTimedNotes(experienceId: Int): List<TimedNote>

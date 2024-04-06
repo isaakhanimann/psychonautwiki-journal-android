@@ -356,8 +356,8 @@ class OneExperienceViewModel @Inject constructor(
                         cumulativeRouteAndDose = cumulativeRouteDose
                     )
                 }
-                .filter {
-                    it.cumulativeRouteAndDose.isNotEmpty() && it.cumulativeRouteAndDose.any { it.hasMoreThanOneIngestion }
+                .filter { cumulativeDose ->
+                    cumulativeDose.cumulativeRouteAndDose.isNotEmpty() && cumulativeDose.cumulativeRouteAndDose.any { it.hasMoreThanOneIngestion }
                 }
         }
     }

@@ -32,7 +32,13 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.TIMED_NOTE_ID_KEY
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -46,7 +52,7 @@ class EditTimedNoteViewModel @Inject constructor(
     var color by mutableStateOf(AdaptiveColor.BLUE)
     var isPartOfTimeline by mutableStateOf(true)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
-    var timedNote: TimedNote? = null
+    private var timedNote: TimedNote? = null
     val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
 
     private val timedNoteId: Int

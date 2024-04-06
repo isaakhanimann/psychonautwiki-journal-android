@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.NoteAdd
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -42,7 +43,6 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.ExposurePlus2
-import androidx.compose.material.icons.outlined.NoteAdd
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.AlertDialog
@@ -360,7 +360,7 @@ fun OneExperienceScreen(
                             },
                             leadingIcon = {
                                 Icon(
-                                    Icons.Outlined.NoteAdd,
+                                    Icons.AutoMirrored.Outlined.NoteAdd,
                                     contentDescription = "Add timed note",
                                     modifier = Modifier.size(ButtonDefaults.IconSize)
                                 )

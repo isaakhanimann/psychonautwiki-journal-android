@@ -70,7 +70,7 @@ fun EditRatingScreen(
             viewModel.delete()
             navigateBack()
         },
-        isOverallRating = viewModel.isOverallRating.value
+        isOverallRating = viewModel.isOverallRatingFlow.collectAsState().value
     )
 }
 

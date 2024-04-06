@@ -34,7 +34,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchField(
     modifier: Modifier,

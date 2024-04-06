@@ -29,6 +29,6 @@ class SubstanceFile(
     init {
         this.categories = categories
         this.substances = substances
-        this.substancesMap = substances.map { it.name to it }.toMap()
+        this.substancesMap = substances.associateBy { it.name }
     }
 }

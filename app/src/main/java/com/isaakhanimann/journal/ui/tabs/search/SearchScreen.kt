@@ -36,7 +36,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.tabs.search.substancerow.SubstanceRow
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel(),
