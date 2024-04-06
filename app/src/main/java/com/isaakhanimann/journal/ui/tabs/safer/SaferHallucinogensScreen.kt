@@ -18,17 +18,25 @@
 
 package com.isaakhanimann.journal.ui.tabs.safer
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.tabs.search.substance.BulletPoints
-import com.isaakhanimann.journal.ui.tabs.search.substance.CollapsibleSection
 import com.isaakhanimann.journal.ui.tabs.search.substance.SectionText
+import com.isaakhanimann.journal.ui.tabs.search.substance.SectionWithTitle
 import com.isaakhanimann.journal.ui.tabs.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
@@ -56,7 +64,7 @@ fun SaferHallucinogensScreen() {
                 )
                 VerticalSpace()
             }
-            CollapsibleSection(title = "Setting") {
+            SectionWithTitle(title = "Setting") {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     SectionText(text = "Choosing a suitable place to experience the effects of a hallucinogen is extremely important and plays a major role in determining the outcome of the experience. The ideal place for an inexperienced user is a familiar, safe, indoor environment over which they have full control and is devoid of factors that can negatively influence one's mental state. In order to prepare a proper setting for hallucinogens, it is advised to take the following steps:")
                     BulletPoints(
@@ -72,7 +80,7 @@ fun SaferHallucinogensScreen() {
                     VerticalSpace()
                 }
             }
-            CollapsibleSection(title = "Set (State of Mind)") {
+            SectionWithTitle(title = "Set (State of Mind)") {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
 
                     SectionText(
@@ -86,7 +94,7 @@ fun SaferHallucinogensScreen() {
                     VerticalSpace()
                 }
             }
-            CollapsibleSection(title = "Bodily State") {
+            SectionWithTitle(title = "Bodily State") {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     SectionText(
                         text = """
@@ -97,7 +105,7 @@ fun SaferHallucinogensScreen() {
                     VerticalSpace()
                 }
             }
-            CollapsibleSection(title = "Trip Sitters") {
+            SectionWithTitle(title = "Trip Sitters") {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     SectionText(
                         text = """
@@ -109,7 +117,7 @@ fun SaferHallucinogensScreen() {
                     VerticalSpace()
                 }
             }
-            CollapsibleSection("Anchors") {
+            SectionWithTitle("Anchors") {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     SectionText(text = "In the context of hallucinogen use, an anchor is an activity or physical object which keeps the user grounded during the heavy distortion of a person's sense of time, space, memory, and sense of self. At higher dosages, this can result in extreme disorientation and confusion. Anchors are often used to counteract this and maintain one's concept of the current situation as it is within reality.")
                     SectionText(text = "Examples of anchors include:")
@@ -127,7 +135,7 @@ fun SaferHallucinogensScreen() {
                 }
             }
         }
-        CollapsibleSection("Aborting Trips") {
+        SectionWithTitle("Aborting Trips") {
             Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                 SectionText(
                     text = """

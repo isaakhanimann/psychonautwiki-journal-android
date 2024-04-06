@@ -23,14 +23,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
-import com.isaakhanimann.journal.ui.tabs.search.substance.CollapsibleSection
+import com.isaakhanimann.journal.ui.tabs.search.substance.SectionWithTitle
 import com.isaakhanimann.journal.ui.tabs.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
@@ -60,7 +64,7 @@ fun DoseExplanationScreen() {
                 )
             }
             DoseClass.values().forEach {
-                CollapsibleSection(title = it.name) {
+                SectionWithTitle(title = it.name) {
                     Text(
                         text = it.description,
                         textAlign = TextAlign.Left,

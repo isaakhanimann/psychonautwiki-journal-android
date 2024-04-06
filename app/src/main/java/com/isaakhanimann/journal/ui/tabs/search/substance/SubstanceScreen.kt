@@ -236,7 +236,7 @@ fun SubstanceScreen(
                 return@filter !isEveryDoseNull
             }
             if (substance.dosageRemark != null || roasWithDosesDefined.isNotEmpty()) {
-                CollapsibleSection(title = "Dosage") {
+                SectionWithTitle(title = "Dosage") {
                     Column(Modifier.padding(horizontal = horizontalPadding)) {
                         if (substance.dosageRemark != null) {
                             Text(text = substance.dosageRemark)
@@ -314,7 +314,7 @@ fun SubstanceScreen(
                 }
             }
             if (substance.tolerance != null || substance.crossTolerances.isNotEmpty()) {
-                CollapsibleSection(title = "Tolerance") {
+                SectionWithTitle(title = "Tolerance") {
                     Column {
                         VerticalSpace()
                         ToleranceSection(
@@ -327,7 +327,7 @@ fun SubstanceScreen(
                 }
             }
             if (substance.toxicities.isNotEmpty()) {
-                CollapsibleSection(title = "Toxicity") {
+                SectionWithTitle(title = "Toxicity") {
                     Column {
                         VerticalSpace()
                         if (substance.toxicities.size == 1) {
@@ -352,7 +352,7 @@ fun SubstanceScreen(
                 return@filter !isEveryDurationNull
             }
             if (roasWithDurationsDefined.isNotEmpty()) {
-                CollapsibleSection(title = "Duration") {
+                SectionWithTitle(title = "Duration") {
                     Column(Modifier.padding(horizontal = horizontalPadding)) {
                         var ingestionTime by remember { mutableStateOf(LocalDateTime.now()) }
                         Row(
@@ -453,7 +453,7 @@ fun SubstanceScreen(
             val interactions = substance.interactions
             if (interactions != null) {
                 if (interactions.dangerous.isNotEmpty() || interactions.unsafe.isNotEmpty() || interactions.uncertain.isNotEmpty()) {
-                    CollapsibleSection(title = "Interactions") {
+                    SectionWithTitle(title = "Interactions") {
                         InteractionsView(
                             interactions = substance.interactions,
                             substanceURL = substance.url,
@@ -463,7 +463,7 @@ fun SubstanceScreen(
                 }
             }
             if (substance.effectsSummary != null) {
-                CollapsibleSection(title = "Effects") {
+                SectionWithTitle(title = "Effects") {
                     Column {
                         Text(
                             text = substance.effectsSummary,
@@ -474,7 +474,7 @@ fun SubstanceScreen(
                 }
             }
             if (substance.generalRisks != null && substance.longtermRisks != null) {
-                CollapsibleSection(title = "Risks") {
+                SectionWithTitle(title = "Risks") {
                     Column {
                         Text(
                             text = substance.generalRisks,
@@ -483,7 +483,7 @@ fun SubstanceScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
-                CollapsibleSection(title = "Long-term") {
+                SectionWithTitle(title = "Long-term") {
                     Column {
                         Text(
                             text = substance.longtermRisks,
@@ -494,7 +494,7 @@ fun SubstanceScreen(
                 }
             }
             if (substance.saferUse.isNotEmpty()) {
-                CollapsibleSection(title = "Safer Use") {
+                SectionWithTitle(title = "Safer Use") {
                     Column {
                         BulletPoints(
                             points = substance.saferUse,
@@ -505,7 +505,7 @@ fun SubstanceScreen(
                 }
             }
             if (substance.addictionPotential != null) {
-                CollapsibleSection(title = "Addiction Potential") {
+                SectionWithTitle(title = "Addiction Potential") {
                     Column {
                         Text(
                             substance.addictionPotential,
@@ -518,7 +518,7 @@ fun SubstanceScreen(
             val firstRoa = substance.roas.firstOrNull()
             val useVolumetric = firstRoa?.roaDose?.shouldUseVolumetricDosing == true
             if (substance.isHallucinogen || substance.isStimulant || useVolumetric) {
-                CollapsibleSection(title = "See Also") {
+                SectionWithTitle(title = "See Also") {
                     Column {
                         if (substance.isHallucinogen) {
                             TextButton(onClick = navigateToSaferHallucinogensScreen) {

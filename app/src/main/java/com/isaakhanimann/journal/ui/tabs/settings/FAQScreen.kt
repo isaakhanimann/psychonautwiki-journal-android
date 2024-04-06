@@ -32,7 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.journal.ui.tabs.search.substance.CollapsibleSection
+import com.isaakhanimann.journal.ui.tabs.search.substance.SectionWithTitle
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,7 +76,7 @@ fun FAQScreen() {
 
 @Composable
 fun QuestionAnswerRow(question: String, answer: String) {
-    CollapsibleSection(title = question) {
+    SectionWithTitle(title = question) {
         Text(
             text = answer,
             modifier = Modifier

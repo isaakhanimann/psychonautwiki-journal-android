@@ -43,8 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.tabs.search.substance.CollapsibleSection
 import com.isaakhanimann.journal.ui.tabs.search.substance.SectionText
+import com.isaakhanimann.journal.ui.tabs.search.substance.SectionWithTitle
 import com.isaakhanimann.journal.ui.tabs.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
@@ -93,7 +93,7 @@ Determining an optimal route of administration is highly dependent on the substa
                 }
             }
             AdministrationRoute.values().filter { !it.isInjectionMethod }.forEach {
-                CollapsibleSection(title = it.displayText) {
+                SectionWithTitle(title = it.displayText) {
                     Text(
                         text = it.articleText,
                         textAlign = TextAlign.Left,
@@ -117,7 +117,7 @@ Determining an optimal route of administration is highly dependent on the substa
                 }
             }
             AdministrationRoute.values().filter { it.isInjectionMethod }.forEach {
-                CollapsibleSection(title = it.displayText) {
+                SectionWithTitle(title = it.displayText) {
                     Text(
                         text = it.articleText,
                         textAlign = TextAlign.Left,
