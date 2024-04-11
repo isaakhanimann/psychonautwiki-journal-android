@@ -24,7 +24,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -35,7 +38,20 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val experienceRepository: ExperienceRepository,
     private val fileSystemConnection: FileSystemConnection,
+    private val userPreferences: UserPreferences,
 ) : ViewModel() {
+
+    fun saveDosageDotsAreHidden(value: Boolean) {
+        viewModelScope.launch {
+            userPreferences.saveDosageDotsAreHidden(value)
+        }
+    }
+
+    val areDosageDotsHiddenFlow = userPreferences.areDosageDotsHiddenFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     val snackbarHostState = SnackbarHostState()
 

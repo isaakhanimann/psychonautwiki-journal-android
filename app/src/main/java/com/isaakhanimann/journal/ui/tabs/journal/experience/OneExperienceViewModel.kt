@@ -77,6 +77,12 @@ class OneExperienceViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
+    val areDosageDotsHiddenFlow = userPreferences.areDosageDotsHiddenFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
     fun saveOralDisclaimerIsHidden(isOralDisclaimerHidden: Boolean) {
         viewModelScope.launch {
             userPreferences.saveOralDisclaimerIsHidden(isOralDisclaimerHidden)

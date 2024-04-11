@@ -37,7 +37,11 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDos
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeRouteAndDose
 
 @Composable
-fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
+fun CumulativeDoseRow(
+    cumulativeDose: CumulativeDose,
+    areDosageDotsHidden: Boolean,
+    modifier: Modifier
+) {
     Column(
         modifier = modifier,
     ) {
@@ -59,7 +63,7 @@ fun CumulativeDoseRow(cumulativeDose: CumulativeDose, modifier: Modifier) {
                 }
                 Text(text = text, style = MaterialTheme.typography.titleSmall)
                 val numDots = cumulativeRouteAndDose.numDots
-                if (numDots != null) {
+                if (numDots != null && !areDosageDotsHidden) {
                     DotRows(numDots = numDots)
                 }
             }
@@ -93,6 +97,8 @@ fun CumulativeDoseRowPreview() {
                     hasMoreThanOneIngestion = true
                 )
             )
-        ), modifier = Modifier.fillMaxWidth()
+        ),
+        areDosageDotsHidden = false,
+        modifier = Modifier.fillMaxWidth()
     )
 }

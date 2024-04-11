@@ -146,7 +146,8 @@ fun OneExperienceScreen(
         savedTimeDisplayOption = viewModel.savedTimeDisplayOption.collectAsState().value,
         timeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value,
         onChangeTimeDisplayOption = viewModel::saveTimeDisplayOption,
-        navigateToTimelineScreen = navigateToTimelineScreen
+        navigateToTimelineScreen = navigateToTimelineScreen,
+        areDosageDotsHidden = viewModel.areDosageDotsHiddenFlow.collectAsState().value
     )
 }
 
@@ -178,7 +179,8 @@ fun ExperienceScreenPreview(
             savedTimeDisplayOption = SavedTimeDisplayOption.RELATIVE_TO_START,
             timeDisplayOption = TimeDisplayOption.RELATIVE_TO_START,
             onChangeTimeDisplayOption = {},
-            navigateToTimelineScreen = {}
+            navigateToTimelineScreen = {},
+            areDosageDotsHidden = false
         )
     }
 }
@@ -205,6 +207,7 @@ fun OneExperienceScreen(
     timeDisplayOption: TimeDisplayOption,
     onChangeTimeDisplayOption: (SavedTimeDisplayOption) -> Unit,
     navigateToTimelineScreen: (consumerName: String) -> Unit,
+    areDosageDotsHidden: Boolean
 ) {
     Scaffold(
         topBar = {
@@ -488,6 +491,7 @@ fun OneExperienceScreen(
                             ingestionElement = ingestionElement,
                             timeDisplayOption = timeDisplayOption,
                             startTime = oneExperienceScreenModel.firstIngestionTime,
+                            areDosageDotsHidden = areDosageDotsHidden,
                             modifier = Modifier
                                 .clickable {
                                     navigateToIngestionScreen(ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.id)
@@ -510,7 +514,9 @@ fun OneExperienceScreen(
                     }
                     cumulativeDoses.forEachIndexed { index, cumulativeDose ->
                         CumulativeDoseRow(
-                            cumulativeDose = cumulativeDose, modifier = Modifier
+                            cumulativeDose = cumulativeDose,
+                            areDosageDotsHidden = areDosageDotsHidden,
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         )
@@ -634,6 +640,7 @@ fun OneExperienceScreen(
                             ingestionElement = ingestionElement,
                             timeDisplayOption = timeDisplayOption,
                             startTime = oneExperienceScreenModel.firstIngestionTime,
+                            areDosageDotsHidden = areDosageDotsHidden,
                             modifier = Modifier
                                 .clickable {
                                     navigateToIngestionScreen(ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.id)

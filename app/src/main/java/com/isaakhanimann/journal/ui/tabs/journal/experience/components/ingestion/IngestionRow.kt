@@ -50,6 +50,7 @@ fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) in
         ingestionElement = ingestionElement,
         timeDisplayOption = TimeDisplayOption.REGULAR,
         startTime = Instant.now().minus(3, ChronoUnit.HOURS),
+        areDosageDotsHidden = false,
         modifier = Modifier.fillMaxWidth()
     )
 }
@@ -60,6 +61,7 @@ fun IngestionRow(
     ingestionElement: IngestionElement,
     timeDisplayOption: TimeDisplayOption,
     startTime: Instant,
+    areDosageDotsHidden: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val ingestionWithCompanionAndCustomUnit = ingestionElement.ingestionWithCompanionAndCustomUnit
@@ -105,7 +107,7 @@ fun IngestionRow(
                 }
                 Text(text = text, style = MaterialTheme.typography.titleSmall)
                 val numDots = ingestionElement.numDots
-                if (numDots != null) {
+                if (numDots != null && !areDosageDotsHidden) {
                     DotRows(numDots = numDots)
                 }
             }
