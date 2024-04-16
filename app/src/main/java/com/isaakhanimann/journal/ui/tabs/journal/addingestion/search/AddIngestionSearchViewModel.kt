@@ -129,9 +129,9 @@ class AddIngestionSearchViewModel @Inject constructor(
             val color =
                 ingestionsGroupedBySubstance.firstOrNull()?.substanceCompanion?.color ?: return@flatMap emptyList()
             val isPredefinedSubstance = substanceRepo.getSubstance(substanceName) != null
-            val isCustomSubstance = customSubstances.any { it.name == substanceName }
+            val customSubstanceId = customSubstances.firstOrNull { it.name == substanceName }?.id
             val groupedRoute = ingestionsGroupedBySubstance.groupBy { it.ingestion.administrationRoute }
-            if (!isPredefinedSubstance && !isCustomSubstance) {
+            if (!isPredefinedSubstance && customSubstanceId == null) {
                 return@flatMap emptyList<SubstanceRouteSuggestion>()
             } else {
                 return@flatMap groupedRoute.mapNotNull { routeEntry ->
@@ -168,7 +168,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                             color = color,
                             route = routeEntry.key,
                             substanceName = substanceName,
-                            isCustomSubstance = isCustomSubstance,
+                            customSubstanceId = customSubstanceId,
                             dosesAndUnit = dosesAndUnit,
                             customUnitDoses = customUnitDoses,
                             customUnits = customUnits,

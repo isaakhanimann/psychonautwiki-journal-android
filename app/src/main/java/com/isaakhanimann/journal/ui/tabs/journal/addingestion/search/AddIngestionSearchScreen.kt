@@ -80,9 +80,9 @@ fun AddIngestionSearchScreen(
     navigateToCheckSaferUse: (substanceName: String) -> Unit,
     navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
-    navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
+    navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
@@ -115,9 +115,9 @@ fun AddIngestionSearchScreen(
     navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToCheckSaferUse: (substanceName: String) -> Unit,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
-    navigateToCustomSubstanceChooseRoute: (substanceName: String) -> Unit,
+    navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     substanceRouteSuggestions: List<SubstanceRouteSuggestion>,
@@ -215,7 +215,7 @@ fun AddIngestionSearchScreen(
                         hasSaferUse = false,
                         hasInteractions = false
                     ), onTap = {
-                        navigateToCustomSubstanceChooseRoute(customSubstance.name)
+                        navigateToCustomSubstanceChooseRoute(customSubstance.id)
                     })
                     if (index < filteredCustomSubstances.size - 1) {
                         HorizontalDivider()

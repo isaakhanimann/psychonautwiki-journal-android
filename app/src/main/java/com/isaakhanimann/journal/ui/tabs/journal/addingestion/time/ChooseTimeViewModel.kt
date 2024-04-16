@@ -32,6 +32,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompani
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_SUBSTANCE_ID_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_UNIT_ID_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.DOSE_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.ESTIMATED_DOSE_STANDARD_DEVIATION_KEY
@@ -66,7 +67,7 @@ class ChooseTimeViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
+    var substanceName  by mutableStateOf("")
     val localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var enteredTitle by mutableStateOf(LocalDateTime.now().getStringOfPattern("dd MMMM yyyy"))
     val isEnteredTitleOk get() = enteredTitle.isNotEmpty()
@@ -177,6 +178,7 @@ class ChooseTimeViewModel @Inject constructor(
 
     init {
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
+        substanceName = state.get<String>(SUBSTANCE_NAME_KEY) ?: ""
         administrationRoute = AdministrationRoute.valueOf(routeString)
         dose = state.get<String>(DOSE_KEY)?.toDoubleOrNull()
         estimatedDoseStandardDeviation = state.get<String>(ESTIMATED_DOSE_STANDARD_DEVIATION_KEY)?.toDoubleOrNull()
@@ -189,7 +191,14 @@ class ChooseTimeViewModel @Inject constructor(
             }
         }
         isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)!!
+        val customSubstanceId = state.get<String>(CUSTOM_SUBSTANCE_ID_KEY)?.toIntOrNull()
         viewModelScope.launch {
+            if (customSubstanceId!=null) {
+                val customSubstance = experienceRepo.getCustomSubstanceFlow(customSubstanceId).firstOrNull()
+                if (customSubstance != null) {
+                    substanceName = customSubstance.name
+                }
+            }
             val allCompanions = experienceRepo.getAllSubstanceCompanionsFlow().first()
             val thisCompanion = allCompanions.firstOrNull { it.substanceName == substanceName }
             substanceCompanion = thisCompanion

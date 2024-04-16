@@ -30,7 +30,7 @@ data class SubstanceRouteSuggestion(
     val color: AdaptiveColor,
     val route: AdministrationRoute,
     val substanceName: String,
-    val isCustomSubstance: Boolean,
+    val customSubstanceId: Int?,
     val dosesAndUnit: List<DoseAndUnit>,
     val customUnitDoses: List<CustomUnitDose>,
     val customUnits: List<CustomUnit>,

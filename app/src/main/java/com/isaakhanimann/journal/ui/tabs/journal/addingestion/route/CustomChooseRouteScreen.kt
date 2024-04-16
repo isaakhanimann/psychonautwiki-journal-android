@@ -42,15 +42,15 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 @Preview
 @Composable
 fun CustomChooseRouteScreenPreview() {
-    CustomChooseRouteScreen(onRouteTap = {}, substanceName = "Cookies")
+    CustomChooseRouteScreen(onRouteTap = {})
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit, substanceName: String) {
+fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("$substanceName Route") })
+            TopAppBar(title = { Text("Route") })
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {

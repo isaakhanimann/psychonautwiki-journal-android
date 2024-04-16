@@ -53,7 +53,7 @@ fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) s
         substanceRouteSuggestion = substanceRouteSuggestion,
         navigateToDose = { _: String, _: AdministrationRoute -> },
         navigateToCustomUnitChooseDose = {},
-        navigateToCustomDose = { _: String, _: AdministrationRoute -> },
+        navigateToCustomDose = { _: Int, _: AdministrationRoute -> },
         navigateToChooseTime = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean, _: Double?, _: Int? -> }
     )
 }
@@ -64,7 +64,7 @@ fun SuggestionRow(
     substanceRouteSuggestion: SubstanceRouteSuggestion,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
-    navigateToCustomDose: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
 ) {
     Column(
@@ -90,7 +90,7 @@ fun SuggestionRow(
             substanceRouteSuggestion.dosesAndUnit.forEach { doseAndUnit ->
                 SuggestionChip(
                     onClick = {
-                        if (substanceRouteSuggestion.isCustomSubstance) {
+                        if (substanceRouteSuggestion.customSubstanceId != null) {
                             navigateToChooseTime(
                                 substanceRouteSuggestion.substanceName,
                                 substanceRouteSuggestion.route,
@@ -138,9 +138,9 @@ fun SuggestionRow(
             val pureDoseUnit = substanceRouteSuggestion.dosesAndUnit.firstOrNull()?.unit
             if (pureDoseUnit != null) {
                 SuggestionChip(onClick = {
-                    if (substanceRouteSuggestion.isCustomSubstance) {
+                    if (substanceRouteSuggestion.customSubstanceId != null) {
                         navigateToCustomDose(
-                            substanceRouteSuggestion.substanceName,
+                            substanceRouteSuggestion.customSubstanceId,
                             substanceRouteSuggestion.route
                         )
                     } else {

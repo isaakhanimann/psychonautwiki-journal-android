@@ -33,6 +33,7 @@ const val RATING_ID_KEY = "ratingId"
 const val TIMED_NOTE_ID_KEY = "timedNoteId"
 const val INGESTION_ID_KEY = "ingestionId"
 const val SUBSTANCE_NAME_KEY = "substanceName"
+const val CUSTOM_SUBSTANCE_ID_KEY = "customSubstanceId"
 const val URL_KEY = "url"
 const val ADMINISTRATION_ROUTE_KEY = "administrationRoute"
 const val DOSE_KEY = "dose"
@@ -129,8 +130,8 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     )
 
     object EditCustomRouter : ArgumentRouter(
-        route = "$ROUTE_START_EDIT_CUSTOM{$SUBSTANCE_NAME_KEY}",
-        args = listOf(navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType })
+        route = "$ROUTE_START_EDIT_CUSTOM{$CUSTOM_SUBSTANCE_ID_KEY}",
+        args = listOf(navArgument(CUSTOM_SUBSTANCE_ID_KEY) { type = NavType.IntType })
     )
 
     object URLRouterOnSearchTab : ArgumentRouter(
@@ -154,14 +155,14 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     )
 
     object CustomChooseRouteRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_ROUTE_CUSTOM{$SUBSTANCE_NAME_KEY}",
-        args = listOf(navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType })
+        route = "$ROUTE_START_CHOOSE_ROUTE_CUSTOM{$CUSTOM_SUBSTANCE_ID_KEY}",
+        args = listOf(navArgument(CUSTOM_SUBSTANCE_ID_KEY) { type = NavType.IntType })
     )
 
     object CustomChooseDoseRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_DOSE_CUSTOM{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}",
+        route = "$ROUTE_START_CHOOSE_DOSE_CUSTOM{$CUSTOM_SUBSTANCE_ID_KEY}/{$ADMINISTRATION_ROUTE_KEY}",
         args = listOf(
-            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
+            navArgument(CUSTOM_SUBSTANCE_ID_KEY) { type = NavType.IntType },
             navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType }
         )
     )
@@ -218,15 +219,16 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     )
 
     object ChooseTimeRouter : ArgumentRouter(
-        route = "$ROUTE_START_CHOOSE_TIME{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY={$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY}/?$CUSTOM_UNIT_ID_KEY={$CUSTOM_UNIT_ID_KEY}",
+        route = "$ROUTE_START_CHOOSE_TIME{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY={$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY}/?$SUBSTANCE_NAME_KEY={$SUBSTANCE_NAME_KEY}/?$CUSTOM_UNIT_ID_KEY={$CUSTOM_UNIT_ID_KEY}/?$CUSTOM_SUBSTANCE_ID_KEY={$CUSTOM_SUBSTANCE_ID_KEY}",
         args = listOf(
-            navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
             navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType },
             navArgument(IS_ESTIMATE_KEY) { type = NavType.BoolType },
             navArgument(UNITS_KEY) { nullable = true },
             navArgument(DOSE_KEY) { nullable = true },
             navArgument(ESTIMATED_DOSE_STANDARD_DEVIATION_KEY) { nullable = true },
+            navArgument(SUBSTANCE_NAME_KEY) { nullable = true },
             navArgument(CUSTOM_UNIT_ID_KEY) { nullable = true },
+            navArgument(CUSTOM_SUBSTANCE_ID_KEY) { nullable = true },
         )
     )
 
@@ -298,13 +300,12 @@ fun NavController.navigateToURLInSaferTab(url: String) {
     navigate(ROUTE_START_SAFER_TAB_URL + encodedUrl)
 }
 
-fun NavController.navigateToEditCustomSubstance(substanceName: String) {
-    val encodedSubstanceName = URLEncoder.encode(substanceName, StandardCharsets.UTF_8.toString())
-    navigate(ROUTE_START_EDIT_CUSTOM + encodedSubstanceName)
+fun NavController.navigateToEditCustomSubstance(customSubstanceId: Int) {
+    navigate(ROUTE_START_EDIT_CUSTOM + customSubstanceId)
 }
 
-fun NavController.navigateToChooseCustomRoute(substanceName: String) {
-    navigate(ROUTE_START_CHOOSE_ROUTE_CUSTOM + substanceName)
+fun NavController.navigateToChooseCustomRoute(customSubstanceId: Int) {
+    navigate(ROUTE_START_CHOOSE_ROUTE_CUSTOM + customSubstanceId)
 }
 
 fun NavController.navigateToSubstanceCompanionScreen(substanceName: String, consumerName: String?) {
@@ -340,22 +341,23 @@ fun NavController.navigateToChooseDose(
 }
 
 fun NavController.navigateToChooseDoseCustom(
-    substanceName: String,
+    customSubstanceId: Int,
     administrationRoute: AdministrationRoute
 ) {
-    navigate("$ROUTE_START_CHOOSE_DOSE_CUSTOM$substanceName/${administrationRoute.name}")
+    navigate("$ROUTE_START_CHOOSE_DOSE_CUSTOM$customSubstanceId/${administrationRoute.name}")
 }
 
 fun NavController.navigateToChooseTimeAndMaybeColor(
-    substanceName: String,
     administrationRoute: AdministrationRoute,
     units: String?,
     isEstimate: Boolean,
     dose: Double?,
     estimatedDoseStandardDeviation: Double?,
-    customUnitId: Int?
+    substanceName: String?,
+    customUnitId: Int?,
+    customSubstanceId: Int?,
 ) {
-    navigate("$ROUTE_START_CHOOSE_TIME$substanceName/${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose/?$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY=$estimatedDoseStandardDeviation/?$CUSTOM_UNIT_ID_KEY=$customUnitId")
+    navigate("$ROUTE_START_CHOOSE_TIME${administrationRoute.name}/$isEstimate/?$UNITS_KEY=$units/?$DOSE_KEY=$dose/?$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY=$estimatedDoseStandardDeviation/?$SUBSTANCE_NAME_KEY=$substanceName/?$CUSTOM_UNIT_ID_KEY=$customUnitId/?$CUSTOM_SUBSTANCE_ID_KEY=$customSubstanceId")
 }
 
 fun NavController.navigateToFinishAddCustomUnit(

@@ -33,7 +33,7 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
             color = AdaptiveColor.PINK,
             route = AdministrationRoute.ORAL,
             substanceName = "MDMA",
-            isCustomSubstance = false,
+            customSubstanceId = null,
             dosesAndUnit = listOf(
                 DoseAndUnit(
                     dose = 50.0,
@@ -78,7 +78,7 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
             color = AdaptiveColor.BLUE,
             route = AdministrationRoute.INSUFFLATED,
             substanceName = "Amphetamine",
-            isCustomSubstance = false,
+            customSubstanceId = null,
             dosesAndUnit = listOf(
                 DoseAndUnit(
                     dose = 10.0,
@@ -107,7 +107,7 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
             color = AdaptiveColor.BLUE,
             route = AdministrationRoute.ORAL,
             substanceName = "Amphetamine",
-            isCustomSubstance = false,
+            customSubstanceId = null,
             dosesAndUnit = listOf(
                 DoseAndUnit(
                     dose = 20.0,

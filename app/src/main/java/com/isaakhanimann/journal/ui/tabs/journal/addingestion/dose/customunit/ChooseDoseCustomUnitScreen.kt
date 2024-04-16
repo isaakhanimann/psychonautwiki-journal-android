@@ -70,12 +70,12 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun ChooseDoseCustomUnitScreen(
     navigateToChooseTimeAndMaybeColor: (
-        substanceName: String,
         administrationRoute: AdministrationRoute,
         units: String?,
         isEstimate: Boolean,
         dose: Double?,
         estimatedDoseStandardDeviation: Double?,
+        substanceName: String,
         customUnitId: Int?
     ) -> Unit,
     viewModel: ChooseDoseCustomUnitViewModel = hiltViewModel()
@@ -98,23 +98,23 @@ fun ChooseDoseCustomUnitScreen(
             },
             navigateToNext = {
                 navigateToChooseTimeAndMaybeColor(
-                    customUnitUnwrapped.substanceName,
                     customUnitUnwrapped.administrationRoute,
                     customUnitUnwrapped.unit,
                     viewModel.isEstimate,
                     viewModel.dose,
                     viewModel.estimatedDoseDeviation,
+                    customUnitUnwrapped.substanceName,
                     customUnitUnwrapped.id
                 )
             },
             useUnknownDoseAndNavigate = {
                 navigateToChooseTimeAndMaybeColor(
-                    customUnitUnwrapped.substanceName,
                     customUnitUnwrapped.administrationRoute,
                     customUnitUnwrapped.unit,
                     false,
                     null,
                     null,
+                    customUnitUnwrapped.substanceName,
                     customUnitUnwrapped.id
                 )
             },

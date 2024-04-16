@@ -25,6 +25,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
+import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_SUBSTANCE_ID_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.URL_KEY
@@ -68,17 +69,18 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToCustomSubstanceChooseRoute = navController::navigateToChooseCustomRoute,
                 navigateToChooseTime = { substanceName, route, dose, units, isEstimate, estimatedDoseStandardDeviation, customUnitId ->
                     navController.navigateToChooseTimeAndMaybeColor(
-                        substanceName = substanceName,
                         administrationRoute = route,
                         units = units,
                         isEstimate = isEstimate,
                         dose = dose,
                         estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
-                        customUnitId = customUnitId
+                        substanceName = substanceName,
+                        customUnitId = customUnitId,
+                        customSubstanceId = null
                     )
                 },
-                navigateToCustomDose = { substanceName, route ->
-                    navController.navigateToChooseDoseCustom(substanceName, route)
+                navigateToCustomDose = { customSubstanceId, route ->
+                    navController.navigateToChooseDoseCustom(customSubstanceId, route)
                 },
                 navigateToDose = { substanceName, route ->
                     navController.navigateToChooseDose(substanceName, route)
@@ -127,7 +129,24 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             ArgumentRouter.ChooseDoseCustomUnitRouter.route,
             arguments = ArgumentRouter.ChooseDoseCustomUnitRouter.args
         ) {
-            ChooseDoseCustomUnitScreen(navigateToChooseTimeAndMaybeColor = navController::navigateToChooseTimeAndMaybeColor)
+            ChooseDoseCustomUnitScreen(navigateToChooseTimeAndMaybeColor = { administrationRoute: AdministrationRoute,
+                units: String?,
+                isEstimate: Boolean,
+                dose: Double?,
+                estimatedDoseStandardDeviation: Double?,
+                substanceName: String,
+                customUnitId: Int? ->
+                navController.navigateToChooseTimeAndMaybeColor(
+                    administrationRoute,
+                    units,
+                    isEstimate,
+                    dose,
+                    estimatedDoseStandardDeviation,
+                    substanceName,
+                    customUnitId,
+                    customSubstanceId = null
+                )
+            })
         }
         composableWithTransitions(
             ArgumentRouter.ChooseRouteOfAddIngestionRouter.route,
@@ -151,15 +170,14 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             arguments = ArgumentRouter.CustomChooseRouteRouter.args
         ) { backStackEntry ->
             val args = backStackEntry.arguments!!
-            val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+            val customSubstanceId = args.getInt(CUSTOM_SUBSTANCE_ID_KEY)
             CustomChooseRouteScreen(
                 onRouteTap = { administrationRoute ->
                     navController.navigateToChooseDoseCustom(
-                        substanceName = substanceName,
+                        customSubstanceId = customSubstanceId,
                         administrationRoute = administrationRoute,
                     )
-                },
-                substanceName = substanceName
+                }
             )
         }
         composableWithTransitions(
@@ -169,16 +187,17 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             CustomChooseDose(
                 navigateToChooseTimeAndMaybeColor = { units, isEstimate, dose, estimatedDoseStandardDeviation ->
                     val args = backStackEntry.arguments!!
-                    val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+                    val customSubstanceId = args.getInt(CUSTOM_SUBSTANCE_ID_KEY)
                     val route =
                         AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
                     navController.navigateToChooseTimeAndMaybeColor(
-                        substanceName = substanceName,
                         administrationRoute = route,
                         units = units,
                         isEstimate = isEstimate,
                         dose = dose,
                         estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
+                        substanceName = null,
+                        customSubstanceId = customSubstanceId,
                         customUnitId = null
                     )
                 },
@@ -197,13 +216,14 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     val route =
                         AdministrationRoute.valueOf(args.getString(ADMINISTRATION_ROUTE_KEY)!!)
                     navController.navigateToChooseTimeAndMaybeColor(
-                        substanceName = substanceName,
                         administrationRoute = route,
                         units = units,
                         isEstimate = isEstimate,
                         dose = dose,
                         estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
-                        customUnitId = null
+                        substanceName = substanceName,
+                        customUnitId = null,
+                        customSubstanceId = null
                     )
                 },
                 navigateToVolumetricDosingScreenOnJournalTab = navController::navigateToVolumetricDosingScreenOnJournalTab,

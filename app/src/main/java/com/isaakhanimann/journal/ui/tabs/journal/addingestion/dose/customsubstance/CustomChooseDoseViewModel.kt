@@ -27,7 +27,7 @@ import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_SUBSTANCE_ID_KEY
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
@@ -40,7 +40,7 @@ class CustomChooseDoseViewModel @Inject constructor(
     experienceRepository: ExperienceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    val substanceName: String
+    var substanceName by mutableStateOf("")
     val administrationRoute: AdministrationRoute
     var units by mutableStateOf("mg")
     var isEstimate by mutableStateOf(false)
@@ -87,13 +87,14 @@ class CustomChooseDoseViewModel @Inject constructor(
     }
 
     init {
-        substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
+        val customSubstanceId = state.get<Int>(CUSTOM_SUBSTANCE_ID_KEY)!!
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         viewModelScope.launch {
             val customSubstance =
-                experienceRepository.getCustomSubstanceFlow(substanceName).firstOrNull()
+                experienceRepository.getCustomSubstanceFlow(customSubstanceId).firstOrNull()
                     ?: return@launch
+            substanceName = customSubstance.name
             units = customSubstance.units
         }
     }
