@@ -56,7 +56,7 @@ fun UnknownDoseDialog(
                     useUnknownDoseAndNavigate()
                 }
             ) {
-                Text("Log Unknown Dose")
+                Text("Log unknown dose")
             }
         },
         dismissButton = {

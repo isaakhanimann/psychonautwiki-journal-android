@@ -99,7 +99,7 @@ class CheckInteractionsViewModel @Inject constructor(
             }
         val now = Instant.now()
         val messages = dangerousIngestions.map { ingestion ->
-            "Dangerous Interaction with ${ingestion.substanceName} (taken ${
+            "Dangerous interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
                     fromInstant = ingestion.time,
                     toInstant = now
@@ -107,10 +107,10 @@ class CheckInteractionsViewModel @Inject constructor(
             } ago)."
         }.toMutableList()
         messages += dangerousExtras.map { extra ->
-            "Dangerous Interaction with $extra."
+            "Dangerous interaction with $extra."
         }
         messages += unsafeIngestions.map { ingestion ->
-            "Unsafe Interaction with ${ingestion.substanceName} (taken ${
+            "Unsafe interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
                     fromInstant = ingestion.time,
                     toInstant = now
@@ -118,10 +118,10 @@ class CheckInteractionsViewModel @Inject constructor(
             } ago)."
         }
         messages += unsafeExtras.map { extra ->
-            "Unsafe Interaction with $extra."
+            "Unsafe interaction with $extra."
         }
         messages += uncertainIngestions.map { ingestion ->
-            "Uncertain Interaction with ${ingestion.substanceName} (taken ${
+            "Uncertain interaction with ${ingestion.substanceName} (taken ${
                 getTimeDifferenceText(
                     fromInstant = ingestion.time,
                     toInstant = now
@@ -129,7 +129,7 @@ class CheckInteractionsViewModel @Inject constructor(
             } ago)."
         }
         messages += uncertainExtras.map { extra ->
-            "Uncertain Interaction with $extra."
+            "Uncertain interaction with $extra."
         }
         alertText = messages.distinct().joinToString(separator = "\n")
         isShowingAlert = true

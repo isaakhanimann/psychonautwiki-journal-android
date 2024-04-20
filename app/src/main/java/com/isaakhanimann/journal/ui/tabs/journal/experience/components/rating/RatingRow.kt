@@ -18,7 +18,9 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,7 +62,7 @@ fun RatingRow(
         val ratingTime = rating.time
         if (ratingTime == null) {
             Text(
-                text = "Overall Rating",
+                text = "Overall rating",
                 style = MaterialTheme.typography.bodyLarge
             )
         } else {

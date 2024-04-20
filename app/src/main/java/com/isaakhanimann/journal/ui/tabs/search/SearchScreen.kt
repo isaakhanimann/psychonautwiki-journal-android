@@ -139,7 +139,7 @@ fun SearchScreen(
                             Icons.Outlined.Add, contentDescription = "Add"
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Add Custom Substance")
+                        Text(text = "Add custom substance")
                     }
                 }
             } else {
@@ -176,7 +176,7 @@ fun SearchScreen(
                                 Icons.Outlined.Add, contentDescription = "Add"
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text(text = "Add Custom Substance")
+                            Text(text = "Add custom substance")
                         }
                     }
                 }

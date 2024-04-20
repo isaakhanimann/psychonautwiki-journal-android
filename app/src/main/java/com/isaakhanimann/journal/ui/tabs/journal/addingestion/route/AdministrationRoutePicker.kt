@@ -127,7 +127,7 @@ fun AdministrationRoutePicker(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Text(
-                            text = "Other Routes",
+                            text = "Other routes",
                             style = MaterialTheme.typography.headlineSmall
                         )
                     }

@@ -87,7 +87,7 @@ fun ColorPicker(
     ) {
         Icon(
             imageVector = Icons.Default.Edit,
-            contentDescription = "Edit Color",
+            contentDescription = "Edit color",
             modifier = Modifier.padding(20.dp),
         )
     }
@@ -126,14 +126,14 @@ fun ColorDialog(
     AlertDialog(
         onDismissRequest = dismiss,
         title = {
-            Text(text = "Pick a Color", style = MaterialTheme.typography.titleLarge)
+            Text(text = "Pick a color", style = MaterialTheme.typography.titleLarge)
         },
         text = {
             Column {
                 if (otherColors.isEmpty()) {
-                    Text(text = "No Unused Colors")
+                    Text(text = "No unused colors")
                 } else {
-                    Text(text = "Not Yet Used")
+                    Text(text = "Not yet used")
                     Spacer(modifier = Modifier.height(2.dp))
                     CircleColorButtons(colors = otherColors) {
                         onChangeOfColor(it)
@@ -142,7 +142,7 @@ fun ColorDialog(
                 }
                 if (alreadyUsedColors.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "Already Used")
+                    Text(text = "Already used")
                     Spacer(modifier = Modifier.height(2.dp))
                     CircleColorButtons(colors = alreadyUsedColors) {
                         onChangeOfColor(it)

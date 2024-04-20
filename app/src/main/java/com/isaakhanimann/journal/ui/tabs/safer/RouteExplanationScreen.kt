@@ -61,7 +61,7 @@ fun RouteExplanationPreview() {
 fun RouteExplanationScreen(navigateToURL: (url: String) -> Unit) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Routes of Administration") })
+            TopAppBar(title = { Text("Routes of administration") })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -111,7 +111,7 @@ Determining an optimal route of administration is highly dependent on the substa
                                 contentDescription = "Open PW article",
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text("Safer Plugging")
+                            Text("Safer plugging")
                         }
                     }
                 }

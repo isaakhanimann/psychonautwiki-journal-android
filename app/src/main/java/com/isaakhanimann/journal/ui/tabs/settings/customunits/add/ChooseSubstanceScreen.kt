@@ -108,7 +108,7 @@ private fun ChooseSubstanceScreen(
                     .onFocusChanged { focusState ->
                         isFocused = focusState.isFocused
                     },
-                placeholder = { Text(text = "Search Substances") },
+                placeholder = { Text(text = "Search substances") },
                 leadingIcon = {
                     Icon(
                         Icons.Default.Search,

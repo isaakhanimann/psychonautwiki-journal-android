@@ -177,7 +177,7 @@ fun ChooseTimeScreen(
 ) {
     val focusManager = LocalFocusManager.current
     Scaffold(
-        topBar = { TopAppBar(title = { Text("$substanceName Ingestion") }) },
+        topBar = { TopAppBar(title = { Text("$substanceName ingestion") }) },
         floatingActionButton = {
             AnimatedVisibility(
                 visible = !isLoadingColor,
@@ -235,7 +235,7 @@ fun ChooseTimeScreen(
                             value = enteredTitle,
                             onValueChange = onChangeOfEnteredTitle,
                             singleLine = true,
-                            label = { Text(text = "New Experience Title") },
+                            label = { Text(text = "New experience title") },
                             isError = !isEnteredTitleOk,
                             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             keyboardOptions = KeyboardOptions.Default.copy(
@@ -348,7 +348,7 @@ fun ChooseTimeScreen(
                 }
                 if (isShowingColorPicker) {
                     CardWithTitle(
-                        title = "$substanceName Color",
+                        title = "$substanceName color",
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         ColorPicker(

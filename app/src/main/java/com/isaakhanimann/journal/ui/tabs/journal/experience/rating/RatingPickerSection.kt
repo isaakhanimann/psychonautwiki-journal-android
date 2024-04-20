@@ -18,7 +18,11 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.rating
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +51,7 @@ fun RatingPickerSection(
     selectedRating: ShulginRatingOption,
     onRatingChange: (ShulginRatingOption) -> Unit
 ) {
-    CardWithTitle(title = "Shulgin Rating") {
+    CardWithTitle(title = "Shulgin rating") {
         val ratings = ShulginRatingOption.values()
         // Modifier.selectableGroup() is essential to ensure correct accessibility behavior
         Column(Modifier.selectableGroup()) {

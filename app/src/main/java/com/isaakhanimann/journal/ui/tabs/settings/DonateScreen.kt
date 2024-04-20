@@ -70,7 +70,7 @@ fun DonateScreen() {
             Spacer(modifier = Modifier.height(15.dp))
             DonateButton(
                 imageVector = Icons.Outlined.Payment,
-                text = "Paypal Donate"
+                text = "Paypal donate"
             ) {
                 uriHandler.openUri("https://www.paypal.com/donate/?hosted_button_id=A8XKEKXN64VQJ")
             }

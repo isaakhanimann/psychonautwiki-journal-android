@@ -26,7 +26,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -34,7 +39,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.*
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.RatingPickerSection
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.RatingsExplanationSection
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.TimePickerSection
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import java.time.LocalDateTime
 
@@ -88,14 +96,14 @@ fun EditRatingScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Edit Shulgin Rating") },
+                title = { Text("Edit Shulgin rating") },
                 actions = {
                     IconButton(
                         onClick = { onDelete() },
                     ) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "Delete Rating",
+                            contentDescription = "Delete rating",
                         )
                     }
                 }

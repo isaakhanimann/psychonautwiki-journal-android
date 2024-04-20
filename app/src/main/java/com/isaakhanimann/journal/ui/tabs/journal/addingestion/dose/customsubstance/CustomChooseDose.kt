@@ -169,7 +169,7 @@ fun CustomChooseDose(
                     IconButton(onClick = { isShowingUnknownDoseDialog = true }) {
                         Icon(
                             imageVector = Icons.Default.QuestionMark,
-                            contentDescription = "Log Unknown Dose"
+                            contentDescription = "Log unknown dose"
                         )
                     }
                     AnimatedVisibility(visible = isShowingUnknownDoseDialog) {
@@ -284,16 +284,16 @@ fun CustomChooseDose(
             }
             if (administrationRoute == AdministrationRoute.INSUFFLATED) {
                 TextButton(onClick = navigateToSaferSniffingScreen) {
-                    Text(text = "Safer Sniffing")
+                    Text(text = "Safer sniffing")
                 }
             } else if (administrationRoute == AdministrationRoute.RECTAL) {
                 TextButton(onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) }) {
                     Icon(
                         Icons.Outlined.Newspaper,
-                        contentDescription = "Open Link"
+                        contentDescription = "Open link"
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer Plugging")
+                    Text("Safer plugging")
                 }
             }
         }

@@ -19,10 +19,22 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience.rating.add
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -31,7 +43,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.*
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.RatingPickerSection
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.RatingsExplanationSection
+import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.TimePickerSection
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import java.time.LocalDateTime
 
@@ -85,7 +100,7 @@ fun AddRatingScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add Shulgin Rating") },
+                title = { Text("Add Shulgin rating") },
             )
         },
         floatingActionButton = {
@@ -114,7 +129,7 @@ fun AddRatingScreen(
                             onCheckedChange = { onChangeIsOverallRating(it) }
                         )
                         Text(
-                            text = "Overall Rating",
+                            text = "Overall rating",
                             style = MaterialTheme.typography.titleMedium
                         )
                     }

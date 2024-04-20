@@ -47,7 +47,7 @@ fun SaferHallucinogensScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Safer Hallucinogens") },
+                title = { Text("Safer hallucinogens") },
             )
         },
     ) { padding ->
@@ -80,7 +80,7 @@ fun SaferHallucinogensScreen() {
                     VerticalSpace()
                 }
             }
-            SectionWithTitle(title = "Set (State of Mind)") {
+            SectionWithTitle(title = "Set (state of mind)") {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
 
                     SectionText(
@@ -94,7 +94,7 @@ fun SaferHallucinogensScreen() {
                     VerticalSpace()
                 }
             }
-            SectionWithTitle(title = "Bodily State") {
+            SectionWithTitle(title = "Bodily state") {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     SectionText(
                         text = """
@@ -105,7 +105,7 @@ fun SaferHallucinogensScreen() {
                     VerticalSpace()
                 }
             }
-            SectionWithTitle(title = "Trip Sitters") {
+            SectionWithTitle(title = "Trip sitters") {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     SectionText(
                         text = """
@@ -135,7 +135,7 @@ fun SaferHallucinogensScreen() {
                 }
             }
         }
-        SectionWithTitle("Aborting Trips") {
+        SectionWithTitle("Aborting trips") {
             Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                 SectionText(
                     text = """

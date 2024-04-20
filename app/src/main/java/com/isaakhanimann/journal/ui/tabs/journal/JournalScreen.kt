@@ -141,9 +141,9 @@ fun JournalScreen(
                         onCheckedChange = onChangeIsRelative
                     ) {
                         if (isTimeRelativeToNow) {
-                            Icon(Icons.Filled.Timer, contentDescription = "Regular Time")
+                            Icon(Icons.Filled.Timer, contentDescription = "Regular time")
                         } else {
-                            Icon(Icons.Outlined.Timer, contentDescription = "Time Relative To Now")
+                            Icon(Icons.Outlined.Timer, contentDescription = "Time relative to now")
                         }
                     }
                     IconToggleButton(
@@ -151,9 +151,9 @@ fun JournalScreen(
                         onCheckedChange = onChangeIsFavorite
                     ) {
                         if (isFavoriteEnabled) {
-                            Icon(Icons.Filled.Star, contentDescription = "Is Favorite")
+                            Icon(Icons.Filled.Star, contentDescription = "Is favorite")
                         } else {
-                            Icon(Icons.Outlined.StarOutline, contentDescription = "Is not Favorite")
+                            Icon(Icons.Outlined.StarOutline, contentDescription = "Is not favorite")
                         }
                     }
                     IconToggleButton(
@@ -161,13 +161,13 @@ fun JournalScreen(
                         onCheckedChange = onChangeIsSearchEnabled
                     ) {
                         if (isSearchEnabled) {
-                            Icon(Icons.Outlined.SearchOff, contentDescription = "Search Off")
+                            Icon(Icons.Outlined.SearchOff, contentDescription = "Search off")
                         } else {
                             Icon(Icons.Filled.Search, contentDescription = "Search")
                         }
                     }
                     IconButton(onClick = navigateToCalendar) {
-                        Icon(Icons.Default.CalendarMonth, contentDescription = "Navigate to Calendar")
+                        Icon(Icons.Default.CalendarMonth, contentDescription = "Navigate to calendar")
                     }
                 }
             )
@@ -237,7 +237,7 @@ fun JournalScreen(
                             if (isFavoriteEnabled) {
                                 Column(modifier = Modifier.padding(horizontalPadding)) {
                                     Text(
-                                        text = "No Results",
+                                        text = "No results",
                                         style = MaterialTheme.typography.titleMedium
                                     )
                                     Text(
@@ -248,7 +248,7 @@ fun JournalScreen(
                             } else {
                                 Column(modifier = Modifier.padding(horizontalPadding)) {
                                     Text(
-                                        text = "No Results",
+                                        text = "No results",
                                         style = MaterialTheme.typography.titleMedium
                                     )
                                     Text(
@@ -281,12 +281,12 @@ fun JournalScreen(
             if (experiences.isEmpty() && !isSearchEnabled) {
                 if (isFavoriteEnabled) {
                     EmptyScreenDisclaimer(
-                        title = "No Favorites",
+                        title = "No favorites",
                         description = "Mark experiences as favorites to find them quickly."
                     )
                 } else {
                     EmptyScreenDisclaimer(
-                        title = "No Experiences Yet",
+                        title = "No experiences yet",
                         description = "Add your first ingestion."
                     )
                 }

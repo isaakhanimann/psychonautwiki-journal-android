@@ -156,21 +156,21 @@ fun SettingsScreen(
             CardWithTitle(title = "UI", innerPaddingHorizontal = 0.dp) {
                 SettingsButton(
                     imageVector = Icons.Outlined.Medication,
-                    text = "Custom Units"
+                    text = "Custom units"
                 ) {
                     navigateToCustomUnits()
                 }
                 HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.Outlined.Palette,
-                    text = "Substance Colors"
+                    text = "Substance colors"
                 ) {
                     navigateToSubstanceColors()
                 }
                 HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.Outlined.WarningAmber,
-                    text = "Interaction Settings"
+                    text = "Interaction settings"
                 ) {
                     navigateToComboSettings()
                 }
@@ -186,7 +186,7 @@ fun SettingsScreen(
                         onCheckedChange = saveDosageDotsAreHidden)
                 }
             }
-            CardWithTitle(title = "App Data", innerPaddingHorizontal = 0.dp) {
+            CardWithTitle(title = "App data", innerPaddingHorizontal = 0.dp) {
                 var isShowingExportDialog by remember { mutableStateOf(false) }
                 SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
                     isShowingExportDialog = true
@@ -232,7 +232,7 @@ fun SettingsScreen(
                 }
                 HorizontalDivider()
                 var isShowingImportDialog by remember { mutableStateOf(false) }
-                SettingsButton(imageVector = Icons.Outlined.FileDownload, text = "Import File") {
+                SettingsButton(imageVector = Icons.Outlined.FileDownload, text = "Import file") {
                     isShowingImportDialog = true
                 }
                 val launcherImport =
@@ -245,7 +245,7 @@ fun SettingsScreen(
                     AlertDialog(
                         onDismissRequest = { isShowingImportDialog = false },
                         title = {
-                            Text(text = "Import File?")
+                            Text(text = "Import file?")
                         },
                         text = {
                             Text("Import a file that was exported before. Note that this will delete the data that you already have in the app.")
@@ -273,7 +273,7 @@ fun SettingsScreen(
                 var isShowingDeleteDialog by remember { mutableStateOf(false) }
                 SettingsButton(
                     imageVector = Icons.Outlined.DeleteForever,
-                    text = "Delete Everything"
+                    text = "Delete everything"
                 ) {
                     isShowingDeleteDialog = true
                 }
@@ -282,7 +282,7 @@ fun SettingsScreen(
                     AlertDialog(
                         onDismissRequest = { isShowingDeleteDialog = false },
                         title = {
-                            Text(text = "Delete Everything?")
+                            Text(text = "Delete everything?")
                         },
                         text = {
                             Text("This will delete all your experiences, ingestions and custom substances.")
@@ -294,7 +294,7 @@ fun SettingsScreen(
                                     deleteEverything()
                                     scope.launch {
                                         snackbarHostState.showSnackbar(
-                                            message = "Deleted Everything",
+                                            message = "Deleted everything",
                                             duration = SnackbarDuration.Short
                                         )
                                     }
@@ -321,7 +321,7 @@ fun SettingsScreen(
                 HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.AutoMirrored.Outlined.ContactSupport,
-                    text = "Question / Feedback / Bug Report"
+                    text = "Question / feedback / bug report"
                 ) {
                     uriHandler.openUri("https://t.me/+ss8uZhBF6g00MTY8")
                 }

@@ -132,7 +132,7 @@ fun ChooseRouteScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("$substanceName Route") },
+                title = { Text("$substanceName route") },
                 navigationIcon = {
                     if (showOtherRoutes && pwRoutes.isNotEmpty()) {
                         IconButton(onClick = { onChangeOfShowOtherRoutes(false) }) {
@@ -147,7 +147,7 @@ fun ChooseRouteScreen(
                     IconButton(onClick = navigateToRouteExplanationScreen) {
                         Icon(
                             imageVector = Icons.Outlined.Info,
-                            contentDescription = "Administration Routes Info"
+                            contentDescription = "Administration routes info"
                         )
                     }
                 }
@@ -201,7 +201,7 @@ fun InjectionDialog(
             ) {
                 Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning")
                 Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                Text(text = "Safer Injection", style = MaterialTheme.typography.headlineSmall)
+                Text(text = "Safer injection", style = MaterialTheme.typography.headlineSmall)
             }
         },
         text = {
@@ -264,11 +264,11 @@ fun SaferInjectionLink(navigateToURL: (url: String) -> Unit) {
     }) {
         Icon(
             Icons.Outlined.Newspaper,
-            contentDescription = "Open Link",
+            contentDescription = "Open link",
             modifier = Modifier.size(ButtonDefaults.IconSize),
         )
         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        Text("Safer Injection Guide")
+        Text("Safer injection guide")
     }
 }
 

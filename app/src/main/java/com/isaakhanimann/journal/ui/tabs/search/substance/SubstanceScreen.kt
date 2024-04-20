@@ -167,7 +167,7 @@ fun SubstanceScreen(
                         contentDescription = "Open PW article"
                     )
                 },
-                text = { Text("More Info") },
+                text = { Text("More info") },
             )
         }
     ) { padding ->
@@ -296,7 +296,7 @@ fun SubstanceScreen(
                                     modifier = Modifier.size(ButtonDefaults.IconSize)
                                 )
                                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                                Text("Volumetric Dosing")
+                                Text("Volumetric dosing")
                             }
                         }
                         HorizontalDivider()
@@ -307,7 +307,7 @@ fun SubstanceScreen(
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text("Dosage Classification")
+                            Text("Dosage classification")
                         }
 
                     }
@@ -375,7 +375,7 @@ fun SubstanceScreen(
                                 IconButton(onClick = { ingestionTime = LocalDateTime.now() }) {
                                     Icon(
                                         imageVector = Icons.Default.Update,
-                                        contentDescription = "Reset to Now"
+                                        contentDescription = "Reset to now"
                                     )
                                 }
                             }
@@ -383,7 +383,7 @@ fun SubstanceScreen(
                             IconButton(onClick = navigateToExplainTimeline) {
                                 Icon(
                                     imageVector = Icons.Outlined.Info,
-                                    contentDescription = "Timeline Disclaimer"
+                                    contentDescription = "Timeline disclaimer"
                                 )
                             }
                         }
@@ -494,7 +494,7 @@ fun SubstanceScreen(
                 }
             }
             if (substance.saferUse.isNotEmpty()) {
-                SectionWithTitle(title = "Safer Use") {
+                SectionWithTitle(title = "Safer use") {
                     Column {
                         BulletPoints(
                             points = substance.saferUse,
@@ -505,7 +505,7 @@ fun SubstanceScreen(
                 }
             }
             if (substance.addictionPotential != null) {
-                SectionWithTitle(title = "Addiction Potential") {
+                SectionWithTitle(title = "Addiction potential") {
                     Column {
                         Text(
                             substance.addictionPotential,
@@ -518,12 +518,12 @@ fun SubstanceScreen(
             val firstRoa = substance.roas.firstOrNull()
             val useVolumetric = firstRoa?.roaDose?.shouldUseVolumetricDosing == true
             if (substance.isHallucinogen || substance.isStimulant || useVolumetric) {
-                SectionWithTitle(title = "See Also") {
+                SectionWithTitle(title = "See also") {
                     Column {
                         if (substance.isHallucinogen) {
                             TextButton(onClick = navigateToSaferHallucinogensScreen) {
                                 Text(
-                                    text = "Safer Hallucinogen Use",
+                                    text = "Safer hallucinogen use",
                                     modifier = Modifier.padding(horizontal = horizontalPadding)
                                 )
                             }
@@ -532,7 +532,7 @@ fun SubstanceScreen(
                         if (substance.isStimulant) {
                             TextButton(onClick = navigateToSaferStimulantsScreen) {
                                 Text(
-                                    text = "Safer Stimulant Use",
+                                    text = "Safer stimulant use",
                                     modifier = Modifier.padding(horizontal = horizontalPadding)
                                 )
                             }

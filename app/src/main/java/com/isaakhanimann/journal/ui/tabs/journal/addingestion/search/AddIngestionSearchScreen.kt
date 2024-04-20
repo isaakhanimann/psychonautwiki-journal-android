@@ -155,7 +155,7 @@ fun AddIngestionSearchScreen(
                     .onFocusChanged { focusState ->
                         isFocused = focusState.isFocused
                     },
-                placeholder = { Text(text = "Search Substances") },
+                placeholder = { Text(text = "Search substances") },
                 leadingIcon = {
                     Icon(
                         Icons.Default.Search,
@@ -187,7 +187,7 @@ fun AddIngestionSearchScreen(
             LazyColumn {
                 if (substanceRouteSuggestions.isNotEmpty()) {
                     stickyHeader {
-                        SectionHeader(title = "Quick Logging")
+                        SectionHeader(title = "Quick logging")
                     }
                 }
                 itemsIndexed(substanceRouteSuggestions) { index, substanceRow ->
@@ -204,7 +204,7 @@ fun AddIngestionSearchScreen(
                 }
                 if (filteredCustomSubstances.isNotEmpty()) {
                     stickyHeader {
-                        SectionHeader(title = "Custom Substances")
+                        SectionHeader(title = "Custom substances")
                     }
                 }
                 itemsIndexed(filteredCustomSubstances) { index, customSubstance ->
@@ -223,7 +223,7 @@ fun AddIngestionSearchScreen(
                 }
                 if (filteredCustomUnits.isNotEmpty()) {
                     stickyHeader {
-                        SectionHeader(title = "Custom Units")
+                        SectionHeader(title = "Custom units")
                     }
                 }
                 itemsIndexed(filteredCustomUnits) { index, customUnit ->
@@ -262,7 +262,7 @@ fun AddIngestionSearchScreen(
                             Icons.Outlined.Add, contentDescription = "Add"
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "Add Custom Substance")
+                        Text(text = "Add custom substance")
                     }
                 }
                 item {

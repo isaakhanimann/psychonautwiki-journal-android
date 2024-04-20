@@ -216,7 +216,7 @@ fun OneExperienceScreen(
                 actions = {
                     var areTimeOptionsExpanded by remember { mutableStateOf(false) }
                     IconButton(onClick = { areTimeOptionsExpanded = true }) {
-                        Icon(Icons.Outlined.Timer, contentDescription = "Time Display Option")
+                        Icon(Icons.Outlined.Timer, contentDescription = "Time display option")
                     }
                     DropdownMenu(
                         expanded = areTimeOptionsExpanded,
@@ -245,7 +245,7 @@ fun OneExperienceScreen(
                     IconButton(onClick = { areEditOptionsExpanded = true }) {
                         Icon(
                             Icons.Default.Edit,
-                            contentDescription = "Edit Options",
+                            contentDescription = "Edit options",
                         )
                     }
                     var isShowingDeleteDialog by remember { mutableStateOf(false) }
@@ -253,7 +253,7 @@ fun OneExperienceScreen(
                         AlertDialog(
                             onDismissRequest = { isShowingDeleteDialog = false },
                             title = {
-                                Text(text = "Delete Experience?")
+                                Text(text = "Delete experience?")
                             },
                             text = {
                                 Text("This will also delete all its ingestions.")
@@ -283,7 +283,7 @@ fun OneExperienceScreen(
                         onDismissRequest = { areEditOptionsExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Edit Title/Notes/Location") },
+                            text = { Text("Edit title/notes/location") },
                             onClick = {
                                 navigateToEditExperienceScreen()
                                 areEditOptionsExpanded = false
@@ -291,7 +291,7 @@ fun OneExperienceScreen(
                             leadingIcon = {
                                 Icon(
                                     Icons.Outlined.Edit,
-                                    contentDescription = "Edit Experience",
+                                    contentDescription = "Edit experience",
                                     modifier = Modifier.size(ButtonDefaults.IconSize)
                                 )
                             }
@@ -299,7 +299,7 @@ fun OneExperienceScreen(
                         val isFavorite = oneExperienceScreenModel.isFavorite
                         if (isFavorite) {
                             DropdownMenuItem(
-                                text = { Text("Unmark Favorite") },
+                                text = { Text("Unmark favorite") },
                                 onClick = {
                                     saveIsFavorite(false)
                                     areEditOptionsExpanded = false
@@ -307,14 +307,14 @@ fun OneExperienceScreen(
                                 leadingIcon = {
                                     Icon(
                                         Icons.Filled.Star,
-                                        contentDescription = "Unmark Favorite",
+                                        contentDescription = "Unmark favorite",
                                         modifier = Modifier.size(ButtonDefaults.IconSize)
                                     )
                                 }
                             )
                         } else {
                             DropdownMenuItem(
-                                text = { Text("Mark Favorite") },
+                                text = { Text("Mark favorite") },
                                 onClick = {
                                     saveIsFavorite(true)
                                     areEditOptionsExpanded = false
@@ -322,14 +322,14 @@ fun OneExperienceScreen(
                                 leadingIcon = {
                                     Icon(
                                         Icons.Outlined.StarOutline,
-                                        contentDescription = "Mark Favorite",
+                                        contentDescription = "Mark favorite",
                                         modifier = Modifier.size(ButtonDefaults.IconSize)
                                     )
                                 }
                             )
                         }
                         DropdownMenuItem(
-                            text = { Text("Delete Experience") },
+                            text = { Text("Delete experience") },
                             onClick = {
                                 isShowingDeleteDialog = true
                                 areEditOptionsExpanded = false
@@ -337,7 +337,7 @@ fun OneExperienceScreen(
                             leadingIcon = {
                                 Icon(
                                     Icons.Outlined.Delete,
-                                    contentDescription = "Delete Experience",
+                                    contentDescription = "Delete experience",
                                     modifier = Modifier.size(ButtonDefaults.IconSize)
                                 )
                             }
@@ -348,7 +348,7 @@ fun OneExperienceScreen(
                     IconButton(onClick = { areAddOptionsExpanded = true }) {
                         Icon(
                             Icons.Outlined.Add,
-                            contentDescription = "Add Options",
+                            contentDescription = "Add options",
                         )
                     }
                     DropdownMenu(
@@ -356,7 +356,7 @@ fun OneExperienceScreen(
                         onDismissRequest = { areAddOptionsExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Add Timed Note") },
+                            text = { Text("Add timed note") },
                             onClick = {
                                 navigateToAddTimedNoteScreen()
                                 areAddOptionsExpanded = false
@@ -370,7 +370,7 @@ fun OneExperienceScreen(
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Add Shulgin Rating") },
+                            text = { Text("Add Shulgin rating") },
                             onClick = {
                                 navigateToAddRatingScreen()
                                 areAddOptionsExpanded = false
@@ -434,7 +434,7 @@ fun OneExperienceScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        CardTitle(title = "Effect Timeline")
+                        CardTitle(title = "Effect timeline")
                         TextButton(onClick = navigateToExplainTimeline) {
                             Text(text = "Limitations")
                         }
@@ -468,7 +468,7 @@ fun OneExperienceScreen(
                                 IconButton(onClick = { onChangeIsOralDisclaimerHidden(true) }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
-                                        contentDescription = "Close Disclaimer"
+                                        contentDescription = "Close disclaimer"
                                     )
                                 }
                             }
@@ -508,7 +508,7 @@ fun OneExperienceScreen(
             val cumulativeDoses = oneExperienceScreenModel.cumulativeDoses
             if (cumulativeDoses.isNotEmpty()) {
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                    CardTitle(title = "My Cumulative Doses")
+                    CardTitle(title = "My cumulative doses")
                     if (cumulativeDoses.isNotEmpty()) {
                         HorizontalDivider()
                     }
@@ -529,7 +529,7 @@ fun OneExperienceScreen(
             val timedNotes = oneExperienceScreenModel.timedNotes
             if (timedNotes.isNotEmpty()) {
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                    CardTitle(title = "Timed Notes")
+                    CardTitle(title = "Timed notes")
                     if (timedNotes.isNotEmpty()) {
                         HorizontalDivider()
                     }
@@ -553,7 +553,7 @@ fun OneExperienceScreen(
             }
             if (oneExperienceScreenModel.ratings.isNotEmpty()) {
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                    CardTitle(title = "Shulgin Ratings")
+                    CardTitle(title = "Shulgin ratings")
                     HorizontalDivider()
                     val ratingsWithTime =
                         oneExperienceScreenModel.ratings.filter { it.time != null }

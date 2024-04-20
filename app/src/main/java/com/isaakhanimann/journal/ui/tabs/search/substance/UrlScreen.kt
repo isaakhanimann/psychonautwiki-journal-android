@@ -49,7 +49,7 @@ fun UrlScreen(url: String) {
             FloatingActionButton(onClick = {
                 context.startActivity(shareIntent)
             }) {
-                Icon(Icons.Filled.Share, "Share Link")
+                Icon(Icons.Filled.Share, "Share link")
             }
         },
     ) { padding ->

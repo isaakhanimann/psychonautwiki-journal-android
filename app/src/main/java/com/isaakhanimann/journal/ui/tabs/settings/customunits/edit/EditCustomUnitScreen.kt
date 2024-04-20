@@ -136,20 +136,20 @@ private fun EditCustomUnitScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("$substanceName Unit") },
+                title = { Text("$substanceName unit") },
                 actions = {
                     var isShowingDeleteDialog by remember { mutableStateOf(false) }
                     IconButton(onClick = { isShowingDeleteDialog = true }) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "Delete Custom Unit"
+                            contentDescription = "Delete custom unit"
                         )
                     }
                     AnimatedVisibility(visible = isShowingDeleteDialog) {
                         AlertDialog(
                             onDismissRequest = { isShowingDeleteDialog = false },
                             title = {
-                                Text(text = "Delete Custom Unit?")
+                                Text(text = "Delete custom unit?")
                             },
                             text = {
                                 Text("This will affect all ingestions that are using it. Consider archiving it instead.")

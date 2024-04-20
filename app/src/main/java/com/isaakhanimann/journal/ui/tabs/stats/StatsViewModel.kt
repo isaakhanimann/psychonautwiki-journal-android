@@ -273,7 +273,7 @@ data class TotalDose(
 enum class TimePickerOption {
     DAYS_7 {
         override val displayText = "7D"
-        override val longDisplayText = "Last Week"
+        override val longDisplayText = "Last week"
         override val tabIndex = 0
         override val bucketCount = 7
         override val oneBucketSize: Period = Period.ofDays(1)
@@ -281,7 +281,7 @@ enum class TimePickerOption {
     },
     DAYS_30 {
         override val displayText = "30D"
-        override val longDisplayText = "Last Month"
+        override val longDisplayText = "Last month"
         override val tabIndex = 1
         override val bucketCount = 30
         override val oneBucketSize: Period = Period.ofDays(1)
@@ -289,7 +289,7 @@ enum class TimePickerOption {
     },
     WEEKS_26 {
         override val displayText = "26W"
-        override val longDisplayText = "Half Year"
+        override val longDisplayText = "Half year"
         override val tabIndex = 2
         override val bucketCount = 26
         override val oneBucketSize: Period =
@@ -298,7 +298,7 @@ enum class TimePickerOption {
     },
     MONTHS_12 {
         override val displayText = "12M"
-        override val longDisplayText = "Last Year"
+        override val longDisplayText = "Last year"
         override val tabIndex = 3
         override val bucketCount = 12
         override val oneBucketSize: Period = Period.ofDays(30)
@@ -306,7 +306,7 @@ enum class TimePickerOption {
     },
     YEARS_10 {
         override val displayText = "10Y"
-        override val longDisplayText = "10 Years"
+        override val longDisplayText = "10 years"
         override val tabIndex = 4
         override val bucketCount = 10
         override val oneBucketSize: Period = Period.ofDays(365)

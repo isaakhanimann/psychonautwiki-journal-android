@@ -32,7 +32,7 @@ This method can also have a greater propensity for nausea and gastrointestinal d
     },
     SUBLINGUAL {
         override val displayText = "Sublingual"
-        override val description = "Under Tongue"
+        override val description = "Under tongue"
         override val articleText =
             """Sublingual administration refers to absorption under the tongue. It is a common route of administration for lysergamides like LSD.
 This route causes the substance to be absorbed through the large lingual artery present underneath the tongue, generally resulting in a faster absorption than oral administration.
@@ -43,7 +43,7 @@ Caustic compounds, such as the freebase form of amine-containing substance, shou
     },
     BUCCAL {
         override val displayText = "Buccal"
-        override val description = "Between Gums and Cheek"
+        override val description = "Between gums and cheek"
         override val articleText =
             """Buccal administration refers to absorption through the cheek and gum.
 This route is commonly employed when ingesting potent psychedelics such as 25I-NBOMe, DOM, LSD, and other substances distributed on blotter paper. Potent clandestine manufactured benzodiazepines like alprazolam and etizolam are also sometimes distributed on blotters.
@@ -76,7 +76,7 @@ Rectal administration can involve either the insertion of a low-volume solution 
     },
     TRANSDERMAL {
         override val displayText = "Transdermal"
-        override val description = "Through Skin"
+        override val description = "Through skin"
         override val articleText =
             """Transdermal is a route of administration where active ingredients are delivered across the skin for systemic distribution. Examples include transdermal patches used for medicine delivery for opioids such as fentanyl and transdermal implants used for medical or anesthetic purposes. This route is typically not observed in non-medical or recreational contexts due to the manufacturing requirements."""
         override val isInjectionMethod = false
@@ -84,7 +84,7 @@ Rectal administration can involve either the insertion of a low-volume solution 
     },
     SUBCUTANEOUS {
         override val displayText = "Subcutaneous"
-        override val description = "Injected Between Skin and Muscle"
+        override val description = "Injected between skin and muscle"
         override val articleText =
             """Subcutaneous administration (also known as skin popping) refers to a drug being injected into the subcutis, the layer of skin directly below the dermis and epidermis. Subcutaneous administration is relatively uncommon among psychonautics, as many people are not trained how to do it or would rather use a different route of administration which they are more familiar with."""
         override val isInjectionMethod = true
@@ -92,7 +92,7 @@ Rectal administration can involve either the insertion of a low-volume solution 
     },
     INTRAMUSCULAR {
         override val displayText = "Intramuscular"
-        override val description = "Injected Into Muscle Tissue"
+        override val description = "Injected into muscle tissue"
         override val articleText =
             """Intramuscular administration refers to a drug being injected into the muscle tissue using a hypodermic needle. This method is very similar to the intravenous route, but is often more painful with a decreased onset and absorption. Some drugs (such as ketamine) are commonly administered via this route. Like intravenous administration, intramuscular injection must be taken with precaution, using sterilized unused needles and not leaving any residual air bubbles in the reservoir."""
         override val isInjectionMethod = true
@@ -100,7 +100,7 @@ Rectal administration can involve either the insertion of a low-volume solution 
     },
     INTRAVENOUS {
         override val displayText = "Intravenous"
-        override val description = "Injected Into Vein"
+        override val description = "Injected into vein"
         override val articleText =
             """Intravenous administration refers to a drug being directly introduced into the bloodstream using a hypodermic needle. This method has the benefit of a very short onset and eliminates absorption by directly entering the bloodstream. However, much greater care must be taken when compared to other methods of administration.
 Sterilized, unused needles and a high purity substance with little to no adulterant are required to avoid damage to the circulatory system. Making sure no air bubbles are present in the reservoir before the plunger is released is also of dire importance as air bubbles in the bloodstream can easily be lethal.
@@ -110,7 +110,7 @@ This route is strongly associated with substances such as heroin and cocaine, bu
     },
     SMOKED {
         override val displayText = "Smoked"
-        override val description = "Inhaling With Heat Source"
+        override val description = "Inhaling with heat source"
         override val articleText =
             """Smoking substances is a common method of consumption with the most common examples including cannabis and tobacco.
 To smoke a substance a direct heat source, most often a flame, is applied directly to the substance with no barrier between the heat source and the substance. The smoking of substances can lead to an almost instantaneous absorption of the substance and passage through the blood brain barrier.
@@ -134,7 +134,7 @@ Ethnobotanist Daniel Siebert cautions that inhaling hot air can be irritating an
     },
     INHALED {
         override val displayText = "Inhaled"
-        override val description = "Inhaling Without Heat Source"
+        override val description = "Inhaling without heat source"
         override val articleText =
             """Inhaled administration is used for inhalants gases such as nitrous oxide, volatile liquids such as ether, and volatile viscous compounds such as poppers. It is substantially easier to overdose on alcohol inhalation than drinking alcohol.
 Inhalants do not require an external heat source to produce psychoactive vapors that can then be inhaled through various methods depending on the substance used. Inhaled substances are absorbed very rapidly and lead to an almost instantaneous absorption of the substance and passage through the blood brain barrier.

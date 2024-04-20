@@ -60,7 +60,7 @@ fun ReagentTestingScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Reagent Testing") })
+            TopAppBar(title = { Text("Reagent testing") })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -68,7 +68,7 @@ fun ReagentTestingScreen(
                 icon = {
                     Icon(
                         Icons.Outlined.Newspaper,
-                        contentDescription = "Open Link"
+                        contentDescription = "Open link"
                     )
                 },
                 text = { Text("Article") },
@@ -97,7 +97,7 @@ Reagents can only determine the presence, not the quantity or purity, of a parti
                     Modifier.padding(vertical = 5.dp)
                 ) {
                     Text(
-                        text = "Kit Sellers",
+                        text = "Kit sellers",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )

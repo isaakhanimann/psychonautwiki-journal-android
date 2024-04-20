@@ -57,7 +57,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun DrugTestingScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Drug Testing Services") })
+            TopAppBar(title = { Text("Drug testing services") })
         }
     ) { padding ->
         Column(

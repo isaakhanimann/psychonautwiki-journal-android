@@ -106,7 +106,7 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstanceWithCategoriesPrev
         dismissAlert = {},
         isShowingAlert = false,
         alertInteractionType = InteractionType.DANGEROUS,
-        alertText = "Dangerous Interaction with Heroin taken 4h ago"
+        alertText = "Dangerous interaction with Heroin taken 4h ago"
     )
 }
 
@@ -125,7 +125,7 @@ fun CheckInteractionsScreenPreview2() {
         dismissAlert = {},
         isShowingAlert = true,
         alertInteractionType = InteractionType.DANGEROUS,
-        alertText = "Dangerous Interaction with Heroin taken 4h ago."
+        alertText = "Dangerous interaction with Heroin taken 4h ago."
     )
 }
 
@@ -146,7 +146,7 @@ fun CheckInteractionsScreen(
     navigateToURL: (url: String) -> Unit
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("$substanceName Interactions") }) },
+        topBar = { TopAppBar(title = { Text("$substanceName interactions") }) },
         floatingActionButton = {
             NextFAB(navigateToNext)
         }
@@ -214,9 +214,9 @@ fun CheckInteractionsScreen(
                     onDismissRequest = dismissAlert,
                     title = {
                         val title = when (alertInteractionType) {
-                            InteractionType.DANGEROUS -> "Dangerous Interaction!"
-                            InteractionType.UNSAFE -> "Unsafe Interaction"
-                            InteractionType.UNCERTAIN -> "Uncertain Interaction"
+                            InteractionType.DANGEROUS -> "Dangerous interaction!"
+                            InteractionType.UNSAFE -> "Unsafe interaction"
+                            InteractionType.UNCERTAIN -> "Uncertain interaction"
                             else -> "Interaction"
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {

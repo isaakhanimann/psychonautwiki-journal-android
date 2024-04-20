@@ -87,7 +87,7 @@ fun SubstanceColorsScreenContent(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Substance Colors") })
+            TopAppBar(title = { Text("Substance colors") })
         },
     ) { padding ->
         LazyColumn(

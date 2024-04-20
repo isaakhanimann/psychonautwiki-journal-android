@@ -80,7 +80,7 @@ fun AddCustomSubstance(
         onDoneTap = {
             scope.launch {
                 snackbarHostState.showSnackbar(
-                    message = "Custom Substance Added",
+                    message = "Custom substance added",
                     duration = SnackbarDuration.Short
                 )
             }
@@ -88,7 +88,7 @@ fun AddCustomSubstance(
             navigateBack()
         },
         isDoneEnabled = viewModel.isValid,
-        title = "Add Custom Substance",
+        title = "Add custom substance",
         isShowingDelete = false,
         deleteAndNavigate = {}
     )
@@ -111,7 +111,7 @@ fun EditCustomSubstance(
             navigateBack()
         },
         isDoneEnabled = viewModel.isValid,
-        title = "Edit Custom Substance",
+        title = "Edit custom substance",
         isShowingDelete = true,
         deleteAndNavigate = {
             viewModel.deleteCustomSubstance()
@@ -133,7 +133,7 @@ fun AddCustomSubstancePreview() {
         onDescriptionChange = {},
         onDoneTap = {},
         isDoneEnabled = true,
-        title = "Add Custom Substance",
+        title = "Add custom substance",
         isShowingDelete = false,
         deleteAndNavigate = {}
     )
@@ -166,14 +166,14 @@ fun AddOrEditCustomSubstance(
                     ) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "Delete Substance",
+                            contentDescription = "Delete substance",
                         )
                     }
                     AnimatedVisibility(visible = isShowingDeleteDialog) {
                         AlertDialog(
                             onDismissRequest = { isShowingDeleteDialog = false },
                             title = {
-                                Text(text = "Delete Substance?")
+                                Text(text = "Delete substance?")
                             },
                             confirmButton = {
                                 TextButton(

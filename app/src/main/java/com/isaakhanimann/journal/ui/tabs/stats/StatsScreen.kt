@@ -168,7 +168,7 @@ fun StatsScreen(
     ) { padding ->
         if (!statsModel.areThereAnyIngestions) {
             EmptyScreenDisclaimer(
-                title = "Nothing to Show Yet",
+                title = "Nothing to show yet",
                 description = "Start logging your ingestions to see an overview of your consumption pattern."
             )
         } else {
@@ -278,7 +278,7 @@ fun StatsScreen(
                     }
                 } else {
                     EmptyScreenDisclaimer(
-                        title = "No Ingestions Since ${statsModel.selectedOption.longDisplayText}",
+                        title = "No ingestions since ${statsModel.selectedOption.longDisplayText}",
                         description = "Choose a longer duration range to see statistics."
                     )
                 }

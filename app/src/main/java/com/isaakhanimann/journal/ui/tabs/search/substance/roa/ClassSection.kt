@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 fun ClassSectionPreview() {
     ClassSection(
         psychoactiveClasses = listOf("Stimulants", "Psychedelics"),
-        chemicalClasses = listOf("Substituted Phenethylamines"),
+        chemicalClasses = listOf("Substituted phenethylamines"),
         titleStyle = MaterialTheme.typography.titleLarge
     )
 }
@@ -48,7 +48,7 @@ fun ClassSection(
 ) {
     if (psychoactiveClasses.isNotEmpty() || chemicalClasses.isNotEmpty()) {
         Column {
-            Text(text = "Class Membership", style = titleStyle)
+            Text(text = "Class membership", style = titleStyle)
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()

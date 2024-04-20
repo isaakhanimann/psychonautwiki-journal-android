@@ -143,6 +143,6 @@ data class IngestionsBurst(
                     description
                 }
             }
-        } ?: "Unknown Dose"
+        } ?: "Unknown dose"
     }
 }

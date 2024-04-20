@@ -52,7 +52,7 @@ fun VolumetricDosingScreen(navigateToVolumetricLiquidDosingArticle: () -> Unit) 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Volumetric Liquid Dosing") }
+                title = { Text("Volumetric liquid dosing") }
             )
         },
         floatingActionButton = {
@@ -64,7 +64,7 @@ fun VolumetricDosingScreen(navigateToVolumetricLiquidDosingArticle: () -> Unit) 
                         contentDescription = "Open PW article"
                     )
                 },
-                text = { Text("More Info") },
+                text = { Text("More info") },
             )
         }
     ) { padding ->

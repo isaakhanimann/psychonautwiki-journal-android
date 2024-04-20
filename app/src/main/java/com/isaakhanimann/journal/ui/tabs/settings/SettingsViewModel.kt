@@ -60,7 +60,7 @@ class SettingsViewModel @Inject constructor(
             val text = fileSystemConnection.getTextFromUri(uri)
             if (text == null) {
                 snackbarHostState.showSnackbar(
-                    message = "File Not Found",
+                    message = "File not found",
                     duration = SnackbarDuration.Short
                 )
             } else {
@@ -70,13 +70,13 @@ class SettingsViewModel @Inject constructor(
                     experienceRepository.deleteEverything()
                     experienceRepository.insertEverything(journalExport)
                     snackbarHostState.showSnackbar(
-                        message = "Import Successful",
+                        message = "Import successful",
                         duration = SnackbarDuration.Short
                     )
                 } catch (e: Exception) {
                     println("Error when decoding: ${e.message}")
                     snackbarHostState.showSnackbar(
-                        message = "Decoding File Failed",
+                        message = "Decoding file failed",
                         duration = SnackbarDuration.Short
                     )
                 }
@@ -165,12 +165,12 @@ class SettingsViewModel @Inject constructor(
                 val jsonList = Json.encodeToString(journalExport)
                 fileSystemConnection.saveTextInUri(uri, text = jsonList)
                 snackbarHostState.showSnackbar(
-                    message = "Export Successful",
+                    message = "Export successful",
                     duration = SnackbarDuration.Short
                 )
             } catch (_: Exception) {
                 snackbarHostState.showSnackbar(
-                    message = "Export Failed",
+                    message = "Export failed",
                     duration = SnackbarDuration.Short
                 )
             }

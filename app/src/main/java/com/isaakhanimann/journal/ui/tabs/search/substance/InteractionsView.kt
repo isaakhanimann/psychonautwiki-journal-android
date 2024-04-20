@@ -94,7 +94,7 @@ fun InteractionExplanationButton(substanceURL: String, navigateToURL: (url: Stri
     }) {
         Icon(
             Icons.Outlined.Info,
-            contentDescription = "Open Link"
+            contentDescription = "Open link"
         )
         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
         Text("Explanations")

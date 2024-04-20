@@ -82,7 +82,7 @@ fun SaferUseScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Safer Use") },
+                title = { Text("Safer use") },
             )
         }
     ) { padding ->
@@ -103,11 +103,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Outlined.Biotech,
-                        contentDescription = "Open Link",
+                        contentDescription = "Open link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Drug Testing Services")
+                    Text("Drug testing services")
                 }
                 Button(
                     onClick = navigateToReagentTestingScreen,
@@ -115,11 +115,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Outlined.Science,
-                        contentDescription = "Open Link",
+                        contentDescription = "Open link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Reagent Testing")
+                    Text("Reagent testing")
                 }
                 VerticalSpace()
             }
@@ -129,29 +129,29 @@ fun SaferUseScreen(
                     onClick = navigateToDosageGuideScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
-                    Text("Dosage Guide")
+                    Text("Dosage guide")
                 }
                 Button(
                     onClick = navigateToDosageClassificationScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
-                    Text("Dosage Classification")
+                    Text("Dosage classification")
                 }
                 Button(
                     onClick = navigateToVolumetricDosingScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
-                    Text("Volumetric Liquid Dosing")
+                    Text("Volumetric liquid dosing")
                 }
                 VerticalSpace()
             }
-            SectionWithTitle(title = "4. Set and Setting") {
+            SectionWithTitle(title = "4. Set and setting") {
                 SaferText(text = "Set: Make sure your thoughts, desires, feelings, general mood, and any preconceived notions or expectations about what you are about to experience are conducive to the experience. Make sure your body is well. Better not to take it if you feel sick, injured or generally unhealthy.\n\nSetting: An unfamiliar, uncontrollable or otherwise disagreeable social or physical environment may result in an unpleasant or dangerous experience. Choose an environment that provides a sense of safety, familiarity, control, and comfort. For using hallucinogens (psychedelics, dissociatives and deliriants) refer to the safer hallucinogen guide.")
                 Button(
                     onClick = navigateToSaferHallucinogensScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
-                    Text("Safer Hallucinogen Guide")
+                    Text("Safer hallucinogen guide")
                 }
                 VerticalSpace()
             }
@@ -165,11 +165,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Default.OpenInBrowser,
-                        contentDescription = "Open Link",
+                        contentDescription = "Open link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Swiss Combination Checker")
+                    Text("Swiss combination checker")
                 }
                 Button(
                     onClick = {
@@ -179,15 +179,15 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Default.OpenInBrowser,
-                        contentDescription = "Open Link",
+                        contentDescription = "Open link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Tripsit Combination Checker")
+                    Text("Tripsit combination checker")
                 }
                 VerticalSpace()
             }
-            SectionWithTitle(title = "6. Administration Routes") {
+            SectionWithTitle(title = "6. Administration routes") {
                 SaferText(text = "Don’t share snorting equipment (straws, banknotes, bullets) to avoid blood-borne diseases such as Hepatitis C that can be transmitted through blood amounts so small you can’t notice. Injection is the the most dangerous route of administration and highly advised against. If you are determined to inject, don’t share injection materials and refer to the safer injection guide.")
                 Button(
                     onClick = {
@@ -197,11 +197,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Default.PlayArrow,
-                        contentDescription = "Open Link",
+                        contentDescription = "Open link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer Snorting Video")
+                    Text("Safer snorting video")
                 }
                 Button(
                     onClick = {
@@ -211,11 +211,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Default.PlayArrow,
-                        contentDescription = "Open Link",
+                        contentDescription = "Open link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer Smoking Video")
+                    Text("Safer smoking video")
                 }
                 Button(
                     onClick = {
@@ -225,11 +225,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Default.PlayArrow,
-                        contentDescription = "Open Link",
+                        contentDescription = "Open link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer Injecting Video")
+                    Text("Safer injecting video")
                 }
                 Button(
                     onClick = navigateToRouteExplanationScreen,
@@ -241,20 +241,20 @@ fun SaferUseScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Administration Routes Info")
+                    Text("Administration routes info")
                 }
                 VerticalSpace()
             }
-            SectionWithTitle(title = "7. Allergy Tests") {
+            SectionWithTitle(title = "7. Allergy tests") {
                 SaferText(text = "Simply dose a minuscule amount of the substance (e.g. 1/10 to 1/4 of a regular dose) and wait several hours to verify that you do not exhibit an unusual or idiosyncratic response.")
             }
             SectionWithTitle(title = "8. Reflection") {
                 SaferText(text = "Carefully monitor the frequency and intensity of any substance use to ensure it is not sliding into abuse and addiction. In particular, many stimulants, opioids, and depressants are known to be highly addictive.")
             }
-            SectionWithTitle(title = "9. Safety of Others") {
+            SectionWithTitle(title = "9. Safety of others") {
                 SaferText(text = "Don’t drive, operate heavy machinery, or otherwise be directly or indirectly responsible for the safety or care of another person while intoxicated.")
             }
-            SectionWithTitle(title = "10. Recovery Position") {
+            SectionWithTitle(title = "10. Recovery position") {
                 SaferText(text = "If someone is unconscious and breathing place them into Recovery Position to prevent death by the suffocation of vomit after a drug overdose.\nHave the contact details of help services to hand in case of urgent need.")
                 Button(
                     onClick = {
@@ -264,11 +264,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Default.PlayArrow,
-                        contentDescription = "Open Link",
+                        contentDescription = "Open link",
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Recovery Position Video")
+                    Text("Recovery position video")
                 }
                 VerticalSpace()
             }
@@ -286,11 +286,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Outlined.HealthAndSafety,
-                        contentDescription = "Responsible Drug Use",
+                        contentDescription = "Responsible drug use",
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Responsible Drug Use Article")
+                    Text("Responsible drug use article")
                     Spacer(modifier = Modifier.weight(1f))
                 }
             }

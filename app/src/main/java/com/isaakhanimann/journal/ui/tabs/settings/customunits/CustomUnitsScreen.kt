@@ -90,7 +90,7 @@ fun CustomUnitsScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Custom Units") },
+                title = { Text("Custom units") },
                 actions = {
                     IconButton(onClick = navigateToCustomUnitArchive) {
                         Icon(Icons.Default.Inventory, contentDescription = "Go to archive")
@@ -104,7 +104,7 @@ fun CustomUnitsScreenContent(
                     Icon(Icons.Default.Add, contentDescription = "Add custom unit")
                 },
                 text = {
-                    Text(text = "Custom Unit")
+                    Text(text = "Custom unit")
                 }
             )
         }
@@ -129,7 +129,7 @@ fun CustomUnitsScreenContent(
             }
             if (customUnits.isEmpty()) {
                 EmptyScreenDisclaimer(
-                    title = "No Custom Units Yet",
+                    title = "No custom units yet",
                     description = "Add your first unit."
                 )
             }

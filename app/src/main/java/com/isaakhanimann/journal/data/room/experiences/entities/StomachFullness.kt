@@ -36,7 +36,7 @@ enum class StomachFullness {
         override val onsetDelayForOralInHours: Double = 0.0
     },
     HALF_FULL {
-        override val text = "Half Full"
+        override val text = "Half full"
         override val serialized = "HALFFULL"
         override val onsetDelayForOralInHours = 1.5
     },
@@ -46,7 +46,7 @@ enum class StomachFullness {
         override val onsetDelayForOralInHours: Double = 3.0
     },
     VERY_FULL {
-        override val text = "Very Full"
+        override val text = "Very full"
         override val serialized = "VERYFULL"
         override val onsetDelayForOralInHours: Double = 4.0
     };

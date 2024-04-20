@@ -74,7 +74,7 @@ fun PurityCalculation(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Converted Amount")
+                Text(text = "Converted amount")
                 Text(text = convertedDoseAndUnitText)
             }
         }

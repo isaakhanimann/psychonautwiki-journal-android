@@ -151,7 +151,7 @@ private fun FinishAddCustomUnitScreenContent(
     onChangeOfIsArchived: (Boolean) -> Unit,
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("$substanceName Unit") }) },
+        topBar = { TopAppBar(title = { Text("$substanceName unit") }) },
         floatingActionButton = {
             FloatingDoneButton {
                 dismiss()

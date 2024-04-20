@@ -23,7 +23,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -44,7 +48,7 @@ fun ExplainTimelineScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Timeline Info") },
+                title = { Text("Timeline info") },
             )
         },
     ) { padding ->
@@ -56,7 +60,7 @@ fun ExplainTimelineScreen() {
                 .padding(horizontal = horizontalPadding)
         ) {
             VerticalSpace()
-            CardWithTitle(title = "Simplifying Assumptions") {
+            CardWithTitle(title = "Simplifying assumptions") {
                 val text = buildAnnotatedString {
                     append("To be able to draw the timeline with the given data multiple ")
                     withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
@@ -74,7 +78,7 @@ fun ExplainTimelineScreen() {
                     )
                 )
             }
-            CardWithTitle(title = "Understanding the Timeline") {
+            CardWithTitle(title = "Understanding the timeline") {
                 BulletPoints(
                     points = listOf(
                         "The timeline is drawn based on the onset, comeup, peak and offset (and sometimes total) from PsychonautWiki.",
@@ -86,7 +90,7 @@ fun ExplainTimelineScreen() {
                     )
                 )
             }
-            CardWithTitle(title = "PsychonautWiki Durations") {
+            CardWithTitle(title = "PsychonautWiki durations") {
                 SectionText(
                     text = "Duration refers to the length of time over which the subjective effects of a psychoactive substance manifest themselves.\n" +
                             "Duration can be broken down into 6 parts: (1) total duration (2) onset (3) come up (4) peak (5) offset and (6) after effects. Depending upon the substance consumed, each of these occurs in a separate and continuous fashion."
@@ -102,7 +106,7 @@ fun ExplainTimelineScreen() {
                 SectionText(text = "The peak phase can be defined as period of time in which the intensity of the substance's effects are at its height.")
                 Text(text = "Offset", style = titleStyle)
                 SectionText(text = "The offset phase can be defined as the amount of time in between the conclusion of the peak and shifting into a sober state. This is colloquially referred to as \"coming down.\"")
-                Text(text = "After Effects", style = titleStyle)
+                Text(text = "After effects", style = titleStyle)
                 SectionText(
                     text = "The after effects can be defined as any residual effects which may remain after the experience has reached its conclusion. This is colloquially known as a \"hangover\" or an \"afterglow\" depending on the substance and usage.\n" +
                             "The after effects are not included as part of the total duration."

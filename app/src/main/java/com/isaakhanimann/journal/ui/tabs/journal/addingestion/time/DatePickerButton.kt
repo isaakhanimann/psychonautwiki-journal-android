@@ -62,7 +62,7 @@ fun DatePickerButton(
     OutlinedButton(onClick = datePickerDialog::show, modifier = modifier) {
         Icon(
             Icons.Outlined.Event,
-            contentDescription = "Open Calendar"
+            contentDescription = "Open calendar"
         )
         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
         Text(dateString)

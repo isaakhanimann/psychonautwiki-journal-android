@@ -95,13 +95,13 @@ fun EditExperienceScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Edit Experience") },
+                title = { Text("Edit experience") },
                 actions = {
                     if (isEnteredTitleOk) {
                         IconButton(onClick = onDoneTap) {
                             Icon(
                                 Icons.Filled.Done,
-                                contentDescription = "Done Icon"
+                                contentDescription = "Done icon"
                             )
                         }
                     }

@@ -21,7 +21,16 @@ package com.isaakhanimann.journal.ui.tabs.journal.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -71,7 +80,7 @@ fun ExperienceRow(
                     style = MaterialTheme.typography.titleMedium,
                 )
                 if (experience.isFavorite) {
-                    Icon(imageVector = Icons.Filled.Star, contentDescription = "Is Favorite")
+                    Icon(imageVector = Icons.Filled.Star, contentDescription = "Is favorite")
                 }
             }
             Row(

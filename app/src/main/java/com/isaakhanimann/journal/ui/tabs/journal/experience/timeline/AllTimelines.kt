@@ -25,7 +25,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -102,7 +107,7 @@ fun AllTimelines(
     modifier: Modifier = Modifier,
 ) {
     if (dataForEffectLines.isEmpty()) {
-        Text(text = "Insufficient Data for Timeline")
+        Text(text = "Insufficient data for timeline")
     } else {
         val model: AllTimelinesModel = remember(dataForEffectLines, dataForRatings) {
             AllTimelinesModel(

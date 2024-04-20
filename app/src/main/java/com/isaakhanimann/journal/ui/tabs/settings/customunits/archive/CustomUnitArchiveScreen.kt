@@ -92,7 +92,7 @@ fun CustomUnitArchiveScreenContent(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Custom Unit Archive") })
+            TopAppBar(title = { Text("Custom unit archive") })
         }
     ) { padding ->
         Box(
@@ -115,7 +115,7 @@ fun CustomUnitArchiveScreenContent(
             }
             if (customUnits.isEmpty()) {
                 EmptyScreenDisclaimer(
-                    title = "No Archived Units Yet",
+                    title = "No archived units yet",
                     description = "Archived units don't show up when adding ingestions"
                 )
             }

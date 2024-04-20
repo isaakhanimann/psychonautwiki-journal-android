@@ -137,7 +137,7 @@ fun ChooseDoseScreenPreview(
     ChooseDoseScreen(
         navigateToVolumetricDosingScreen = {},
         navigateToSaferSniffingScreen = {},
-        substanceName = "Example Substance",
+        substanceName = "Example substance",
         roaDose = roaDose,
         administrationRoute = AdministrationRoute.INSUFFLATED,
         doseText = "5",
@@ -223,7 +223,7 @@ fun ChooseDoseScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("$substanceName ${administrationRoute.displayText} Dose") })
+            TopAppBar(title = { Text("$substanceName ${administrationRoute.displayText} dose") })
         },
         floatingActionButton = {
             if (isValidDose) {
@@ -269,7 +269,7 @@ fun ChooseDoseScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Warning,
-                                contentDescription = "Dosage Warning"
+                                contentDescription = "Dosage warning"
                             )
                             Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
                             Text(
@@ -421,16 +421,16 @@ fun ChooseDoseScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = "Safer Sniffing")
+                    Text(text = "Safer sniffing")
                 }
             } else if (administrationRoute == AdministrationRoute.RECTAL) {
                 TextButton(onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) }) {
                     Icon(
                         Icons.Outlined.Newspaper,
-                        contentDescription = "Open Link"
+                        contentDescription = "Open link"
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer Plugging")
+                    Text("Safer plugging")
                 }
             }
             if (roaDose?.shouldUseVolumetricDosing == true) {
@@ -441,7 +441,7 @@ fun ChooseDoseScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = "Volumetric Liquid Dosing")
+                    Text(text = "Volumetric liquid dosing")
                 }
             }
             if (administrationRoute == AdministrationRoute.SMOKED && substanceName != "Cannabis") {

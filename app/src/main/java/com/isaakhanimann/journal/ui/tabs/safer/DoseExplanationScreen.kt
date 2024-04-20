@@ -44,7 +44,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun DoseExplanationScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Dosage Classification") })
+            TopAppBar(title = { Text("Dosage classification") })
         }
     ) { padding ->
         Column(

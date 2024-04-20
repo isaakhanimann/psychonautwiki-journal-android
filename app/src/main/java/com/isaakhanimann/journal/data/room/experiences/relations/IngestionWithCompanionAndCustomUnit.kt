@@ -75,5 +75,5 @@ data class IngestionWithCompanionAndCustomUnit(
                 description
             }
         }
-    } ?: "Unknown Dose"
+    } ?: "Unknown dose"
 }

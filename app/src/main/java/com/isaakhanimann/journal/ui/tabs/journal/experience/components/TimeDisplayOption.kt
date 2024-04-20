@@ -22,11 +22,11 @@ enum class SavedTimeDisplayOption {
     AUTO {
         override val text = "Auto"
     }, RELATIVE_TO_NOW {
-        override val text = "Time Relative To Now"
+        override val text = "Time relative to now"
     }, RELATIVE_TO_START {
-        override val text = "Time Relative To Start"
+        override val text = "Time relative to start"
     }, REGULAR {
-        override val text = "Regular Time"
+        override val text = "Regular time"
     };
 
     abstract val text: String

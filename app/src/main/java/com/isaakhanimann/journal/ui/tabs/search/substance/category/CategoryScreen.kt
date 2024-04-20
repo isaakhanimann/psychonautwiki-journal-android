@@ -66,7 +66,7 @@ fun CategoryPreview() {
 fun CategoryScreen(category: Category?, navigateToURL: (url: String) -> Unit) {
     if (category == null) {
         EmptyScreenDisclaimer(
-            title = "Category Not Found",
+            title = "Category not found",
             description = "An error happened, please navigate back."
         )
     } else {
@@ -79,10 +79,10 @@ fun CategoryScreen(category: Category?, navigateToURL: (url: String) -> Unit) {
                         icon = {
                             Icon(
                                 Icons.Outlined.Newspaper,
-                                contentDescription = "Open Link"
+                                contentDescription = "Open link"
                             )
                         },
-                        text = { Text("More Info") },
+                        text = { Text("More info") },
                     )
                 }
             }

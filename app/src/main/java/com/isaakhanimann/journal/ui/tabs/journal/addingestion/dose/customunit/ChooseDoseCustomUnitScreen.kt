@@ -131,7 +131,7 @@ fun ChooseDoseCustomUnitScreenPreview(
 ) {
     ChooseDoseCustomUnitScreen(
         customUnit = CustomUnit(
-            substanceName = "Example Substance",
+            substanceName = "Example substance",
             administrationRoute = AdministrationRoute.ORAL,
             dose = 10.0,
             estimatedDoseStandardDeviation = null,

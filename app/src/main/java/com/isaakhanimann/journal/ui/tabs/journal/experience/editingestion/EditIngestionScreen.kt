@@ -200,14 +200,14 @@ fun EditIngestionScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Edit Ingestion") },
+                title = { Text("Edit ingestion") },
                 actions = {
                     var isShowingDeleteDialog by remember { mutableStateOf(false) }
                     AnimatedVisibility(visible = isShowingDeleteDialog) {
                         AlertDialog(
                             onDismissRequest = { isShowingDeleteDialog = false },
                             title = {
-                                Text(text = "Delete Ingestion?")
+                                Text(text = "Delete ingestion?")
                             },
                             confirmButton = {
                                 TextButton(
@@ -234,7 +234,7 @@ fun EditIngestionScreen(
                     ) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "Delete Ingestion",
+                            contentDescription = "Delete ingestion",
                         )
                     }
                 }
@@ -246,7 +246,7 @@ fun EditIngestionScreen(
                 icon = {
                     Icon(
                         Icons.Filled.Done,
-                        contentDescription = "Done Icon"
+                        contentDescription = "Done icon"
                     )
                 },
                 text = { Text("Done") }
@@ -407,7 +407,7 @@ fun EditIngestionScreen(
                             onClick = { isShowingDropDownMenu = true },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(text = if (selectedOption?.title != null) "Part of " + selectedOption.title else "Part of Unknown Experience")
+                            Text(text = if (selectedOption?.title != null) "Part of " + selectedOption.title else "Part of unknown experience")
                         }
                         DropdownMenu(
                             expanded = isShowingDropDownMenu,
