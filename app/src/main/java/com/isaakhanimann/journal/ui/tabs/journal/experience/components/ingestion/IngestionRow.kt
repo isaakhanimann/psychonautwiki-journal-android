@@ -75,11 +75,13 @@ fun IngestionRow(
         VerticalLine(color = ingestionWithCompanionAndCustomUnit.substanceCompanion!!.color)
         Column {
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.Top,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 val customUnitName = if (customUnit != null) ", ${customUnit.name}" else ""
                 Text(
+                    modifier = Modifier.weight(1f),
                     text = ingestion.substanceName + customUnitName,
                     style = MaterialTheme.typography.titleMedium
                 )
