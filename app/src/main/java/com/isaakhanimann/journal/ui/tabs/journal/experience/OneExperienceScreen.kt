@@ -75,7 +75,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.FULL_STOMACH_DISCLAIMER
-import com.isaakhanimann.journal.ui.ME
+import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardTitle
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CumulativeDoseRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ExperienceEffectTimelines
@@ -453,7 +453,7 @@ fun OneExperienceScreen(
                                 .fillMaxWidth()
                                 .height(200.dp)
                                 .clickable {
-                                    navigateToTimelineScreen(ME)
+                                    navigateToTimelineScreen(YOU)
                                 }
                         )
                         val hasOralIngestion =
@@ -508,7 +508,7 @@ fun OneExperienceScreen(
             val cumulativeDoses = oneExperienceScreenModel.cumulativeDoses
             if (cumulativeDoses.isNotEmpty()) {
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                    CardTitle(title = "My cumulative doses")
+                    CardTitle(title = "Your cumulative doses")
                     if (cumulativeDoses.isNotEmpty()) {
                         HorizontalDivider()
                     }

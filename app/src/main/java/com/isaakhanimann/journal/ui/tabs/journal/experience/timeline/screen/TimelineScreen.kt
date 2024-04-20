@@ -46,7 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.journal.ui.ME
+import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ExperienceEffectTimelines
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
@@ -60,8 +60,8 @@ fun TimelineScreen(
     val timelineScreenModel = TimelineScreenModel(
         title = viewModel.consumerName,
         ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
-        ratings = if (viewModel.consumerName == ME) viewModel.ratingsFlow.collectAsState().value else emptyList(),
-        timedNotes = if (viewModel.consumerName == ME) viewModel.timedNotesFlow.collectAsState().value else emptyList(),
+        ratings = if (viewModel.consumerName == YOU) viewModel.ratingsFlow.collectAsState().value else emptyList(),
+        timedNotes = if (viewModel.consumerName == YOU) viewModel.timedNotesFlow.collectAsState().value else emptyList(),
     )
     TimelineScreen(timelineScreenModel)
 }

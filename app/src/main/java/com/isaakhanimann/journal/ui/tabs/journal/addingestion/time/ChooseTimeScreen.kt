@@ -70,6 +70,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -260,7 +261,7 @@ fun ChooseTimeScreen(
                         )
                     ) {
                         Text(
-                            text = "Consumed by: ${consumerName.ifBlank { "Me" }}",
+                            text = "Consumed by: ${consumerName.ifBlank { YOU }}",
                             style = MaterialTheme.typography.titleMedium
                         )
                         if (consumerNamesSorted.isNotEmpty() || consumerName.isNotBlank()) {
@@ -273,7 +274,7 @@ fun ChooseTimeScreen(
                                 onDismissRequest = { areConsumerNamesExpanded = false }
                             ) {
                                 DropdownMenuItem(
-                                    text = { Text("Me") },
+                                    text = { Text(YOU) },
                                     onClick = {
                                         onChangeOfConsumerName("")
                                         areConsumerNamesExpanded = false

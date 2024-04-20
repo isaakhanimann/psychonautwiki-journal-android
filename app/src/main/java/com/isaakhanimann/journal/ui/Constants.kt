@@ -27,4 +27,4 @@ const val VERSION_NAME = "8.4"
 
 const val FULL_STOMACH_DISCLAIMER = "A full stomach delays the onset of oral ingestions by approx. 3 hours."
 
-const val ME = "Me"
+const val YOU = "You"

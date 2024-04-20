@@ -60,7 +60,7 @@ fun CardWithTitle(
 @Preview
 @Composable
 fun CardWithTitlePreview() {
-    CardWithTitle(title = "My card") {
+    CardWithTitle(title = "Your card") {
         Text(text = "Content", modifier = Modifier.fillMaxWidth())
     }
 }

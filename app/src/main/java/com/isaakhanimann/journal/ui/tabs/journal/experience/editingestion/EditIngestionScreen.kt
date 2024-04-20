@@ -79,6 +79,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
+import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.DatePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
@@ -438,7 +439,7 @@ fun EditIngestionScreen(
                     )
                 ) {
                     Text(
-                        text = "Consumed by: ${consumerName.ifBlank { "Me" }}",
+                        text = "Consumed by: ${consumerName.ifBlank { YOU }}",
                         style = MaterialTheme.typography.titleMedium
                     )
                     if (consumerNamesSorted.isNotEmpty() || consumerName.isNotBlank()) {
@@ -496,7 +497,7 @@ fun EditIngestionScreen(
             LazyColumn {
                 item {
                     ListItem(
-                        headlineContent = { Text("Me") },
+                        headlineContent = { Text(YOU) },
                         leadingContent = {
                             Icon(
                                 Icons.Default.Person,

@@ -66,6 +66,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -98,7 +99,7 @@ fun StatsPreview(
             onTapOption = {},
             statsModel = statsModel,
             onChangeConsumerName = {},
-            consumerNamesSorted = listOf("Me", "Someone else")
+            consumerNamesSorted = listOf("You", "Someone else")
         )
     }
 }
@@ -127,7 +128,7 @@ fun StatsScreen(
                             onDismissRequest = { isConsumerSelectionExpanded = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Me") },
+                                text = { Text(YOU) },
                                 onClick = {
                                     onChangeConsumerName(null)
                                     isConsumerSelectionExpanded = false
