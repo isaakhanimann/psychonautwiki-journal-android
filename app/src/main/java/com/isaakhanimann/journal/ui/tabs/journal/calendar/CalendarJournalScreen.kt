@@ -239,17 +239,20 @@ fun Day(
         } else {
             aspectRatioModifier
         }
-        val now = LocalDate.now()
-        val isToday = day.date.year == now.year && day.date.monthValue == now.monthValue && day.date.dayOfMonth == now.dayOfMonth
+        val isToday = day.date == LocalDate.now()
         Box(
-            modifier = modifier,
+            modifier = modifier
+                .padding(4.dp)
+                .background(
+                    if (isToday) MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f) else Color.Transparent,
+                    shape = RoundedCornerShape(20)
+                ),
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 if (isToday) {
                     Text(
                         text = day.date.dayOfMonth.toString(),
-                        color = MaterialTheme.colorScheme.secondary
                     )
                 } else if (experienceInfos.experienceIds.isEmpty()) {
                     Text(
