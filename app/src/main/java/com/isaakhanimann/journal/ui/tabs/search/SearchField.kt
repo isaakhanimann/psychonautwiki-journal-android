@@ -18,7 +18,9 @@
 
 package com.isaakhanimann.journal.ui.tabs.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -45,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchField(
@@ -86,18 +89,17 @@ fun SearchField(
                 if (isShowingFilter) {
                     var isExpanded by remember { mutableStateOf(false) }
                     val activeFilters = categories.filter { it.isActive }
-                    IconButton(
-                        onClick = { isExpanded = true },
-                    ) {
-                        BadgedBox(badge = {
+                    BadgedBox(
+                        modifier = Modifier
+                            .clickable(onClick = { isExpanded = true })
+                            .padding(horizontal = 16.dp), badge = {
                             if (activeFilters.isNotEmpty()) {
                                 Badge { Text(activeFilters.size.toString()) }
                             }
                         }) {
-                            Icon(
-                                Icons.Default.FilterList, contentDescription = "Filter"
-                            )
-                        }
+                        Icon(
+                            Icons.Default.FilterList, contentDescription = "Filter"
+                        )
                     }
                     DropdownMenu(
                         expanded = isExpanded,
