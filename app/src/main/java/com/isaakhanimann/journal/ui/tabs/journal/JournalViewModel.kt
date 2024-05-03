@@ -78,37 +78,40 @@ class JournalViewModel @Inject constructor(
             .combine(searchTextFlow) { experiencesWithIngestions, searchText ->
                 Pair(first = experiencesWithIngestions, second = searchText)
             }
+            .combine(experienceRepo.getCustomSubstancesFlow()) { pair, customSubstances ->
+                Pair(first = pair, second = customSubstances)
+            }
             .combine(isFavoriteEnabledFlow) { pair, isFavoriteEnabled ->
-                val experiencesWithIngestions = pair.first
-                val searchText = pair.second
-                val filtered = if (searchText.isEmpty() && !isFavoriteEnabled) {
-                    experiencesWithIngestions
-                } else {
+                var experiencesWithIngestions = pair.first.first
+                val searchText = pair.first.second
+                val customSubstances = pair.second
+
+                if (isFavoriteEnabled) {
+                    // only favorites
+                    experiencesWithIngestions =
+                        experiencesWithIngestions.filter { it.experience.isFavorite }
+                }
+                if (searchText.isNotEmpty()) {
+                    // collect substances with matching names
                     val matchingSubstances = searchRepository.getMatchingSubstances(
                         searchText = searchText,
                         filterCategories = emptyList(),
-                        recentlyUsedSubstanceNamesSorted = emptyList())
-                    if (isFavoriteEnabled) {
-                        experiencesWithIngestions.filter {
-                            it.experience.isFavorite && (it.experience.title.contains(
-                                other = searchText,
-                                ignoreCase = true
-                            ) || it.ingestionsWithCompanions.any { ingestionWithCompanion ->
-                                matchingSubstances.any { sub -> sub.substance.name == ingestionWithCompanion.substanceCompanion?.substanceName  }
-                            })
-                        }
-                    } else {
-                        experiencesWithIngestions.filter {
-                            it.experience.title.contains(
-                                other = searchText,
-                                ignoreCase = true
-                            ) || it.ingestionsWithCompanions.any { ingestionWithCompanion ->
-                                matchingSubstances.any { sub -> sub.substance.name == ingestionWithCompanion.substanceCompanion?.substanceName  }
-                            }
+                        recentlyUsedSubstanceNamesSorted = emptyList()
+                    ).map { it.substance.name } + customSubstances.map { it.name }.filter {
+                        it.contains(other = searchText, ignoreCase = true)
+                    }
+
+                    // experience title or some consumed substance must contain search string
+                    experiencesWithIngestions = experiencesWithIngestions.filter {
+                        it.experience.title.contains(
+                            other = searchText,
+                            ignoreCase = true
+                        ) || it.ingestionsWithCompanions.any { ingestionWithCompanion ->
+                            matchingSubstances.any { name -> name == ingestionWithCompanion.substanceCompanion?.substanceName }
                         }
                     }
                 }
-                return@combine filtered
+                return@combine experiencesWithIngestions
             }
             .stateIn(
                 initialValue = emptyList(),
