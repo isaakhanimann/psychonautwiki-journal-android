@@ -44,6 +44,7 @@ class JournalViewModel @Inject constructor(
     fun onChangeRelative(isRelative: Boolean) {
         isTimeRelativeToNow.value = isRelative
     }
+
     val isSearchEnabled = mutableStateOf(false)
 
     fun onChangeOfIsSearchEnabled(newValue: Boolean) {
@@ -107,7 +108,12 @@ class JournalViewModel @Inject constructor(
                             other = searchText,
                             ignoreCase = true
                         ) || it.ingestionsWithCompanions.any { ingestionWithCompanion ->
-                            matchingSubstances.any { name -> name == ingestionWithCompanion.substanceCompanion?.substanceName }
+                            val substanceMatches =
+                                matchingSubstances.any { name -> name == ingestionWithCompanion.substanceCompanion?.substanceName }
+                            val consumerMatches =
+                                ingestionWithCompanion.ingestion.consumerName?.contains(searchText, ignoreCase = true)
+                                    ?: false
+                            substanceMatches || consumerMatches
                         }
                     }
                 }
