@@ -122,7 +122,7 @@ fun ChooseDoseScreen(
             viewModel.purityText = it
         },
         isValidPurity = viewModel.isPurityValid,
-        convertedDoseAndUnitText = viewModel.rawDoseWithUnit,
+        convertedDoseAndUnitText = viewModel.impureDoseWithUnit,
         isShowingUnitsField = viewModel.roaDose?.units?.isBlank() ?: true,
         units = viewModel.units,
         onChangeOfUnits = { viewModel.units = it }
@@ -155,7 +155,7 @@ fun ChooseDoseScreenPreview(
         purityText = "20",
         onPurityChange = {},
         isValidPurity = true,
-        convertedDoseAndUnitText = "25 mg",
+        convertedDoseAndUnitText = "25 impure mg",
         isShowingUnitsField = false,
         units = "mg",
         onChangeOfUnits = {}
@@ -186,7 +186,7 @@ fun ChooseDoseScreenPreview2() {
         purityText = "20",
         onPurityChange = {},
         isValidPurity = true,
-        convertedDoseAndUnitText = "25 mg",
+        convertedDoseAndUnitText = "25 impure mg",
         isShowingUnitsField = false,
         units = "mg",
         onChangeOfUnits = {}
@@ -305,11 +305,11 @@ fun ChooseDoseScreen(
                         value = doseText,
                         onValueChange = onChangeDoseText,
                         textStyle = textStyle,
-                        label = { Text("Dose", style = textStyle) },
+                        label = { Text("Pure Dose", style = textStyle) },
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
-                                text = units,
+                                text = "pure $units",
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )

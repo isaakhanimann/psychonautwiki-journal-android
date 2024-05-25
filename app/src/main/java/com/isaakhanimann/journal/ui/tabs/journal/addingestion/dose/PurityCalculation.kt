@@ -69,13 +69,14 @@ fun PurityCalculation(
             )
         }
         if (convertedDoseAndUnitText != null) {
+            val textStyle = MaterialTheme.typography.titleMedium
             Row(
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Converted amount")
-                Text(text = convertedDoseAndUnitText)
+                Text(text = "Impure dose", style = textStyle)
+                Text(text = convertedDoseAndUnitText, style = textStyle)
             }
         }
     }

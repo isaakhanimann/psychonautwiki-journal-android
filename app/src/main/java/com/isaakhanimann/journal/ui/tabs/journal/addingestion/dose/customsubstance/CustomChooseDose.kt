@@ -108,7 +108,7 @@ fun CustomChooseDose(
             viewModel.purityText = it
         },
         isValidPurity = viewModel.isPurityValid,
-        convertedDoseAndUnitText = viewModel.rawDoseWithUnit,
+        convertedDoseAndUnitText = viewModel.impureDoseWithUnit,
         units = viewModel.units
     )
 }
@@ -133,7 +133,7 @@ fun CustomChooseDosePreview() {
         purityText = "20",
         onPurityChange = {},
         isValidPurity = true,
-        convertedDoseAndUnitText = "25 mg",
+        convertedDoseAndUnitText = "25 impure mg",
         units = "mg"
     )
 }
@@ -222,7 +222,7 @@ fun CustomChooseDose(
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
-                                text = units,
+                                text = "pure $units",
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )

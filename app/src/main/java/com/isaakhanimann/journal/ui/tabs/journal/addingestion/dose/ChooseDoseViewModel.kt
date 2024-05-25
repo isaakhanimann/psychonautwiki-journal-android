@@ -57,14 +57,14 @@ class ChooseDoseViewModel @Inject constructor(
             }
         }
     val isPurityValid: Boolean get() = purity != null
-    val rawDoseWithUnit: String?
+    val impureDoseWithUnit: String?
         get() {
             dose.let {
                 if (it == null) return null
                 purity.let { safePurity ->
                     if (safePurity == null) return null
                     val result = it.div(safePurity).times(100)
-                    return result.toReadableString() + " ${roaDose?.units ?: ""}"
+                    return result.toReadableString() + " impure ${roaDose?.units ?: ""}"
                 }
             }
         }
