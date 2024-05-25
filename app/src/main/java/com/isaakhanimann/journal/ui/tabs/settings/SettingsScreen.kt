@@ -321,7 +321,7 @@ fun SettingsScreen(
                 HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.AutoMirrored.Outlined.ContactSupport,
-                    text = "Question / feedback / bug report"
+                    text = "Question, bug report"
                 ) {
                     uriHandler.openUri("https://t.me/+ss8uZhBF6g00MTY8")
                 }
