@@ -102,19 +102,22 @@ class JournalViewModel @Inject constructor(
                         it.contains(other = searchText, ignoreCase = true)
                     }
 
-                    // experience title or some consumed substance must contain search string
+                    // experience title, text or some consumed substance must contain search string or the consumer needs to match
                     experiencesWithIngestions = experiencesWithIngestions.filter {
                         it.experience.title.contains(
                             other = searchText,
                             ignoreCase = true
                         ) || it.ingestionsWithCompanions.any { ingestionWithCompanion ->
-                            val substanceMatches =
+                            val isSubstanceAMatch =
                                 matchingSubstances.any { name -> name == ingestionWithCompanion.substanceCompanion?.substanceName }
-                            val consumerMatches =
+                            val isConsumerAMatch =
                                 ingestionWithCompanion.ingestion.consumerName?.contains(searchText, ignoreCase = true)
                                     ?: false
-                            substanceMatches || consumerMatches
-                        }
+                            isSubstanceAMatch || isConsumerAMatch
+                        } || it.experience.text.contains(
+                            other = searchText,
+                            ignoreCase = true
+                        )
                     }
                 }
                 return@combine experiencesWithIngestions
