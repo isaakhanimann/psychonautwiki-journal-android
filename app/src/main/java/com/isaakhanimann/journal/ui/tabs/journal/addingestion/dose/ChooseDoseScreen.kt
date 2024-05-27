@@ -70,6 +70,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
+import com.isaakhanimann.journal.ui.CUSTOM_UNITS_HINT
 import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
@@ -379,6 +380,7 @@ fun ChooseDoseScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
+                    Text(text = CUSTOM_UNITS_HINT)
                 }
             }
             AnimatedVisibility(visible = isValidDose) {

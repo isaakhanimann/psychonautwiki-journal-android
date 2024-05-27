@@ -28,3 +28,5 @@ const val VERSION_NAME = "8.5"
 const val FULL_STOMACH_DISCLAIMER = "A full stomach delays the onset of oral ingestions by approx. 3 hours."
 
 const val YOU = "You"
+
+const val CUSTOM_UNITS_HINT = "For tracking different units such as pills, sprays, scoops or mg of a mixture create a custom unit in settings."

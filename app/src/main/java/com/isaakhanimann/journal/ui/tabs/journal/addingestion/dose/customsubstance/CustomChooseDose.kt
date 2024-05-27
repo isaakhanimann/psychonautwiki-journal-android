@@ -62,6 +62,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.ui.CUSTOM_UNITS_HINT
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.PurityCalculation
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.UnknownDoseDialog
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -263,6 +264,7 @@ fun CustomChooseDose(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
+                    Text(text = CUSTOM_UNITS_HINT)
                 }
             }
             AnimatedVisibility(visible = isValidDose) {
