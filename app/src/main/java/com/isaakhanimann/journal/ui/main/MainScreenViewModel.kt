@@ -24,7 +24,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -34,24 +33,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 val ARE_CONDITIONS_ACCEPTED = booleanPreferencesKey("are_conditions_accepted")
-val IS_MIGRATED_0 = booleanPreferencesKey("is_migrated_0")
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    private val experienceRepo: ExperienceRepository,
-    ) : ViewModel() {
-
-    fun maybeMigrate() {
-        viewModelScope.launch {
-            dataStore.edit { settings ->
-                if (settings[IS_MIGRATED_0] == false) {
-                    experienceRepo.migrateBenzydamine()
-                    settings[IS_MIGRATED_0] = true
-                }
-            }
-        }
-    }
+) : ViewModel() {
 
     val isAcceptedFlow: StateFlow<Boolean> = dataStore.data
         .map { preferences ->

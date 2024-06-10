@@ -51,6 +51,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,6 +75,9 @@ fun JournalScreen(
     viewModel: JournalViewModel = hiltViewModel()
 ) {
     val experiences = viewModel.experiences.collectAsState().value
+    LaunchedEffect(Unit) {
+        viewModel.maybeMigrate()
+    }
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToAddIngestion = navigateToAddIngestion,
@@ -129,7 +133,7 @@ fun JournalScreen(
     onChangeSearchText: (String) -> Unit,
     isSearchEnabled: Boolean,
     onChangeIsSearchEnabled: (Boolean) -> Unit,
-    experiences: List<ExperienceWithIngestionsCompanionsAndRatings>,
+    experiences: List<ExperienceWithIngestionsCompanionsAndRatings>
 ) {
     Scaffold(
         topBar = {

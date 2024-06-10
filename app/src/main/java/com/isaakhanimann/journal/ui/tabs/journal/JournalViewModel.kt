@@ -19,6 +19,10 @@
 package com.isaakhanimann.journal.ui.tabs.journal
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
@@ -31,11 +35,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+val IS_MIGRATED_0 = booleanPreferencesKey("is_migrated_0")
 
 @HiltViewModel
 class JournalViewModel @Inject constructor(
-    experienceRepo: ExperienceRepository,
-    searchRepository: SearchRepository
+    private val experienceRepo: ExperienceRepository,
+    searchRepository: SearchRepository,
+    private val dataStore: DataStore<Preferences>,
 ) : ViewModel() {
 
 
@@ -46,6 +52,17 @@ class JournalViewModel @Inject constructor(
     }
 
     val isSearchEnabled = mutableStateOf(false)
+
+    fun maybeMigrate() {
+        viewModelScope.launch {
+            dataStore.edit { settings ->
+                if (settings[IS_MIGRATED_0] == false) {
+                    experienceRepo.migrateBenzydamine()
+                    settings[IS_MIGRATED_0] = true
+                }
+            }
+        }
+    }
 
     fun onChangeOfIsSearchEnabled(newValue: Boolean) {
         if (newValue) {
@@ -111,7 +128,10 @@ class JournalViewModel @Inject constructor(
                             val isSubstanceAMatch =
                                 matchingSubstances.any { name -> name == ingestionWithCompanion.substanceCompanion?.substanceName }
                             val isConsumerAMatch =
-                                ingestionWithCompanion.ingestion.consumerName?.contains(searchText, ignoreCase = true)
+                                ingestionWithCompanion.ingestion.consumerName?.contains(
+                                    searchText,
+                                    ignoreCase = true
+                                )
                                     ?: false
                             isSubstanceAMatch || isConsumerAMatch
                         } || it.experience.text.contains(
