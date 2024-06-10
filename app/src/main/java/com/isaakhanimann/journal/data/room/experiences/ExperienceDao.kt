@@ -176,6 +176,10 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion WHERE id =:id")
     fun getIngestionWithCompanionFlow(id: Int): Flow<IngestionWithCompanionAndCustomUnit?>
 
+    @Transaction
+    @Query("UPDATE ingestion SET units = 'mg', dose = dose * 1000 WHERE substanceName = 'Benzydamine' AND units = 'g'")
+    suspend fun migrateBenzydamine()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(experience: Experience): Long
 

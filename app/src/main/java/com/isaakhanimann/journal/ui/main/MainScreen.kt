@@ -25,6 +25,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -48,6 +49,9 @@ fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
     if (viewModel.isAcceptedFlow.collectAsState().value) {
+        LaunchedEffect(Unit) {
+            viewModel.maybeMigrate()
+        }
         val navController = rememberNavController()
         Scaffold(
             bottomBar = {
