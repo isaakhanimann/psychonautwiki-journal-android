@@ -56,7 +56,7 @@ class JournalViewModel @Inject constructor(
     fun maybeMigrate() {
         viewModelScope.launch {
             dataStore.edit { settings ->
-                if (settings[IS_MIGRATED_0] == false) {
+                if (settings[IS_MIGRATED_0] == null) {
                     experienceRepo.migrateBenzydamine()
                     settings[IS_MIGRATED_0] = true
                 }
