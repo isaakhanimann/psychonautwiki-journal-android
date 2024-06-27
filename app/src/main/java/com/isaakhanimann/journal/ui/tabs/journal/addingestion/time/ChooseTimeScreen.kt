@@ -225,10 +225,9 @@ fun ChooseTimeScreen(
                     val isCloseToExperience = experienceTitleToAddTo != null
                     AnimatedVisibility(visible = isCloseToExperience) {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable { check(isChecked.not()) }) {
+                            verticalAlignment = Alignment.CenterVertically) {
                             Checkbox(checked = isChecked, onCheckedChange = check)
-                            Text(text = "Add to $experienceTitleToAddTo")
+                            Text(text = "Add to $experienceTitleToAddTo", modifier = Modifier.clickable { check(isChecked.not()) })
                         }
                     }
                     AnimatedVisibility(visible = !isCloseToExperience || !isChecked) {
