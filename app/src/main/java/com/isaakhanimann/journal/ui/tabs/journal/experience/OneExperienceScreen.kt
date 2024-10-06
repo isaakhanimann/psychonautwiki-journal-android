@@ -436,7 +436,7 @@ fun OneExperienceScreen(
                     ) {
                         CardTitle(title = "Effect timeline")
                         TextButton(onClick = navigateToExplainTimeline) {
-                            Text(text = "Limitations")
+                            Text(text = "Info")
                         }
                     }
                     Column(
