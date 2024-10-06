@@ -29,4 +29,4 @@ const val FULL_STOMACH_DISCLAIMER = "A full stomach delays the onset of oral ing
 
 const val YOU = "You"
 
-const val CUSTOM_UNITS_HINT = "For tracking different units such as pills, sprays, scoops or mg of a mixture create a custom unit in settings."
+const val CUSTOM_UNITS_HINT = "For tracking different units such as pills, sprays, scoops, diluted powder weight etc create a custom unit in settings."

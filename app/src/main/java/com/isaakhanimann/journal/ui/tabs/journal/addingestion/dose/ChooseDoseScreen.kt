@@ -34,6 +34,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Newspaper
@@ -42,6 +43,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -53,6 +55,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -126,7 +129,9 @@ fun ChooseDoseScreen(
         convertedDoseAndUnitText = viewModel.impureDoseWithUnit,
         isShowingUnitsField = viewModel.roaDose?.units?.isBlank() ?: true,
         units = viewModel.units,
-        onChangeOfUnits = { viewModel.units = it }
+        onChangeOfUnits = { viewModel.units = it },
+        isCustomUnitHintShown = viewModel.isCustomUnitHintShown.collectAsState().value,
+        hideCustomUnitsHint = viewModel::hideCustomUnitsHint
     )
 }
 
@@ -138,19 +143,19 @@ fun ChooseDoseScreenPreview(
     ChooseDoseScreen(
         navigateToVolumetricDosingScreen = {},
         navigateToSaferSniffingScreen = {},
+        navigateToURL = {},
         substanceName = "Example substance",
         roaDose = roaDose,
         administrationRoute = AdministrationRoute.INSUFFLATED,
+        doseRemark = "This is a dose remark",
         doseText = "5",
         onChangeDoseText = {},
         estimatedDoseStandardDeviationText = "",
         onChangeEstimatedDoseStandardDeviationText = {},
-        doseRemark = "This is a dose remark",
         isValidDose = true,
         isEstimate = false,
         onChangeIsEstimate = {},
         navigateToNext = {},
-        navigateToURL = {},
         useUnknownDoseAndNavigate = {},
         currentDoseClass = DoseClass.THRESHOLD,
         purityText = "20",
@@ -159,7 +164,9 @@ fun ChooseDoseScreenPreview(
         convertedDoseAndUnitText = "25 impure mg",
         isShowingUnitsField = false,
         units = "mg",
-        onChangeOfUnits = {}
+        onChangeOfUnits = {},
+        isCustomUnitHintShown = true,
+        hideCustomUnitsHint = { }
     )
 }
 
@@ -169,10 +176,11 @@ fun ChooseDoseScreenPreview2() {
     ChooseDoseScreen(
         navigateToVolumetricDosingScreen = {},
         navigateToSaferSniffingScreen = {},
+        navigateToURL = {},
         substanceName = "Example Substance",
-        doseRemark = null,
         roaDose = null,
         administrationRoute = AdministrationRoute.ORAL,
+        doseRemark = null,
         doseText = "5",
         onChangeDoseText = {},
         estimatedDoseStandardDeviationText = "",
@@ -181,7 +189,6 @@ fun ChooseDoseScreenPreview2() {
         isEstimate = false,
         onChangeIsEstimate = {},
         navigateToNext = {},
-        navigateToURL = {},
         useUnknownDoseAndNavigate = {},
         currentDoseClass = null,
         purityText = "20",
@@ -190,7 +197,9 @@ fun ChooseDoseScreenPreview2() {
         convertedDoseAndUnitText = "25 impure mg",
         isShowingUnitsField = false,
         units = "mg",
-        onChangeOfUnits = {}
+        onChangeOfUnits = {},
+        isCustomUnitHintShown = true,
+        hideCustomUnitsHint = {}
     )
 }
 
@@ -221,6 +230,8 @@ fun ChooseDoseScreen(
     isShowingUnitsField: Boolean,
     units: String,
     onChangeOfUnits: (units: String) -> Unit,
+    isCustomUnitHintShown: Boolean,
+    hideCustomUnitsHint: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -251,7 +262,12 @@ fun ChooseDoseScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(4.dp))
-            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
@@ -282,7 +298,12 @@ fun ChooseDoseScreen(
                     Text(text = DOSE_DISCLAIMER, style = MaterialTheme.typography.bodySmall)
                 }
             }
-            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
@@ -301,6 +322,19 @@ fun ChooseDoseScreen(
                     val textStyle = MaterialTheme.typography.titleMedium
                     LaunchedEffect(Unit) {
                         focusRequester.requestFocus()
+                    }
+                    AnimatedVisibility(visible = isCustomUnitHintShown) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(text = CUSTOM_UNITS_HINT, modifier = Modifier.weight(1f))
+                            IconButton(onClick = hideCustomUnitsHint) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Close disclaimer"
+                                )
+                            }
+                        }
                     }
                     OutlinedTextField(
                         value = doseText,
@@ -380,7 +414,6 @@ fun ChooseDoseScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
-                    Text(text = CUSTOM_UNITS_HINT)
                 }
             }
             AnimatedVisibility(visible = isValidDose) {
@@ -447,8 +480,18 @@ fun ChooseDoseScreen(
                 }
             }
             if (administrationRoute == AdministrationRoute.SMOKED && substanceName != "Cannabis") {
-                ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
-                    ChasingTheDragonText(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 10.dp))
+                ElevatedCard(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 4.dp
+                    )
+                ) {
+                    ChasingTheDragonText(
+                        modifier = Modifier.padding(
+                            horizontal = horizontalPadding,
+                            vertical = 10.dp
+                        )
+                    )
                 }
             }
         }

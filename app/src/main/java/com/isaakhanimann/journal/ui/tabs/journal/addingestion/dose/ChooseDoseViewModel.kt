@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.Substance
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
@@ -31,15 +32,20 @@ import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepositor
 import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ChooseDoseViewModel @Inject constructor(
     repository: SubstanceRepository,
-    state: SavedStateHandle
+    state: SavedStateHandle,
+    private val userPreferences: UserPreferences
 ) : ViewModel() {
-    val substance: Substance
+    val substance: Substance = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY)!!)!!
     val administrationRoute: AdministrationRoute
     val roaDose: RoaDose?
     var isEstimate by mutableStateOf(false)
@@ -73,6 +79,16 @@ class ChooseDoseViewModel @Inject constructor(
     val isValidDose: Boolean get() = dose != null
     val currentDoseClass: DoseClass? get() = roaDose?.getDoseClass(ingestionDose = dose)
 
+    val isCustomUnitHintShown = userPreferences.isCustomUnitHintShownFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
+    fun hideCustomUnitsHint() = viewModelScope.launch {
+        userPreferences.hideCustomUnitsHint()
+    }
+
     fun onDoseTextChange(newDoseText: String) {
         doseText = newDoseText.replace(oldChar = ',', newChar = '.')
     }
@@ -82,7 +98,6 @@ class ChooseDoseViewModel @Inject constructor(
     }
 
     init {
-        substance = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY)!!)!!
         val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
         administrationRoute = AdministrationRoute.valueOf(routeString)
         roaDose = substance.getRoa(administrationRoute)?.roaDose
