@@ -24,11 +24,14 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -37,6 +40,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -150,7 +154,7 @@ fun ChooseTimeScreenPreview() {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ChooseTimeScreen(
     createSaveAndDismissAfter: () -> Unit,
@@ -177,17 +181,32 @@ fun ChooseTimeScreen(
     consumerNamesSorted: List<String>
 ) {
     val focusManager = LocalFocusManager.current
+    val isImeVisible = WindowInsets.isImeVisible
     Scaffold(
-        topBar = { TopAppBar(title = { Text("$substanceName ingestion") }) },
+        topBar = {
+            TopAppBar(
+                title = { Text("$substanceName ingestion") },
+                actions = {
+                    if (isImeVisible) {
+                        TextButton(onClick = createSaveAndDismissAfter) {
+                            Icon(
+                                Icons.Filled.Done,
+                                contentDescription = "Done"
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text("Done")
+                        }
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = !isLoadingColor,
+                visible = !isLoadingColor && !isImeVisible,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                FloatingDoneButton {
-                    createSaveAndDismissAfter()
-                }
+                FloatingDoneButton(onDone = createSaveAndDismissAfter)
             }
         }
     ) { padding ->
@@ -225,9 +244,12 @@ fun ChooseTimeScreen(
                     val isCloseToExperience = experienceTitleToAddTo != null
                     AnimatedVisibility(visible = isCloseToExperience) {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically) {
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Checkbox(checked = isChecked, onCheckedChange = check)
-                            Text(text = "Add to $experienceTitleToAddTo", modifier = Modifier.clickable { check(isChecked.not()) })
+                            Text(
+                                text = "Add to $experienceTitleToAddTo",
+                                modifier = Modifier.clickable { check(isChecked.not()) })
                         }
                     }
                     AnimatedVisibility(visible = !isCloseToExperience || !isChecked) {

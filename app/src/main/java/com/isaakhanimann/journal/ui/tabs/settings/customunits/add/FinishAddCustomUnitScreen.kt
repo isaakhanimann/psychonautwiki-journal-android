@@ -153,9 +153,7 @@ private fun FinishAddCustomUnitScreenContent(
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName unit") }) },
         floatingActionButton = {
-            FloatingDoneButton {
-                dismiss()
-            }
+            FloatingDoneButton(onDone = dismiss)
         }
     ) { padding ->
         EditCustomUnitSections(

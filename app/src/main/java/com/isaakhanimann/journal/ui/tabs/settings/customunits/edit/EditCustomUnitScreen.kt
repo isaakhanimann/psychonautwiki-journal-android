@@ -177,9 +177,7 @@ private fun EditCustomUnitScreenContent(
             )
         },
         floatingActionButton = {
-            FloatingDoneButton {
-                dismiss()
-            }
+            FloatingDoneButton(onDone = dismiss)
         }
     ) { padding ->
         EditCustomUnitSections(
