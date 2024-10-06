@@ -23,6 +23,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -34,6 +35,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -43,7 +45,6 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -51,6 +52,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -74,6 +76,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
@@ -105,9 +108,9 @@ fun ChooseTimeScreen(
         onNoteChange = {
             viewModel.note = it
         },
-        experienceTitleToAddTo = viewModel.experienceTitleToAddToFlow.collectAsState().value,
-        check = viewModel::toggleCheck,
-        isChecked = viewModel.userWantsToContinueSameExperienceFlow.collectAsState().value,
+        experiencesInRange = viewModel.experiencesInRangeFlow.collectAsState().value,
+        selectedExperience = viewModel.selectedExperienceFlow.collectAsState().value,
+        onChangeOfSelectedExperience = viewModel::onChangeOfSelectedExperience,
         substanceName = viewModel.substanceName,
         enteredTitle = viewModel.enteredTitle,
         onChangeOfEnteredTitle = viewModel::changeTitle,
@@ -141,9 +144,9 @@ fun ChooseTimeScreenPreview() {
         ),
         note = "",
         onNoteChange = {},
-        experienceTitleToAddTo = "New Years Eve",
-        check = {},
-        isChecked = false,
+        experiencesInRange = emptyList(),
+        selectedExperience = null,
+        onChangeOfSelectedExperience = {},
         substanceName = "LSD",
         enteredTitle = "This is my title",
         onChangeOfEnteredTitle = {},
@@ -169,9 +172,9 @@ fun ChooseTimeScreen(
     previousNotes: List<String>,
     note: String,
     onNoteChange: (String) -> Unit,
-    experienceTitleToAddTo: String?,
-    check: (Boolean) -> Unit,
-    isChecked: Boolean,
+    experiencesInRange: List<ExperienceWithIngestions>,
+    selectedExperience: ExperienceWithIngestions?,
+    onChangeOfSelectedExperience: (ExperienceWithIngestions?) -> Unit,
     substanceName: String,
     enteredTitle: String,
     onChangeOfEnteredTitle: (String) -> Unit,
@@ -241,18 +244,42 @@ fun ChooseTimeScreen(
                     )
                 }
                 CardWithTitle(title = "Experience", modifier = Modifier.fillMaxWidth()) {
-                    val isCloseToExperience = experienceTitleToAddTo != null
-                    AnimatedVisibility(visible = isCloseToExperience) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
+                    var isShowingDropDownMenu by remember { mutableStateOf(false) }
+                    Box(
+                        modifier = Modifier
+                            .wrapContentSize(Alignment.TopEnd)
+                    ) {
+                        OutlinedButton(
+                            onClick = { isShowingDropDownMenu = true },
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Checkbox(checked = isChecked, onCheckedChange = check)
-                            Text(
-                                text = "Add to $experienceTitleToAddTo",
-                                modifier = Modifier.clickable { check(isChecked.not()) })
+                            val selectedExperienceTitle = selectedExperience?.experience?.title
+                            Text(text = if (selectedExperienceTitle != null) "Part of $selectedExperienceTitle" else "Part of new experience")
+                        }
+                        DropdownMenu(
+                            expanded = isShowingDropDownMenu,
+                            onDismissRequest = { isShowingDropDownMenu = false }
+                        ) {
+                            experiencesInRange.forEach { experienceWithIngestions ->
+                                val experience = experienceWithIngestions.experience
+                                DropdownMenuItem(
+                                    text = { Text(experience.title) },
+                                    onClick = {
+                                        onChangeOfSelectedExperience(experienceWithIngestions)
+                                        isShowingDropDownMenu = false
+                                    }
+                                )
+                            }
+                            DropdownMenuItem(
+                                text = { Text("New experience") },
+                                onClick = {
+                                    onChangeOfSelectedExperience(null)
+                                    isShowingDropDownMenu = false
+                                }
+                            )
                         }
                     }
-                    AnimatedVisibility(visible = !isCloseToExperience || !isChecked) {
+                    AnimatedVisibility(visible = selectedExperience == null) {
                         OutlinedTextField(
                             value = enteredTitle,
                             onValueChange = onChangeOfEnteredTitle,

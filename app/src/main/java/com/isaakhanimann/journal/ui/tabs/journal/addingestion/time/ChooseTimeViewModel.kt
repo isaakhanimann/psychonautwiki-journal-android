@@ -68,7 +68,8 @@ class ChooseTimeViewModel @Inject constructor(
 ) : ViewModel() {
     var substanceName by mutableStateOf("")
     val localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
-    private val closestExperienceFlow = MutableStateFlow<ExperienceWithIngestions?>(null)
+    val experiencesInRangeFlow = MutableStateFlow<List<ExperienceWithIngestions>>(emptyList())
+    val selectedExperienceFlow = MutableStateFlow<ExperienceWithIngestions?>(null)
     var enteredTitle by mutableStateOf(LocalDateTime.now().getStringOfPattern("dd MMMM yyyy"))
     val isEnteredTitleOk get() = enteredTitle.isNotEmpty()
     var consumerName by mutableStateOf("")
@@ -84,22 +85,6 @@ class ChooseTimeViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000)
         )
-
-    val experienceTitleToAddToFlow: StateFlow<String?> =
-        closestExperienceFlow.map { it?.experience?.title }.stateIn(
-            initialValue = null,
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
-
-
-    val userWantsToContinueSameExperienceFlow = MutableStateFlow(true)
-
-    fun toggleCheck(userWantsToContinueSameExperience: Boolean) {
-        viewModelScope.launch {
-            userWantsToContinueSameExperienceFlow.emit(userWantsToContinueSameExperience)
-        }
-    }
 
     var isLoadingColor by mutableStateOf(true)
     var isShowingColorPicker by mutableStateOf(false)
@@ -202,6 +187,10 @@ class ChooseTimeViewModel @Inject constructor(
         }
     }
 
+    fun onChangeOfSelectedExperience(experienceWithIngestions: ExperienceWithIngestions?) = viewModelScope.launch {
+        selectedExperienceFlow.emit(experienceWithIngestions)
+    }
+
     fun onChangeDateOrTime(newLocalDateTime: LocalDateTime) {
         viewModelScope.launch {
             localDateTimeFlow.emit(newLocalDateTime)
@@ -215,13 +204,14 @@ class ChooseTimeViewModel @Inject constructor(
 
     private suspend fun updateExperiencesBasedOnSelectedTime() {
         val selectedInstant = localDateTimeFlow.value.getInstant()
-        val fromInstant = selectedInstant.minus(4, ChronoUnit.DAYS)
-        val toInstant = selectedInstant.plus(2, ChronoUnit.DAYS)
+        val fromInstant = selectedInstant.minus(3, ChronoUnit.DAYS)
+        val toInstant = selectedInstant.plus(1, ChronoUnit.DAYS)
         val experiencesInRange =
             experienceRepo.getSortedExperiencesWithIngestionsWithSortDateBetween(
                 fromInstant = fromInstant,
                 toInstant = toInstant
             )
+        experiencesInRangeFlow.emit(experiencesInRange)
         val closestExperience = experiencesInRange.firstOrNull { experience ->
             val sortedIngestions = experience.ingestions.sortedBy { it.time }
             val firstIngestionTime =
@@ -233,7 +223,7 @@ class ChooseTimeViewModel @Inject constructor(
             val lowerBound = firstIngestionTime.minus(3, ChronoUnit.HOURS)
             return@firstOrNull selectedInstant in lowerBound..finalUpperBound
         }
-        closestExperienceFlow.emit(closestExperience)
+        selectedExperienceFlow.emit(closestExperience)
     }
 
     fun createSaveAndDismissAfter(dismiss: () -> Unit) {
@@ -246,16 +236,14 @@ class ChooseTimeViewModel @Inject constructor(
     }
 
     private suspend fun createAndSaveIngestion() {
-        val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
-        val oldIdToUse = closestExperienceFlow.firstOrNull()?.experience?.id
-        val userWantsToCreateANewExperience =
-            !(userWantsToContinueSameExperienceFlow.firstOrNull() ?: true)
         val substanceCompanion = SubstanceCompanion(
             substanceName,
             color = selectedColor
         )
-        val ingestionTime = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
-        if (userWantsToCreateANewExperience || oldIdToUse == null) {
+        val oldIdToUse = selectedExperienceFlow.firstOrNull()?.experience?.id
+        if (oldIdToUse == null) {
+            val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
+            val ingestionTime = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
             val newExperience = Experience(
                 id = newIdToUse,
                 title = enteredTitle,
