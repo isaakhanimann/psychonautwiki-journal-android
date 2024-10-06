@@ -48,6 +48,10 @@ class SubstanceColorsViewModel @Inject constructor(
         }
     }
 
+    fun deleteUnusedSubstanceCompanions() = viewModelScope.launch {
+        experienceRepository.deleteUnusedSubstanceCompanions()
+    }
+
     fun updateColor(color: AdaptiveColor, substanceName: String) {
         viewModelScope.launch {
             val updatedList = _substanceCompanionsFlow.value.map { companion ->

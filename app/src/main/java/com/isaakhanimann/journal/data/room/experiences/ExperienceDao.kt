@@ -219,6 +219,10 @@ interface ExperienceDao {
         }
     }
 
+    @Transaction
+    @Query("DELETE FROM substancecompanion WHERE substanceName NOT IN (SELECT substanceName FROM ingestion)")
+    suspend fun deleteUnusedSubstanceCompanions()
+
     @Delete
     suspend fun delete(ingestion: Ingestion)
 

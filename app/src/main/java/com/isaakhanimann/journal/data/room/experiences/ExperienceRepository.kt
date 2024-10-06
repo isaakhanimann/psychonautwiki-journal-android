@@ -94,6 +94,9 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun delete(experienceWithIngestions: ExperienceWithIngestions) =
         experienceDao.deleteExperienceWithIngestions(experienceWithIngestions)
 
+    suspend fun deleteUnusedSubstanceCompanions() =
+        experienceDao.deleteUnusedSubstanceCompanions()
+
     suspend fun getSortedExperiencesWithIngestionsWithSortDateBetween(
         fromInstant: Instant,
         toInstant: Instant
