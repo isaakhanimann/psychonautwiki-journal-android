@@ -25,6 +25,8 @@ enum class SavedTimeDisplayOption {
         override val text = "Time relative to now"
     }, RELATIVE_TO_START {
         override val text = "Time relative to start"
+    }, TIME_BETWEEN {
+        override val text = "Time between"
     }, REGULAR {
         override val text = "Regular time"
     };
@@ -34,5 +36,5 @@ enum class SavedTimeDisplayOption {
 
 
 enum class TimeDisplayOption {
-    RELATIVE_TO_NOW , RELATIVE_TO_START, REGULAR;
+    RELATIVE_TO_NOW, RELATIVE_TO_START, TIME_BETWEEN, REGULAR;
 }

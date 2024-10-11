@@ -18,6 +18,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
@@ -45,11 +46,20 @@ fun TimeText(
                 style = style
             )
         }
-        TimeDisplayOption.RELATIVE_TO_START -> {
-            TimeRelativeToStartText(
-                time = time,
-                startTime = startTime,
+        TimeDisplayOption.TIME_BETWEEN -> {
+            val timeString = time.getStringOfPattern("EEE HH:mm")
+            Text(
+                text = "$timeString between",
                 style = style
+            )
+        }
+        TimeDisplayOption.RELATIVE_TO_START -> {
+            Text(
+                text = getTimeDistanceText(
+                    startTime = startTime,
+                    endTime = time
+                ) + " in",
+                style = MaterialTheme.typography.titleSmall
             )
         }
     }

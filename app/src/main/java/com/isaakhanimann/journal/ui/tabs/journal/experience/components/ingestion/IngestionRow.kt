@@ -37,32 +37,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DotRows
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 
 @Preview(showBackground = true)
 @Composable
 fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) ingestionElement: IngestionElement) {
     IngestionRow(
         ingestionElement = ingestionElement,
-        timeDisplayOption = TimeDisplayOption.REGULAR,
-        startTime = Instant.now().minus(3, ChronoUnit.HOURS),
         areDosageDotsHidden = false,
         modifier = Modifier.fillMaxWidth()
-    )
+    ) {
+        Text(
+            text = "Fri 07:17",
+            style = MaterialTheme.typography.titleSmall
+        )
+    }
 }
 
 
 @Composable
 fun IngestionRow(
     ingestionElement: IngestionElement,
-    timeDisplayOption: TimeDisplayOption,
-    startTime: Instant,
     areDosageDotsHidden: Boolean,
     modifier: Modifier = Modifier,
+    time: @Composable () -> Unit,
 ) {
     val ingestionWithCompanionAndCustomUnit = ingestionElement.ingestionWithCompanionAndCustomUnit
     val ingestion = ingestionWithCompanionAndCustomUnit.ingestion
@@ -85,12 +83,7 @@ fun IngestionRow(
                     text = ingestion.substanceName + customUnitName,
                     style = MaterialTheme.typography.titleMedium
                 )
-                TimeText(
-                    time = ingestion.time,
-                    timeDisplayOption = timeDisplayOption,
-                    startTime = startTime,
-                    style = MaterialTheme.typography.titleSmall
-                )
+                time()
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,

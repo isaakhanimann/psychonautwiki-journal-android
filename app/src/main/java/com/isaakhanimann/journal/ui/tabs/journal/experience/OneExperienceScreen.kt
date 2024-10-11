@@ -82,9 +82,12 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.Experienc
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.InteractionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeRelativeToNowText
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getTimeDistanceText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.timednote.TimedNoteRow
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.OneExperienceScreenModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
@@ -489,8 +492,6 @@ fun OneExperienceScreen(
                     oneExperienceScreenModel.ingestionElements.forEachIndexed { index, ingestionElement ->
                         IngestionRow(
                             ingestionElement = ingestionElement,
-                            timeDisplayOption = timeDisplayOption,
-                            startTime = oneExperienceScreenModel.firstIngestionTime,
                             areDosageDotsHidden = areDosageDotsHidden,
                             modifier = Modifier
                                 .clickable {
@@ -498,7 +499,14 @@ fun OneExperienceScreen(
                                 }
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
-                        )
+                        ) {
+                            IngestionTimeText(
+                                ingestionElement,
+                                index,
+                                timeDisplayOption,
+                                oneExperienceScreenModel.ingestionElements
+                            )
+                        }
                         if (index < oneExperienceScreenModel.ingestionElements.size - 1) {
                             HorizontalDivider()
                         }
@@ -638,8 +646,6 @@ fun OneExperienceScreen(
                     consumerWithIngestions.ingestionElements.forEachIndexed { index, ingestionElement ->
                         IngestionRow(
                             ingestionElement = ingestionElement,
-                            timeDisplayOption = timeDisplayOption,
-                            startTime = oneExperienceScreenModel.firstIngestionTime,
                             areDosageDotsHidden = areDosageDotsHidden,
                             modifier = Modifier
                                 .clickable {
@@ -647,7 +653,14 @@ fun OneExperienceScreen(
                                 }
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
-                        )
+                        ) {
+                            IngestionTimeText(
+                                ingestionElement,
+                                index,
+                                timeDisplayOption,
+                                consumerWithIngestions.ingestionElements
+                            )
+                        }
                         if (index < consumerWithIngestions.ingestionElements.size - 1) {
                             HorizontalDivider()
                         }
@@ -689,6 +702,73 @@ fun OneExperienceScreen(
                 }
             }
             Spacer(modifier = Modifier.height(60.dp))
+        }
+    }
+}
+
+@Composable
+private fun IngestionTimeText(
+    ingestionElement: IngestionElement,
+    index: Int,
+    timeDisplayOption: TimeDisplayOption,
+    ingestionElements: List<IngestionElement>
+) {
+    val time =
+        ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.time
+    val isFirstIngestion = index == 0
+    when (timeDisplayOption) {
+        TimeDisplayOption.REGULAR -> {
+            val timeString = time.getStringOfPattern("EEE HH:mm")
+            Text(
+                text = timeString,
+                style = MaterialTheme.typography.titleSmall
+            )
+        }
+
+        TimeDisplayOption.RELATIVE_TO_NOW -> {
+            TimeRelativeToNowText(
+                time = time,
+                style = MaterialTheme.typography.titleSmall
+            )
+        }
+
+        TimeDisplayOption.TIME_BETWEEN -> {
+            if (isFirstIngestion) {
+                val timeString = time.getStringOfPattern("EEE HH:mm")
+                Text(
+                    text = timeString,
+                    style = MaterialTheme.typography.titleSmall
+                )
+            } else {
+                val previousIngestion =
+                    ingestionElements[index - 1]
+                Text(
+                    text = getTimeDistanceText(
+                        startTime = previousIngestion.ingestionWithCompanionAndCustomUnit.ingestion.time,
+                        endTime = time
+                    ) + " later",
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
+        }
+
+        TimeDisplayOption.RELATIVE_TO_START -> {
+            if (isFirstIngestion) {
+                val timeString = time.getStringOfPattern("EEE HH:mm")
+                Text(
+                    text = timeString,
+                    style = MaterialTheme.typography.titleSmall
+                )
+            } else {
+                Text(
+                    text = getTimeDistanceText(
+                        startTime = ingestionElements.firstOrNull()?.ingestionWithCompanionAndCustomUnit?.ingestion?.time
+                            ?: Instant.now(),
+                        endTime = time
+                    ) + " in",
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
         }
     }
 }

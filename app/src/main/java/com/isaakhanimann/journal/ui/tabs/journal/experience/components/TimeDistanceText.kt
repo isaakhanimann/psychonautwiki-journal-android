@@ -19,10 +19,8 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.isaakhanimann.journal.ui.tabs.journal.components.roundToOneDecimal
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
@@ -30,33 +28,42 @@ import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-@Composable
-fun TimeRelativeToStartText(
-    time: Instant,
+fun getTimeDistanceText(
     startTime: Instant,
-    style: TextStyle = MaterialTheme.typography.bodyMedium
-) {
-    val duration = Duration.between(startTime, time)
-    val relativeTime = when {
-        duration.toDays() > 3 -> "+ ${duration.toDays()} d"
-        duration.toHours() > 24 -> "+ ${roundToOneDecimal(duration.toHours().toDouble()/24.0)} d"
-        duration.toHours() > 1 -> "+ ${roundToOneDecimal(duration.toMinutes().toDouble()/60.0)} h"
-        duration.toMinutes() > 0 -> "+ ${duration.toMinutes()} min"
-        duration.toMillis() > 0 -> "+ ${(duration.toMillis()/1000).toInt()} s"
-        else -> time.getStringOfPattern("EEE HH:mm")
+    endTime: Instant,
+): String {
+    val duration = Duration.between(startTime, endTime)
+    return when {
+        duration.toDays() > 3 -> "${duration.toDays()} d"
+        duration.toHours() > 24 -> "${roundToOneDecimal(duration.toHours().toDouble() / 24.0)} d"
+        duration.toHours() > 1 -> "${
+            roundToOneDecimal(
+                duration.toMinutes().toDouble() / 60.0
+            )
+        } h"
 
+        duration.toMinutes() > 0 -> "${duration.toMinutes()} min"
+        duration.toMillis() > 0 -> "${(duration.toMillis() / 1000).toInt()} s"
+        else -> endTime.getStringOfPattern("EEE HH:mm")
     }
-    Text(
-        text = relativeTime,
-        style = style
-    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun TimeRelativeToStartTextPreview() {
     Column {
-        TimeRelativeToStartText(time = Instant.now(), startTime = Instant.now().minus(4, ChronoUnit.HOURS))
-        TimeRelativeToStartText(time = Instant.now(), startTime = Instant.now().minus(20, ChronoUnit.MINUTES))
+
+        Text(
+            text = getTimeDistanceText(
+                startTime = Instant.now().minus(4, ChronoUnit.HOURS),
+                endTime = Instant.now()
+            )
+        )
+        Text(
+            text = getTimeDistanceText(
+                startTime = Instant.now().minus(20, ChronoUnit.MINUTES),
+                endTime = Instant.now()
+            )
+        )
     }
 }
