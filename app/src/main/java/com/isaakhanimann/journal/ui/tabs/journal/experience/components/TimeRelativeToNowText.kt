@@ -28,12 +28,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import com.isaakhanimann.journal.ui.tabs.journal.components.roundToOneDecimal
 import kotlinx.coroutines.delay
-import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import kotlin.math.absoluteValue
 
 @Composable
 fun TimeRelativeToNowText(
@@ -47,70 +44,11 @@ fun TimeRelativeToNowText(
             now.value = Instant.now()
         }
     }
-    val duration = Duration.between(time, now.value)
     val isInPast = time < now.value
-    val relativeTime = when {
-        duration.toDays().absoluteValue > 500 -> {
-            val years = roundToOneDecimal(duration.toDays().toDouble().absoluteValue / 365.0)
-            if (isInPast) {
-                "$years years ago"
-            } else {
-                "in $years years"
-            }
-        }
-
-        duration.toDays().absoluteValue > 60 -> {
-            val months = roundToOneDecimal(duration.toDays().toDouble().absoluteValue / 30.0)
-            if (isInPast) {
-                "$months months ago"
-            } else {
-                "in $months months"
-            }
-        }
-
-        duration.toDays().absoluteValue > 20 -> {
-            val weeks = roundToOneDecimal(duration.toDays().toDouble().absoluteValue / 7.0)
-            if (isInPast) {
-                "$weeks weeks ago"
-            } else {
-                "in $weeks weeks"
-            }
-        }
-
-        duration.toHours().absoluteValue > 24 -> {
-            val days = roundToOneDecimal(duration.toHours().toDouble().absoluteValue / 24.0)
-            if (isInPast) {
-                "$days days ago"
-            } else {
-                "in $days days"
-            }
-        }
-
-        duration.toHours().absoluteValue > 0 -> {
-            val hours = roundToOneDecimal(duration.toMinutes().toDouble().absoluteValue / 60.0)
-            if (isInPast) {
-                "$hours hours ago"
-            } else {
-                "in $hours hours"
-            }
-        }
-
-        duration.toMinutes().absoluteValue > 0 -> {
-            val minutes = duration.toMinutes().absoluteValue
-            if (isInPast) {
-                "$minutes minutes ago"
-            } else {
-                "in $minutes minutes"
-            }
-        }
-
-        else -> {
-            if (isInPast) {
-                "just now"
-            } else {
-                "now"
-            }
-        }
+    val relativeTime = if (isInPast) {
+        getDurationText(fromInstant = time, toInstant = now.value) + " ago"
+    } else {
+        "in " + getDurationText(fromInstant = time, toInstant = now.value)
     }
     Text(
         text = relativeTime,

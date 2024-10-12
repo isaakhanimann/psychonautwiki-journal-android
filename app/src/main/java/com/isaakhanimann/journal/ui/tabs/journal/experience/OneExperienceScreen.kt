@@ -62,6 +62,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -83,7 +85,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.Interacti
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeRelativeToNowText
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getTimeDistanceText
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.timednote.TimedNoteRow
@@ -94,6 +96,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneT
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import kotlinx.coroutines.delay
 import java.time.Instant
 
 @Composable
@@ -507,7 +510,18 @@ fun OneExperienceScreen(
                                 oneExperienceScreenModel.ingestionElements
                             )
                         }
-                        if (index < oneExperienceScreenModel.ingestionElements.size - 1) {
+                        val isLastIngestion =
+                            index == oneExperienceScreenModel.ingestionElements.size - 1
+                        if (isLastIngestion) {
+                            HorizontalDivider()
+                            if (oneExperienceScreenModel.isCurrentExperience) {
+                                if (timeDisplayOption == TimeDisplayOption.TIME_BETWEEN) {
+                                    LastIngestionRelativeToNowText(lastIngestionTime = ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.time)
+                                } else if (timeDisplayOption == TimeDisplayOption.RELATIVE_TO_START) {
+                                    NowRelativeToStartTimeText(startTime = oneExperienceScreenModel.firstIngestionTime)
+                                }
+                            }
+                        } else {
                             HorizontalDivider()
                         }
                     }
@@ -707,6 +721,62 @@ fun OneExperienceScreen(
 }
 
 @Composable
+private fun LastIngestionRelativeToNowText(lastIngestionTime: Instant) {
+    val now: MutableState<Instant> = remember { mutableStateOf(Instant.now()) }
+    LaunchedEffect(key1 = "updateTime") {
+        while (true) {
+            delay(10000L) // update every 10 seconds
+            now.value = Instant.now()
+        }
+    }
+    val isInPast = lastIngestionTime < now.value
+    val relativeTime = if (isInPast) {
+        "Last ingestion was " + getDurationText(
+            fromInstant = lastIngestionTime,
+            toInstant = now.value
+        ) + " ago"
+    } else {
+        "Last ingestion in " + getDurationText(
+            fromInstant = lastIngestionTime,
+            toInstant = now.value
+        )
+    }
+    Text(
+        text = relativeTime,
+        style = MaterialTheme.typography.titleSmall,
+        modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)
+    )
+}
+
+@Composable
+private fun NowRelativeToStartTimeText(startTime: Instant) {
+    val now: MutableState<Instant> = remember { mutableStateOf(Instant.now()) }
+    LaunchedEffect(key1 = "updateTime") {
+        while (true) {
+            delay(10000L) // update every 10 seconds
+            now.value = Instant.now()
+        }
+    }
+    val isStartInPast = startTime < now.value
+    val relativeTime = if (isStartInPast) {
+        getDurationText(
+            fromInstant = startTime,
+            toInstant = now.value
+        ) + " in (since start)"
+    } else {
+        "Start is in " + getDurationText(
+            fromInstant = startTime,
+            toInstant = now.value
+        )
+    }
+    Text(
+        text = relativeTime,
+        style = MaterialTheme.typography.titleSmall,
+        modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)
+    )
+}
+
+@Composable
 private fun IngestionTimeText(
     ingestionElement: IngestionElement,
     index: Int,
@@ -743,9 +813,9 @@ private fun IngestionTimeText(
                 val previousIngestion =
                     ingestionElements[index - 1]
                 Text(
-                    text = getTimeDistanceText(
-                        startTime = previousIngestion.ingestionWithCompanionAndCustomUnit.ingestion.time,
-                        endTime = time
+                    text = getDurationText(
+                        fromInstant = previousIngestion.ingestionWithCompanionAndCustomUnit.ingestion.time,
+                        toInstant = time
                     ) + " later",
                     style = MaterialTheme.typography.titleSmall
                 )
@@ -761,10 +831,10 @@ private fun IngestionTimeText(
                 )
             } else {
                 Text(
-                    text = getTimeDistanceText(
-                        startTime = ingestionElements.firstOrNull()?.ingestionWithCompanionAndCustomUnit?.ingestion?.time
+                    text = getDurationText(
+                        fromInstant = ingestionElements.firstOrNull()?.ingestionWithCompanionAndCustomUnit?.ingestion?.time
                             ?: Instant.now(),
-                        endTime = time
+                        toInstant = time
                     ) + " in",
                     style = MaterialTheme.typography.titleSmall
                 )

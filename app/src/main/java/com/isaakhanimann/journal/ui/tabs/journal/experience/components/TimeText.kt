@@ -55,9 +55,9 @@ fun TimeText(
         }
         TimeDisplayOption.RELATIVE_TO_START -> {
             Text(
-                text = getTimeDistanceText(
-                    startTime = startTime,
-                    endTime = time
+                text = getDurationText(
+                    fromInstant = startTime,
+                    toInstant = time
                 ) + " in",
                 style = MaterialTheme.typography.titleSmall
             )
