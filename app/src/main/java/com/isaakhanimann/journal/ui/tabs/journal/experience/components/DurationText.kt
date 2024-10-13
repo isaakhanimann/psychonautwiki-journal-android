@@ -53,12 +53,12 @@ fun getDurationText(fromInstant: Instant, toInstant: Instant): String {
 
         duration.toHours().absoluteValue > 40 -> {
             val days = roundToOneDecimal(duration.toHours().toDouble().absoluteValue / 24.0)
-            "$days d"
+            "$days days"
         }
 
         duration.toHours().absoluteValue > 1 -> {
             val hours = roundToOneDecimal(duration.toMinutes().toDouble().absoluteValue / 60.0)
-            "$hours h"
+            "$hours hr"
         }
 
         duration.toMinutes().absoluteValue > 0 -> {
