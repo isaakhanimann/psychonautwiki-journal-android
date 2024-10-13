@@ -84,12 +84,11 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.Experienc
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.InteractionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeRelativeToNowText
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeOrDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.timednote.TimedNoteRow
-import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.OneExperienceScreenModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
@@ -503,11 +502,11 @@ fun OneExperienceScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         ) {
-                            IngestionTimeText(
-                                ingestionElement,
+                            TimeOrDurationText(
+                                ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.time,
                                 index,
                                 timeDisplayOption,
-                                oneExperienceScreenModel.ingestionElements
+                                oneExperienceScreenModel.ingestionElements.map { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
                             )
                         }
                         val isLastIngestion =
@@ -668,11 +667,11 @@ fun OneExperienceScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
                         ) {
-                            IngestionTimeText(
-                                ingestionElement,
+                            TimeOrDurationText(
+                                ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.time,
                                 index,
                                 timeDisplayOption,
-                                consumerWithIngestions.ingestionElements
+                                consumerWithIngestions.ingestionElements.map { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
                             )
                         }
                         if (index < consumerWithIngestions.ingestionElements.size - 1) {
@@ -759,7 +758,7 @@ private fun NowRelativeToStartTimeText(startTime: Instant) {
     }
     val isStartInPast = startTime < now.value
     val relativeTime = if (isStartInPast) {
-        getDurationText(
+        "Now " + getDurationText(
             fromInstant = startTime,
             toInstant = now.value
         ) + " in (since start)"
@@ -774,71 +773,4 @@ private fun NowRelativeToStartTimeText(startTime: Instant) {
         style = MaterialTheme.typography.titleSmall,
         modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)
     )
-}
-
-@Composable
-private fun IngestionTimeText(
-    ingestionElement: IngestionElement,
-    index: Int,
-    timeDisplayOption: TimeDisplayOption,
-    ingestionElements: List<IngestionElement>
-) {
-    val time =
-        ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.time
-    val isFirstIngestion = index == 0
-    when (timeDisplayOption) {
-        TimeDisplayOption.REGULAR -> {
-            val timeString = time.getStringOfPattern("EEE HH:mm")
-            Text(
-                text = timeString,
-                style = MaterialTheme.typography.titleSmall
-            )
-        }
-
-        TimeDisplayOption.RELATIVE_TO_NOW -> {
-            TimeRelativeToNowText(
-                time = time,
-                style = MaterialTheme.typography.titleSmall
-            )
-        }
-
-        TimeDisplayOption.TIME_BETWEEN -> {
-            if (isFirstIngestion) {
-                val timeString = time.getStringOfPattern("EEE HH:mm")
-                Text(
-                    text = timeString,
-                    style = MaterialTheme.typography.titleSmall
-                )
-            } else {
-                val previousIngestion =
-                    ingestionElements[index - 1]
-                Text(
-                    text = getDurationText(
-                        fromInstant = previousIngestion.ingestionWithCompanionAndCustomUnit.ingestion.time,
-                        toInstant = time
-                    ) + " later",
-                    style = MaterialTheme.typography.titleSmall
-                )
-            }
-        }
-
-        TimeDisplayOption.RELATIVE_TO_START -> {
-            if (isFirstIngestion) {
-                val timeString = time.getStringOfPattern("EEE HH:mm")
-                Text(
-                    text = timeString,
-                    style = MaterialTheme.typography.titleSmall
-                )
-            } else {
-                Text(
-                    text = getDurationText(
-                        fromInstant = ingestionElements.firstOrNull()?.ingestionWithCompanionAndCustomUnit?.ingestion?.time
-                            ?: Instant.now(),
-                        toInstant = time
-                    ) + " in",
-                    style = MaterialTheme.typography.titleSmall
-                )
-            }
-        }
-    }
 }
