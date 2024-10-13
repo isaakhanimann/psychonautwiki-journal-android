@@ -22,10 +22,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,6 +35,7 @@ import javax.inject.Singleton
 class UserPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
     private object PreferencesKeys {
         val KEY_TIME_DISPLAY_OPTION = stringPreferencesKey("key_time_display_option")
+        val KEY_LAST_INGESTION_OF_EXPERIENCE = longPreferencesKey("KEY_LAST_INGESTION_OF_EXPERIENCE")
         val KEY_HIDE_ORAL_DISCLAIMER = booleanPreferencesKey("key_hide_oral_disclaimer")
         val KEY_SHOW_CUSTOM_UNIT_HINT = booleanPreferencesKey("KEY_SHOW_CUSTOM_UNIT_HINT")
         val KEY_HIDE_DOSAGE_DOTS = booleanPreferencesKey("key_hide_dosage_dots")
@@ -48,6 +51,22 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
         .map { preferences ->
             val name = preferences[PreferencesKeys.KEY_TIME_DISPLAY_OPTION] ?: SavedTimeDisplayOption.REGULAR.name
             SavedTimeDisplayOption.valueOf(name)
+        }
+
+    suspend fun saveLastIngestionTimeOfExperience(value: Instant?) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.KEY_LAST_INGESTION_OF_EXPERIENCE] = value?.epochSecond ?: 0L
+        }
+    }
+
+    val lastIngestionTimeOfExperienceFlow: Flow<Instant?> = dataStore.data
+        .map { preferences ->
+            val epochSecond = preferences[PreferencesKeys.KEY_LAST_INGESTION_OF_EXPERIENCE] ?: 0L
+            if (epochSecond != 0L) {
+                Instant.ofEpochSecond(epochSecond)
+            } else {
+                null
+            }
         }
 
     suspend fun saveOralDisclaimerIsHidden(value: Boolean) {

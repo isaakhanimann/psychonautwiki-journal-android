@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.substances.repositories.SearchRepository
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -42,6 +43,7 @@ class JournalViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     searchRepository: SearchRepository,
     private val dataStore: DataStore<Preferences>,
+    private val userPreferences: UserPreferences,
 ) : ViewModel() {
 
 
@@ -52,6 +54,10 @@ class JournalViewModel @Inject constructor(
     }
 
     val isSearchEnabled = mutableStateOf(false)
+
+    fun saveLastIngestionOfExperience() = viewModelScope.launch {
+        userPreferences.saveLastIngestionTimeOfExperience(null)
+    }
 
     fun maybeMigrate() {
         viewModelScope.launch {

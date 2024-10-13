@@ -98,6 +98,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import kotlinx.coroutines.delay
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 @Composable
 fun OneExperienceScreen(
@@ -137,7 +138,10 @@ fun OneExperienceScreen(
         oneExperienceScreenModel = oneExperienceScreenModel,
         isOralDisclaimerHidden = viewModel.isOralTimelineDisclaimerHidden.collectAsState().value,
         onChangeIsOralDisclaimerHidden = viewModel::saveOralDisclaimerIsHidden,
-        addIngestion = navigateToAddIngestionSearch,
+        addIngestion = {
+            viewModel.saveLastIngestionTimeOfExperience()
+            navigateToAddIngestionSearch()
+        },
         deleteExperience = viewModel::deleteExperience,
         navigateToEditExperienceScreen = navigateToEditExperienceScreen,
         navigateToExplainTimeline = navigateToExplainTimeline,

@@ -39,7 +39,9 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.ESTIMATED_DOSE_STAND
 import com.isaakhanimann.journal.ui.main.navigation.routers.IS_ESTIMATE_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.UNITS_KEY
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import com.isaakhanimann.journal.ui.utils.getInstant
+import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -64,6 +66,7 @@ const val hourLimitToSeparateIngestions: Long = 12
 @HiltViewModel
 class ChooseTimeViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
+    userPreferences: UserPreferences,
     state: SavedStateHandle
 ) : ViewModel() {
     var substanceName by mutableStateOf("")
@@ -163,6 +166,14 @@ class ChooseTimeViewModel @Inject constructor(
         isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)!!
         val customSubstanceId = state.get<String>(CUSTOM_SUBSTANCE_ID_KEY)?.toIntOrNull()
         viewModelScope.launch {
+            val lastIngestionTimeOfExperience = userPreferences.lastIngestionTimeOfExperienceFlow.first()
+            if (lastIngestionTimeOfExperience != null) {
+                val wasLastIngestionOfExperienceMoreThan20HoursAgo = lastIngestionTimeOfExperience < Instant.now().minus(20, ChronoUnit.HOURS)
+                if (wasLastIngestionOfExperienceMoreThan20HoursAgo) {
+                    localDateTimeFlow.emit(lastIngestionTimeOfExperience.getLocalDateTime())
+                    updateTitleBasedOnTime(lastIngestionTimeOfExperience)
+                }
+            }
             updateExperiencesBasedOnSelectedTime()
             if (customSubstanceId != null) {
                 val customSubstance =
@@ -197,9 +208,13 @@ class ChooseTimeViewModel @Inject constructor(
             updateExperiencesBasedOnSelectedTime()
             val ingestionTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
             if (!hasTitleBeenChanged) {
-                enteredTitle = ingestionTime.getStringOfPattern("dd MMMM yyyy")
+                updateTitleBasedOnTime(ingestionTime)
             }
         }
+    }
+
+    private fun updateTitleBasedOnTime(time: Instant) {
+        enteredTitle = time.getStringOfPattern("dd MMMM yyyy")
     }
 
     private suspend fun updateExperiencesBasedOnSelectedTime() {

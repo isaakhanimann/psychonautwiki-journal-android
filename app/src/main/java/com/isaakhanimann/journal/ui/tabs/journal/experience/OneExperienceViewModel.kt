@@ -322,6 +322,14 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
+    fun saveLastIngestionTimeOfExperience() = viewModelScope.launch {
+        val lastIngestionTime =
+            ingestionElementsFlow.value.maxOfOrNull { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
+        if (lastIngestionTime != null) {
+            userPreferences.saveLastIngestionTimeOfExperience(lastIngestionTime)
+        }
+    }
+
     private companion object {
         fun getCumulativeDoses(ingestions: List<IngestionWithAssociatedData>): List<CumulativeDose> {
             return ingestions.groupBy { it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName }

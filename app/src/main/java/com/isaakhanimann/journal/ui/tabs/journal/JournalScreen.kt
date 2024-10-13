@@ -88,7 +88,10 @@ fun JournalScreen(
     }
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
-        navigateToAddIngestion = navigateToAddIngestion,
+        navigateToAddIngestion = {
+            viewModel.saveLastIngestionOfExperience()
+            navigateToAddIngestion()
+        },
         navigateToCalendar = navigateToCalendar,
         isFavoriteEnabled = viewModel.isFavoriteEnabledFlow.collectAsState().value,
         onChangeIsFavorite = viewModel::onChangeFavorite,
