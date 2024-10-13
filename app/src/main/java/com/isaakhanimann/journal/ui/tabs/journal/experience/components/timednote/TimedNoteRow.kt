@@ -20,7 +20,15 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.components.timednot
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,29 +41,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeText
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 
 @Preview(showBackground = true)
 @Composable
 fun TimedNoteRowPreview(@PreviewParameter(TimedNotePreviewProvider::class) timedNote: TimedNote) {
     TimedNoteRow(
         timedNote = timedNote,
-        timeDisplayOption = TimeDisplayOption.REGULAR,
-        startTime = Instant.now().minus(3, ChronoUnit.HOURS),
         modifier = Modifier.fillMaxWidth()
-    )
+    ) {
+        Text(text = "Sat 7:34")
+    }
 }
 
 
 @Composable
 fun TimedNoteRow(
     timedNote: TimedNote,
-    timeDisplayOption: TimeDisplayOption,
-    startTime: Instant,
     modifier: Modifier = Modifier,
+    timeText: @Composable () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -87,12 +90,7 @@ fun TimedNoteRow(
         }
         Column {
             Row(horizontalArrangement = Arrangement.spacedBy(15.dp), verticalAlignment = Alignment.Bottom) {
-                TimeText(
-                    time = timedNote.time,
-                    timeDisplayOption = timeDisplayOption,
-                    startTime = startTime,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                timeText()
                 if (!timedNote.isPartOfTimeline) {
                     Text(text = "(Not in timeline)", style = MaterialTheme.typography.bodySmall)
                 }

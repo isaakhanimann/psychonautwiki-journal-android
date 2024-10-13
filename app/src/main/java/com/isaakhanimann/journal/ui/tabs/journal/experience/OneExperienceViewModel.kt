@@ -136,7 +136,7 @@ class OneExperienceViewModel @Inject constructor(
                 started = SharingStarted.WhileSubscribed(5000)
             )
 
-    val timedNotesFlow =
+    val timedNotesSortedFlow =
         experienceRepo.getTimedNotesFlowSorted(experienceId)
             .stateIn(
                 initialValue = emptyList(),

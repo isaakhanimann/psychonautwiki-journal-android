@@ -35,6 +35,6 @@ data class OneExperienceScreenModel(
     val interactions: List<Interaction>,
     val interactionExplanations: List<InteractionExplanation>,
     val ratings: List<ShulginRating>,
-    val timedNotes: List<TimedNote>,
+    val timedNotesSorted: List<TimedNote>,
     val consumersWithIngestions: List<ConsumerWithIngestions>
 )

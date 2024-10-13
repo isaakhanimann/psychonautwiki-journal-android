@@ -130,7 +130,7 @@ class OneExperienceScreenPreviewProvider :
                     experienceId = 0
                 )
             ),
-            timedNotes = listOf(
+            timedNotesSorted = listOf(
                 TimedNote(
                     creationDate = getInstant(
                         year = 2022,

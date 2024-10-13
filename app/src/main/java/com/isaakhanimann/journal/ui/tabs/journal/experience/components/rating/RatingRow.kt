@@ -29,53 +29,63 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeText
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 
-
-@Preview
 @Composable
-fun RatingRowPreview(@PreviewParameter(RatingPreviewProvider::class) rating: ShulginRating) {
+fun TimedRatingRow(
+    modifier: Modifier = Modifier,
+    ratingSign: String,
+    timeText: @Composable () -> Unit
+) {
     RatingRow(
-        rating = rating,
-        timeDisplayOption = TimeDisplayOption.REGULAR,
-        startTime = Instant.now().minus(2, ChronoUnit.HOURS),
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier,
+        ratingSign = ratingSign,
+        content = timeText
     )
+}
+
+@Composable
+fun OverallRatingRow(
+    modifier: Modifier = Modifier,
+    ratingSign: String
+) {
+    RatingRow(
+        modifier = modifier,
+        ratingSign = ratingSign
+    ) {
+        Text(
+            text = "Overall rating",
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
 }
 
 
 @Composable
-fun RatingRow(
-    rating: ShulginRating,
-    timeDisplayOption: TimeDisplayOption,
-    startTime: Instant,
+private fun RatingRow(
     modifier: Modifier = Modifier,
+    ratingSign: String,
+    content: @Composable () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
     ) {
-        val ratingTime = rating.time
-        if (ratingTime == null) {
-            Text(
-                text = "Overall rating",
-                style = MaterialTheme.typography.bodyLarge
-            )
-        } else {
-            TimeText(
-                time = ratingTime,
-                timeDisplayOption = timeDisplayOption,
-                startTime = startTime,
-                style = MaterialTheme.typography.bodyLarge
-            )
-        }
+        content()
         Text(
-            text = rating.option.sign,
+            text = ratingSign,
             style = MaterialTheme.typography.titleMedium
         )
+    }
+}
+
+@Preview
+@Composable
+private fun RatingRowPreview(@PreviewParameter(RatingPreviewProvider::class) rating: ShulginRating) {
+    RatingRow(
+        ratingSign = rating.option.sign,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(text = "Sat 7:34")
     }
 }

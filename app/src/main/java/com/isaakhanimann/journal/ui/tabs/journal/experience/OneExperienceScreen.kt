@@ -87,7 +87,8 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDispl
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeOrDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.RatingRow
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.OverallRatingRow
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.TimedRatingRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.timednote.TimedNoteRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.OneExperienceScreenModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
@@ -129,7 +130,7 @@ fun OneExperienceScreen(
         interactions = viewModel.interactionsFlow.collectAsState().value,
         interactionExplanations = viewModel.interactionExplanationsFlow.collectAsState().value,
         ratings = viewModel.ratingsFlow.collectAsState().value,
-        timedNotes = viewModel.timedNotesFlow.collectAsState().value,
+        timedNotesSorted = viewModel.timedNotesSortedFlow.collectAsState().value,
         consumersWithIngestions = viewModel.consumersWithIngestionsFlow.collectAsState().value
     )
     OneExperienceScreen(
@@ -427,7 +428,7 @@ fun OneExperienceScreen(
                 }
             }
             val dataForTimedNotes =
-                oneExperienceScreenModel.timedNotes.filter { it.isPartOfTimeline }
+                oneExperienceScreenModel.timedNotesSorted.filter { it.isPartOfTimeline }
                     .map {
                         DataForOneTimedNote(time = it.time, color = it.color)
                     }
@@ -547,26 +548,31 @@ fun OneExperienceScreen(
                     }
                 }
             }
-            val timedNotes = oneExperienceScreenModel.timedNotes
-            if (timedNotes.isNotEmpty()) {
+            val timedNotesSorted = oneExperienceScreenModel.timedNotesSorted
+            if (timedNotesSorted.isNotEmpty()) {
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
                     CardTitle(title = "Timed notes")
-                    if (timedNotes.isNotEmpty()) {
+                    if (timedNotesSorted.isNotEmpty()) {
                         HorizontalDivider()
                     }
-                    timedNotes.forEachIndexed { index, timedNote ->
+                    timedNotesSorted.forEachIndexed { index, timedNote ->
                         TimedNoteRow(
                             timedNote = timedNote,
-                            timeDisplayOption = timeDisplayOption,
-                            startTime = oneExperienceScreenModel.firstIngestionTime,
                             modifier = Modifier
                                 .clickable {
                                     navigateToEditTimedNoteScreen(timedNote.id)
                                 }
                                 .fillMaxWidth()
                                 .padding(vertical = 5.dp, horizontal = horizontalPadding)
-                        )
-                        if (index < timedNotes.size - 1) {
+                        ) {
+                            TimeOrDurationText(
+                                time = timedNote.time,
+                                index = index,
+                                timeDisplayOption = timeDisplayOption,
+                                allTimesSortedMap = timedNotesSorted.map { it.time }
+                            )
+                        }
+                        if (index < timedNotesSorted.size - 1) {
                             HorizontalDivider()
                         }
                     }
@@ -577,19 +583,30 @@ fun OneExperienceScreen(
                     CardTitle(title = "Shulgin ratings")
                     HorizontalDivider()
                     val ratingsWithTime =
-                        oneExperienceScreenModel.ratings.filter { it.time != null }
-                    ratingsWithTime.forEachIndexed { index, rating ->
-                        RatingRow(
-                            rating = rating,
-                            timeDisplayOption = timeDisplayOption,
-                            startTime = oneExperienceScreenModel.firstIngestionTime,
+                        oneExperienceScreenModel.ratings.mapNotNull { rating ->
+                            val time = rating.time
+                            if (time != null) {
+                                Pair(time, rating)
+                            } else {
+                                null
+                            }
+                        }.sortedBy { it.first }
+                    ratingsWithTime.forEachIndexed { index, pair ->
+                        TimedRatingRow(
                             modifier = Modifier
                                 .clickable {
-                                    navigateToEditRatingScreen(rating.id)
+                                    navigateToEditRatingScreen(pair.second.id)
                                 }
                                 .fillMaxWidth()
-                                .padding(vertical = 8.dp, horizontal = horizontalPadding)
-                        )
+                                .padding(vertical = 8.dp, horizontal = horizontalPadding),
+                            ratingSign = pair.second.option.sign) {
+                            TimeOrDurationText(
+                                time = pair.first,
+                                index = index,
+                                timeDisplayOption = timeDisplayOption,
+                                allTimesSortedMap = ratingsWithTime.map { it.first }
+                            )
+                        }
                         if (index < ratingsWithTime.size - 1) {
                             HorizontalDivider()
                         }
@@ -600,16 +617,14 @@ fun OneExperienceScreen(
                         if (ratingsWithTime.isNotEmpty()) {
                             HorizontalDivider()
                         }
-                        RatingRow(
-                            rating = overallRating,
-                            timeDisplayOption = timeDisplayOption,
-                            startTime = oneExperienceScreenModel.firstIngestionTime,
+                        OverallRatingRow(
                             modifier = Modifier
                                 .clickable {
                                     navigateToEditRatingScreen(overallRating.id)
                                 }
                                 .fillMaxWidth()
-                                .padding(vertical = 8.dp, horizontal = horizontalPadding)
+                                .padding(vertical = 8.dp, horizontal = horizontalPadding),
+                            ratingSign = overallRating.option.sign
                         )
                     }
                 }
