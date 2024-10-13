@@ -398,7 +398,12 @@ fun OneExperienceScreen(
             )
         },
         floatingActionButton = {
-            if (oneExperienceScreenModel.isCurrentExperience) {
+            val wasAnyIngestionCreatedInLast4Hours =
+                oneExperienceScreenModel.ingestionElements.mapNotNull { it.ingestionWithCompanionAndCustomUnit.ingestion.creationDate }
+                    .any {
+                        it > Instant.now().minus(4, ChronoUnit.HOURS)
+                    }
+            if (oneExperienceScreenModel.isCurrentExperience || wasAnyIngestionCreatedInLast4Hours) {
                 ExtendedFloatingActionButton(
                     onClick = addIngestion,
                     icon = {
