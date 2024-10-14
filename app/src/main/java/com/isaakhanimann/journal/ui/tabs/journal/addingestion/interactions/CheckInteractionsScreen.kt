@@ -36,7 +36,6 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -163,42 +162,36 @@ fun CheckInteractionsScreen(
                     Text(text = "No interactions found... check other sources.")
                 }
             } else {
-                ElevatedCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = horizontalPadding, vertical = 10.dp
-                        )
-                ) {
-                    val verticalPaddingInside = 4.dp
-                    LazyColumn {
-                        if (dangerousInteractions.isNotEmpty()) {
-                            items(dangerousInteractions) {
-                                InteractionRow(
-                                    text = it,
-                                    interactionType = InteractionType.DANGEROUS,
-                                    verticalPaddingInside = verticalPaddingInside,
-                                )
-                            }
-                        }
-                        if (unsafeInteractions.isNotEmpty()) {
-                            items(unsafeInteractions) {
-                                InteractionRow(
-                                    text = it, interactionType = InteractionType.UNSAFE,
-                                    verticalPaddingInside = verticalPaddingInside,
-                                )
-                            }
-                        }
-                        if (uncertainInteractions.isNotEmpty()) {
-                            items(uncertainInteractions) {
-                                InteractionRow(
-                                    text = it, interactionType = InteractionType.UNCERTAIN,
-                                    verticalPaddingInside = verticalPaddingInside,
-                                )
-                            }
+                val verticalPaddingInside = 4.dp
+                LazyColumn {
+                    if (dangerousInteractions.isNotEmpty()) {
+                        items(dangerousInteractions) {
+                            InteractionRow(
+                                text = it,
+                                interactionType = InteractionType.DANGEROUS,
+                                verticalPaddingInside = verticalPaddingInside,
+                            )
                         }
                     }
-                    InteractionExplanationButton(substanceURL = substanceUrl)
+                    if (unsafeInteractions.isNotEmpty()) {
+                        items(unsafeInteractions) {
+                            InteractionRow(
+                                text = it, interactionType = InteractionType.UNSAFE,
+                                verticalPaddingInside = verticalPaddingInside,
+                            )
+                        }
+                    }
+                    if (uncertainInteractions.isNotEmpty()) {
+                        items(uncertainInteractions) {
+                            InteractionRow(
+                                text = it, interactionType = InteractionType.UNCERTAIN,
+                                verticalPaddingInside = verticalPaddingInside,
+                            )
+                        }
+                    }
+                    item {
+                        InteractionExplanationButton(substanceURL = substanceUrl)
+                    }
                 }
             }
             AnimatedVisibility(visible = isShowingAlert) {
