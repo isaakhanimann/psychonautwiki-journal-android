@@ -53,6 +53,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -240,28 +242,31 @@ fun Day(
             aspectRatioModifier
         }
         val isToday = day.date == LocalDate.now()
+        val dayText = day.date.dayOfMonth.toString()
         Box(
             modifier = modifier
                 .padding(4.dp)
                 .background(
                     if (isToday) MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f) else Color.Transparent,
                     shape = RoundedCornerShape(20)
-                ),
+                ).semantics {
+                    contentDescription = dayText + " " + day.date.month.name
+                },
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 if (isToday) {
                     Text(
-                        text = day.date.dayOfMonth.toString(),
+                        text = dayText,
                     )
                 } else if (experienceInfos.experienceIds.isEmpty()) {
                     Text(
-                        text = day.date.dayOfMonth.toString(),
+                        text = dayText,
                         color = if (isSystemInDarkTheme()) Color.Gray else Color.LightGray
                     )
                 } else {
                     Text(
-                        text = day.date.dayOfMonth.toString(),
+                        text = dayText,
                     )
                 }
                 HorizontalColorRectangle(
