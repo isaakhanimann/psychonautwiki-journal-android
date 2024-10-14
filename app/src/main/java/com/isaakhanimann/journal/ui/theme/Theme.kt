@@ -98,6 +98,7 @@ private val DarkColors = darkColorScheme(
 
 val horizontalPadding = 10.dp
 val verticalPaddingCards = 4.dp
+val minimumTouchTargetHeight = 48.dp
 
 @Composable
 fun JournalTheme(
