@@ -588,7 +588,8 @@ fun CategoryChipFromSubstanceScreen(
                 navigateToCategoryScreen(category.name)
             }
             .background(color = category.color.copy(alpha = 0.2f))
-            .padding(vertical = 4.dp, horizontal = 10.dp)
+            .height(48.dp)
+            .padding(horizontal = 12.dp)
 
     ) {
         Text(text = category.name)
