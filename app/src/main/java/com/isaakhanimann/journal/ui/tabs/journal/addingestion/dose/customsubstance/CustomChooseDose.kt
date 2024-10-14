@@ -35,7 +35,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.QuestionMark
-import androidx.compose.material.icons.outlined.Newspaper
+import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -59,6 +59,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -73,7 +74,6 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun CustomChooseDose(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseStandardDeviation: Double?) -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
-    navigateToURL: (url: String) -> Unit,
     viewModel: CustomChooseDoseViewModel = hiltViewModel()
 ) {
     CustomChooseDose(
@@ -97,7 +97,6 @@ fun CustomChooseDose(
                 viewModel.estimatedDoseStandardDeviation
             )
         },
-        navigateToURL = navigateToURL,
         useUnknownDoseAndNavigate = {
             navigateToChooseTimeAndMaybeColor(
                 viewModel.units,
@@ -133,7 +132,6 @@ fun CustomChooseDosePreview() {
         isEstimate = false,
         onChangeIsEstimate = {},
         navigateToNext = {},
-        navigateToURL = {},
         useUnknownDoseAndNavigate = {},
         purityText = "20",
         onPurityChange = {},
@@ -160,7 +158,6 @@ fun CustomChooseDose(
     isEstimate: Boolean,
     onChangeIsEstimate: (Boolean) -> Unit,
     navigateToNext: () -> Unit,
-    navigateToURL: (url: String) -> Unit,
     useUnknownDoseAndNavigate: () -> Unit,
     purityText: String,
     onPurityChange: (purity: String) -> Unit,
@@ -309,9 +306,10 @@ fun CustomChooseDose(
                     Text(text = "Safer sniffing")
                 }
             } else if (administrationRoute == AdministrationRoute.RECTAL) {
-                TextButton(onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) }) {
+                val uriHandler = LocalUriHandler.current
+                TextButton(onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
                     Icon(
-                        Icons.Outlined.Newspaper,
+                        Icons.Outlined.OpenInBrowser,
                         contentDescription = "Open link"
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))

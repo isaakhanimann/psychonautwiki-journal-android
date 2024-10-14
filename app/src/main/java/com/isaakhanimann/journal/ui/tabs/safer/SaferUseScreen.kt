@@ -62,7 +62,6 @@ fun SaferUsePreview() {
         navigateToDosageGuideScreen = {},
         navigateToDosageClassificationScreen = {},
         navigateToRouteExplanationScreen = {},
-        navigateToURL = {},
         navigateToReagentTestingScreen = {},
     )
 }
@@ -76,7 +75,6 @@ fun SaferUseScreen(
     navigateToDosageGuideScreen: () -> Unit,
     navigateToDosageClassificationScreen: () -> Unit,
     navigateToRouteExplanationScreen: () -> Unit,
-    navigateToURL: (url: String) -> Unit,
     navigateToReagentTestingScreen: () -> Unit,
 ) {
     Scaffold(
@@ -280,7 +278,7 @@ fun SaferUseScreen(
             ) {
                 TextButton(
                     onClick = {
-                        navigateToURL("https://psychonautwiki.org/wiki/Responsible_drug_use")
+                        uriHandler.openUri("https://psychonautwiki.org/wiki/Responsible_drug_use")
                     },
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {

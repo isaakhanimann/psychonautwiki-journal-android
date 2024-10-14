@@ -27,7 +27,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Newspaper
+import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
@@ -39,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,27 +49,21 @@ import com.isaakhanimann.journal.ui.tabs.search.substance.SectionWithTitle
 import com.isaakhanimann.journal.ui.tabs.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun RouteExplanationPreview() {
-    RouteExplanationScreen(navigateToURL = {})
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RouteExplanationScreen(navigateToURL: (url: String) -> Unit) {
+fun RouteExplanationScreen() {
+    val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Routes of administration") })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { navigateToURL(AdministrationRoute.psychonautWikiArticleURL) },
+                onClick = { uriHandler.openUri(AdministrationRoute.psychonautWikiArticleURL) },
                 icon = {
                     Icon(
-                        Icons.Outlined.Newspaper,
+                        Icons.Outlined.OpenInBrowser,
                         contentDescription = "Open PW article"
                     )
                 },
@@ -103,11 +98,11 @@ Determining an optimal route of administration is highly dependent on the substa
                     )
                     if (it == AdministrationRoute.RECTAL) {
                         Button(
-                            onClick = { navigateToURL(AdministrationRoute.saferPluggingArticleURL) },
+                            onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) },
                             modifier = Modifier.padding(horizontal = 5.dp)
                         ) {
                             Icon(
-                                Icons.Outlined.Newspaper,
+                                Icons.Outlined.OpenInBrowser,
                                 contentDescription = "Open PW article",
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))

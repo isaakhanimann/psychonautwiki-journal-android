@@ -28,7 +28,6 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_SUBSTANCE_ID_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.URL_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddCustom
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAdministrationRouteExplanationScreen
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCheckInteractions
@@ -40,7 +39,6 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseDose
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseRouteOfAddIngestion
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseTimeAndMaybeColor
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferSniffingOnJournalTab
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLInJournalTab
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToVolumetricDosingScreenOnJournalTab
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChooseDoseScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customsubstance.CustomChooseDose
@@ -51,7 +49,6 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomChoose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.saferuse.CheckSaferUseScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ChooseTimeScreen
-import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 
 fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
     navigation(
@@ -102,7 +99,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
                     navController.navigateToChooseRouteOfAddIngestion(substanceName = substanceName)
                 },
-                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(
@@ -116,14 +112,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigateToCheckInteractions(substanceName = substanceName)
                 },
             )
-        }
-        composableWithTransitions(
-            ArgumentRouter.JournalTabURLRouter.route,
-            arguments = ArgumentRouter.JournalTabURLRouter.args
-        ) { backStackEntry ->
-            val args = backStackEntry.arguments!!
-            val url = args.getString(URL_KEY)!!
-            UrlScreen(url = url)
         }
         composableWithTransitions(
             ArgumentRouter.ChooseDoseCustomUnitRouter.route,
@@ -161,8 +149,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         administrationRoute = administrationRoute,
                     )
                 },
-                navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
-                navigateToURL = navController::navigateToURLInJournalTab
+                navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen
             )
         }
         composableWithTransitions(
@@ -202,7 +189,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     )
                 },
                 navigateToSaferSniffingScreen = navController::navigateToSaferSniffingOnJournalTab,
-                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(
@@ -228,7 +214,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 },
                 navigateToVolumetricDosingScreenOnJournalTab = navController::navigateToVolumetricDosingScreenOnJournalTab,
                 navigateToSaferSniffingScreen = navController::navigateToSaferSniffingOnJournalTab,
-                navigateToURL = navController::navigateToURLInJournalTab
             )
         }
         composableWithTransitions(

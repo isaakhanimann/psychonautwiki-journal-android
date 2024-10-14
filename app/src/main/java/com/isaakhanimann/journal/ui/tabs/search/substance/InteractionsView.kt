@@ -26,7 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -51,14 +52,13 @@ import com.isaakhanimann.journal.ui.utils.getInteractionExplanationURLForSubstan
 @Preview
 @Composable
 fun InteractionsPreview(@PreviewParameter(InteractionsPreviewProvider::class) interactions: Interactions) {
-    InteractionsView(interactions, navigateToURL = {}, substanceURL = "")
+    InteractionsView(interactions, substanceURL = "")
 }
 
 @Composable
 fun InteractionsView(
     interactions: Interactions,
-    substanceURL: String,
-    navigateToURL: (url: String) -> Unit
+    substanceURL: String
 ) {
     Column {
         if (interactions.dangerous.isNotEmpty()) {
@@ -82,18 +82,19 @@ fun InteractionsView(
                 )
             }
         }
-        InteractionExplanationButton(substanceURL = substanceURL, navigateToURL = navigateToURL)
+        InteractionExplanationButton(substanceURL = substanceURL)
     }
 }
 
 @Composable
-fun InteractionExplanationButton(substanceURL: String, navigateToURL: (url: String) -> Unit) {
+fun InteractionExplanationButton(substanceURL: String) {
+    val uriHandler = LocalUriHandler.current
     TextButton(onClick = {
         val interactionURL = getInteractionExplanationURLForSubstance(substanceURL)
-        navigateToURL(interactionURL)
+        uriHandler.openUri(interactionURL)
     }) {
         Icon(
-            Icons.Outlined.Info,
+            Icons.Outlined.OpenInBrowser,
             contentDescription = "Open link"
         )
         Spacer(Modifier.size(ButtonDefaults.IconSpacing))

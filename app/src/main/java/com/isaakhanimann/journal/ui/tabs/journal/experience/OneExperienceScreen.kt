@@ -71,6 +71,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -106,7 +107,6 @@ fun OneExperienceScreen(
     navigateToAddIngestionSearch: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
-    navigateToURL: (url: String) -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateToAddRatingScreen: () -> Unit,
     navigateToAddTimedNoteScreen: () -> Unit,
@@ -150,7 +150,6 @@ fun OneExperienceScreen(
         navigateToAddTimedNoteScreen = navigateToAddTimedNoteScreen,
         navigateBack = navigateBack,
         saveIsFavorite = viewModel::saveIsFavorite,
-        navigateToURL = navigateToURL,
         navigateToEditRatingScreen = navigateToEditRatingScreen,
         navigateToEditTimedNoteScreen = navigateToEditTimedNoteScreen,
         savedTimeDisplayOption = viewModel.savedTimeDisplayOption.collectAsState().value,
@@ -183,7 +182,6 @@ fun ExperienceScreenPreview(
             navigateToAddTimedNoteScreen = {},
             navigateBack = {},
             saveIsFavorite = {},
-            navigateToURL = {},
             navigateToEditRatingScreen = {},
             navigateToEditTimedNoteScreen = {},
             savedTimeDisplayOption = SavedTimeDisplayOption.RELATIVE_TO_START,
@@ -204,7 +202,6 @@ fun OneExperienceScreen(
     addIngestion: () -> Unit,
     deleteExperience: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
-    navigateToURL: (url: String) -> Unit,
     navigateToExplainTimeline: () -> Unit,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     navigateToAddRatingScreen: () -> Unit,
@@ -728,9 +725,10 @@ fun OneExperienceScreen(
                         modifier = Modifier.padding(horizontal = horizontalPadding)
                     ) {
                         oneExperienceScreenModel.interactionExplanations.forEach {
+                            val uriHandler = LocalUriHandler.current
                             SuggestionChip(
                                 onClick = {
-                                    navigateToURL(it.url)
+                                    uriHandler.openUri(it.url)
                                 },
                                 label = { Text(it.name) }
                             )

@@ -21,12 +21,10 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
-import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.URL_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddCustom
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCategoryScreen
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToDosageExplanationScreenOnSearchTab
@@ -35,7 +33,6 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExplainTim
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferHallucinogens
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferStimulants
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceScreen
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLScreenOnSearchTab
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToVolumetricDosingScreenOnSearchTab
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
@@ -43,7 +40,6 @@ import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
 import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstance
 import com.isaakhanimann.journal.ui.tabs.search.custom.EditCustomSubstance
 import com.isaakhanimann.journal.ui.tabs.search.substance.SubstanceScreen
-import com.isaakhanimann.journal.ui.tabs.search.substance.UrlScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.category.CategoryScreen
 
 
@@ -74,21 +70,12 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
                 navigateToExplainTimeline = navController::navigateToExplainTimelineOnSearchTab,
                 navigateToCategoryScreen = navController::navigateToCategoryScreen,
                 navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreenOnSearchTab,
-                navigateToArticle = navController::navigateToURLScreenOnSearchTab
             )
-        }
-        composableWithTransitions(
-            ArgumentRouter.URLRouterOnSearchTab.route,
-            arguments = ArgumentRouter.URLRouterOnSearchTab.args
-        ) { backStackEntry ->
-            val args = backStackEntry.arguments!!
-            val url = args.getString(URL_KEY)!!
-            UrlScreen(url = url)
         }
         composableWithTransitions(
             ArgumentRouter.CategoryRouter.route, arguments = ArgumentRouter.CategoryRouter.args
         ) {
-            CategoryScreen(navigateToURL = navController::navigateToURLScreenOnSearchTab)
+            CategoryScreen()
         }
         composableWithTransitions(
             ArgumentRouter.EditCustomRouter.route, arguments = ArgumentRouter.EditCustomRouter.args
@@ -101,11 +88,7 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
             )
         }
         composableWithTransitions(NoArgumentRouter.VolumetricDosingOnSearchTabRouter.route) {
-            VolumetricDosingScreen(navigateToVolumetricLiquidDosingArticle = {
-                navController.navigateToURLScreenOnSearchTab(
-                    VOLUMETRIC_DOSE_ARTICLE_URL
-                )
-            })
+            VolumetricDosingScreen()
         }
         composableWithTransitions(NoArgumentRouter.ExplainTimelineOnSearchTabRouter.route) { ExplainTimelineScreen() }
     }

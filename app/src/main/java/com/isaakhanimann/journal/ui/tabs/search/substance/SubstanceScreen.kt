@@ -42,7 +42,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Newspaper
+import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -65,6 +65,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -101,7 +102,6 @@ fun SubstanceScreen(
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
-    navigateToArticle: (url: String) -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
@@ -112,7 +112,6 @@ fun SubstanceScreen(
         navigateToVolumetricDosingScreen = navigateToVolumetricDosingScreen,
         navigateToCategoryScreen = navigateToCategoryScreen,
         navigateToExplainTimeline = navigateToExplainTimeline,
-        navigateToURL = navigateToArticle,
         substanceWithCategories = viewModel.substanceWithCategories,
         customUnits = viewModel.customUnitsFlow.collectAsState().value
     )
@@ -130,7 +129,6 @@ fun SubstanceScreenPreview(
             navigateToSaferStimulantsScreen = {},
             navigateToVolumetricDosingScreen = {},
             navigateToExplainTimeline = {},
-            navigateToURL = {},
             navigateToCategoryScreen = {},
             substanceWithCategories = substanceWithCategories,
             customUnits = listOf(
@@ -148,22 +146,22 @@ fun SubstanceScreen(
     navigateToSaferStimulantsScreen: () -> Unit,
     navigateToVolumetricDosingScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
-    navigateToURL: (url: String) -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     substanceWithCategories: SubstanceWithCategories,
     customUnits: List<CustomUnit>
 ) {
     val substance = substanceWithCategories.substance
+    val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(substance.name) })
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { navigateToURL(substance.url) },
+                onClick = { uriHandler.openUri(substance.url) },
                 icon = {
                     Icon(
-                        Icons.Outlined.Newspaper,
+                        Icons.Outlined.OpenInBrowser,
                         contentDescription = "Open PW article"
                     )
                 },
@@ -457,7 +455,6 @@ fun SubstanceScreen(
                         InteractionsView(
                             interactions = substance.interactions,
                             substanceURL = substance.url,
-                            navigateToURL = navigateToURL
                         )
                     }
                 }

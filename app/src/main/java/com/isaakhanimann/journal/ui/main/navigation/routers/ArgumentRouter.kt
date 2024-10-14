@@ -23,8 +23,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 // argument keys
 const val EXPERIENCE_ID_KEY = "experienceId"
@@ -34,7 +32,6 @@ const val TIMED_NOTE_ID_KEY = "timedNoteId"
 const val INGESTION_ID_KEY = "ingestionId"
 const val SUBSTANCE_NAME_KEY = "substanceName"
 const val CUSTOM_SUBSTANCE_ID_KEY = "customSubstanceId"
-const val URL_KEY = "url"
 const val ADMINISTRATION_ROUTE_KEY = "administrationRoute"
 const val DOSE_KEY = "dose"
 const val ESTIMATED_DOSE_STANDARD_DEVIATION_KEY = "estimatedDoseStandardDeviation"
@@ -67,10 +64,6 @@ private const val ROUTE_START_CHOOSE_TIME = "chooseTime/"
 private const val ROUTE_START_FINISH_ADD_CUSTOM_UNIT = "finishAddCustomUnit/"
 private const val ROUTE_START_SUBSTANCE_COMPANION = "substancesCompanion/"
 private const val ROUTE_START_CATEGORY = "category/"
-private const val ROUTE_START_URL = "url/"
-private const val ROUTE_START_JOURNAL_TAB_URL = "journalTabUrl/"
-private const val ROUTE_START_SAFER_TAB_URL = "saferTabUrl/"
-
 
 sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>) {
     object ExperienceRouter : ArgumentRouter(
@@ -132,21 +125,6 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
     object EditCustomRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_CUSTOM{$CUSTOM_SUBSTANCE_ID_KEY}",
         args = listOf(navArgument(CUSTOM_SUBSTANCE_ID_KEY) { type = NavType.IntType })
-    )
-
-    object URLRouterOnSearchTab : ArgumentRouter(
-        route = "$ROUTE_START_URL{$URL_KEY}",
-        args = listOf(navArgument(URL_KEY) { type = NavType.StringType })
-    )
-
-    object JournalTabURLRouter : ArgumentRouter(
-        route = "$ROUTE_START_JOURNAL_TAB_URL{$URL_KEY}",
-        args = listOf(navArgument(URL_KEY) { type = NavType.StringType })
-    )
-
-    object URLRouterOnSaferTab : ArgumentRouter(
-        route = "$ROUTE_START_SAFER_TAB_URL{$URL_KEY}",
-        args = listOf(navArgument(URL_KEY) { type = NavType.StringType })
     )
 
     object CategoryRouter : ArgumentRouter(
@@ -283,21 +261,6 @@ fun NavController.navigateToTimelineScreen(consumerName: String, experienceId: I
 
 fun NavController.navigateToSubstanceScreen(substanceName: String) {
     navigate(ROUTE_START_SUBSTANCES + substanceName)
-}
-
-fun NavController.navigateToURLScreenOnSearchTab(url: String) {
-    val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
-    navigate(ROUTE_START_URL + encodedUrl)
-}
-
-fun NavController.navigateToURLInJournalTab(url: String) {
-    val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
-    navigate(ROUTE_START_JOURNAL_TAB_URL + encodedUrl)
-}
-
-fun NavController.navigateToURLInSaferTab(url: String) {
-    val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
-    navigate(ROUTE_START_SAFER_TAB_URL + encodedUrl)
 }
 
 fun NavController.navigateToEditCustomSubstance(customSubstanceId: Int) {

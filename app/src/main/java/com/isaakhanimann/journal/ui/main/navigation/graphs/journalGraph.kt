@@ -21,7 +21,6 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
-import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
@@ -36,7 +35,6 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExperience
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExplainTimelineOnJournalTab
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToIngestion
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToTimelineScreen
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToURLInJournalTab
 import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
 import com.isaakhanimann.journal.ui.tabs.journal.calendar.CalendarJournalScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceScreen
@@ -104,10 +102,7 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
             TimelineScreen()
         }
         composableWithTransitions(NoArgumentRouter.VolumetricDosingOnJournalTabRouter.route) {
-            VolumetricDosingScreen(
-                navigateToVolumetricLiquidDosingArticle = {
-                    navController.navigateToURLInJournalTab(url = VOLUMETRIC_DOSE_ARTICLE_URL)
-                })
+            VolumetricDosingScreen()
         }
         composableWithTransitions(
             ArgumentRouter.ExperienceRouter.route,
@@ -130,7 +125,6 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
                 navigateToAddTimedNoteScreen = {
                     navController.navigateToAddTimedNote(experienceId)
                 },
-                navigateToURL = navController::navigateToURLInJournalTab,
                 navigateToEditRatingScreen = navController::navigateToEditRating,
                 navigateToTimelineScreen = { consumerName ->
                     navController.navigateToTimelineScreen(consumerName, experienceId)

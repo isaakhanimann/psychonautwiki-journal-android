@@ -68,7 +68,6 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun CheckInteractionsScreen(
     navigateToNext: () -> Unit,
-    navigateToURL: (url: String) -> Unit,
     viewModel: CheckInteractionsViewModel = hiltViewModel()
 ) {
     CheckInteractionsScreen(
@@ -79,7 +78,6 @@ fun CheckInteractionsScreen(
         unsafeInteractions = viewModel.unsafeInteractions,
         uncertainInteractions = viewModel.uncertainInteractions,
         navigateToNext = navigateToNext,
-        navigateToURL = navigateToURL,
         dismissAlert = {
             viewModel.isShowingAlert = false
         },
@@ -102,7 +100,6 @@ fun CheckInteractionsScreenPreview(@PreviewParameter(SubstanceWithCategoriesPrev
         uncertainInteractions = substanceWithCategories.substance.interactions?.uncertain
             ?: emptyList(),
         navigateToNext = {},
-        navigateToURL = {},
         dismissAlert = {},
         isShowingAlert = false,
         alertInteractionType = InteractionType.DANGEROUS,
@@ -121,7 +118,6 @@ fun CheckInteractionsScreenPreview2() {
         unsafeInteractions = emptyList(),
         uncertainInteractions = emptyList(),
         navigateToNext = {},
-        navigateToURL = {},
         dismissAlert = {},
         isShowingAlert = true,
         alertInteractionType = InteractionType.DANGEROUS,
@@ -142,8 +138,7 @@ fun CheckInteractionsScreen(
     dangerousInteractions: List<String>,
     unsafeInteractions: List<String>,
     uncertainInteractions: List<String>,
-    navigateToNext: () -> Unit,
-    navigateToURL: (url: String) -> Unit
+    navigateToNext: () -> Unit
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName interactions") }) },
@@ -203,10 +198,7 @@ fun CheckInteractionsScreen(
                             }
                         }
                     }
-                    InteractionExplanationButton(
-                        substanceURL = substanceUrl,
-                        navigateToURL = navigateToURL
-                    )
+                    InteractionExplanationButton(substanceURL = substanceUrl)
                 }
             }
             AnimatedVisibility(visible = isShowingAlert) {

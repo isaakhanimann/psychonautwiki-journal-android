@@ -26,7 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Newspaper
+import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,20 +35,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.journal.ui.VOLUMETRIC_DOSE_ARTICLE_URL
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun VolumetricDosingPreview() {
-    VolumetricDosingScreen {}
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun VolumetricDosingScreen(navigateToVolumetricLiquidDosingArticle: () -> Unit) {
+fun VolumetricDosingScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -56,11 +53,12 @@ fun VolumetricDosingScreen(navigateToVolumetricLiquidDosingArticle: () -> Unit) 
             )
         },
         floatingActionButton = {
+            val uriHandler = LocalUriHandler.current
             ExtendedFloatingActionButton(
-                onClick = navigateToVolumetricLiquidDosingArticle,
+                onClick = { uriHandler.openUri(VOLUMETRIC_DOSE_ARTICLE_URL) },
                 icon = {
                     Icon(
-                        Icons.Outlined.Newspaper,
+                        Icons.Outlined.OpenInBrowser,
                         contentDescription = "Open PW article"
                     )
                 },
