@@ -388,7 +388,7 @@ fun ChooseTimeScreen(
                         }
                     }
                 }
-                CardWithTitle(title = "Notes") {
+                CardWithTitle(title = "Ingestion note") {
                     NoteSection(
                         previousNotes,
                         note,
