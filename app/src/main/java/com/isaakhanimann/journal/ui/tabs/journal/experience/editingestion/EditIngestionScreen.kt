@@ -364,7 +364,7 @@ fun EditIngestionScreen(
                     }
                 }
             }
-            CardWithTitle(title = "Notes") {
+            CardWithTitle(title = "Ingestion notes") {
                 OutlinedTextField(
                     value = note,
                     onValueChange = onNoteChange,
