@@ -1,0 +1,59 @@
+name: Build App on new release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*'
+
+jobs:
+  build:
+    name: Build, sign and release app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up jdk
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+          cache: "gradle"
+
+      - name: build app
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Setup Android SDK
+        run: |
+          ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager "build-tools;35.0.0"
+
+      - name: Sign app APK
+        uses: ilharp/sign-android-release@nightly
+        id: sign
+        with:
+          signingKey: ${{ secrets.KEYSTORE }}
+          keyAlias: ${{ secrets.SIGNING_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+          buildToolsVersion: 35.0.0
+
+      - name: Rename signed APK
+        run: |
+          mv "${{steps.sign.outputs.signedFile}}" "psychonautwiki-journal_${{ github.ref_name }}.apk"
+
+      # Uploads to the action results if not pointed at a tag
+      - uses: actions/upload-artifact@v4
+        if: "! startsWith(github.ref, 'refs/tags/')"
+        with:
+          name: "psychonautwiki-journal_${{ github.ref_name }}.apk"
+          path: "psychonautwiki-journal_${{ github.ref_name }}.apk"
+          if-no-files-found: error
+
+      # Creates a release if pointed at a tag
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: "psychonautwiki-journal_${{ github.ref_name }}.apk"
+          fail_on_unmatched_files: true
+          make_latest: true
