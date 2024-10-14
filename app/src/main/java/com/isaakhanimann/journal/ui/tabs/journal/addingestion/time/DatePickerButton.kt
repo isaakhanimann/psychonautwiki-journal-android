@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import com.isaakhanimann.journal.R
 import java.time.LocalDateTime
 
@@ -59,7 +60,7 @@ fun DatePickerButton(
             )
         }, localDateTime.year, localDateTime.monthValue - 1, localDateTime.dayOfMonth
     )
-    OutlinedButton(onClick = datePickerDialog::show, modifier = modifier) {
+    OutlinedButton(onClick = datePickerDialog::show, modifier = modifier.clearAndSetSemantics {  }) {
         Icon(
             Icons.Outlined.Event,
             contentDescription = "Open calendar"

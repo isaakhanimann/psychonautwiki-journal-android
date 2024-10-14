@@ -48,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.tabs.search.substancerow.SubstanceRow
@@ -78,7 +79,7 @@ fun SearchScreen(
                     .focusRequester(focusRequester)
                     .onFocusChanged { focusState ->
                         isFocused = focusState.isFocused
-                    },
+                    }.clearAndSetSemantics {  },
                 searchText = searchViewModel.searchTextFlow.collectAsState().value,
                 onChange = {
                     searchViewModel.filterSubstances(searchText = it)
