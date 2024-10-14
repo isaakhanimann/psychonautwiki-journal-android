@@ -41,7 +41,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -492,7 +491,6 @@ fun EditIngestionScreen(
         ModalBottomSheet(
             onDismissRequest = { isPresentingBottomSheet = false },
             sheetState = bottomSheetState,
-            windowInsets = BottomSheetDefaults.windowInsets
         ) {
             LazyColumn {
                 item {
