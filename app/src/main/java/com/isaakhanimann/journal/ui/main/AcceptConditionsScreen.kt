@@ -40,6 +40,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -88,47 +90,72 @@ fun AcceptConditionsScreen(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
-                    checkedState0 = checkedState0.not()
-                }) {
-                Checkbox(
-                    checked = checkedState0,
-                    onCheckedChange = { checkedState0 = it }
-                )
-                Text(text = "I acknowledge that I am the only one responsible for my actions, especially when deciding to use drugs.")
-            }
-            Row(verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
-                    checkedState1 = checkedState1.not()
-                }) {
-                Checkbox(
-                    checked = checkedState1,
-                    onCheckedChange = { checkedState1 = it }
-                )
-                Text(text = "I'm going to use this app for mitigating the risks of my or somebody else’s substance use.")
-            }
+            val responsibilityText =
+                "I acknowledge that I am the only one responsible for my actions, especially when deciding to use drugs."
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
-                    checkedState2 = checkedState2.not()
-                }
+                modifier = Modifier
+                    .clickable {
+                        checkedState0 = checkedState0.not()
+                    }) {
+                Checkbox(
+                    checked = checkedState0,
+                    onCheckedChange = { checkedState0 = it },
+                    modifier = Modifier.semantics {
+                        contentDescription = responsibilityText
+                    }
+                )
+                Text(text = responsibilityText)
+            }
+            val mitigateRisksText =
+                "I'm going to use this app for mitigating the risks of my or somebody else’s substance use."
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clickable {
+                        checkedState1 = checkedState1.not()
+                    }) {
+                Checkbox(
+                    checked = checkedState1,
+                    onCheckedChange = { checkedState1 = it },
+                    modifier = Modifier.semantics {
+                        contentDescription = mitigateRisksText
+                    }
+                )
+                Text(text = mitigateRisksText)
+            }
+            val incompleteDataText =
+                "I acknowledge that the data in this app might be inaccurate or incomplete."
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clickable {
+                        checkedState2 = checkedState2.not()
+                    }
             ) {
                 Checkbox(
                     checked = checkedState2,
-                    onCheckedChange = { checkedState2 = it }
+                    onCheckedChange = { checkedState2 = it },
+                    modifier = Modifier.semantics {
+                        contentDescription = incompleteDataText
+                    }
                 )
-                Text(text = "I acknowledge that the data in this app might be inaccurate or incomplete.")
+                Text(text = incompleteDataText)
             }
+            val professionalHelpText =
+                "I’m going to seek professional help before attempting to self-medicate."
             Row(verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
-                    checkedState3 = checkedState3.not()
-                }) {
+                modifier = Modifier
+                    .clickable {
+                        checkedState3 = checkedState3.not()
+                    }) {
                 Checkbox(
                     checked = checkedState3,
-                    onCheckedChange = { checkedState3 = it }
+                    onCheckedChange = { checkedState3 = it },
+                    modifier = Modifier.semantics {
+                        contentDescription = professionalHelpText
+                    }
                 )
-                Text(text = "I’m going to seek professional help before attempting to self-medicate.")
+                Text(text = professionalHelpText)
             }
         }
         Text(
