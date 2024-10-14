@@ -42,11 +42,9 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.GppBad
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -154,18 +152,15 @@ fun SubstanceScreen(
     val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(substance.name) })
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = { uriHandler.openUri(substance.url) },
-                icon = {
-                    Icon(
-                        Icons.Outlined.OpenInBrowser,
-                        contentDescription = "Open PW article"
-                    )
-                },
-                text = { Text("More info") },
+            TopAppBar(
+                title = { Text(substance.name) },
+                actions = {
+                    TextButton(
+                        onClick = { uriHandler.openUri(substance.url) },
+                    ) {
+                        Text("Article")
+                    }
+                }
             )
         }
     ) { padding ->

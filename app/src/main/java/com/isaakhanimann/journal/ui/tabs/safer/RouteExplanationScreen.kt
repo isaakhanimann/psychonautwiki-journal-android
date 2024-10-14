@@ -32,10 +32,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -56,18 +56,15 @@ fun RouteExplanationScreen() {
     val uriHandler = LocalUriHandler.current
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Routes of administration") })
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = { uriHandler.openUri(AdministrationRoute.psychonautWikiArticleURL) },
-                icon = {
-                    Icon(
-                        Icons.Outlined.OpenInBrowser,
-                        contentDescription = "Open PW article"
-                    )
-                },
-                text = { Text("Article") },
+            TopAppBar(
+                title = { Text("Routes of administration") },
+                actions = {
+                    TextButton(
+                        onClick = { uriHandler.openUri(AdministrationRoute.psychonautWikiArticleURL) },
+                    ) {
+                        Text("Article")
+                    }
+                }
             )
         }
     ) { padding ->
@@ -77,7 +74,12 @@ fun RouteExplanationScreen() {
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
         ) {
-            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 3.dp)) {
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 3.dp
+                )
+            ) {
                 Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                     SectionText(
                         text = """A route of administration is the method in which a psychoactive substance is delivered into the body.

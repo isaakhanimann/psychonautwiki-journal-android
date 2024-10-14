@@ -19,13 +19,10 @@
 package com.isaakhanimann.journal.ui.tabs.search.substance.category
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -71,21 +68,20 @@ fun CategoryScreen(category: Category?) {
     } else {
         val uriHandler = LocalUriHandler.current
         Scaffold(
-            topBar = { TopAppBar(title = { Text(category.name.replaceFirstChar { it.uppercase() }) }) },
-            floatingActionButton = {
-                if (category.url != null) {
-                    ExtendedFloatingActionButton(
-                        onClick = { uriHandler.openUri(category.url) },
-                        icon = {
-                            Icon(
-                                Icons.Outlined.OpenInBrowser,
-                                contentDescription = "Open link"
-                            )
-                        },
-                        text = { Text("More info") },
-                    )
-                }
-            }
+            topBar = {
+                TopAppBar(
+                    title = { Text(category.name.replaceFirstChar { it.uppercase() }) },
+                    actions = {
+                        if (category.url != null) {
+                            TextButton(
+                                onClick = { uriHandler.openUri(category.url) },
+                            ) {
+                                Text("Article")
+                            }
+                        }
+                    }
+                )
+            },
         ) { padding ->
             Text(
                 text = category.description,

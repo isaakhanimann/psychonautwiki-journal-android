@@ -25,15 +25,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -63,20 +60,15 @@ fun DoseGuideScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Dosage guide") },
+                actions = {
+                    TextButton(
+                        onClick = { uriHandler.openUri("https://psychonautwiki.org/wiki/Dosage") },
+                    ) {
+                        Text("Article")
+                    }
+                }
             )
         },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = { uriHandler.openUri("https://psychonautwiki.org/wiki/Dosage") },
-                icon = {
-                    Icon(
-                        Icons.Outlined.OpenInBrowser,
-                        contentDescription = "Open link"
-                    )
-                },
-                text = { Text("Article") },
-            )
-        }
     ) { padding ->
         Column(
             modifier = Modifier
