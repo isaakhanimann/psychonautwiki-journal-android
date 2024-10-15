@@ -216,7 +216,6 @@ fun DrugTestingScreen() {
             }) {
                 Text(
                     "Report missing service",
-                    style = MaterialTheme.typography.bodySmall,
                     textDecoration = TextDecoration.Underline
                 )
             }
