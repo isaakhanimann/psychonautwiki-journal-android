@@ -49,6 +49,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.tabs.search.substancerow.SubstanceRow
@@ -79,7 +81,8 @@ fun SearchScreen(
                     .focusRequester(focusRequester)
                     .onFocusChanged { focusState ->
                         isFocused = focusState.isFocused
-                    }.clearAndSetSemantics {  },
+                    }
+                    .clearAndSetSemantics { },
                 searchText = searchViewModel.searchTextFlow.collectAsState().value,
                 onChange = {
                     searchViewModel.filterSubstances(searchText = it)
@@ -169,15 +172,18 @@ fun SearchScreen(
                     }
 
                     item {
+                        val addCustomSubstanceText = "Add custom substance"
                         TextButton(
                             onClick = navigateToAddCustomSubstanceScreen,
-                            modifier = Modifier.padding(horizontal = horizontalPadding)
+                            modifier = Modifier
+                                .padding(horizontal = horizontalPadding)
+                                .semantics { contentDescription = addCustomSubstanceText }
                         ) {
                             Icon(
                                 Icons.Outlined.Add, contentDescription = "Add"
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text(text = "Add custom substance")
+                            Text(text = addCustomSubstanceText)
                         }
                     }
                 }

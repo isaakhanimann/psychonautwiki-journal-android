@@ -46,6 +46,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -211,11 +213,16 @@ fun DrugTestingScreen() {
                 )
             }
             val uriHandler = LocalUriHandler.current
-            TextButton(onClick = {
-                uriHandler.openUri("https://t.me/isaakhanimann")
-            }) {
+            val reportServiceText = "Report missing service"
+            TextButton(
+                onClick = {
+                    uriHandler.openUri("https://t.me/isaakhanimann")
+                },
+                modifier = Modifier.semantics {
+                    contentDescription = reportServiceText
+                }) {
                 Text(
-                    "Report missing service",
+                    reportServiceText,
                     textDecoration = TextDecoration.Underline
                 )
             }
