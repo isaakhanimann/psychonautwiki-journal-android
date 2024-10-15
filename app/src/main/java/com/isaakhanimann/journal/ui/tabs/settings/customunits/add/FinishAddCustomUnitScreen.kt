@@ -48,6 +48,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -99,7 +101,7 @@ fun FinishAddCustomUnitScreen(
 @Composable
 private fun FinishAddCustomUnitScreenPreview(
     @PreviewParameter(RoaDosePreviewProvider::class) roaDose: RoaDose,
-    ) {
+) {
     FinishAddCustomUnitScreenContent(
         substanceName = "Example",
         roaDose = roaDose,
@@ -176,7 +178,8 @@ private fun FinishAddCustomUnitScreenContent(
             note = note,
             onChangeOfNote = onChangeOfNote,
             isArchived = isArchived,
-            onChangeOfIsArchived = onChangeOfIsArchived)
+            onChangeOfIsArchived = onChangeOfIsArchived
+        )
     }
 }
 
@@ -340,7 +343,10 @@ fun EditCustomUnitSections(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    Switch(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
+                    Switch(
+                        checked = isEstimate,
+                        onCheckedChange = onChangeIsEstimate,
+                        modifier = Modifier.semantics { contentDescription = "Is an estimate" })
                     Text("Estimate", style = MaterialTheme.typography.titleMedium)
                 }
                 AnimatedVisibility(visible = isEstimate) {
@@ -348,7 +354,12 @@ fun EditCustomUnitSections(
                         value = estimatedDoseStandardDeviationText,
                         onValueChange = onChangeEstimatedDoseStandardDeviationText,
                         textStyle = textStyle,
-                        label = { Text("Estimated standard deviation per $unit", style = textStyle) },
+                        label = {
+                            Text(
+                                "Estimated standard deviation per $unit",
+                                style = textStyle
+                            )
+                        },
                         trailingIcon = {
                             Text(
                                 text = originalUnit,
@@ -366,18 +377,25 @@ fun EditCustomUnitSections(
                 }
             }
         }
-        ElevatedCard(modifier = Modifier
-            .padding(horizontal = horizontalPadding, vertical = 4.dp)
-            .fillMaxWidth()) {
-            Column(modifier = Modifier.padding(
-                horizontal = horizontalPadding,
-                vertical = 10.dp
-            )) {
+        ElevatedCard(
+            modifier = Modifier
+                .padding(horizontal = horizontalPadding, vertical = 4.dp)
+                .fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 10.dp
+                )
+            ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    Switch(checked = isArchived, onCheckedChange = onChangeOfIsArchived)
+                    Switch(
+                        checked = isArchived,
+                        onCheckedChange = onChangeOfIsArchived,
+                        modifier = Modifier.semantics { contentDescription = "Archive this unit" })
                     Text("Archive", style = MaterialTheme.typography.titleMedium)
                 }
                 Text("Archived custom units don't show up when adding ingestions")
