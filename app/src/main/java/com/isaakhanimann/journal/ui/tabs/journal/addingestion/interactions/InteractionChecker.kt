@@ -145,7 +145,7 @@ class InteractionChecker @Inject constructor(
             Regex(
                 pattern = interaction.replace(
                     oldValue = "x",
-                    newValue = "[\\S]*",
+                    newValue = "[\\S]{2}",
                     ignoreCase = true
                 ),
                 option = RegexOption.IGNORE_CASE
