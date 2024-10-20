@@ -15,8 +15,8 @@ android {
         applicationId = "com.isaakhanimann.journal"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 39
+        versionName = "8.10"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -69,7 +69,6 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
 
-
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     kapt(libs.androidx.room.compiler)
@@ -87,7 +86,6 @@ dependencies {
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.core.splashscreen)
-
 
 }
 
