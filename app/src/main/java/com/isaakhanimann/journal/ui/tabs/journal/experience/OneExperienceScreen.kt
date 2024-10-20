@@ -229,7 +229,7 @@ fun OneExperienceScreen(
                         expanded = areTimeOptionsExpanded,
                         onDismissRequest = { areTimeOptionsExpanded = false }
                     ) {
-                        SavedTimeDisplayOption.values().forEach { option ->
+                        SavedTimeDisplayOption.entries.forEach { option ->
                             DropdownMenuItem(
                                 text = { Text(option.text) },
                                 onClick = {
@@ -519,8 +519,8 @@ fun OneExperienceScreen(
                         val isLastIngestion =
                             index == oneExperienceScreenModel.ingestionElements.size - 1
                         if (isLastIngestion) {
-                            HorizontalDivider()
                             if (oneExperienceScreenModel.isCurrentExperience) {
+                                HorizontalDivider()
                                 if (timeDisplayOption == TimeDisplayOption.TIME_BETWEEN) {
                                     LastIngestionRelativeToNowText(lastIngestionTime = ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.time)
                                 } else if (timeDisplayOption == TimeDisplayOption.RELATIVE_TO_START) {
