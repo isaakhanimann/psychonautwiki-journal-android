@@ -30,9 +30,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
 import com.isaakhanimann.journal.ui.main.MainScreen
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,12 +37,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        firebaseAnalytics = Firebase.analytics
         setContent {
             JournalTheme {
                 val systemUiController = rememberSystemUiController()
