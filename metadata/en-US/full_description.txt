@@ -1,0 +1,6 @@
+PsychonautWiki Journal can help you keep track of your substance use and give you insights on your consumption patterns.
+
+The substance info comes from PsychonautWiki with some additional info from Tripsit and saferparty.ch
+
+The app is designed to work fully offline.
+The data you enter in the app never leaves your device.
