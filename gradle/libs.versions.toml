@@ -1,6 +1,8 @@
 [versions]
+accompanistSystemuicontroller = "0.23.1"
 agp = "8.7.1"
 compose = "2.5.0"
+coreSplashscreen = "1.0.1"
 datastorePreferences = "1.1.1"
 hiltAndroidCompiler = "2.51.1"
 hiltNavigationCompose = "1.2.0"
@@ -20,7 +22,9 @@ navigationCompose = "2.8.3"
 roomRuntime = "2.6.1"
 
 [libraries]
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
