@@ -49,7 +49,7 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
 
     val savedTimeDisplayOptionFlow: Flow<SavedTimeDisplayOption> = dataStore.data
         .map { preferences ->
-            val name = preferences[PreferencesKeys.KEY_TIME_DISPLAY_OPTION] ?: SavedTimeDisplayOption.REGULAR.name
+            val name = preferences[PreferencesKeys.KEY_TIME_DISPLAY_OPTION] ?: SavedTimeDisplayOption.AUTO.name
             SavedTimeDisplayOption.valueOf(name)
         }
 
