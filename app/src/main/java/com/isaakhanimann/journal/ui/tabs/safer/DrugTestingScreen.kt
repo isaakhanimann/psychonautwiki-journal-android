@@ -89,6 +89,19 @@ fun DrugTestingScreen() {
                     url = "https://triptalks.at"
                 )
             }
+            CardWithTesting(title = "Australia") {
+                TestingServiceItem(
+                    name = "CanTEST",
+                    city = "Canberra",
+                    url = "https://www.cahma.org.au/services/cantest/"
+                )
+                HorizontalDivider()
+                TestingServiceItem(
+                    name = "CheQpoint",
+                    city = "Queensland",
+                    url = "https://www.quihn.org/cheqpoint/"
+                )
+            }
             CardWithTesting(title = "Belgium") {
                 TestingServiceItem(
                     name = "Modus Vivendi",
