@@ -25,14 +25,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -42,7 +39,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -125,7 +121,7 @@ fun ChooseTimeScreen(
 @Composable
 fun ChooseTimeScreenPreview() {
     val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK)
-    val otherColors = AdaptiveColor.values().filter { color ->
+    val otherColors = AdaptiveColor.entries.filter { color ->
         !alreadyUsedColors.contains(color)
     }
     ChooseTimeScreen(
@@ -157,7 +153,7 @@ fun ChooseTimeScreenPreview() {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseTimeScreen(
     createSaveAndDismissAfter: () -> Unit,
@@ -184,28 +180,15 @@ fun ChooseTimeScreen(
     consumerNamesSorted: List<String>
 ) {
     val focusManager = LocalFocusManager.current
-    val isImeVisible = WindowInsets.isImeVisible
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("$substanceName ingestion") },
-                actions = {
-                    if (isImeVisible) {
-                        TextButton(onClick = createSaveAndDismissAfter) {
-                            Icon(
-                                Icons.Filled.Done,
-                                contentDescription = "Done"
-                            )
-                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                            Text("Done")
-                        }
-                    }
-                }
+                title = { Text("$substanceName ingestion") }
             )
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = !isLoadingColor && !isImeVisible,
+                visible = !isLoadingColor,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
@@ -408,7 +391,7 @@ fun ChooseTimeScreen(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(3.dp))
+                Spacer(modifier = Modifier.height(70.dp))
             }
         }
     }
