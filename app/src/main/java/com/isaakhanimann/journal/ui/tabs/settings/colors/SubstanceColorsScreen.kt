@@ -63,7 +63,7 @@ fun SubstanceColorsScreen(
 @Composable
 fun SubstanceColorsScreenPreview() {
     val alreadyUsedColors = listOf(AdaptiveColor.OLIVE, AdaptiveColor.AUBURN)
-    val otherColors = AdaptiveColor.values().filter { !alreadyUsedColors.contains(it) }
+    val otherColors = AdaptiveColor.entries.filter { !alreadyUsedColors.contains(it) }
     SubstanceColorsScreenContent(
         substanceCompanions = listOf(
             SubstanceCompanion(substanceName = "Substance 1", color = AdaptiveColor.AUBURN),

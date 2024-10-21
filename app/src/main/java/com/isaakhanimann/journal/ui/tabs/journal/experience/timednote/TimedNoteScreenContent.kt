@@ -62,7 +62,7 @@ fun TimedNoteScreenContentPreview() {
         },
     ) { padding ->
         val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK)
-        val otherColors = AdaptiveColor.values().filter { color ->
+        val otherColors = AdaptiveColor.entries.filter { color ->
             !alreadyUsedColors.contains(color)
         }
         TimedNoteScreenContent(

@@ -33,7 +33,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithT
 @Composable
 fun RatingsExplanationSection() {
     CardWithTitle(title = "Longer explanations") {
-        val ratings = ShulginRatingOption.values()
+        val ratings = ShulginRatingOption.entries
         ratings.forEach { oneRating ->
             Column(modifier = Modifier.padding(vertical = 5.dp)) {
                 Text(

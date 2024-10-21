@@ -63,7 +63,7 @@ fun DoseExplanationScreen() {
                         .padding(vertical = 10.dp, horizontal = horizontalPadding)
                 )
             }
-            DoseClass.values().forEach {
+            DoseClass.entries.forEach {
                 SectionWithTitle(title = it.name) {
                     Text(
                         text = it.description,

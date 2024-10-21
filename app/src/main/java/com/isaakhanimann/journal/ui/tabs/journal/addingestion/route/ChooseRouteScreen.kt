@@ -94,7 +94,7 @@ fun ChooseRouteScreen(
 @Composable
 fun ChooseRouteScreenPreview() {
     val pwRoutes = listOf(AdministrationRoute.INSUFFLATED, AdministrationRoute.ORAL)
-    val otherRoutes = AdministrationRoute.values().filter { route ->
+    val otherRoutes = AdministrationRoute.entries.filter { route ->
         !pwRoutes.contains(route)
     }
     val otherRoutesChunked = otherRoutes.chunked(2)

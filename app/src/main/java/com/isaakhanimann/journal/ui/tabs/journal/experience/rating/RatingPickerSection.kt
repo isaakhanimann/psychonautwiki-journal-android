@@ -52,7 +52,7 @@ fun RatingPickerSection(
     onRatingChange: (ShulginRatingOption) -> Unit
 ) {
     CardWithTitle(title = "Shulgin rating") {
-        val ratings = ShulginRatingOption.values()
+        val ratings = ShulginRatingOption.entries
         // Modifier.selectableGroup() is essential to ensure correct accessibility behavior
         Column(Modifier.selectableGroup()) {
             ratings.forEach { oneRating ->

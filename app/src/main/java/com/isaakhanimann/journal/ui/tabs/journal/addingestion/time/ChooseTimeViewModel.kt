@@ -134,7 +134,7 @@ class ChooseTimeViewModel @Inject constructor(
 
     val otherColorsFlow: StateFlow<List<AdaptiveColor>> =
         alreadyUsedColorsFlow.map { alreadyUsedColors ->
-            AdaptiveColor.values().filter {
+            AdaptiveColor.entries.filter {
                 !alreadyUsedColors.contains(it)
             }
         }.stateIn(
@@ -188,9 +188,9 @@ class ChooseTimeViewModel @Inject constructor(
             if (thisCompanion == null) {
                 isShowingColorPicker = true
                 val alreadyUsedColors = allCompanions.map { it.color }
-                val otherColors = AdaptiveColor.values().filter { !alreadyUsedColors.contains(it) }
+                val otherColors = AdaptiveColor.entries.filter { !alreadyUsedColors.contains(it) }
                 selectedColor = otherColors.filter { it.isPreferred }.randomOrNull()
-                    ?: otherColors.randomOrNull() ?: AdaptiveColor.values().random()
+                    ?: otherColors.randomOrNull() ?: AdaptiveColor.entries.random()
             } else {
                 selectedColor = thisCompanion.color
             }

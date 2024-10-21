@@ -58,7 +58,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 @Composable
 fun ColorPickerPreview() {
     val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK)
-    val otherColors = AdaptiveColor.values().filter { color ->
+    val otherColors = AdaptiveColor.entries.filter { color ->
         !alreadyUsedColors.contains(color)
     }
     ColorPicker(
@@ -109,7 +109,7 @@ fun ColorPicker(
 @Composable
 fun ColorDialogPreview() {
     val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK, AdaptiveColor.AUBURN)
-    val otherColors = AdaptiveColor.values().filter { color ->
+    val otherColors = AdaptiveColor.entries.filter { color ->
         !alreadyUsedColors.contains(color)
     }
     ColorDialog(

@@ -58,7 +58,7 @@ class AddTimedNoteViewModel @Inject constructor(
             val notes = experienceRepo.getTimedNotes(experienceId)
             val noteColors = notes.map { it.color }.distinct()
             alreadyUsedColors = (substanceColors + noteColors).distinct()
-            otherColors = AdaptiveColor.values().filter {
+            otherColors = AdaptiveColor.entries.filter {
                 !alreadyUsedColors.contains(it)
             }
             color = otherColors.randomOrNull() ?: AdaptiveColor.BLUE

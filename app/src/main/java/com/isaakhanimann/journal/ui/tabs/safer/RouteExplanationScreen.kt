@@ -89,7 +89,7 @@ Determining an optimal route of administration is highly dependent on the substa
                     VerticalSpace()
                 }
             }
-            AdministrationRoute.values().filter { !it.isInjectionMethod }.forEach {
+            AdministrationRoute.entries.filter { !it.isInjectionMethod }.forEach {
                 SectionWithTitle(title = it.displayText) {
                     Text(
                         text = it.articleText,
@@ -113,7 +113,7 @@ Determining an optimal route of administration is highly dependent on the substa
                     }
                 }
             }
-            AdministrationRoute.values().filter { it.isInjectionMethod }.forEach {
+            AdministrationRoute.entries.filter { it.isInjectionMethod }.forEach {
                 SectionWithTitle(title = it.displayText) {
                     Text(
                         text = it.articleText,

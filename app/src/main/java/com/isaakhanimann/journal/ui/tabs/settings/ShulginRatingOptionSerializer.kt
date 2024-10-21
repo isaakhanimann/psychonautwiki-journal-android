@@ -38,7 +38,7 @@ object ShulginRatingOptionSerializer : KSerializer<ShulginRatingOption> {
 
     override fun deserialize(decoder: Decoder): ShulginRatingOption {
         val ratingRawValue = decoder.decodeString()
-        val foundRating = ShulginRatingOption.values().firstOrNull {
+        val foundRating = ShulginRatingOption.entries.firstOrNull {
             it.rawValue == ratingRawValue
         }
         return foundRating ?: ShulginRatingOption.FOUR_PLUS

@@ -39,7 +39,7 @@ class ChooseRouteViewModel @Inject constructor(
 
     var showOtherRoutes by mutableStateOf(false)
     val pwRoutes = substance?.roas?.map { it.route } ?: emptyList()
-    private val otherRoutes = AdministrationRoute.values().filter { route ->
+    private val otherRoutes = AdministrationRoute.entries.filter { route ->
         !pwRoutes.contains(route)
     }
     val otherRoutesChunked = otherRoutes.chunked(2)

@@ -178,7 +178,7 @@ fun StatsScreen(
                     selectedTabIndex = statsModel.selectedOption.tabIndex,
                     contentColor = MaterialTheme.colorScheme.onSurface,
                 ) {
-                    TimePickerOption.values().forEachIndexed { index, option ->
+                    TimePickerOption.entries.forEachIndexed { index, option ->
                         Tab(
                             text = { Text(option.displayText) },
                             selected = statsModel.selectedOption.tabIndex == index,

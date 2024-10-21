@@ -63,7 +63,7 @@ fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
                 modifier = Modifier.padding(10.dp),
                 verticalArrangement = Arrangement.spacedBy(spacing.dp)
             ) {
-                val routesChunked = AdministrationRoute.values().toList().chunked(2)
+                val routesChunked = AdministrationRoute.entries.toList().chunked(2)
                 routesChunked.forEach { chunk ->
                     Row(
                         modifier = Modifier

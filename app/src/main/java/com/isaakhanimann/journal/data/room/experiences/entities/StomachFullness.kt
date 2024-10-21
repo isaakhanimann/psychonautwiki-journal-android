@@ -69,7 +69,7 @@ object StomachFullnessSerializer : KSerializer<StomachFullness> {
 
     override fun deserialize(decoder: Decoder): StomachFullness {
         val value = decoder.decodeString()
-        val fullness = StomachFullness.values().find { it.serialized == value }
+        val fullness = StomachFullness.entries.find { it.serialized == value }
         if (fullness == null) {
             throw IllegalArgumentException("$value is not a valid stomach fullness")
         } else {
