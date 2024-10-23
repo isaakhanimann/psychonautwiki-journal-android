@@ -38,6 +38,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.OpenInFull
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
@@ -447,8 +448,16 @@ fun OneExperienceScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         CardTitle(title = "Effect timeline")
-                        TextButton(onClick = navigateToExplainTimeline) {
-                            Text(text = "Info")
+                        Row {
+                            TextButton(onClick = navigateToExplainTimeline) {
+                                Text(text = "Info")
+                            }
+                            IconButton(onClick = { navigateToTimelineScreen(YOU) }) {
+                                Icon(
+                                    Icons.Default.OpenInFull,
+                                    contentDescription = "Expand timeline"
+                                )
+                            }
                         }
                     }
                     Column(
@@ -464,9 +473,6 @@ fun OneExperienceScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)
-                                .clickable {
-                                    navigateToTimelineScreen(YOU)
-                                }
                         )
                         val hasOralIngestion =
                             oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }
@@ -657,7 +663,18 @@ fun OneExperienceScreen(
             }
             oneExperienceScreenModel.consumersWithIngestions.forEach { consumerWithIngestions ->
                 ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                    CardTitle(title = consumerWithIngestions.consumerName)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        CardTitle(title = consumerWithIngestions.consumerName)
+                        IconButton(onClick = { navigateToTimelineScreen(consumerWithIngestions.consumerName) }) {
+                            Icon(
+                                Icons.Default.OpenInFull,
+                                contentDescription = "Expand timeline"
+                            )
+                        }
+                    }
                     Column(
                         modifier = Modifier
                             .padding(horizontal = horizontalPadding)
@@ -671,9 +688,6 @@ fun OneExperienceScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)
-                                .clickable {
-                                    navigateToTimelineScreen(consumerWithIngestions.consumerName)
-                                }
                         )
                     }
                     HorizontalDivider()
