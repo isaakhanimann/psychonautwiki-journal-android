@@ -27,8 +27,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-@OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = ShulginRatingOption::class)
 object ShulginRatingOptionSerializer : KSerializer<ShulginRatingOption> {
     override val descriptor = PrimitiveSerialDescriptor("ShulginRatingOption", PrimitiveKind.STRING)
 
