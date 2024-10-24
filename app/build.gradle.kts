@@ -16,7 +16,7 @@ android {
         applicationId = "com.isaakhanimann.journal"
         minSdk = 26
         targetSdk = 34
-        versionCode = 44
+        versionCode = 45
         versionName = "8.14"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -33,7 +33,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            ndk.debugSymbolLevel = "SYMBOL_TABLE"
+            ndk.debugSymbolLevel = "FULL"
         }
     }
     compileOptions {
