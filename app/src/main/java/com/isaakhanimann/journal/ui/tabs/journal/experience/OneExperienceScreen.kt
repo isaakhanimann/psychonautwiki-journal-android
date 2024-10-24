@@ -470,6 +470,7 @@ fun OneExperienceScreen(
                             ingestionElements = oneExperienceScreenModel.ingestionElements,
                             dataForRatings = dataForRatings,
                             dataForTimedNotes = dataForTimedNotes,
+                            timeDisplayOption = timeDisplayOption,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)
@@ -685,6 +686,7 @@ fun OneExperienceScreen(
                             ingestionElements = consumerWithIngestions.ingestionElements,
                             dataForRatings = emptyList(),
                             dataForTimedNotes = emptyList(),
+                            timeDisplayOption = timeDisplayOption,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)

@@ -55,6 +55,8 @@ import androidx.compose.ui.unit.toSize
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import kotlinx.coroutines.delay
@@ -102,6 +104,7 @@ fun AllTimelinesPreview(
             ),
         ),
         isShowingCurrentTime = true,
+        timeDisplayOption = TimeDisplayOption.REGULAR,
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
@@ -115,6 +118,7 @@ fun AllTimelines(
     dataForRatings: List<DataForOneRating>,
     dataForTimedNotes: List<DataForOneTimedNote>,
     isShowingCurrentTime: Boolean,
+    timeDisplayOption: TimeDisplayOption,
     modifier: Modifier = Modifier,
 ) {
     if (dataForEffectLines.isEmpty()) {
@@ -231,7 +235,8 @@ fun AllTimelines(
                         model,
                         verticalDistanceFromFinger,
                         textMeasurer,
-                        dragTimeTextSize
+                        dragTimeTextSize,
+                        timeDisplayOption
                     )
                 }
             }
@@ -255,7 +260,8 @@ private fun DrawScope.drawDragPointLineAndTimeLabel(
     model: AllTimelinesModel,
     dragPointToTextVerticalDistance: Float,
     textMeasurer: TextMeasurer,
-    dragTimeTextSize: TextStyle
+    dragTimeTextSize: TextStyle,
+    timeDisplayOption: TimeDisplayOption,
 ) {
     val horizontallyLimitedDragPoint = Offset(
         x = dragPoint.x.coerceIn(0f, canvasWidth),
@@ -275,7 +281,8 @@ private fun DrawScope.drawDragPointLineAndTimeLabel(
         canvasHeightWithVerticalLine,
         dragLineColor,
         dragTimeTextSize,
-        textColor
+        textColor,
+        timeDisplayOption
     )
 }
 
@@ -289,15 +296,34 @@ private fun DrawScope.drawDragTimeLabelWithBackground(
     canvasHeightWithVerticalLine: Float,
     dragLineColor: Color,
     dragTimeTextSize: TextStyle,
-    textColor: Color
+    textColor: Color,
+    timeDisplayOption: TimeDisplayOption,
 ) {
     val secondsAtDragPoint = horizontallyLimitedDragPoint.x / pixelsPerSec
     val timeAtDragPoint = model.startTime.plusSeconds(secondsAtDragPoint.toLong())
     val textHeight = max(0f, horizontallyLimitedDragPoint.y - dragPointToTextVerticalDistance)
-
+    val timeLabel = when(timeDisplayOption) {
+        TimeDisplayOption.RELATIVE_TO_NOW -> {
+            val now = Instant.now()
+            val isInPast = timeAtDragPoint < now
+            if (isInPast) {
+                getDurationText(fromInstant = timeAtDragPoint, toInstant = now) + " ago"
+            } else {
+                "in " + getDurationText(fromInstant = timeAtDragPoint, toInstant = now)
+            }
+        }
+        TimeDisplayOption.RELATIVE_TO_START -> {
+            getDurationText(
+                fromInstant = model.startTime,
+                toInstant = timeAtDragPoint
+            ) + " in"
+        }
+        TimeDisplayOption.TIME_BETWEEN -> timeAtDragPoint.getStringOfPattern("HH:mm")
+        TimeDisplayOption.REGULAR -> timeAtDragPoint.getStringOfPattern("HH:mm")
+    }
     val measuredText =
         textMeasurer.measure(
-            timeAtDragPoint.getStringOfPattern("HH:mm"),
+            timeLabel,
             style = TextStyle(fontSize = 18.sp)
         )
     val textSize = measuredText.size
@@ -320,7 +346,7 @@ private fun DrawScope.drawDragTimeLabelWithBackground(
     )
     drawText(
         textMeasurer,
-        text = timeAtDragPoint.getStringOfPattern("HH:mm"),
+        text = timeLabel,
         topLeft = Offset(
             x = rectTopLeft.x + (rectSize.width - textSize.width) / 2,
             y = rectTopLeft.y + (rectSize.height - textSize.height) / 2

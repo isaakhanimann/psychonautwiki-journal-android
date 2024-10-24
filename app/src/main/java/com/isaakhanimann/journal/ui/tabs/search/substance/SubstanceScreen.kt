@@ -79,6 +79,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.OptionalDosag
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customunit.CustomUnitRoaDoseView
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.ToleranceSection
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
@@ -399,6 +400,7 @@ fun SubstanceScreen(
                             dataForRatings = emptyList(),
                             dataForTimedNotes = emptyList(),
                             isShowingCurrentTime = false,
+                            timeDisplayOption = TimeDisplayOption.RELATIVE_TO_NOW,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)

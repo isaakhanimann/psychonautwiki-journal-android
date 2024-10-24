@@ -32,6 +32,7 @@ fun ExperienceEffectTimelines(
     ingestionElements: List<IngestionElement>,
     dataForRatings: List<DataForOneRating>,
     dataForTimedNotes: List<DataForOneTimedNote>,
+    timeDisplayOption: TimeDisplayOption,
     modifier: Modifier
 ) {
     val effectTimelines = remember(ingestionElements) {
@@ -63,6 +64,7 @@ fun ExperienceEffectTimelines(
         dataForRatings = dataForRatings,
         dataForTimedNotes = dataForTimedNotes,
         isShowingCurrentTime = true,
+        timeDisplayOption = timeDisplayOption,
         modifier = modifier
     )
 }

@@ -62,6 +62,7 @@ fun TimelineScreen(
         ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
         ratings = if (viewModel.consumerName == YOU) viewModel.ratingsFlow.collectAsState().value else emptyList(),
         timedNotes = if (viewModel.consumerName == YOU) viewModel.timedNotesFlow.collectAsState().value else emptyList(),
+        timeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value
     )
     TimelineScreen(timelineScreenModel)
 }
@@ -124,6 +125,7 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
                         .map {
                             DataForOneTimedNote(time = it.time, color = it.color)
                         },
+                    timeDisplayOption = timelineScreenModel.timeDisplayOption,
                     modifier = Modifier
                         .fillMaxHeight(if (isOrientationPortrait) 0.5f else 1f)
                         .width(canvasWidth.dp)

@@ -31,6 +31,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.utils.getInstant
 
@@ -121,6 +122,7 @@ class TimelineScreenModelPreviewProvider :
                     isPartOfTimeline = true
                 )
             ),
+            timeDisplayOption = TimeDisplayOption.REGULAR,
         )
     )
 
