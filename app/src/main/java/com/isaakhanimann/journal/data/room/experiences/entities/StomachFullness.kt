@@ -18,10 +18,8 @@
 
 package com.isaakhanimann.journal.data.room.experiences.entities
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -56,8 +54,6 @@ enum class StomachFullness {
     abstract val onsetDelayForOralInHours: Double
 }
 
-@OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = StomachFullness::class)
 object StomachFullnessSerializer : KSerializer<StomachFullness> {
 
     override val descriptor: SerialDescriptor =
