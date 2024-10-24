@@ -150,9 +150,9 @@ Many substances can be inhaled to achieve an altered state of consciousness, how
     abstract val color: AdaptiveColor
 
     companion object {
-        const val psychonautWikiArticleURL =
+        const val PSYCHONAUT_WIKI_ARTICLE_URL =
             "https://psychonautwiki.org/wiki/Route_of_administration"
-        const val saferInjectionArticleURL = "https://psychonautwiki.org/wiki/Safer_injection_guide"
-        const val saferPluggingArticleURL = "https://wiki.tripsit.me/wiki/Quick_Guide_to_Plugging"
+        const val SAFER_INJECTION_ARTICLE_URL = "https://psychonautwiki.org/wiki/Safer_injection_guide"
+        const val SAFER_PLUGGING_ARTICLE_URL = "https://wiki.tripsit.me/wiki/Quick_Guide_to_Plugging"
     }
 }

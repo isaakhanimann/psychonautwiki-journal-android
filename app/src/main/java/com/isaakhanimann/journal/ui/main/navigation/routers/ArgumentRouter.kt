@@ -66,47 +66,47 @@ private const val ROUTE_START_SUBSTANCE_COMPANION = "substancesCompanion/"
 private const val ROUTE_START_CATEGORY = "category/"
 
 sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>) {
-    object ExperienceRouter : ArgumentRouter(
+    data object ExperienceRouter : ArgumentRouter(
         route = "$ROUTE_START_EXPERIENCES{$EXPERIENCE_ID_KEY}",
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
     )
 
-    object IngestionRouter : ArgumentRouter(
+    data object IngestionRouter : ArgumentRouter(
         route = "$ROUTE_START_INGESTIONS{$INGESTION_ID_KEY}",
         args = listOf(navArgument(INGESTION_ID_KEY) { type = NavType.IntType })
     )
 
-    object EditCustomUnitRouter : ArgumentRouter(
+    data object EditCustomUnitRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_CUSTOM_UNIT{$CUSTOM_UNIT_ID_KEY}",
         args = listOf(navArgument(CUSTOM_UNIT_ID_KEY) { type = NavType.IntType })
     )
 
-    object ChooseDoseCustomUnitRouter : ArgumentRouter(
+    data object ChooseDoseCustomUnitRouter : ArgumentRouter(
         route = "$ROUTE_START_CHOOSE_DOSE_CUSTOM_UNIT{$CUSTOM_UNIT_ID_KEY}",
         args = listOf(navArgument(CUSTOM_UNIT_ID_KEY) { type = NavType.IntType })
     )
 
-    object EditExperienceRouter : ArgumentRouter(
+    data object EditExperienceRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_EXPERIENCE{$EXPERIENCE_ID_KEY}",
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
     )
 
-    object AddRatingRouter : ArgumentRouter(
+    data object AddRatingRouter : ArgumentRouter(
         route = "$ROUTE_START_ADD_RATING{$EXPERIENCE_ID_KEY}",
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
     )
 
-    object AddTimedNoteRouter : ArgumentRouter(
+    data object AddTimedNoteRouter : ArgumentRouter(
         route = "$ROUTE_START_ADD_TIMED_NOTE{$EXPERIENCE_ID_KEY}",
         args = listOf(navArgument(EXPERIENCE_ID_KEY) { type = NavType.IntType })
     )
 
-    object EditRatingRouter : ArgumentRouter(
+    data object EditRatingRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_RATING{$RATING_ID_KEY}",
         args = listOf(navArgument(RATING_ID_KEY) { type = NavType.IntType })
     )
 
-    object EditTimedNoteRouter : ArgumentRouter(
+    data object EditTimedNoteRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_TIMED_NOTE{$TIMED_NOTE_ID_KEY}/{$EXPERIENCE_ID_KEY}",
         args = listOf(
             navArgument(TIMED_NOTE_ID_KEY) { type = NavType.IntType },
@@ -114,7 +114,7 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         )
     )
 
-    object TimelineScreenRouter : ArgumentRouter(
+    data object TimelineScreenRouter : ArgumentRouter(
         route = "$ROUTE_START_TIMELINE_SCREEN{$CONSUMER_NAME_KEY}/{$EXPERIENCE_ID_KEY}",
         args = listOf(
             navArgument(CONSUMER_NAME_KEY) { type = NavType.StringType },
@@ -122,22 +122,22 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         )
     )
 
-    object EditCustomRouter : ArgumentRouter(
+    data object EditCustomRouter : ArgumentRouter(
         route = "$ROUTE_START_EDIT_CUSTOM{$CUSTOM_SUBSTANCE_ID_KEY}",
         args = listOf(navArgument(CUSTOM_SUBSTANCE_ID_KEY) { type = NavType.IntType })
     )
 
-    object CategoryRouter : ArgumentRouter(
+    data object CategoryRouter : ArgumentRouter(
         route = "$ROUTE_START_CATEGORY{$CATEGORY_KEY}",
         args = listOf(navArgument(CATEGORY_KEY) { type = NavType.StringType })
     )
 
-    object CustomChooseRouteRouter : ArgumentRouter(
+    data object CustomChooseRouteRouter : ArgumentRouter(
         route = "$ROUTE_START_CHOOSE_ROUTE_CUSTOM{$CUSTOM_SUBSTANCE_ID_KEY}",
         args = listOf(navArgument(CUSTOM_SUBSTANCE_ID_KEY) { type = NavType.IntType })
     )
 
-    object CustomChooseDoseRouter : ArgumentRouter(
+    data object CustomChooseDoseRouter : ArgumentRouter(
         route = "$ROUTE_START_CHOOSE_DOSE_CUSTOM{$CUSTOM_SUBSTANCE_ID_KEY}/{$ADMINISTRATION_ROUTE_KEY}",
         args = listOf(
             navArgument(CUSTOM_SUBSTANCE_ID_KEY) { type = NavType.IntType },
@@ -145,14 +145,14 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         )
     )
 
-    object SubstanceRouter : ArgumentRouter(
+    data object SubstanceRouter : ArgumentRouter(
         route = "$ROUTE_START_SUBSTANCES{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
         )
     )
 
-    object SubstanceCompanionRouter : ArgumentRouter(
+    data object SubstanceCompanionRouter : ArgumentRouter(
         route = "$ROUTE_START_SUBSTANCE_COMPANION{$SUBSTANCE_NAME_KEY}/?$CONSUMER_NAME_KEY={$CONSUMER_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
@@ -160,35 +160,35 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         )
     )
 
-    object CheckInteractionsRouter : ArgumentRouter(
+    data object CheckInteractionsRouter : ArgumentRouter(
         route = "$ROUTE_START_CHECK_INTERACTIONS{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
         )
     )
 
-    object CheckSaferUseRouter : ArgumentRouter(
+    data object CheckSaferUseRouter : ArgumentRouter(
         route = "$ROUTE_START_CHECK_SAFER_USE{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
         )
     )
 
-    object ChooseRouteOfAddIngestionRouter : ArgumentRouter(
+    data object ChooseRouteOfAddIngestionRouter : ArgumentRouter(
         route = "$ROUTE_START_CHOOSE_ROUTE_OF_ADD_INGESTION{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
         )
     )
 
-    object ChooseRouteOfAddCustomUnitRouter : ArgumentRouter(
+    data object ChooseRouteOfAddCustomUnitRouter : ArgumentRouter(
         route = "$ROUTE_START_OF_ADD_CUSTOM_UNIT{$SUBSTANCE_NAME_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
         )
     )
 
-    object ChooseDoseRouter : ArgumentRouter(
+    data object ChooseDoseRouter : ArgumentRouter(
         route = "$ROUTE_START_CHOOSE_DOSE{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },
@@ -196,7 +196,7 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         )
     )
 
-    object ChooseTimeRouter : ArgumentRouter(
+    data object ChooseTimeRouter : ArgumentRouter(
         route = "$ROUTE_START_CHOOSE_TIME{$ADMINISTRATION_ROUTE_KEY}/{$IS_ESTIMATE_KEY}/?$UNITS_KEY={$UNITS_KEY}/?$DOSE_KEY={$DOSE_KEY}/?$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY={$ESTIMATED_DOSE_STANDARD_DEVIATION_KEY}/?$SUBSTANCE_NAME_KEY={$SUBSTANCE_NAME_KEY}/?$CUSTOM_UNIT_ID_KEY={$CUSTOM_UNIT_ID_KEY}/?$CUSTOM_SUBSTANCE_ID_KEY={$CUSTOM_SUBSTANCE_ID_KEY}",
         args = listOf(
             navArgument(ADMINISTRATION_ROUTE_KEY) { type = NavType.StringType },
@@ -210,7 +210,7 @@ sealed class ArgumentRouter(val route: String, val args: List<NamedNavArgument>)
         )
     )
 
-    object FinishAddCustomUnitRouter : ArgumentRouter(
+    data object FinishAddCustomUnitRouter : ArgumentRouter(
         route = "$ROUTE_START_FINISH_ADD_CUSTOM_UNIT{$SUBSTANCE_NAME_KEY}/{$ADMINISTRATION_ROUTE_KEY}",
         args = listOf(
             navArgument(SUBSTANCE_NAME_KEY) { type = NavType.StringType },

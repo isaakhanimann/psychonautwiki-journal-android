@@ -60,7 +60,7 @@ fun RouteExplanationScreen() {
                 title = { Text("Routes of administration") },
                 actions = {
                     TextButton(
-                        onClick = { uriHandler.openUri(AdministrationRoute.psychonautWikiArticleURL) },
+                        onClick = { uriHandler.openUri(AdministrationRoute.PSYCHONAUT_WIKI_ARTICLE_URL) },
                     ) {
                         Text("Article")
                     }
@@ -100,7 +100,7 @@ Determining an optimal route of administration is highly dependent on the substa
                     )
                     if (it == AdministrationRoute.RECTAL) {
                         Button(
-                            onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) },
+                            onClick = { uriHandler.openUri(AdministrationRoute.SAFER_PLUGGING_ARTICLE_URL) },
                             modifier = Modifier.padding(horizontal = 5.dp)
                         ) {
                             Icon(

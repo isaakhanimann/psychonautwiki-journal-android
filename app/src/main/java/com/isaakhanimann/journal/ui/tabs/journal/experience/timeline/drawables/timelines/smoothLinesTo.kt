@@ -29,7 +29,7 @@ fun Path.startSmoothLineTo(
 ) {
     val diff = endX - startX
     val controlX = startX + (diff * smoothnessBetween0And1)
-    quadraticBezierTo(controlX, startY, endX, endY)
+    quadraticTo(controlX, startY, endX, endY)
 }
 
 fun Path.endSmoothLineTo(
@@ -40,5 +40,5 @@ fun Path.endSmoothLineTo(
 ) {
     val diff = endX - startX
     val controlX = endX - (diff * smoothnessBetween0And1)
-    quadraticBezierTo(controlX, endY, endX, endY)
+    quadraticTo(controlX, endY, endX, endY)
 }

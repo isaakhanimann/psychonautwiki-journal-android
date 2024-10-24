@@ -22,51 +22,51 @@ import androidx.navigation.NavController
 
 
 sealed class NoArgumentRouter(val route: String) {
-    object StatsRouter : NoArgumentRouter(route = "stats")
-    object CombinationSettingsRouter : NoArgumentRouter(route = "combinationSettings")
-    object SubstanceColorsRouter : NoArgumentRouter(route = "substanceColors")
-    object CustomUnitsRouter : NoArgumentRouter(route = "customUnits")
-    object AddCustomUnitsRouter : NoArgumentRouter(route = "addCustomUnits")
-    object CustomUnitArchiveRouter : NoArgumentRouter(route = "customUnitArchive")
-    object AddCustomUnitsSearchSubstanceRouter : NoArgumentRouter(route = "addCustomUnitsSearch")
-    object FAQRouter : NoArgumentRouter(route = "faqRoute")
-    object DonateRouter : NoArgumentRouter(route = "donate")
-    object ExplainTimelineOnSearchTabRouter : NoArgumentRouter(route = "explainTimelineOnSearchTab")
-    object ExplainTimelineOnJournalTabRouter :
+    data object StatsRouter : NoArgumentRouter(route = "stats")
+    data object CombinationSettingsRouter : NoArgumentRouter(route = "combinationSettings")
+    data object SubstanceColorsRouter : NoArgumentRouter(route = "substanceColors")
+    data object CustomUnitsRouter : NoArgumentRouter(route = "customUnits")
+    data object AddCustomUnitsRouter : NoArgumentRouter(route = "addCustomUnits")
+    data object CustomUnitArchiveRouter : NoArgumentRouter(route = "customUnitArchive")
+    data object AddCustomUnitsSearchSubstanceRouter : NoArgumentRouter(route = "addCustomUnitsSearch")
+    data object FAQRouter : NoArgumentRouter(route = "faqRoute")
+    data object DonateRouter : NoArgumentRouter(route = "donate")
+    data object ExplainTimelineOnSearchTabRouter : NoArgumentRouter(route = "explainTimelineOnSearchTab")
+    data object ExplainTimelineOnJournalTabRouter :
         NoArgumentRouter(route = "explainTimelineOnJournalTab")
 
-    object SettingsRouter : NoArgumentRouter(route = "settings")
-    object DosageExplanationRouterOnSaferTab :
+    data object SettingsRouter : NoArgumentRouter(route = "settings")
+    data object DosageExplanationRouterOnSaferTab :
         NoArgumentRouter(route = "dosageExplanationOnSaferTab")
 
-    object DosageExplanationRouterOnSearchTab :
+    data object DosageExplanationRouterOnSearchTab :
         NoArgumentRouter(route = "dosageExplanationOnSearchTab")
 
-    object AdministrationRouteExplanationRouter :
+    data object AdministrationRouteExplanationRouter :
         NoArgumentRouter(route = "administrationRouteExplanation")
 
-    object DosageGuideRouter : NoArgumentRouter(route = "dosageGuide")
-    object VolumetricDosingOnSaferTabRouter : NoArgumentRouter(route = "volumetricDosingOnSaferTab")
-    object VolumetricDosingOnJournalTabRouter :
+    data object DosageGuideRouter : NoArgumentRouter(route = "dosageGuide")
+    data object VolumetricDosingOnSaferTabRouter : NoArgumentRouter(route = "volumetricDosingOnSaferTab")
+    data object VolumetricDosingOnJournalTabRouter :
         NoArgumentRouter(route = "volumetricDosingOnJournalTab")
 
-    object VolumetricDosingOnSearchTabRouter :
+    data object VolumetricDosingOnSearchTabRouter :
         NoArgumentRouter(route = "volumetricDosingOnSearchTab")
 
-    object DrugTestingRouter : NoArgumentRouter(route = "drugTesting")
-    object SaferHallucinogens : NoArgumentRouter(route = "saferHallucinogens")
-    object SaferSniffingOnJournalTab : NoArgumentRouter(route = "saferSniffing")
-    object SaferStimulants : NoArgumentRouter(route = "saferStimulants")
-    object ReagentTestingRouter : NoArgumentRouter(route = "reagentTesting")
-    object AddIngestionRouter : NoArgumentRouter(route = "addIngestions")
-    object CalendarRouter : NoArgumentRouter(route = "calendar")
-    object AddIngestionSearchRouter : NoArgumentRouter(route = "addIngestionsSearch")
-    object AddCustomRouter : NoArgumentRouter(route = "addCustom")
-    object SubstancesRouter :
+    data object DrugTestingRouter : NoArgumentRouter(route = "drugTesting")
+    data object SaferHallucinogens : NoArgumentRouter(route = "saferHallucinogens")
+    data object SaferSniffingOnJournalTab : NoArgumentRouter(route = "saferSniffing")
+    data object SaferStimulants : NoArgumentRouter(route = "saferStimulants")
+    data object ReagentTestingRouter : NoArgumentRouter(route = "reagentTesting")
+    data object AddIngestionRouter : NoArgumentRouter(route = "addIngestions")
+    data object CalendarRouter : NoArgumentRouter(route = "calendar")
+    data object AddIngestionSearchRouter : NoArgumentRouter(route = "addIngestionsSearch")
+    data object AddCustomRouter : NoArgumentRouter(route = "addCustom")
+    data object SubstancesRouter :
         NoArgumentRouter(route = "searchChild") // child because there is already a route for the tabs
 
-    object JournalRouter : NoArgumentRouter(route = "journalChild")
-    object SaferRouter : NoArgumentRouter(route = "saferChild")
+    data object JournalRouter : NoArgumentRouter(route = "journalChild")
+    data object SaferRouter : NoArgumentRouter(route = "saferChild")
 }
 
 fun NavController.navigateToComboSettings() {

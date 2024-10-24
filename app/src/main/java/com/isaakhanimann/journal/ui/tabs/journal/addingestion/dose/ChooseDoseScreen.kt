@@ -456,7 +456,7 @@ fun ChooseDoseScreen(
                 }
             } else if (administrationRoute == AdministrationRoute.RECTAL) {
                 val uriHandler = LocalUriHandler.current
-                TextButton(onClick = { uriHandler.openUri(AdministrationRoute.saferPluggingArticleURL) }) {
+                TextButton(onClick = { uriHandler.openUri(AdministrationRoute.SAFER_PLUGGING_ARTICLE_URL) }) {
                     Icon(
                         Icons.Outlined.OpenInBrowser,
                         contentDescription = "Open link"

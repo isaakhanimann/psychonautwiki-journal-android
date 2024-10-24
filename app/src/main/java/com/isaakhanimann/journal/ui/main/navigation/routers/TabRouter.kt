@@ -34,35 +34,35 @@ sealed class TabRouter(
     @StringRes val resourceId: Int,
     val icon: ImageVector
 ) {
-    object Journal : TabRouter(
+    data object Journal : TabRouter(
         route = "journalTab",
         childRoute = NoArgumentRouter.JournalRouter.route,
         resourceId = R.string.journal,
         icon = Icons.Outlined.Book
     )
 
-    object Statistics : TabRouter(
+    data object Statistics : TabRouter(
         route = "statisticsTab",
         childRoute = NoArgumentRouter.StatsRouter.route,
         resourceId = R.string.stats,
         icon = Icons.Outlined.BarChart
     )
 
-    object Substances : TabRouter(
+    data object Substances : TabRouter(
         route = "substancesTab",
         childRoute = NoArgumentRouter.SubstancesRouter.route,
         resourceId = R.string.substances,
         icon = Icons.Outlined.Medication
     )
 
-    object SaferUse : TabRouter(
+    data object SaferUse : TabRouter(
         route = "saferTab",
         childRoute = NoArgumentRouter.SaferRouter.route,
         resourceId = R.string.safer,
         icon = Icons.Outlined.HealthAndSafety
     )
 
-    object Settings : TabRouter(
+    data object Settings : TabRouter(
         route = "settingsTab",
         childRoute = NoArgumentRouter.SettingsRouter.route,
         resourceId = R.string.settings,

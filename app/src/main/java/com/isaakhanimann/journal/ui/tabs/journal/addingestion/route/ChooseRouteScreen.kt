@@ -255,7 +255,7 @@ fun RouteBox(route: AdministrationRoute, titleStyle: TextStyle) {
 fun SaferInjectionLink() {
     val uriHandler = LocalUriHandler.current
     TextButton(onClick = {
-        uriHandler.openUri(AdministrationRoute.saferInjectionArticleURL)
+        uriHandler.openUri(AdministrationRoute.SAFER_INJECTION_ARTICLE_URL)
     }) {
         Icon(
             Icons.Outlined.OpenInBrowser,
