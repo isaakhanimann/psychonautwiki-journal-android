@@ -31,7 +31,8 @@ import kotlin.time.Duration.Companion.minutes
 class AllTimelinesModel(
     dataForLines: List<DataForOneEffectLine>,
     dataForRatings: List<DataForOneRating>,
-    timedNotes: List<DataForOneTimedNote>
+    timedNotes: List<DataForOneTimedNote>,
+    areSubstanceHeightsIndependent: Boolean,
 ) {
     val startTime: Instant
     val widthInSeconds: Float
@@ -53,9 +54,9 @@ class AllTimelinesModel(
             return@flatMap linesPerSubstance.groupBy { it.route }.map { routeGroup ->
                 val linesPerRoute = routeGroup.value
                 return@map RoaGroup(
-                    linesPerRoute.first().color,
-                    linesPerRoute.first().roaDuration,
-                    linesPerRoute.map { WeightedLine(it.startTime, it.horizontalWeight, it.height) })
+                    color = linesPerRoute.first().color,
+                    roaDuration = linesPerRoute.first().roaDuration,
+                    weightedLines = linesPerRoute.map { WeightedLine(it.startTime, it.horizontalWeight, it.height) })
             }
         }
         val allStartTimeCandidates = ratingTimes + ingestionTimes + noteTimes
@@ -65,9 +66,12 @@ class AllTimelinesModel(
                 startTimeGraph = startTime,
                 color = group.color,
                 roaDuration = group.roaDuration,
-                weightedLines = group.weightedLines
+                weightedLines = group.weightedLines,
+                areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
             )
         }
+        val overallMaxHeight = groupDrawables.maxOfOrNull { it.nonNormalisedHeight } ?: 1f
+        groupDrawables.forEach { it.setOverallHeight(overallMaxHeight) }
         this.groupDrawables = groupDrawables
         val maxWidthIngestions: Float = groupDrawables.maxOfOrNull {
             it.endOfLineRelativeToStartInSeconds

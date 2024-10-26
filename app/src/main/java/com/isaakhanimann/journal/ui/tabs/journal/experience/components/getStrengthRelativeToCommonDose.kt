@@ -19,22 +19,28 @@
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
+import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
+import kotlin.math.max
 
-fun getHeightBetween0And1(
+fun getStrengthRelativeToCommonDose(
     ingestion: IngestionWithCompanionAndCustomUnit,
-    allIngestions: List<IngestionWithCompanionAndCustomUnit>
-): Float {
-    val max = allIngestions
-        .filter { it.ingestion.substanceName == ingestion.ingestion.substanceName }
-        .mapNotNull { it.pureDose }
-        .maxOrNull()
-    return ingestion.pureDose.let { doseSnap ->
-        if (doseSnap == 0.0) {
-            0.01f
-        } else if (max == null || max == 0.0 || doseSnap == null) {
-            1f
-        } else {
-            doseSnap.div(max).toFloat()
+    allIngestions: List<IngestionWithCompanionAndCustomUnit>,
+    roaDose: RoaDose?,
+): Double {
+    val allKnownDoses = allIngestions
+        .filter { it.ingestion.substanceName == ingestion.ingestion.substanceName }.mapNotNull {
+            it.pureDose
         }
+    val sumDose = allKnownDoses.reduceOrNull { acc, d -> acc + d } ?: 0.0
+    val averageDose = sumDose / max(1.0, allKnownDoses.size.toDouble())
+    var commonDose = averageDose
+    val commonMin = roaDose?.commonMin
+    val commonMax = roaDose?.strongMin
+    if (commonMin != null && commonMax != null) {
+        commonDose = (commonMin + commonMax) / 2
     }
+
+    return ingestion.pureDose?.let { doseSnap ->
+        doseSnap / commonDose
+    } ?: 1.0
 }

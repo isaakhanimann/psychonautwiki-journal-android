@@ -31,27 +31,32 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.normalStrok
 
 data class OnsetTimeline(
     val onset: FullDurationRange,
-    val ingestionTimeRelativeToStartInSeconds: Float
+    val ingestionTimeRelativeToStartInSeconds: Float,
 ) : TimelineDrawable {
 
+    override val nonNormalisedHeight: Float = 0f
+    override fun setOverallHeight(overallHeight: Float) {
+        nonNormalisedOverallHeight = overallHeight
+    }
+    override var nonNormalisedOverallHeight: Float = 1f
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds + onset.maxInSeconds
 
     override fun drawTimeLine(
         drawScope: DrawScope,
-        height: Float,
+        canvasHeight: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
     ) {
         val weight = 0.5f
-        val startX = ingestionTimeRelativeToStartInSeconds*pixelsPerSec
+        val startX = ingestionTimeRelativeToStartInSeconds * pixelsPerSec
         val onsetEndX =
             startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
         drawScope.drawPath(
             path = Path().apply {
-                moveTo(x = startX, y = height)
-                lineTo(x = onsetEndX, y = height)
+                moveTo(x = startX, y = canvasHeight)
+                lineTo(x = onsetEndX, y = canvasHeight)
             },
             color = color,
             style = density.normalStroke
@@ -59,7 +64,7 @@ data class OnsetTimeline(
         drawScope.drawCircle(
             color = color,
             radius = density.ingestionDotRadius,
-            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
+            center = Offset(x = ingestionTimeRelativeToStartInSeconds * pixelsPerSec, y = canvasHeight)
         )
     }
 }

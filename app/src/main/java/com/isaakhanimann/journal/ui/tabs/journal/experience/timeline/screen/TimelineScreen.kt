@@ -47,7 +47,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.YOU
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ExperienceEffectTimelines
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
 import com.isaakhanimann.journal.ui.theme.JournalTheme
@@ -59,10 +59,11 @@ fun TimelineScreen(
 ) {
     val timelineScreenModel = TimelineScreenModel(
         title = viewModel.consumerName,
-        ingestionElements = viewModel.ingestionElementsFlow.collectAsState().value,
+        dataForEffectLines = viewModel.dataForEffectLinesFlow.collectAsState().value,
         ratings = if (viewModel.consumerName == YOU) viewModel.ratingsFlow.collectAsState().value else emptyList(),
         timedNotes = if (viewModel.consumerName == YOU) viewModel.timedNotesFlow.collectAsState().value else emptyList(),
-        timeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value
+        timeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value,
+        areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value
     )
     TimelineScreen(timelineScreenModel)
 }
@@ -108,8 +109,8 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
                     .horizontalScroll(rememberScrollState()),
                 contentAlignment = Alignment.Center
             ) {
-                ExperienceEffectTimelines(
-                    ingestionElements = timelineScreenModel.ingestionElements,
+                AllTimelines(
+                    dataForEffectLines = timelineScreenModel.dataForEffectLines,
                     dataForRatings = timelineScreenModel.ratings.mapNotNull {
                         val ratingTime = it.time
                         return@mapNotNull if (ratingTime == null) {
@@ -126,6 +127,8 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
                             DataForOneTimedNote(time = it.time, color = it.color)
                         },
                     timeDisplayOption = timelineScreenModel.timeDisplayOption,
+                    isShowingCurrentTime = true,
+                    areSubstanceHeightsIndependent = timelineScreenModel.areSubstanceHeightsIndependent,
                     modifier = Modifier
                         .fillMaxHeight(if (isOrientationPortrait) 0.5f else 1f)
                         .width(canvasWidth.dp)

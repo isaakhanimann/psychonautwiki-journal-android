@@ -33,7 +33,6 @@ import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
 import com.isaakhanimann.journal.data.substances.classes.roa.DurationUnits
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
-import com.isaakhanimann.journal.ui.tabs.journal.experience.models.ConsumerWithIngestions
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeRouteAndDose
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
@@ -172,11 +171,8 @@ class OneExperienceScreenPreviewProvider :
                     isPartOfTimeline = true
                 )
             ),
-            consumersWithIngestions = listOf(
-                ConsumerWithIngestions(consumerName = "David", ingestionElements = ingestionElements),
-                ConsumerWithIngestions(consumerName = "Laura", ingestionElements = ingestionElements),
-                ConsumerWithIngestions(consumerName = "Lorene", ingestionElements = ingestionElements),
-            )
+            consumersWithIngestions = emptyList(),
+            dataForEffectLines = emptyList()
         )
     )
 

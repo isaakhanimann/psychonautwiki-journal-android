@@ -31,46 +31,64 @@ data class OnsetTotalTimeline(
     val onset: FullDurationRange,
     val total: FullDurationRange,
     val totalWeight: Float,
-    val ingestionTimeRelativeToStartInSeconds: Float
+    val ingestionTimeRelativeToStartInSeconds: Float,
+    override val nonNormalisedHeight: Float,
+    val areSubstanceHeightsIndependent: Boolean,
+    val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
 
+    override var nonNormalisedOverallHeight: Float = 1f
+    override fun setOverallHeight(overallHeight: Float) {
+        nonNormalisedOverallHeight = overallHeight
+    }
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds + total.maxInSeconds
 
+    private val finalNonNormalisedMaxHeight: Float get() {
+        return if (areSubstanceHeightsIndependent) {
+            nonNormalisedMaxOfRoute
+        } else {
+            nonNormalisedOverallHeight
+        }
+    }
+
     override fun drawTimeLine(
         drawScope: DrawScope,
-        height: Float,
+        canvasHeight: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
     ) {
+        val normalisedHeight = nonNormalisedHeight / finalNonNormalisedMaxHeight
+        val heightInPx = normalisedHeight * canvasHeight
+        val top = canvasHeight - heightInPx
         val onsetWeight = 0.5f
-        val startX = ingestionTimeRelativeToStartInSeconds*pixelsPerSec
+        val startX = ingestionTimeRelativeToStartInSeconds * pixelsPerSec
         val onsetEndX =
             startX + (onset.interpolateAtValueInSeconds(onsetWeight) * pixelsPerSec)
         drawScope.drawPath(
             path = Path().apply {
-                moveTo(x = startX, y = height)
-                lineTo(x = onsetEndX, y = height)
+                moveTo(x = startX, y = canvasHeight)
+                lineTo(x = onsetEndX, y = canvasHeight)
             },
             color = color,
             style = density.normalStroke
         )
         val totalX = total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec
         val path = Path().apply {
-            moveTo(x = onsetEndX, y = height)
+            moveTo(x = onsetEndX, y = canvasHeight)
             endSmoothLineTo(
                 smoothnessBetween0And1 = 0.5f,
                 startX = onsetEndX,
                 endX = startX + (totalX / 2f),
-                endY = 0f
+                endY = top
             )
             startSmoothLineTo(
                 smoothnessBetween0And1 = 0.5f,
                 startX = startX + (totalX / 2f),
-                startY = 0f,
+                startY = top,
                 endX = startX + totalX,
-                endY = height
+                endY = canvasHeight
             )
         }
         drawScope.drawPath(
@@ -78,8 +96,8 @@ data class OnsetTotalTimeline(
             color = color,
             style = density.dottedStroke
         )
-        path.lineTo(x = startX + totalX, y = height + drawScope.strokeWidth/2)
-        path.lineTo(x = startX, y = height + drawScope.strokeWidth/2)
+        path.lineTo(x = startX + totalX, y = canvasHeight + drawScope.strokeWidth / 2)
+        path.lineTo(x = startX, y = canvasHeight + drawScope.strokeWidth / 2)
         path.close()
         drawScope.drawPath(
             path = path,
@@ -88,12 +106,18 @@ data class OnsetTotalTimeline(
         drawScope.drawCircle(
             color = color,
             radius = density.ingestionDotRadius,
-            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
+            center = Offset(x = ingestionTimeRelativeToStartInSeconds * pixelsPerSec, y = canvasHeight)
         )
     }
 }
 
-fun RoaDuration.toOnsetTotalTimeline(totalWeight: Float, ingestionTimeRelativeToStartInSeconds: Float): OnsetTotalTimeline? {
+fun RoaDuration.toOnsetTotalTimeline(
+    totalWeight: Float,
+    ingestionTimeRelativeToStartInSeconds: Float,
+    nonNormalisedHeight: Float,
+    areSubstanceHeightsIndependent: Boolean,
+    nonNormalisedMaxOfRoute: Float,
+): OnsetTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullTotal = total?.toFullDurationRange()
     return if (fullOnset != null && fullTotal != null) {
@@ -101,7 +125,10 @@ fun RoaDuration.toOnsetTotalTimeline(totalWeight: Float, ingestionTimeRelativeTo
             onset = fullOnset,
             total = fullTotal,
             totalWeight = totalWeight,
-            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds
+            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
+            nonNormalisedHeight = nonNormalisedHeight,
+            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {
         null

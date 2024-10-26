@@ -95,7 +95,9 @@ fun SettingsPreview() {
         exportFile = {},
         snackbarHostState = remember { SnackbarHostState() },
         areDosageDotsHidden = false,
-        saveDosageDotsAreHidden = {}
+        saveDosageDotsAreHidden = {},
+        areSubstanceHeightsIndependent = false,
+        saveAreSubstanceHeightsIndependent = {},
     )
 }
 
@@ -119,7 +121,9 @@ fun SettingsScreen(
         exportFile = viewModel::exportFile,
         snackbarHostState = viewModel.snackbarHostState,
         areDosageDotsHidden = viewModel.areDosageDotsHiddenFlow.collectAsState().value,
-        saveDosageDotsAreHidden = viewModel::saveDosageDotsAreHidden
+        saveDosageDotsAreHidden = viewModel::saveDosageDotsAreHidden,
+        areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value,
+        saveAreSubstanceHeightsIndependent = viewModel::saveAreSubstanceHeightsIndependent
     )
 }
 
@@ -136,7 +140,9 @@ fun SettingsScreen(
     exportFile: (uri: Uri) -> Unit,
     snackbarHostState: SnackbarHostState,
     areDosageDotsHidden: Boolean,
-    saveDosageDotsAreHidden: (Boolean) -> Unit
+    saveDosageDotsAreHidden: (Boolean) -> Unit,
+    areSubstanceHeightsIndependent: Boolean,
+    saveAreSubstanceHeightsIndependent: (Boolean) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -184,6 +190,17 @@ fun SettingsScreen(
                     Switch(
                         checked = areDosageDotsHidden,
                         onCheckedChange = saveDosageDotsAreHidden)
+                }
+                HorizontalDivider()
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = horizontalPadding),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Independent substance heights")
+                    Switch(
+                        checked = areSubstanceHeightsIndependent,
+                        onCheckedChange = saveAreSubstanceHeightsIndependent)
                 }
             }
             CardWithTitle(title = "App data", innerPaddingHorizontal = 0.dp) {

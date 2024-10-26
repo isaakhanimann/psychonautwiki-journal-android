@@ -32,63 +32,107 @@ class GroupDrawable(
     val startTimeGraph: Instant,
     val color: AdaptiveColor,
     roaDuration: RoaDuration?,
-    weightedLines: List<WeightedLine>
-): TimelineDrawable {
+    weightedLines: List<WeightedLine>,
+    areSubstanceHeightsIndependent: Boolean,
+) : TimelineDrawable {
     private val timelineDrawables: List<TimelineDrawable>
 
+    override var nonNormalisedOverallHeight: Float = 1f
+    override val nonNormalisedHeight: Float
+
     init {
-        val fulls = roaDuration?.toFullTimelines(weightedLines, startTimeGraph)
+        val nonNormalisedMaxOfRoute = weightedLines.maxOfOrNull { it.height } ?: 1f
+        val fulls = roaDuration?.toFullTimelines(
+            weightedLines = weightedLines,
+            startTimeGraph = startTimeGraph,
+            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+        )
         timelineDrawables = if (fulls != null) {
             listOf(fulls)
         } else {
             val onsetComeupPeakTotals = weightedLines.mapNotNull {
                 roaDuration?.toOnsetComeupPeakTotalTimeline(
                     peakAndTotalWeight = it.horizontalWeight,
-                    ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime))
+                    ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime),
+                    nonNormalisedHeight = it.height,
+                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+                    nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
+                )
             }
             onsetComeupPeakTotals.ifEmpty {
                 val onsetComeupTotals = weightedLines.mapNotNull {
                     roaDuration?.toOnsetComeupTotalTimeline(
                         totalWeight = it.horizontalWeight,
-                        ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime)
+                        ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
+                            it.startTime
+                        ),
+                        nonNormalisedHeight = it.height,
+                        areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+                        nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                     )
                 }
                 onsetComeupTotals.ifEmpty {
                     val onsetTotals = weightedLines.mapNotNull {
                         roaDuration?.toOnsetTotalTimeline(
                             totalWeight = it.horizontalWeight,
-                            ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime)
+                            ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
+                                it.startTime
+                            ),
+                            nonNormalisedHeight = it.height,
+                            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+                            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                         )
                     }
                     onsetTotals.ifEmpty {
                         val totals = weightedLines.mapNotNull {
                             roaDuration?.toTotalTimeline(
                                 totalWeight = it.horizontalWeight,
-                                ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime)
+                                ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
+                                    it.startTime
+                                ),
+                                nonNormalisedHeight = it.height,
+                                areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+                                nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                             )
                         }
                         totals.ifEmpty {
                             val onsetComeupPeaks = weightedLines.mapNotNull {
                                 roaDuration?.toOnsetComeupPeakTimeline(
                                     peakWeight = it.horizontalWeight,
-                                    ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime)
+                                    ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
+                                        it.startTime
+                                    ),
+                                    nonNormalisedHeight = it.height,
+                                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+                                    nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                                 )
                             }
                             onsetComeupPeaks.ifEmpty {
                                 val onsetComeups = weightedLines.mapNotNull {
                                     roaDuration?.toOnsetComeupTimeline(
-                                        ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime)
+                                        ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
+                                            it.startTime
+                                        ),
+                                        nonNormalisedHeight = it.height,
+                                        areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+                                        nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                                     )
                                 }
                                 onsetComeups.ifEmpty {
                                     val onsets = weightedLines.mapNotNull {
                                         roaDuration?.toOnsetTimeline(
-                                            ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime)
+                                            ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
+                                                it.startTime
+                                            )
                                         )
                                     }
                                     onsets.ifEmpty {
                                         weightedLines.map {
-                                            NoTimeline(ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime))
+                                            NoTimeline(
+                                                ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
+                                                    it.startTime
+                                                )
+                                            )
                                         }
                                     }
                                 }
@@ -98,9 +142,13 @@ class GroupDrawable(
                 }
             }
         }
+        nonNormalisedHeight = timelineDrawables.maxOfOrNull { it.nonNormalisedHeight } ?: 0f
     }
 
-
+    override fun setOverallHeight(overallHeight: Float) {
+        nonNormalisedOverallHeight = overallHeight
+        timelineDrawables.forEach { it.setOverallHeight(overallHeight) }
+    }
 
     private fun getDistanceFromStartGraphInSeconds(time: Instant): Float {
         return Duration.between(startTimeGraph, time).seconds.toFloat()
@@ -108,7 +156,7 @@ class GroupDrawable(
 
     override fun drawTimeLine(
         drawScope: DrawScope,
-        height: Float,
+        canvasHeight: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
@@ -116,7 +164,7 @@ class GroupDrawable(
         for (drawable in timelineDrawables) {
             drawable.drawTimeLine(
                 drawScope = drawScope,
-                height = height,
+                canvasHeight = canvasHeight,
                 pixelsPerSec = pixelsPerSec,
                 color = color,
                 density = density

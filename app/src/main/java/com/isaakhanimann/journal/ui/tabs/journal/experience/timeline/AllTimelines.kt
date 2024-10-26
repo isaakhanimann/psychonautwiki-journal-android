@@ -105,6 +105,7 @@ fun AllTimelinesPreview(
         ),
         isShowingCurrentTime = true,
         timeDisplayOption = TimeDisplayOption.REGULAR,
+        areSubstanceHeightsIndependent = false,
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
@@ -119,6 +120,7 @@ fun AllTimelines(
     dataForTimedNotes: List<DataForOneTimedNote>,
     isShowingCurrentTime: Boolean,
     timeDisplayOption: TimeDisplayOption,
+    areSubstanceHeightsIndependent: Boolean,
     modifier: Modifier = Modifier,
 ) {
     if (dataForEffectLines.isEmpty()) {
@@ -128,7 +130,8 @@ fun AllTimelines(
             AllTimelinesModel(
                 dataForLines = dataForEffectLines,
                 dataForRatings = dataForRatings,
-                timedNotes = dataForTimedNotes
+                timedNotes = dataForTimedNotes,
+                areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
             )
         }
         val isDarkTheme = isSystemInDarkTheme()
@@ -189,7 +192,7 @@ fun AllTimelines(
                 model.groupDrawables.forEach { group ->
                     group.drawTimeLine(
                         drawScope = this,
-                        height = canvasHeightWithVerticalLine,
+                        canvasHeight = canvasHeightWithVerticalLine,
                         pixelsPerSec = pixelsPerSec,
                         color = group.color.getComposeColor(isDarkTheme),
                         density = density

@@ -25,11 +25,15 @@ import androidx.compose.ui.unit.Density
 interface TimelineDrawable {
     fun drawTimeLine(
         drawScope: DrawScope,
-        height: Float,
+        canvasHeight: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
     )
 
+    fun setOverallHeight(overallHeight: Float)
+
+    val nonNormalisedHeight: Float
+    var nonNormalisedOverallHeight: Float
     val endOfLineRelativeToStartInSeconds: Float
 }

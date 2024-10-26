@@ -20,12 +20,14 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.screen
 
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 data class TimelineScreenModel(
     val title: String,
-    val ingestionElements: List<IngestionElement>,
+    val dataForEffectLines: List<DataForOneEffectLine>,
     val ratings: List<ShulginRating>,
     val timedNotes: List<TimedNote>,
     val timeDisplayOption: TimeDisplayOption,
+    val areSubstanceHeightsIndependent: Boolean,
 )

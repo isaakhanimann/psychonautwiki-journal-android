@@ -32,29 +32,48 @@ data class OnsetComeupTotalTimeline(
     val comeup: FullDurationRange,
     val total: FullDurationRange,
     val totalWeight: Float,
-    val ingestionTimeRelativeToStartInSeconds: Float
+    val ingestionTimeRelativeToStartInSeconds: Float,
+    override val nonNormalisedHeight: Float,
+    val areSubstanceHeightsIndependent: Boolean,
+    val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
+
+    override var nonNormalisedOverallHeight: Float = 1f
+    override fun setOverallHeight(overallHeight: Float) {
+        nonNormalisedOverallHeight = overallHeight
+    }
 
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds + total.maxInSeconds
 
+    private val finalNonNormalisedMaxHeight: Float get() {
+        return if (areSubstanceHeightsIndependent) {
+            nonNormalisedMaxOfRoute
+        } else {
+            nonNormalisedOverallHeight
+        }
+    }
+
     override fun drawTimeLine(
         drawScope: DrawScope,
-        height: Float,
+        canvasHeight: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
     ) {
+        val normalisedHeight = nonNormalisedHeight / finalNonNormalisedMaxHeight
+        val heightInPx = normalisedHeight * canvasHeight
+        val top = canvasHeight - heightInPx
         val onsetAndComeupWeight = 0.5f
-        val startX = ingestionTimeRelativeToStartInSeconds*pixelsPerSec
+        val startX = ingestionTimeRelativeToStartInSeconds * pixelsPerSec
         val onsetEndX =
             startX + (onset.interpolateAtValueInSeconds(onsetAndComeupWeight) * pixelsPerSec)
         val comeupEndX =
             onsetEndX + (comeup.interpolateAtValueInSeconds(onsetAndComeupWeight) * pixelsPerSec)
         val path1 = Path().apply {
-            moveTo(x = startX, y = height)
-            lineTo(x = onsetEndX, y = height)
-            lineTo(x = comeupEndX, y = 0f)
+            moveTo(x = startX, y = canvasHeight)
+            lineTo(x = onsetEndX, y = canvasHeight)
+            lineTo(x = comeupEndX, y = top)
         }
         drawScope.drawPath(
             path = path1,
@@ -63,13 +82,13 @@ data class OnsetComeupTotalTimeline(
         )
         val offsetEndX = startX + (total.interpolateAtValueInSeconds(totalWeight) * pixelsPerSec)
         val path2 = Path().apply {
-            moveTo(x = comeupEndX, y = 0f)
+            moveTo(x = comeupEndX, y = top)
             startSmoothLineTo(
                 smoothnessBetween0And1 = 0.5f,
                 startX = comeupEndX,
-                startY = 0f,
+                startY = top,
                 endX = offsetEndX,
-                endY = height
+                endY = canvasHeight
             )
         }
         drawScope.drawPath(
@@ -78,18 +97,18 @@ data class OnsetComeupTotalTimeline(
             style = density.dottedStroke
         )
         val combinedPath = Path().apply {
-            moveTo(x = startX, y = height)
-            lineTo(x = onsetEndX, y = height)
-            lineTo(x = comeupEndX, y = 0f)
+            moveTo(x = startX, y = canvasHeight)
+            lineTo(x = onsetEndX, y = canvasHeight)
+            lineTo(x = comeupEndX, y = top)
             startSmoothLineTo(
                 smoothnessBetween0And1 = 0.5f,
                 startX = comeupEndX,
-                startY = 0f,
+                startY = top,
                 endX = offsetEndX,
-                endY = height
+                endY = canvasHeight
             )
-            lineTo(x = offsetEndX, y = height + drawScope.strokeWidth/2)
-            lineTo(x = startX, y = height + drawScope.strokeWidth/2)
+            lineTo(x = offsetEndX, y = canvasHeight + drawScope.strokeWidth / 2)
+            lineTo(x = startX, y = canvasHeight + drawScope.strokeWidth / 2)
             close()
         }
         drawScope.drawPath(
@@ -99,12 +118,21 @@ data class OnsetComeupTotalTimeline(
         drawScope.drawCircle(
             color = color,
             radius = density.ingestionDotRadius,
-            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
+            center = Offset(
+                x = ingestionTimeRelativeToStartInSeconds * pixelsPerSec,
+                y = canvasHeight
+            )
         )
     }
 }
 
-fun RoaDuration.toOnsetComeupTotalTimeline(totalWeight: Float, ingestionTimeRelativeToStartInSeconds: Float): OnsetComeupTotalTimeline? {
+fun RoaDuration.toOnsetComeupTotalTimeline(
+    totalWeight: Float,
+    ingestionTimeRelativeToStartInSeconds: Float,
+    nonNormalisedHeight: Float,
+    areSubstanceHeightsIndependent: Boolean,
+    nonNormalisedMaxOfRoute: Float,
+): OnsetComeupTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
     val fullTotal = total?.toFullDurationRange()
@@ -114,7 +142,10 @@ fun RoaDuration.toOnsetComeupTotalTimeline(totalWeight: Float, ingestionTimeRela
             comeup = fullComeup,
             total = fullTotal,
             totalWeight = totalWeight,
-            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds
+            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
+            nonNormalisedHeight = nonNormalisedHeight,
+            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {
         null

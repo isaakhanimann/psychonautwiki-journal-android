@@ -20,19 +20,10 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.screen
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
-import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
-import com.isaakhanimann.journal.data.room.experiences.entities.StomachFullness
-import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
-import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
-import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.data.substances.classes.roa.DurationRange
-import com.isaakhanimann.journal.data.substances.classes.roa.DurationUnits
-import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.utils.getInstant
 
 class TimelineScreenModelPreviewProvider :
@@ -41,7 +32,7 @@ class TimelineScreenModelPreviewProvider :
     override val values: Sequence<TimelineScreenModel> = sequenceOf(
         TimelineScreenModel(
             title = "Dave",
-            ingestionElements = ingestionElements,
+            dataForEffectLines = emptyList(),
             ratings = listOf(
                 ShulginRating(
                     time = getInstant(
@@ -123,189 +114,7 @@ class TimelineScreenModelPreviewProvider :
                 )
             ),
             timeDisplayOption = TimeDisplayOption.REGULAR,
+            areSubstanceHeightsIndependent = false
         )
     )
-
-    companion object {
-        val ingestionElements = listOf(
-            IngestionElement(
-                ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
-                    ingestion = Ingestion(
-                        substanceName = "MDMA",
-                        time = getInstant(
-                            year = 2022,
-                            month = 2,
-                            day = 19,
-                            hourOfDay = 20,
-                            minute = 5
-                        )!!,
-                        administrationRoute = AdministrationRoute.ORAL,
-                        dose = 90.0,
-                        isDoseAnEstimate = false,
-                        estimatedDoseStandardDeviation = null,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                        stomachFullness = StomachFullness.EMPTY,
-                        consumerName = null,
-                        customUnitId = null
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "MDMA",
-                        color = AdaptiveColor.PINK
-                    ),
-                    customUnit = null
-                ),
-                roaDuration = RoaDuration(
-                    onset = DurationRange(
-                        min = 30f,
-                        max = 45f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    comeup = DurationRange(
-                        min = 15f,
-                        max = 30f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    peak = DurationRange(
-                        min = 1.5f,
-                        max = 2.5f,
-                        units = DurationUnits.HOURS
-                    ),
-                    offset = DurationRange(
-                        min = 1f,
-                        max = 1.5f,
-                        units = DurationUnits.HOURS
-                    ),
-                    total = DurationRange(
-                        min = 3f,
-                        max = 6f,
-                        units = DurationUnits.HOURS
-                    ),
-                    afterglow = DurationRange(
-                        min = 12f,
-                        max = 48f,
-                        units = DurationUnits.HOURS
-                    )
-                ),
-                numDots = 2
-            ),
-            IngestionElement(
-                ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
-                    ingestion = Ingestion(
-                        substanceName = "Cocaine",
-                        time = getInstant(
-                            year = 2022,
-                            month = 2,
-                            day = 19,
-                            hourOfDay = 23,
-                            minute = 5
-                        )!!,
-                        administrationRoute = AdministrationRoute.INSUFFLATED,
-                        dose = 80.0,
-                        isDoseAnEstimate = false,
-                        estimatedDoseStandardDeviation = null,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                        stomachFullness = StomachFullness.EMPTY,
-                        consumerName = null,
-                        customUnitId = null
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Cocaine",
-                        color = AdaptiveColor.BLUE
-                    ),
-                    customUnit = null
-                ),
-                roaDuration = RoaDuration(
-                    onset = DurationRange(
-                        min = 1f,
-                        max = 10f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    comeup = DurationRange(
-                        min = 5f,
-                        max = 15f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    peak = DurationRange(
-                        min = 15f,
-                        max = 30f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    offset = DurationRange(
-                        min = 10f,
-                        max = 30f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    total = DurationRange(
-                        min = 10f,
-                        max = 90f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    afterglow = null
-                ),
-                numDots = 3
-            ),
-            IngestionElement(
-                ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
-                    ingestion = Ingestion(
-                        substanceName = "Cocaine",
-                        time = getInstant(
-                            year = 2022,
-                            month = 2,
-                            day = 20,
-                            hourOfDay = 1,
-                            minute = 15
-                        )!!,
-                        administrationRoute = AdministrationRoute.INSUFFLATED,
-                        dose = 50.0,
-                        isDoseAnEstimate = false,
-                        estimatedDoseStandardDeviation = null,
-                        units = "mg",
-                        experienceId = 0,
-                        notes = null,
-                        stomachFullness = StomachFullness.EMPTY,
-                        consumerName = null,
-                        customUnitId = null
-                    ),
-                    substanceCompanion = SubstanceCompanion(
-                        substanceName = "Cocaine",
-                        color = AdaptiveColor.BLUE
-                    ),
-                    customUnit = null
-                ),
-                roaDuration = RoaDuration(
-                    onset = DurationRange(
-                        min = 1f,
-                        max = 10f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    comeup = DurationRange(
-                        min = 5f,
-                        max = 15f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    peak = DurationRange(
-                        min = 15f,
-                        max = 30f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    offset = DurationRange(
-                        min = 10f,
-                        max = 30f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    total = DurationRange(
-                        min = 10f,
-                        max = 90f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    afterglow = null
-                ),
-                numDots = 2
-            )
-        )
-    }
 }

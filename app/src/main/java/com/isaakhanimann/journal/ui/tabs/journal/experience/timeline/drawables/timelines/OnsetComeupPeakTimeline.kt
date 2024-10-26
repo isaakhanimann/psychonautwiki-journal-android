@@ -35,21 +35,39 @@ data class OnsetComeupPeakTimeline(
     val comeup: FullDurationRange,
     val peak: FullDurationRange,
     val peakWeight: Float,
-    val ingestionTimeRelativeToStartInSeconds: Float
+    val ingestionTimeRelativeToStartInSeconds: Float,
+    override val nonNormalisedHeight: Float,
+    val areSubstanceHeightsIndependent: Boolean,
+    val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
 
+    override var nonNormalisedOverallHeight: Float = 1f
+    override fun setOverallHeight(overallHeight: Float) {
+        nonNormalisedOverallHeight = overallHeight
+    }
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds + onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds
 
+    private val finalNonNormalisedMaxHeight: Float get() {
+        return if (areSubstanceHeightsIndependent) {
+            nonNormalisedMaxOfRoute
+        } else {
+            nonNormalisedOverallHeight
+        }
+    }
+
     override fun drawTimeLine(
         drawScope: DrawScope,
-        height: Float,
+        canvasHeight: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
     ) {
+        val normalisedHeight = nonNormalisedHeight / finalNonNormalisedMaxHeight
+        val heightInPx = normalisedHeight * canvasHeight
+        val top = canvasHeight - heightInPx
         val weight = 0.5f
-        val startX = ingestionTimeRelativeToStartInSeconds*pixelsPerSec
+        val startX = ingestionTimeRelativeToStartInSeconds * pixelsPerSec
         val onsetEndX =
             startX + (onset.interpolateAtValueInSeconds(weight) * pixelsPerSec)
         val comeupEndX =
@@ -57,18 +75,18 @@ data class OnsetComeupPeakTimeline(
         val peakEndX =
             comeupEndX + (peak.interpolateAtValueInSeconds(peakWeight) * pixelsPerSec)
         val path = Path().apply {
-            moveTo(x = startX, y = height)
-            lineTo(x = onsetEndX, y = height)
-            lineTo(x = comeupEndX, y = 0f)
-            lineTo(x = peakEndX, y = 0f)
+            moveTo(x = startX, y = canvasHeight)
+            lineTo(x = onsetEndX, y = canvasHeight)
+            lineTo(x = comeupEndX, y = top)
+            lineTo(x = peakEndX, y = top)
         }
         drawScope.drawPath(
             path = path,
             color = color,
             style = density.normalStroke
         )
-        path.lineTo(x = peakEndX, y = height + drawScope.strokeWidth/2)
-        path.lineTo(x = startX, y = height + drawScope.strokeWidth/2)
+        path.lineTo(x = peakEndX, y = canvasHeight + drawScope.strokeWidth / 2)
+        path.lineTo(x = startX, y = canvasHeight + drawScope.strokeWidth / 2)
         path.close()
         drawScope.drawPath(
             path = path,
@@ -77,12 +95,18 @@ data class OnsetComeupPeakTimeline(
         drawScope.drawCircle(
             color = color,
             radius = density.ingestionDotRadius,
-            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
+            center = Offset(x = ingestionTimeRelativeToStartInSeconds * pixelsPerSec, y = canvasHeight)
         )
     }
 }
 
-fun RoaDuration.toOnsetComeupPeakTimeline(peakWeight: Float, ingestionTimeRelativeToStartInSeconds: Float): OnsetComeupPeakTimeline? {
+fun RoaDuration.toOnsetComeupPeakTimeline(
+    peakWeight: Float,
+    ingestionTimeRelativeToStartInSeconds: Float,
+    nonNormalisedHeight: Float,
+    areSubstanceHeightsIndependent: Boolean,
+    nonNormalisedMaxOfRoute: Float,
+): OnsetComeupPeakTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
     val fullPeak = peak?.toFullDurationRange()
@@ -92,7 +116,10 @@ fun RoaDuration.toOnsetComeupPeakTimeline(peakWeight: Float, ingestionTimeRelati
             comeup = fullComeup,
             peak = fullPeak,
             peakWeight = peakWeight,
-            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds
+            ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
+            nonNormalisedHeight = nonNormalisedHeight,
+            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {
         null

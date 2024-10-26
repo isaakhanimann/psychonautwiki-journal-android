@@ -401,6 +401,7 @@ fun SubstanceScreen(
                             dataForTimedNotes = emptyList(),
                             isShowingCurrentTime = false,
                             timeDisplayOption = TimeDisplayOption.RELATIVE_TO_NOW,
+                            areSubstanceHeightsIndependent = false,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)

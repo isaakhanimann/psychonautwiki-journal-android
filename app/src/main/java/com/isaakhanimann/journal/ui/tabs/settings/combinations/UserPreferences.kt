@@ -39,6 +39,7 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
         val KEY_HIDE_ORAL_DISCLAIMER = booleanPreferencesKey("key_hide_oral_disclaimer")
         val KEY_SHOW_CUSTOM_UNIT_HINT = booleanPreferencesKey("KEY_SHOW_CUSTOM_UNIT_HINT")
         val KEY_HIDE_DOSAGE_DOTS = booleanPreferencesKey("key_hide_dosage_dots")
+        val KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT = booleanPreferencesKey("KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT")
     }
 
     suspend fun saveTimeDisplayOption(value: SavedTimeDisplayOption) {
@@ -100,6 +101,17 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
     val areDosageDotsHiddenFlow: Flow<Boolean> = dataStore.data
         .map { preferences ->
             preferences[PreferencesKeys.KEY_HIDE_DOSAGE_DOTS] ?: false
+        }
+
+    suspend fun saveAreSubstanceHeightsIndependent(value: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT] = value
+        }
+    }
+
+    val areSubstanceHeightsIndependentFlow: Flow<Boolean> = dataStore.data
+        .map { preferences ->
+            preferences[PreferencesKeys.KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT] ?: false
         }
 }
 

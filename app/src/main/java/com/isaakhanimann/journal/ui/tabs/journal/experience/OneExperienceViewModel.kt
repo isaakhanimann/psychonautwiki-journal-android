@@ -22,15 +22,19 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
+import com.isaakhanimann.journal.data.substances.classes.Substance
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.InteractionChecker
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getStrengthRelativeToCommonDose
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.ConsumerWithIngestions
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeRouteAndDose
@@ -64,6 +68,12 @@ class OneExperienceViewModel @Inject constructor(
     combinationSettingsStorage: CombinationSettingsStorage,
     state: SavedStateHandle
 ) : ViewModel() {
+
+    val areSubstanceHeightsIndependentFlow = userPreferences.areSubstanceHeightsIndependentFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     fun saveTimeDisplayOption(savedTimeDisplayOption: SavedTimeDisplayOption) {
         viewModelScope.launch {
@@ -196,12 +206,6 @@ class OneExperienceViewModel @Inject constructor(
             ingestionsWithCompanions.sortedBy { it.ingestion.time }
         }
 
-    private data class IngestionWithAssociatedData(
-        val ingestionWithCompanionAndCustomUnit: IngestionWithCompanionAndCustomUnit,
-        val roaDuration: RoaDuration?,
-        val roaDose: RoaDose?
-    )
-
     private val ingestionsWithAssociatedDataFlow: Flow<List<IngestionWithAssociatedData>> =
         sortedIngestionsWithCompanionsFlow.map { ingestionsWithComps ->
             ingestionsWithComps.map { oneIngestionWithComp ->
@@ -231,9 +235,13 @@ class OneExperienceViewModel @Inject constructor(
             val consumerName = entry.key ?: return@mapNotNull null
             val sortedIngestionsWith =
                 entry.value.sortedBy { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
+            val ingestionElements =
+                getIngestionElements(sortedIngestionsWith = sortedIngestionsWith)
+            val substances = ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
             ConsumerWithIngestions(
                 consumerName = consumerName,
-                ingestionElements = getIngestionElements(sortedIngestionsWith = sortedIngestionsWith)
+                ingestionElements = ingestionElements,
+                dataForEffectLines = getDataForEffectTimelines(ingestionElements, substances)
             )
         }
     }.stateIn(
@@ -244,6 +252,15 @@ class OneExperienceViewModel @Inject constructor(
 
     val ingestionElementsFlow = myIngestionsWithAssociatedDataFlow.map {
         getIngestionElements(it)
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
+    val dataForEffectTimelinesFlow = ingestionElementsFlow.map { ingestionElements ->
+        val substances = ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
+        getDataForEffectTimelines(ingestionElements = ingestionElements, substances = substances)
     }.stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,
@@ -330,7 +347,38 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 
-    private companion object {
+    companion object {
+
+        fun getDataForEffectTimelines(
+            ingestionElements: List<IngestionElement>,
+            substances: List<Substance>
+        ) =
+            ingestionElements.map { oneElement ->
+                val horizontalWeight = if (oneElement.numDots == null) {
+                    0.5f
+                } else if (oneElement.numDots > 4) {
+                    1f
+                } else {
+                    oneElement.numDots.toFloat() / 4f
+                }
+                val ingestion = oneElement.ingestionWithCompanionAndCustomUnit.ingestion
+                DataForOneEffectLine(
+                    substanceName = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.substanceName,
+                    route = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute,
+                    roaDuration = oneElement.roaDuration,
+                    height = getStrengthRelativeToCommonDose(
+                        ingestion = oneElement.ingestionWithCompanionAndCustomUnit,
+                        allIngestions = ingestionElements.map { it.ingestionWithCompanionAndCustomUnit },
+                        roaDose = substances.firstOrNull { it.name == ingestion.substanceName }
+                            ?.getRoa(ingestion.administrationRoute)?.roaDose
+                    ).toFloat(),
+                    horizontalWeight = horizontalWeight,
+                    color = oneElement.ingestionWithCompanionAndCustomUnit.substanceCompanion?.color
+                        ?: AdaptiveColor.RED,
+                    startTime = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.time
+                )
+            }
+
         fun getCumulativeDoses(ingestions: List<IngestionWithAssociatedData>): List<CumulativeDose> {
             return ingestions.groupBy { it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName }
                 .map { groupedBySubstanceName ->
@@ -377,3 +425,9 @@ class OneExperienceViewModel @Inject constructor(
         }
     }
 }
+
+data class IngestionWithAssociatedData(
+    val ingestionWithCompanionAndCustomUnit: IngestionWithCompanionAndCustomUnit,
+    val roaDuration: RoaDuration?,
+    val roaDose: RoaDose?
+)

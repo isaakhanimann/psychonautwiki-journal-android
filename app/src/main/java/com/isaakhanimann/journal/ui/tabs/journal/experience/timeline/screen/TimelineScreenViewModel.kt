@@ -30,6 +30,7 @@ import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.main.navigation.routers.CONSUMER_NAME_KEY
 import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
+import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceViewModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
@@ -54,19 +55,26 @@ class TimelineScreenViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
+    val areSubstanceHeightsIndependentFlow = userPreferences.areSubstanceHeightsIndependentFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
     private val experienceID = state.get<Int>(EXPERIENCE_ID_KEY)!!
     val consumerName = state.get<String>(CONSUMER_NAME_KEY)!!
 
-    private val ingestionsWithCompanionsFlow = experienceRepo.getIngestionsWithCompanionsFlow(experienceID)
-        .map { ingestions ->
-            ingestions.filter {
-                if (consumerName == YOU) {
-                    it.ingestion.consumerName == null
-                } else {
-                    it.ingestion.consumerName == consumerName
+    private val ingestionsWithCompanionsFlow =
+        experienceRepo.getIngestionsWithCompanionsFlow(experienceID)
+            .map { ingestions ->
+                ingestions.filter {
+                    if (consumerName == YOU) {
+                        it.ingestion.consumerName == null
+                    } else {
+                        it.ingestion.consumerName == consumerName
+                    }
                 }
             }
-        }
 
     val ratingsFlow =
         experienceRepo.getRatingsFlow(experienceID)
@@ -146,8 +154,14 @@ class TimelineScreenViewModel @Inject constructor(
             }
         }
 
-    val ingestionElementsFlow = ingestionsWithAssociatedDataFlow.map {
-        getIngestionElements(it)
+    val dataForEffectLinesFlow = ingestionsWithAssociatedDataFlow.map { ingestionWithAssociatedData ->
+        val ingestionElements = getIngestionElements(ingestionWithAssociatedData)
+        val substances =
+            ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
+        OneExperienceViewModel.getDataForEffectTimelines(
+            ingestionElements = ingestionElements,
+            substances = substances
+        )
     }.stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,

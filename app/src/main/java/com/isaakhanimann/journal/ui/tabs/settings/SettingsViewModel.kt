@@ -41,11 +41,19 @@ class SettingsViewModel @Inject constructor(
     private val userPreferences: UserPreferences,
 ) : ViewModel() {
 
-    fun saveDosageDotsAreHidden(value: Boolean) {
-        viewModelScope.launch {
-            userPreferences.saveDosageDotsAreHidden(value)
-        }
+    fun saveDosageDotsAreHidden(value: Boolean) = viewModelScope.launch {
+        userPreferences.saveDosageDotsAreHidden(value)
     }
+
+    fun saveAreSubstanceHeightsIndependent(value: Boolean) = viewModelScope.launch {
+        userPreferences.saveAreSubstanceHeightsIndependent(value)
+    }
+
+    val areSubstanceHeightsIndependentFlow = userPreferences.areSubstanceHeightsIndependentFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     val areDosageDotsHiddenFlow = userPreferences.areDosageDotsHiddenFlow.stateIn(
         initialValue = false,

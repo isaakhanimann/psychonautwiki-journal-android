@@ -29,12 +29,18 @@ data class NoTimeline(
     val ingestionTimeRelativeToStartInSeconds: Float
 ) : TimelineDrawable {
 
+    override val nonNormalisedHeight: Float = 1f
+    override fun setOverallHeight(overallHeight: Float) {
+        nonNormalisedOverallHeight = overallHeight
+    }
+    override var nonNormalisedOverallHeight: Float = 1f
+
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds
 
     override fun drawTimeLine(
         drawScope: DrawScope,
-        height: Float,
+        canvasHeight: Float,
         pixelsPerSec: Float,
         color: Color,
         density: Density
@@ -42,7 +48,7 @@ data class NoTimeline(
         drawScope.drawCircle(
             color = color,
             radius = density.ingestionDotRadius,
-            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = height)
+            center = Offset(x = ingestionTimeRelativeToStartInSeconds*pixelsPerSec, y = canvasHeight)
         )
     }
 }
