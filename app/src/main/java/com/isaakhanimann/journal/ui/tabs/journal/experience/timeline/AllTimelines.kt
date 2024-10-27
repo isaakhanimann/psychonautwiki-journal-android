@@ -20,7 +20,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -169,8 +169,8 @@ fun AllTimelines(
         val verticalDistanceFromFinger = LocalDensity.current.run { 60.dp.toPx() }
 
         Canvas(modifier = modifier.pointerInput(Unit) {
-            detectDragGestures(
-                onDrag = { change, _ ->
+            detectHorizontalDragGestures(
+                onHorizontalDrag = { change, _ ->
                     change.consume()
                     dragPoint = change.position
                 },
