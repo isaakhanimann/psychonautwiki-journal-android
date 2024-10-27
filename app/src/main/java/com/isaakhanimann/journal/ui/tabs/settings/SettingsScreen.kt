@@ -23,6 +23,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.FileUpload
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Medication
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.QuestionAnswer
@@ -51,6 +53,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -59,6 +62,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -182,25 +186,60 @@ fun SettingsScreen(
                 }
                 HorizontalDivider()
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = horizontalPadding),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = horizontalPadding),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "Hide dosage dots")
                     Switch(
                         checked = areDosageDotsHidden,
-                        onCheckedChange = saveDosageDotsAreHidden)
+                        onCheckedChange = saveDosageDotsAreHidden
+                    )
                 }
                 HorizontalDivider()
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = horizontalPadding),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = horizontalPadding),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Independent substance heights")
+                    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+                    var showBottomSheet by remember { mutableStateOf(false) }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(ButtonDefaults.IconSpacing),
+                        modifier = Modifier.clickable {
+                        showBottomSheet = true
+                    }) {
+                        Text(text = "Independent substance heights")
+                        if (showBottomSheet) {
+                            ModalBottomSheet(
+                                onDismissRequest = {
+                                    showBottomSheet = false
+                                },
+                                sheetState = sheetState
+                            ) {
+                                Text(
+                                    text = """
+                                    Enable this setting if you want the timeline of different substances and routes of administration (roas) to be independent. Then ingestions of different substances and roas will always take the full height of the timeline.
+                                    
+                                    If this setting is disabled then timelines of different substances have a height relative to each other. In that case the average of the common dose is used as the point to compare it to.
+                                    E.g. if the oral average common dose of MDMA is 100mg and the average common dose of insufflated MDMA is 50mg then the timeline for 100mg of oral MDMA is the same height as for 50mg of insufflated MDMA.
+                                    This is also applied across substances. E.g. if the common dose of oral 2C-B is 20mg then the timeline of 40mg oral 2C-B will be twice as high as 100mg of oral MDMA.
+                                """.trimIndent(),
+                                    modifier = Modifier.padding(horizontal = horizontalPadding).padding(bottom = 15.dp)
+                                )
+                            }
+                        }
+                        Icon(Icons.Outlined.Info, contentDescription = "Show more info")
+                    }
                     Switch(
                         checked = areSubstanceHeightsIndependent,
-                        onCheckedChange = saveAreSubstanceHeightsIndependent)
+                        onCheckedChange = saveAreSubstanceHeightsIndependent
+                    )
                 }
             }
             CardWithTitle(title = "App data", innerPaddingHorizontal = 0.dp) {
@@ -232,7 +271,11 @@ fun SettingsScreen(
                             TextButton(
                                 onClick = {
                                     isShowingExportDialog = false
-                                    launcherExport.launch("Journal ${Instant.now().getStringOfPattern("dd MMM yyyy")}.json")
+                                    launcherExport.launch(
+                                        "Journal ${
+                                            Instant.now().getStringOfPattern("dd MMM yyyy")
+                                        }.json"
+                                    )
                                 }
                             ) {
                                 Text("Export")
