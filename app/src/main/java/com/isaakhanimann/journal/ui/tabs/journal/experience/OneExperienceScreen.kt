@@ -637,10 +637,11 @@ private fun MyIngestionList(
                 index == oneExperienceScreenModel.ingestionElements.size - 1
             if (isLastIngestion) {
                 if (oneExperienceScreenModel.isCurrentExperience) {
-                    HorizontalDivider()
                     if (timeDisplayOption == TimeDisplayOption.TIME_BETWEEN) {
+                        HorizontalDivider()
                         LastIngestionRelativeToNowText(lastIngestionTime = ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.time)
                     } else if (timeDisplayOption == TimeDisplayOption.RELATIVE_TO_START) {
+                        HorizontalDivider()
                         NowRelativeToStartTimeText(startTime = oneExperienceScreenModel.firstIngestionTime)
                     }
                 }
