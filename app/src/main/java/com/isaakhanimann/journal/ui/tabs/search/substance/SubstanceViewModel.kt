@@ -24,6 +24,7 @@ import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -33,8 +34,14 @@ import javax.inject.Inject
 class SubstanceViewModel @Inject constructor(
     substanceRepo: SubstanceRepository,
     experienceRepo: ExperienceRepository,
-    state: SavedStateHandle
+    state: SavedStateHandle,
+    userPreferences: UserPreferences
 ) : ViewModel() {
+    val areSubstanceHeightsIndependentFlow = userPreferences.areSubstanceHeightsIndependentFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
 

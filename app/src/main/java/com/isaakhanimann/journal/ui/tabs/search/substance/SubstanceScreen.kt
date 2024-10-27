@@ -112,7 +112,8 @@ fun SubstanceScreen(
         navigateToCategoryScreen = navigateToCategoryScreen,
         navigateToExplainTimeline = navigateToExplainTimeline,
         substanceWithCategories = viewModel.substanceWithCategories,
-        customUnits = viewModel.customUnitsFlow.collectAsState().value
+        customUnits = viewModel.customUnitsFlow.collectAsState().value,
+        areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value
     )
 }
 
@@ -132,7 +133,8 @@ fun SubstanceScreenPreview(
             substanceWithCategories = substanceWithCategories,
             customUnits = listOf(
                 CustomUnit.mdmaSample
-            )
+            ),
+            areSubstanceHeightsIndependent = false
         )
     }
 }
@@ -147,7 +149,8 @@ fun SubstanceScreen(
     navigateToExplainTimeline: () -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     substanceWithCategories: SubstanceWithCategories,
-    customUnits: List<CustomUnit>
+    customUnits: List<CustomUnit>,
+    areSubstanceHeightsIndependent: Boolean
 ) {
     val substance = substanceWithCategories.substance
     val uriHandler = LocalUriHandler.current
@@ -382,13 +385,15 @@ fun SubstanceScreen(
                             }
                         }
                         VerticalSpace()
+                        val firstAverageCommonDose =
+                            roasWithDosesDefined.firstNotNullOfOrNull { it.roaDose?.averageCommonDose } ?: 100.0
                         val dataForEffectLines = remember(roasWithDurationsDefined, ingestionTime) {
                             roasWithDurationsDefined.mapIndexed { index, roa ->
                                 DataForOneEffectLine(
                                     substanceName = "name$index",
                                     route = roa.route,
                                     roaDuration = roa.roaDuration,
-                                    height = 1f,
+                                    height = roa.roaDose?.getStrengthRelativeToCommonDose(firstAverageCommonDose)?.toFloat() ?: 1f,
                                     horizontalWeight = 0.5f,
                                     color = roa.route.color,
                                     startTime = ingestionTime.getInstant()
@@ -401,7 +406,7 @@ fun SubstanceScreen(
                             dataForTimedNotes = emptyList(),
                             isShowingCurrentTime = false,
                             timeDisplayOption = TimeDisplayOption.RELATIVE_TO_NOW,
-                            areSubstanceHeightsIndependent = false,
+                            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)

@@ -33,12 +33,7 @@ fun getStrengthRelativeToCommonDose(
         }
     val sumDose = allKnownDoses.reduceOrNull { acc, d -> acc + d } ?: 0.0
     val averageDose = sumDose / max(1.0, allKnownDoses.size.toDouble())
-    var commonDose = averageDose
-    val commonMin = roaDose?.commonMin
-    val commonMax = roaDose?.strongMin
-    if (commonMin != null && commonMax != null) {
-        commonDose = (commonMin + commonMax) / 2
-    }
+    val commonDose = roaDose?.averageCommonDose ?: averageDose
 
     return ingestion.pureDose?.let { doseSnap ->
         doseSnap / commonDose
