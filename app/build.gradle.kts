@@ -16,8 +16,8 @@ android {
         applicationId = "com.isaakhanimann.journal"
         minSdk = 26
         targetSdk = 34
-        versionCode = 46
-        versionName = "8.15"
+        versionCode = 47
+        versionName = "8.16"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
