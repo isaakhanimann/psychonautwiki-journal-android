@@ -210,10 +210,13 @@ fun SettingsScreen(
                     var showBottomSheet by remember { mutableStateOf(false) }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(ButtonDefaults.IconSpacing),
-                        modifier = Modifier.clickable {
-                        showBottomSheet = true
-                    }) {
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                        modifier = Modifier
+                            .clickable {
+                                showBottomSheet = true
+                            }
+                            .padding(end = ButtonDefaults.IconSpacing)
+                    ) {
                         Text(text = "Independent substance heights")
                         if (showBottomSheet) {
                             ModalBottomSheet(
@@ -230,7 +233,10 @@ fun SettingsScreen(
                                     E.g. if the oral average common dose of MDMA is 100mg and the average common dose of insufflated MDMA is 50mg then the timeline for 100mg of oral MDMA is the same height as for 50mg of insufflated MDMA.
                                     This is also applied across substances. E.g. if the common dose of oral 2C-B is 20mg then the timeline of 40mg oral 2C-B will be twice as high as 100mg of oral MDMA.
                                 """.trimIndent(),
-                                    modifier = Modifier.padding(horizontal = horizontalPadding).padding(bottom = 15.dp)
+                                    modifier = Modifier
+                                        .padding(horizontal = horizontalPadding)
+                                        .padding(bottom = 15.dp)
+                                        .verticalScroll(state = rememberScrollState())
                                 )
                             }
                         }
