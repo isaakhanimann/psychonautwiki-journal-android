@@ -105,7 +105,11 @@ data class RoaDose(
 
     fun getStrengthRelativeToCommonDose(dose: Double): Double? {
         return averageCommonDose?.let {
-            dose/it
+            if (it > 0) {
+                dose/it
+            } else {
+                null
+            }
         }
     }
 }
