@@ -113,7 +113,6 @@ fun SubstanceScreen(
         navigateToExplainTimeline = navigateToExplainTimeline,
         substanceWithCategories = viewModel.substanceWithCategories,
         customUnits = viewModel.customUnitsFlow.collectAsState().value,
-        areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value
     )
 }
 
@@ -134,7 +133,6 @@ fun SubstanceScreenPreview(
             customUnits = listOf(
                 CustomUnit.mdmaSample
             ),
-            areSubstanceHeightsIndependent = false
         )
     }
 }
@@ -149,8 +147,7 @@ fun SubstanceScreen(
     navigateToExplainTimeline: () -> Unit,
     navigateToCategoryScreen: (categoryName: String) -> Unit,
     substanceWithCategories: SubstanceWithCategories,
-    customUnits: List<CustomUnit>,
-    areSubstanceHeightsIndependent: Boolean
+    customUnits: List<CustomUnit>
 ) {
     val substance = substanceWithCategories.substance
     val uriHandler = LocalUriHandler.current
@@ -406,7 +403,7 @@ fun SubstanceScreen(
                             dataForTimedNotes = emptyList(),
                             isShowingCurrentTime = false,
                             timeDisplayOption = TimeDisplayOption.RELATIVE_TO_NOW,
-                            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+                            areSubstanceHeightsIndependent = false,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(200.dp)
