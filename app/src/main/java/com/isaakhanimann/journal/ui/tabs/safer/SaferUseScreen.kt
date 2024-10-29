@@ -188,48 +188,6 @@ fun SaferUseScreen(
             SectionWithTitle(title = "6. Administration routes") {
                 SaferText(text = "Don’t share snorting equipment (straws, banknotes, bullets) to avoid blood-borne diseases such as Hepatitis C that can be transmitted through blood amounts so small you can’t notice. Injection is the the most dangerous route of administration and highly advised against. If you are determined to inject, don’t share injection materials and refer to the safer injection guide.")
                 Button(
-                    onClick = {
-                        uriHandler.openUri("https://www.youtube.com/watch?v=31fuvYXxeV0&list=PLkC348-BeCu6Ut-iJy8xp9_LLKXoMMroR")
-                    },
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                ) {
-                    Icon(
-                        Icons.Default.PlayArrow,
-                        contentDescription = "Open link",
-                        modifier = Modifier.size(ButtonDefaults.IconSize),
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer snorting video")
-                }
-                Button(
-                    onClick = {
-                        uriHandler.openUri("https://www.youtube.com/watch?v=lBlS2e46CV0&list=PLkC348-BeCu6Ut-iJy8xp9_LLKXoMMroR")
-                    },
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                ) {
-                    Icon(
-                        Icons.Default.PlayArrow,
-                        contentDescription = "Open link",
-                        modifier = Modifier.size(ButtonDefaults.IconSize),
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer smoking video")
-                }
-                Button(
-                    onClick = {
-                        uriHandler.openUri("https://www.youtube.com/watch?v=N7HjCPz4A7Y&list=PLkC348-BeCu6Ut-iJy8xp9_LLKXoMMroR")
-                    },
-                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                ) {
-                    Icon(
-                        Icons.Default.PlayArrow,
-                        contentDescription = "Open link",
-                        modifier = Modifier.size(ButtonDefaults.IconSize),
-                    )
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer injecting video")
-                }
-                Button(
                     onClick = navigateToRouteExplanationScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
