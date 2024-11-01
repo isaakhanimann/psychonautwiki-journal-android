@@ -43,7 +43,7 @@ fun DotRows(numDots: Int) {
             val numFullRows = numDots/4
             val dotsInLastRow = numDots.rem(4)
             if (numFullRows > 20) {
-                Text(text = "$numDots dosage dots", style = MaterialTheme.typography.titleSmall)
+                Text(text = "more than $numFullRows heavy doses", style = MaterialTheme.typography.titleSmall)
             } else {
                 if (numFullRows > 0) {
                     for (row in 1..numFullRows) {
