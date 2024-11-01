@@ -23,6 +23,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,23 +42,27 @@ fun DotRows(numDots: Int) {
         } else {
             val numFullRows = numDots/4
             val dotsInLastRow = numDots.rem(4)
-            if (numFullRows > 0) {
-                for (row in 1..numFullRows) {
-                    Row(modifier = Modifier.padding(vertical = verticalPadding)) {
-                        for (dot in 1..4) {
-                            Dot(isFull = true)
+            if (numFullRows > 20) {
+                Text(text = "$numDots dosage dots", style = MaterialTheme.typography.titleSmall)
+            } else {
+                if (numFullRows > 0) {
+                    for (row in 1..numFullRows) {
+                        Row(modifier = Modifier.padding(vertical = verticalPadding)) {
+                            for (dot in 1..4) {
+                                Dot(isFull = true)
+                            }
                         }
                     }
                 }
-            }
-            if (dotsInLastRow > 0) {
-                Row(modifier = Modifier.padding(vertical = verticalPadding)) {
-                    for (dot in 1..dotsInLastRow) {
-                        Dot(isFull = true)
-                    }
-                    val numEmpty = 4 - dotsInLastRow
-                    for (dot in 1..numEmpty) {
-                        Dot(isFull = false)
+                if (dotsInLastRow > 0) {
+                    Row(modifier = Modifier.padding(vertical = verticalPadding)) {
+                        for (dot in 1..dotsInLastRow) {
+                            Dot(isFull = true)
+                        }
+                        val numEmpty = 4 - dotsInLastRow
+                        for (dot in 1..numEmpty) {
+                            Dot(isFull = false)
+                        }
                     }
                 }
             }
