@@ -252,7 +252,7 @@ fun SubstanceScreen(
                                 }
                                 roa.roaDose?.let { roaDose ->
                                     val customUnitsForRoute =
-                                        customUnits.filter { it.administrationRoute == roa.route }
+                                        customUnits.filter { it.administrationRoute == roa.route && it.dose != null }
                                     customUnitsForRoute.forEach { customUnit ->
                                         Text(
                                             text = customUnit.name,
