@@ -52,6 +52,7 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun update(timedNote: TimedNote) = experienceDao.update(timedNote)
 
     suspend fun migrateBenzydamine() = experienceDao.migrateBenzydamine()
+    suspend fun migrateCannabisAndMushroomUnits() = experienceDao.migrateCannabisAndMushroomUnits()
     suspend fun insertIngestionExperienceAndCompanion(
         ingestion: Ingestion,
         experience: Experience,

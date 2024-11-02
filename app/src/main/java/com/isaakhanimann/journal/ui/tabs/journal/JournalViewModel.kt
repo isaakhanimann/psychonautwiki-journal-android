@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 val IS_MIGRATED_0 = booleanPreferencesKey("is_migrated_0")
+val IS_MIGRATED_1 = booleanPreferencesKey("is_migrated_1")
 
 @HiltViewModel
 class JournalViewModel @Inject constructor(
@@ -65,6 +66,10 @@ class JournalViewModel @Inject constructor(
                 if (settings[IS_MIGRATED_0] == null) {
                     experienceRepo.migrateBenzydamine()
                     settings[IS_MIGRATED_0] = true
+                }
+                if (settings[IS_MIGRATED_1] == null) {
+                    experienceRepo.migrateCannabisAndMushroomUnits()
+                    settings[IS_MIGRATED_1] = true
                 }
             }
         }

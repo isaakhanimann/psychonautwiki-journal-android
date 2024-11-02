@@ -184,6 +184,27 @@ interface ExperienceDao {
     @Query("UPDATE ingestion SET units = 'mg', dose = dose * 1000 WHERE substanceName = 'Benzydamine' AND units = 'g'")
     suspend fun migrateBenzydamine()
 
+
+    @Transaction
+    suspend fun migrateCannabisAndMushroomUnits() {
+        migrateCannabisIngestionUnits()
+        migrateMushroomsIngestionUnits()
+        migrateCannabisCustomUnits()
+        migrateMushroomsCustomUnits()
+    }
+
+    @Query("UPDATE ingestion SET units = 'mg THC' WHERE substanceName = 'Cannabis' AND units = 'mg'")
+    suspend fun migrateCannabisIngestionUnits()
+
+    @Query("UPDATE ingestion SET units = 'mg Psilocybin' WHERE substanceName = 'Psilocybin mushrooms' AND units = 'mg'")
+    suspend fun migrateMushroomsIngestionUnits()
+
+    @Query("UPDATE customunit SET originalUnit = 'mg THC' WHERE substanceName = 'Cannabis' AND originalUnit = 'mg'")
+    suspend fun migrateCannabisCustomUnits()
+
+    @Query("UPDATE customunit SET originalUnit = 'mg Psilocybin' WHERE substanceName = 'Psilocybin mushrooms' AND originalUnit = 'mg'")
+    suspend fun migrateMushroomsCustomUnits()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(experience: Experience): Long
 
