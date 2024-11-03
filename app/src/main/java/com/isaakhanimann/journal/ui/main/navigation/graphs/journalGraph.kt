@@ -18,9 +18,10 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
+import com.isaakhanimann.journal.ui.main.JournalBottomNavigationBar
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
@@ -50,8 +51,7 @@ import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
 
-
-fun NavGraphBuilder.journalGraph(navController: NavController) {
+fun NavGraphBuilder.journalGraph(navController: NavHostController) {
     navigation(
         startDestination = NoArgumentRouter.JournalRouter.route,
         route = TabRouter.Journal.route,
@@ -62,7 +62,10 @@ fun NavGraphBuilder.journalGraph(navController: NavController) {
             JournalScreen(
                 navigateToExperiencePopNothing = navController::navigateToExperience,
                 navigateToAddIngestion = navController::navigateToAddIngestion,
-                navigateToCalendar = navController::navigateToCalendar
+                navigateToCalendar = navController::navigateToCalendar,
+                bottomAppBar = {
+                    JournalBottomNavigationBar(navController = navController)
+                }
             )
         }
         composableWithTransitions(

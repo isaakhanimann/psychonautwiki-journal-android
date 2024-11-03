@@ -80,6 +80,7 @@ fun JournalScreen(
     navigateToExperiencePopNothing: (experienceId: Int) -> Unit,
     navigateToAddIngestion: () -> Unit,
     navigateToCalendar: () -> Unit,
+    bottomAppBar: @Composable () -> Unit,
     viewModel: JournalViewModel = hiltViewModel()
 ) {
     val experiences = viewModel.experiences.collectAsState().value
@@ -101,7 +102,8 @@ fun JournalScreen(
         onChangeSearchText = viewModel::search,
         isSearchEnabled = viewModel.isSearchEnabled.value,
         onChangeIsSearchEnabled = viewModel::onChangeOfIsSearchEnabled,
-        experiences = experiences
+        experiences = experiences,
+        bottomAppBar = bottomAppBar
     )
 }
 
@@ -125,7 +127,8 @@ fun ExperiencesScreenPreview(
             onChangeSearchText = {},
             isSearchEnabled = true,
             onChangeIsSearchEnabled = {},
-            experiences = experiences
+            experiences = experiences,
+            bottomAppBar = {}
         )
     }
 }
@@ -144,7 +147,8 @@ fun JournalScreen(
     onChangeSearchText: (String) -> Unit,
     isSearchEnabled: Boolean,
     onChangeIsSearchEnabled: (Boolean) -> Unit,
-    experiences: List<ExperienceWithIngestionsCompanionsAndRatings>
+    experiences: List<ExperienceWithIngestionsCompanionsAndRatings>,
+    bottomAppBar: @Composable () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -203,7 +207,8 @@ fun JournalScreen(
                     text = { Text("Ingestion") },
                 )
             }
-        }
+        },
+        bottomBar = bottomAppBar
     ) { padding ->
         Box(
             contentAlignment = Alignment.Center,

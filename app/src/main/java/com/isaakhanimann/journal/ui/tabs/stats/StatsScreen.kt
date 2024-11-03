@@ -76,13 +76,15 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 fun StatsScreen(
     viewModel: StatsViewModel = hiltViewModel(),
     navigateToSubstanceCompanion: (substanceName: String, consumerName: String?) -> Unit,
+    bottomAppBar: @Composable () -> Unit,
 ) {
     StatsScreen(
         navigateToSubstanceCompanion = navigateToSubstanceCompanion,
         onTapOption = viewModel::onTapOption,
         statsModel = viewModel.statsModelFlow.collectAsState().value,
         onChangeConsumerName = viewModel::onChangeConsumer,
-        consumerNamesSorted = viewModel.sortedConsumerNamesFlow.collectAsState().value
+        consumerNamesSorted = viewModel.sortedConsumerNamesFlow.collectAsState().value,
+        bottomAppBar = bottomAppBar
     )
 }
 
@@ -99,7 +101,8 @@ fun StatsPreview(
             onTapOption = {},
             statsModel = statsModel,
             onChangeConsumerName = {},
-            consumerNamesSorted = listOf("You", "Someone else")
+            consumerNamesSorted = listOf("You", "Someone else"),
+            bottomAppBar = {}
         )
     }
 }
@@ -111,7 +114,8 @@ fun StatsScreen(
     onTapOption: (option: TimePickerOption) -> Unit,
     statsModel: StatsModel,
     onChangeConsumerName: (String?) -> Unit,
-    consumerNamesSorted: List<String>
+    consumerNamesSorted: List<String>,
+    bottomAppBar: @Composable () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -165,7 +169,8 @@ fun StatsScreen(
                     }
                 }
             )
-        }
+        },
+        bottomBar = bottomAppBar
     ) { padding ->
         if (!statsModel.areThereAnyIngestions) {
             EmptyScreenDisclaimer(

@@ -10,12 +10,12 @@ plugins {
 
 android {
     namespace = "com.isaakhanimann.journal"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.isaakhanimann.journal"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 48
         versionName = "8.17"
 
@@ -87,7 +87,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.compose)
 
-    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.core.splashscreen)
 
 }

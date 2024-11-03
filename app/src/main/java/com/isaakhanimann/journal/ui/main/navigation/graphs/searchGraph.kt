@@ -18,9 +18,10 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
+import com.isaakhanimann.journal.ui.main.JournalBottomNavigationBar
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
@@ -42,8 +43,7 @@ import com.isaakhanimann.journal.ui.tabs.search.custom.EditCustomSubstance
 import com.isaakhanimann.journal.ui.tabs.search.substance.SubstanceScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.category.CategoryScreen
 
-
-fun NavGraphBuilder.searchGraph(navController: NavController) {
+fun NavGraphBuilder.searchGraph(navController: NavHostController) {
     navigation(
         startDestination = NoArgumentRouter.SubstancesRouter.route,
         route = TabRouter.Substances.route,
@@ -57,6 +57,9 @@ fun NavGraphBuilder.searchGraph(navController: NavController) {
                 },
                 onCustomSubstanceTap = navController::navigateToEditCustomSubstance,
                 navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom,
+                bottomAppBar = {
+                    JournalBottomNavigationBar(navController)
+                }
             )
         }
         composableWithTransitions(

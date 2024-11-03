@@ -18,9 +18,10 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
+import com.isaakhanimann.journal.ui.main.JournalBottomNavigationBar
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
@@ -40,7 +41,7 @@ import com.isaakhanimann.journal.ui.tabs.settings.customunits.CustomUnitsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.archive.CustomUnitArchiveScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.edit.EditCustomUnitScreen
 
-fun NavGraphBuilder.settingsGraph(navController: NavController) {
+fun NavGraphBuilder.settingsGraph(navController: NavHostController) {
     navigation(
         startDestination = NoArgumentRouter.SettingsRouter.route,
         route = TabRouter.Settings.route,
@@ -53,7 +54,10 @@ fun NavGraphBuilder.settingsGraph(navController: NavController) {
                 navigateToComboSettings = navController::navigateToComboSettings,
                 navigateToSubstanceColors = navController::navigateToSubstanceColors,
                 navigateToCustomUnits = navController::navigateToCustomUnits,
-                navigateToDonate = navController::navigateToDonate
+                navigateToDonate = navController::navigateToDonate,
+                bottomAppBar = {
+                    JournalBottomNavigationBar(navController)
+                }
             )
         }
         composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }

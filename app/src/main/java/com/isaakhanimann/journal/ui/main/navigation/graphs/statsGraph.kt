@@ -20,7 +20,9 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
+import com.isaakhanimann.journal.ui.main.JournalBottomNavigationBar
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
@@ -30,7 +32,7 @@ import com.isaakhanimann.journal.ui.tabs.stats.StatsScreen
 import com.isaakhanimann.journal.ui.tabs.stats.substancecompanion.SubstanceCompanionScreen
 
 
-fun NavGraphBuilder.statsGraph(navController: NavController) {
+fun NavGraphBuilder.statsGraph(navController: NavHostController) {
     navigation(
         startDestination = NoArgumentRouter.StatsRouter.route,
         route = TabRouter.Statistics.route,
@@ -41,6 +43,9 @@ fun NavGraphBuilder.statsGraph(navController: NavController) {
             StatsScreen(
                 navigateToSubstanceCompanion = {substanceName, consumerName ->
                     navController.navigateToSubstanceCompanionScreen(substanceName = substanceName, consumerName=consumerName)
+                },
+                bottomAppBar = {
+                    JournalBottomNavigationBar(navController)
                 }
             )
         }
