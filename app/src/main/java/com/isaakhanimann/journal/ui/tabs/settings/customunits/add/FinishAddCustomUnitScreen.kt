@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -155,7 +156,10 @@ private fun FinishAddCustomUnitScreenContent(
     Scaffold(
         topBar = { TopAppBar(title = { Text("$substanceName unit") }) },
         floatingActionButton = {
-            FloatingDoneButton(onDone = dismiss)
+            FloatingDoneButton(
+                onDone = dismiss,
+                modifier = Modifier.imePadding()
+            )
         }
     ) { padding ->
         EditCustomUnitSections(

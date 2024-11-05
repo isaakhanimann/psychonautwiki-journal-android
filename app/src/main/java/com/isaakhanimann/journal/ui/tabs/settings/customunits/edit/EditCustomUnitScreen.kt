@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.settings.customunits.edit
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
@@ -34,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -177,7 +179,10 @@ private fun EditCustomUnitScreenContent(
             )
         },
         floatingActionButton = {
-            FloatingDoneButton(onDone = dismiss)
+            FloatingDoneButton(
+                onDone = dismiss,
+                modifier = Modifier.imePadding(),
+            )
         }
     ) { padding ->
         EditCustomUnitSections(

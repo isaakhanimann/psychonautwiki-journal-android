@@ -68,7 +68,8 @@ fun SearchScreen(
     Scaffold(
         floatingActionButton = {
             if (!isFocused) {
-                FloatingActionButton(onClick = { focusRequester.requestFocus() }) {
+                FloatingActionButton(
+                    onClick = { focusRequester.requestFocus() }) {
                     Icon(Icons.Default.Keyboard, contentDescription = "Keyboard")
                 }
             }
