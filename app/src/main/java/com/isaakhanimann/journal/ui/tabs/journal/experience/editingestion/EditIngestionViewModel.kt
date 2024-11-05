@@ -25,10 +25,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
-import com.isaakhanimann.journal.ui.main.navigation.routers.INGESTION_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.EditIngestionRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
@@ -78,10 +79,10 @@ class EditIngestionViewModel @Inject constructor(
     }
 
     init {
-        val id = state.get<Int>(INGESTION_ID_KEY)!!
+        val editIngestionRoute = state.toRoute<EditIngestionRoute>()
         viewModelScope.launch {
             val ingestionAndCustomUnit =
-                experienceRepo.getIngestionFlow(id = id).first() ?: return@launch
+                experienceRepo.getIngestionFlow(id = editIngestionRoute.ingestionId).first() ?: return@launch
             val ing = ingestionAndCustomUnit.ingestion
             ingestionFlow.emit(ing)
             ingestion = ing

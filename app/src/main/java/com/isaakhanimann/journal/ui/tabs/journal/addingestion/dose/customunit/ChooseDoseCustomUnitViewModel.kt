@@ -24,12 +24,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_UNIT_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.ChooseDoseCustomUnitRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.CustomUnitDose
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -47,9 +48,9 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
     var roaDose: RoaDose? = null
 
     init {
-        val customUnitId = state.get<Int>(CUSTOM_UNIT_ID_KEY)!!
+        val chooseDoseCustomUnitRoute = state.toRoute<ChooseDoseCustomUnitRoute>()
         viewModelScope.launch {
-            val customUnit = experienceRepo.getCustomUnit(customUnitId)
+            val customUnit = experienceRepo.getCustomUnit(chooseDoseCustomUnitRoute.customUnitId)
             this@ChooseDoseCustomUnitViewModel.customUnit = customUnit
             if (customUnit != null) {
                 val substance = substanceRepo.getSubstance(customUnit.substanceName)!!
@@ -90,7 +91,8 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
             }
         }
     val currentDoseClass: DoseClass? get() = roaDose?.getDoseClass(ingestionDose = customUnitDose?.calculatedDose)
-    val customUnitCalculationText: String? get() {
-        return customUnitDose?.calculatedDoseDescription
-    }
+    val customUnitCalculationText: String?
+        get() {
+            return customUnitDose?.calculatedDoseDescription
+        }
 }

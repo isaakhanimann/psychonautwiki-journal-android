@@ -22,33 +22,35 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceCompanionScreen
+import com.isaakhanimann.journal.ui.main.navigation.StatsTopLevelRoute
 import com.isaakhanimann.journal.ui.tabs.stats.StatsScreen
 import com.isaakhanimann.journal.ui.tabs.stats.substancecompanion.SubstanceCompanionScreen
-
+import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.statsGraph(navController: NavHostController) {
-    navigation(
-        startDestination = NoArgumentRouter.StatsRouter.route,
-        route = TabRouter.Statistics.route,
+    navigation<StatsTopLevelRoute>(
+        startDestination = StatsScreenRoute,
     ) {
-        composableWithTransitions(
-            route = NoArgumentRouter.StatsRouter.route,
-        ) {
+        composableWithTransitions<StatsScreenRoute> {
             StatsScreen(
-                navigateToSubstanceCompanion = {substanceName, consumerName ->
-                    navController.navigateToSubstanceCompanionScreen(substanceName = substanceName, consumerName=consumerName)
+                navigateToSubstanceCompanion = { substanceName, consumerName ->
+                    navController.navigate(
+                        SubstanceCompanionRoute(
+                            substanceName = substanceName,
+                            consumerName = consumerName
+                        )
+                    )
                 },
             )
         }
-        composableWithTransitions(
-            ArgumentRouter.SubstanceCompanionRouter.route,
-            arguments = ArgumentRouter.SubstanceCompanionRouter.args
-        ) {
+        composableWithTransitions<SubstanceCompanionRoute> {
             SubstanceCompanionScreen()
         }
     }
 }
+
+@Serializable
+object StatsScreenRoute
+
+@Serializable
+data class SubstanceCompanionRoute(val substanceName: String, val consumerName: String?)

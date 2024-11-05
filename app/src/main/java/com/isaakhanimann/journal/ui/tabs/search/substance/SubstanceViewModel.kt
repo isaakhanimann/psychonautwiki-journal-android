@@ -21,9 +21,10 @@ package com.isaakhanimann.journal.ui.tabs.search.substance
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.SubstanceRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -36,7 +37,7 @@ class SubstanceViewModel @Inject constructor(
     state: SavedStateHandle,
 ) : ViewModel() {
 
-    val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
+    val substanceName = state.toRoute<SubstanceRoute>().substanceName
 
     val substanceWithCategories = substanceRepo.getSubstanceWithCategories(substanceName)!!
 

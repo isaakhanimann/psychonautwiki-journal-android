@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
@@ -31,14 +32,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_SUBSTANCE_ID_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_UNIT_ID_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.DOSE_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.ESTIMATED_DOSE_STANDARD_DEVIATION_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.IS_ESTIMATE_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.UNITS_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.ChooseTimeRoute
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
@@ -149,22 +143,21 @@ class ChooseTimeViewModel @Inject constructor(
     }
 
     init {
-        val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
-        substanceName = state.get<String>(SUBSTANCE_NAME_KEY) ?: ""
-        administrationRoute = AdministrationRoute.valueOf(routeString)
-        dose = state.get<String>(DOSE_KEY)?.toDoubleOrNull()
-        estimatedDoseStandardDeviation =
-            state.get<String>(ESTIMATED_DOSE_STANDARD_DEVIATION_KEY)?.toDoubleOrNull()
-        customUnitId = state.get<String>(CUSTOM_UNIT_ID_KEY)?.toIntOrNull()
-        units = state.get<String>(UNITS_KEY)?.let {
+        val chooseTimeRoute = state.toRoute<ChooseTimeRoute>()
+        substanceName = chooseTimeRoute.substanceName ?: ""
+        administrationRoute = AdministrationRoute.valueOf(chooseTimeRoute.administrationRoute)
+        dose = chooseTimeRoute.dose
+        estimatedDoseStandardDeviation = chooseTimeRoute.estimatedDoseStandardDeviation
+        customUnitId = chooseTimeRoute.customUnitId
+        units = chooseTimeRoute.units?.let {
             if (it == "null") {
                 null
             } else {
                 it
             }
         }
-        isEstimate = state.get<Boolean>(IS_ESTIMATE_KEY)!!
-        val customSubstanceId = state.get<String>(CUSTOM_SUBSTANCE_ID_KEY)?.toIntOrNull()
+        isEstimate = chooseTimeRoute.isEstimate
+        val customSubstanceId = chooseTimeRoute.customSubstanceId
         viewModelScope.launch {
             val lastIngestionTimeOfExperience = userPreferences.lastIngestionTimeOfExperienceFlow.first()
             if (lastIngestionTimeOfExperience != null) {

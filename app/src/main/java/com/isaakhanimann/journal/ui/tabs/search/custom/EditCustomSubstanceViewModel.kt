@@ -24,9 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
-import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_SUBSTANCE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.EditCustomSubstanceRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -46,7 +47,8 @@ class EditCustomSubstanceViewModel @Inject constructor(
     val isValid get() = name.isNotBlank() && units.isNotBlank()
 
     init {
-        val customSubstanceId = state.get<Int>(CUSTOM_SUBSTANCE_ID_KEY)!!
+        val editCustomSubstanceRoute = state.toRoute<EditCustomSubstanceRoute>()
+        val customSubstanceId = editCustomSubstanceRoute.customSubstanceId
         viewModelScope.launch {
             val customSubstance =
                 experienceRepo.getCustomSubstanceFlow(customSubstanceId).firstOrNull() ?: return@launch

@@ -21,20 +21,9 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
+import androidx.navigation.toRoute
+import com.isaakhanimann.journal.ui.main.navigation.JournalTopLevelRoute
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddRating
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddTimedNote
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditExperience
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditRating
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditTimedNote
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExperience
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExplainTimelineOnJournalTab
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToIngestion
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToTimelineScreen
 import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
 import com.isaakhanimann.journal.ui.tabs.journal.calendar.CalendarJournalScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceScreen
@@ -48,106 +37,141 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTime
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.screen.TimelineScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
+import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.journalGraph(navController: NavHostController) {
-    navigation(
-        startDestination = NoArgumentRouter.JournalRouter.route,
-        route = TabRouter.Journal.route,
+    navigation<JournalTopLevelRoute>(
+        startDestination = JournalScreenRoute,
     ) {
-        composableWithTransitions(
-            route = NoArgumentRouter.JournalRouter.route,
-        ) {
+        composableWithTransitions<JournalScreenRoute> {
             JournalScreen(
-                navigateToExperiencePopNothing = navController::navigateToExperience,
-                navigateToAddIngestion = navController::navigateToAddIngestion,
-                navigateToCalendar = navController::navigateToCalendar
+                navigateToExperiencePopNothing = { experienceId ->
+                    navController.navigate(ExperienceRoute(experienceId))
+                },
+                navigateToAddIngestion = {
+                    navController.navigate(AddIngestionRoute)
+                },
+                navigateToCalendar = {
+                    navController.navigate(CalendarRoute)
+                }
             )
         }
-        composableWithTransitions(
-            ArgumentRouter.EditExperienceRouter.route,
-            arguments = ArgumentRouter.EditExperienceRouter.args
-        ) {
+        composableWithTransitions<EditExperienceRoute> {
             EditExperienceScreen(navigateBack = navController::popBackStack)
         }
-        composableWithTransitions(
-            ArgumentRouter.AddRatingRouter.route,
-            arguments = ArgumentRouter.AddRatingRouter.args
-        ) {
+        composableWithTransitions<AddRatingRoute> {
             AddRatingScreen(navigateBack = navController::popBackStack)
         }
-        composableWithTransitions(
-            ArgumentRouter.AddTimedNoteRouter.route,
-            arguments = ArgumentRouter.AddTimedNoteRouter.args
-        ) {
+        composableWithTransitions<AddTimedNoteRoute> {
             AddTimedNoteScreen(navigateBack = navController::popBackStack)
         }
-        composableWithTransitions(
-            ArgumentRouter.EditRatingRouter.route,
-            arguments = ArgumentRouter.EditRatingRouter.args
-        ) {
+        composableWithTransitions<EditRatingRoute> {
             EditRatingScreen(navigateBack = navController::popBackStack)
         }
-        composableWithTransitions(
-            ArgumentRouter.EditTimedNoteRouter.route,
-            arguments = ArgumentRouter.EditTimedNoteRouter.args
-        ) {
+        composableWithTransitions<EditTimedNoteRoute> {
             EditTimedNoteScreen(navigateBack = navController::popBackStack)
         }
-        composableWithTransitions(
-            ArgumentRouter.TimelineScreenRouter.route,
-            arguments = ArgumentRouter.TimelineScreenRouter.args
-        ) {
+        composableWithTransitions<TimelineScreenRoute> {
             TimelineScreen()
         }
-        composableWithTransitions(NoArgumentRouter.VolumetricDosingOnJournalTabRouter.route) {
+        composableWithTransitions<VolumetricDosingOnJournalTabRoute> {
             VolumetricDosingScreen()
         }
-        composableWithTransitions(
-            ArgumentRouter.ExperienceRouter.route,
-            arguments = ArgumentRouter.ExperienceRouter.args
-        ) {
-            val experienceId = it.arguments!!.getInt(EXPERIENCE_ID_KEY)
+        composableWithTransitions<ExperienceRoute> { backStackEntry ->
+            val experienceRoute: ExperienceRoute = backStackEntry.toRoute()
+            val experienceId = experienceRoute.experienceId
             OneExperienceScreen(
-                navigateToAddIngestionSearch = navController::navigateToAddIngestion,
-                navigateToExplainTimeline = navController::navigateToExplainTimelineOnJournalTab,
+                navigateToAddIngestionSearch = {
+                    navController.navigate(AddIngestionRoute)
+                },
+                navigateToExplainTimeline = {
+                    navController.navigate(ExplainTimelineOnJournalTabRoute)
+                },
                 navigateToEditExperienceScreen = {
-                    navController.navigateToEditExperience(experienceId)
+                    navController.navigate(EditExperienceRoute(experienceId))
                 },
                 navigateToIngestionScreen = { ingestionId ->
-                    navController.navigateToIngestion(ingestionId)
+                    navController.navigate(EditIngestionRoute(ingestionId))
                 },
                 navigateBack = navController::popBackStack,
                 navigateToAddRatingScreen = {
-                    navController.navigateToAddRating(experienceId)
+                    navController.navigate(AddRatingRoute(experienceId))
                 },
                 navigateToAddTimedNoteScreen = {
-                    navController.navigateToAddTimedNote(experienceId)
+                    navController.navigate(AddTimedNoteRoute(experienceId))
                 },
-                navigateToEditRatingScreen = navController::navigateToEditRating,
+                navigateToEditRatingScreen = { ratingId ->
+                    navController.navigate(EditRatingRoute(ratingId))
+                },
                 navigateToTimelineScreen = { consumerName ->
-                    navController.navigateToTimelineScreen(consumerName, experienceId)
+                    navController.navigate(
+                        TimelineScreenRoute(
+                            consumerName = consumerName,
+                            experienceId = experienceId
+                        )
+                    )
                 },
                 navigateToEditTimedNoteScreen = { timedNoteID ->
-                    navController.navigateToEditTimedNote(
-                        timedNoteId = timedNoteID,
-                        experienceId = experienceId
+                    navController.navigate(
+                        EditTimedNoteRoute(
+                            timedNoteId = timedNoteID,
+                            experienceId = experienceId
+                        )
                     )
                 }
             )
         }
-        composableWithTransitions(
-            ArgumentRouter.IngestionRouter.route,
-            arguments = ArgumentRouter.IngestionRouter.args
-        ) {
+        composableWithTransitions<EditIngestionRoute> {
             EditIngestionScreen(navigateBack = navController::popBackStack)
         }
         addIngestionGraph(navController)
-        composableWithTransitions(NoArgumentRouter.ExplainTimelineOnJournalTabRouter.route) { ExplainTimelineScreen() }
-        composableWithTransitions(NoArgumentRouter.SaferSniffingOnJournalTab.route) { SaferSniffingScreen() }
-        composableWithTransitions(NoArgumentRouter.CalendarRouter.route) {
+        composableWithTransitions<ExplainTimelineOnJournalTabRoute> { ExplainTimelineScreen() }
+        composableWithTransitions<SaferSniffingRouteOnJournalTab> { SaferSniffingScreen() }
+        composableWithTransitions<CalendarRoute> {
             CalendarJournalScreen(
-                navigateToExperiencePopNothing = navController::navigateToExperience,
+                navigateToExperiencePopNothing = { experienceId ->
+                    navController.navigate(ExperienceRoute(experienceId))
+                },
             )
         }
     }
 }
+
+@Serializable
+object JournalScreenRoute
+
+@Serializable
+data class EditExperienceRoute(val experienceId: Int)
+
+@Serializable
+data class AddRatingRoute(val experienceId: Int)
+
+@Serializable
+data class AddTimedNoteRoute(val experienceId: Int)
+
+@Serializable
+data class EditRatingRoute(val ratingId: Int)
+
+@Serializable
+data class EditTimedNoteRoute(val timedNoteId: Int, val experienceId: Int)
+
+@Serializable
+data class TimelineScreenRoute(val consumerName: String, val experienceId: Int)
+
+@Serializable
+object VolumetricDosingOnJournalTabRoute
+
+@Serializable
+data class ExperienceRoute(val experienceId: Int)
+
+@Serializable
+data class EditIngestionRoute(val ingestionId: Int)
+
+@Serializable
+object ExplainTimelineOnJournalTabRoute
+
+@Serializable
+object SaferSniffingRouteOnJournalTab
+
+@Serializable
+object CalendarRoute

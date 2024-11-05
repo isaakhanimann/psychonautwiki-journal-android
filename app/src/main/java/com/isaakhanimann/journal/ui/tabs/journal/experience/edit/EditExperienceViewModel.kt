@@ -24,10 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Location
-import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.EditExperienceRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,9 +51,9 @@ class EditExperienceViewModel @Inject constructor(
 
 
     init {
-        val id = state.get<Int>(EXPERIENCE_ID_KEY)!!
+        val editExperienceRoute = state.toRoute<EditExperienceRoute>()
         viewModelScope.launch {
-            experience = repository.getExperience(id = id)!!
+            experience = repository.getExperience(id = editExperienceRoute.experienceId)!!
             enteredTitle = experience!!.title
             enteredText = experience!!.text
             enteredLocation = experience!!.location?.name ?: ""

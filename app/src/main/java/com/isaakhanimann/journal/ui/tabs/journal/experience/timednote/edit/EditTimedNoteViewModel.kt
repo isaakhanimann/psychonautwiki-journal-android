@@ -24,11 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
-import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.TIMED_NOTE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.EditTimedNoteRoute
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,12 +53,13 @@ class EditTimedNoteViewModel @Inject constructor(
     var isPartOfTimeline by mutableStateOf(true)
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     private var timedNote: TimedNote? = null
-    val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
+    private val editTimedNoteRoute = state.toRoute<EditTimedNoteRoute>()
+    val experienceId = editTimedNoteRoute.experienceId
 
     private val timedNoteId: Int
 
     init {
-        val timedNoteId = state.get<Int>(TIMED_NOTE_ID_KEY)!!
+        val timedNoteId = editTimedNoteRoute.timedNoteId
         this.timedNoteId = timedNoteId
         viewModelScope.launch {
             val loadedNote = experienceRepo.getTimedNote(id = timedNoteId) ?: return@launch

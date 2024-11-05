@@ -24,8 +24,8 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -36,7 +36,8 @@ import com.isaakhanimann.journal.ui.main.navigation.graphs.saferGraph
 import com.isaakhanimann.journal.ui.main.navigation.graphs.searchGraph
 import com.isaakhanimann.journal.ui.main.navigation.graphs.settingsGraph
 import com.isaakhanimann.journal.ui.main.navigation.graphs.statsGraph
-import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
+import com.isaakhanimann.journal.ui.main.navigation.JournalTopLevelRoute
+import com.isaakhanimann.journal.ui.main.navigation.topLevelRoutes
 
 @Composable
 fun MainScreen(
@@ -48,27 +49,26 @@ fun MainScreen(
         NavigationSuiteScaffold(
             navigationSuiteItems = {
                 val currentDestination = navBackStackEntry?.destination
-                val tabs = listOf(
-                    TabRouter.Statistics,
-                    TabRouter.Journal,
-                    TabRouter.Substances,
-                    TabRouter.SaferUse,
-                    TabRouter.Settings
-                )
-                tabs.forEach { tab ->
-                    val isSelected =
-                        currentDestination?.hierarchy?.any { it.route == tab.route } == true
+                topLevelRoutes.forEach { topLevelRoute ->
+                    val selected = currentDestination?.hierarchy?.any { it.hasRoute(topLevelRoute.route::class) } == true
                     item(
-                        selected = isSelected,
+                        icon = {
+                            Icon(
+                                topLevelRoute.icon,
+                                contentDescription = topLevelRoute.name
+                            )
+                        },
+                        label = { Text(topLevelRoute.name) },
+                        selected = selected,
                         onClick = {
-                            if (isSelected) {
+                            if (selected) {
                                 val isAlreadyOnTopOfTab =
-                                    tabs.any { it.childRoute == currentDestination?.route }
+                                    topLevelRoutes.any { it.route == currentDestination?.route }
                                 if (!isAlreadyOnTopOfTab) {
                                     navController.popBackStack()
                                 }
                             } else {
-                                navController.navigate(tab.route) {
+                                navController.navigate(topLevelRoute.route) {
                                     popUpTo(navController.graph.findStartDestination().id) {
                                         saveState = true
                                     }
@@ -76,21 +76,14 @@ fun MainScreen(
                                     restoreState = true
                                 }
                             }
-                        },
-                        icon = {
-                            Icon(tab.icon, contentDescription = null)
-                        },
-                        label = {
-                            Text(stringResource(tab.resourceId))
-                        },
-                        alwaysShowLabel = true,
+                        }
                     )
                 }
             }
         ) {
             NavHost(
                 navController,
-                startDestination = TabRouter.Journal.route
+                startDestination = JournalTopLevelRoute
             ) {
                 journalGraph(navController)
                 statsGraph(navController)

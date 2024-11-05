@@ -24,14 +24,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.FinishAddCustomUnitRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,12 +44,13 @@ class FinishAddCustomUnitViewModel @Inject constructor(
     substanceRepository: SubstanceRepository,
     state: SavedStateHandle
 ) : ViewModel() {
-    val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
-    private val administrationRoute: AdministrationRoute
+    private val finishAddCustomUnitRoute = state.toRoute<FinishAddCustomUnitRoute>()
+    val substanceName = finishAddCustomUnitRoute.substanceName
+    private val administrationRoute: AdministrationRoute = AdministrationRoute.valueOf(finishAddCustomUnitRoute.administrationRoute)
 
-    val substance = substanceRepository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY)!!)!!
+    val substance = substanceRepository.getSubstance(finishAddCustomUnitRoute.substanceName)!!
 
-    var roaDose: RoaDose?
+    var roaDose: RoaDose? = substance.getRoa(administrationRoute)?.roaDose
 
     var name by mutableStateOf("")
 
@@ -101,9 +102,6 @@ class FinishAddCustomUnitViewModel @Inject constructor(
     }
 
     init {
-        val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
-        administrationRoute = AdministrationRoute.valueOf(routeString)
-        roaDose = substance.getRoa(administrationRoute)?.roaDose
         originalUnit = roaDose?.units ?: ""
     }
 

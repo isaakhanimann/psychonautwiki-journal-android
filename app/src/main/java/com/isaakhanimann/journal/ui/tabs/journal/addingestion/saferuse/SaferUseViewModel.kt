@@ -20,8 +20,9 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.saferuse
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.CheckSaferUseRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -30,6 +31,6 @@ class SaferUseViewModel @Inject constructor(
     substanceRepo: SubstanceRepository,
     state: SavedStateHandle,
 ) : ViewModel() {
-    val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
+    val substanceName = state.toRoute<CheckSaferUseRoute>().substanceName
     val substance = substanceRepo.getSubstance(substanceName)!!
 }

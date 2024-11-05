@@ -21,61 +21,59 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToChooseRouteOfAddCustomUnit
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToFinishAddCustomUnit
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseRouteDuringAddCustomUnitScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseSubstanceScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.FinishAddCustomUnitScreen
+import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
-    navigation(
-        startDestination = NoArgumentRouter.AddCustomUnitsSearchSubstanceRouter.route,
-        route = NoArgumentRouter.AddCustomUnitsRouter.route,
+    navigation<AddCustomUnitsParentRoute>(
+        startDestination = AddCustomUnitsChooseSubstanceScreenRoute,
     ) {
-        composableWithTransitions(NoArgumentRouter.AddCustomUnitsSearchSubstanceRouter.route) {
+        composableWithTransitions<AddCustomUnitsChooseSubstanceScreenRoute> {
             ChooseSubstanceScreen(
                 navigateToChooseRoute = { substanceName ->
-                    navController.navigateToChooseRouteOfAddCustomUnit(substanceName)
+                    navController.navigate(ChooseRouteOfAddCustomUnitRoute(substanceName))
                 }
             )
         }
-        composableWithTransitions(
-            ArgumentRouter.ChooseRouteOfAddCustomUnitRouter.route,
-            arguments = ArgumentRouter.ChooseRouteOfAddCustomUnitRouter.args
-        ) { backStackEntry ->
-            val args = backStackEntry.arguments!!
-            val substanceName = args.getString(SUBSTANCE_NAME_KEY)!!
+        composableWithTransitions<ChooseRouteOfAddCustomUnitRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<ChooseRouteOfAddCustomUnitRoute>()
             ChooseRouteDuringAddCustomUnitScreen(
                 onRouteChosen = { administrationRoute ->
-                    navController.navigateToFinishAddCustomUnit(
-                        substanceName = substanceName,
-                        administrationRoute = administrationRoute,
+                    navController.navigate(
+                        FinishAddCustomUnitRoute(
+                            substanceName = route.substanceName,
+                            administrationRoute = administrationRoute.name,
+                        )
                     )
                 }
             )
         }
-        composableWithTransitions(
-            ArgumentRouter.FinishAddCustomUnitRouter.route,
-            arguments = ArgumentRouter.FinishAddCustomUnitRouter.args
-        ) {
+        composableWithTransitions<FinishAddCustomUnitRoute> {
             FinishAddCustomUnitScreen(
-                dismissAddCustomUnit = navController::dismissAddCustomUnits,
+                dismissAddCustomUnit = {
+                    navController.popBackStack(
+                        route = AddCustomUnitsChooseSubstanceScreenRoute,
+                        inclusive = true
+                    )
+                },
             )
         }
     }
 }
 
-fun NavController.navigateToAddCustomUnits() {
-    navigate(NoArgumentRouter.AddCustomUnitsRouter.route)
-}
-fun NavController.navigateToCustomUnitArchive() {
-    navigate(NoArgumentRouter.CustomUnitArchiveRouter.route)
-}
+@Serializable
+object AddCustomUnitsParentRoute
 
-fun NavController.dismissAddCustomUnits() {
-    popBackStack(route = NoArgumentRouter.AddCustomUnitsRouter.route, inclusive = true)
-}
+@Serializable
+object AddCustomUnitsChooseSubstanceScreenRoute
+
+@Serializable
+data class ChooseRouteOfAddCustomUnitRoute(val substanceName: String)
+
+@Serializable
+data class FinishAddCustomUnitRoute(val substanceName: String, val administrationRoute: String)
+

@@ -24,13 +24,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.Substance
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.ChooseDoseRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,9 +45,10 @@ class ChooseDoseViewModel @Inject constructor(
     state: SavedStateHandle,
     private val userPreferences: UserPreferences
 ) : ViewModel() {
-    val substance: Substance = repository.getSubstance(state.get<String>(SUBSTANCE_NAME_KEY)!!)!!
-    val administrationRoute: AdministrationRoute
-    val roaDose: RoaDose?
+    private val chooseDoseRoute = state.toRoute<ChooseDoseRoute>()
+    val substance: Substance = repository.getSubstance(chooseDoseRoute.substanceName)!!
+    val administrationRoute: AdministrationRoute = AdministrationRoute.valueOf(chooseDoseRoute.administrationRoute)
+    val roaDose: RoaDose? = substance.getRoa(administrationRoute)?.roaDose
     var isEstimate by mutableStateOf(false)
     var doseText by mutableStateOf("")
     var estimatedDoseStandardDeviationText by mutableStateOf("")
@@ -98,9 +99,6 @@ class ChooseDoseViewModel @Inject constructor(
     }
 
     init {
-        val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
-        administrationRoute = AdministrationRoute.valueOf(routeString)
-        roaDose = substance.getRoa(administrationRoute)?.roaDose
         units = roaDose?.units ?: ""
     }
 

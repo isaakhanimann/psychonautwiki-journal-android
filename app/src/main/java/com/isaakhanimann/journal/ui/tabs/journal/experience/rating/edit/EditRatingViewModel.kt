@@ -24,10 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
-import com.isaakhanimann.journal.ui.main.navigation.routers.RATING_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.EditRatingRoute
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,7 +50,8 @@ class EditRatingViewModel @Inject constructor(
     var isOverallRatingFlow = MutableStateFlow(false)
 
     init {
-        val ratingId = state.get<Int>(RATING_ID_KEY)!!
+        val editRatingRoute = state.toRoute<EditRatingRoute>()
+        val ratingId = editRatingRoute.ratingId
         this.ratingId = ratingId
         viewModelScope.launch {
             val loadedRating = experienceRepo.getRating(id = ratingId) ?: return@launch

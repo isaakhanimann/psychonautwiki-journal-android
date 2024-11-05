@@ -22,15 +22,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAdministrationRouteExplanationScreen
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToDosageExplanationScreenOnSaferTab
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToDosageGuideScreen
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToDrugTestingScreen
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToReagentTesting
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferHallucinogens
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToVolumetricDosingScreenOnSaferTab
+import com.isaakhanimann.journal.ui.main.navigation.SaferUseTopLevelRoute
 import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.DoseGuideScreen
 import com.isaakhanimann.journal.ui.tabs.safer.DrugTestingScreen
@@ -40,44 +32,87 @@ import com.isaakhanimann.journal.ui.tabs.safer.SaferHallucinogensScreen
 import com.isaakhanimann.journal.ui.tabs.safer.SaferUseScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferStimulantsScreen
-
+import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.saferGraph(navController: NavHostController) {
-    navigation(
-        startDestination = NoArgumentRouter.SaferRouter.route,
-        route = TabRouter.SaferUse.route,
+    navigation<SaferUseTopLevelRoute>(
+        startDestination = SaferUseScreenRoute
     ) {
-        composableWithTransitions(
-            route = NoArgumentRouter.SaferRouter.route,
-        ) {
+        composableWithTransitions<SaferUseScreenRoute> {
             SaferUseScreen(
-                navigateToDrugTestingScreen = navController::navigateToDrugTestingScreen,
-                navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
-                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreenOnSaferTab,
-                navigateToDosageGuideScreen = navController::navigateToDosageGuideScreen,
-                navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreenOnSaferTab,
-                navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
-                navigateToReagentTestingScreen = navController::navigateToReagentTesting
+                navigateToDrugTestingScreen = {
+                    navController.navigate(DrugTestingRoute)
+                },
+                navigateToSaferHallucinogensScreen = {
+                    navController.navigate(SaferHallucinogensRoute)
+                },
+                navigateToVolumetricDosingScreen = {
+                    navController.navigate(VolumetricDosingOnSaferTabRoute)
+                },
+                navigateToDosageGuideScreen = {
+                    navController.navigate(DosageGuideRoute)
+                },
+                navigateToDosageClassificationScreen = {
+                    navController.navigate(DosageExplanationRouteOnSaferTab)
+                },
+                navigateToRouteExplanationScreen = {
+                    navController.navigate(AdministrationRouteExplanationRouteOnSaferTab)
+                },
+                navigateToReagentTestingScreen = {
+                    navController.navigate(ReagentTestingRoute)
+                }
             )
         }
-        composableWithTransitions(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }
-        composableWithTransitions(NoArgumentRouter.SaferStimulants.route) { SaferStimulantsScreen() }
-        composableWithTransitions(NoArgumentRouter.DosageExplanationRouterOnSaferTab.route) { DoseExplanationScreen() }
-        composableWithTransitions(NoArgumentRouter.AdministrationRouteExplanationRouter.route) {
+        composableWithTransitions<SaferHallucinogensRoute> { SaferHallucinogensScreen() }
+        composableWithTransitions<SaferStimulantsRoute> { SaferStimulantsScreen() }
+        composableWithTransitions<DosageExplanationRouteOnSaferTab> { DoseExplanationScreen() }
+        composableWithTransitions<AdministrationRouteExplanationRouteOnSaferTab> {
             RouteExplanationScreen()
         }
-        composableWithTransitions(NoArgumentRouter.DrugTestingRouter.route) { DrugTestingScreen() }
-        composableWithTransitions(NoArgumentRouter.DosageGuideRouter.route) {
+        composableWithTransitions<DrugTestingRoute> { DrugTestingScreen() }
+        composableWithTransitions<DosageGuideRoute> {
             DoseGuideScreen(
-                navigateToDoseClassification = navController::navigateToDosageExplanationScreenOnSaferTab,
-                navigateToVolumetricDosing = navController::navigateToVolumetricDosingScreenOnSaferTab,
+                navigateToDoseClassification = {
+                    navController.navigate(DosageExplanationRouteOnSaferTab)
+                },
+                navigateToVolumetricDosing = {
+                    navController.navigate(VolumetricDosingOnSaferTabRoute)
+                },
             )
         }
-        composableWithTransitions(NoArgumentRouter.VolumetricDosingOnSaferTabRouter.route) {
+        composableWithTransitions<VolumetricDosingOnSaferTabRoute> {
             VolumetricDosingScreen()
         }
-        composableWithTransitions(NoArgumentRouter.ReagentTestingRouter.route) {
+        composableWithTransitions<ReagentTestingRoute> {
             ReagentTestingScreen()
         }
     }
 }
+
+
+@Serializable
+object SaferUseScreenRoute
+
+@Serializable
+object SaferHallucinogensRoute
+
+@Serializable
+object SaferStimulantsRoute
+
+@Serializable
+object DosageExplanationRouteOnSaferTab
+
+@Serializable
+object ReagentTestingRoute
+
+@Serializable
+object DrugTestingRoute
+
+@Serializable
+object AdministrationRouteExplanationRouteOnSaferTab
+
+@Serializable
+object DosageGuideRoute
+
+@Serializable
+object VolumetricDosingOnSaferTabRoute

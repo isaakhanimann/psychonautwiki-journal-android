@@ -22,18 +22,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
-import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToAddCustom
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToCategoryScreen
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToDosageExplanationScreenOnSearchTab
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToEditCustomSubstance
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToExplainTimelineOnSearchTab
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferHallucinogens
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferStimulants
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceScreen
-import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToVolumetricDosingScreenOnSearchTab
+import com.isaakhanimann.journal.ui.main.navigation.DrugsTopLevelRoute
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
@@ -42,57 +31,88 @@ import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstance
 import com.isaakhanimann.journal.ui.tabs.search.custom.EditCustomSubstance
 import com.isaakhanimann.journal.ui.tabs.search.substance.SubstanceScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.category.CategoryScreen
+import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.searchGraph(navController: NavHostController) {
-    navigation(
-        startDestination = NoArgumentRouter.SubstancesRouter.route,
-        route = TabRouter.Substances.route,
+    navigation<DrugsTopLevelRoute>(
+        startDestination = DrugsScreenRoute,
     ) {
-        composableWithTransitions(
-            route = NoArgumentRouter.SubstancesRouter.route,
-        ) {
+        composableWithTransitions<DrugsScreenRoute>{
             SearchScreen(
-                onSubstanceTap = {
-                    navController.navigateToSubstanceScreen(substanceName = it.name)
+                onSubstanceTap = { substanceModel ->
+                    navController.navigate(SubstanceRoute(substanceName = substanceModel.name))
                 },
-                onCustomSubstanceTap = navController::navigateToEditCustomSubstance,
-                navigateToAddCustomSubstanceScreen = navController::navigateToAddCustom
+                onCustomSubstanceTap = { customSubstanceId ->
+                    navController.navigate(EditCustomSubstanceRoute(customSubstanceId))
+                },
+                navigateToAddCustomSubstanceScreen = {
+                    navController.navigate(AddCustomSubstanceRouteOnSearchGraph)
+                }
             )
         }
-        composableWithTransitions(
-            route = ArgumentRouter.SubstanceRouter.route,
-            arguments = ArgumentRouter.SubstanceRouter.args,
-        ) {
+        composableWithTransitions<SubstanceRoute> {
             SubstanceScreen(
-                navigateToDosageExplanationScreen = navController::navigateToDosageExplanationScreenOnSearchTab,
-                navigateToSaferHallucinogensScreen = navController::navigateToSaferHallucinogens,
-                navigateToSaferStimulantsScreen = navController::navigateToSaferStimulants,
-                navigateToExplainTimeline = navController::navigateToExplainTimelineOnSearchTab,
-                navigateToCategoryScreen = navController::navigateToCategoryScreen,
-                navigateToVolumetricDosingScreen = navController::navigateToVolumetricDosingScreenOnSearchTab,
+                navigateToDosageExplanationScreen = {
+                    navController.navigate(DosageExplanationRouteOnSearchTab)
+                },
+                navigateToSaferHallucinogensScreen = {
+                    navController.navigate(SaferHallucinogensRoute)
+                },
+                navigateToSaferStimulantsScreen = {
+                    navController.navigate(SaferStimulantsRoute)
+                },
+                navigateToExplainTimeline = {
+                    navController.navigate(ExplainTimelineOnSearchTabRoute)
+                },
+                navigateToCategoryScreen = { categoryName ->
+                    navController.navigate(CategoryRoute(categoryName))
+                },
+                navigateToVolumetricDosingScreen = {
+                    navController.navigate(VolumetricDosingOnSearchTabRoute)
+                },
             )
         }
-        composableWithTransitions(
-            ArgumentRouter.CategoryRouter.route, arguments = ArgumentRouter.CategoryRouter.args
-        ) {
+        composableWithTransitions<CategoryRoute> {
             CategoryScreen()
         }
-        composableWithTransitions(
-            ArgumentRouter.EditCustomRouter.route, arguments = ArgumentRouter.EditCustomRouter.args
-        ) {
+        composableWithTransitions<EditCustomSubstanceRoute> {
             EditCustomSubstance(navigateBack = navController::popBackStack)
         }
-        composableWithTransitions(NoArgumentRouter.AddCustomRouter.route) {
+        composableWithTransitions<AddCustomSubstanceRouteOnSearchGraph> {
             AddCustomSubstance(
                 navigateBack = navController::popBackStack
             )
         }
-        composableWithTransitions(NoArgumentRouter.VolumetricDosingOnSearchTabRouter.route) {
+        composableWithTransitions<VolumetricDosingOnSearchTabRoute> {
             VolumetricDosingScreen()
         }
-        composableWithTransitions(NoArgumentRouter.ExplainTimelineOnSearchTabRouter.route) { ExplainTimelineScreen() }
+        composableWithTransitions<ExplainTimelineOnSearchTabRoute> { ExplainTimelineScreen() }
 
-        composableWithTransitions(NoArgumentRouter.DosageExplanationRouterOnSearchTab.route) { DoseExplanationScreen() }
+        composableWithTransitions<DosageExplanationRouteOnSearchTab> { DoseExplanationScreen() }
 
     }
 }
+
+@Serializable
+object DrugsScreenRoute
+
+@Serializable
+data class SubstanceRoute(val substanceName: String)
+
+@Serializable
+data class CategoryRoute(val categoryName: String)
+
+@Serializable
+data class EditCustomSubstanceRoute(val customSubstanceId: Int)
+
+@Serializable
+object AddCustomSubstanceRouteOnSearchGraph
+
+@Serializable
+object VolumetricDosingOnSearchTabRoute
+
+@Serializable
+object ExplainTimelineOnSearchTabRoute
+
+@Serializable
+object DosageExplanationRouteOnSearchTab

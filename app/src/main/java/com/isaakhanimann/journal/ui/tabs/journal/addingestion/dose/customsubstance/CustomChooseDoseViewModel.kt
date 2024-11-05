@@ -24,10 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.main.navigation.routers.ADMINISTRATION_ROUTE_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_SUBSTANCE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.CustomChooseDoseRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -102,12 +102,11 @@ class CustomChooseDoseViewModel @Inject constructor(
     }
 
     init {
-        val customSubstanceId = state.get<Int>(CUSTOM_SUBSTANCE_ID_KEY)!!
-        val routeString = state.get<String>(ADMINISTRATION_ROUTE_KEY)!!
-        administrationRoute = AdministrationRoute.valueOf(routeString)
+        val customChooseDoseRoute = state.toRoute<CustomChooseDoseRoute>()
+        administrationRoute = AdministrationRoute.valueOf(customChooseDoseRoute.administrationRoute)
         viewModelScope.launch {
             val customSubstance =
-                experienceRepository.getCustomSubstanceFlow(customSubstanceId).firstOrNull()
+                experienceRepository.getCustomSubstanceFlow(customChooseDoseRoute.customSubstanceId).firstOrNull()
                     ?: return@launch
             substanceName = customSubstance.name
             units = customSubstance.units

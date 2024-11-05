@@ -21,14 +21,14 @@ package com.isaakhanimann.journal.ui.tabs.stats.substancecompanion
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Experience
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.main.navigation.routers.CONSUMER_NAME_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.SUBSTANCE_NAME_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.SubstanceCompanionRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.CustomUnitDose
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.utils.getTimeDifferenceText
@@ -58,8 +58,9 @@ class SubstanceCompanionViewModel @Inject constructor(
         }
     }
 
-    private val substanceName = state.get<String>(SUBSTANCE_NAME_KEY)!!
-    val consumerName = state.get<String>(CONSUMER_NAME_KEY)
+    private val substanceCompanionRoute = state.toRoute<SubstanceCompanionRoute>()
+    private val substanceName = substanceCompanionRoute.substanceName
+    val consumerName = substanceCompanionRoute.consumerName
 
     private val substance = substanceRepo.getSubstance(substanceName)
     val tolerance = substance?.tolerance

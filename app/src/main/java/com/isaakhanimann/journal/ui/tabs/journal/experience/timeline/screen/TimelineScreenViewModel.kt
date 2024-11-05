@@ -21,14 +21,14 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.YOU
-import com.isaakhanimann.journal.ui.main.navigation.routers.CONSUMER_NAME_KEY
-import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.TimelineScreenRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
 import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceViewModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
@@ -61,8 +61,9 @@ class TimelineScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
-    private val experienceID = state.get<Int>(EXPERIENCE_ID_KEY)!!
-    val consumerName = state.get<String>(CONSUMER_NAME_KEY)!!
+    private val timelineRoute = state.toRoute<TimelineScreenRoute>()
+    private val experienceID = timelineRoute.experienceId
+    val consumerName = timelineRoute.consumerName
 
     private val ingestionsWithCompanionsFlow =
         experienceRepo.getIngestionsWithCompanionsFlow(experienceID)

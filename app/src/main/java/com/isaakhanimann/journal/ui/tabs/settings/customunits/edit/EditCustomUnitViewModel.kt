@@ -24,12 +24,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.main.navigation.routers.CUSTOM_UNIT_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.EditCustomUnitRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +47,8 @@ class EditCustomUnitViewModel @Inject constructor(
 
     private var customUnit: CustomUnit? = null
     init {
-        val customUnitId = state.get<Int>(CUSTOM_UNIT_ID_KEY)!!
+        val customUnitRoute: EditCustomUnitRoute = state.toRoute()
+        val customUnitId = customUnitRoute.customUnitId
         viewModelScope.launch {
             val customUnit = experienceRepo.getCustomUnit(customUnitId)
             this@EditCustomUnitViewModel.customUnit = customUnit

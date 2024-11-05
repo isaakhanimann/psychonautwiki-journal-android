@@ -24,10 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
-import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.AddTimedNoteRoute
 import com.isaakhanimann.journal.ui.utils.getInstant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,7 +47,7 @@ class AddTimedNoteViewModel @Inject constructor(
     var note by mutableStateOf("")
     var color by mutableStateOf(AdaptiveColor.BLUE)
     var isPartOfTimeline by mutableStateOf(true)
-    val experienceId = state.get<Int>(EXPERIENCE_ID_KEY)!!
+    val experienceId = state.toRoute<AddTimedNoteRoute>().experienceId
     var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
     var alreadyUsedColors by mutableStateOf(emptyList<AdaptiveColor>())
     var otherColors by mutableStateOf(emptyList<AdaptiveColor>())

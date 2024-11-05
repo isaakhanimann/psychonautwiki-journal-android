@@ -21,6 +21,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.experience
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
@@ -28,7 +29,7 @@ import com.isaakhanimann.journal.data.substances.classes.Substance
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.main.navigation.routers.EXPERIENCE_ID_KEY
+import com.isaakhanimann.journal.ui.main.navigation.graphs.ExperienceRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.InteractionChecker
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
@@ -110,7 +111,8 @@ class OneExperienceViewModel @Inject constructor(
     )
 
     init {
-        val expId = state.get<Int>(EXPERIENCE_ID_KEY)!!
+        val experienceRoute = state.toRoute<ExperienceRoute>()
+        val expId = experienceRoute.experienceId
         experienceId = expId
         viewModelScope.launch {
             val experience = experienceRepo.getExperience(expId)
