@@ -21,7 +21,6 @@ package com.isaakhanimann.journal.ui.main.navigation.graphs
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
-import com.isaakhanimann.journal.ui.main.JournalBottomNavigationBar
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
@@ -55,9 +54,6 @@ fun NavGraphBuilder.settingsGraph(navController: NavHostController) {
                 navigateToSubstanceColors = navController::navigateToSubstanceColors,
                 navigateToCustomUnits = navController::navigateToCustomUnits,
                 navigateToDonate = navController::navigateToDonate,
-                bottomAppBar = {
-                    JournalBottomNavigationBar(navController)
-                }
             )
         }
         composableWithTransitions(NoArgumentRouter.FAQRouter.route) { FAQScreen() }

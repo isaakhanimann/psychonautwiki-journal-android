@@ -63,7 +63,6 @@ fun SaferUsePreview() {
         navigateToDosageClassificationScreen = {},
         navigateToRouteExplanationScreen = {},
         navigateToReagentTestingScreen = {},
-        bottomAppBar = {}
     )
 }
 
@@ -77,7 +76,6 @@ fun SaferUseScreen(
     navigateToDosageClassificationScreen: () -> Unit,
     navigateToRouteExplanationScreen: () -> Unit,
     navigateToReagentTestingScreen: () -> Unit,
-    bottomAppBar: @Composable () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -85,7 +83,6 @@ fun SaferUseScreen(
                 title = { Text("Safer use") },
             )
         },
-        bottomBar = bottomAppBar
     ) { padding ->
         Column(
             Modifier

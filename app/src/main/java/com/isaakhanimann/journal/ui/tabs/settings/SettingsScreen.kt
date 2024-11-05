@@ -102,7 +102,6 @@ fun SettingsPreview() {
         saveDosageDotsAreHidden = {},
         areSubstanceHeightsIndependent = false,
         saveAreSubstanceHeightsIndependent = {},
-        bottomAppBar = {}
     )
 }
 
@@ -114,7 +113,6 @@ fun SettingsScreen(
     navigateToSubstanceColors: () -> Unit,
     navigateToCustomUnits: () -> Unit,
     navigateToDonate: () -> Unit,
-    bottomAppBar: @Composable () -> Unit,
 ) {
     SettingsScreen(
         navigateToFAQ = navigateToFAQ,
@@ -130,7 +128,6 @@ fun SettingsScreen(
         saveDosageDotsAreHidden = viewModel::saveDosageDotsAreHidden,
         areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value,
         saveAreSubstanceHeightsIndependent = viewModel::saveAreSubstanceHeightsIndependent,
-        bottomAppBar = bottomAppBar
     )
 }
 
@@ -150,7 +147,6 @@ fun SettingsScreen(
     saveDosageDotsAreHidden: (Boolean) -> Unit,
     areSubstanceHeightsIndependent: Boolean,
     saveAreSubstanceHeightsIndependent: (Boolean) -> Unit,
-    bottomAppBar: @Composable () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -159,7 +155,6 @@ fun SettingsScreen(
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        bottomBar = bottomAppBar
     ) { padding ->
         Column(
             modifier = Modifier

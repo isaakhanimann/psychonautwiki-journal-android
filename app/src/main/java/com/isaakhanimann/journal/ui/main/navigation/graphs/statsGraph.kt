@@ -18,11 +18,9 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
-import com.isaakhanimann.journal.ui.main.JournalBottomNavigationBar
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.ArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
@@ -44,9 +42,6 @@ fun NavGraphBuilder.statsGraph(navController: NavHostController) {
                 navigateToSubstanceCompanion = {substanceName, consumerName ->
                     navController.navigateToSubstanceCompanionScreen(substanceName = substanceName, consumerName=consumerName)
                 },
-                bottomAppBar = {
-                    JournalBottomNavigationBar(navController)
-                }
             )
         }
         composableWithTransitions(

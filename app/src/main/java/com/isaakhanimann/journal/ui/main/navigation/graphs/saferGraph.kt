@@ -18,11 +18,9 @@
 
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
-import com.isaakhanimann.journal.ui.main.JournalBottomNavigationBar
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.routers.NoArgumentRouter
 import com.isaakhanimann.journal.ui.main.navigation.routers.TabRouter
@@ -59,10 +57,7 @@ fun NavGraphBuilder.saferGraph(navController: NavHostController) {
                 navigateToDosageGuideScreen = navController::navigateToDosageGuideScreen,
                 navigateToDosageClassificationScreen = navController::navigateToDosageExplanationScreenOnSaferTab,
                 navigateToRouteExplanationScreen = navController::navigateToAdministrationRouteExplanationScreen,
-                navigateToReagentTestingScreen = navController::navigateToReagentTesting,
-                bottomAppBar = {
-                    JournalBottomNavigationBar(navController)
-                }
+                navigateToReagentTestingScreen = navController::navigateToReagentTesting
             )
         }
         composableWithTransitions(NoArgumentRouter.SaferHallucinogens.route) { SaferHallucinogensScreen() }

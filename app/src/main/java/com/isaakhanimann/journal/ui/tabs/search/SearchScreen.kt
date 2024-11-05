@@ -62,7 +62,6 @@ fun SearchScreen(
     onSubstanceTap: (substanceModel: SubstanceModel) -> Unit,
     onCustomSubstanceTap: (customSubstanceId: Int) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
-    bottomAppBar: @Composable () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     var isFocused by remember { mutableStateOf(false) }
@@ -74,7 +73,6 @@ fun SearchScreen(
                 }
             }
         },
-        bottomBar = bottomAppBar
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             SearchField(
