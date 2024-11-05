@@ -127,7 +127,7 @@ fun EditExperienceScreen(
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done,
-                    capitalization = KeyboardCapitalization.Words
+                    capitalization = KeyboardCapitalization.Sentences
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
