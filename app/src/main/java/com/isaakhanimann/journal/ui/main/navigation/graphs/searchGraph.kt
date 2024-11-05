@@ -35,6 +35,7 @@ import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSaferStimu
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToSubstanceScreen
 import com.isaakhanimann.journal.ui.main.navigation.routers.navigateToVolumetricDosingScreenOnSearchTab
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
+import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
 import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstance
@@ -90,5 +91,8 @@ fun NavGraphBuilder.searchGraph(navController: NavHostController) {
             VolumetricDosingScreen()
         }
         composableWithTransitions(NoArgumentRouter.ExplainTimelineOnSearchTabRouter.route) { ExplainTimelineScreen() }
+
+        composableWithTransitions(NoArgumentRouter.DosageExplanationRouterOnSearchTab.route) { DoseExplanationScreen() }
+
     }
 }

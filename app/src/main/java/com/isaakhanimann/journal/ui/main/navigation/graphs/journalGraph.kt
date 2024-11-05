@@ -46,7 +46,6 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timednote.add.AddTim
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timednote.edit.EditTimedNoteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTimelineScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.screen.TimelineScreen
-import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SaferSniffingScreen
 
@@ -144,7 +143,6 @@ fun NavGraphBuilder.journalGraph(navController: NavHostController) {
         }
         addIngestionGraph(navController)
         composableWithTransitions(NoArgumentRouter.ExplainTimelineOnJournalTabRouter.route) { ExplainTimelineScreen() }
-        composableWithTransitions(NoArgumentRouter.DosageExplanationRouterOnSearchTab.route) { DoseExplanationScreen() }
         composableWithTransitions(NoArgumentRouter.SaferSniffingOnJournalTab.route) { SaferSniffingScreen() }
         composableWithTransitions(NoArgumentRouter.CalendarRouter.route) {
             CalendarJournalScreen(
