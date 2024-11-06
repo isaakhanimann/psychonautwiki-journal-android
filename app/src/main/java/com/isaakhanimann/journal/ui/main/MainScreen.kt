@@ -50,11 +50,12 @@ fun MainScreen(
             navigationSuiteItems = {
                 val currentDestination = navBackStackEntry?.destination
                 topLevelRoutes.forEach { topLevelRoute ->
-                    val selected = currentDestination?.hierarchy?.any { it.hasRoute(topLevelRoute.route::class) } == true
+                    val selected =
+                        currentDestination?.hierarchy?.any { it.hasRoute(topLevelRoute.route::class) } == true
                     item(
                         icon = {
                             Icon(
-                                topLevelRoute.icon,
+                                if (selected) topLevelRoute.filledIcon else topLevelRoute.outlinedIcon,
                                 contentDescription = topLevelRoute.name
                             )
                         },
