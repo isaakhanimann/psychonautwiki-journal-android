@@ -27,6 +27,8 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 
@@ -81,11 +83,9 @@ inline fun <reified T : Any> NavGraphBuilder.composableWithTransitions(
 }
 
 fun AnimatedContentTransitionScope<NavBackStackEntry>.isChangingTab(): Boolean {
-    // check grandparents because in a tab graph there can be another nested graph such as addIngestion
-    val initialParent = initialState.destination.parent
-    val initialGrandParent = initialParent?.parent
-    val targetParent = targetState.destination.parent
-    val targetGrandParent = targetParent?.parent
-    return (initialGrandParent?.route ?: initialParent?.route) != (targetGrandParent?.route
-        ?: targetParent?.route)
+    val initialTopLevel = initialState.destination.hierarchy.firstOrNull { navDestination ->
+        topLevelRoutes.any { navDestination.hasRoute(it.route::class) } }
+    val targetTopLevel = targetState.destination.hierarchy.firstOrNull { navDestination ->
+        topLevelRoutes.any { navDestination.hasRoute(it.route::class) } }
+    return initialTopLevel != targetTopLevel
 }
