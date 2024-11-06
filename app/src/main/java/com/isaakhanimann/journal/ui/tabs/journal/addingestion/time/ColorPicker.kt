@@ -92,7 +92,7 @@ fun ColorPicker(
         Icon(
             imageVector = Icons.Default.Edit,
             contentDescription = "Edit color",
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(15.dp),
         )
     }
     if (isColorPickerVisible) {
