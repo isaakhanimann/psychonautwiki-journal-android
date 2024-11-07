@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -95,7 +96,7 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(top = 3.dp),
+                .safeDrawingPadding(),
             verticalArrangement = Arrangement.SpaceEvenly,
         ) {
             val configuration = LocalConfiguration.current
@@ -130,7 +131,7 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
                     isShowingCurrentTime = true,
                     areSubstanceHeightsIndependent = timelineScreenModel.areSubstanceHeightsIndependent,
                     modifier = Modifier
-                        .fillMaxHeight(if (isOrientationPortrait) 0.5f else 1f)
+                        .fillMaxHeight(if (isOrientationPortrait) 0.5f else 0.8f)
                         .width(canvasWidth.dp)
                         .padding(horizontal = horizontalPadding)
                 )
@@ -143,7 +144,7 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
                 valueRange = screenWidth..5 * screenWidth,
                 modifier = Modifier
                     .padding(horizontal = 30.dp)
-                    .padding(bottom = 30.dp)
+                    .padding(bottom = if (isOrientationPortrait) 30.dp else 10.dp)
             )
         }
     }
