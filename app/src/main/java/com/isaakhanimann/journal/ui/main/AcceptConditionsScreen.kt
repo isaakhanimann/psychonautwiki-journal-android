@@ -23,6 +23,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -65,6 +66,7 @@ fun AcceptConditionsScreen(
             modifier = Modifier
                 .padding(padding)
                 .padding(10.dp)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
             var checkedState0 by remember { mutableStateOf(false) }
@@ -162,7 +164,7 @@ fun AcceptConditionsScreen(
                 }
             }
             Text(
-                text = "Journaling data always stays on this device",
+                text = "Your data always stays on this device",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 15.dp, vertical = 20.dp)
             )
