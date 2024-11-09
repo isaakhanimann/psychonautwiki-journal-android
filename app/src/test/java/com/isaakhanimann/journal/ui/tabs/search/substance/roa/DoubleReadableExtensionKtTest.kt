@@ -9,7 +9,7 @@ class DoubleReadableExtensionKtTest {
     fun testToReadableString() {
         assertEquals("2", 2.0.toReadableString())
         assertEquals("20", 20.0.toReadableString())
-        assertEquals("0.333", (1.0/3.0).toReadableString())
+        assertEquals("0.33", (1.0/3.0).toReadableString())
         assertEquals("120", 120.0.toReadableString())
         assertEquals("1.5", 1.5.toReadableString())
         assertEquals("1500", 1500.0.toReadableString())

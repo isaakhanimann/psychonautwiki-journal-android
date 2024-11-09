@@ -24,8 +24,9 @@ import java.math.RoundingMode
 
 
 fun Double.toReadableString(): String {
-    val roundedNumber = roundToSignificantDigits(this, 3)
-    return formatToMaximumFractionDigits(roundedNumber, 5)
+    val numberOfSignificantDigits = if (this > 1) 3 else 2
+    val roundedNumber = roundToSignificantDigits(this, numberOfSignificantDigits)
+    return formatToMaximumFractionDigits(roundedNumber, 6)
 }
 
 fun roundToSignificantDigits(value: Double, significantDigits: Int): Double {
