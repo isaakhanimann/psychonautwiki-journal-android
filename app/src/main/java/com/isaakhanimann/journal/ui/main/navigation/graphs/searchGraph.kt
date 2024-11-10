@@ -27,8 +27,8 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.ExplainTime
 import com.isaakhanimann.journal.ui.tabs.safer.DoseExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.safer.VolumetricDosingScreen
 import com.isaakhanimann.journal.ui.tabs.search.SearchScreen
-import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstance
-import com.isaakhanimann.journal.ui.tabs.search.custom.EditCustomSubstance
+import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstanceScreen
+import com.isaakhanimann.journal.ui.tabs.search.custom.EditCustomSubstanceScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.SubstanceScreen
 import com.isaakhanimann.journal.ui.tabs.search.substance.category.CategoryScreen
 import kotlinx.serialization.Serializable
@@ -76,10 +76,10 @@ fun NavGraphBuilder.searchGraph(navController: NavHostController) {
             CategoryScreen()
         }
         composableWithTransitions<EditCustomSubstanceRoute> {
-            EditCustomSubstance(navigateBack = navController::popBackStack)
+            EditCustomSubstanceScreen(navigateBack = navController::popBackStack)
         }
         composableWithTransitions<AddCustomSubstanceRouteOnSearchGraph> {
-            AddCustomSubstance(
+            AddCustomSubstanceScreen(
                 navigateBack = navController::popBackStack
             )
         }

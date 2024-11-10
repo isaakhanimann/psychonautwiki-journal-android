@@ -21,6 +21,7 @@ package com.isaakhanimann.journal.ui.tabs.search.custom
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,9 +43,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -53,7 +51,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -63,151 +60,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
-import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddCustomSubstance(
+fun AddCustomSubstanceScreen(
     navigateBack: () -> Unit,
     initialName: String = "",
     viewModel: AddCustomSubstanceViewModel = hiltViewModel()
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         viewModel.name = initialName
     }
-    AddOrEditCustomSubstance(
-        name = viewModel.name,
-        units = viewModel.units,
-        description = viewModel.description,
-        onNameChange = { viewModel.name = it },
-        onUnitsChange = { viewModel.units = it },
-        onDescriptionChange = { viewModel.description = it },
-        onDoneTap = {
-            scope.launch {
-                snackbarHostState.showSnackbar(
-                    message = "Custom substance added",
-                    duration = SnackbarDuration.Short
-                )
-            }
-            viewModel.onDoneTap()
-            navigateBack()
-        },
-        isDoneEnabled = viewModel.isValid,
-        title = "Add custom substance",
-        isShowingDelete = false,
-        deleteAndNavigate = {}
-    )
-}
-
-@Composable
-fun EditCustomSubstance(
-    navigateBack: () -> Unit,
-    viewModel: EditCustomSubstanceViewModel = hiltViewModel()
-) {
-    AddOrEditCustomSubstance(
-        name = viewModel.name,
-        units = viewModel.units,
-        description = viewModel.description,
-        onNameChange = { viewModel.name = it },
-        onUnitsChange = { viewModel.units = it },
-        onDescriptionChange = { viewModel.description = it },
-        onDoneTap = {
-            viewModel.onDoneTap()
-            navigateBack()
-        },
-        isDoneEnabled = viewModel.isValid,
-        title = "Edit custom substance",
-        isShowingDelete = true,
-        deleteAndNavigate = {
-            viewModel.deleteCustomSubstance()
-            navigateBack()
-        }
-    )
-}
-
-
-@Preview
-@Composable
-fun AddCustomSubstancePreview() {
-    AddOrEditCustomSubstance(
-        name = "Medication",
-        units = "mg",
-        description = "My medication has a very long description to see how the text fits into the text field, to make sure it looks good.",
-        onNameChange = {},
-        onUnitsChange = {},
-        onDescriptionChange = {},
-        onDoneTap = {},
-        isDoneEnabled = true,
-        title = "Add custom substance",
-        isShowingDelete = false,
-        deleteAndNavigate = {}
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddOrEditCustomSubstance(
-    name: String,
-    units: String,
-    description: String,
-    onNameChange: (String) -> Unit,
-    onUnitsChange: (String) -> Unit,
-    onDescriptionChange: (String) -> Unit,
-    onDoneTap: () -> Unit,
-    isDoneEnabled: Boolean,
-    title: String,
-    isShowingDelete: Boolean,
-    deleteAndNavigate: () -> Unit,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
-) {
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            TopAppBar(title = { Text(title) }, actions = {
-                if (isShowingDelete) {
-                    var isShowingDeleteDialog by remember { mutableStateOf(false) }
-                    IconButton(
-                        onClick = { isShowingDeleteDialog = true },
-                    ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Delete substance",
-                        )
-                    }
-                    AnimatedVisibility(visible = isShowingDeleteDialog) {
-                        AlertDialog(
-                            onDismissRequest = { isShowingDeleteDialog = false },
-                            title = {
-                                Text(text = "Delete substance?")
-                            },
-                            confirmButton = {
-                                TextButton(
-                                    onClick = {
-                                        isShowingDeleteDialog = false
-                                        deleteAndNavigate()
-                                    }
-                                ) {
-                                    Text("Delete")
-                                }
-                            },
-                            dismissButton = {
-                                TextButton(
-                                    onClick = { isShowingDeleteDialog = false }
-                                ) {
-                                    Text("Cancel")
-                                }
-                            }
-                        )
-                    }
-                }
-            })
+            TopAppBar(title = { Text("Add custom substance") })
         },
         floatingActionButton = {
-            if (isDoneEnabled) {
+            if (viewModel.isValid) {
                 ExtendedFloatingActionButton(
                     modifier = Modifier.imePadding(),
-                    onClick = onDoneTap,
+                    onClick = {
+                        viewModel.onDoneTap()
+                        navigateBack()
+                    },
                     icon = {
                         Icon(
                             Icons.Filled.Done,
@@ -219,65 +94,178 @@ fun AddOrEditCustomSubstance(
             }
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(horizontal = horizontalPadding)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(modifier = Modifier.height(5.dp))
-            val focusManager = LocalFocusManager.current
-            OutlinedTextField(
-                value = name,
-                onValueChange = onNameChange,
-                label = { Text("Name") },
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    capitalization = KeyboardCapitalization.Words
-                ),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = units,
-                onValueChange = onUnitsChange,
-                label = { Text("Units") },
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                OutlinedButton(onClick = { onUnitsChange("µg") }) {
-                    Text(text = "µg")
-                }
-                OutlinedButton(onClick = { onUnitsChange("mg") }) {
-                    Text(text = "mg")
-                }
-                OutlinedButton(onClick = { onUnitsChange("g") }) {
-                    Text(text = "g")
-                }
-                OutlinedButton(onClick = { onUnitsChange("mL") }) {
-                    Text(text = "mL")
-                }
-            }
-            OutlinedTextField(
-                value = description,
-                onValueChange = onDescriptionChange,
-                label = { Text("Description") },
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    capitalization = KeyboardCapitalization.Sentences
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(5.dp))
+        AddOrEditCustomSubstanceContent(
+            padding = padding,
+            name = viewModel.name,
+            units = viewModel.units,
+            description = viewModel.description,
+            onNameChange = { viewModel.name = it },
+            onUnitsChange = { viewModel.units = it },
+            onDescriptionChange = { viewModel.description = it },
+        )
+    }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditCustomSubstanceScreen(
+    navigateBack: () -> Unit,
+    viewModel: EditCustomSubstanceViewModel = hiltViewModel()
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("Edit custom substance") }, actions = {
+                var isShowingDeleteDialog by remember { mutableStateOf(false) }
+                IconButton(
+                    onClick = { isShowingDeleteDialog = true },
+                ) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Delete substance",
+                    )
+                }
+                AnimatedVisibility(visible = isShowingDeleteDialog) {
+                    AlertDialog(
+                        onDismissRequest = { isShowingDeleteDialog = false },
+                        title = {
+                            Text(text = "Delete substance?")
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    isShowingDeleteDialog = false
+                                    viewModel.deleteCustomSubstance()
+                                    navigateBack()
+                                }
+                            ) {
+                                Text("Delete")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(
+                                onClick = { isShowingDeleteDialog = false }
+                            ) {
+                                Text("Cancel")
+                            }
+                        }
+                    )
+                }
+            })
+        },
+        floatingActionButton = {
+            if (viewModel.isValid) {
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.imePadding(),
+                    onClick = {
+                        viewModel.onDoneTap()
+                        navigateBack()
+                    },
+                    icon = {
+                        Icon(
+                            Icons.Filled.Done,
+                            contentDescription = "Done"
+                        )
+                    },
+                    text = { Text("Done") },
+                )
+            }
         }
+    ) { padding ->
+        AddOrEditCustomSubstanceContent(
+            padding = padding,
+            name = viewModel.name,
+            units = viewModel.units,
+            description = viewModel.description,
+            onNameChange = { viewModel.name = it },
+            onUnitsChange = { viewModel.units = it },
+            onDescriptionChange = { viewModel.description = it }
+        )
+    }
+}
+
+
+@Preview
+@Composable
+fun AddCustomSubstancePreview() {
+    AddOrEditCustomSubstanceContent(
+        name = "Medication",
+        units = "mg",
+        description = "My medication has a very long description to see how the text fits into the text field, to make sure it looks good.",
+        onNameChange = {},
+        onUnitsChange = {},
+        onDescriptionChange = {},
+        padding = PaddingValues(0.dp)
+    )
+}
+
+@Composable
+private fun AddOrEditCustomSubstanceContent(
+    padding: PaddingValues,
+    name: String,
+    onNameChange: (String) -> Unit,
+    units: String,
+    onUnitsChange: (String) -> Unit,
+    description: String,
+    onDescriptionChange: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(padding)
+            .padding(horizontal = horizontalPadding)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Spacer(modifier = Modifier.height(5.dp))
+        val focusManager = LocalFocusManager.current
+        OutlinedTextField(
+            value = name,
+            onValueChange = onNameChange,
+            label = { Text("Name") },
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Words
+            ),
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = units,
+            onValueChange = onUnitsChange,
+            label = { Text("Units") },
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedButton(onClick = { onUnitsChange("µg") }) {
+                Text(text = "µg")
+            }
+            OutlinedButton(onClick = { onUnitsChange("mg") }) {
+                Text(text = "mg")
+            }
+            OutlinedButton(onClick = { onUnitsChange("g") }) {
+                Text(text = "g")
+            }
+            OutlinedButton(onClick = { onUnitsChange("mL") }) {
+                Text(text = "mL")
+            }
+        }
+        OutlinedTextField(
+            value = description,
+            onValueChange = onDescriptionChange,
+            label = { Text("Description") },
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                capitalization = KeyboardCapitalization.Sentences
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(5.dp))
+
     }
 }
