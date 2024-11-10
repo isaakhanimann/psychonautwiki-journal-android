@@ -85,9 +85,10 @@ fun AddIngestionSearchScreen(
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
     navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
-    navigateToAddCustomSubstanceScreen: () -> Unit,
+    navigateToAddCustomSubstanceScreen: (searchText: String) -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
 ) {
+    val searchText = viewModel.searchTextFlow.collectAsState().value
     AddIngestionSearchScreen(
         navigateToCheckInteractions = navigateToCheckInteractions,
         navigateToCheckSaferUse = navigateToCheckSaferUse,
@@ -96,10 +97,12 @@ fun AddIngestionSearchScreen(
         navigateToCustomSubstanceChooseRoute = navigateToCustomSubstanceChooseRoute,
         navigateToChooseTime = navigateToChooseTime,
         navigateToDose = navigateToDose,
-        navigateToAddCustomSubstanceScreen = navigateToAddCustomSubstanceScreen,
+        navigateToAddCustomSubstanceScreen = {
+            navigateToAddCustomSubstanceScreen(searchText)
+        },
         navigateToCustomUnitChooseDose = navigateToCustomUnitChooseDose,
         substanceRouteSuggestions = viewModel.filteredSuggestions.collectAsState().value,
-        searchText = viewModel.searchTextFlow.collectAsState().value,
+        searchText = searchText,
         onChangeSearchText = {
             viewModel.updateSearchText(it)
         },

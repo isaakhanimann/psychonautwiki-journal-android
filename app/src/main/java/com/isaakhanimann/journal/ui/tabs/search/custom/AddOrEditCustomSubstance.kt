@@ -49,6 +49,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,10 +68,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddCustomSubstance(
     navigateBack: () -> Unit,
+    initialName: String = "",
     viewModel: AddCustomSubstanceViewModel = hiltViewModel()
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        viewModel.name = initialName
+    }
     AddOrEditCustomSubstance(
         name = viewModel.name,
         units = viewModel.units,

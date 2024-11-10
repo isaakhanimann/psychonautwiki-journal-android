@@ -86,16 +86,20 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToChooseRoute = { substanceName ->
                     navController.navigate(ChooseRouteOfAddIngestionRoute(substanceName = substanceName))
                 },
-                navigateToAddCustomSubstanceScreen = {
-                    navController.navigate(AddCustomSubstanceRouteOnAddIngestionGraph)
+                navigateToAddCustomSubstanceScreen = { searchText ->
+                    navController.navigate(AddCustomSubstanceRouteOnAddIngestionGraph(searchText = searchText))
                 },
                 navigateToCustomUnitChooseDose = { customUnitId ->
                     navController.navigate(ChooseDoseCustomUnitRoute(customUnitId = customUnitId))
                 }
             )
         }
-        composableWithTransitions<AddCustomSubstanceRouteOnAddIngestionGraph> {
-            AddCustomSubstance(navigateBack = navController::popBackStack)
+        composableWithTransitions<AddCustomSubstanceRouteOnAddIngestionGraph> { backStackEntry ->
+            val route = backStackEntry.toRoute<AddCustomSubstanceRouteOnAddIngestionGraph>()
+            AddCustomSubstance(
+                navigateBack = navController::popBackStack,
+                initialName = route.searchText
+            )
         }
         composableWithTransitions<CheckInteractionsRoute> { backStackEntry ->
             val route = backStackEntry.toRoute<CheckInteractionsRoute>()
@@ -247,7 +251,10 @@ data class ChooseRouteOfAddIngestionRoute(val substanceName: String)
 data class CustomChooseRouteRoute(val customSubstanceId: Int)
 
 @Serializable
-data class ChooseCustomSubstanceDoseRoute(val customSubstanceId: Int, val administrationRoute: String)
+data class ChooseCustomSubstanceDoseRoute(
+    val customSubstanceId: Int,
+    val administrationRoute: String
+)
 
 @Serializable
 data class ChooseDoseRoute(val substanceName: String, val administrationRoute: String)
@@ -268,4 +275,4 @@ data class ChooseTimeRoute(
 object AdministrationRouteExplanationRouteOnJournalTab
 
 @Serializable
-object AddCustomSubstanceRouteOnAddIngestionGraph
+data class AddCustomSubstanceRouteOnAddIngestionGraph(val searchText: String)
