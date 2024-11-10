@@ -27,7 +27,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.main.navigation.graphs.CustomChooseDoseRoute
+import com.isaakhanimann.journal.ui.main.navigation.graphs.ChooseCustomSubstanceDoseRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -102,11 +102,11 @@ class CustomChooseDoseViewModel @Inject constructor(
     }
 
     init {
-        val customChooseDoseRoute = state.toRoute<CustomChooseDoseRoute>()
-        administrationRoute = AdministrationRoute.valueOf(customChooseDoseRoute.administrationRoute)
+        val chooseCustomSubstanceDoseRoute = state.toRoute<ChooseCustomSubstanceDoseRoute>()
+        administrationRoute = AdministrationRoute.valueOf(chooseCustomSubstanceDoseRoute.administrationRoute)
         viewModelScope.launch {
             val customSubstance =
-                experienceRepository.getCustomSubstanceFlow(customChooseDoseRoute.customSubstanceId).firstOrNull()
+                experienceRepository.getCustomSubstanceFlow(chooseCustomSubstanceDoseRoute.customSubstanceId).firstOrNull()
                     ?: return@launch
             substanceName = customSubstance.name
             units = customSubstance.units
