@@ -27,7 +27,7 @@ jobs:
 
       - name: Setup Android SDK
         run: |
-          ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager "build-tools;34.0.0"
+          ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager "build-tools;35.0.0"
 
       - name: Sign app APK
         uses: ilharp/sign-android-release@nightly
@@ -37,7 +37,7 @@ jobs:
           keyAlias: ${{ secrets.SIGNING_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.SIGNING_STORE_PASSWORD }}
           keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          buildToolsVersion: 34.0.0
+          buildToolsVersion: 35.0.0
 
       - name: Rename signed APK
         run: |
