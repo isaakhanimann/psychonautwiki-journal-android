@@ -204,8 +204,8 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
     suspend fun update(substanceCompanion: SubstanceCompanion) =
         experienceDao.update(substanceCompanion)
 
-    suspend fun insert(customSubstance: CustomSubstance) =
-        experienceDao.insert(customSubstance)
+    suspend fun insert(customSubstance: CustomSubstance): Int =
+        experienceDao.insert(customSubstance).toInt()
 
     suspend fun delete(customSubstance: CustomSubstance) =
         experienceDao.delete(customSubstance)

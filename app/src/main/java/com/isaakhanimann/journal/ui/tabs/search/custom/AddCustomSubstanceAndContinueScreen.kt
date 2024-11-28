@@ -34,8 +34,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddCustomSubstanceScreen(
-    navigateBack: () -> Unit,
+fun AddCustomSubstanceAndContinueScreen(
+    navigateToChooseRoa: (customSubstanceId: Int) -> Unit,
     initialName: String = "",
     viewModel: AddCustomSubstanceViewModel = hiltViewModel()
 ) {
@@ -52,7 +52,7 @@ fun AddCustomSubstanceScreen(
                     modifier = Modifier.imePadding(),
                     onClick = {
                         viewModel.addCustomSubstance {
-                            navigateBack()
+                            navigateToChooseRoa(it)
                         }
                     },
                     icon = {

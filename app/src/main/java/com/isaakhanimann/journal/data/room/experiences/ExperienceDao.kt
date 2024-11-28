@@ -447,7 +447,7 @@ interface ExperienceDao {
     suspend fun insert(substanceCompanion: SubstanceCompanion)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(customSubstance: CustomSubstance)
+    suspend fun insert(customSubstance: CustomSubstance): Long
 
     @Delete
     suspend fun delete(customSubstance: CustomSubstance)

@@ -34,7 +34,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.saferuse.CheckSafe
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ChooseTimeScreen
 import com.isaakhanimann.journal.ui.tabs.safer.RouteExplanationScreen
-import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstanceScreen
+import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstanceAndContinueScreen
 import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
@@ -96,8 +96,10 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         }
         composableWithTransitions<AddCustomSubstanceRouteOnAddIngestionGraph> { backStackEntry ->
             val route = backStackEntry.toRoute<AddCustomSubstanceRouteOnAddIngestionGraph>()
-            AddCustomSubstanceScreen(
-                navigateBack = navController::popBackStack,
+            AddCustomSubstanceAndContinueScreen(
+                navigateToChooseRoa = { customSubstanceId ->
+                    navController.navigate(CustomChooseRouteRoute(customSubstanceId = customSubstanceId))
+                },
                 initialName = route.searchText
             )
         }

@@ -40,14 +40,15 @@ class AddCustomSubstanceViewModel @Inject constructor(
 
     val isValid get() = name.isNotBlank() && units.isNotBlank()
 
-    fun onDoneTap() {
+    fun addCustomSubstance(onDone: (customSubstanceId: Int) -> Unit) {
         viewModelScope.launch {
             val customSubstance = CustomSubstance(
                 name = name,
                 units = units,
                 description = description
             )
-            experienceRepo.insert(customSubstance)
+            val customSubstanceId = experienceRepo.insert(customSubstance)
+            onDone(customSubstanceId)
         }
     }
 }
