@@ -35,6 +35,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestio
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ChooseTimeScreen
 import com.isaakhanimann.journal.ui.tabs.safer.RouteExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstanceAndContinueScreen
+import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.FinishAddCustomUnitScreen
 import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
@@ -55,7 +56,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToChooseTime = { substanceName, administrationRoute, dose, units, isEstimate, estimatedDoseStandardDeviation, customUnitId ->
                     navController.navigate(
                         ChooseTimeRoute(
-                            administrationRoute = administrationRoute.name,
+                            administrationRoute = administrationRoute,
                             units = units,
                             isEstimate = isEstimate,
                             dose = dose,
@@ -70,16 +71,16 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigate(
                         ChooseCustomSubstanceDoseRoute(
                             customSubstanceId = customSubstanceId,
-                            administrationRoute = administrationRoute.name
+                            administrationRoute = administrationRoute
 
                         )
                     )
                 },
-                navigateToDose = { substanceName, route ->
+                navigateToDose = { substanceName, administrationRoute ->
                     navController.navigate(
                         ChooseDoseRoute(
                             substanceName = substanceName,
-                            administrationRoute = route.name
+                            administrationRoute = administrationRoute
                         )
                     )
                 },
@@ -132,7 +133,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                                                       customUnitId: Int? ->
                     navController.navigate(
                         ChooseTimeRoute(
-                            administrationRoute = administrationRoute.name,
+                            administrationRoute = administrationRoute,
                             isEstimate = isEstimate,
                             units = units,
                             dose = dose,
@@ -151,7 +152,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigate(
                         ChooseDoseRoute(
                             substanceName = route.substanceName,
-                            administrationRoute = administrationRoute.name
+                            administrationRoute = administrationRoute
                         )
                     )
                 },
@@ -167,7 +168,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigate(
                         ChooseCustomSubstanceDoseRoute(
                             customSubstanceId = route.customSubstanceId,
-                            administrationRoute = administrationRoute.name
+                            administrationRoute = administrationRoute
                         )
                     )
                 }
@@ -257,15 +258,18 @@ data class CustomChooseRouteRoute(val customSubstanceId: Int)
 @Serializable
 data class ChooseCustomSubstanceDoseRoute(
     val customSubstanceId: Int,
-    val administrationRoute: String
+    val administrationRoute: AdministrationRoute,
 )
 
 @Serializable
-data class ChooseDoseRoute(val substanceName: String, val administrationRoute: String)
+data class ChooseDoseRoute(
+    val substanceName: String,
+    val administrationRoute: AdministrationRoute
+)
 
 @Serializable
 data class ChooseTimeRoute(
-    val administrationRoute: String,
+    val administrationRoute: AdministrationRoute,
     val isEstimate: Boolean,
     val units: String?,
     val dose: Double?,
@@ -280,3 +284,7 @@ object AdministrationRouteExplanationRouteOnJournalTab
 
 @Serializable
 data class AddCustomSubstanceRouteOnAddIngestionGraph(val searchText: String)
+
+
+@Serializable
+data class AddCustomUnitWhileAddingIngestionRoute(val substanceName: String, val administrationRoute: AdministrationRoute)

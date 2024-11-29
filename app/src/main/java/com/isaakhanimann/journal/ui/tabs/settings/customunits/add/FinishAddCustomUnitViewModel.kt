@@ -46,7 +46,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
 ) : ViewModel() {
     private val finishAddCustomUnitRoute = state.toRoute<FinishAddCustomUnitRoute>()
     val substanceName = finishAddCustomUnitRoute.substanceName
-    private val administrationRoute: AdministrationRoute = AdministrationRoute.valueOf(finishAddCustomUnitRoute.administrationRoute)
+    private val administrationRoute: AdministrationRoute = finishAddCustomUnitRoute.administrationRoute
 
     val substance = substanceRepository.getSubstance(finishAddCustomUnitRoute.substanceName)!!
 

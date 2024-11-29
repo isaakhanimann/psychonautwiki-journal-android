@@ -103,7 +103,7 @@ class CustomChooseDoseViewModel @Inject constructor(
 
     init {
         val chooseCustomSubstanceDoseRoute = state.toRoute<ChooseCustomSubstanceDoseRoute>()
-        administrationRoute = AdministrationRoute.valueOf(chooseCustomSubstanceDoseRoute.administrationRoute)
+        administrationRoute = chooseCustomSubstanceDoseRoute.administrationRoute
         viewModelScope.launch {
             val customSubstance =
                 experienceRepository.getCustomSubstanceFlow(chooseCustomSubstanceDoseRoute.customSubstanceId).firstOrNull()

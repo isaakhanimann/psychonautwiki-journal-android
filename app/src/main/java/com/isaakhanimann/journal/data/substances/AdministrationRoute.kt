@@ -19,7 +19,9 @@
 package com.isaakhanimann.journal.data.substances
 
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class AdministrationRoute {
     ORAL {
         override val displayText = "Oral"

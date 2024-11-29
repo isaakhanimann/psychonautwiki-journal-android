@@ -47,7 +47,7 @@ class ChooseDoseViewModel @Inject constructor(
 ) : ViewModel() {
     private val chooseDoseRoute = state.toRoute<ChooseDoseRoute>()
     val substance: Substance = repository.getSubstance(chooseDoseRoute.substanceName)!!
-    val administrationRoute: AdministrationRoute = AdministrationRoute.valueOf(chooseDoseRoute.administrationRoute)
+    val administrationRoute: AdministrationRoute = chooseDoseRoute.administrationRoute
     val roaDose: RoaDose? = substance.getRoa(administrationRoute)?.roaDose
     var isEstimate by mutableStateOf(false)
     var doseText by mutableStateOf("")

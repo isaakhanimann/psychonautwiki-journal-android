@@ -145,7 +145,7 @@ class ChooseTimeViewModel @Inject constructor(
     init {
         val chooseTimeRoute = state.toRoute<ChooseTimeRoute>()
         substanceName = chooseTimeRoute.substanceName ?: ""
-        administrationRoute = AdministrationRoute.valueOf(chooseTimeRoute.administrationRoute)
+        administrationRoute = chooseTimeRoute.administrationRoute
         dose = chooseTimeRoute.dose
         estimatedDoseStandardDeviation = chooseTimeRoute.estimatedDoseStandardDeviation
         customUnitId = chooseTimeRoute.customUnitId

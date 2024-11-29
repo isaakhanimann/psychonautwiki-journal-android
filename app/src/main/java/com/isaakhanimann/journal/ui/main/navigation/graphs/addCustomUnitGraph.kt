@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseRouteDuringAddCustomUnitScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseSubstanceScreen
@@ -46,7 +47,7 @@ fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
                     navController.navigate(
                         FinishAddCustomUnitRoute(
                             substanceName = route.substanceName,
-                            administrationRoute = administrationRoute.name,
+                            administrationRoute = administrationRoute,
                         )
                     )
                 }
@@ -75,5 +76,5 @@ object AddCustomUnitsChooseSubstanceScreenRoute
 data class ChooseRouteOfAddCustomUnitRoute(val substanceName: String)
 
 @Serializable
-data class FinishAddCustomUnitRoute(val substanceName: String, val administrationRoute: String)
+data class FinishAddCustomUnitRoute(val substanceName: String, val administrationRoute: AdministrationRoute)
 
