@@ -58,6 +58,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.CurrentDoseClassInfo
@@ -73,6 +74,7 @@ fun FinishAddCustomUnitScreen(
 ) {
     FinishAddCustomUnitScreenContent(
         substanceName = viewModel.substanceName,
+        administrationRoute = viewModel.administrationRoute,
         roaDose = viewModel.roaDose,
         dismiss = {
             viewModel.createSaveAndDismissAfter(dismiss = dismissAddCustomUnit)
@@ -105,6 +107,7 @@ private fun FinishAddCustomUnitScreenPreview(
 ) {
     FinishAddCustomUnitScreenContent(
         substanceName = "Example",
+        administrationRoute = AdministrationRoute.ORAL,
         roaDose = roaDose,
         dismiss = {},
         name = "Pink rocket",
@@ -132,6 +135,7 @@ private fun FinishAddCustomUnitScreenPreview(
 @Composable
 private fun FinishAddCustomUnitScreenContent(
     substanceName: String,
+    administrationRoute: AdministrationRoute,
     roaDose: RoaDose?,
     dismiss: () -> Unit,
     name: String,
@@ -164,6 +168,8 @@ private fun FinishAddCustomUnitScreenContent(
     ) { padding ->
         EditCustomUnitSections(
             padding = padding,
+            substanceName = substanceName,
+            administrationRoute = administrationRoute,
             roaDose = roaDose,
             name = name,
             onChangeOfName = onChangeOfName,
@@ -190,6 +196,8 @@ private fun FinishAddCustomUnitScreenContent(
 @Composable
 fun EditCustomUnitSections(
     padding: PaddingValues,
+    substanceName: String,
+    administrationRoute: AdministrationRoute,
     roaDose: RoaDose?,
     name: String,
     onChangeOfName: (String) -> Unit,
@@ -224,6 +232,61 @@ fun EditCustomUnitSections(
         val focusManager = LocalFocusManager.current
         LaunchedEffect(Unit) {
             focusRequesterName.requestFocus()
+        }
+        if (substanceName == "Cannabis" && administrationRoute == AdministrationRoute.SMOKED) {
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    Text("When smoking a joint about 23% of the THC in the bud is inhaled. So if you smoke a joint with 300mg of a bud that has 20% THC then you inhale 300mg * 20/100 * 23/100 = 13.8mg THC.")
+                    Text("When smoking with a bong about 40% of the THC in the bud is inhaled. So if you smoke 300mg of a bud that has 20% THC then you inhale 300mg * 20/100 * 40/100 = 24mg THC.")
+                    Text("When smoking with a vaporizer about 70% of the THC in the bud is inhaled. So if you smoke 300mg of a bud that has 20% THC then you inhale 300mg * 20/100 * 70/100 = 42mg THC.")
+                }
+            }
+        } else if (substanceName == "Psilocybin mushrooms") {
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    Text("Dried Psilocybe cubensis contain around 1% of Psylocybin.")
+                    Text("Fresh Psilocybe cubensis contain around 0.1% of Psylocybin.")
+                    Text("Research the strain of mushroom you have to be able to estimate the amount of Psylocybin it contains.")
+                }
+            }
+        } else if (substanceName == "Alcohol") {
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    )
+                ) {
+                    Text("1 ml of Ethanol is 0.8g. So if you are e.g. consuming 200ml of a spirit with 40% of Alcohol you are consuming 200ml * 40/100 * 0.8 = 64g Ethanol.")
+                }
+            }
         }
         ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
             Column(

@@ -27,6 +27,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
@@ -54,6 +55,7 @@ class EditCustomUnitViewModel @Inject constructor(
             this@EditCustomUnitViewModel.customUnit = customUnit
             if (customUnit != null) {
                 substanceName = customUnit.substanceName
+                administrationRoute = customUnit.administrationRoute
                 val substance = substanceRepository.getSubstance(customUnit.substanceName)!!
                 roaDose = substance.getRoa(customUnit.administrationRoute)?.roaDose
                 originalUnit = customUnit.originalUnit
@@ -73,6 +75,7 @@ class EditCustomUnitViewModel @Inject constructor(
     var name by mutableStateOf("")
 
     var substanceName by mutableStateOf("")
+    var administrationRoute by mutableStateOf(AdministrationRoute.ORAL)
 
     val currentDoseClass: DoseClass? get() = roaDose?.getDoseClass(ingestionDose = dose)
 

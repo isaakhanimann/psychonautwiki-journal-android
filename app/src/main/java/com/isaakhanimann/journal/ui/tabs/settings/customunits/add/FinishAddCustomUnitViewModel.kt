@@ -27,7 +27,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
-import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
@@ -46,7 +45,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
 ) : ViewModel() {
     private val finishAddCustomUnitRoute = state.toRoute<FinishAddCustomUnitRoute>()
     val substanceName = finishAddCustomUnitRoute.substanceName
-    private val administrationRoute: AdministrationRoute = finishAddCustomUnitRoute.administrationRoute
+    val administrationRoute = finishAddCustomUnitRoute.administrationRoute
 
     val substance = substanceRepository.getSubstance(finishAddCustomUnitRoute.substanceName)!!
 

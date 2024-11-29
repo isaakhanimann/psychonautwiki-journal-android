@@ -277,25 +277,6 @@ fun ChooseDoseScreen(
                         vertical = 10.dp
                     )
                 ) {
-                    Text(text = "Want to log with a different unit?")
-                    Spacer(modifier = Modifier.height(5.dp))
-                    OutlinedButton(onClick = navigateToCreateCustomUnit) {
-                        Text("Create custom unit")
-                    }
-                }
-            }
-            ElevatedCard(
-                modifier = Modifier.padding(
-                    horizontal = horizontalPadding,
-                    vertical = 4.dp
-                )
-            ) {
-                Column(
-                    modifier = Modifier.padding(
-                        horizontal = horizontalPadding,
-                        vertical = 10.dp
-                    )
-                ) {
                     if (!doseRemark.isNullOrBlank()) {
                         Text(text = doseRemark, style = MaterialTheme.typography.bodySmall)
                     }
@@ -457,6 +438,33 @@ fun ChooseDoseScreen(
                             convertedDoseAndUnitText = convertedDoseAndUnitText,
                             isValidPurity = isValidPurity
                         )
+                    }
+                }
+            }
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    ).fillMaxWidth()
+                ) {
+                    if (substanceName == "Cannabis" && administrationRoute == AdministrationRoute.SMOKED) {
+                        Text("Prefer to log weight of bud, hash or log another unit related to joint, vaporizer or bong?")
+                    } else if (substanceName == "Psilocybin mushrooms") {
+                        Text("Prefer to log weight of mushrooms instead of mg Psilocybin?")
+                    } else if (substanceName == "Alcohol") {
+                        Text("Prefer to log number of drinks, beer or wine instead of g of Ethanol?")
+                    } else {
+                        Text(text = "Prefer to log with a different unit?")
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                    OutlinedButton(onClick = navigateToCreateCustomUnit) {
+                        Text("Create a custom unit")
                     }
                 }
             }

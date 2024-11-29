@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
@@ -52,6 +53,7 @@ fun EditCustomUnitScreen(
 ) {
     EditCustomUnitScreenContent(
         substanceName = viewModel.substanceName,
+        administrationRoute = viewModel.administrationRoute,
         roaDose = viewModel.roaDose,
         dismiss = {
             viewModel.updateAndDismissAfter(dismiss = navigateBack)
@@ -85,6 +87,7 @@ private fun EditCustomUnitScreenPreview(
 ) {
     EditCustomUnitScreenContent(
         substanceName = "Example",
+        administrationRoute = AdministrationRoute.ORAL,
         roaDose = roaDose,
         dismiss = {},
         name = "Pink rocket",
@@ -113,6 +116,7 @@ private fun EditCustomUnitScreenPreview(
 @Composable
 private fun EditCustomUnitScreenContent(
     substanceName: String,
+    administrationRoute: AdministrationRoute,
     roaDose: RoaDose?,
     dismiss: () -> Unit,
     name: String,
@@ -186,6 +190,8 @@ private fun EditCustomUnitScreenContent(
         }
     ) { padding ->
         EditCustomUnitSections(
+            substanceName = substanceName,
+            administrationRoute = administrationRoute,
             padding = padding,
             roaDose = roaDose,
             name = name,
