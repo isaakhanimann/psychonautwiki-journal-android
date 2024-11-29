@@ -266,9 +266,9 @@ fun EditCustomUnitSections(
                     ),
                     verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
-                    Text("Dried Psilocybe cubensis contain around 1% of Psylocybin.")
-                    Text("Fresh Psilocybe cubensis contain around 0.1% of Psylocybin.")
-                    Text("Research the strain of mushroom you have to be able to estimate the amount of Psylocybin it contains.")
+                    Text("Dried Psilocybe cubensis contain around 1% of Psilocybin.")
+                    Text("Fresh Psilocybe cubensis contain around 0.1% of Psilocybin.")
+                    Text("Research the strain of mushroom you have to be able to estimate the amount of Psilocybin it contains.")
                 }
             }
         } else if (substanceName == "Alcohol") {
