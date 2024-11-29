@@ -24,14 +24,8 @@ import androidx.compose.runtime.Composable
 @Composable
 fun OptionalDosageUnitDisclaimer(substanceName: String) {
     when (substanceName) {
-        "Cannabis" -> {
-            Text(text = "The dosages are given in mg of THC.")
-        }
         "Alcohol" -> {
             Text(text = "The dosages are given in mg of pure Ethanol.")
-        }
-        "Psilocybin mushrooms" -> {
-            Text(text = "The dosages are given in mg of Psilocybin.")
         }
     }
 }
