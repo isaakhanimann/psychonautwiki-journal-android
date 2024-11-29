@@ -105,28 +105,24 @@ class FinishAddCustomUnitViewModel @Inject constructor(
         originalUnit = roaDose?.units ?: ""
     }
 
-    fun createSaveAndDismissAfter(dismiss: () -> Unit) {
+    fun createSaveAndDismissAfter(dismiss: (customUnitId: Int) -> Unit) {
         viewModelScope.launch {
-            createAndSaveCustomUnit()
+            val customUnit = CustomUnit(
+                substanceName = substanceName,
+                name = name,
+                administrationRoute = administrationRoute,
+                dose = dose,
+                isEstimate = isEstimate,
+                estimatedDoseStandardDeviation = if (isEstimate) estimatedDoseDeviation else null,
+                isArchived = isArchived,
+                unit = unit,
+                originalUnit = originalUnit,
+                note = note
+            )
+            val customUnitId = experienceRepo.insert(customUnit)
             withContext(Dispatchers.Main) {
-                dismiss()
+                dismiss(customUnitId)
             }
         }
-    }
-
-    private suspend fun createAndSaveCustomUnit() {
-        val customUnit = CustomUnit(
-            substanceName = substanceName,
-            name = name,
-            administrationRoute = administrationRoute,
-            dose = dose,
-            isEstimate = isEstimate,
-            estimatedDoseStandardDeviation = if (isEstimate) estimatedDoseDeviation else null,
-            isArchived = isArchived,
-            unit = unit,
-            originalUnit = originalUnit,
-            note = note
-        )
-        experienceRepo.insert(customUnit)
     }
 }

@@ -86,6 +86,7 @@ fun ChooseDoseScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseStandardDeviation: Double?) -> Unit,
     navigateToVolumetricDosingScreenOnJournalTab: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
+    navigateToCreateCustomUnit: () -> Unit,
     viewModel: ChooseDoseViewModel = hiltViewModel()
 ) {
     ChooseDoseScreen(
@@ -131,7 +132,8 @@ fun ChooseDoseScreen(
         units = viewModel.units,
         onChangeOfUnits = { viewModel.units = it },
         isCustomUnitHintShown = viewModel.isCustomUnitHintShown.collectAsState().value,
-        hideCustomUnitsHint = viewModel::hideCustomUnitsHint
+        hideCustomUnitsHint = viewModel::hideCustomUnitsHint,
+        navigateToCreateCustomUnit = navigateToCreateCustomUnit
     )
 }
 
@@ -165,7 +167,8 @@ fun ChooseDoseScreenPreview(
         units = "mg",
         onChangeOfUnits = {},
         isCustomUnitHintShown = true,
-        hideCustomUnitsHint = { }
+        hideCustomUnitsHint = {},
+        navigateToCreateCustomUnit = {},
     )
 }
 
@@ -197,7 +200,8 @@ fun ChooseDoseScreenPreview2() {
         units = "mg",
         onChangeOfUnits = {},
         isCustomUnitHintShown = true,
-        hideCustomUnitsHint = {}
+        hideCustomUnitsHint = {},
+        navigateToCreateCustomUnit = {}
     )
 }
 
@@ -229,6 +233,7 @@ fun ChooseDoseScreen(
     onChangeOfUnits: (units: String) -> Unit,
     isCustomUnitHintShown: Boolean,
     hideCustomUnitsHint: () -> Unit,
+    navigateToCreateCustomUnit: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -260,6 +265,25 @@ fun ChooseDoseScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(4.dp))
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 10.dp
+                    )
+                ) {
+                    Text(text = "Want to log with a different unit?")
+                    Spacer(modifier = Modifier.height(5.dp))
+                    OutlinedButton(onClick = navigateToCreateCustomUnit) {
+                        Text("Create custom unit")
+                    }
+                }
+            }
             ElevatedCard(
                 modifier = Modifier.padding(
                     horizontal = horizontalPadding,

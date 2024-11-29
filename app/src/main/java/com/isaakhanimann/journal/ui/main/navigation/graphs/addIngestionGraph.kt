@@ -219,6 +219,9 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToSaferSniffingScreen = {
                     navController.navigate(SaferSniffingRouteOnJournalTab)
                 },
+                navigateToCreateCustomUnit = {
+                    navController.navigate(AddCustomUnitWhileAddingIngestionRoute(substanceName = route.substanceName, administrationRoute = route.administrationRoute))
+                }
             )
         }
         composableWithTransitions<ChooseTimeRoute> {
@@ -230,6 +233,15 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         }
         composableWithTransitions<AdministrationRouteExplanationRouteOnJournalTab> {
             RouteExplanationScreen()
+        }
+        composableWithTransitions<AddCustomUnitWhileAddingIngestionRoute> {
+            FinishAddCustomUnitScreen(
+                dismissAddCustomUnit = { customUnitId ->
+                    navController.navigate(ChooseDoseCustomUnitRoute(customUnitId = customUnitId)) {
+                        popUpTo(AddIngestionSearchRoute)
+                    }
+                },
+            )
         }
     }
 }

@@ -43,7 +43,7 @@ import javax.inject.Singleton
 @Singleton
 class ExperienceRepository @Inject constructor(private val experienceDao: ExperienceDao) {
     suspend fun insert(rating: ShulginRating) = experienceDao.insert(rating)
-    suspend fun insert(customUnit: CustomUnit) = experienceDao.insert(customUnit)
+    suspend fun insert(customUnit: CustomUnit) = experienceDao.insert(customUnit).toInt()
     suspend fun insert(timedNote: TimedNote) = experienceDao.insert(timedNote)
     suspend fun update(experience: Experience) = experienceDao.update(experience)
     suspend fun update(ingestion: Ingestion) = experienceDao.update(ingestion)

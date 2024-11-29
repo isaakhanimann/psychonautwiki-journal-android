@@ -68,7 +68,7 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun FinishAddCustomUnitScreen(
-    dismissAddCustomUnit: () -> Unit,
+    dismissAddCustomUnit: (customUnitId: Int) -> Unit,
     viewModel: FinishAddCustomUnitViewModel = hiltViewModel()
 ) {
     FinishAddCustomUnitScreenContent(
