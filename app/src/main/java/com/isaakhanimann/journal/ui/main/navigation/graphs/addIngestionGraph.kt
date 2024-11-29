@@ -98,7 +98,9 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             val route = backStackEntry.toRoute<AddCustomSubstanceRouteOnAddIngestionGraph>()
             AddCustomSubstanceAndContinueScreen(
                 navigateToChooseRoa = { customSubstanceId ->
-                    navController.navigate(CustomChooseRouteRoute(customSubstanceId = customSubstanceId))
+                    navController.navigate(CustomChooseRouteRoute(customSubstanceId = customSubstanceId)) {
+                        popUpTo(AddIngestionSearchRoute)
+                    }
                 },
                 initialName = route.searchText
             )
