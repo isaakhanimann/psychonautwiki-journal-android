@@ -341,26 +341,7 @@ fun EditCustomUnitSections(
                     singleLine = true,
                     label = { Text(text = "Unit in singular form") },
                     placeholder = {
-                        when (administrationRoute) {
-                            AdministrationRoute.ORAL -> {
-                                Text("pill, capsule")
-                            }
-                            AdministrationRoute.SMOKED -> {
-                                Text("mg, hit")
-                            }
-                            AdministrationRoute.INSUFFLATED -> {
-                                Text("spray, spoon, scoop, line")
-                            }
-                            AdministrationRoute.BUCCAL -> {
-                                Text("pouch")
-                            }
-                            AdministrationRoute.TRANSDERMAL -> {
-                                Text("patch")
-                            }
-                            else -> {
-                                Text("pill, spray, spoon")
-                            }
-                        }
+                        Text(getSampleUnitText(administrationRoute))
                     },
                     keyboardActions = KeyboardActions(onNext = { focusRequesterNote.requestFocus() }),
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -577,5 +558,26 @@ fun EditCustomUnitSections(
                 Text("Archived custom units don't show up when adding ingestions")
             }
         }
+    }
+}
+
+fun getSampleUnitText(administrationRoute: AdministrationRoute) = when (administrationRoute) {
+    AdministrationRoute.ORAL -> {
+        "pill, capsule"
+    }
+    AdministrationRoute.SMOKED -> {
+        "mg, hit"
+    }
+    AdministrationRoute.INSUFFLATED -> {
+        "spray, spoon, scoop, line"
+    }
+    AdministrationRoute.BUCCAL -> {
+        "pouch"
+    }
+    AdministrationRoute.TRANSDERMAL -> {
+        "patch"
+    }
+    else -> {
+        "pill, spray, spoon"
     }
 }

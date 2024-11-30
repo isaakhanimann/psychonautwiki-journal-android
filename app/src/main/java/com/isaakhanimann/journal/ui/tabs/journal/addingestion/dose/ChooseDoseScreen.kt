@@ -75,6 +75,7 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
+import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.getSampleUnitText
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
@@ -435,7 +436,7 @@ fun ChooseDoseScreen(
                     } else if (substanceName == "Alcohol") {
                         Text("Prefer to log number of drinks, beer or wine instead of g of Ethanol?")
                     } else {
-                        Text(text = "Prefer to log with a different unit?")
+                        Text(text = "Prefer to log with a different unit such as ${getSampleUnitText(administrationRoute)}?")
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                     OutlinedButton(onClick = navigateToCreateCustomUnit) {
