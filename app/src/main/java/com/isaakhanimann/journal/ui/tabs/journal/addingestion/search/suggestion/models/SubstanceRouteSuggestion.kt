@@ -34,7 +34,8 @@ data class SubstanceRouteSuggestion(
     val dosesAndUnit: List<DoseAndUnit>,
     val customUnitDoses: List<CustomUnitDose>,
     val customUnits: List<CustomUnit>,
-    val lastUsed: Instant
+    val lastIngestedTime: Instant,
+    val lastCreationTime: Instant
 )
 
 data class DoseAndUnit(

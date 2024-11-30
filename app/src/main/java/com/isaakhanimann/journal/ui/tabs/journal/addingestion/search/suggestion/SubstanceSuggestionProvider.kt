@@ -72,7 +72,8 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
                 CustomUnit.mdmaSample,
                 CustomUnit.twoCBSample
             ),
-            lastUsed = getInstant(year = 2023, month = 4, day = 10, hourOfDay = 5, minute = 20)!!
+            lastIngestedTime = getInstant(year = 2023, month = 4, day = 10, hourOfDay = 5, minute = 20)!!,
+            lastCreationTime = getInstant(year = 2023, month = 4, day = 10, hourOfDay = 5, minute = 20)!!,
         ),
         SubstanceRouteSuggestion(
             color = AdaptiveColor.BLUE,
@@ -101,7 +102,8 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
             ),
             customUnitDoses = emptyList(),
             customUnits = emptyList(),
-            lastUsed = getInstant(year = 2023, month = 3, day = 10, hourOfDay = 5, minute = 20)!!
+            lastIngestedTime = getInstant(year = 2023, month = 3, day = 10, hourOfDay = 5, minute = 20)!!,
+            lastCreationTime = getInstant(year = 2023, month = 3, day = 10, hourOfDay = 5, minute = 20)!!,
         ),
         SubstanceRouteSuggestion(
             color = AdaptiveColor.BLUE,
@@ -118,7 +120,8 @@ class SubstanceSuggestionProvider : PreviewParameterProvider<SubstanceRouteSugge
             ),
             customUnitDoses = emptyList(),
             customUnits = emptyList(),
-            lastUsed = getInstant(year = 2023, month = 3, day = 10, hourOfDay = 5, minute = 20)!!
+            lastIngestedTime = getInstant(year = 2023, month = 3, day = 10, hourOfDay = 5, minute = 20)!!,
+            lastCreationTime = getInstant(year = 2023, month = 3, day = 10, hourOfDay = 5, minute = 20)!!,
         )
     )
 }

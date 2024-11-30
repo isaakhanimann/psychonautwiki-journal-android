@@ -99,7 +99,7 @@ class AddIngestionSearchViewModel @Inject constructor(
         )
 
     val filteredSuggestions: StateFlow<List<SubstanceRouteSuggestion>> = combine(
-        experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow(limit = 150),
+        experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow(limit = 300),
         customSubstancesFlow,
         filteredSubstancesFlow,
         searchTextFlow
@@ -172,10 +172,11 @@ class AddIngestionSearchViewModel @Inject constructor(
                             dosesAndUnit = dosesAndUnit,
                             customUnitDoses = customUnitDoses,
                             customUnits = customUnits,
-                            lastUsed = routeEntry.value.maxOfOrNull { it.ingestion.time } ?: Instant.now()
+                            lastIngestedTime = routeEntry.value.maxOfOrNull { it.ingestion.time } ?: Instant.now(),
+                            lastCreationTime = routeEntry.value.mapNotNull { it.ingestion.creationDate }.maxOfOrNull { it} ?: Instant.now()
                         )
                     }
-                }
+                }.sortedByDescending { it.lastCreationTime }
             }
         }
     }

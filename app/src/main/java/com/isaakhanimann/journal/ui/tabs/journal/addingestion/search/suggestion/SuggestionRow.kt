@@ -82,7 +82,7 @@ fun SuggestionRow(
             )
             Spacer(modifier = Modifier.weight(1f))
             RelativeDateTextNew(
-                dateTime = substanceRouteSuggestion.lastUsed,
+                dateTime = substanceRouteSuggestion.lastIngestedTime,
                 style = MaterialTheme.typography.bodyMedium
             )
         }
