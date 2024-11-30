@@ -313,7 +313,7 @@ fun EditCustomUnitSections(
                     placeholder = {
                         when (substanceName) {
                             "Cannabis" -> {
-                                Text("Weight in joint, bong, vaporizer")
+                                Text("Flower in joint, bong, vaporizer")
                             }
                             "Psilocybin mushrooms" -> {
                                 Text("Mushroom strain")
