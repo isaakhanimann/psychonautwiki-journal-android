@@ -237,8 +237,7 @@ fun EditCustomUnitSections(
             ElevatedCard(
                 modifier = Modifier.padding(
                     horizontal = horizontalPadding,
-                    vertical = 4.dp
-                )
+                ).padding(bottom = 4.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(

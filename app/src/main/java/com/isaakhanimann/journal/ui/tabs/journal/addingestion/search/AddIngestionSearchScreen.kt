@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -243,7 +244,7 @@ fun AddIngestionSearchScreen(
                         SectionHeader(title = "Substances")
                     }
                 }
-                itemsIndexed(filteredSubstances) { index, substance ->
+                items(filteredSubstances) { substance ->
                     SubstanceRowAddIngestion(substanceModel = substance, onTap = {
                         if (substance.hasSaferUse) {
                             navigateToCheckSaferUse(substance.name)
@@ -253,11 +254,9 @@ fun AddIngestionSearchScreen(
                             navigateToChooseRoute(substance.name)
                         }
                     })
-                    if (index < filteredSubstances.size - 1) {
-                        HorizontalDivider()
-                    }
                 }
                 item {
+                    HorizontalDivider()
                     TextButton(
                         onClick = navigateToAddCustomSubstanceScreen,
                         modifier = Modifier.padding(horizontal = horizontalPadding)
@@ -268,6 +267,7 @@ fun AddIngestionSearchScreen(
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                         Text(text = "Add custom substance")
                     }
+                    HorizontalDivider()
                 }
                 item {
                     if (filteredSubstances.isEmpty() && filteredCustomSubstances.isEmpty()) {
