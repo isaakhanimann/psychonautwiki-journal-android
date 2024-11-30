@@ -310,6 +310,20 @@ fun EditCustomUnitSections(
                     textStyle = textStyle,
                     singleLine = true,
                     label = { Text(text = "Name to identify") },
+                    placeholder = {
+                        when (substanceName) {
+                            "Cannabis" -> {
+                                Text("Weight in joint, bong, vaporizer")
+                            }
+                            "Psilocybin mushrooms" -> {
+                                Text("Mushroom strain")
+                            }
+                            "Alcohol" -> {
+                                Text("Beer, Wine, Spirit")
+                            }
+                            else -> Text("Blue rocket")
+                        }
+                    },
                     keyboardActions = KeyboardActions(onNext = { focusRequesterUnit.requestFocus() }),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next,
@@ -326,7 +340,28 @@ fun EditCustomUnitSections(
                     textStyle = textStyle,
                     singleLine = true,
                     label = { Text(text = "Unit in singular form") },
-                    placeholder = { Text(text = "e.g. pill, spray, spoon") },
+                    placeholder = {
+                        when (administrationRoute) {
+                            AdministrationRoute.ORAL -> {
+                                Text("pill, capsule")
+                            }
+                            AdministrationRoute.SMOKED -> {
+                                Text("mg, hit")
+                            }
+                            AdministrationRoute.INSUFFLATED -> {
+                                Text("spray, spoon, line")
+                            }
+                            AdministrationRoute.BUCCAL -> {
+                                Text("pouch")
+                            }
+                            AdministrationRoute.TRANSDERMAL -> {
+                                Text("patch")
+                            }
+                            else -> {
+                                Text("pill, spray, spoon")
+                            }
+                        }
+                    },
                     keyboardActions = KeyboardActions(onNext = { focusRequesterNote.requestFocus() }),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Next,
