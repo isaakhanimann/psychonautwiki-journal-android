@@ -217,11 +217,11 @@ fun CustomChooseDose(
                         value = doseText,
                         onValueChange = onChangeDoseText,
                         textStyle = textStyle,
-                        label = { Text("Dose", style = textStyle) },
+                        label = { Text("Pure dose", style = textStyle) },
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
-                                text = "pure $units",
+                                text = units,
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )

@@ -322,7 +322,7 @@ fun ChooseDoseScreen(
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
-                                text = "pure $units",
+                                text = units,
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
