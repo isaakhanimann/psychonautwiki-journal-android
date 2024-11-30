@@ -23,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.Substance
@@ -32,18 +31,13 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.navigation.graphs.ChooseDoseRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
-import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ChooseDoseViewModel @Inject constructor(
     repository: SubstanceRepository,
     state: SavedStateHandle,
-    private val userPreferences: UserPreferences
 ) : ViewModel() {
     private val chooseDoseRoute = state.toRoute<ChooseDoseRoute>()
     val substance: Substance = repository.getSubstance(chooseDoseRoute.substanceName)!!
@@ -79,16 +73,6 @@ class ChooseDoseViewModel @Inject constructor(
     val estimatedDoseStandardDeviation: Double? get() = estimatedDoseStandardDeviationText.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
     val currentDoseClass: DoseClass? get() = roaDose?.getDoseClass(ingestionDose = dose)
-
-    val isCustomUnitHintShown = userPreferences.isCustomUnitHintShownFlow.stateIn(
-        initialValue = false,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
-
-    fun hideCustomUnitsHint() = viewModelScope.launch {
-        userPreferences.hideCustomUnitsHint()
-    }
 
     fun onDoseTextChange(newDoseText: String) {
         doseText = newDoseText.replace(oldChar = ',', newChar = '.')

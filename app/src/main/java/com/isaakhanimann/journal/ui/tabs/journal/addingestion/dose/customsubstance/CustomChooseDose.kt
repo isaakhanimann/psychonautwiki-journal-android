@@ -34,7 +34,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.ButtonDefaults
@@ -52,7 +51,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,7 +64,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.CUSTOM_UNITS_HINT
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.PurityCalculation
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.UnknownDoseDialog
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -113,8 +110,6 @@ fun CustomChooseDose(
         isValidPurity = viewModel.isPurityValid,
         convertedDoseAndUnitText = viewModel.impureDoseWithUnit,
         units = viewModel.units,
-        isCustomUnitHintShown = viewModel.isCustomUnitHintShown.collectAsState().value,
-        hideCustomUnitsHint = viewModel::hideCustomUnitsHint,
     )
 }
 
@@ -139,8 +134,6 @@ fun CustomChooseDosePreview() {
         isValidPurity = true,
         convertedDoseAndUnitText = "25 impure mg",
         units = "mg",
-        isCustomUnitHintShown = true,
-        hideCustomUnitsHint = { }
     )
 }
 
@@ -165,8 +158,6 @@ fun CustomChooseDose(
     isValidPurity: Boolean,
     convertedDoseAndUnitText: String?,
     units: String,
-    isCustomUnitHintShown: Boolean,
-    hideCustomUnitsHint: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -220,19 +211,6 @@ fun CustomChooseDose(
                         vertical = 10.dp
                     )
                 ) {
-                    AnimatedVisibility(visible = isCustomUnitHintShown) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(text = CUSTOM_UNITS_HINT, modifier = Modifier.weight(1f))
-                            IconButton(onClick = hideCustomUnitsHint) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Close disclaimer"
-                                )
-                            }
-                        }
-                    }
                     val focusManager = LocalFocusManager.current
                     val textStyle = MaterialTheme.typography.titleMedium
                     OutlinedTextField(

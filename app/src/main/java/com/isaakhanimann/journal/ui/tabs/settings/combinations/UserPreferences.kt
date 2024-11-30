@@ -37,7 +37,6 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
         val KEY_TIME_DISPLAY_OPTION = stringPreferencesKey("key_time_display_option")
         val KEY_LAST_INGESTION_OF_EXPERIENCE = longPreferencesKey("KEY_LAST_INGESTION_OF_EXPERIENCE")
         val KEY_HIDE_ORAL_DISCLAIMER = booleanPreferencesKey("key_hide_oral_disclaimer")
-        val KEY_SHOW_CUSTOM_UNIT_HINT = booleanPreferencesKey("KEY_SHOW_CUSTOM_UNIT_HINT")
         val KEY_HIDE_DOSAGE_DOTS = booleanPreferencesKey("key_hide_dosage_dots")
         val KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT = booleanPreferencesKey("KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT")
     }
@@ -79,17 +78,6 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
     val isOralDisclaimerHiddenFlow: Flow<Boolean> = dataStore.data
         .map { preferences ->
             preferences[PreferencesKeys.KEY_HIDE_ORAL_DISCLAIMER] ?: false
-        }
-
-    suspend fun hideCustomUnitsHint() {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.KEY_SHOW_CUSTOM_UNIT_HINT] = false
-        }
-    }
-
-    val isCustomUnitHintShownFlow: Flow<Boolean> = dataStore.data
-        .map { preferences ->
-            preferences[PreferencesKeys.KEY_SHOW_CUSTOM_UNIT_HINT] ?: true
         }
 
     suspend fun saveDosageDotsAreHidden(value: Boolean) {

@@ -349,7 +349,7 @@ fun EditCustomUnitSections(
                                 Text("mg, hit")
                             }
                             AdministrationRoute.INSUFFLATED -> {
-                                Text("spray, spoon, line")
+                                Text("spray, spoon, scoop, line")
                             }
                             AdministrationRoute.BUCCAL -> {
                                 Text("pouch")

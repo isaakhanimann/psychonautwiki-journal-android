@@ -35,7 +35,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.OpenInBrowser
@@ -44,7 +43,6 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -56,7 +54,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -75,7 +72,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
-import com.isaakhanimann.journal.ui.CUSTOM_UNITS_HINT
 import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
@@ -131,8 +127,6 @@ fun ChooseDoseScreen(
         isShowingUnitsField = viewModel.roaDose?.units?.isBlank() ?: true,
         units = viewModel.units,
         onChangeOfUnits = { viewModel.units = it },
-        isCustomUnitHintShown = viewModel.isCustomUnitHintShown.collectAsState().value,
-        hideCustomUnitsHint = viewModel::hideCustomUnitsHint,
         navigateToCreateCustomUnit = navigateToCreateCustomUnit
     )
 }
@@ -166,8 +160,6 @@ fun ChooseDoseScreenPreview(
         isShowingUnitsField = false,
         units = "mg",
         onChangeOfUnits = {},
-        isCustomUnitHintShown = true,
-        hideCustomUnitsHint = {},
         navigateToCreateCustomUnit = {},
     )
 }
@@ -199,8 +191,6 @@ fun ChooseDoseScreenPreview2() {
         isShowingUnitsField = false,
         units = "mg",
         onChangeOfUnits = {},
-        isCustomUnitHintShown = true,
-        hideCustomUnitsHint = {},
         navigateToCreateCustomUnit = {}
     )
 }
@@ -231,8 +221,6 @@ fun ChooseDoseScreen(
     isShowingUnitsField: Boolean,
     units: String,
     onChangeOfUnits: (units: String) -> Unit,
-    isCustomUnitHintShown: Boolean,
-    hideCustomUnitsHint: () -> Unit,
     navigateToCreateCustomUnit: () -> Unit,
 ) {
     Scaffold(
@@ -325,19 +313,6 @@ fun ChooseDoseScreen(
                     val textStyle = MaterialTheme.typography.titleMedium
                     LaunchedEffect(Unit) {
                         focusRequester.requestFocus()
-                    }
-                    AnimatedVisibility(visible = isCustomUnitHintShown) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(text = CUSTOM_UNITS_HINT, modifier = Modifier.weight(1f))
-                            IconButton(onClick = hideCustomUnitsHint) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Close disclaimer"
-                                )
-                            }
-                        }
                     }
                     OutlinedTextField(
                         value = doseText,

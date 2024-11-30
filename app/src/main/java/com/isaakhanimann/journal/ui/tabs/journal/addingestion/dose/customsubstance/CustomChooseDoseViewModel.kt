@@ -29,11 +29,8 @@ import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.graphs.ChooseCustomSubstanceDoseRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
-import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
@@ -43,7 +40,6 @@ import javax.inject.Inject
 class CustomChooseDoseViewModel @Inject constructor(
     experienceRepository: ExperienceRepository,
     state: SavedStateHandle,
-    private val userPreferences: UserPreferences
 ) : ViewModel() {
     var substanceName by mutableStateOf("")
     val administrationRoute: AdministrationRoute
@@ -82,16 +78,6 @@ class CustomChooseDoseViewModel @Inject constructor(
     val dose: Double? get() = doseText.toDoubleOrNull()
     val estimatedDoseStandardDeviation: Double? get() = estimatedDoseDeviationText.toDoubleOrNull()
     val isValidDose: Boolean get() = dose != null
-
-    val isCustomUnitHintShown = userPreferences.isCustomUnitHintShownFlow.stateIn(
-        initialValue = false,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
-
-    fun hideCustomUnitsHint() = viewModelScope.launch {
-        userPreferences.hideCustomUnitsHint()
-    }
 
     fun onDoseTextChange(newDoseText: String) {
         doseText = newDoseText.replace(oldChar = ',', newChar = '.')
