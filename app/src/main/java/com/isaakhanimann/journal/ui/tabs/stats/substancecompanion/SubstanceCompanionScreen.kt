@@ -155,7 +155,7 @@ fun SubstanceCompanionScreen(
                         }
                         HorizontalDivider()
                         burst.ingestions.forEachIndexed { index, ingestion ->
-                            IngestionRow(ingestionAndCustomUnit = ingestion)
+                            IngestionRowOnSubstanceCompanionScreen(ingestionAndCustomUnit = ingestion)
                             if (index < burst.ingestions.size - 1) {
                                 HorizontalDivider()
                             }
@@ -168,7 +168,7 @@ fun SubstanceCompanionScreen(
 }
 
 @Composable
-fun IngestionRow(ingestionAndCustomUnit: IngestionsBurst.IngestionAndCustomUnit) {
+fun IngestionRowOnSubstanceCompanionScreen(ingestionAndCustomUnit: IngestionsBurst.IngestionAndCustomUnit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -36,6 +36,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DotRows
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 
@@ -70,7 +71,7 @@ fun IngestionRow(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier.height(intrinsicSize = IntrinsicSize.Min)
     ) {
-        VerticalLine(color = ingestionWithCompanionAndCustomUnit.substanceCompanion!!.color)
+        VerticalLine(color = ingestionWithCompanionAndCustomUnit.substanceCompanion?.color ?: AdaptiveColor.RED)
         Column {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),

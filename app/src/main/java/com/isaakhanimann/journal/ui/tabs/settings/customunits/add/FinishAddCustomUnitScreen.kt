@@ -34,6 +34,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -58,14 +59,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
+import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.CurrentDoseClassInfo
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
+import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import java.time.Instant
 
 @Composable
 fun FinishAddCustomUnitScreen(
@@ -235,9 +243,11 @@ fun EditCustomUnitSections(
         }
         if (substanceName == "Cannabis" && administrationRoute == AdministrationRoute.SMOKED) {
             ElevatedCard(
-                modifier = Modifier.padding(
-                    horizontal = horizontalPadding,
-                ).padding(bottom = 4.dp)
+                modifier = Modifier
+                    .padding(
+                        horizontal = horizontalPadding,
+                    )
+                    .padding(bottom = 4.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(
@@ -440,6 +450,71 @@ fun EditCustomUnitSections(
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
+                }
+            }
+        }
+        if (name.isNotBlank() && unit.isNotBlank()) {
+            ElevatedCard(
+                modifier = Modifier
+                    .padding(horizontal = horizontalPadding, vertical = 4.dp)
+                    .fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(vertical = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    Text(
+                        "Ingestion sample preview:",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    )
+                    HorizontalDivider()
+                    val customUnit = CustomUnit(
+                        id = 123,
+                        substanceName = substanceName,
+                        name = name,
+                        administrationRoute = administrationRoute,
+                        unit = unit,
+                        originalUnit = originalUnit,
+                        dose = doseText.toDoubleOrNull(),
+                        estimatedDoseStandardDeviation = estimatedDoseStandardDeviationText.toDoubleOrNull(),
+                        isEstimate = isEstimate,
+                        isArchived = isArchived,
+                        note = "",
+                    )
+                    val ingestionElement = IngestionElement(
+                        ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
+                            ingestion = Ingestion(
+                                substanceName = substanceName,
+                                notes = null,
+                                experienceId = 1,
+                                consumerName = null,
+                                stomachFullness = null,
+                                dose = 3.0,
+                                isDoseAnEstimate = false,
+                                time = Instant.now(),
+                                customUnitId = customUnit.id,
+                                administrationRoute = administrationRoute,
+                                estimatedDoseStandardDeviation = null,
+                                units = unit,
+                            ),
+                            substanceCompanion = null,
+                            customUnit = customUnit
+                        ),
+                        roaDuration = null,
+                        numDots = null
+                    )
+                    IngestionRow(
+                        ingestionElement = ingestionElement,
+                        areDosageDotsHidden = true,
+                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                    ) {
+                        val timeString = Instant.now().getStringOfPattern("EEE HH:mm")
+                        Text(
+                            text = timeString,
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                    }
                 }
             }
         }
