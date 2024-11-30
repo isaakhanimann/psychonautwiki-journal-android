@@ -216,6 +216,12 @@ fun DrugTestingScreen() {
                     city = "Luzern",
                     url = "https://www.gassenarbeit.ch/angebote/dilu"
                 )
+                HorizontalDivider()
+                TestingServiceItem(
+                    name = "NightLife Vaud",
+                    city = "Lausanne",
+                    url = "https://nightlifevaud.ch/permanence/"
+                )
             }
 
             CardWithTesting(title = "United Kingdom") {
