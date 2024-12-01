@@ -110,7 +110,7 @@ data class CustomUnitDose(
 }
 
 fun Double.toStringWith(unit: String): String {
-    return if (this != 1.0 && !unit.endsWith("s")) {
+    return if (unit.isPlural(this)) {
         "${this.toReadableString()} ${unit}s"
     } else {
         "${this.toReadableString()} $unit"
@@ -118,10 +118,12 @@ fun Double.toStringWith(unit: String): String {
 }
 
 fun String.asPlural(basedOn: Double): String {
-    return if (basedOn != 1.0 && !this.endsWith("s")) {
+    return if (isPlural(basedOn)) {
         "${this}s"
     } else {
         this
     }
 }
+
+fun String.isPlural(basedOn: Double) = basedOn != 1.0 && !this.endsWith("s") && this != "mg"
 
