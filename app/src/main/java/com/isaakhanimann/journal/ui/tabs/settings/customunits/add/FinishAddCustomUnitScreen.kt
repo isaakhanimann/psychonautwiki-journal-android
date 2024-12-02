@@ -298,6 +298,51 @@ fun EditCustomUnitSections(
             }
         }
         ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            val prompt = when (substanceName) {
+                "Cannabis" -> Prompt(
+                    name = "e.g. flower in joint, bong, vaporizer",
+                    unit = "mg"
+                )
+
+                "Psilocybin mushrooms" ->
+                    Prompt(name = "Mushroom strain", unit = "g")
+
+                "Alcohol" ->
+                    Prompt(name = "e.g. beer, wine, spirit", unit = "e.g. ml, cup")
+
+                "Caffeine" ->
+                    Prompt(name = "e.g. coffee, tea, energy drink", unit = "e.g. cup, can")
+
+                else ->
+                    when (administrationRoute) {
+                        AdministrationRoute.ORAL ->
+                            Prompt(
+                                name = "e.g. blue rocket, 85% powder",
+                                unit = "e.g. pill, capsule, mg"
+                            )
+
+                        AdministrationRoute.SMOKED ->
+                            Prompt(name = "e.g. 85% powder", unit = "e.g. mg, hit")
+
+                        AdministrationRoute.INSUFFLATED ->
+                            Prompt(
+                                name = "e.g. nasal solution, blue dispenser",
+                                unit = "e.g. spray, spoon, scoop, line"
+                            )
+
+                        AdministrationRoute.BUCCAL ->
+                            Prompt(name = "e.g. brand name", unit = "e.g. pouch")
+
+                        AdministrationRoute.TRANSDERMAL ->
+                            Prompt(name = "e.g. brand name", unit = "e.g. patch")
+
+                        else ->
+                            Prompt(
+                                name = "e.g. 85% powder, blue rocket",
+                                unit = "e.g. pill, spray, spoon"
+                            )
+                    }
+            }
             Column(
                 modifier = Modifier.padding(
                     horizontal = horizontalPadding,
@@ -311,18 +356,7 @@ fun EditCustomUnitSections(
                     singleLine = true,
                     label = { Text(text = "Name to identify") },
                     placeholder = {
-                        when (substanceName) {
-                            "Cannabis" -> {
-                                Text("Flower in joint, bong, vaporizer")
-                            }
-                            "Psilocybin mushrooms" -> {
-                                Text("Mushroom strain")
-                            }
-                            "Alcohol" -> {
-                                Text("Beer, Wine, Spirit")
-                            }
-                            else -> Text("Blue rocket")
-                        }
+                        Text(prompt.name)
                     },
                     keyboardActions = KeyboardActions(onNext = { focusRequesterUnit.requestFocus() }),
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -341,7 +375,7 @@ fun EditCustomUnitSections(
                     singleLine = true,
                     label = { Text(text = "Unit in singular form") },
                     placeholder = {
-                        Text(getSampleUnitText(administrationRoute))
+                        Text(prompt.unit)
                     },
                     keyboardActions = KeyboardActions(onNext = { focusRequesterNote.requestFocus() }),
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -561,23 +595,7 @@ fun EditCustomUnitSections(
     }
 }
 
-fun getSampleUnitText(administrationRoute: AdministrationRoute) = when (administrationRoute) {
-    AdministrationRoute.ORAL -> {
-        "pill, capsule"
-    }
-    AdministrationRoute.SMOKED -> {
-        "mg, hit"
-    }
-    AdministrationRoute.INSUFFLATED -> {
-        "spray, spoon, scoop, line"
-    }
-    AdministrationRoute.BUCCAL -> {
-        "pouch"
-    }
-    AdministrationRoute.TRANSDERMAL -> {
-        "patch"
-    }
-    else -> {
-        "pill, spray, spoon"
-    }
-}
+data class Prompt(
+    val name: String,
+    val unit: String
+)

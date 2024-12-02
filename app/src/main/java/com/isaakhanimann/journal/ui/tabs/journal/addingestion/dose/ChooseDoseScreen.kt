@@ -75,7 +75,6 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.ui.DOSE_DISCLAIMER
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
-import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.getSampleUnitText
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
@@ -424,10 +423,12 @@ fun ChooseDoseScreen(
                 )
             ) {
                 Column(
-                    modifier = Modifier.padding(
-                        horizontal = horizontalPadding,
-                        vertical = 10.dp
-                    ).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(
+                            horizontal = horizontalPadding,
+                            vertical = 10.dp
+                        )
+                        .fillMaxWidth()
                 ) {
                     if (substanceName == "Cannabis" && administrationRoute == AdministrationRoute.SMOKED) {
                         Text("Prefer to log weight of bud, hash or log another unit related to joint, vaporizer or bong?")
@@ -435,8 +436,18 @@ fun ChooseDoseScreen(
                         Text("Prefer to log weight of mushrooms instead of mg Psilocybin?")
                     } else if (substanceName == "Alcohol") {
                         Text("Prefer to log number of drinks, beer or wine instead of g of Ethanol?")
+                    } else if (substanceName == "Caffeine") {
+                        Text("Prefer to log coffee, tea or energy drink instead of mg Caffeine?")
                     } else {
-                        Text(text = "Prefer to log with a different unit such as ${getSampleUnitText(administrationRoute)}?")
+                        val unitSuggestions = when (administrationRoute) {
+                            AdministrationRoute.ORAL -> "pills, capsules or raw powder weight"
+                            AdministrationRoute.SMOKED -> "hits"
+                            AdministrationRoute.INSUFFLATED -> "sprays, spoons, scoops, lines or raw powder weight"
+                            AdministrationRoute.BUCCAL -> "pouches"
+                            AdministrationRoute.TRANSDERMAL -> "patches"
+                            else -> "pills, sprays, spoons or powder weight"
+                        }
+                        Text(text = "Prefer to log with a different unit such as $unitSuggestions?")
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                     OutlinedButton(onClick = navigateToCreateCustomUnit) {
