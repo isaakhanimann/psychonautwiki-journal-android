@@ -346,6 +346,7 @@ class OneExperienceViewModel @Inject constructor(
             ingestionElementsFlow.value.maxOfOrNull { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
         if (lastIngestionTime != null) {
             userPreferences.saveLastIngestionTimeOfExperience(lastIngestionTime)
+            userPreferences.saveClonedIngestionTime(null)
         }
     }
 

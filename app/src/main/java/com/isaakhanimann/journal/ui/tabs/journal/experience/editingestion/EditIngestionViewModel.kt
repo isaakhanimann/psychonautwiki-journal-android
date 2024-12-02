@@ -31,6 +31,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.ui.main.navigation.graphs.EditIngestionRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,6 +51,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditIngestionViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
+    private val userPreferences: UserPreferences,
     state: SavedStateHandle
 ) : ViewModel() {
     private var ingestionFlow: MutableStateFlow<Ingestion?> = MutableStateFlow(null)
@@ -131,6 +133,10 @@ class EditIngestionViewModel @Inject constructor(
 
     fun onChangeIsEstimate(newIsEstimate: Boolean) {
         isEstimate = newIsEstimate
+    }
+
+    fun saveClonedIngestionTime() = viewModelScope.launch {
+        userPreferences.saveClonedIngestionTime(ingestion?.time)
     }
 
     val relevantExperiences: StateFlow<List<ExperienceOption>> = localDateTimeFlow.map {

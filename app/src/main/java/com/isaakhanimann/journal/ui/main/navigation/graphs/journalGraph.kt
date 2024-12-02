@@ -122,7 +122,12 @@ fun NavGraphBuilder.journalGraph(navController: NavHostController) {
             )
         }
         composableWithTransitions<EditIngestionRoute> {
-            EditIngestionScreen(navigateBack = navController::popBackStack)
+            EditIngestionScreen(
+                navigateBack = navController::popBackStack,
+                navigateToAddIngestion = {
+                    navController.navigate(AddIngestionRoute)
+                }
+            )
         }
         addIngestionGraph(navController)
         composableWithTransitions<ExplainTimelineOnJournalTabRoute> { ExplainTimelineScreen() }

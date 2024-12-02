@@ -160,7 +160,11 @@ class ChooseTimeViewModel @Inject constructor(
         val customSubstanceId = chooseTimeRoute.customSubstanceId
         viewModelScope.launch {
             val lastIngestionTimeOfExperience = userPreferences.lastIngestionTimeOfExperienceFlow.first()
-            if (lastIngestionTimeOfExperience != null) {
+            val clonedIngestionTime = userPreferences.clonedIngestionTimeFlow.first()
+            if (clonedIngestionTime != null) {
+                localDateTimeFlow.emit(clonedIngestionTime.getLocalDateTime())
+                updateTitleBasedOnTime(clonedIngestionTime)
+            } else if (lastIngestionTimeOfExperience != null) {
                 val wasLastIngestionOfExperienceMoreThan20HoursAgo = lastIngestionTimeOfExperience < Instant.now().minus(20, ChronoUnit.HOURS)
                 if (wasLastIngestionOfExperienceMoreThan20HoursAgo) {
                     localDateTimeFlow.emit(lastIngestionTimeOfExperience.getLocalDateTime())

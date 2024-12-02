@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -41,7 +42,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -93,6 +96,7 @@ import java.time.LocalDateTime
 @Composable
 fun EditIngestionScreen(
     viewModel: EditIngestionViewModel = hiltViewModel(),
+    navigateToAddIngestion: () -> Unit,
     navigateBack: () -> Unit
 ) {
     EditIngestionScreen(
@@ -124,7 +128,12 @@ fun EditIngestionScreen(
         consumerNamesSorted = viewModel.sortedConsumerNamesFlow.collectAsState().value,
         customUnit = viewModel.customUnit,
         onCustomUnitChange = viewModel::onChangeCustomUnit,
-        otherCustomUnits = viewModel.otherCustomUnits.collectAsState().value
+        otherCustomUnits = viewModel.otherCustomUnits.collectAsState().value,
+        addIngestionWithClonedTime = {
+            viewModel.saveClonedIngestionTime()
+            navigateBack()
+            navigateToAddIngestion()
+        }
     )
 }
 
@@ -158,7 +167,8 @@ fun EditIngestionScreenPreview() {
             consumerNamesSorted = listOf("Dave", "Ali"),
             customUnit = null,
             onCustomUnitChange = {},
-            otherCustomUnits = emptyList()
+            otherCustomUnits = emptyList(),
+            addIngestionWithClonedTime = {}
         )
     }
 }
@@ -191,7 +201,8 @@ fun EditIngestionScreen(
     consumerNamesSorted: List<String>,
     customUnit: CustomUnit?,
     onCustomUnitChange: (CustomUnit?) -> Unit,
-    otherCustomUnits: List<CustomUnit>
+    otherCustomUnits: List<CustomUnit>,
+    addIngestionWithClonedTime: () -> Unit
 ) {
     var isPresentingBottomSheet by rememberSaveable { mutableStateOf(false) }
     val skipPartiallyExpanded by remember { mutableStateOf(false) }
@@ -484,6 +495,26 @@ fun EditIngestionScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                         )
+                    }
+                }
+            }
+            ElevatedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 3.dp
+                    )
+                ) {
+                    TextButton(onClick = addIngestionWithClonedTime) {
+                        Icon(
+                            Icons.Outlined.Add, contentDescription = "Add"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Add ingestion at same time")
                     }
                 }
             }

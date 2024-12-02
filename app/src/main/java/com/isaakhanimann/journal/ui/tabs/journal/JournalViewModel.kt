@@ -56,8 +56,9 @@ class JournalViewModel @Inject constructor(
 
     val isSearchEnabled = mutableStateOf(false)
 
-    fun saveLastIngestionOfExperience() = viewModelScope.launch {
+    fun resetAddIngestionTimes() = viewModelScope.launch {
         userPreferences.saveLastIngestionTimeOfExperience(null)
+        userPreferences.saveClonedIngestionTime(null)
     }
 
     fun maybeMigrate() {

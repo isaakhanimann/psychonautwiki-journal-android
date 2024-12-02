@@ -35,7 +35,13 @@ import javax.inject.Singleton
 class UserPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
     private object PreferencesKeys {
         val KEY_TIME_DISPLAY_OPTION = stringPreferencesKey("key_time_display_option")
+
+        // last ingestion time of experience is used when adding an ingestion from a past experience
+        // cloned ingestion time is used to copy the time from another ingestion
+        // those values need to be set/reset whenever an ingestion is added
         val KEY_LAST_INGESTION_OF_EXPERIENCE = longPreferencesKey("KEY_LAST_INGESTION_OF_EXPERIENCE")
+        val KEY_CLONED_INGESTION_TIME = longPreferencesKey("KEY_CLONED_INGESTION_TIME")
+
         val KEY_HIDE_ORAL_DISCLAIMER = booleanPreferencesKey("key_hide_oral_disclaimer")
         val KEY_HIDE_DOSAGE_DOTS = booleanPreferencesKey("key_hide_dosage_dots")
         val KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT = booleanPreferencesKey("KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT")
@@ -62,6 +68,22 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
     val lastIngestionTimeOfExperienceFlow: Flow<Instant?> = dataStore.data
         .map { preferences ->
             val epochSecond = preferences[PreferencesKeys.KEY_LAST_INGESTION_OF_EXPERIENCE] ?: 0L
+            if (epochSecond != 0L) {
+                Instant.ofEpochSecond(epochSecond)
+            } else {
+                null
+            }
+        }
+
+    suspend fun saveClonedIngestionTime(value: Instant?) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.KEY_CLONED_INGESTION_TIME] = value?.epochSecond ?: 0L
+        }
+    }
+
+    val clonedIngestionTimeFlow: Flow<Instant?> = dataStore.data
+        .map { preferences ->
+            val epochSecond = preferences[PreferencesKeys.KEY_CLONED_INGESTION_TIME] ?: 0L
             if (epochSecond != 0L) {
                 Instant.ofEpochSecond(epochSecond)
             } else {

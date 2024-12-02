@@ -89,7 +89,7 @@ fun JournalScreen(
     JournalScreen(
         navigateToExperiencePopNothing = navigateToExperiencePopNothing,
         navigateToAddIngestion = {
-            viewModel.saveLastIngestionOfExperience()
+            viewModel.resetAddIngestionTimes()
             navigateToAddIngestion()
         },
         navigateToCalendar = navigateToCalendar,
