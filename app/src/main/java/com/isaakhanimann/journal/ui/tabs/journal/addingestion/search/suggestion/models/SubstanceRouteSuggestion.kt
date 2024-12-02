@@ -125,5 +125,5 @@ fun String.asPlural(basedOn: Double): String {
     }
 }
 
-fun String.isPlural(basedOn: Double) = basedOn != 1.0 && !this.endsWith("s") && this != "mg"
+fun String.isPlural(basedOn: Double) = basedOn != 1.0 && !this.endsWith("s") && this != "mg" && this != "g" && this != "ml"
 
