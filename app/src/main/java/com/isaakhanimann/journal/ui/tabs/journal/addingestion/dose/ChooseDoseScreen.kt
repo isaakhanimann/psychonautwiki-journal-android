@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
+import androidx.compose.material.icons.filled.Expand
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.OpenInBrowser
@@ -65,6 +67,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -265,8 +268,23 @@ fun ChooseDoseScreen(
                         vertical = 10.dp
                     )
                 ) {
-                    if (!doseRemark.isNullOrBlank()) {
-                        Text(text = doseRemark, style = MaterialTheme.typography.bodySmall)
+                    var isDoseRemarkExpanded by remember { mutableStateOf(false) }
+                    Row(modifier = Modifier.clickable {
+                        isDoseRemarkExpanded = !isDoseRemarkExpanded
+                    }, verticalAlignment = Alignment.CenterVertically) {
+                        val finalDoseInfoText = if (doseRemark.isNullOrBlank()) DOSE_DISCLAIMER else "$doseRemark\n\n$DOSE_DISCLAIMER"
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = finalDoseInfoText,
+                            maxLines = if (isDoseRemarkExpanded) Int.MAX_VALUE else 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        if (!isDoseRemarkExpanded) {
+                            Icon(
+                                imageVector = Icons.Default.Expand,
+                                contentDescription = "Expand"
+                            )
+                        }
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                     if (roaDose != null) {
@@ -286,7 +304,6 @@ fun ChooseDoseScreen(
                         }
                     }
                     OptionalDosageUnitDisclaimer(substanceName)
-                    Text(text = DOSE_DISCLAIMER, style = MaterialTheme.typography.bodySmall)
                 }
             }
             ElevatedCard(
