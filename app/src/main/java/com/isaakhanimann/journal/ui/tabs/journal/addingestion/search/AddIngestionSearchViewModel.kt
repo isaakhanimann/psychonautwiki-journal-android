@@ -123,7 +123,7 @@ class AddIngestionSearchViewModel @Inject constructor(
         customSubstances: List<CustomSubstance>
     ): List<SubstanceRouteSuggestion> {
         val grouped = ingestions.groupBy { it.ingestion.substanceName }
-        return grouped.flatMap { entry ->
+        val suggestions = grouped.flatMap { entry ->
             val substanceName = entry.key
             val ingestionsGroupedBySubstance = entry.value
             val color =
@@ -134,7 +134,7 @@ class AddIngestionSearchViewModel @Inject constructor(
             if (!isPredefinedSubstance && customSubstanceId == null) {
                 return@flatMap emptyList<SubstanceRouteSuggestion>()
             } else {
-                return@flatMap groupedRoute.mapNotNull { routeEntry ->
+                val suggestions = groupedRoute.mapNotNull { routeEntry ->
                     val dosesAndUnit = routeEntry.value.filter { it.customUnit == null }.map { ingestionWithCustomUnit ->
                         DoseAndUnit(
                             dose = ingestionWithCustomUnit.ingestion.dose,
@@ -172,12 +172,14 @@ class AddIngestionSearchViewModel @Inject constructor(
                             dosesAndUnit = dosesAndUnit,
                             customUnitDoses = customUnitDoses,
                             customUnits = customUnits,
-                            lastIngestedTime = routeEntry.value.maxOfOrNull { it.ingestion.time } ?: Instant.now(),
-                            lastCreationTime = routeEntry.value.mapNotNull { it.ingestion.creationDate }.maxOfOrNull { it} ?: Instant.now()
+                            lastIngestedTime = routeEntry.value.maxOfOrNull { it.ingestion.time } ?: Instant.MIN,
+                            lastCreationTime = routeEntry.value.mapNotNull { it.ingestion.creationDate }.maxOfOrNull { it} ?: Instant.MIN
                         )
                     }
-                }.sortedByDescending { it.lastCreationTime }
+                }
+                return@flatMap suggestions
             }
         }
+        return suggestions.sortedByDescending { it.lastCreationTime }
     }
 }
