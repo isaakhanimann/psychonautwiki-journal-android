@@ -310,46 +310,70 @@ fun EditCustomUnitSections(
         ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
             val prompt = when (substanceName) {
                 "Cannabis" -> Prompt(
-                    name = "e.g. flower in joint, bong, vaporizer",
-                    unit = "mg"
+                    name = "e.g. Joint weed 20%, Bong weed 15%, Vaporizer",
+                    unit = "mg, joint, hit",
+                    unitPlural = "mg, joints, hits"
                 )
 
                 "Psilocybin mushrooms" ->
-                    Prompt(name = "Mushroom strain", unit = "g")
+                    Prompt(name = "Mushroom strain", unit = "g", unitPlural = "g")
 
                 "Alcohol" ->
-                    Prompt(name = "e.g. beer, wine, spirit", unit = "e.g. ml, cup")
+                    Prompt(
+                        name = "e.g. beer, wine, spirit",
+                        unit = "e.g. ml, cup",
+                        unitPlural = "ml, cups"
+                    )
 
                 "Caffeine" ->
-                    Prompt(name = "e.g. coffee, tea, energy drink", unit = "e.g. cup, can")
+                    Prompt(
+                        name = "e.g. coffee, tea, energy drink",
+                        unit = "e.g. cup, can",
+                        unitPlural = "cups, cans"
+                    )
 
                 else ->
                     when (administrationRoute) {
                         AdministrationRoute.ORAL ->
                             Prompt(
-                                name = "e.g. blue rocket, 85% powder",
-                                unit = "e.g. pill, capsule, mg"
+                                name = "e.g. Blue rocket, 85% powder",
+                                unit = "e.g. pill, capsule, mg",
+                                unitPlural = "e.g. pills, capsules, mg"
                             )
 
                         AdministrationRoute.SMOKED ->
-                            Prompt(name = "e.g. 85% powder", unit = "e.g. mg, hit")
+                            Prompt(
+                                name = "e.g. 85% powder",
+                                unit = "e.g. mg, hit",
+                                unitPlural = "e.g. mg, hits"
+                            )
 
                         AdministrationRoute.INSUFFLATED ->
                             Prompt(
-                                name = "e.g. nasal solution, blue dispenser",
-                                unit = "e.g. spray, spoon, scoop, line"
+                                name = "e.g. Nasal solution, Blue dispenser",
+                                unit = "e.g. spray, spoon, scoop, line",
+                                unitPlural = "e.g. sprays, spoons, scoops, lines"
                             )
 
                         AdministrationRoute.BUCCAL ->
-                            Prompt(name = "e.g. brand name", unit = "e.g. pouch")
+                            Prompt(
+                                name = "e.g. Brand name",
+                                unit = "e.g. pouch",
+                                unitPlural = "pouches"
+                            )
 
                         AdministrationRoute.TRANSDERMAL ->
-                            Prompt(name = "e.g. brand name", unit = "e.g. patch")
+                            Prompt(
+                                name = "e.g. brand name",
+                                unit = "e.g. patch",
+                                unitPlural = "patches"
+                            )
 
                         else ->
                             Prompt(
                                 name = "e.g. 85% powder, blue rocket",
-                                unit = "e.g. pill, spray, spoon"
+                                unit = "e.g. pill, spray, spoon",
+                                unitPlural = "e.g. pills, sprays, spoons"
                             )
                     }
             }
@@ -364,7 +388,7 @@ fun EditCustomUnitSections(
                     onValueChange = onChangeOfName,
                     textStyle = textStyle,
                     singleLine = true,
-                    label = { Text(text = "Name to identify") },
+                    label = { Text(text = "Name") },
                     placeholder = {
                         Text(prompt.name)
                     },
@@ -383,9 +407,27 @@ fun EditCustomUnitSections(
                     onValueChange = onChangeOfUnits,
                     textStyle = textStyle,
                     singleLine = true,
-                    label = { Text(text = "Unit in singular form") },
+                    label = { Text(text = "Unit singular") },
                     placeholder = {
                         Text(prompt.unit)
+                    },
+                    keyboardActions = KeyboardActions(onNext = { focusRequesterNote.requestFocus() }),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.None
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequesterUnit)
+                )
+                OutlinedTextField(
+                    value = unitPlural,
+                    onValueChange = onChangeOfUnitPlural,
+                    textStyle = textStyle,
+                    singleLine = true,
+                    label = { Text(text = "Unit plural") },
+                    placeholder = {
+                        Text(prompt.unitPlural)
                     },
                     keyboardActions = KeyboardActions(onNext = { focusRequesterNote.requestFocus() }),
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -609,5 +651,6 @@ fun EditCustomUnitSections(
 
 data class Prompt(
     val name: String,
-    val unit: String
+    val unit: String,
+    val unitPlural: String
 )

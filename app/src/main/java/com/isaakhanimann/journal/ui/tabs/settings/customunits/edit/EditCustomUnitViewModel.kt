@@ -60,7 +60,9 @@ class EditCustomUnitViewModel @Inject constructor(
                 roaDose = substance.getRoa(customUnit.administrationRoute)?.roaDose
                 originalUnit = customUnit.originalUnit
                 name = customUnit.name
+                val pluralizableUnit = customUnit.getPluralizableUnit()
                 unit = customUnit.unit
+                unitPlural = pluralizableUnit.plural
                 doseText = customUnit.dose?.toReadableString() ?: ""
                 estimatedDoseDeviationText = customUnit.estimatedDoseStandardDeviation?.toReadableString() ?: ""
                 isEstimate = customUnit.isEstimate

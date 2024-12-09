@@ -40,6 +40,21 @@ data class CustomUnit(
     var originalUnit: String,
     var note: String
 ) {
+    fun getPluralizableUnit(): PluralizableUnit {
+        val plural = unitPlural
+        if (plural == null) {
+            val calculatedPlural =
+                if (unit != "mg" && unit != "g" && unit.lowercase() != "ml" && unit.lastOrNull() != 's') {
+                    unit + "s"
+                } else {
+                    unit
+                }
+            return PluralizableUnit(singular = unit, plural = calculatedPlural)
+        } else {
+            return PluralizableUnit(singular = unit, plural = plural)
+        }
+    }
+
     companion object {
         var mdmaSample = CustomUnit(
             substanceName = "MDMA",
@@ -70,3 +85,8 @@ data class CustomUnit(
         )
     }
 }
+
+data class PluralizableUnit(
+    val singular: String,
+    val plural: String
+)
