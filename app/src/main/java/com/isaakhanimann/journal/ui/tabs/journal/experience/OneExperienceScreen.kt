@@ -440,11 +440,13 @@ private fun ConsumerSection(
                     .fillMaxWidth()
                     .padding(vertical = 5.dp, horizontal = horizontalPadding)
             ) {
+                val ingestion = ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion
                 TimeOrDurationText(
-                    ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.time,
-                    index,
-                    timeDisplayOption,
-                    consumerWithIngestions.ingestionElements.map { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
+                    time = ingestion.time,
+                    endTime = ingestion.endTime,
+                    index = index,
+                    timeDisplayOption = timeDisplayOption,
+                    allTimesSortedMap = consumerWithIngestions.ingestionElements.map { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
                 )
             }
             if (index < consumerWithIngestions.ingestionElements.size - 1) {
@@ -509,6 +511,7 @@ private fun ShulginRatingsSection(
                 ratingSign = pair.second.option.sign) {
                 TimeOrDurationText(
                     time = pair.first,
+                    endTime = null,
                     index = index,
                     timeDisplayOption = timeDisplayOption,
                     allTimesSortedMap = ratingsWithTime.map { it.first }
@@ -561,6 +564,7 @@ private fun TimedNotesSection(
             ) {
                 TimeOrDurationText(
                     time = timedNote.time,
+                    endTime = null,
                     index = index,
                     timeDisplayOption = timeDisplayOption,
                     allTimesSortedMap = timedNotesSorted.map { it.time }
@@ -627,11 +631,13 @@ private fun MyIngestionList(
                     .fillMaxWidth()
                     .padding(vertical = 5.dp, horizontal = horizontalPadding)
             ) {
+                val ingestion = ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion
                 TimeOrDurationText(
-                    ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion.time,
-                    index,
-                    timeDisplayOption,
-                    oneExperienceScreenModel.ingestionElements.map { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
+                    time = ingestion.time,
+                    endTime = ingestion.endTime,
+                    index = index,
+                    timeDisplayOption = timeDisplayOption,
+                    allTimesSortedMap = oneExperienceScreenModel.ingestionElements.map { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
                 )
             }
             val isLastIngestion =

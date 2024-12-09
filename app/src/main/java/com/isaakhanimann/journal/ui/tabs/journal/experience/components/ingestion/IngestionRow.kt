@@ -50,7 +50,7 @@ fun IngestionRowPreview(@PreviewParameter(IngestionRowPreviewProvider::class) in
     ) {
         Text(
             text = "Fri 07:17",
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.labelMedium
         )
     }
 }
@@ -73,19 +73,13 @@ fun IngestionRow(
     ) {
         VerticalLine(color = ingestionWithCompanionAndCustomUnit.substanceCompanion?.color ?: AdaptiveColor.RED)
         Column {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.Top,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                val customUnitName = if (customUnit != null) ", ${customUnit.name}" else ""
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = ingestion.substanceName + customUnitName,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                time()
-            }
+            time()
+            val customUnitName = if (customUnit != null) "${customUnit.name}, " else ""
+            Text(
+                modifier = Modifier.weight(1f),
+                text = customUnitName + ingestion.substanceName,
+                style = MaterialTheme.typography.titleMedium
+            )
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()

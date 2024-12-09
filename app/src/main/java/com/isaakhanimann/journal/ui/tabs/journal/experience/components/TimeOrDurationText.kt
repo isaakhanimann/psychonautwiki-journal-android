@@ -18,73 +18,120 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.experience.components
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.TextStyle
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.Instant
+
+const val TIME_RANGE_SEPARATOR_TEXT = " - "
 
 @Composable
 fun TimeOrDurationText(
     time: Instant,
+    endTime: Instant?,
     index: Int,
     timeDisplayOption: TimeDisplayOption,
     allTimesSortedMap: List<Instant>
 ) {
-   val isFirstIngestion = index == 0
+    val isFirstIngestion = index == 0
+    val textStyle = MaterialTheme.typography.labelMedium
     when (timeDisplayOption) {
         TimeDisplayOption.REGULAR -> {
-            val timeString = time.getStringOfPattern("EEE HH:mm")
-            Text(
-                text = timeString,
-                style = MaterialTheme.typography.titleSmall
-            )
+            RegularTimeOrRangeText(time, endTime, textStyle)
         }
 
         TimeDisplayOption.RELATIVE_TO_NOW -> {
-            TimeRelativeToNowText(
-                time = time,
-                style = MaterialTheme.typography.titleSmall
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                TimeRelativeToNowText(
+                    time = time,
+                    style = textStyle
+                )
+                if (endTime != null) {
+                    Text(TIME_RANGE_SEPARATOR_TEXT)
+                    TimeRelativeToNowText(
+                        time = endTime,
+                        style = textStyle
+                    )
+                }
+            }
         }
 
         TimeDisplayOption.TIME_BETWEEN -> {
             if (isFirstIngestion) {
-                val timeString = time.getStringOfPattern("EEE HH:mm")
-                Text(
-                    text = timeString,
-                    style = MaterialTheme.typography.titleSmall
-                )
+                RegularTimeOrRangeText(time, endTime, textStyle)
             } else {
                 val previousTime =
                     allTimesSortedMap[index - 1]
-                Text(
-                    text = getDurationText(
-                        fromInstant = previousTime,
-                        toInstant = time
-                    ) + " later",
-                    style = MaterialTheme.typography.titleSmall
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = getDurationText(
+                            fromInstant = previousTime,
+                            toInstant = time
+                        ) + " later",
+                        style = textStyle
+                    )
+                    if (endTime != null) {
+                        Text(TIME_RANGE_SEPARATOR_TEXT)
+                        Text(
+                            text = getDurationText(
+                                fromInstant = previousTime,
+                                toInstant = endTime
+                            ) + " later",
+                            style = textStyle
+                        )
+                    }
+                }
             }
         }
 
         TimeDisplayOption.RELATIVE_TO_START -> {
             if (isFirstIngestion) {
-                val timeString = time.getStringOfPattern("EEE HH:mm")
-                Text(
-                    text = timeString,
-                    style = MaterialTheme.typography.titleSmall
-                )
+                RegularTimeOrRangeText(time, endTime, textStyle)
             } else {
-                Text(
-                    text = getDurationText(
-                        fromInstant = allTimesSortedMap.firstOrNull()
-                            ?: Instant.now(),
-                        toInstant = time
-                    ) + " in",
-                    style = MaterialTheme.typography.titleSmall
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    val startTime = allTimesSortedMap.firstOrNull()
+                        ?: Instant.now()
+                    Text(
+                        text = getDurationText(
+                            fromInstant = startTime,
+                            toInstant = time
+                        ) + " since start",
+                        style = textStyle
+                    )
+                    if (endTime != null) {
+                        Text(TIME_RANGE_SEPARATOR_TEXT)
+                        Text(
+                            text = getDurationText(
+                                fromInstant = startTime,
+                                toInstant = endTime
+                            ) + " since start",
+                            style = textStyle
+                        )
+                    }
+                }
             }
         }
     }
+}
+
+@Composable
+private fun RegularTimeOrRangeText(
+    time: Instant,
+    endTime: Instant?,
+    textStyle: TextStyle
+) {
+    val startText = time.getStringOfPattern("EEE HH:mm")
+    val text = if (endTime == null) {
+        startText
+    } else {
+        startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getStringOfPattern("EEE HH:mm")
+    }
+    Text(
+        text = text,
+        style = textStyle
+    )
 }
