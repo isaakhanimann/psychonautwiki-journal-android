@@ -150,7 +150,7 @@ fun SuggestionRow(
                         )
                     }
                 }, label = {
-                    Text("Enter $pureDoseUnit")
+                    Text("Log $pureDoseUnit")
                 }, icon = {
                         Icon(
                             imageVector = Icons.Default.Keyboard,
@@ -187,7 +187,7 @@ fun SuggestionRow(
                 }, label = {
                     Column(modifier = Modifier.padding(vertical = 5.dp)) {
                         Text(text = customUnit.name, style = MaterialTheme.typography.labelSmall)
-                        Text(text = "Enter " + customUnit.unit)
+                        Text(text = "Log " + customUnit.unit)
                     }
                 }, icon = {
                     Icon(
