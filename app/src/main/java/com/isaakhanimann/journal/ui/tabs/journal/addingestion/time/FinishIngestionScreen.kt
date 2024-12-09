@@ -18,6 +18,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.time
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -52,6 +53,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -92,8 +96,12 @@ fun FinishIngestionScreen(
         createSaveAndDismissAfter = {
             viewModel.createSaveAndDismissAfter(dismiss = dismissAddIngestionScreens)
         },
-        onChangeDateOrTime = viewModel::onChangeDateOrTime,
-        localDateTime = localDateTime,
+        ingestionTimePickerOption = viewModel.ingestionTimePickerOptionFlow.collectAsState().value,
+        onChangeTimePickerOption = viewModel::onChangeTimePickerOption,
+        onChangeStartDateOrTime = viewModel::onChangeStartDateOrTime,
+        localDateTimeStart = localDateTime,
+        localDateTimeEnd = viewModel.localDateTimeEndFlow.collectAsState().value,
+        onChangeEndDateOrTime = viewModel::onChangeEndDateOrTime,
         isLoadingColor = viewModel.isLoadingColor,
         isShowingColorPicker = viewModel.isShowingColorPicker,
         selectedColor = viewModel.selectedColor,
@@ -127,8 +135,12 @@ fun FinishIngestionScreenPreview() {
     }
     FinishIngestionScreen(
         createSaveAndDismissAfter = {},
-        onChangeDateOrTime = {},
-        localDateTime = LocalDateTime.now(),
+        ingestionTimePickerOption = IngestionTimePickerOption.POINT_IN_TIME,
+        onChangeTimePickerOption = {},
+        onChangeStartDateOrTime = {},
+        localDateTimeStart = LocalDateTime.now(),
+        localDateTimeEnd = LocalDateTime.now(),
+        onChangeEndDateOrTime = {},
         isLoadingColor = false,
         isShowingColorPicker = true,
         selectedColor = AdaptiveColor.BLUE,
@@ -158,8 +170,12 @@ fun FinishIngestionScreenPreview() {
 @Composable
 fun FinishIngestionScreen(
     createSaveAndDismissAfter: () -> Unit,
-    onChangeDateOrTime: (LocalDateTime) -> Unit,
-    localDateTime: LocalDateTime,
+    ingestionTimePickerOption: IngestionTimePickerOption,
+    onChangeTimePickerOption: (option: IngestionTimePickerOption) -> Unit,
+    onChangeStartDateOrTime: (LocalDateTime) -> Unit,
+    localDateTimeStart: LocalDateTime,
+    onChangeEndDateOrTime: (LocalDateTime) -> Unit,
+    localDateTimeEnd: LocalDateTime,
     isLoadingColor: Boolean,
     isShowingColorPicker: Boolean,
     selectedColor: AdaptiveColor,
@@ -217,18 +233,84 @@ fun FinishIngestionScreen(
             ) {
                 Spacer(modifier = Modifier.height(3.dp))
                 CardWithTitle(title = "Time") {
-                    DatePickerButton(
-                        localDateTime = localDateTime,
-                        onChange = onChangeDateOrTime,
-                        dateString = localDateTime.getStringOfPattern("EEE dd MMM yyyy"),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    TimePickerButton(
-                        localDateTime = localDateTime,
-                        onChange = onChangeDateOrTime,
-                        timeString = localDateTime.getStringOfPattern("HH:mm"),
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                        SegmentedButton(
+                            shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                            onClick = { onChangeTimePickerOption(IngestionTimePickerOption.POINT_IN_TIME) },
+                            selected = ingestionTimePickerOption == IngestionTimePickerOption.POINT_IN_TIME
+                        ) {
+                            Text("Point in time")
+                        }
+                        SegmentedButton(
+                            shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                            onClick = { onChangeTimePickerOption(IngestionTimePickerOption.TIME_RANGE) },
+                            selected = ingestionTimePickerOption == IngestionTimePickerOption.TIME_RANGE
+                        ) {
+                            Text("Time range")
+                        }
+                    }
+                    AnimatedContent(
+                        targetState = ingestionTimePickerOption,
+                        label = "ingestionTimePicker"
+                    ) { option ->
+                        when (option) {
+                            IngestionTimePickerOption.POINT_IN_TIME -> {
+                                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                                    DatePickerButton(
+                                        localDateTime = localDateTimeStart,
+                                        onChange = onChangeStartDateOrTime,
+                                        dateString = localDateTimeStart.getStringOfPattern("EEE d MMM yyyy"),
+                                    )
+                                    TimePickerButton(
+                                        localDateTime = localDateTimeStart,
+                                        onChange = onChangeStartDateOrTime,
+                                        timeString = localDateTimeStart.getStringOfPattern("HH:mm"),
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+                            }
+
+                            IngestionTimePickerOption.TIME_RANGE -> {
+                                Column {
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text("Start")
+                                        DatePickerButton(
+                                            localDateTime = localDateTimeStart,
+                                            onChange = onChangeStartDateOrTime,
+                                            dateString = localDateTimeStart.getStringOfPattern("EEE d MMM yyyy"),
+                                        )
+                                        TimePickerButton(
+                                            localDateTime = localDateTimeStart,
+                                            onChange = onChangeStartDateOrTime,
+                                            timeString = localDateTimeStart.getStringOfPattern("HH:mm"),
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text("End  ")
+                                        DatePickerButton(
+                                            localDateTime = localDateTimeEnd,
+                                            onChange = onChangeEndDateOrTime,
+                                            dateString = localDateTimeEnd.getStringOfPattern("EEE d MMM yyyy"),
+                                        )
+                                        TimePickerButton(
+                                            localDateTime = localDateTimeEnd,
+                                            onChange = onChangeEndDateOrTime,
+                                            timeString = localDateTimeEnd.getStringOfPattern("HH:mm"),
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                 }
                 CardWithTitle(title = "Experience", modifier = Modifier.fillMaxWidth()) {
                     var isShowingDropDownMenu by remember { mutableStateOf(false) }

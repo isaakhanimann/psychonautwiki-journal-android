@@ -78,6 +78,11 @@ class FinishIngestionScreenViewModel @Inject constructor(
     var consumerName by mutableStateOf("")
 
 
+    fun onChangeTimePickerOption(ingestionTimePickerOption: IngestionTimePickerOption) =
+        viewModelScope.launch {
+            ingestionTimePickerOptionFlow.emit(ingestionTimePickerOption)
+        }
+
     private val sortedExperiencesFlow = experienceRepo.getSortedExperiencesWithIngestionsFlow()
 
     val sortedConsumerNamesFlow =
@@ -165,13 +170,15 @@ class FinishIngestionScreenViewModel @Inject constructor(
         isEstimate = finishIngestionRoute.isEstimate
         val customSubstanceId = finishIngestionRoute.customSubstanceId
         viewModelScope.launch {
-            val lastIngestionTimeOfExperience = userPreferences.lastIngestionTimeOfExperienceFlow.first()
+            val lastIngestionTimeOfExperience =
+                userPreferences.lastIngestionTimeOfExperienceFlow.first()
             val clonedIngestionTime = userPreferences.clonedIngestionTimeFlow.first()
             if (clonedIngestionTime != null) {
                 localDateTimeStartFlow.emit(clonedIngestionTime.getLocalDateTime())
                 updateTitleBasedOnTime(clonedIngestionTime)
             } else if (lastIngestionTimeOfExperience != null) {
-                val wasLastIngestionOfExperienceMoreThan20HoursAgo = lastIngestionTimeOfExperience < Instant.now().minus(20, ChronoUnit.HOURS)
+                val wasLastIngestionOfExperienceMoreThan20HoursAgo =
+                    lastIngestionTimeOfExperience < Instant.now().minus(20, ChronoUnit.HOURS)
                 if (wasLastIngestionOfExperienceMoreThan20HoursAgo) {
                     localDateTimeStartFlow.emit(lastIngestionTimeOfExperience.getLocalDateTime())
                     updateTitleBasedOnTime(lastIngestionTimeOfExperience)
@@ -201,19 +208,22 @@ class FinishIngestionScreenViewModel @Inject constructor(
         }
     }
 
-    fun onChangeOfSelectedExperience(experienceWithIngestions: ExperienceWithIngestions?) = viewModelScope.launch {
-        selectedExperienceFlow.emit(experienceWithIngestions)
+    fun onChangeOfSelectedExperience(experienceWithIngestions: ExperienceWithIngestions?) =
+        viewModelScope.launch {
+            selectedExperienceFlow.emit(experienceWithIngestions)
+        }
+
+    fun onChangeStartDateOrTime(newLocalDateTime: LocalDateTime) = viewModelScope.launch {
+        localDateTimeStartFlow.emit(newLocalDateTime)
+        updateExperiencesBasedOnSelectedTime()
+        val ingestionTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
+        if (!hasTitleBeenChanged) {
+            updateTitleBasedOnTime(ingestionTime)
+        }
     }
 
-    fun onChangeDateOrTime(newLocalDateTime: LocalDateTime) {
-        viewModelScope.launch {
-            localDateTimeStartFlow.emit(newLocalDateTime)
-            updateExperiencesBasedOnSelectedTime()
-            val ingestionTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
-            if (!hasTitleBeenChanged) {
-                updateTitleBasedOnTime(ingestionTime)
-            }
-        }
+    fun onChangeEndDateOrTime(newLocalDateTime: LocalDateTime) = viewModelScope.launch {
+        localDateTimeEndFlow.emit(newLocalDateTime)
     }
 
     private fun updateTitleBasedOnTime(time: Instant) {
@@ -237,7 +247,8 @@ class FinishIngestionScreenViewModel @Inject constructor(
             val upperBoundBasedOnFirstIngestion = firstIngestionTime.plus(15, ChronoUnit.HOURS)
             val lastIngestionTime = sortedIngestions.lastOrNull()?.time ?: return@firstOrNull false
             val upperBoundBasedOnLastIngestion = lastIngestionTime.plus(3, ChronoUnit.HOURS)
-            val finalUpperBound = maxOf(upperBoundBasedOnFirstIngestion, upperBoundBasedOnLastIngestion)
+            val finalUpperBound =
+                maxOf(upperBoundBasedOnFirstIngestion, upperBoundBasedOnLastIngestion)
             val lowerBound = firstIngestionTime.minus(3, ChronoUnit.HOURS)
             return@firstOrNull selectedInstant in lowerBound..finalUpperBound
         }
@@ -261,7 +272,8 @@ class FinishIngestionScreenViewModel @Inject constructor(
         val oldIdToUse = selectedExperienceFlow.firstOrNull()?.experience?.id
         if (oldIdToUse == null) {
             val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
-            val ingestionTime = localDateTimeStartFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+            val ingestionTime =
+                localDateTimeStartFlow.first().atZone(ZoneId.systemDefault()).toInstant()
             val newExperience = Experience(
                 id = newIdToUse,
                 title = enteredTitle,
@@ -286,11 +298,12 @@ class FinishIngestionScreenViewModel @Inject constructor(
     }
 
     private suspend fun createNewIngestion(experienceId: Int): Ingestion {
-        val time =  localDateTimeStartFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+        val time = localDateTimeStartFlow.first().atZone(ZoneId.systemDefault()).toInstant()
         val ingestionTimePickerOption = ingestionTimePickerOptionFlow.first()
-        val endTime = when(ingestionTimePickerOption) {
+        val endTime = when (ingestionTimePickerOption) {
             IngestionTimePickerOption.POINT_IN_TIME -> null
-            IngestionTimePickerOption.TIME_RANGE -> localDateTimeEndFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+            IngestionTimePickerOption.TIME_RANGE -> localDateTimeEndFlow.first()
+                .atZone(ZoneId.systemDefault()).toInstant()
         }
         return Ingestion(
             substanceName = substanceName,
