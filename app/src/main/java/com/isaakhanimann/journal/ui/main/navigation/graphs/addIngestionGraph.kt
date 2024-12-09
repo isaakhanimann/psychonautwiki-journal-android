@@ -32,7 +32,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.ChooseRouteS
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomChooseRouteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.saferuse.CheckSaferUseScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestionSearchScreen
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.ChooseTimeScreen
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.FinishIngestionScreen
 import com.isaakhanimann.journal.ui.tabs.safer.RouteExplanationScreen
 import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstanceAndContinueScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.FinishAddCustomUnitScreen
@@ -55,7 +55,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 },
                 navigateToChooseTime = { substanceName, administrationRoute, dose, units, isEstimate, estimatedDoseStandardDeviation, customUnitId ->
                     navController.navigate(
-                        ChooseTimeRoute(
+                        FinishIngestionRoute(
                             administrationRoute = administrationRoute,
                             units = units,
                             isEstimate = isEstimate,
@@ -132,7 +132,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                                                       substanceName: String,
                                                       customUnitId: Int? ->
                     navController.navigate(
-                        ChooseTimeRoute(
+                        FinishIngestionRoute(
                             administrationRoute = administrationRoute,
                             isEstimate = isEstimate,
                             units = units,
@@ -179,7 +179,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             CustomChooseDose(
                 navigateToChooseTimeAndMaybeColor = { units, isEstimate, dose, estimatedDoseStandardDeviation ->
                     navController.navigate(
-                        ChooseTimeRoute(
+                        FinishIngestionRoute(
                             administrationRoute = route.administrationRoute,
                             units = units,
                             isEstimate = isEstimate,
@@ -201,7 +201,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             ChooseDoseScreen(
                 navigateToChooseTimeAndMaybeColor = { units, isEstimate, dose, estimatedDoseStandardDeviation ->
                     navController.navigate(
-                        ChooseTimeRoute(
+                        FinishIngestionRoute(
                             administrationRoute = route.administrationRoute,
                             units = units,
                             isEstimate = isEstimate,
@@ -224,8 +224,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 }
             )
         }
-        composableWithTransitions<ChooseTimeRoute> {
-            ChooseTimeScreen(
+        composableWithTransitions<FinishIngestionRoute> {
+            FinishIngestionScreen(
                 dismissAddIngestionScreens = {
                     navController.popBackStack(route = AddIngestionRoute, inclusive = true)
                 },
@@ -280,7 +280,7 @@ data class ChooseDoseRoute(
 )
 
 @Serializable
-data class ChooseTimeRoute(
+data class FinishIngestionRoute(
     val administrationRoute: AdministrationRoute,
     val isEstimate: Boolean,
     val units: String?,

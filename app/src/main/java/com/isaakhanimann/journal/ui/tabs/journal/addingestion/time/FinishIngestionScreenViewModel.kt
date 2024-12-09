@@ -32,7 +32,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
-import com.isaakhanimann.journal.ui.main.navigation.graphs.ChooseTimeRoute
+import com.isaakhanimann.journal.ui.main.navigation.graphs.FinishIngestionRoute
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
@@ -62,7 +62,7 @@ enum class IngestionTimePickerOption {
 }
 
 @HiltViewModel
-class ChooseTimeViewModel @Inject constructor(
+class FinishIngestionScreenViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     userPreferences: UserPreferences,
     state: SavedStateHandle
@@ -149,21 +149,21 @@ class ChooseTimeViewModel @Inject constructor(
     }
 
     init {
-        val chooseTimeRoute = state.toRoute<ChooseTimeRoute>()
-        substanceName = chooseTimeRoute.substanceName ?: ""
-        administrationRoute = chooseTimeRoute.administrationRoute
-        dose = chooseTimeRoute.dose
-        estimatedDoseStandardDeviation = chooseTimeRoute.estimatedDoseStandardDeviation
-        customUnitId = chooseTimeRoute.customUnitId
-        units = chooseTimeRoute.units?.let {
+        val finishIngestionRoute = state.toRoute<FinishIngestionRoute>()
+        substanceName = finishIngestionRoute.substanceName ?: ""
+        administrationRoute = finishIngestionRoute.administrationRoute
+        dose = finishIngestionRoute.dose
+        estimatedDoseStandardDeviation = finishIngestionRoute.estimatedDoseStandardDeviation
+        customUnitId = finishIngestionRoute.customUnitId
+        units = finishIngestionRoute.units?.let {
             if (it == "null") {
                 null
             } else {
                 it
             }
         }
-        isEstimate = chooseTimeRoute.isEstimate
-        val customSubstanceId = chooseTimeRoute.customSubstanceId
+        isEstimate = finishIngestionRoute.isEstimate
+        val customSubstanceId = finishIngestionRoute.customSubstanceId
         viewModelScope.launch {
             val lastIngestionTimeOfExperience = userPreferences.lastIngestionTimeOfExperienceFlow.first()
             val clonedIngestionTime = userPreferences.clonedIngestionTimeFlow.first()

@@ -83,12 +83,12 @@ import java.time.LocalDateTime
 
 
 @Composable
-fun ChooseTimeScreen(
+fun FinishIngestionScreen(
     dismissAddIngestionScreens: () -> Unit,
-    viewModel: ChooseTimeViewModel = hiltViewModel()
+    viewModel: FinishIngestionScreenViewModel = hiltViewModel()
 ) {
     val localDateTime = viewModel.localDateTimeStartFlow.collectAsState().value
-    ChooseTimeScreen(
+    FinishIngestionScreen(
         createSaveAndDismissAfter = {
             viewModel.createSaveAndDismissAfter(dismiss = dismissAddIngestionScreens)
         },
@@ -120,12 +120,12 @@ fun ChooseTimeScreen(
 
 @Preview
 @Composable
-fun ChooseTimeScreenPreview() {
+fun FinishIngestionScreenPreview() {
     val alreadyUsedColors = listOf(AdaptiveColor.BLUE, AdaptiveColor.PINK)
     val otherColors = AdaptiveColor.entries.filter { color ->
         !alreadyUsedColors.contains(color)
     }
-    ChooseTimeScreen(
+    FinishIngestionScreen(
         createSaveAndDismissAfter = {},
         onChangeDateOrTime = {},
         localDateTime = LocalDateTime.now(),
@@ -156,7 +156,7 @@ fun ChooseTimeScreenPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChooseTimeScreen(
+fun FinishIngestionScreen(
     createSaveAndDismissAfter: () -> Unit,
     onChangeDateOrTime: (LocalDateTime) -> Unit,
     localDateTime: LocalDateTime,
