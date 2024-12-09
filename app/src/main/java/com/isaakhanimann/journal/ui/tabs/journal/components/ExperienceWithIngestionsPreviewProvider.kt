@@ -50,6 +50,7 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                     ingestion = Ingestion(
                         substanceName = "MDMA",
                         time = Instant.now().minus(2, ChronoUnit.HOURS),
+                        endTime = null,
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -71,6 +72,7 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
                         time = Instant.now().minus(1, ChronoUnit.HOURS),
+                        endTime = null,
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 30.0,
                         isDoseAnEstimate = false,
@@ -92,6 +94,7 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
                         time = Instant.now().minus(30, ChronoUnit.MINUTES),
+                        endTime = null,
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 20.0,
                         isDoseAnEstimate = false,
@@ -145,6 +148,7 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                     ingestion = Ingestion(
                         substanceName = "MDMA",
                         time = Instant.now(),
+                        endTime = null,
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -166,6 +170,7 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
                         time = Instant.now(),
+                        endTime = null,
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 20.0,
                         isDoseAnEstimate = false,
@@ -187,6 +192,7 @@ class ExperienceWithIngestionsCompanionsAndRatingsPreviewProvider :
                     ingestion = Ingestion(
                         substanceName = "Cocaine",
                         time = Instant.now(),
+                        endTime = null,
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 20.0,
                         isDoseAnEstimate = false,

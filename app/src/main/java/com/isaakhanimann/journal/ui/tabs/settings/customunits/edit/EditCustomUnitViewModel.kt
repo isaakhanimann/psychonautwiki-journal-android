@@ -89,6 +89,12 @@ class EditCustomUnitViewModel @Inject constructor(
         unit = newUnit
     }
 
+    var unitPlural by mutableStateOf("")
+
+    fun onChangeOfUnitPlural(newUnit: String) {
+        unitPlural = newUnit
+    }
+
     var originalUnit by mutableStateOf("")
 
     fun onChangeOfOriginalUnit(newUnit: String) {

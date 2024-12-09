@@ -87,7 +87,7 @@ fun ChooseTimeScreen(
     dismissAddIngestionScreens: () -> Unit,
     viewModel: ChooseTimeViewModel = hiltViewModel()
 ) {
-    val localDateTime = viewModel.localDateTimeFlow.collectAsState().value
+    val localDateTime = viewModel.localDateTimeStartFlow.collectAsState().value
     ChooseTimeScreen(
         createSaveAndDismissAfter = {
             viewModel.createSaveAndDismissAfter(dismiss = dismissAddIngestionScreens)

@@ -108,6 +108,7 @@ class SettingsViewModel @Inject constructor(
                         IngestionSerializable(
                             substanceName = ingestion.substanceName,
                             time = ingestion.time,
+                            endTime = ingestion.endTime,
                             creationDate = ingestion.creationDate,
                             administrationRoute = ingestion.administrationRoute,
                             dose = ingestion.dose,
@@ -159,6 +160,7 @@ class SettingsViewModel @Inject constructor(
                     isEstimate = it.isEstimate,
                     isArchived = it.isArchived,
                     unit = it.unit,
+                    unitPlural = it.unitPlural,
                     originalUnit = it.originalUnit,
                     note = it.note
                 )

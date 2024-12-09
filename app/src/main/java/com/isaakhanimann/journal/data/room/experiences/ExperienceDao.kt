@@ -360,6 +360,7 @@ interface ExperienceDao {
                 val newIngestion = Ingestion(
                     substanceName = ingestionSerializable.substanceName,
                     time = ingestionSerializable.time,
+                    endTime = ingestionSerializable.endTime,
                     creationDate = ingestionSerializable.creationDate,
                     administrationRoute = ingestionSerializable.administrationRoute,
                     dose = ingestionSerializable.dose,
@@ -410,6 +411,7 @@ interface ExperienceDao {
                     isEstimate = it.isEstimate,
                     isArchived = it.isArchived,
                     unit = it.unit,
+                    unitPlural = it.unitPlural,
                     originalUnit = it.originalUnit,
                     note = it.note
                 )

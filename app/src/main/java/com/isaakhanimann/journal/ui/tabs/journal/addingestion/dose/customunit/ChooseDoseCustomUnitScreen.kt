@@ -141,6 +141,7 @@ fun ChooseDoseCustomUnitScreenPreview(
             originalUnit = "mg",
             name = "Big Spoon",
             unit = "spoon",
+            unitPlural = "spoons",
             note = "Note about custom unit dose"
         ),
         roaDose = roaDose,

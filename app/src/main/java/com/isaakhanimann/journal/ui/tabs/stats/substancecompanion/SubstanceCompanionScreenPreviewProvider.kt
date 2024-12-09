@@ -70,6 +70,7 @@ class SubstanceCompanionScreenPreviewProvider :
                                     hourOfDay = 14,
                                     minute = 20
                                 )!!,
+                                endTime = null,
                                 administrationRoute = AdministrationRoute.INSUFFLATED,
                                 dose = 20.0,
                                 isDoseAnEstimate = false,
@@ -93,6 +94,7 @@ class SubstanceCompanionScreenPreviewProvider :
                                     hourOfDay = 13,
                                     minute = 40
                                 )!!,
+                                endTime = null,
                                 administrationRoute = AdministrationRoute.INSUFFLATED,
                                 dose = 30.0,
                                 isDoseAnEstimate = false,
@@ -142,6 +144,7 @@ class SubstanceCompanionScreenPreviewProvider :
                                     hourOfDay = 14,
                                     minute = 20
                                 )!!,
+                                endTime = null,
                                 administrationRoute = AdministrationRoute.INSUFFLATED,
                                 dose = 10.0,
                                 isDoseAnEstimate = false,
@@ -165,6 +168,7 @@ class SubstanceCompanionScreenPreviewProvider :
                                     hourOfDay = 13,
                                     minute = 40
                                 )!!,
+                                endTime = null,
                                 administrationRoute = AdministrationRoute.INSUFFLATED,
                                 dose = 20.0,
                                 isDoseAnEstimate = false,

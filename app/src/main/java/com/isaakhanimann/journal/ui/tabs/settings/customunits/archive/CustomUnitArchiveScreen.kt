@@ -64,6 +64,7 @@ fun CustomUnitArchiveScreenPreview() {
                 isEstimate = true,
                 isArchived = false,
                 unit = "spoon",
+                unitPlural = "spoons",
                 originalUnit = "mg",
                 note = ""
             ),
@@ -76,6 +77,7 @@ fun CustomUnitArchiveScreenPreview() {
                 isEstimate = true,
                 isArchived = false,
                 unit = "pill",
+                unitPlural = "pills",
                 originalUnit = "mg",
                 note = ""
             ),

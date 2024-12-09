@@ -36,6 +36,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                 ingestion = Ingestion(
                     substanceName = "MDMA",
                     time = Instant.now(),
+                    endTime = null,
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 90.0,
                     isDoseAnEstimate = false,
@@ -61,6 +62,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                 ingestion = Ingestion(
                     substanceName = "2C-B",
                     time = Instant.now(),
+                    endTime = null,
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = 1.5,
                     isDoseAnEstimate = false,
@@ -86,6 +88,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                     isEstimate = true,
                     isArchived = false,
                     unit = "pill",
+                    unitPlural = "pills",
                     originalUnit = "mg",
                     note = "this is a note"
                 )
@@ -98,6 +101,7 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
                 ingestion = Ingestion(
                     substanceName = "LSD",
                     time = Instant.now(),
+                    endTime = null,
                     administrationRoute = AdministrationRoute.ORAL,
                     dose = null,
                     isDoseAnEstimate = false,

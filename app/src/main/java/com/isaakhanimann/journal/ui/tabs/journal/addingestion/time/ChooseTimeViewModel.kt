@@ -57,6 +57,10 @@ import javax.inject.Inject
 
 const val hourLimitToSeparateIngestions: Long = 12
 
+enum class IngestionTimePickerOption {
+    POINT_IN_TIME, TIME_RANGE
+}
+
 @HiltViewModel
 class ChooseTimeViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
@@ -64,7 +68,9 @@ class ChooseTimeViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     var substanceName by mutableStateOf("")
-    val localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
+    val localDateTimeStartFlow = MutableStateFlow(LocalDateTime.now())
+    val localDateTimeEndFlow = MutableStateFlow(LocalDateTime.now().plusMinutes(30))
+    val ingestionTimePickerOptionFlow = MutableStateFlow(IngestionTimePickerOption.POINT_IN_TIME)
     val experiencesInRangeFlow = MutableStateFlow<List<ExperienceWithIngestions>>(emptyList())
     val selectedExperienceFlow = MutableStateFlow<ExperienceWithIngestions?>(null)
     var enteredTitle by mutableStateOf(LocalDateTime.now().getStringOfPattern("dd MMMM yyyy"))
@@ -162,12 +168,12 @@ class ChooseTimeViewModel @Inject constructor(
             val lastIngestionTimeOfExperience = userPreferences.lastIngestionTimeOfExperienceFlow.first()
             val clonedIngestionTime = userPreferences.clonedIngestionTimeFlow.first()
             if (clonedIngestionTime != null) {
-                localDateTimeFlow.emit(clonedIngestionTime.getLocalDateTime())
+                localDateTimeStartFlow.emit(clonedIngestionTime.getLocalDateTime())
                 updateTitleBasedOnTime(clonedIngestionTime)
             } else if (lastIngestionTimeOfExperience != null) {
                 val wasLastIngestionOfExperienceMoreThan20HoursAgo = lastIngestionTimeOfExperience < Instant.now().minus(20, ChronoUnit.HOURS)
                 if (wasLastIngestionOfExperienceMoreThan20HoursAgo) {
-                    localDateTimeFlow.emit(lastIngestionTimeOfExperience.getLocalDateTime())
+                    localDateTimeStartFlow.emit(lastIngestionTimeOfExperience.getLocalDateTime())
                     updateTitleBasedOnTime(lastIngestionTimeOfExperience)
                 }
             }
@@ -201,7 +207,7 @@ class ChooseTimeViewModel @Inject constructor(
 
     fun onChangeDateOrTime(newLocalDateTime: LocalDateTime) {
         viewModelScope.launch {
-            localDateTimeFlow.emit(newLocalDateTime)
+            localDateTimeStartFlow.emit(newLocalDateTime)
             updateExperiencesBasedOnSelectedTime()
             val ingestionTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
             if (!hasTitleBeenChanged) {
@@ -215,7 +221,7 @@ class ChooseTimeViewModel @Inject constructor(
     }
 
     private suspend fun updateExperiencesBasedOnSelectedTime() {
-        val selectedInstant = localDateTimeFlow.value.getInstant()
+        val selectedInstant = localDateTimeStartFlow.value.getInstant()
         val fromInstant = selectedInstant.minus(3, ChronoUnit.DAYS)
         val toInstant = selectedInstant.plus(1, ChronoUnit.DAYS)
         val experiencesInRange =
@@ -255,7 +261,7 @@ class ChooseTimeViewModel @Inject constructor(
         val oldIdToUse = selectedExperienceFlow.firstOrNull()?.experience?.id
         if (oldIdToUse == null) {
             val newIdToUse = newExperienceIdToUseFlow.firstOrNull() ?: 1
-            val ingestionTime = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+            val ingestionTime = localDateTimeStartFlow.first().atZone(ZoneId.systemDefault()).toInstant()
             val newExperience = Experience(
                 id = newIdToUse,
                 title = enteredTitle,
@@ -279,20 +285,29 @@ class ChooseTimeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun createNewIngestion(experienceId: Int) = Ingestion(
-        substanceName = substanceName,
-        time = localDateTimeFlow.first().atZone(ZoneId.systemDefault()).toInstant(),
-        administrationRoute = administrationRoute,
-        dose = dose,
-        isDoseAnEstimate = isEstimate,
-        estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
-        units = units,
-        experienceId = experienceId,
-        notes = note,
-        stomachFullness = null, // todo: allow to add real stomach fullness
-        consumerName = consumerName.ifBlank {
-            null
-        },
-        customUnitId = customUnitId
-    )
+    private suspend fun createNewIngestion(experienceId: Int): Ingestion {
+        val time =  localDateTimeStartFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+        val ingestionTimePickerOption = ingestionTimePickerOptionFlow.first()
+        val endTime = when(ingestionTimePickerOption) {
+            IngestionTimePickerOption.POINT_IN_TIME -> null
+            IngestionTimePickerOption.TIME_RANGE -> localDateTimeEndFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+        }
+        return Ingestion(
+            substanceName = substanceName,
+            time = time,
+            endTime = endTime,
+            administrationRoute = administrationRoute,
+            dose = dose,
+            isDoseAnEstimate = isEstimate,
+            estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
+            units = units,
+            experienceId = experienceId,
+            notes = note,
+            stomachFullness = null, // todo: allow to add real stomach fullness
+            consumerName = consumerName.ifBlank {
+                null
+            },
+            customUnitId = customUnitId
+        )
+    }
 }

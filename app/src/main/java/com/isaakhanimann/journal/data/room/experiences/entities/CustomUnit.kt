@@ -36,6 +36,7 @@ data class CustomUnit(
     var isEstimate: Boolean,
     var isArchived: Boolean,
     var unit: String,
+    var unitPlural: String? = null,
     var originalUnit: String,
     var note: String
 ) {
@@ -49,6 +50,7 @@ data class CustomUnit(
             isEstimate = false,
             isArchived = false,
             unit = "capsule",
+            unitPlural = "capsules",
             originalUnit = "mg",
             note = "this is a note"
         )
@@ -62,6 +64,7 @@ data class CustomUnit(
             isEstimate = true,
             isArchived = false,
             unit = "pill",
+            unitPlural = "pills",
             originalUnit = "mg",
             note = "this is a note"
         )

@@ -189,6 +189,7 @@ class OneExperienceScreenPreviewProvider :
                             hourOfDay = 20,
                             minute = 5
                         )!!,
+                        endTime = null,
                         administrationRoute = AdministrationRoute.ORAL,
                         dose = 90.0,
                         isDoseAnEstimate = false,
@@ -251,6 +252,7 @@ class OneExperienceScreenPreviewProvider :
                             hourOfDay = 23,
                             minute = 5
                         )!!,
+                        endTime = null,
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 80.0,
                         isDoseAnEstimate = false,
@@ -309,6 +311,7 @@ class OneExperienceScreenPreviewProvider :
                             hourOfDay = 1,
                             minute = 15
                         )!!,
+                        endTime = null,
                         administrationRoute = AdministrationRoute.INSUFFLATED,
                         dose = 50.0,
                         isDoseAnEstimate = false,

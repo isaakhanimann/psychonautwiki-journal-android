@@ -29,6 +29,7 @@ data class Ingestion(
     val id: Int = 0,
     val substanceName: String,
     var time: Instant,
+    var endTime: Instant? = null,
     var creationDate: Instant? = Instant.now(),
     val administrationRoute: AdministrationRoute,
     var dose: Double?,
