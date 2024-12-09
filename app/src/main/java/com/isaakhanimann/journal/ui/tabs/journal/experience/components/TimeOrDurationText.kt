@@ -128,7 +128,13 @@ private fun RegularTimeOrRangeText(
     val text = if (endTime == null) {
         startText
     } else {
-        startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getStringOfPattern("EEE HH:mm")
+        val startDay = time.getStringOfPattern("EEE")
+        val endDay = endTime.getStringOfPattern("EEE")
+        if (startDay == endDay) {
+            startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getStringOfPattern("HH:mm")
+        } else {
+            startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getStringOfPattern("EEE HH:mm")
+        }
     }
     Text(
         text = text,
