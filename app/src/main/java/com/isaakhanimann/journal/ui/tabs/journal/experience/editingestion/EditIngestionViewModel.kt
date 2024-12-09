@@ -30,6 +30,7 @@ import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.ui.main.navigation.graphs.EditIngestionRoute
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.IngestionTimePickerOption
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import com.isaakhanimann.journal.ui.utils.getInstant
@@ -63,7 +64,9 @@ class EditIngestionViewModel @Inject constructor(
     var estimatedDoseStandardDeviation by mutableStateOf("")
     var units by mutableStateOf("")
     var experienceId by mutableIntStateOf(1)
-    var localDateTimeFlow = MutableStateFlow(LocalDateTime.now())
+    val ingestionTimePickerOptionFlow = MutableStateFlow(IngestionTimePickerOption.POINT_IN_TIME)
+    var localDateTimeStartFlow = MutableStateFlow(LocalDateTime.now())
+    var localDateTimeEndFlow = MutableStateFlow(LocalDateTime.now())
     var consumerName by mutableStateOf("")
     var customUnit: CustomUnit? by mutableStateOf(null)
     val otherCustomUnits = experienceRepo.getAllCustomUnitsFlow().combine(ingestionFlow) { customUnits, ing ->
@@ -96,7 +99,14 @@ class EditIngestionViewModel @Inject constructor(
             isKnown = ing.dose != null
             units = ing.units ?: ""
             consumerName = ing.consumerName ?: ""
-            localDateTimeFlow.emit(ing.time.getLocalDateTime())
+            localDateTimeStartFlow.emit(ing.time.getLocalDateTime())
+            val endTime = ing.endTime
+            if (endTime != null) {
+                ingestionTimePickerOptionFlow.emit(IngestionTimePickerOption.TIME_RANGE)
+                localDateTimeEndFlow.emit(endTime.getLocalDateTime())
+            } else {
+                localDateTimeEndFlow.emit(ing.time.plus(30, ChronoUnit.MINUTES).getLocalDateTime())
+            }
             customUnit = ingestionAndCustomUnit.customUnit
         }
     }
@@ -117,10 +127,17 @@ class EditIngestionViewModel @Inject constructor(
         }
     }
 
-    fun onChangeTime(newLocalDateTime: LocalDateTime) {
+    fun onChangeTimePickerOption(ingestionTimePickerOption: IngestionTimePickerOption) =
         viewModelScope.launch {
-            localDateTimeFlow.emit(newLocalDateTime)
+            ingestionTimePickerOptionFlow.emit(ingestionTimePickerOption)
         }
+
+    fun onChangeStartTime(newLocalDateTime: LocalDateTime) = viewModelScope.launch {
+        localDateTimeStartFlow.emit(newLocalDateTime)
+    }
+
+    fun onChangeEndTime(newLocalDateTime: LocalDateTime) = viewModelScope.launch {
+        localDateTimeEndFlow.emit(newLocalDateTime)
     }
 
     fun onChangeConsumerName(newName: String) {
@@ -139,7 +156,7 @@ class EditIngestionViewModel @Inject constructor(
         userPreferences.saveClonedIngestionTime(ingestion?.time)
     }
 
-    val relevantExperiences: StateFlow<List<ExperienceOption>> = localDateTimeFlow.map {
+    val relevantExperiences: StateFlow<List<ExperienceOption>> = localDateTimeStartFlow.map {
         val selectedInstant = it.getInstant()
         val fromDate = selectedInstant.minus(2, ChronoUnit.DAYS)
         val toDate = selectedInstant.plus(2, ChronoUnit.DAYS)
@@ -157,7 +174,10 @@ class EditIngestionViewModel @Inject constructor(
 
     fun onDoneTap() {
         viewModelScope.launch {
-            val selectedInstant = localDateTimeFlow.firstOrNull()?.getInstant() ?: return@launch
+            val selectedStartInstant = localDateTimeStartFlow.firstOrNull()?.getInstant() ?: return@launch
+            val selectedEndInstant = localDateTimeEndFlow.firstOrNull()?.getInstant()
+            val timePickerOption = ingestionTimePickerOptionFlow.first()
+            val endTime = if (timePickerOption == IngestionTimePickerOption.TIME_RANGE) selectedEndInstant else null
             ingestion?.let {
                 it.notes = note
                 it.isDoseAnEstimate = isEstimate
@@ -166,7 +186,8 @@ class EditIngestionViewModel @Inject constructor(
                 it.estimatedDoseStandardDeviation = if (isEstimate) estimatedDoseStandardDeviation.toDoubleOrNull() else null
                 it.units = units
                 it.customUnitId = customUnit?.id
-                it.time = selectedInstant
+                it.time = selectedStartInstant
+                it.endTime = endTime
                 it.consumerName = consumerName.ifBlank { null }
                 experienceRepo.update(it)
             }

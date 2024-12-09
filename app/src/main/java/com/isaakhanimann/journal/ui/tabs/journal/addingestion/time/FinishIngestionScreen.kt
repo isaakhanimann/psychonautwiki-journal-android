@@ -233,84 +233,14 @@ fun FinishIngestionScreen(
             ) {
                 Spacer(modifier = Modifier.height(3.dp))
                 CardWithTitle(title = "Time") {
-                    SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-                        SegmentedButton(
-                            shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
-                            onClick = { onChangeTimePickerOption(IngestionTimePickerOption.POINT_IN_TIME) },
-                            selected = ingestionTimePickerOption == IngestionTimePickerOption.POINT_IN_TIME
-                        ) {
-                            Text("Point in time")
-                        }
-                        SegmentedButton(
-                            shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
-                            onClick = { onChangeTimePickerOption(IngestionTimePickerOption.TIME_RANGE) },
-                            selected = ingestionTimePickerOption == IngestionTimePickerOption.TIME_RANGE
-                        ) {
-                            Text("Time range")
-                        }
-                    }
-                    AnimatedContent(
-                        targetState = ingestionTimePickerOption,
-                        label = "ingestionTimePicker"
-                    ) { option ->
-                        when (option) {
-                            IngestionTimePickerOption.POINT_IN_TIME -> {
-                                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                                    DatePickerButton(
-                                        localDateTime = localDateTimeStart,
-                                        onChange = onChangeStartDateOrTime,
-                                        dateString = localDateTimeStart.getStringOfPattern("EEE d MMM yyyy"),
-                                    )
-                                    TimePickerButton(
-                                        localDateTime = localDateTimeStart,
-                                        onChange = onChangeStartDateOrTime,
-                                        timeString = localDateTimeStart.getStringOfPattern("HH:mm"),
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                }
-                            }
-
-                            IngestionTimePickerOption.TIME_RANGE -> {
-                                Column {
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(5.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text("Start")
-                                        DatePickerButton(
-                                            localDateTime = localDateTimeStart,
-                                            onChange = onChangeStartDateOrTime,
-                                            dateString = localDateTimeStart.getStringOfPattern("EEE d MMM yyyy"),
-                                        )
-                                        TimePickerButton(
-                                            localDateTime = localDateTimeStart,
-                                            onChange = onChangeStartDateOrTime,
-                                            timeString = localDateTimeStart.getStringOfPattern("HH:mm"),
-                                            modifier = Modifier.weight(1f)
-                                        )
-                                    }
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(5.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text("End  ")
-                                        DatePickerButton(
-                                            localDateTime = localDateTimeEnd,
-                                            onChange = onChangeEndDateOrTime,
-                                            dateString = localDateTimeEnd.getStringOfPattern("EEE d MMM yyyy"),
-                                        )
-                                        TimePickerButton(
-                                            localDateTime = localDateTimeEnd,
-                                            onChange = onChangeEndDateOrTime,
-                                            timeString = localDateTimeEnd.getStringOfPattern("HH:mm"),
-                                            modifier = Modifier.weight(1f)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+                    TimePointOrRangePicker(
+                        onChangeTimePickerOption = onChangeTimePickerOption,
+                        ingestionTimePickerOption = ingestionTimePickerOption,
+                        localDateTimeStart = localDateTimeStart,
+                        onChangeStartDateOrTime = onChangeStartDateOrTime,
+                        localDateTimeEnd = localDateTimeEnd,
+                        onChangeEndDateOrTime = onChangeEndDateOrTime
+                    )
                 }
                 CardWithTitle(title = "Experience", modifier = Modifier.fillMaxWidth()) {
                     var isShowingDropDownMenu by remember { mutableStateOf(false) }
