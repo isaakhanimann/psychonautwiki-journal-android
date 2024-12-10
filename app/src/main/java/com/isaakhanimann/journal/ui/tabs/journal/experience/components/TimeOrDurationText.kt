@@ -67,20 +67,28 @@ fun TimeOrDurationText(
                 val previousTime =
                     allTimesSortedMap[index - 1]
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = getDurationText(
-                            fromInstant = previousTime,
-                            toInstant = time
-                        ) + " later",
-                        style = textStyle
-                    )
                     if (endTime != null) {
+                        Text(
+                            text = getDurationText(
+                                fromInstant = previousTime,
+                                toInstant = time
+                            ),
+                            style = textStyle
+                        )
                         Text(TIME_RANGE_SEPARATOR_TEXT)
                         Text(
                             text = getDurationText(
                                 fromInstant = previousTime,
                                 toInstant = endTime
-                            ) + " later",
+                            ) + " since previous",
+                            style = textStyle
+                        )
+                    } else {
+                        Text(
+                            text = getDurationText(
+                                fromInstant = previousTime,
+                                toInstant = time
+                            ) + " since previous",
                             style = textStyle
                         )
                     }
@@ -95,19 +103,27 @@ fun TimeOrDurationText(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     val startTime = allTimesSortedMap.firstOrNull()
                         ?: Instant.now()
-                    Text(
-                        text = getDurationText(
-                            fromInstant = startTime,
-                            toInstant = time
-                        ) + " since start",
-                        style = textStyle
-                    )
                     if (endTime != null) {
+                        Text(
+                            text = getDurationText(
+                                fromInstant = startTime,
+                                toInstant = time
+                            ),
+                            style = textStyle
+                        )
                         Text(TIME_RANGE_SEPARATOR_TEXT)
                         Text(
                             text = getDurationText(
                                 fromInstant = startTime,
                                 toInstant = endTime
+                            ) + " since start",
+                            style = textStyle
+                        )
+                    } else {
+                        Text(
+                            text = getDurationText(
+                                fromInstant = startTime,
+                                toInstant = time
                             ) + " since start",
                             style = textStyle
                         )
