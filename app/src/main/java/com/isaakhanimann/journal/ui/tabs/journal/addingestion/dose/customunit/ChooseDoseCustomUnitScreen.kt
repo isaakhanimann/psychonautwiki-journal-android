@@ -63,7 +63,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.asPlural
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.justUnit
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -268,6 +268,7 @@ fun ChooseDoseCustomUnitScreen(
                     LaunchedEffect(Unit) {
                         focusRequester.requestFocus()
                     }
+                    val pluralizableUnit = customUnit.getPluralizableUnit()
                     OutlinedTextField(
                         value = doseText,
                         onValueChange = onChangeDoseText,
@@ -276,7 +277,7 @@ fun ChooseDoseCustomUnitScreen(
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
-                                text = customUnit.unit.asPlural(dose ?: 2.0),
+                                text = pluralizableUnit.justUnit(dose ?: 1.0),
                                 style = textStyle,
                                 modifier = Modifier.padding(horizontal = horizontalPadding)
                             )
@@ -305,7 +306,7 @@ fun ChooseDoseCustomUnitScreen(
                             label = { Text("Estimated standard deviation", style = textStyle) },
                             trailingIcon = {
                                 Text(
-                                    text = customUnit.unit.asPlural(estimatedDoseDeviation ?: 2.0),
+                                    text = pluralizableUnit.justUnit(estimatedDoseDeviation ?: 1.0),
                                     style = textStyle,
                                     modifier = Modifier.padding(horizontal = horizontalPadding)
                                 )

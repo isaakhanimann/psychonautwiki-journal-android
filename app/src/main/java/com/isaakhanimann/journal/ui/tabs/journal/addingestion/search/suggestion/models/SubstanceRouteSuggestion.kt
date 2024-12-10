@@ -20,6 +20,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion
 
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
+import com.isaakhanimann.journal.data.room.experiences.entities.PluralizableUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import java.time.Instant
@@ -51,9 +52,10 @@ data class CustomUnitDose(
     val estimatedDoseStandardDeviation: Double?,
     val customUnit: CustomUnit
 ) {
-    val calculatedDose: Double? get() = customUnit.dose?.let { dosePerUnit ->
-        dose * dosePerUnit
-    }
+    val calculatedDose: Double?
+        get() = customUnit.dose?.let { dosePerUnit ->
+            dose * dosePerUnit
+        }
 
     // https://www.mathsisfun.com/data/standard-deviation.html
     // https://en.m.wikipedia.org/wiki/Distribution_of_the_product_of_two_random_variables
@@ -61,13 +63,16 @@ data class CustomUnitDose(
     val calculatedDoseStandardDeviation: Double?
         get() {
             return customUnit.dose?.let { expectationY ->
-                val standardDeviationY = if (customUnit.isEstimate) (customUnit.estimatedDoseStandardDeviation ?: 0.0) else 0.0
+                val standardDeviationY =
+                    if (customUnit.isEstimate) (customUnit.estimatedDoseStandardDeviation
+                        ?: 0.0) else 0.0
                 val expectationX = dose
-                val standardDeviationX = if (isEstimate) (estimatedDoseStandardDeviation ?: 0.0) else 0.0
+                val standardDeviationX =
+                    if (isEstimate) (estimatedDoseStandardDeviation ?: 0.0) else 0.0
                 val sum1 = standardDeviationX.pow(2) + expectationX.pow(2)
                 val sum2 = standardDeviationY.pow(2) + expectationY.pow(2)
                 val expectations = expectationX.pow(2) * expectationY.pow(2)
-                val productVariance = sum1*sum2 - expectations
+                val productVariance = sum1 * sum2 - expectations
                 if (productVariance > 0.0000001) {
                     return sqrt(productVariance)
                 } else {
@@ -77,53 +82,54 @@ data class CustomUnitDose(
         }
 
     // 20 mg or 20±2 mg
-    val calculatedDoseDescription: String? get()
-    {
-        return calculatedDose?.let { calculatedDoseUnwrapped ->
-            calculatedDoseStandardDeviation?.let {
-                return "${calculatedDoseUnwrapped.toReadableString()}±${it.toReadableString()} ${customUnit.originalUnit}"
-            } ?: run {
-                val description = "${calculatedDoseUnwrapped.toReadableString()} ${customUnit.originalUnit}"
-                if (isEstimate || customUnit.isEstimate) {
-                    return "~$description"
-                } else {
-                    return description
+    val calculatedDoseDescription: String?
+        get() {
+            return calculatedDose?.let { calculatedDoseUnwrapped ->
+                calculatedDoseStandardDeviation?.let {
+                    return "${calculatedDoseUnwrapped.toReadableString()}±${it.toReadableString()} ${customUnit.originalUnit}"
+                } ?: run {
+                    val description =
+                        "${calculatedDoseUnwrapped.toReadableString()} ${customUnit.originalUnit}"
+                    if (isEstimate || customUnit.isEstimate) {
+                        return "~$description"
+                    } else {
+                        return description
+                    }
                 }
             }
         }
-    }
 
     // 2 pills
-    val doseDescription: String get()
-    {
-        val description = dose.toStringWith(unit = customUnit.unit)
-        return if (isEstimate) {
-            if (estimatedDoseStandardDeviation != null) {
-                "${dose.toReadableString()}±${estimatedDoseStandardDeviation.toReadableString()} ${customUnit.unit.asPlural(dose)}"
+    val doseDescription: String
+        get() {
+            val pluralizableUnit = customUnit.getPluralizableUnit()
+            val description = dose.toStringWith(pluralizableUnit = pluralizableUnit)
+            return if (isEstimate) {
+                if (estimatedDoseStandardDeviation != null) {
+                    "${dose.toReadableString()}±${estimatedDoseStandardDeviation.toReadableString()} ${
+                        pluralizableUnit.justUnit(dose)
+                    }"
+                } else {
+                    "~$description"
+                }
             } else {
-                "~$description"
+                description
             }
-        } else {
-            description
         }
-    }
 }
 
-fun Double.toStringWith(unit: String): String {
-    return if (unit.isPlural(this)) {
-        "${this.toReadableString()} ${unit}s"
+fun Double.toStringWith(pluralizableUnit: PluralizableUnit): String {
+    return if (this != 1.0) {
+        "${this.toReadableString()} ${pluralizableUnit.plural}"
     } else {
-        "${this.toReadableString()} $unit"
+        "${this.toReadableString()} ${pluralizableUnit.singular}"
     }
 }
 
-fun String.asPlural(basedOn: Double): String {
-    return if (isPlural(basedOn)) {
-        "${this}s"
+fun PluralizableUnit.justUnit(basedOn: Double): String {
+    return if (basedOn != 1.0) {
+        plural
     } else {
-        this
+        singular
     }
 }
-
-fun String.isPlural(basedOn: Double) = basedOn != 1.0 && !this.endsWith("s") && this != "mg" && this != "g" && this != "ml"
-
