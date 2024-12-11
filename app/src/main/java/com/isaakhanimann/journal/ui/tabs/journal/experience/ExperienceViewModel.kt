@@ -366,8 +366,8 @@ class ExperienceViewModel @Inject constructor(
                 }
                 val ingestion = oneElement.ingestionWithCompanionAndCustomUnit.ingestion
                 DataForOneEffectLine(
-                    substanceName = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.substanceName,
-                    route = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute,
+                    substanceName = ingestion.substanceName,
+                    route = ingestion.administrationRoute,
                     roaDuration = oneElement.roaDuration,
                     height = getStrengthRelativeToCommonDose(
                         ingestion = oneElement.ingestionWithCompanionAndCustomUnit,
@@ -378,7 +378,8 @@ class ExperienceViewModel @Inject constructor(
                     horizontalWeight = horizontalWeight,
                     color = oneElement.ingestionWithCompanionAndCustomUnit.substanceCompanion?.color
                         ?: AdaptiveColor.RED,
-                    startTime = oneElement.ingestionWithCompanionAndCustomUnit.ingestion.time
+                    startTime = ingestion.time,
+                    endTime = ingestion.endTime
                 )
             }
 

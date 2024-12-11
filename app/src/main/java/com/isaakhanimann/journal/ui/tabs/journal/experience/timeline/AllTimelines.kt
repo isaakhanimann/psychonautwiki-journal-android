@@ -58,6 +58,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOn
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimeRangeDrawable
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import kotlinx.coroutines.delay
 import java.time.Duration
@@ -215,6 +216,14 @@ fun AllTimelines(
                         color = dataForOneTimedNote.color,
                         pixelsPerSec = pixelsPerSec,
                         canvasHeightOuter = canvasHeightWithVerticalLine,
+                        isDarkTheme = isDarkTheme
+                    )
+                }
+                model.timeRangeDrawables.forEach {
+                    drawTimeRange(
+                        timeRangeDrawable = it,
+                        canvasHeight = canvasHeightWithVerticalLine,
+                        pixelsPerSec = pixelsPerSec,
                         isDarkTheme = isDarkTheme
                     )
                 }
@@ -393,6 +402,46 @@ fun DrawScope.drawCurrentTime(
             cap = StrokeCap.Round
         )
     }
+}
+
+fun DrawScope.drawTimeRange(
+    timeRangeDrawable: TimeRangeDrawable,
+    canvasHeight: Float,
+    pixelsPerSec: Float,
+    isDarkTheme: Boolean
+) {
+    val color = timeRangeDrawable.color.getComposeColor(isDarkTheme)
+    val startX = timeRangeDrawable.startInSeconds * pixelsPerSec
+    val endX = timeRangeDrawable.endInSeconds * pixelsPerSec
+    val minLineHeight = 20.dp.toPx()
+    val horizontalLineWidth = 8.dp.toPx()
+    val offset = timeRangeDrawable.intersectionCountWithPreviousRanges * horizontalLineWidth
+    val horizontalLineHeight = minLineHeight/2 + offset
+    val verticalLineHeight = minLineHeight + offset
+    val verticalLineTopY = canvasHeight - verticalLineHeight
+    val horizontalLineY = canvasHeight - horizontalLineHeight
+    val verticalLineStrokeWidth = 4.dp.toPx()
+    drawLine(
+        color = color,
+        start = Offset(x = startX, y = verticalLineTopY),
+        end = Offset(x = startX, y = canvasHeight),
+        strokeWidth = verticalLineStrokeWidth,
+        cap = StrokeCap.Round
+    )
+    drawLine(
+        color = color,
+        start = Offset(x = startX, y = horizontalLineY),
+        end = Offset(x = endX, y = horizontalLineY),
+        strokeWidth = horizontalLineWidth,
+        cap = StrokeCap.Butt
+    )
+    drawLine(
+        color = color,
+        start = Offset(x = endX, y = verticalLineTopY),
+        end = Offset(x = endX, y = canvasHeight),
+        strokeWidth = verticalLineStrokeWidth,
+        cap = StrokeCap.Round
+    )
 }
 
 fun DrawScope.drawRating(

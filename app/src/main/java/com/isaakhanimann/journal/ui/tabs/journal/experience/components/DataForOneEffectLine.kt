@@ -30,5 +30,6 @@ data class DataForOneEffectLine(
     val height: Float,
     val horizontalWeight: Float,
     val color: AdaptiveColor,
-    val startTime: Instant
+    val startTime: Instant,
+    val endTime: Instant?
 )

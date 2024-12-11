@@ -393,7 +393,8 @@ fun SubstanceScreen(
                                     height = roa.roaDose?.getStrengthRelativeToCommonDose(firstAverageCommonDose)?.toFloat() ?: 1f,
                                     horizontalWeight = 0.5f,
                                     color = roa.route.color,
-                                    startTime = ingestionTime.getInstant()
+                                    startTime = ingestionTime.getInstant(),
+                                    endTime = null,
                                 )
                             }
                         }
