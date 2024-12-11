@@ -413,7 +413,7 @@ fun DrawScope.drawTimeRange(
     val color = timeRangeDrawable.color.getComposeColor(isDarkTheme)
     val startX = timeRangeDrawable.startInSeconds * pixelsPerSec
     val endX = timeRangeDrawable.endInSeconds * pixelsPerSec
-    val minLineHeight = 20.dp.toPx()
+    val minLineHeight = 12.dp.toPx()
     val horizontalLineWidth = 8.dp.toPx()
     val offset = timeRangeDrawable.intersectionCountWithPreviousRanges * horizontalLineWidth
     val horizontalLineHeight = minLineHeight/2 + offset
