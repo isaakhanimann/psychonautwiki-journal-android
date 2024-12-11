@@ -30,7 +30,7 @@ import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepositor
 import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.main.navigation.graphs.TimelineScreenRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
-import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceViewModel
+import com.isaakhanimann.journal.ui.tabs.journal.experience.ExperienceViewModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
@@ -159,7 +159,7 @@ class TimelineScreenViewModel @Inject constructor(
         val ingestionElements = getIngestionElements(ingestionWithAssociatedData)
         val substances =
             ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
-        OneExperienceViewModel.getDataForEffectTimelines(
+        ExperienceViewModel.getDataForEffectTimelines(
             ingestionElements = ingestionElements,
             substances = substances
         )

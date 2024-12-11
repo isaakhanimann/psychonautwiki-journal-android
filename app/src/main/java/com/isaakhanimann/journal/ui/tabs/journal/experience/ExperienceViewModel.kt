@@ -61,7 +61,7 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
-class OneExperienceViewModel @Inject constructor(
+class ExperienceViewModel @Inject constructor(
     private val experienceRepo: ExperienceRepository,
     private val substanceRepo: SubstanceRepository,
     private val interactionChecker: InteractionChecker,

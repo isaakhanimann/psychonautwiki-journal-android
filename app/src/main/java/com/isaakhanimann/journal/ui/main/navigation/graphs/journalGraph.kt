@@ -26,7 +26,7 @@ import com.isaakhanimann.journal.ui.main.navigation.JournalTopLevelRoute
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.tabs.journal.JournalScreen
 import com.isaakhanimann.journal.ui.tabs.journal.calendar.CalendarJournalScreen
-import com.isaakhanimann.journal.ui.tabs.journal.experience.OneExperienceScreen
+import com.isaakhanimann.journal.ui.tabs.journal.experience.ExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.edit.EditExperienceScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.editingestion.EditIngestionScreen
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.add.AddRatingScreen
@@ -80,7 +80,7 @@ fun NavGraphBuilder.journalGraph(navController: NavHostController) {
         composableWithTransitions<ExperienceRoute> { backStackEntry ->
             val experienceRoute: ExperienceRoute = backStackEntry.toRoute()
             val experienceId = experienceRoute.experienceId
-            OneExperienceScreen(
+            ExperienceScreen(
                 navigateToAddIngestionSearch = {
                     navController.navigate(AddIngestionRoute)
                 },

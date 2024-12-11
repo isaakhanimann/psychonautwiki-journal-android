@@ -108,8 +108,8 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 @Composable
-fun OneExperienceScreen(
-    viewModel: OneExperienceViewModel = hiltViewModel(),
+fun ExperienceScreen(
+    viewModel: ExperienceViewModel = hiltViewModel(),
     navigateToAddIngestionSearch: () -> Unit,
     navigateToEditExperienceScreen: () -> Unit,
     navigateToExplainTimeline: () -> Unit,
@@ -141,7 +141,7 @@ fun OneExperienceScreen(
         consumersWithIngestions = viewModel.consumersWithIngestionsFlow.collectAsState().value,
         dataForEffectLines = viewModel.dataForEffectTimelinesFlow.collectAsState().value
     )
-    OneExperienceScreen(
+    ExperienceScreen(
         oneExperienceScreenModel = oneExperienceScreenModel,
         isOralDisclaimerHidden = viewModel.isOralTimelineDisclaimerHidden.collectAsState().value,
         onChangeIsOralDisclaimerHidden = viewModel::saveOralDisclaimerIsHidden,
@@ -177,7 +177,7 @@ fun ExperienceScreenPreview(
     ) oneExperienceScreenModel: OneExperienceScreenModel
 ) {
     JournalTheme {
-        OneExperienceScreen(
+        ExperienceScreen(
             oneExperienceScreenModel = oneExperienceScreenModel,
             isOralDisclaimerHidden = false,
             onChangeIsOralDisclaimerHidden = {},
@@ -203,7 +203,7 @@ fun ExperienceScreenPreview(
 }
 
 @Composable
-fun OneExperienceScreen(
+fun ExperienceScreen(
     oneExperienceScreenModel: OneExperienceScreenModel,
     isOralDisclaimerHidden: Boolean,
     onChangeIsOralDisclaimerHidden: (Boolean) -> Unit,
