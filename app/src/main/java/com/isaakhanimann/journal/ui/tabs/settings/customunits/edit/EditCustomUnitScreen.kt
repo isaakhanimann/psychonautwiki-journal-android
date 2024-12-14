@@ -78,7 +78,11 @@ fun EditCustomUnitScreen(
         onChangeOfNote = viewModel::onChangeOfNote,
         isArchived = viewModel.isArchived,
         onChangeOfIsArchived = viewModel::onChangeOfIsArchived,
-        onDelete = viewModel::deleteCustomUnit
+        onDelete = {
+            viewModel.deleteCustomUnit {
+                navigateBack()
+            }
+        }
     )
 }
 

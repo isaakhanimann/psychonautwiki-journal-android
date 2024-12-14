@@ -151,10 +151,13 @@ class EditCustomUnitViewModel @Inject constructor(
         }
     }
 
-    fun deleteCustomUnit() {
+    fun deleteCustomUnit(dismiss: () -> Unit) {
         viewModelScope.launch {
             customUnit?.let {
                 experienceRepo.delete(customUnit = it)
+            }
+            withContext(Dispatchers.Main) {
+                dismiss()
             }
         }
     }
