@@ -216,14 +216,26 @@ class FinishIngestionScreenViewModel @Inject constructor(
     fun onChangeStartDateOrTime(newLocalDateTime: LocalDateTime) = viewModelScope.launch {
         localDateTimeStartFlow.emit(newLocalDateTime)
         updateExperiencesBasedOnSelectedTime()
-        val ingestionTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
+        val startTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
         if (!hasTitleBeenChanged) {
-            updateTitleBasedOnTime(ingestionTime)
+            updateTitleBasedOnTime(startTime)
+        }
+        val endTime = localDateTimeEndFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+        if (startTime > endTime) {
+            val newEndTime = startTime.plus(30, ChronoUnit.MINUTES)
+            localDateTimeEndFlow.emit(newEndTime.getLocalDateTime())
         }
     }
 
     fun onChangeEndDateOrTime(newLocalDateTime: LocalDateTime) = viewModelScope.launch {
         localDateTimeEndFlow.emit(newLocalDateTime)
+        val endTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
+        val startTime =
+            localDateTimeStartFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+        if (startTime > endTime) {
+            val newStartTime = endTime.minus(30, ChronoUnit.MINUTES)
+            localDateTimeStartFlow.emit(newStartTime.getLocalDateTime())
+        }
     }
 
     private fun updateTitleBasedOnTime(time: Instant) {

@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -134,10 +135,23 @@ class EditIngestionViewModel @Inject constructor(
 
     fun onChangeStartTime(newLocalDateTime: LocalDateTime) = viewModelScope.launch {
         localDateTimeStartFlow.emit(newLocalDateTime)
+        val startTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
+        val endTime = localDateTimeEndFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+        if (startTime > endTime) {
+            val newEndTime = startTime.plus(30, ChronoUnit.MINUTES)
+            localDateTimeEndFlow.emit(newEndTime.getLocalDateTime())
+        }
     }
 
     fun onChangeEndTime(newLocalDateTime: LocalDateTime) = viewModelScope.launch {
         localDateTimeEndFlow.emit(newLocalDateTime)
+        val endTime = newLocalDateTime.atZone(ZoneId.systemDefault()).toInstant()
+        val startTime =
+            localDateTimeStartFlow.first().atZone(ZoneId.systemDefault()).toInstant()
+        if (startTime > endTime) {
+            val newStartTime = endTime.minus(30, ChronoUnit.MINUTES)
+            localDateTimeStartFlow.emit(newStartTime.getLocalDateTime())
+        }
     }
 
     fun onChangeConsumerName(newName: String) {
