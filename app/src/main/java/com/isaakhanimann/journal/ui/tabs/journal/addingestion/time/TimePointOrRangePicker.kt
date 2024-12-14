@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Update
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -59,16 +63,38 @@ fun TimePointOrRangePicker(
                         timeString = localDateTimeStart.getStringOfPattern("HH:mm"),
                         modifier = Modifier.weight(1f)
                     )
+                    IconButton(onClick = {
+                        onChangeStartDateOrTime(LocalDateTime.now())
+                    }) {
+                        Icon(
+                            Icons.Default.Update,
+                            contentDescription = "Update time to now",
+                        )
+                    }
                 }
             }
 
             IngestionTimePickerOption.TIME_RANGE -> {
                 Column {
                     Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Start:")
+                        IconButton(onClick = {
+                            onChangeStartDateOrTime(LocalDateTime.now())
+                        }) {
+                            Icon(
+                                Icons.Default.Update,
+                                contentDescription = "Update time to now",
+                            )
+                        }
+                    }
+                    Row(
                         horizontalArrangement = Arrangement.spacedBy(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Start")
                         DatePickerButton(
                             localDateTime = localDateTimeStart,
                             onChange = onChangeStartDateOrTime,
@@ -82,10 +108,24 @@ fun TimePointOrRangePicker(
                         )
                     }
                     Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("End:")
+                        IconButton(onClick = {
+                            onChangeEndDateOrTime(LocalDateTime.now())
+                        }) {
+                            Icon(
+                                Icons.Default.Update,
+                                contentDescription = "Update time to now",
+                            )
+                        }
+                    }
+                    Row(
                         horizontalArrangement = Arrangement.spacedBy(5.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("End  ")
                         DatePickerButton(
                             localDateTime = localDateTimeEnd,
                             onChange = onChangeEndDateOrTime,
