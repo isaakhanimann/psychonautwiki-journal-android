@@ -77,7 +77,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                 filteredSubstances.any { it.name == custom.substanceName } || custom.name.contains(
                     other = searchText,
                     ignoreCase = true
-                )
+                ) || custom.substanceName.contains(other = searchText, ignoreCase = true)
             }
         }.stateIn(
             initialValue = emptyList(),

@@ -257,6 +257,7 @@ fun AddIngestionSearchScreen(
                     HorizontalDivider()
                 }
                 item {
+                    HorizontalDivider()
                     TextButton(
                         onClick = navigateToAddCustomSubstanceScreen,
                         modifier = Modifier.padding(horizontal = horizontalPadding)
