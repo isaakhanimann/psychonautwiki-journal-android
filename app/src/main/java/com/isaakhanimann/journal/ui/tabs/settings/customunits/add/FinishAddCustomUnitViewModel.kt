@@ -74,7 +74,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
         unitPlural = newUnit
     }
 
-    var originalUnit by mutableStateOf("")
+    var originalUnit by mutableStateOf("mg")
 
     fun onChangeOfOriginalUnit(newUnit: String) {
         originalUnit = newUnit
@@ -114,6 +114,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
             if (finishAddCustomUnitRoute.substanceName != null) {
                 substanceName = finishAddCustomUnitRoute.substanceName
                 substance = substanceRepository.getSubstance(finishAddCustomUnitRoute.substanceName)
+                originalUnit = roaDose?.units ?: "mg"
             } else if (finishAddCustomUnitRoute.customSubstanceId != null) {
                 val customSubstance = experienceRepo.getCustomSubstanceFlow(finishAddCustomUnitRoute.customSubstanceId).first()
                 if (customSubstance != null) {
