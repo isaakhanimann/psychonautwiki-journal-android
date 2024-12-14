@@ -29,7 +29,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customsubstan
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customunit.ChooseDoseCustomUnitScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.CheckInteractionsScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.ChooseRouteScreen
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomChooseRouteScreen
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomSubstanceChooseRouteScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.saferuse.CheckSaferUseScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestionSearchScreen
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.FinishIngestionScreen
@@ -51,7 +51,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigate(CheckSaferUseRoute(substanceName))
                 },
                 navigateToCustomSubstanceChooseRoute = { customSubstanceId ->
-                    navController.navigate(CustomChooseRouteRoute(customSubstanceId = customSubstanceId))
+                    navController.navigate(CustomSubstanceChooseRouteRoute(customSubstanceId))
                 },
                 navigateToChooseTime = { substanceName, administrationRoute, dose, units, isEstimate, estimatedDoseStandardDeviation, customUnitId ->
                     navController.navigate(
@@ -99,7 +99,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
             val route = backStackEntry.toRoute<AddCustomSubstanceRouteOnAddIngestionGraph>()
             AddCustomSubstanceAndContinueScreen(
                 navigateToChooseRoa = { customSubstanceId ->
-                    navController.navigate(CustomChooseRouteRoute(customSubstanceId = customSubstanceId)) {
+                    navController.navigate(CustomSubstanceChooseRouteRoute(customSubstanceId)) {
                         popUpTo(AddIngestionSearchRoute)
                     }
                 },
@@ -161,9 +161,9 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 }
             )
         }
-        composableWithTransitions<CustomChooseRouteRoute> { backStackEntry ->
-            val route = backStackEntry.toRoute<CustomChooseRouteRoute>()
-            CustomChooseRouteScreen(
+        composableWithTransitions<CustomSubstanceChooseRouteRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<CustomSubstanceChooseRouteRoute>()
+            CustomSubstanceChooseRouteScreen(
                 onRouteTap = { administrationRoute ->
                     navController.navigate(
                         ChooseCustomSubstanceDoseRoute(
@@ -265,7 +265,7 @@ data class ChooseDoseCustomUnitRoute(val customUnitId: Int)
 data class ChooseRouteOfAddIngestionRoute(val substanceName: String)
 
 @Serializable
-data class CustomChooseRouteRoute(val customSubstanceId: Int)
+data class CustomSubstanceChooseRouteRoute(val customSubstanceId: Int)
 
 @Serializable
 data class ChooseCustomSubstanceDoseRoute(

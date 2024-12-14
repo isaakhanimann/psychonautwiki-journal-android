@@ -124,6 +124,9 @@ interface ExperienceDao {
     @Query("SELECT * FROM customsubstance WHERE id = :id")
     fun getCustomSubstanceFlow(id: Int): Flow<CustomSubstance?>
 
+    @Query("SELECT * FROM customsubstance WHERE name = :name")
+    suspend fun getCustomSubstance(name: String): CustomSubstance?
+
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC")
     fun getSortedIngestionsFlow(substanceName: String): Flow<List<Ingestion>>
 

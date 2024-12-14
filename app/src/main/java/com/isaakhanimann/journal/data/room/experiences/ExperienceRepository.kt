@@ -129,6 +129,9 @@ class ExperienceRepository @Inject constructor(private val experienceDao: Experi
             .flowOn(Dispatchers.IO)
             .conflate()
 
+    suspend fun getCustomSubstance(name: String): CustomSubstance? =
+        experienceDao.getCustomSubstance(name)
+
     fun getIngestionsWithExperiencesFlow(
         fromInstant: Instant,
         toInstant: Instant

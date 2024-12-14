@@ -27,12 +27,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
+import com.isaakhanimann.journal.data.substances.classes.Substance
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
-import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
 import com.isaakhanimann.journal.ui.main.navigation.graphs.FinishAddCustomUnitRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -44,12 +45,11 @@ class FinishAddCustomUnitViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
     private val finishAddCustomUnitRoute = state.toRoute<FinishAddCustomUnitRoute>()
-    val substanceName = finishAddCustomUnitRoute.substanceName
+    var substanceName by mutableStateOf("")
     val administrationRoute = finishAddCustomUnitRoute.administrationRoute
 
-    val substance = substanceRepository.getSubstance(finishAddCustomUnitRoute.substanceName)!!
-
-    var roaDose: RoaDose? = substance.getRoa(administrationRoute)?.roaDose
+    var substance by mutableStateOf<Substance?>(null)
+    val roaDose get() = substance?.getRoa(administrationRoute)?.roaDose
 
     var name by mutableStateOf("")
 
@@ -92,7 +92,6 @@ class FinishAddCustomUnitViewModel @Inject constructor(
     }
     private val estimatedDoseDeviation: Double? get() = estimatedDoseDeviationText.toDoubleOrNull()
 
-
     var isEstimate by mutableStateOf(false)
     fun onChangeOfIsEstimate(newIsEstimate: Boolean) {
         isEstimate = newIsEstimate
@@ -111,6 +110,18 @@ class FinishAddCustomUnitViewModel @Inject constructor(
 
     init {
         originalUnit = roaDose?.units ?: ""
+        viewModelScope.launch {
+            if (finishAddCustomUnitRoute.substanceName != null) {
+                substanceName = finishAddCustomUnitRoute.substanceName
+                substance = substanceRepository.getSubstance(finishAddCustomUnitRoute.substanceName)
+            } else if (finishAddCustomUnitRoute.customSubstanceId != null) {
+                val customSubstance = experienceRepo.getCustomSubstanceFlow(finishAddCustomUnitRoute.customSubstanceId).first()
+                if (customSubstance != null) {
+                    substanceName = customSubstance.name
+                    originalUnit = customSubstance.units
+                }
+            }
+        }
     }
 
     fun createSaveAndDismissAfter(dismiss: (customUnitId: Int) -> Unit) {

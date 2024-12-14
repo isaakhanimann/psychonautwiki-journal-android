@@ -42,12 +42,12 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 @Preview
 @Composable
 fun CustomChooseRouteScreenPreview() {
-    CustomChooseRouteScreen(onRouteTap = {})
+    CustomSubstanceChooseRouteScreen(onRouteTap = {})
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
+fun CustomSubstanceChooseRouteScreen(onRouteTap: (AdministrationRoute) -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Route") })

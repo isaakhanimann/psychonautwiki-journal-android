@@ -98,7 +98,6 @@ fun SearchScreen(
             val filteredSubstances = searchViewModel.filteredSubstancesFlow.collectAsState().value
             val filteredCustomSubstances =
                 searchViewModel.filteredCustomSubstancesFlow.collectAsState().value
-            val customColor = searchViewModel.customColor
             if (activeFilters.isNotEmpty()) {
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(2.dp),

@@ -81,8 +81,6 @@ class SearchViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
-    val customColor = Color.Cyan
-
     val filteredSubstancesFlow = combine(searchTextFlow, filtersFlow, experienceRepo.getSortedLastUsedSubstanceNamesFlow(limit = 200)) { searchText, filters, recents ->
         return@combine searchRepository.getMatchingSubstances(searchText = searchText, filterCategories = filters, recentlyUsedSubstanceNamesSorted = recents).map { it.toSubstanceModel() }
     }.stateIn(
@@ -112,6 +110,8 @@ class SearchViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 }
+
+val customColor = Color.Cyan
 
 data class CategoryChipModel(
     val chipName: String, val color: Color, val isActive: Boolean

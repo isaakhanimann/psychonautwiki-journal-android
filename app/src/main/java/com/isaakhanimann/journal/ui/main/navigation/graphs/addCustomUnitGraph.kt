@@ -24,6 +24,7 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomSubstanceChooseRouteScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseRouteDuringAddCustomUnitScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseSubstanceScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.FinishAddCustomUnitScreen
@@ -37,6 +38,23 @@ fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
             ChooseSubstanceScreen(
                 navigateToChooseRoute = { substanceName ->
                     navController.navigate(ChooseRouteOfAddCustomUnitRoute(substanceName))
+                },
+                navigateToCustomSubstanceChooseRoute = { customSubstanceName ->
+                    navController.navigate(CustomSubstanceChooseRouteRoute(customSubstanceName))
+                }
+            )
+        }
+        composableWithTransitions<CustomSubstanceChooseRouteRoute> { backStackEntry ->
+            val route = backStackEntry.toRoute<CustomSubstanceChooseRouteRoute>()
+            CustomSubstanceChooseRouteScreen(
+                onRouteTap = { administrationRoute ->
+                    navController.navigate(
+                        FinishAddCustomUnitRoute(
+                            administrationRoute = administrationRoute,
+                            substanceName = null,
+                            customSubstanceId = route.customSubstanceId,
+                        )
+                    )
                 }
             )
         }
@@ -46,8 +64,9 @@ fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
                 onRouteChosen = { administrationRoute ->
                     navController.navigate(
                         FinishAddCustomUnitRoute(
-                            substanceName = route.substanceName,
                             administrationRoute = administrationRoute,
+                            substanceName = route.substanceName,
+                            customSubstanceId = null
                         )
                     )
                 }
@@ -76,5 +95,8 @@ object AddCustomUnitsChooseSubstanceScreenRoute
 data class ChooseRouteOfAddCustomUnitRoute(val substanceName: String)
 
 @Serializable
-data class FinishAddCustomUnitRoute(val substanceName: String, val administrationRoute: AdministrationRoute)
-
+data class FinishAddCustomUnitRoute(
+    val administrationRoute: AdministrationRoute,
+    val substanceName: String?,
+    val customSubstanceId: Int?
+)
