@@ -56,8 +56,8 @@ class EditCustomUnitViewModel @Inject constructor(
             if (customUnit != null) {
                 substanceName = customUnit.substanceName
                 administrationRoute = customUnit.administrationRoute
-                val substance = substanceRepository.getSubstance(customUnit.substanceName)!!
-                roaDose = substance.getRoa(customUnit.administrationRoute)?.roaDose
+                val substance = substanceRepository.getSubstance(customUnit.substanceName)
+                roaDose = substance?.getRoa(customUnit.administrationRoute)?.roaDose
                 originalUnit = customUnit.originalUnit
                 name = customUnit.name
                 val pluralizableUnit = customUnit.getPluralizableUnit()
