@@ -53,9 +53,9 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
             val customUnit = experienceRepo.getCustomUnit(chooseDoseCustomUnitRoute.customUnitId)
             this@ChooseDoseCustomUnitViewModel.customUnit = customUnit
             if (customUnit != null) {
-                val substance = substanceRepo.getSubstance(customUnit.substanceName)!!
-                doseRemark = substance.dosageRemark
-                roaDose = substance.getRoa(customUnit.administrationRoute)?.roaDose
+                val substance = substanceRepo.getSubstance(customUnit.substanceName)
+                doseRemark = substance?.dosageRemark
+                roaDose = substance?.getRoa(customUnit.administrationRoute)?.roaDose
             }
         }
     }
