@@ -96,7 +96,7 @@ fun FinishAddCustomUnitScreen(
         isEstimate = viewModel.isEstimate,
         onChangeIsEstimate = viewModel::onChangeOfIsEstimate,
         currentDoseClass = viewModel.currentDoseClass,
-        isShowingUnitsField = viewModel.roaDose?.units?.isBlank() ?: true,
+        isUnitsFieldShown = viewModel.isUnitsFieldShown,
         unit = viewModel.unit,
         onChangeOfUnits = viewModel::onChangeOfUnit,
         unitPlural = viewModel.unitPlural,
@@ -129,7 +129,7 @@ private fun FinishAddCustomUnitScreenPreview(
         isEstimate = true,
         onChangeIsEstimate = {},
         currentDoseClass = DoseClass.LIGHT,
-        isShowingUnitsField = false,
+        isUnitsFieldShown = false,
         unit = "pill",
         onChangeOfUnits = {},
         unitPlural = "pills",
@@ -159,7 +159,7 @@ private fun FinishAddCustomUnitScreenContent(
     isEstimate: Boolean,
     onChangeIsEstimate: (Boolean) -> Unit,
     currentDoseClass: DoseClass?,
-    isShowingUnitsField: Boolean,
+    isUnitsFieldShown: Boolean,
     unit: String,
     onChangeOfUnits: (units: String) -> Unit,
     unitPlural: String,
@@ -194,7 +194,7 @@ private fun FinishAddCustomUnitScreenContent(
             isEstimate = isEstimate,
             onChangeIsEstimate = onChangeIsEstimate,
             currentDoseClass = currentDoseClass,
-            isShowingUnitsField = isShowingUnitsField,
+            isShowingUnitsField = isUnitsFieldShown,
             unit = unit,
             onChangeOfUnits = onChangeOfUnits,
             unitPlural = unitPlural,
@@ -475,7 +475,7 @@ fun EditCustomUnitSections(
                     label = { Text("Dose per $unit", style = textStyle) },
                     trailingIcon = {
                         Text(
-                            text = roaDose?.units ?: "",
+                            text = originalUnit,
                             style = textStyle,
                             modifier = Modifier.padding(horizontal = horizontalPadding)
                         )

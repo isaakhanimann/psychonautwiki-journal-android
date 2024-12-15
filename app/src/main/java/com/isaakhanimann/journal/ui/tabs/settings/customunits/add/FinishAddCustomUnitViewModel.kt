@@ -52,6 +52,7 @@ class FinishAddCustomUnitViewModel @Inject constructor(
     val roaDose get() = substance?.getRoa(administrationRoute)?.roaDose
 
     var name by mutableStateOf("")
+    var isUnitsFieldShown by mutableStateOf(false)
 
     val currentDoseClass: DoseClass? get() = roaDose?.getDoseClass(ingestionDose = dose)
 
@@ -115,11 +116,13 @@ class FinishAddCustomUnitViewModel @Inject constructor(
                 substanceName = finishAddCustomUnitRoute.substanceName
                 substance = substanceRepository.getSubstance(finishAddCustomUnitRoute.substanceName)
                 originalUnit = roaDose?.units ?: "mg"
+                isUnitsFieldShown = roaDose?.units?.isBlank() ?: true
             } else if (finishAddCustomUnitRoute.customSubstanceId != null) {
                 val customSubstance = experienceRepo.getCustomSubstanceFlow(finishAddCustomUnitRoute.customSubstanceId).first()
                 if (customSubstance != null) {
                     substanceName = customSubstance.name
                     originalUnit = customSubstance.units
+                    isUnitsFieldShown = false
                 }
             }
         }
