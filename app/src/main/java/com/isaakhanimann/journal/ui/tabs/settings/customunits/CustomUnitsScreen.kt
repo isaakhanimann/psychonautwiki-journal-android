@@ -47,7 +47,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
-import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
@@ -168,16 +167,4 @@ fun CustomUnitRow(
             )
         }
     }
-}
-
-fun CustomUnit.getDoseOfOneUnitDescription(): String {
-    return this.dose?.let { unwrappedDose ->
-        if (this.isEstimate) {
-            this.estimatedDoseStandardDeviation?.let { estimatedDoseStandardDeviationUnwrapped ->
-                "${unwrappedDose.toReadableString()}±${estimatedDoseStandardDeviationUnwrapped.toReadableString()} ${this.originalUnit}"
-            } ?: "~${unwrappedDose.toReadableString()} ${this.originalUnit}"
-        } else {
-            "${unwrappedDose.toReadableString()} ${this.originalUnit}"
-        }
-    } ?: "Unknown dose"
 }

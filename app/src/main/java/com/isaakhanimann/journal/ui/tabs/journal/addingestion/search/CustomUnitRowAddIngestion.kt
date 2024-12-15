@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
-import com.isaakhanimann.journal.ui.tabs.settings.customunits.getDoseOfOneUnitDescription
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable

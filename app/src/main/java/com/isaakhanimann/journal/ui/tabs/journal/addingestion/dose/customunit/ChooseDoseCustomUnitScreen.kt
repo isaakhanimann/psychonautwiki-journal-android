@@ -53,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -216,7 +217,7 @@ fun ChooseDoseCustomUnitScreen(
                 modifier = Modifier.padding(
                     horizontal = horizontalPadding,
                     vertical = 4.dp
-                )
+                ).fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier.padding(
@@ -234,16 +235,11 @@ fun ChooseDoseCustomUnitScreen(
                     if (roaDose != null) {
                         RoaDoseView(roaDose = roaDose)
                     }
-                    AnimatedVisibility(visible = currentDoseClass != null && customUnitCalculationText != null) {
-                        if (currentDoseClass != null && customUnitCalculationText != null) {
-                            val doseColor = currentDoseClass.getComposeColor(isSystemInDarkTheme())
-                            Text(
-                                text = customUnitCalculationText,
-                                color = doseColor,
-                                style = MaterialTheme.typography.labelLarge
-                            )
-                        }
-                    }
+                    Text(
+                        text = customUnitCalculationText ?: "",
+                        color = currentDoseClass?.getComposeColor(isSystemInDarkTheme()) ?: Color.Unspecified,
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
             }
             ElevatedCard(

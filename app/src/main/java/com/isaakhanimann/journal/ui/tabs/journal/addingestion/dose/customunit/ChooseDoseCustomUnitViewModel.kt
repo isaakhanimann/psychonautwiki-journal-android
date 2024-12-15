@@ -93,6 +93,8 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
     val currentDoseClass: DoseClass? get() = roaDose?.getDoseClass(ingestionDose = customUnitDose?.calculatedDose)
     val customUnitCalculationText: String?
         get() {
-            return customUnitDose?.calculatedDoseDescription
+            return customUnitDose?.let {
+                it.doseDescription + " x " + it.customUnit.getDoseOfOneUnitDescription() + " = " + it.calculatedDoseDescription
+            }
         }
 }

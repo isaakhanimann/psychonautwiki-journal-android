@@ -21,6 +21,7 @@ package com.isaakhanimann.journal.data.room.experiences.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import java.time.Instant
 
 @Entity
@@ -40,6 +41,19 @@ data class CustomUnit(
     var originalUnit: String,
     var note: String
 ) {
+
+    fun getDoseOfOneUnitDescription(): String {
+        return this.dose?.let { unwrappedDose ->
+            if (this.isEstimate) {
+                this.estimatedDoseStandardDeviation?.let { estimatedDoseStandardDeviationUnwrapped ->
+                    "${unwrappedDose.toReadableString()}±${estimatedDoseStandardDeviationUnwrapped.toReadableString()} ${this.originalUnit}"
+                } ?: "~${unwrappedDose.toReadableString()} ${this.originalUnit}"
+            } else {
+                "${unwrappedDose.toReadableString()} ${this.originalUnit}"
+            }
+        } ?: "Unknown dose"
+    }
+
     fun getPluralizableUnit(): PluralizableUnit {
         val plural = unitPlural
         if (plural == null) {
