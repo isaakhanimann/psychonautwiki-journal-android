@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -52,9 +53,10 @@ fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) s
     SuggestionRow(
         substanceRouteSuggestion = substanceRouteSuggestion,
         navigateToDose = { _: String, _: AdministrationRoute -> },
+        navigateToCreateCustomUnit = { _: AdministrationRoute, _: String?, _: Int? -> },
         navigateToCustomUnitChooseDose = {},
         navigateToCustomDose = { _: Int, _: AdministrationRoute -> },
-        navigateToChooseTime = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean, _: Double?, _: Int? -> }
+        navigateToChooseTime = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean, _: Double?, _: Int? -> },
     )
 }
 
@@ -63,6 +65,7 @@ fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) s
 fun SuggestionRow(
     substanceRouteSuggestion: SubstanceRouteSuggestion,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
+    navigateToCreateCustomUnit: (route: AdministrationRoute, substanceName: String?, customSubstanceId: Int?) -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
@@ -152,11 +155,11 @@ fun SuggestionRow(
                 }, label = {
                     Text("Log $pureDoseUnit")
                 }, icon = {
-                        Icon(
-                            imageVector = Icons.Default.Keyboard,
-                            contentDescription = "Keyboard"
-                        )
-                    })
+                    Icon(
+                        imageVector = Icons.Default.Keyboard,
+                        contentDescription = "Keyboard"
+                    )
+                })
             }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -197,5 +200,27 @@ fun SuggestionRow(
                 })
             }
         }
+        SuggestionChip(onClick = {
+            if (substanceRouteSuggestion.customSubstanceId != null) {
+                navigateToCreateCustomUnit(
+                    substanceRouteSuggestion.route,
+                    null,
+                    substanceRouteSuggestion.customSubstanceId
+                )
+            } else {
+                navigateToCreateCustomUnit(
+                    substanceRouteSuggestion.route,
+                    substanceRouteSuggestion.substanceName,
+                    null
+                )
+            }
+        }, label = {
+            Text(text = "New unit")
+        }, icon = {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add"
+            )
+        })
     }
 }

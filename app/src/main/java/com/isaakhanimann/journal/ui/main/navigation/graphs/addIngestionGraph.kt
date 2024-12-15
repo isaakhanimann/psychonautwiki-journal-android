@@ -84,6 +84,15 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         )
                     )
                 },
+                navigateToCreateCustomUnit = { administrationRoute, substanceName, customSubstanceId ->
+                    navController.navigate(
+                        FinishAddCustomUnitRoute(
+                            administrationRoute = administrationRoute,
+                            substanceName = substanceName,
+                            customSubstanceId = customSubstanceId
+                        )
+                    )
+                },
                 navigateToChooseRoute = { substanceName ->
                     navController.navigate(ChooseRouteOfAddIngestionRoute(substanceName = substanceName))
                 },
@@ -220,7 +229,13 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigate(SaferSniffingRouteOnJournalTab)
                 },
                 navigateToCreateCustomUnit = {
-                    navController.navigate(AddCustomUnitWhileAddingIngestionRoute(substanceName = route.substanceName, administrationRoute = route.administrationRoute))
+                    navController.navigate(
+                        FinishAddCustomUnitRoute(
+                            substanceName = route.substanceName,
+                            administrationRoute = route.administrationRoute,
+                            customSubstanceId = null
+                        )
+                    )
                 }
             )
         }
@@ -234,7 +249,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         composableWithTransitions<AdministrationRouteExplanationRouteOnJournalTab> {
             RouteExplanationScreen()
         }
-        composableWithTransitions<AddCustomUnitWhileAddingIngestionRoute> {
+        composableWithTransitions<FinishAddCustomUnitRoute> {
             FinishAddCustomUnitScreen(
                 dismissAddCustomUnit = { customUnitId ->
                     navController.navigate(ChooseDoseCustomUnitRoute(customUnitId = customUnitId)) {
@@ -296,7 +311,3 @@ object AdministrationRouteExplanationRouteOnJournalTab
 
 @Serializable
 data class AddCustomSubstanceRouteOnAddIngestionGraph(val searchText: String)
-
-
-@Serializable
-data class AddCustomUnitWhileAddingIngestionRoute(val substanceName: String, val administrationRoute: AdministrationRoute)
