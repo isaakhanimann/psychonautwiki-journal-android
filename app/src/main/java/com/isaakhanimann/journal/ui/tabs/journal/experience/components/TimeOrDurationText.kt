@@ -80,7 +80,7 @@ fun TimeOrDurationText(
                             text = getDurationText(
                                 fromInstant = previousTime,
                                 toInstant = endTime
-                            ) + " since previous",
+                            ) + " after previous",
                             style = textStyle
                         )
                     } else {
@@ -88,7 +88,7 @@ fun TimeOrDurationText(
                             text = getDurationText(
                                 fromInstant = previousTime,
                                 toInstant = time
-                            ) + " since previous",
+                            ) + " after previous",
                             style = textStyle
                         )
                     }
@@ -116,7 +116,7 @@ fun TimeOrDurationText(
                             text = getDurationText(
                                 fromInstant = startTime,
                                 toInstant = endTime
-                            ) + " since start",
+                            ) + " after start",
                             style = textStyle
                         )
                     } else {
@@ -124,7 +124,7 @@ fun TimeOrDurationText(
                             text = getDurationText(
                                 fromInstant = startTime,
                                 toInstant = time
-                            ) + " since start",
+                            ) + " after start",
                             style = textStyle
                         )
                     }
