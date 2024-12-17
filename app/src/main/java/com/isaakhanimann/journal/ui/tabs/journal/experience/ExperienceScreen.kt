@@ -88,7 +88,8 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.Cumulativ
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.InteractionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeOrDurationText
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.IngestionTimeOrDurationText
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.NoteOrRatingTimeOrDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.OverallRatingRow
@@ -127,8 +128,7 @@ fun ExperienceScreen(
     val oneExperienceScreenModel = OneExperienceScreenModel(
         isFavorite = isFavorite,
         title = experience?.title ?: "",
-        firstIngestionTime = ingestionsWithCompanions.firstOrNull()?.ingestion?.time
-            ?: experience?.sortDate ?: Instant.now(),
+        firstIngestionTime = ingestionsWithCompanions.minOfOrNull { it.ingestion.time } ?: experience?.sortDate ?: Instant.now(),
         notes = experience?.text ?: "",
         locationName = experience?.location?.name ?: "",
         isCurrentExperience = viewModel.isCurrentExperienceFlow.collectAsState().value,
@@ -228,16 +228,16 @@ fun ExperienceScreen(
     Scaffold(
         topBar = {
             ExperienceTopBar(
-                oneExperienceScreenModel,
-                onChangeTimeDisplayOption,
-                savedTimeDisplayOption,
-                deleteExperience,
-                navigateBack,
-                navigateToEditExperienceScreen,
-                saveIsFavorite,
-                navigateToAddTimedNoteScreen,
-                navigateToAddRatingScreen,
-                addIngestion
+                oneExperienceScreenModel = oneExperienceScreenModel,
+                onChangeTimeDisplayOption = onChangeTimeDisplayOption,
+                savedTimeDisplayOption = savedTimeDisplayOption,
+                deleteExperience = deleteExperience,
+                navigateBack = navigateBack,
+                navigateToEditExperienceScreen = navigateToEditExperienceScreen,
+                saveIsFavorite = saveIsFavorite,
+                navigateToAddTimedNoteScreen = navigateToAddTimedNoteScreen,
+                navigateToAddRatingScreen = navigateToAddRatingScreen,
+                addIngestion = addIngestion
             )
         },
         floatingActionButton = {
@@ -272,73 +272,78 @@ fun ExperienceScreen(
                 ingestionElements.isNotEmpty() && !(ingestionElements.all { it.roaDuration == null } && dataForRatings.isEmpty() && dataForTimedNotes.isEmpty())
             if (isWorthDrawing) {
                 MyTimelineSection(
-                    verticalCardPadding,
-                    navigateToExplainTimeline,
-                    navigateToTimelineScreen,
-                    oneExperienceScreenModel,
-                    dataForRatings,
-                    dataForTimedNotes,
-                    timeDisplayOption,
-                    isOralDisclaimerHidden,
-                    onChangeIsOralDisclaimerHidden,
+                    verticalCardPadding = verticalCardPadding,
+                    navigateToExplainTimeline = navigateToExplainTimeline,
+                    navigateToTimelineScreen = navigateToTimelineScreen,
+                    oneExperienceScreenModel = oneExperienceScreenModel,
+                    dataForRatings = dataForRatings,
+                    dataForTimedNotes = dataForTimedNotes,
+                    timeDisplayOption = timeDisplayOption,
+                    isOralDisclaimerHidden = isOralDisclaimerHidden,
+                    onChangeIsOralDisclaimerHidden = onChangeIsOralDisclaimerHidden,
                     areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
                 )
             }
             if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
                 MyIngestionList(
-                    verticalCardPadding,
-                    oneExperienceScreenModel,
-                    areDosageDotsHidden,
-                    navigateToIngestionScreen,
-                    timeDisplayOption
+                    verticalCardPadding = verticalCardPadding,
+                    oneExperienceScreenModel = oneExperienceScreenModel,
+                    areDosageDotsHidden = areDosageDotsHidden,
+                    navigateToIngestionScreen = navigateToIngestionScreen,
+                    timeDisplayOption = timeDisplayOption
                 )
             }
             val cumulativeDoses = oneExperienceScreenModel.cumulativeDoses
             if (cumulativeDoses.isNotEmpty()) {
-                CumulativeDosesSection(verticalCardPadding, cumulativeDoses, areDosageDotsHidden)
+                CumulativeDosesSection(
+                    verticalCardPadding = verticalCardPadding,
+                    cumulativeDoses = cumulativeDoses,
+                    areDosageDotsHidden = areDosageDotsHidden
+                )
             }
             val timedNotesSorted = oneExperienceScreenModel.timedNotesSorted
             if (timedNotesSorted.isNotEmpty()) {
                 TimedNotesSection(
-                    verticalCardPadding,
-                    timedNotesSorted,
-                    navigateToEditTimedNoteScreen,
-                    timeDisplayOption
+                    verticalCardPadding = verticalCardPadding,
+                    timedNotesSorted = timedNotesSorted,
+                    navigateToEditTimedNoteScreen = navigateToEditTimedNoteScreen,
+                    timeDisplayOption = timeDisplayOption,
+                    firstIngestionTime = oneExperienceScreenModel.firstIngestionTime
                 )
             }
             if (oneExperienceScreenModel.ratings.isNotEmpty()) {
                 ShulginRatingsSection(
-                    verticalCardPadding,
-                    oneExperienceScreenModel,
-                    navigateToEditRatingScreen,
-                    timeDisplayOption
+                    verticalCardPadding = verticalCardPadding,
+                    oneExperienceScreenModel = oneExperienceScreenModel,
+                    navigateToEditRatingScreen = navigateToEditRatingScreen,
+                    timeDisplayOption = timeDisplayOption
                 )
             }
             val notes = oneExperienceScreenModel.notes
             if (notes.isNotBlank()) {
                 NotesSection(
-                    verticalCardPadding,
-                    navigateToEditExperienceScreen,
-                    oneExperienceScreenModel
+                    verticalCardPadding = verticalCardPadding,
+                    navigateToEditExperienceScreen = navigateToEditExperienceScreen,
+                    oneExperienceScreenModel = oneExperienceScreenModel
                 )
             }
             oneExperienceScreenModel.consumersWithIngestions.forEach { consumerWithIngestions ->
                 ConsumerSection(
-                    verticalCardPadding,
-                    consumerWithIngestions,
-                    navigateToTimelineScreen,
-                    timeDisplayOption,
-                    areDosageDotsHidden,
-                    navigateToIngestionScreen,
+                    verticalCardPadding = verticalCardPadding,
+                    consumerWithIngestions = consumerWithIngestions,
+                    navigateToTimelineScreen = navigateToTimelineScreen,
+                    timeDisplayOption = timeDisplayOption,
+                    areDosageDotsHidden = areDosageDotsHidden,
+                    navigateToIngestionScreen = navigateToIngestionScreen,
                     areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
                 )
             }
             val interactions = oneExperienceScreenModel.interactions
             AnimatedVisibility(visible = interactions.isNotEmpty()) {
                 ExperienceInteractionsSection(
-                    verticalCardPadding,
-                    interactions,
-                    oneExperienceScreenModel
+                    verticalCardPadding = verticalCardPadding,
+                    interactions = interactions,
+                    oneExperienceScreenModel = oneExperienceScreenModel
                 )
             }
             Spacer(modifier = Modifier.height(60.dp))
@@ -441,7 +446,7 @@ private fun ConsumerSection(
                     .padding(vertical = 5.dp, horizontal = horizontalPadding)
             ) {
                 val ingestion = ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion
-                TimeOrDurationText(
+                IngestionTimeOrDurationText(
                     time = ingestion.time,
                     endTime = ingestion.endTime,
                     index = index,
@@ -509,12 +514,10 @@ private fun ShulginRatingsSection(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp, horizontal = horizontalPadding),
                 ratingSign = pair.second.option.sign) {
-                TimeOrDurationText(
+                NoteOrRatingTimeOrDurationText(
                     time = pair.first,
-                    endTime = null,
-                    index = index,
                     timeDisplayOption = timeDisplayOption,
-                    allTimesSortedMap = ratingsWithTime.map { it.first }
+                    firstIngestionTime = oneExperienceScreenModel.firstIngestionTime
                 )
             }
             if (index < ratingsWithTime.size - 1) {
@@ -545,7 +548,8 @@ private fun TimedNotesSection(
     verticalCardPadding: Dp,
     timedNotesSorted: List<TimedNote>,
     navigateToEditTimedNoteScreen: (timedNoteId: Int) -> Unit,
-    timeDisplayOption: TimeDisplayOption
+    timeDisplayOption: TimeDisplayOption,
+    firstIngestionTime: Instant,
 ) {
     ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
         CardTitle(title = "Timed notes")
@@ -562,12 +566,10 @@ private fun TimedNotesSection(
                     .fillMaxWidth()
                     .padding(vertical = 5.dp, horizontal = horizontalPadding)
             ) {
-                TimeOrDurationText(
+                NoteOrRatingTimeOrDurationText(
                     time = timedNote.time,
-                    endTime = null,
-                    index = index,
                     timeDisplayOption = timeDisplayOption,
-                    allTimesSortedMap = timedNotesSorted.map { it.time }
+                    firstIngestionTime = firstIngestionTime
                 )
             }
             if (index < timedNotesSorted.size - 1) {
@@ -632,7 +634,7 @@ private fun MyIngestionList(
                     .padding(vertical = 5.dp, horizontal = horizontalPadding)
             ) {
                 val ingestion = ingestionElement.ingestionWithCompanionAndCustomUnit.ingestion
-                TimeOrDurationText(
+                IngestionTimeOrDurationText(
                     time = ingestion.time,
                     endTime = ingestion.endTime,
                     index = index,

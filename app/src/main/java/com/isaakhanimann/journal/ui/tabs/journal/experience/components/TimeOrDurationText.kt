@@ -30,7 +30,7 @@ import java.time.Instant
 const val TIME_RANGE_SEPARATOR_TEXT = " - "
 
 @Composable
-fun TimeOrDurationText(
+fun IngestionTimeOrDurationText(
     time: Instant,
     endTime: Instant?,
     index: Int,
@@ -156,4 +156,42 @@ private fun RegularTimeOrRangeText(
         text = text,
         style = textStyle
     )
+}
+
+@Composable
+fun NoteOrRatingTimeOrDurationText(
+    time: Instant,
+    timeDisplayOption: TimeDisplayOption,
+    firstIngestionTime: Instant
+) {
+    val textStyle = MaterialTheme.typography.labelMedium
+    when (timeDisplayOption) {
+        TimeDisplayOption.REGULAR -> {
+            val startText = time.getStringOfPattern("EEE HH:mm")
+            Text(text = startText, style = textStyle)
+        }
+
+        TimeDisplayOption.RELATIVE_TO_NOW -> {
+            TimeRelativeToNowText(
+                time = time,
+                style = textStyle
+            )
+        }
+
+        TimeDisplayOption.TIME_BETWEEN -> {
+            val startText = time.getStringOfPattern("EEE HH:mm")
+            Text(text = startText, style = textStyle)
+        }
+
+        TimeDisplayOption.RELATIVE_TO_START -> {
+            val durationText = getDurationText(
+                fromInstant = firstIngestionTime,
+                toInstant = time
+            ) + if (firstIngestionTime < time) " after start" else "before start"
+            Text(
+                text = durationText,
+                style = textStyle
+            )
+        }
+    }
 }
