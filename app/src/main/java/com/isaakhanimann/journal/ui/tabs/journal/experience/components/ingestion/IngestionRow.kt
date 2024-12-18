@@ -74,10 +74,14 @@ fun IngestionRow(
         VerticalLine(color = ingestionWithCompanionAndCustomUnit.substanceCompanion?.color ?: AdaptiveColor.RED)
         Column {
             time()
-            val customUnitName = if (customUnit != null) "${customUnit.name}, " else ""
+            val title = if (customUnit != null) {
+                "${ingestion.substanceName}, ${customUnit.name}"
+            } else {
+                ingestion.substanceName
+            }
             Text(
                 modifier = Modifier.weight(1f),
-                text = customUnitName + ingestion.substanceName,
+                text = title,
                 style = MaterialTheme.typography.titleMedium
             )
             Row(
