@@ -47,30 +47,6 @@ class EditCustomUnitViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var customUnit: CustomUnit? = null
-    init {
-        val customUnitRoute: EditCustomUnitRoute = state.toRoute()
-        val customUnitId = customUnitRoute.customUnitId
-        viewModelScope.launch {
-            val customUnit = experienceRepo.getCustomUnit(customUnitId)
-            this@EditCustomUnitViewModel.customUnit = customUnit
-            if (customUnit != null) {
-                substanceName = customUnit.substanceName
-                administrationRoute = customUnit.administrationRoute
-                val substance = substanceRepository.getSubstance(customUnit.substanceName)
-                roaDose = substance?.getRoa(customUnit.administrationRoute)?.roaDose
-                originalUnit = customUnit.originalUnit
-                name = customUnit.name
-                val pluralizableUnit = customUnit.getPluralizableUnit()
-                unit = customUnit.unit
-                unitPlural = pluralizableUnit.plural
-                doseText = customUnit.dose?.toReadableString() ?: ""
-                estimatedDoseDeviationText = customUnit.estimatedDoseStandardDeviation?.toReadableString() ?: ""
-                isEstimate = customUnit.isEstimate
-                isArchived = customUnit.isArchived
-                note = customUnit.note
-            }
-        }
-    }
 
     var roaDose: RoaDose? = null
 
@@ -158,6 +134,31 @@ class EditCustomUnitViewModel @Inject constructor(
             }
             withContext(Dispatchers.Main) {
                 dismiss()
+            }
+        }
+    }
+
+    init {
+        val customUnitRoute: EditCustomUnitRoute = state.toRoute()
+        val customUnitId = customUnitRoute.customUnitId
+        viewModelScope.launch {
+            val customUnit = experienceRepo.getCustomUnit(customUnitId)
+            this@EditCustomUnitViewModel.customUnit = customUnit
+            if (customUnit != null) {
+                substanceName = customUnit.substanceName
+                administrationRoute = customUnit.administrationRoute
+                val substance = substanceRepository.getSubstance(customUnit.substanceName)
+                roaDose = substance?.getRoa(customUnit.administrationRoute)?.roaDose
+                originalUnit = customUnit.originalUnit
+                name = customUnit.name
+                val pluralizableUnit = customUnit.getPluralizableUnit()
+                unit = customUnit.unit
+                unitPlural = pluralizableUnit.plural
+                doseText = customUnit.dose?.toReadableString() ?: ""
+                estimatedDoseDeviationText = customUnit.estimatedDoseStandardDeviation?.toReadableString() ?: ""
+                isEstimate = customUnit.isEstimate
+                isArchived = customUnit.isArchived
+                note = customUnit.note
             }
         }
     }
