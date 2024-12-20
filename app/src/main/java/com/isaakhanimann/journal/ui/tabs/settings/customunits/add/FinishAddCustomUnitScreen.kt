@@ -61,11 +61,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
+import com.isaakhanimann.journal.data.room.experiences.entities.PluralizableUnit
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.CurrentDoseClassInfo
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.toStringWith
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
@@ -270,9 +272,10 @@ fun EditCustomUnitSections(
                         verticalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
                         if (numberOfIngestionsWithThisCustomUnit > 0) {
-                            Text("Editing this custom unit also updates $numberOfIngestionsWithThisCustomUnit ingestions which are using this unit.")
+                            val pluralizableUnit = PluralizableUnit(singular = "ingestion", plural = "ingestions")
+                            Text("${numberOfIngestionsWithThisCustomUnit.toStringWith(pluralizableUnit)} are affected by this edit")
                         } else {
-                            Text("No ingestions are using this unit yet.")
+                            Text("No ingestions are using this unit yet")
                         }
                     }
                 }

@@ -126,6 +126,14 @@ fun Double.toStringWith(pluralizableUnit: PluralizableUnit): String {
     }
 }
 
+fun Int.toStringWith(pluralizableUnit: PluralizableUnit): String {
+    return if (this != 1) {
+        "$this ${pluralizableUnit.plural}"
+    } else {
+        "$this ${pluralizableUnit.singular}"
+    }
+}
+
 fun PluralizableUnit.justUnit(basedOn: Double): String {
     return if (basedOn != 1.0) {
         plural
