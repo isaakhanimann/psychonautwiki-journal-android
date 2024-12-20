@@ -3,6 +3,8 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.time
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
@@ -20,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import java.time.LocalDateTime
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TimePointOrRangePicker(
     onChangeTimePickerOption: (option: IngestionTimePickerOption) -> Unit,
@@ -51,7 +54,7 @@ fun TimePointOrRangePicker(
     ) { option ->
         when (option) {
             IngestionTimePickerOption.POINT_IN_TIME -> {
-                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                     DatePickerButton(
                         localDateTime = localDateTimeStart,
                         onChange = onChangeStartDateOrTime,
@@ -91,9 +94,8 @@ fun TimePointOrRangePicker(
                             )
                         }
                     }
-                    Row(
+                    FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(5.dp),
-                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         DatePickerButton(
                             localDateTime = localDateTimeStart,
@@ -122,9 +124,8 @@ fun TimePointOrRangePicker(
                             )
                         }
                     }
-                    Row(
+                    FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(5.dp),
-                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         DatePickerButton(
                             localDateTime = localDateTimeEnd,
