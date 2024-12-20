@@ -54,6 +54,7 @@ fun EditCustomUnitScreen(
     EditCustomUnitScreenContent(
         substanceName = viewModel.substanceName,
         administrationRoute = viewModel.administrationRoute,
+        numberOfIngestionsWithThisCustomUnit = viewModel.numberOfIngestionsWithThisCustomUnit,
         roaDose = viewModel.roaDose,
         dismiss = {
             viewModel.updateAndDismissAfter(dismiss = navigateBack)
@@ -94,6 +95,7 @@ private fun EditCustomUnitScreenPreview(
     EditCustomUnitScreenContent(
         substanceName = "Example",
         administrationRoute = AdministrationRoute.ORAL,
+        numberOfIngestionsWithThisCustomUnit = 3,
         roaDose = roaDose,
         dismiss = {},
         name = "Pink rocket",
@@ -125,6 +127,7 @@ private fun EditCustomUnitScreenPreview(
 private fun EditCustomUnitScreenContent(
     substanceName: String,
     administrationRoute: AdministrationRoute,
+    numberOfIngestionsWithThisCustomUnit: Int?,
     roaDose: RoaDose?,
     dismiss: () -> Unit,
     name: String,
@@ -202,6 +205,7 @@ private fun EditCustomUnitScreenContent(
         EditCustomUnitSections(
             substanceName = substanceName,
             administrationRoute = administrationRoute,
+            numberOfIngestionsWithThisCustomUnit = numberOfIngestionsWithThisCustomUnit,
             padding = padding,
             roaDose = roaDose,
             name = name,

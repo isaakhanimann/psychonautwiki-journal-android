@@ -52,6 +52,8 @@ class EditCustomUnitViewModel @Inject constructor(
 
     var name by mutableStateOf("")
 
+    var numberOfIngestionsWithThisCustomUnit: Int? by mutableStateOf(null)
+
     var substanceName by mutableStateOf("")
     var administrationRoute by mutableStateOf(AdministrationRoute.ORAL)
 
@@ -142,7 +144,8 @@ class EditCustomUnitViewModel @Inject constructor(
         val customUnitRoute: EditCustomUnitRoute = state.toRoute()
         val customUnitId = customUnitRoute.customUnitId
         viewModelScope.launch {
-            val customUnit = experienceRepo.getCustomUnit(customUnitId)
+            val customUnitWithIngestions = experienceRepo.getCustomUnitWithIngestions(customUnitId)
+            val customUnit = customUnitWithIngestions?.customUnit
             this@EditCustomUnitViewModel.customUnit = customUnit
             if (customUnit != null) {
                 substanceName = customUnit.substanceName
@@ -160,6 +163,7 @@ class EditCustomUnitViewModel @Inject constructor(
                 isArchived = customUnit.isArchived
                 note = customUnit.note
             }
+            numberOfIngestionsWithThisCustomUnit = customUnitWithIngestions?.ingestions?.size
         }
     }
 }

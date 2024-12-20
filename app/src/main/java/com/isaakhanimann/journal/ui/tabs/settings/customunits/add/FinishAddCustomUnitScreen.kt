@@ -184,6 +184,7 @@ private fun FinishAddCustomUnitScreenContent(
             padding = padding,
             substanceName = substanceName,
             administrationRoute = administrationRoute,
+            numberOfIngestionsWithThisCustomUnit = null,
             roaDose = roaDose,
             name = name,
             onChangeOfName = onChangeOfName,
@@ -214,6 +215,7 @@ fun EditCustomUnitSections(
     padding: PaddingValues,
     substanceName: String,
     administrationRoute: AdministrationRoute,
+    numberOfIngestionsWithThisCustomUnit: Int?,
     roaDose: RoaDose?,
     name: String,
     onChangeOfName: (String) -> Unit,
@@ -250,6 +252,31 @@ fun EditCustomUnitSections(
         val focusManager = LocalFocusManager.current
         LaunchedEffect(Unit) {
             focusRequesterName.requestFocus()
+        }
+        AnimatedVisibility(visible = numberOfIngestionsWithThisCustomUnit != null) {
+            if (numberOfIngestionsWithThisCustomUnit != null) {
+                ElevatedCard(
+                    modifier = Modifier
+                        .padding(
+                            horizontal = horizontalPadding,
+                        )
+                        .padding(bottom = 4.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = horizontalPadding,
+                            vertical = 10.dp
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        if (numberOfIngestionsWithThisCustomUnit > 0) {
+                            Text("Editing this custom unit also updates $numberOfIngestionsWithThisCustomUnit ingestions which are using this unit.")
+                        } else {
+                            Text("No ingestions are using this unit yet.")
+                        }
+                    }
+                }
+            }
         }
         if (substanceName == "Cannabis" && administrationRoute == AdministrationRoute.SMOKED) {
             ElevatedCard(

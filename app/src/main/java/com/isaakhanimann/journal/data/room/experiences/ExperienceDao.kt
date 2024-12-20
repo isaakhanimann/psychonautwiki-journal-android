@@ -33,6 +33,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.Location
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRating
 import com.isaakhanimann.journal.data.room.experiences.entities.SubstanceCompanion
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
+import com.isaakhanimann.journal.data.room.experiences.relations.CustomUnitWithIngestions
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsAndCompanions
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
@@ -153,6 +154,10 @@ interface ExperienceDao {
 
     @Query("SELECT * FROM customunit WHERE id =:id")
     suspend fun getCustomUnit(id: Int): CustomUnit?
+
+    @Transaction
+    @Query("SELECT * FROM customunit WHERE id =:id")
+    suspend fun getCustomUnitWithIngestions(id: Int): CustomUnitWithIngestions?
 
     @Query("SELECT * FROM experience WHERE id =:id")
     fun getExperienceFlow(id: Int): Flow<Experience?>
