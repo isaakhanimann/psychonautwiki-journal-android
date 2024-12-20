@@ -72,7 +72,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneB
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDosePreviewProvider
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.dose.RoaDoseView
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.ui.utils.getShortTimeWithWeekdayText
 import java.time.Instant
 
 @Composable
@@ -640,7 +640,7 @@ fun EditCustomUnitSections(
                         areDosageDotsHidden = true,
                         modifier = Modifier.padding(horizontal = horizontalPadding)
                     ) {
-                        val timeString = Instant.now().getStringOfPattern("EEE HH:mm")
+                        val timeString = Instant.now().getShortTimeWithWeekdayText()
                         Text(
                             text = timeString,
                             style = MaterialTheme.typography.titleSmall

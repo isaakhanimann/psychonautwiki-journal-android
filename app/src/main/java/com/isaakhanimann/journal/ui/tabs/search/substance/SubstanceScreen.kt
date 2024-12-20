@@ -89,7 +89,7 @@ import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.theme.verticalPaddingCards
 import com.isaakhanimann.journal.ui.utils.getInstant
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.ui.utils.getShortTimeText
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.absoluteValue
@@ -357,7 +357,7 @@ fun SubstanceScreen(
                             TimePickerButton(
                                 localDateTime = ingestionTime,
                                 onChange = { ingestionTime = it },
-                                timeString = ingestionTime.getStringOfPattern("HH:mm"),
+                                timeString = ingestionTime.getShortTimeText(),
                                 hasOutline = false,
                             )
                             val isTimeALotDifferentToNow = ChronoUnit.MINUTES.between(

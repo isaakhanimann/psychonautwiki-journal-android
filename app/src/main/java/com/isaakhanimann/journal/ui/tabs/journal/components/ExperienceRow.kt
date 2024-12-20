@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.ui.utils.getDateWithWeekdayText
 
 @Preview(showBackground = true)
 @Composable
@@ -122,9 +122,7 @@ fun ExperienceRow(
                     )
                 } else {
                     Text(
-                        text = experienceWithIngestionsCompanionsAndRatings.sortInstant.getStringOfPattern(
-                            "EEE, dd MMM yyyy"
-                        ),
+                        text = experienceWithIngestionsCompanionsAndRatings.sortInstant.getDateWithWeekdayText(),
                         style = timeStyle
                     )
                 }

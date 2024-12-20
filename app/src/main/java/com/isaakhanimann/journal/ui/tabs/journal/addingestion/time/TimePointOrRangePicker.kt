@@ -19,7 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.ui.utils.getDateWithWeekdayText
+import com.isaakhanimann.journal.ui.utils.getShortTimeText
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -58,12 +59,12 @@ fun TimePointOrRangePicker(
                     DatePickerButton(
                         localDateTime = localDateTimeStart,
                         onChange = onChangeStartDateOrTime,
-                        dateString = localDateTimeStart.getStringOfPattern("EEE d MMM yyyy"),
+                        dateString = localDateTimeStart.getDateWithWeekdayText(),
                     )
                     TimePickerButton(
                         localDateTime = localDateTimeStart,
                         onChange = onChangeStartDateOrTime,
-                        timeString = localDateTimeStart.getStringOfPattern("HH:mm"),
+                        timeString = localDateTimeStart.getShortTimeText(),
                         modifier = Modifier.weight(1f)
                     )
                     IconButton(onClick = {
@@ -100,12 +101,12 @@ fun TimePointOrRangePicker(
                         DatePickerButton(
                             localDateTime = localDateTimeStart,
                             onChange = onChangeStartDateOrTime,
-                            dateString = localDateTimeStart.getStringOfPattern("EEE d MMM yyyy"),
+                            dateString = localDateTimeStart.getDateWithWeekdayText(),
                         )
                         TimePickerButton(
                             localDateTime = localDateTimeStart,
                             onChange = onChangeStartDateOrTime,
-                            timeString = localDateTimeStart.getStringOfPattern("HH:mm"),
+                            timeString = localDateTimeStart.getShortTimeText(),
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -130,12 +131,12 @@ fun TimePointOrRangePicker(
                         DatePickerButton(
                             localDateTime = localDateTimeEnd,
                             onChange = onChangeEndDateOrTime,
-                            dateString = localDateTimeEnd.getStringOfPattern("EEE d MMM yyyy"),
+                            dateString = localDateTimeEnd.getDateWithWeekdayText(),
                         )
                         TimePickerButton(
                             localDateTime = localDateTimeEnd,
                             onChange = onChangeEndDateOrTime,
-                            timeString = localDateTimeEnd.getStringOfPattern("HH:mm"),
+                            timeString = localDateTimeEnd.getShortTimeText(),
                             modifier = Modifier.weight(1f)
                         )
                     }

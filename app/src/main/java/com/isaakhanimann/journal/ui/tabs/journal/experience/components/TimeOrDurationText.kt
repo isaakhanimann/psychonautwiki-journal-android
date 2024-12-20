@@ -24,7 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.ui.utils.getShortTimeText
+import com.isaakhanimann.journal.ui.utils.getShortTimeWithWeekdayText
+import com.isaakhanimann.journal.ui.utils.getShortWeekdayText
 import java.time.Instant
 
 const val TIME_RANGE_SEPARATOR_TEXT = " - "
@@ -140,16 +142,16 @@ private fun RegularTimeOrRangeText(
     endTime: Instant?,
     textStyle: TextStyle
 ) {
-    val startText = time.getStringOfPattern("EEE HH:mm")
+    val startText = time.getShortTimeWithWeekdayText()
     val text = if (endTime == null) {
         startText
     } else {
-        val startDay = time.getStringOfPattern("EEE")
-        val endDay = endTime.getStringOfPattern("EEE")
+        val startDay = time.getShortWeekdayText()
+        val endDay = endTime.getShortWeekdayText()
         if (startDay == endDay) {
-            startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getStringOfPattern("HH:mm")
+            startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getShortTimeText()
         } else {
-            startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getStringOfPattern("EEE HH:mm")
+            startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getShortTimeText()
         }
     }
     Text(
@@ -167,7 +169,7 @@ fun NoteOrRatingTimeOrDurationText(
     val textStyle = MaterialTheme.typography.labelMedium
     when (timeDisplayOption) {
         TimeDisplayOption.REGULAR -> {
-            val startText = time.getStringOfPattern("EEE HH:mm")
+            val startText = time.getShortTimeWithWeekdayText()
             Text(text = startText, style = textStyle)
         }
 
@@ -179,7 +181,7 @@ fun NoteOrRatingTimeOrDurationText(
         }
 
         TimeDisplayOption.TIME_BETWEEN -> {
-            val startText = time.getStringOfPattern("EEE HH:mm")
+            val startText = time.getShortTimeWithWeekdayText()
             Text(text = startText, style = textStyle)
         }
 

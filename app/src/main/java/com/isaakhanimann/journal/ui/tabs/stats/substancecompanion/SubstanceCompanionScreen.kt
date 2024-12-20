@@ -53,7 +53,8 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithT
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.ToleranceSection
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.ui.utils.getDateWithWeekdayText
+import com.isaakhanimann.journal.ui.utils.getShortTimeText
 
 @Composable
 fun SubstanceCompanionScreen(
@@ -149,7 +150,7 @@ fun SubstanceCompanionScreen(
                                 style = MaterialTheme.typography.titleMedium,
                             )
                             Text(
-                                text = burst.experience.sortDate.getStringOfPattern("EEE, dd MMM yyyy"),
+                                text = burst.experience.sortDate.getDateWithWeekdayText(),
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }
@@ -187,7 +188,7 @@ fun IngestionRowOnSubstanceCompanionScreen(ingestionAndCustomUnit: IngestionsBur
             }
         }
         Text(text = text, style = MaterialTheme.typography.titleSmall)
-        val dateString = ingestionAndCustomUnit.ingestion.time.getStringOfPattern("HH:mm")
+        val dateString = ingestionAndCustomUnit.ingestion.time.getShortTimeText()
         Text(text = dateString)
     }
 }

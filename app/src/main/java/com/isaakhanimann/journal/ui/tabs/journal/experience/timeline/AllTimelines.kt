@@ -59,7 +59,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDispl
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimeRangeDrawable
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.ui.utils.getShortTimeText
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.Instant
@@ -330,8 +330,8 @@ private fun DrawScope.drawDragTimeLabelWithBackground(
                 toInstant = timeAtDragPoint
             ) + " in"
         }
-        TimeDisplayOption.TIME_BETWEEN -> timeAtDragPoint.getStringOfPattern("HH:mm")
-        TimeDisplayOption.REGULAR -> timeAtDragPoint.getStringOfPattern("HH:mm")
+        TimeDisplayOption.TIME_BETWEEN -> timeAtDragPoint.getShortTimeText()
+        TimeDisplayOption.REGULAR -> timeAtDragPoint.getShortTimeText()
     }
     val measuredText =
         textMeasurer.measure(

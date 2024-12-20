@@ -85,11 +85,11 @@ import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.interactions.Interaction
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardTitle
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CumulativeDoseRow
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.IngestionTimeOrDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.InteractionRow
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.NoteOrRatingTimeOrDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.IngestionTimeOrDurationText
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.NoteOrRatingTimeOrDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurationText
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.rating.OverallRatingRow
@@ -103,7 +103,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneR
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
-import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.ui.utils.getDateWithWeekdayText
 import kotlinx.coroutines.delay
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -615,9 +615,7 @@ private fun MyIngestionList(
 ) {
     ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
         CardTitle(
-            title = oneExperienceScreenModel.firstIngestionTime.getStringOfPattern(
-                "EEE, dd MMM yyyy"
-            )
+            title = oneExperienceScreenModel.firstIngestionTime.getDateWithWeekdayText()
         )
         if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
             HorizontalDivider()
