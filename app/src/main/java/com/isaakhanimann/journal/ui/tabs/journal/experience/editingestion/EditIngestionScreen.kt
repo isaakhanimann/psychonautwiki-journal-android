@@ -106,7 +106,7 @@ fun EditIngestionScreen(
         isKnown = viewModel.isKnown,
         toggleIsKnown = viewModel::toggleIsKnown,
         dose = viewModel.dose,
-        onDoseChange = { viewModel.dose = it },
+        onDoseChange = viewModel::onDoseChange,
         estimatedDoseStandardDeviation = viewModel.estimatedDoseStandardDeviation,
         onEstimatedDoseStandardDeviationChange = viewModel::onChangeEstimatedDoseStandardDeviation,
         units = viewModel.units,
@@ -315,13 +315,16 @@ fun EditIngestionScreen(
                         }
                         OutlinedTextField(
                             value = dose,
-                            onValueChange = onDoseChange,
+                            onValueChange = {
+                                onDoseChange(it.replace(oldChar = ',', newChar = '.'))
+                            },
                             label = { Text(text = "Dose") },
                             trailingIcon = { Text(text = units) },
                             modifier = Modifier.fillMaxWidth(),
                             keyboardActions = KeyboardActions(onDone = {
                                 focusManager.clearFocus()
                             }),
+                            isError = dose.toDoubleOrNull() == null,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             singleLine = true
                         )
@@ -335,7 +338,14 @@ fun EditIngestionScreen(
                         AnimatedVisibility(visible = isEstimate) {
                             OutlinedTextField(
                                 value = estimatedDoseStandardDeviation,
-                                onValueChange = onEstimatedDoseStandardDeviationChange,
+                                onValueChange = {
+                                    onEstimatedDoseStandardDeviationChange(
+                                        it.replace(
+                                            oldChar = ',',
+                                            newChar = '.'
+                                        )
+                                    )
+                                },
                                 label = { Text("Estimated standard deviation") },
                                 trailingIcon = {
                                     Text(
@@ -346,6 +356,7 @@ fun EditIngestionScreen(
                                 keyboardActions = KeyboardActions(onDone = {
                                     focusManager.clearFocus()
                                 }),
+                                isError = estimatedDoseStandardDeviation.toDoubleOrNull() == null,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth()

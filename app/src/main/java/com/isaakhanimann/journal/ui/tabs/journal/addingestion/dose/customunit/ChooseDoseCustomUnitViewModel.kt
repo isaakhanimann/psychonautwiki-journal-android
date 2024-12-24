@@ -66,11 +66,11 @@ class ChooseDoseCustomUnitViewModel @Inject constructor(
     var estimatedDoseDeviationText by mutableStateOf("")
 
     fun onDoseTextChange(newDoseText: String) {
-        doseText = newDoseText.replace(oldChar = ',', newChar = '.')
+        doseText = newDoseText
     }
 
     fun onEstimatedDoseDeviationChange(newEstimatedDeviationText: String) {
-        estimatedDoseDeviationText = newEstimatedDeviationText.replace(oldChar = ',', newChar = '.')
+        estimatedDoseDeviationText = newEstimatedDeviationText
     }
 
     val dose: Double? get() = doseText.toDoubleOrNull()

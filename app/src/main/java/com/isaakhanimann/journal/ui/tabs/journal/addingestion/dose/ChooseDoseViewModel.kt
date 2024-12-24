@@ -75,11 +75,11 @@ class ChooseDoseViewModel @Inject constructor(
     val currentDoseClass: DoseClass? get() = roaDose?.getDoseClass(ingestionDose = dose)
 
     fun onDoseTextChange(newDoseText: String) {
-        doseText = newDoseText.replace(oldChar = ',', newChar = '.')
+        doseText = newDoseText
     }
 
     fun onEstimatedDoseStandardDeviationChange(newEstimatedStandardDeviationText: String) {
-        estimatedDoseStandardDeviationText = newEstimatedStandardDeviationText.replace(oldChar = ',', newChar = '.')
+        estimatedDoseStandardDeviationText = newEstimatedStandardDeviationText
     }
 
     init {

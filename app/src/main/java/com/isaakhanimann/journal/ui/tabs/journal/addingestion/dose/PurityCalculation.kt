@@ -46,7 +46,9 @@ fun PurityCalculation(
         val focusManager = LocalFocusManager.current
         OutlinedTextField(
             value = purityText,
-            onValueChange = onPurityChange,
+            onValueChange = {
+                onPurityChange(it.replace(oldChar = ',', newChar = '.'))
+            },
             label = { Text("Purity") },
             isError = !isValidPurity,
             trailingIcon = {

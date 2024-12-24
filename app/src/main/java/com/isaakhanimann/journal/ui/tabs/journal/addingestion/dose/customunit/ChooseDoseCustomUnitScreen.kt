@@ -214,10 +214,12 @@ fun ChooseDoseCustomUnitScreen(
             )
             Spacer(modifier = Modifier.height(4.dp))
             ElevatedCard(
-                modifier = Modifier.padding(
-                    horizontal = horizontalPadding,
-                    vertical = 4.dp
-                ).fillMaxWidth()
+                modifier = Modifier
+                    .padding(
+                        horizontal = horizontalPadding,
+                        vertical = 4.dp
+                    )
+                    .fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier.padding(
@@ -237,7 +239,8 @@ fun ChooseDoseCustomUnitScreen(
                     }
                     Text(
                         text = customUnitCalculationText ?: "",
-                        color = currentDoseClass?.getComposeColor(isSystemInDarkTheme()) ?: Color.Unspecified,
+                        color = currentDoseClass?.getComposeColor(isSystemInDarkTheme())
+                            ?: Color.Unspecified,
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
@@ -267,7 +270,14 @@ fun ChooseDoseCustomUnitScreen(
                     val pluralizableUnit = customUnit.getPluralizableUnit()
                     OutlinedTextField(
                         value = doseText,
-                        onValueChange = onChangeDoseText,
+                        onValueChange = {
+                            onChangeDoseText(
+                                it.replace(
+                                    oldChar = ',',
+                                    newChar = '.'
+                                )
+                            )
+                        },
                         textStyle = textStyle,
                         label = { Text("Dose", style = textStyle) },
                         isError = !isValidDose,
@@ -297,7 +307,14 @@ fun ChooseDoseCustomUnitScreen(
                     AnimatedVisibility(visible = isEstimate) {
                         OutlinedTextField(
                             value = estimatedDoseDeviationText,
-                            onValueChange = onChangeEstimatedDoseDeviationText,
+                            onValueChange = {
+                                onChangeEstimatedDoseDeviationText(
+                                    it.replace(
+                                        oldChar = ',',
+                                        newChar = '.'
+                                    )
+                                )
+                            },
                             textStyle = textStyle,
                             label = { Text("Estimated standard deviation", style = textStyle) },
                             trailingIcon = {
@@ -310,6 +327,7 @@ fun ChooseDoseCustomUnitScreen(
                             keyboardActions = KeyboardActions(onDone = {
                                 focusManager.clearFocus()
                             }),
+                            isError = estimatedDoseDeviationText.toDoubleOrNull() == null,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()

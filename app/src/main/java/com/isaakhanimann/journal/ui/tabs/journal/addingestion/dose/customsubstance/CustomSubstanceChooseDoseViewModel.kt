@@ -32,12 +32,11 @@ import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import java.util.Locale
 import javax.inject.Inject
 
 
 @HiltViewModel
-class CustomChooseDoseViewModel @Inject constructor(
+class CustomSubstanceChooseDoseViewModel @Inject constructor(
     experienceRepository: ExperienceRepository,
     state: SavedStateHandle,
 ) : ViewModel() {
@@ -64,14 +63,8 @@ class CustomChooseDoseViewModel @Inject constructor(
                 if (it == null) return null
                 purity.let { safePurity ->
                     if (safePurity == null) return null
-                    val value = String
-                        .format(Locale.US,"%.2f", it.div(safePurity).times(100))
-                        .toDoubleOrNull()
-                    if (value != null) {
-                        return value.toReadableString() + " impure $units"
-                    } else {
-                        return null
-                    }
+                    val value = it.div(safePurity).times(100)
+                    return value.toReadableString() + " impure $units"
                 }
             }
         }
@@ -80,11 +73,11 @@ class CustomChooseDoseViewModel @Inject constructor(
     val isValidDose: Boolean get() = dose != null
 
     fun onDoseTextChange(newDoseText: String) {
-        doseText = newDoseText.replace(oldChar = ',', newChar = '.')
+        doseText = newDoseText
     }
 
     fun onEstimatedDoseStandardDeviationTextChange(newDeviationText: String) {
-        estimatedDoseDeviationText = newDeviationText.replace(oldChar = ',', newChar = '.')
+        estimatedDoseDeviationText = newDeviationText
     }
 
     init {

@@ -69,12 +69,12 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.UnknownDoseDi
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
-fun CustomChooseDose(
+fun CustomSubstanceChooseDoseScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseStandardDeviation: Double?) -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
-    viewModel: CustomChooseDoseViewModel = hiltViewModel()
+    viewModel: CustomSubstanceChooseDoseViewModel = hiltViewModel()
 ) {
-    CustomChooseDose(
+    CustomSubstanceChooseDoseScreen(
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
         substanceName = viewModel.substanceName,
         administrationRoute = viewModel.administrationRoute,
@@ -116,7 +116,7 @@ fun CustomChooseDose(
 @Preview
 @Composable
 fun CustomChooseDosePreview() {
-    CustomChooseDose(
+    CustomSubstanceChooseDoseScreen(
         navigateToSaferSniffingScreen = {},
         substanceName = "Example Substance",
         administrationRoute = AdministrationRoute.INSUFFLATED,
@@ -140,7 +140,7 @@ fun CustomChooseDosePreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomChooseDose(
+fun CustomSubstanceChooseDoseScreen(
     navigateToSaferSniffingScreen: () -> Unit,
     substanceName: String,
     administrationRoute: AdministrationRoute,
@@ -204,7 +204,12 @@ fun CustomChooseDose(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(4.dp))
-            ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+            ElevatedCard(
+                modifier = Modifier.padding(
+                    horizontal = horizontalPadding,
+                    vertical = 4.dp
+                )
+            ) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = horizontalPadding,
@@ -215,7 +220,14 @@ fun CustomChooseDose(
                     val textStyle = MaterialTheme.typography.titleMedium
                     OutlinedTextField(
                         value = doseText,
-                        onValueChange = onChangeDoseText,
+                        onValueChange = {
+                            onChangeDoseText(
+                                it.replace(
+                                    oldChar = ',',
+                                    newChar = '.'
+                                )
+                            )
+                        },
                         textStyle = textStyle,
                         label = { Text("Pure dose", style = textStyle) },
                         isError = !isValidDose,
@@ -243,7 +255,14 @@ fun CustomChooseDose(
                     AnimatedVisibility(visible = isEstimate) {
                         OutlinedTextField(
                             value = estimatedDoseStandardDeviationText,
-                            onValueChange = onChangeEstimatedStandardDeviationText,
+                            onValueChange = {
+                                onChangeEstimatedStandardDeviationText(
+                                    it.replace(
+                                        oldChar = ',',
+                                        newChar = '.'
+                                    )
+                                )
+                            },
                             textStyle = textStyle,
                             label = { Text("Estimated standard deviation", style = textStyle) },
                             isError = !isValidDose,
@@ -265,7 +284,12 @@ fun CustomChooseDose(
                 }
             }
             AnimatedVisibility(visible = isValidDose) {
-                ElevatedCard(modifier = Modifier.padding(horizontal = horizontalPadding, vertical = 4.dp)) {
+                ElevatedCard(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 4.dp
+                    )
+                ) {
                     Column(
                         modifier = Modifier.padding(
                             horizontal = horizontalPadding,

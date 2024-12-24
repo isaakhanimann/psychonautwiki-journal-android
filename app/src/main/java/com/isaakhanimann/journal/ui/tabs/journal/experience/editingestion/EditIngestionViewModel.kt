@@ -31,7 +31,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.Ingestion
 import com.isaakhanimann.journal.ui.main.navigation.graphs.EditIngestionRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.IngestionTimePickerOption
-import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
+import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toPreservedString
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getLocalDateTime
@@ -80,6 +80,10 @@ class EditIngestionViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
+    fun onDoseChange(newDoseText: String) {
+        dose = newDoseText
+    }
+
     fun onChangeEstimatedDoseStandardDeviation(newEstimatedDoseStandardDeviation: String) {
         estimatedDoseStandardDeviation = newEstimatedDoseStandardDeviation
     }
@@ -94,9 +98,9 @@ class EditIngestionViewModel @Inject constructor(
             ingestion = ing
             note = ing.notes ?: ""
             isEstimate = ing.isDoseAnEstimate
-            estimatedDoseStandardDeviation = ing.estimatedDoseStandardDeviation?.toReadableString() ?: ""
+            estimatedDoseStandardDeviation = ing.estimatedDoseStandardDeviation?.toPreservedString() ?: ""
             experienceId = ing.experienceId
-            dose = ing.dose?.toReadableString() ?: ""
+            dose = ing.dose?.toPreservedString() ?: ""
             isKnown = ing.dose != null
             units = ing.units ?: ""
             consumerName = ing.consumerName ?: ""

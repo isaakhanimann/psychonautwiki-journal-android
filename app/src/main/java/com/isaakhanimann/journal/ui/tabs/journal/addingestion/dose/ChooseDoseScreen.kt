@@ -272,7 +272,8 @@ fun ChooseDoseScreen(
                     Row(modifier = Modifier.clickable {
                         isDoseRemarkExpanded = !isDoseRemarkExpanded
                     }, verticalAlignment = Alignment.CenterVertically) {
-                        val finalDoseInfoText = if (doseRemark.isNullOrBlank()) DOSE_DISCLAIMER else "$doseRemark\n\n$DOSE_DISCLAIMER"
+                        val finalDoseInfoText =
+                            if (doseRemark.isNullOrBlank()) DOSE_DISCLAIMER else "$doseRemark\n\n$DOSE_DISCLAIMER"
                         Text(
                             modifier = Modifier.weight(1f),
                             text = finalDoseInfoText,
@@ -333,7 +334,14 @@ fun ChooseDoseScreen(
                     }
                     OutlinedTextField(
                         value = doseText,
-                        onValueChange = onChangeDoseText,
+                        onValueChange = {
+                            onChangeDoseText(
+                                it.replace(
+                                    oldChar = ',',
+                                    newChar = '.'
+                                )
+                            )
+                        },
                         textStyle = textStyle,
                         label = { Text("Pure Dose", style = textStyle) },
                         isError = !isValidDose,
@@ -391,7 +399,14 @@ fun ChooseDoseScreen(
                     AnimatedVisibility(visible = isEstimate) {
                         OutlinedTextField(
                             value = estimatedDoseStandardDeviationText,
-                            onValueChange = onChangeEstimatedDoseStandardDeviationText,
+                            onValueChange = {
+                                onChangeEstimatedDoseStandardDeviationText(
+                                    it.replace(
+                                        oldChar = ',',
+                                        newChar = '.'
+                                    )
+                                )
+                            },
                             textStyle = textStyle,
                             label = { Text("Estimated standard deviation", style = textStyle) },
                             trailingIcon = {
@@ -404,6 +419,7 @@ fun ChooseDoseScreen(
                             keyboardActions = KeyboardActions(onDone = {
                                 focusManager.clearFocus()
                             }),
+                            isError = estimatedDoseStandardDeviationText.toDoubleOrNull() == null,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()

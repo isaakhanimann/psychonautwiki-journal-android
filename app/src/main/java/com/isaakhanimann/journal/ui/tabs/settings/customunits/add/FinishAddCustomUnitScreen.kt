@@ -272,8 +272,15 @@ fun EditCustomUnitSections(
                         verticalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
                         if (numberOfIngestionsWithThisCustomUnit > 0) {
-                            val pluralizableUnit = PluralizableUnit(singular = "ingestion", plural = "ingestions")
-                            Text("${numberOfIngestionsWithThisCustomUnit.toStringWith(pluralizableUnit)} are affected by this edit")
+                            val pluralizableUnit =
+                                PluralizableUnit(singular = "ingestion", plural = "ingestions")
+                            Text(
+                                "${
+                                    numberOfIngestionsWithThisCustomUnit.toStringWith(
+                                        pluralizableUnit
+                                    )
+                                } are affected by this edit"
+                            )
                         } else {
                             Text("No ingestions are using this unit yet")
                         }
@@ -500,7 +507,14 @@ fun EditCustomUnitSections(
                 }
                 OutlinedTextField(
                     value = doseText,
-                    onValueChange = onChangeDoseText,
+                    onValueChange = {
+                        onChangeDoseText(
+                            it.replace(
+                                oldChar = ',',
+                                newChar = '.'
+                            )
+                        )
+                    },
                     textStyle = textStyle,
                     label = { Text("Dose per $unit", style = textStyle) },
                     trailingIcon = {
@@ -513,6 +527,7 @@ fun EditCustomUnitSections(
                     keyboardActions = KeyboardActions(onDone = {
                         focusManager.clearFocus()
                     }),
+                    isError = doseText.toDoubleOrNull() == null,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     modifier = Modifier
@@ -560,7 +575,14 @@ fun EditCustomUnitSections(
                 AnimatedVisibility(visible = isEstimate) {
                     OutlinedTextField(
                         value = estimatedDoseStandardDeviationText,
-                        onValueChange = onChangeEstimatedDoseStandardDeviationText,
+                        onValueChange = {
+                            onChangeEstimatedDoseStandardDeviationText(
+                                it.replace(
+                                    oldChar = ',',
+                                    newChar = '.'
+                                )
+                            )
+                        },
                         textStyle = textStyle,
                         label = {
                             Text(
@@ -578,6 +600,7 @@ fun EditCustomUnitSections(
                         keyboardActions = KeyboardActions(onDone = {
                             focusManager.clearFocus()
                         }),
+                        isError = estimatedDoseStandardDeviationText.toDoubleOrNull() == null,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
