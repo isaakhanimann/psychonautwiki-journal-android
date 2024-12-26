@@ -162,10 +162,17 @@ fun CustomUnitsScreenContent(
                 singleLine = true
             )
             if (filteredUnits.isEmpty()) {
-                EmptyScreenDisclaimer(
-                    title = "No custom units yet",
-                    description = "Add your first unit."
-                )
+                if(searchText.isEmpty()) {
+                    EmptyScreenDisclaimer(
+                        title = "No custom units yet",
+                        description = "Add your first unit"
+                    )
+                } else {
+                    EmptyScreenDisclaimer(
+                        title = "No custom units found",
+                        description = "No custom unit matches your search"
+                    )
+                }
             } else {
                 LazyColumn {
                     items(filteredUnits) { customUnit ->
