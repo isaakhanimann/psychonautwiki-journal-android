@@ -64,12 +64,12 @@ import com.isaakhanimann.journal.ui.tabs.search.customColor
 import com.isaakhanimann.journal.ui.tabs.search.substancerow.SubstanceRow
 
 @Composable
-fun ChooseSubstanceScreen(
+fun AddIngestionSearchScreen(
     navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
 ) {
-    ChooseSubstanceScreen(
+    AddIngestionSearchScreen(
         navigateToChooseRoute = navigateToChooseRoute,
         navigateToCustomSubstanceChooseRoute = navigateToCustomSubstanceChooseRoute,
         searchText = viewModel.searchTextFlow.collectAsState().value,
@@ -82,7 +82,7 @@ fun ChooseSubstanceScreen(
 }
 
 @Composable
-private fun ChooseSubstanceScreen(
+private fun AddIngestionSearchScreen(
     navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
     searchText: String,

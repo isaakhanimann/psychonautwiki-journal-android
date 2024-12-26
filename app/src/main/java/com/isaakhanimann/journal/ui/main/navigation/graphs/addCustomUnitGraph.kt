@@ -26,7 +26,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.route.CustomSubstanceChooseRouteScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseRouteDuringAddCustomUnitScreen
-import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.ChooseSubstanceScreen
+import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.AddIngestionSearchScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.add.FinishAddCustomUnitScreen
 import kotlinx.serialization.Serializable
 
@@ -35,7 +35,7 @@ fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
         startDestination = AddCustomUnitsChooseSubstanceScreenRoute,
     ) {
         composableWithTransitions<AddCustomUnitsChooseSubstanceScreenRoute> {
-            ChooseSubstanceScreen(
+            AddIngestionSearchScreen(
                 navigateToChooseRoute = { substanceName ->
                     navController.navigate(ChooseRouteOfAddCustomUnitRoute(substanceName))
                 },
