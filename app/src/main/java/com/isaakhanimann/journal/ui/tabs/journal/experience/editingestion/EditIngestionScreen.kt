@@ -83,6 +83,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.ui.YOU
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.StandardDeviationExplanation
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.justUnit
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.IngestionTimePickerOption
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePointOrRangePicker
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
@@ -361,6 +363,18 @@ fun EditIngestionScreen(
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth()
                             )
+                        }
+                        val mean = dose.toDoubleOrNull()
+                        val standardDeviation = estimatedDoseStandardDeviation.toDoubleOrNull()
+                        val isExplanationShown = isEstimate && mean != null && standardDeviation != null
+                        AnimatedVisibility(isExplanationShown) {
+                            if (isEstimate && mean != null && standardDeviation != null) {
+                                StandardDeviationExplanation(
+                                    mean = mean,
+                                    standardDeviation = standardDeviation,
+                                    unit = units
+                                )
+                            }
                         }
                         if (otherCustomUnits.isNotEmpty()) {
                             var isShowingDropDownMenu by remember { mutableStateOf(false) }

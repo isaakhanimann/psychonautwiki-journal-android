@@ -425,6 +425,18 @@ fun ChooseDoseScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
+                    val mean = doseText.toDoubleOrNull()
+                    val standardDeviation = estimatedDoseStandardDeviationText.toDoubleOrNull()
+                    val isExplanationShown = isEstimate && mean != null && standardDeviation != null
+                    AnimatedVisibility(isExplanationShown) {
+                        if (isEstimate && mean != null && standardDeviation != null) {
+                            StandardDeviationExplanation(
+                                mean = mean,
+                                standardDeviation = standardDeviation,
+                                unit = units
+                            )
+                        }
+                    }
                 }
             }
             ElevatedCard(

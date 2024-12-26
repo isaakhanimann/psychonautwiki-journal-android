@@ -65,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.PurityCalculation
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.StandardDeviationExplanation
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.UnknownDoseDialog
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
@@ -280,6 +281,18 @@ fun CustomSubstanceChooseDoseScreen(
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
+                    }
+                    val mean = doseText.toDoubleOrNull()
+                    val standardDeviation = estimatedDoseStandardDeviationText.toDoubleOrNull()
+                    val isExplanationShown = isEstimate && mean != null && standardDeviation != null
+                    AnimatedVisibility(isExplanationShown) {
+                        if (isEstimate && mean != null && standardDeviation != null) {
+                            StandardDeviationExplanation(
+                                mean = mean,
+                                standardDeviation = standardDeviation,
+                                unit = units
+                            )
+                        }
                     }
                 }
             }

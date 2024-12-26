@@ -67,6 +67,7 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.CurrentDoseClassInfo
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.StandardDeviationExplanation
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.toStringWith
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.ingestion.IngestionRow
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
@@ -605,6 +606,18 @@ fun EditCustomUnitSections(
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
+                    val mean = doseText.toDoubleOrNull()
+                    val standardDeviation = estimatedDoseStandardDeviationText.toDoubleOrNull()
+                    val isExplanationShown = isEstimate && mean != null && standardDeviation != null
+                    AnimatedVisibility(isExplanationShown) {
+                        if (isEstimate && mean != null && standardDeviation != null) {
+                            StandardDeviationExplanation(
+                                mean = mean,
+                                standardDeviation = standardDeviation,
+                                unit = originalUnit
+                            )
+                        }
+                    }
                 }
             }
         }
