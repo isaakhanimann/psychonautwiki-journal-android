@@ -23,12 +23,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,32 +39,54 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.ColorCircle
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceRouteSuggestion
-import com.isaakhanimann.journal.ui.tabs.journal.components.RelativeDateTextNew
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.Suggestion
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Preview(showBackground = true)
 @Composable
-fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) substanceRouteSuggestion: SubstanceRouteSuggestion) {
+fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) suggestion: Suggestion) {
     SuggestionRow(
-        substanceRouteSuggestion = substanceRouteSuggestion,
+        suggestion = suggestion,
         navigateToDose = { _: String, _: AdministrationRoute -> },
-        navigateToCreateCustomUnit = { _: AdministrationRoute, _: String?, _: Int? -> },
         navigateToCustomUnitChooseDose = {},
         navigateToCustomDose = { _: Int, _: AdministrationRoute -> },
         navigateToChooseTime = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean, _: Double?, _: Int? -> },
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SuggestionRow(
-    substanceRouteSuggestion: SubstanceRouteSuggestion,
+    suggestion: Suggestion,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToCreateCustomUnit: (route: AdministrationRoute, substanceName: String?, customSubstanceId: Int?) -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
+    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
+) {
+    when(suggestion) {
+        is Suggestion.CustomSubstanceSuggestion -> CustomSubstanceSuggestionRow(
+            customSubstanceSuggestion = suggestion,
+            navigateToCustomDose = navigateToCustomDose,
+            navigateToChooseTime = navigateToChooseTime
+        )
+        is Suggestion.CustomUnitSuggestion -> CustomUnitSuggestionRow(
+            customUnitSuggestion = suggestion,
+            navigateToCustomUnitChooseDose = navigateToCustomUnitChooseDose,
+            navigateToChooseTime = navigateToChooseTime
+        )
+        is Suggestion.PureSubstanceSuggestion -> PureSubstanceSuggestionRow(
+            pureSubstanceSuggestion = suggestion,
+            navigateToDose = navigateToDose,
+            navigateToChooseTime = navigateToChooseTime
+        )
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun PureSubstanceSuggestionRow(
+    pureSubstanceSuggestion: Suggestion.PureSubstanceSuggestion,
+    navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
 ) {
     Column(
@@ -76,44 +95,26 @@ fun SuggestionRow(
             .padding(top = 10.dp, bottom = 5.dp)
             .padding(horizontal = horizontalPadding)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            ColorCircle(adaptiveColor = substanceRouteSuggestion.color)
-            Spacer(modifier = Modifier.width(8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ColorCircle(adaptiveColor = pureSubstanceSuggestion.adaptiveColor)
             Text(
-                text = substanceRouteSuggestion.substanceName + " " + substanceRouteSuggestion.route.displayText,
+                text = pureSubstanceSuggestion.substanceName + " " + pureSubstanceSuggestion.administrationRoute.displayText,
                 style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            RelativeDateTextNew(
-                dateTime = substanceRouteSuggestion.lastIngestedTime,
-                style = MaterialTheme.typography.bodyMedium
             )
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-            substanceRouteSuggestion.dosesAndUnit.forEach { doseAndUnit ->
+            pureSubstanceSuggestion.dosesAndUnit.forEach { doseAndUnit ->
                 SuggestionChip(
                     onClick = {
-                        if (substanceRouteSuggestion.customSubstanceId != null) {
-                            navigateToChooseTime(
-                                substanceRouteSuggestion.substanceName,
-                                substanceRouteSuggestion.route,
-                                doseAndUnit.dose,
-                                doseAndUnit.unit,
-                                doseAndUnit.isEstimate,
-                                doseAndUnit.estimatedDoseStandardDeviation,
-                                null
-                            )
-                        } else {
-                            navigateToChooseTime(
-                                substanceRouteSuggestion.substanceName,
-                                substanceRouteSuggestion.route,
-                                doseAndUnit.dose,
-                                doseAndUnit.unit,
-                                doseAndUnit.isEstimate,
-                                doseAndUnit.estimatedDoseStandardDeviation,
-                                null
-                            )
-                        }
+                        navigateToChooseTime(
+                            pureSubstanceSuggestion.substanceName,
+                            pureSubstanceSuggestion.administrationRoute,
+                            doseAndUnit.dose,
+                            doseAndUnit.unit,
+                            doseAndUnit.isEstimate,
+                            doseAndUnit.estimatedDoseStandardDeviation,
+                            null
+                        )
                     },
                     label = {
                         if (doseAndUnit.dose != null) {
@@ -138,89 +139,144 @@ fun SuggestionRow(
                     },
                 )
             }
-            val pureDoseUnit = substanceRouteSuggestion.dosesAndUnit.firstOrNull()?.unit
-            if (pureDoseUnit != null) {
-                SuggestionChip(onClick = {
-                    if (substanceRouteSuggestion.customSubstanceId != null) {
-                        navigateToCustomDose(
-                            substanceRouteSuggestion.customSubstanceId,
-                            substanceRouteSuggestion.route
-                        )
-                    } else {
-                        navigateToDose(
-                            substanceRouteSuggestion.substanceName,
-                            substanceRouteSuggestion.route
-                        )
-                    }
-                }, label = {
-                    Text("Log $pureDoseUnit")
-                }, icon = {
-                    Icon(
-                        imageVector = Icons.Default.Keyboard,
-                        contentDescription = "Keyboard"
-                    )
-                })
-            }
+            SuggestionChip(onClick = {
+                navigateToDose(
+                    pureSubstanceSuggestion.substanceName,
+                    pureSubstanceSuggestion.administrationRoute
+                )
+            }, label = {
+                Text("Other dose")
+            }, icon = {
+                Icon(
+                    imageVector = Icons.Default.Keyboard,
+                    contentDescription = "Keyboard"
+                )
+            })
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun CustomUnitSuggestionRow(
+    customUnitSuggestion: Suggestion.CustomUnitSuggestion,
+    navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
+    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 5.dp)
+            .padding(horizontal = horizontalPadding)
+    ) {
+        val customUnit = customUnitSuggestion.customUnit
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ColorCircle(adaptiveColor = customUnitSuggestion.adaptiveColor)
+            Text(
+                text = customUnit.substanceName + " " + customUnit.administrationRoute.displayText + ", " + customUnit.name,
+                style = MaterialTheme.typography.titleMedium
+            )
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-            substanceRouteSuggestion.customUnitDoses.forEach { customUnitDose ->
+            customUnitSuggestion.dosesAndUnit.forEach { customUnitDose ->
                 SuggestionChip(onClick = {
                     navigateToChooseTime(
-                        customUnitDose.customUnit.substanceName,
-                        customUnitDose.customUnit.administrationRoute,
+                        customUnit.substanceName,
+                        customUnit.administrationRoute,
                         customUnitDose.dose,
-                        customUnitDose.customUnit.unit,
+                        customUnit.unit,
                         customUnitDose.isEstimate,
                         customUnitDose.estimatedDoseStandardDeviation,
-                        customUnitDose.customUnit.id
+                        customUnit.id
                     )
                 }, label = {
-                    Column(modifier = Modifier.padding(vertical = 5.dp)) {
-                        Text(
-                            text = customUnitDose.customUnit.name,
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                        Text(text = customUnitDose.doseDescription)
-                    }
+                    Text(text = customUnitDose.getDoseDescription(customUnit.getPluralizableUnit()))
                 })
             }
-            substanceRouteSuggestion.customUnits.forEach { customUnit ->
-                SuggestionChip(onClick = {
-                    navigateToCustomUnitChooseDose(customUnit.id)
-                }, label = {
-                    Column(modifier = Modifier.padding(vertical = 5.dp)) {
-                        Text(text = customUnit.name, style = MaterialTheme.typography.labelSmall)
-                        Text(text = "Log " + customUnit.unit)
-                    }
-                }, icon = {
-                    Icon(
-                        imageVector = Icons.Default.Keyboard,
-                        contentDescription = "Keyboard"
-                    )
-                })
-            }
+            SuggestionChip(onClick = {
+                navigateToCustomUnitChooseDose(customUnit.id)
+            }, label = {
+                Text(text = "Other dose")
+            }, icon = {
+                Icon(
+                    imageVector = Icons.Default.Keyboard,
+                    contentDescription = "Keyboard"
+                )
+            })
         }
-        SuggestionChip(onClick = {
-            if (substanceRouteSuggestion.customSubstanceId != null) {
-                navigateToCreateCustomUnit(
-                    substanceRouteSuggestion.route,
-                    null,
-                    substanceRouteSuggestion.customSubstanceId
-                )
-            } else {
-                navigateToCreateCustomUnit(
-                    substanceRouteSuggestion.route,
-                    substanceRouteSuggestion.substanceName,
-                    null
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun CustomSubstanceSuggestionRow(
+    customSubstanceSuggestion: Suggestion.CustomSubstanceSuggestion,
+    navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
+    navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 5.dp)
+            .padding(horizontal = horizontalPadding)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            ColorCircle(adaptiveColor = customSubstanceSuggestion.adaptiveColor)
+            Text(
+                text = customSubstanceSuggestion.customSubstance.name + " " + customSubstanceSuggestion.administrationRoute.displayText,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            customSubstanceSuggestion.dosesAndUnit.forEach { doseAndUnit ->
+                SuggestionChip(
+                    onClick = {
+                        navigateToChooseTime(
+                            customSubstanceSuggestion.customSubstance.name,
+                            customSubstanceSuggestion.administrationRoute,
+                            doseAndUnit.dose,
+                            doseAndUnit.unit,
+                            doseAndUnit.isEstimate,
+                            doseAndUnit.estimatedDoseStandardDeviation,
+                            null
+                        )
+                    },
+                    label = {
+                        if (doseAndUnit.dose != null) {
+                            val description =
+                                "${doseAndUnit.dose.toReadableString()} ${doseAndUnit.unit}"
+                            if (doseAndUnit.isEstimate) {
+                                if (doseAndUnit.estimatedDoseStandardDeviation != null) {
+                                    Text(
+                                        text = "${doseAndUnit.dose.toReadableString()}±${
+                                            doseAndUnit.estimatedDoseStandardDeviation.toReadableString()
+                                        } ${doseAndUnit.unit}"
+                                    )
+                                } else {
+                                    Text(text = "~$description")
+                                }
+                            } else {
+                                Text(text = description)
+                            }
+                        } else {
+                            Text(text = "Unknown")
+                        }
+                    },
                 )
             }
-        }, label = {
-            Text(text = "New unit")
-        }, icon = {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add"
-            )
-        })
+            SuggestionChip(onClick = {
+                navigateToCustomDose(
+                    customSubstanceSuggestion.customSubstance.id,
+                    customSubstanceSuggestion.administrationRoute
+                )
+            }, label = {
+                Text("Other dose")
+            }, icon = {
+                Icon(
+                    imageVector = Icons.Default.Keyboard,
+                    contentDescription = "Keyboard"
+                )
+            })
+        }
     }
 }

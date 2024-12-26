@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models
 
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
+import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.room.experiences.entities.PluralizableUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
@@ -27,24 +28,108 @@ import java.time.Instant
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-data class SubstanceRouteSuggestion(
-    val color: AdaptiveColor,
-    val route: AdministrationRoute,
-    val substanceName: String,
-    val customSubstanceId: Int?,
-    val dosesAndUnit: List<DoseAndUnit>,
-    val customUnitDoses: List<CustomUnitDose>,
-    val customUnits: List<CustomUnit>,
-    val lastIngestedTime: Instant,
-    val lastCreationTime: Instant
-)
+sealed class Suggestion(open val sortInstant: Instant) {
+
+    abstract fun isInSearch(searchText: String, substanceNames: List<String>): Boolean
+
+    data class PureSubstanceSuggestion(
+        val administrationRoute: AdministrationRoute,
+        val substanceName: String,
+        val adaptiveColor: AdaptiveColor,
+        val dosesAndUnit: List<DoseAndUnit>,
+        override val sortInstant: Instant
+    ) : Suggestion(sortInstant = sortInstant) {
+        override fun isInSearch(searchText: String, substanceNames: List<String>): Boolean {
+            return substanceNames.contains(substanceName)
+        }
+    }
+
+    data class CustomUnitSuggestion(
+        val customUnit: CustomUnit,
+        val adaptiveColor: AdaptiveColor,
+        val dosesAndUnit: List<CustomUnitDoseSuggestion>,
+        override val sortInstant: Instant
+    ) : Suggestion(sortInstant = sortInstant) {
+        override fun isInSearch(searchText: String, substanceNames: List<String>): Boolean {
+            if (searchText.isEmpty()) {
+                return true
+            }
+            if (substanceNames.contains(customUnit.substanceName)) {
+                return true
+            }
+            return customUnit.name.contains(
+                searchText,
+                ignoreCase = true
+            ) || customUnit.unit.contains(
+                searchText,
+                ignoreCase = true
+            ) || customUnit.note.contains(searchText, ignoreCase = true)
+        }
+    }
+
+    data class CustomSubstanceSuggestion(
+        val administrationRoute: AdministrationRoute,
+        val customSubstance: CustomSubstance,
+        val adaptiveColor: AdaptiveColor,
+        val dosesAndUnit: List<DoseAndUnit>,
+        override val sortInstant: Instant
+    ) : Suggestion(sortInstant = sortInstant) {
+        override fun isInSearch(searchText: String, substanceNames: List<String>): Boolean {
+            if (searchText.isEmpty()) {
+                return true
+            }
+            return customSubstance.name.contains(searchText, ignoreCase = true)
+        }
+    }
+}
 
 data class DoseAndUnit(
     val dose: Double?,
     val unit: String,
     val isEstimate: Boolean,
     val estimatedDoseStandardDeviation: Double?
-)
+) {
+    // used to check if distinct
+    val comparatorValue: String get() {
+        if (dose == null) {
+            return "U"
+        }
+        return dose.toString() + unit + isEstimate + estimatedDoseStandardDeviation
+    }
+}
+
+data class CustomUnitDoseSuggestion(
+    val dose: Double?,
+    val isEstimate: Boolean,
+    val estimatedDoseStandardDeviation: Double?,
+) {
+    // used to check if distinct
+    val comparatorValue: String get() {
+        if (dose == null) {
+            return "U"
+        }
+        return dose.toString() + isEstimate + estimatedDoseStandardDeviation
+    }
+
+    // e.g. 2 pills
+    fun getDoseDescription(pluralizableUnit: PluralizableUnit): String {
+        if (dose == null) {
+            return "Unknown"
+        }
+        val description = dose.toStringWith(pluralizableUnit = pluralizableUnit)
+        return if (isEstimate) {
+            if (estimatedDoseStandardDeviation != null) {
+                "${dose.toReadableString()}±${estimatedDoseStandardDeviation.toReadableString()} ${
+                    pluralizableUnit.justUnit(dose)
+                }"
+            } else {
+                "~$description"
+            }
+        } else {
+            description
+        }
+    }
+}
 
 data class CustomUnitDose(
     val dose: Double,

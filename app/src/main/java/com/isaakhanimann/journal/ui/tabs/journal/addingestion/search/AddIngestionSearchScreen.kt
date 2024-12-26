@@ -72,7 +72,7 @@ import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.SuggestionRow
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceRouteSuggestion
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.Suggestion
 import com.isaakhanimann.journal.ui.tabs.search.SubstanceModel
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
@@ -96,7 +96,6 @@ fun AddIngestionSearchScreen(
         navigateToCheckSaferUse = navigateToCheckSaferUse,
         navigateToChooseRoute = navigateToChooseRoute,
         navigateToCustomDose = navigateToChooseCustomSubstanceDose,
-        navigateToCreateCustomUnit = navigateToCreateCustomUnit,
         navigateToCustomSubstanceChooseRoute = navigateToCustomSubstanceChooseRoute,
         navigateToChooseTime = navigateToChooseTime,
         navigateToDose = navigateToDose,
@@ -104,7 +103,7 @@ fun AddIngestionSearchScreen(
             navigateToAddCustomSubstanceScreen(searchText)
         },
         navigateToCustomUnitChooseDose = navigateToCustomUnitChooseDose,
-        substanceRouteSuggestions = viewModel.filteredSuggestions.collectAsState().value,
+        suggestions = viewModel.filteredSuggestions.collectAsState().value,
         searchText = searchText,
         onChangeSearchText = {
             viewModel.updateSearchText(it)
@@ -122,13 +121,12 @@ fun AddIngestionSearchScreen(
     navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToCheckSaferUse: (substanceName: String) -> Unit,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToCreateCustomUnit: (route: AdministrationRoute, substanceName: String?, customSubstanceId: Int?) -> Unit,
     navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
     navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
-    substanceRouteSuggestions: List<SubstanceRouteSuggestion>,
+    suggestions: List<Suggestion>,
     searchText: String,
     onChangeSearchText: (searchText: String) -> Unit,
     filteredSubstances: List<SubstanceModel>,
@@ -193,21 +191,20 @@ fun AddIngestionSearchScreen(
                 singleLine = true
             )
             LazyColumn {
-                if (substanceRouteSuggestions.isNotEmpty()) {
+                if (suggestions.isNotEmpty()) {
                     stickyHeader {
                         SectionHeader(title = "Quick logging")
                     }
                 }
-                itemsIndexed(substanceRouteSuggestions) { index, substanceRow ->
+                itemsIndexed(suggestions) { index, suggestion ->
                     SuggestionRow(
-                        substanceRouteSuggestion = substanceRow,
+                        suggestion = suggestion,
                         navigateToDose = navigateToDose,
-                        navigateToCreateCustomUnit = navigateToCreateCustomUnit,
                         navigateToCustomUnitChooseDose = navigateToCustomUnitChooseDose,
                         navigateToCustomDose = navigateToCustomDose,
                         navigateToChooseTime = navigateToChooseTime
                     )
-                    if (index < substanceRouteSuggestions.size - 1) {
+                    if (index < suggestions.size - 1) {
                         HorizontalDivider()
                     }
                 }

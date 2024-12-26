@@ -21,13 +21,16 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
+import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.data.room.experiences.relations.IngestionWithCompanionAndCustomUnit
+import com.isaakhanimann.journal.data.substances.AdministrationRoute
+import com.isaakhanimann.journal.data.substances.classes.Substance
 import com.isaakhanimann.journal.data.substances.repositories.SearchRepository
 import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepository
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.CustomUnitDose
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.CustomUnitDoseSuggestion
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.DoseAndUnit
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.SubstanceRouteSuggestion
+import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.Suggestion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -108,18 +111,17 @@ class AddIngestionSearchViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000)
         )
 
-    val filteredSuggestions: StateFlow<List<SubstanceRouteSuggestion>> = combine(
+    val filteredSuggestions: StateFlow<List<Suggestion>> = combine(
         experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow(limit = 300),
         customSubstancesFlow,
         filteredSubstancesFlow,
         searchTextFlow
     ) { ingestions, customSubstances, filteredSubstances, searchText ->
-        val suggestions = getSubstanceSuggestions(ingestions, customSubstances)
+        val suggestions = getSuggestions(ingestions, customSubstances)
         return@combine suggestions.filter { sug ->
-            filteredSubstances.any { it.name == sug.substanceName } || sug.substanceName.contains(
-                other = searchText,
-                ignoreCase = true
-            )
+            sug.isInSearch(
+                searchText = searchText,
+                substanceNames = filteredSubstances.map { it.name })
         }
     }.stateIn(
         initialValue = emptyList(),
@@ -128,76 +130,163 @@ class AddIngestionSearchViewModel @Inject constructor(
     )
 
 
-    private fun getSubstanceSuggestions(
+    private fun getSuggestions(
         ingestions: List<IngestionWithCompanionAndCustomUnit>,
         customSubstances: List<CustomSubstance>
-    ): List<SubstanceRouteSuggestion> {
-        val grouped = ingestions.groupBy { it.ingestion.substanceName }
-        val suggestions = grouped.flatMap { entry ->
-            val substanceName = entry.key
-            val ingestionsGroupedBySubstance = entry.value
-            val color =
-                ingestionsGroupedBySubstance.firstOrNull()?.substanceCompanion?.color
-                    ?: return@flatMap emptyList()
-            val isPredefinedSubstance = substanceRepo.getSubstance(substanceName) != null
-            val customSubstanceId = customSubstances.firstOrNull { it.name == substanceName }?.id
-            val groupedRoute =
-                ingestionsGroupedBySubstance.groupBy { it.ingestion.administrationRoute }
-            if (!isPredefinedSubstance && customSubstanceId == null) {
-                return@flatMap emptyList<SubstanceRouteSuggestion>()
-            } else {
-                val suggestions = groupedRoute.mapNotNull { routeEntry ->
-                    val dosesAndUnit = routeEntry.value.filter { it.customUnit == null }
-                        .map { ingestionWithCustomUnit ->
-                            DoseAndUnit(
-                                dose = ingestionWithCustomUnit.ingestion.dose,
-                                unit = ingestionWithCustomUnit.ingestion.units
-                                    ?: ingestionWithCustomUnit.customUnit?.unit ?: "",
-                                isEstimate = ingestionWithCustomUnit.ingestion.isDoseAnEstimate,
-                                estimatedDoseStandardDeviation = ingestionWithCustomUnit.ingestion.estimatedDoseStandardDeviation
-                            )
-                        }.distinct().take(6)
-                    val customUnitDoses =
-                        routeEntry.value.mapNotNull CustomUnitMapNotNull@{ ingestionWithCustomUnit ->
-                            val ingestion = ingestionWithCustomUnit.ingestion
-                            val dose = ingestion.dose ?: return@CustomUnitMapNotNull null
-                            ingestionWithCustomUnit.customUnit?.let {
-                                if (!it.isArchived) {
-                                    CustomUnitDose(
-                                        dose = dose,
-                                        isEstimate = ingestion.isDoseAnEstimate,
-                                        estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation,
-                                        customUnit = it
-                                    )
-                                } else {
-                                    null
-                                }
+    ): List<Suggestion> {
+        val groupedBySubstance = ingestions.groupBy { it.ingestion.substanceName }
+        val suggestions = groupedBySubstance.flatMap { entry ->
+            return@flatMap getSuggestionsForSubstance(
+                substanceName = entry.key,
+                ingestionsGroupedBySubstance = entry.value,
+                customSubstances = customSubstances
+            )
+        }
+        return suggestions.sortedByDescending { it.sortInstant }
+    }
 
-                            }
-                        }.distinct().take(6)
-                    val customUnits =
-                        filteredCustomUnitsFlow.value.filter { it.substanceName == substanceName && it.administrationRoute == routeEntry.key }
-                    if (dosesAndUnit.isEmpty() && customUnitDoses.isEmpty() && customUnits.isEmpty()) {
-                        return@mapNotNull null
-                    } else {
-                        return@mapNotNull SubstanceRouteSuggestion(
-                            color = color,
-                            route = routeEntry.key,
-                            substanceName = substanceName,
-                            customSubstanceId = customSubstanceId,
-                            dosesAndUnit = dosesAndUnit,
-                            customUnitDoses = customUnitDoses,
-                            customUnits = customUnits,
-                            lastIngestedTime = routeEntry.value.maxOfOrNull { it.ingestion.time }
-                                ?: Instant.MIN,
-                            lastCreationTime = routeEntry.value.mapNotNull { it.ingestion.creationDate }
-                                .maxOfOrNull { it } ?: Instant.MIN
-                        )
+    private fun getSuggestionsForSubstance(
+        substanceName: String,
+        ingestionsGroupedBySubstance: List<IngestionWithCompanionAndCustomUnit>,
+        customSubstances: List<CustomSubstance>
+    ): List<Suggestion> {
+        val color =
+            ingestionsGroupedBySubstance.firstOrNull()?.substanceCompanion?.color
+                ?: return emptyList()
+        val substance = substanceRepo.getSubstance(substanceName)
+        val isPredefinedSubstance = substance != null
+        val customSubstance = customSubstances.firstOrNull { it.name == substanceName }
+        val groupedRoute =
+            ingestionsGroupedBySubstance.groupBy { it.ingestion.administrationRoute }
+        if (!isPredefinedSubstance && customSubstance == null) {
+            return emptyList()
+        } else {
+            val suggestions = groupedRoute.flatMap { routeEntry ->
+                val administrationRoute = routeEntry.key
+                val ingestionsForSubstanceAndRoute = routeEntry.value
+
+                val customUnitSuggestions = getCustomUnitSuggestionsForSubstance(
+                    ingestionsForSubstanceAndRoute = ingestionsForSubstanceAndRoute,
+                    color = color
+                )
+                val results = mutableListOf<Suggestion>()
+                results.addAll(customUnitSuggestions)
+                if (substance != null) {
+                    val pureSubstanceSuggestion = getPureSubstanceSuggestion(
+                        ingestionsForSubstanceAndRoute = ingestionsForSubstanceAndRoute,
+                        substance = substance,
+                        administrationRoute = administrationRoute,
+                        color = color
+                    )
+                    if (pureSubstanceSuggestion != null) {
+                        results.add(pureSubstanceSuggestion)
                     }
                 }
-                return@flatMap suggestions
+                if (customSubstance != null) {
+                    val customSubstanceSuggestion = getCustomSubstanceSuggestion(
+                        ingestionsForSubstanceAndRoute = ingestionsForSubstanceAndRoute,
+                        customSubstance = customSubstance,
+                        administrationRoute = administrationRoute,
+                        color = color
+                    )
+                    if (customSubstanceSuggestion != null) {
+                        results.add(customSubstanceSuggestion)
+                    }
+                }
+                return@flatMap results
             }
+            return suggestions
         }
-        return suggestions.sortedByDescending { it.lastCreationTime }
+    }
+
+    private fun getCustomUnitSuggestionsForSubstance(
+        ingestionsForSubstanceAndRoute: List<IngestionWithCompanionAndCustomUnit>,
+        color: AdaptiveColor
+    ): List<Suggestion.CustomUnitSuggestion> {
+        val groupedByUnit = ingestionsForSubstanceAndRoute.filter { it.customUnit != null }
+            .groupBy { it.customUnit }
+        return groupedByUnit.mapNotNull { unitGroup ->
+            val customUnit = unitGroup.key ?: return@mapNotNull null
+            val ingestionsWithUnit = unitGroup.value
+            val dosesAndUnit = ingestionsWithUnit.map { it.ingestion }.map { ingestion ->
+                CustomUnitDoseSuggestion(
+                    dose = ingestion.dose,
+                    isEstimate = ingestion.isDoseAnEstimate,
+                    estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation
+                )
+            }.distinctBy { it.comparatorValue }.take(8)
+            if (dosesAndUnit.isEmpty()) {
+                return@mapNotNull null
+            }
+            return@mapNotNull Suggestion.CustomUnitSuggestion(
+                customUnit = customUnit,
+                adaptiveColor = color,
+                dosesAndUnit = dosesAndUnit,
+                sortInstant = ingestionsWithUnit.mapNotNull { it.ingestion.creationDate }
+                    .maxOfOrNull { it } ?: Instant.MIN
+            )
+        }
+    }
+
+    private fun getPureSubstanceSuggestion(
+        ingestionsForSubstanceAndRoute: List<IngestionWithCompanionAndCustomUnit>,
+        substance: Substance,
+        administrationRoute: AdministrationRoute,
+        color: AdaptiveColor
+    ): Suggestion.PureSubstanceSuggestion? {
+        val ingestionsToConsider = ingestionsForSubstanceAndRoute.asSequence().filter { it.customUnit == null }
+            .map { it.ingestion }
+        if (ingestionsToConsider.count() == 0) {
+            return null
+        }
+        val dosesAndUnit = ingestionsToConsider
+                .mapNotNull { ingestion ->
+                    val unit = ingestion.units ?: return@mapNotNull null
+                    return@mapNotNull DoseAndUnit(
+                        dose = ingestion.dose,
+                        unit = unit,
+                        isEstimate = ingestion.isDoseAnEstimate,
+                        estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation
+                    )
+                }.distinctBy { it.comparatorValue }.take(8).toList()
+        return Suggestion.PureSubstanceSuggestion(
+            administrationRoute = administrationRoute,
+            substanceName = substance.name,
+            adaptiveColor = color,
+            dosesAndUnit = dosesAndUnit,
+            sortInstant = ingestionsForSubstanceAndRoute.mapNotNull { it.ingestion.creationDate }
+                .maxOfOrNull { it } ?: Instant.MIN
+        )
+    }
+
+    private fun getCustomSubstanceSuggestion(
+        ingestionsForSubstanceAndRoute: List<IngestionWithCompanionAndCustomUnit>,
+        customSubstance: CustomSubstance,
+        administrationRoute: AdministrationRoute,
+        color: AdaptiveColor
+    ): Suggestion.CustomSubstanceSuggestion? {
+        val ingestionsToConsider = ingestionsForSubstanceAndRoute.asSequence().filter { it.customUnit == null }
+            .map { it.ingestion }
+        if (ingestionsToConsider.count() == 0) {
+            return null
+        }
+        val dosesAndUnit = ingestionsToConsider
+                .mapNotNull { ingestion ->
+                    val unit = ingestion.units ?: return@mapNotNull null
+                    return@mapNotNull DoseAndUnit(
+                        dose = ingestion.dose,
+                        unit = unit,
+                        isEstimate = ingestion.isDoseAnEstimate,
+                        estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation
+                    )
+                }.distinctBy { it.comparatorValue }.take(8).toList()
+        return Suggestion.CustomSubstanceSuggestion(
+            administrationRoute = administrationRoute,
+            customSubstance = customSubstance,
+            adaptiveColor = color,
+            dosesAndUnit = dosesAndUnit,
+            sortInstant = ingestionsForSubstanceAndRoute.mapNotNull { it.ingestion.creationDate }
+                .maxOfOrNull { it } ?: Instant.MIN
+        )
     }
 }
