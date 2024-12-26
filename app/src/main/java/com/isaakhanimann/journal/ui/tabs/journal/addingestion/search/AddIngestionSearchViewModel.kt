@@ -72,18 +72,28 @@ class AddIngestionSearchViewModel @Inject constructor(
 
     private val customUnitsFlow = experienceRepo.getCustomUnitsFlow(false)
 
-    val filteredCustomUnitsFlow = combine(customUnitsFlow, filteredSubstancesFlow, searchTextFlow) { customUnit, filteredSubstances, searchText ->
-            customUnit.filter { custom ->
-                filteredSubstances.any { it.name == custom.substanceName } || custom.name.contains(
-                    other = searchText,
-                    ignoreCase = true
-                ) || custom.substanceName.contains(other = searchText, ignoreCase = true)
-            }
-        }.stateIn(
-            initialValue = emptyList(),
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
+    val filteredCustomUnitsFlow = combine(
+        customUnitsFlow,
+        filteredSubstancesFlow,
+        searchTextFlow
+    ) { customUnit, filteredSubstances, searchText ->
+        customUnit.filter { custom ->
+            filteredSubstances.any { it.name == custom.substanceName } || custom.name.contains(
+                other = searchText,
+                ignoreCase = true
+            ) || custom.substanceName.contains(
+                other = searchText,
+                ignoreCase = true
+            ) || custom.unit.contains(
+                other = searchText,
+                ignoreCase = true
+            ) || custom.note.contains(other = searchText, ignoreCase = true)
+        }
+    }.stateIn(
+        initialValue = emptyList(),
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
 
     private val customSubstancesFlow = experienceRepo.getCustomSubstancesFlow()
 
@@ -127,40 +137,46 @@ class AddIngestionSearchViewModel @Inject constructor(
             val substanceName = entry.key
             val ingestionsGroupedBySubstance = entry.value
             val color =
-                ingestionsGroupedBySubstance.firstOrNull()?.substanceCompanion?.color ?: return@flatMap emptyList()
+                ingestionsGroupedBySubstance.firstOrNull()?.substanceCompanion?.color
+                    ?: return@flatMap emptyList()
             val isPredefinedSubstance = substanceRepo.getSubstance(substanceName) != null
             val customSubstanceId = customSubstances.firstOrNull { it.name == substanceName }?.id
-            val groupedRoute = ingestionsGroupedBySubstance.groupBy { it.ingestion.administrationRoute }
+            val groupedRoute =
+                ingestionsGroupedBySubstance.groupBy { it.ingestion.administrationRoute }
             if (!isPredefinedSubstance && customSubstanceId == null) {
                 return@flatMap emptyList<SubstanceRouteSuggestion>()
             } else {
                 val suggestions = groupedRoute.mapNotNull { routeEntry ->
-                    val dosesAndUnit = routeEntry.value.filter { it.customUnit == null }.map { ingestionWithCustomUnit ->
-                        DoseAndUnit(
-                            dose = ingestionWithCustomUnit.ingestion.dose,
-                            unit = ingestionWithCustomUnit.ingestion.units ?: ingestionWithCustomUnit.customUnit?.unit ?: "",
-                            isEstimate = ingestionWithCustomUnit.ingestion.isDoseAnEstimate,
-                            estimatedDoseStandardDeviation = ingestionWithCustomUnit.ingestion.estimatedDoseStandardDeviation
-                        )
-                    }.distinct().take(6)
-                    val customUnitDoses = routeEntry.value.mapNotNull CustomUnitMapNotNull@ { ingestionWithCustomUnit ->
-                        val ingestion = ingestionWithCustomUnit.ingestion
-                        val dose = ingestion.dose ?: return@CustomUnitMapNotNull null
-                        ingestionWithCustomUnit.customUnit?.let {
-                            if (!it.isArchived) {
-                                CustomUnitDose(
-                                    dose = dose,
-                                    isEstimate = ingestion.isDoseAnEstimate,
-                                    estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation,
-                                    customUnit = it
-                                )
-                            } else {
-                                null
-                            }
+                    val dosesAndUnit = routeEntry.value.filter { it.customUnit == null }
+                        .map { ingestionWithCustomUnit ->
+                            DoseAndUnit(
+                                dose = ingestionWithCustomUnit.ingestion.dose,
+                                unit = ingestionWithCustomUnit.ingestion.units
+                                    ?: ingestionWithCustomUnit.customUnit?.unit ?: "",
+                                isEstimate = ingestionWithCustomUnit.ingestion.isDoseAnEstimate,
+                                estimatedDoseStandardDeviation = ingestionWithCustomUnit.ingestion.estimatedDoseStandardDeviation
+                            )
+                        }.distinct().take(6)
+                    val customUnitDoses =
+                        routeEntry.value.mapNotNull CustomUnitMapNotNull@{ ingestionWithCustomUnit ->
+                            val ingestion = ingestionWithCustomUnit.ingestion
+                            val dose = ingestion.dose ?: return@CustomUnitMapNotNull null
+                            ingestionWithCustomUnit.customUnit?.let {
+                                if (!it.isArchived) {
+                                    CustomUnitDose(
+                                        dose = dose,
+                                        isEstimate = ingestion.isDoseAnEstimate,
+                                        estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation,
+                                        customUnit = it
+                                    )
+                                } else {
+                                    null
+                                }
 
-                        }
-                    }.distinct().take(6)
-                    val customUnits = filteredCustomUnitsFlow.value.filter { it.substanceName == substanceName && it.administrationRoute == routeEntry.key }
+                            }
+                        }.distinct().take(6)
+                    val customUnits =
+                        filteredCustomUnitsFlow.value.filter { it.substanceName == substanceName && it.administrationRoute == routeEntry.key }
                     if (dosesAndUnit.isEmpty() && customUnitDoses.isEmpty() && customUnits.isEmpty()) {
                         return@mapNotNull null
                     } else {
@@ -172,8 +188,10 @@ class AddIngestionSearchViewModel @Inject constructor(
                             dosesAndUnit = dosesAndUnit,
                             customUnitDoses = customUnitDoses,
                             customUnits = customUnits,
-                            lastIngestedTime = routeEntry.value.maxOfOrNull { it.ingestion.time } ?: Instant.MIN,
-                            lastCreationTime = routeEntry.value.mapNotNull { it.ingestion.creationDate }.maxOfOrNull { it} ?: Instant.MIN
+                            lastIngestedTime = routeEntry.value.maxOfOrNull { it.ingestion.time }
+                                ?: Instant.MIN,
+                            lastCreationTime = routeEntry.value.mapNotNull { it.ingestion.creationDate }
+                                .maxOfOrNull { it } ?: Instant.MIN
                         )
                     }
                 }
