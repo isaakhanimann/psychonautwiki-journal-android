@@ -427,28 +427,6 @@ fun ChooseDoseScreen(
                     }
                 }
             }
-            AnimatedVisibility(visible = isValidDose) {
-                ElevatedCard(
-                    modifier = Modifier.padding(
-                        horizontal = horizontalPadding,
-                        vertical = 4.dp
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.padding(
-                            horizontal = horizontalPadding,
-                            vertical = 10.dp
-                        )
-                    ) {
-                        PurityCalculation(
-                            purityText = purityText,
-                            onPurityChange = onPurityChange,
-                            convertedDoseAndUnitText = convertedDoseAndUnitText,
-                            isValidPurity = isValidPurity
-                        )
-                    }
-                }
-            }
             ElevatedCard(
                 modifier = Modifier.padding(
                     horizontal = horizontalPadding,
@@ -491,6 +469,28 @@ fun ChooseDoseScreen(
             var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
             TextButton(onClick = { isShowingUnknownDoseDialog = true }) {
                 Text(text = "Log unknown dose")
+            }
+            AnimatedVisibility(visible = isValidDose) {
+                ElevatedCard(
+                    modifier = Modifier.padding(
+                        horizontal = horizontalPadding,
+                        vertical = 4.dp
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(
+                            horizontal = horizontalPadding,
+                            vertical = 10.dp
+                        )
+                    ) {
+                        PurityCalculation(
+                            purityText = purityText,
+                            onPurityChange = onPurityChange,
+                            convertedDoseAndUnitText = convertedDoseAndUnitText,
+                            isValidPurity = isValidPurity
+                        )
+                    }
+                }
             }
             AnimatedVisibility(visible = isShowingUnknownDoseDialog) {
                 UnknownDoseDialog(
