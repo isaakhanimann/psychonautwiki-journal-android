@@ -112,7 +112,7 @@ class AddIngestionSearchViewModel @Inject constructor(
         )
 
     val filteredSuggestions: StateFlow<List<Suggestion>> = combine(
-        experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow(limit = 300),
+        experienceRepo.getSortedIngestionsWithSubstanceCompanionsFlow(limit = 1000),
         customSubstancesFlow,
         filteredSubstancesFlow,
         searchTextFlow
