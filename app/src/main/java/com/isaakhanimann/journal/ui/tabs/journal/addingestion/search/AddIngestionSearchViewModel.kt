@@ -248,7 +248,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                         isEstimate = ingestion.isDoseAnEstimate,
                         estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation
                     )
-                }.distinctBy { it.comparatorValue }.take(8).toList()
+                }.distinctBy { it.comparatorValue }.take(8)
         return Suggestion.PureSubstanceSuggestion(
             administrationRoute = administrationRoute,
             substanceName = substance.name,
@@ -265,9 +265,9 @@ class AddIngestionSearchViewModel @Inject constructor(
         administrationRoute: AdministrationRoute,
         color: AdaptiveColor
     ): Suggestion.CustomSubstanceSuggestion? {
-        val ingestionsToConsider = ingestionsForSubstanceAndRoute.asSequence().filter { it.customUnit == null }
+        val ingestionsToConsider = ingestionsForSubstanceAndRoute.filter { it.customUnit == null }
             .map { it.ingestion }
-        if (ingestionsToConsider.count() == 0) {
+        if (ingestionsToConsider.isEmpty()) {
             return null
         }
         val dosesAndUnit = ingestionsToConsider
@@ -279,7 +279,7 @@ class AddIngestionSearchViewModel @Inject constructor(
                         isEstimate = ingestion.isDoseAnEstimate,
                         estimatedDoseStandardDeviation = ingestion.estimatedDoseStandardDeviation
                     )
-                }.distinctBy { it.comparatorValue }.take(8).toList()
+                }.distinctBy { it.comparatorValue }.take(8)
         return Suggestion.CustomSubstanceSuggestion(
             administrationRoute = administrationRoute,
             customSubstance = customSubstance,
