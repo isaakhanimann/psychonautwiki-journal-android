@@ -254,7 +254,7 @@ class AddIngestionSearchViewModel @Inject constructor(
             substanceName = substance.name,
             adaptiveColor = color,
             dosesAndUnit = dosesAndUnit,
-            sortInstant = ingestionsForSubstanceAndRoute.mapNotNull { it.ingestion.creationDate }
+            sortInstant = ingestionsToConsider.mapNotNull { it.creationDate }
                 .maxOfOrNull { it } ?: Instant.MIN
         )
     }
@@ -285,7 +285,7 @@ class AddIngestionSearchViewModel @Inject constructor(
             customSubstance = customSubstance,
             adaptiveColor = color,
             dosesAndUnit = dosesAndUnit,
-            sortInstant = ingestionsForSubstanceAndRoute.mapNotNull { it.ingestion.creationDate }
+            sortInstant = ingestionsToConsider.mapNotNull { it.creationDate }
                 .maxOfOrNull { it } ?: Instant.MIN
         )
     }
