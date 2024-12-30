@@ -84,7 +84,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.StandardDeviationExplanation
-import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.suggestion.models.justUnit
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.IngestionTimePickerOption
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePointOrRangePicker
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
