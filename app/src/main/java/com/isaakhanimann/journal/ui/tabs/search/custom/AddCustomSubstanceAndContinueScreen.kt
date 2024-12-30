@@ -35,7 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCustomSubstanceAndContinueScreen(
-    navigateToChooseRoa: (customSubstanceId: Int) -> Unit,
+    navigateToChooseRoa: (customSubstanceName: String) -> Unit,
     initialName: String = "",
     viewModel: AddCustomSubstanceViewModel = hiltViewModel()
 ) {

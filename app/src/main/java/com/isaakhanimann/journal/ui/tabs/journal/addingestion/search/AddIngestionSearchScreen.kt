@@ -82,10 +82,9 @@ fun AddIngestionSearchScreen(
     navigateToCheckSaferUse: (substanceName: String) -> Unit,
     navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToCreateCustomUnit: (route: AdministrationRoute, substanceName: String?, customSubstanceId: Int?) -> Unit,
-    navigateToChooseCustomSubstanceDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
+    navigateToChooseCustomSubstanceDose: (customSubstanceName: String, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
-    navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
+    navigateToCustomSubstanceChooseRoute: (customSubstanceName: String) -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     navigateToAddCustomSubstanceScreen: (searchText: String) -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
@@ -121,9 +120,9 @@ fun AddIngestionSearchScreen(
     navigateToChooseRoute: (substanceName: String) -> Unit,
     navigateToCheckSaferUse: (substanceName: String) -> Unit,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
-    navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
+    navigateToCustomDose: (customSubstanceName: String, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
-    navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
+    navigateToCustomSubstanceChooseRoute: (customSubstanceName: String) -> Unit,
     navigateToAddCustomSubstanceScreen: () -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
     suggestions: List<Suggestion>,
@@ -221,7 +220,7 @@ fun AddIngestionSearchScreen(
                         hasSaferUse = false,
                         hasInteractions = false
                     ), onTap = {
-                        navigateToCustomSubstanceChooseRoute(customSubstance.id)
+                        navigateToCustomSubstanceChooseRoute(customSubstance.name)
                     })
                     if (index < filteredCustomSubstances.size - 1) {
                         HorizontalDivider()

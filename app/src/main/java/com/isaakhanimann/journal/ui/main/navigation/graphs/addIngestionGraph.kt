@@ -50,8 +50,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 navigateToCheckSaferUse = { substanceName ->
                     navController.navigate(CheckSaferUseRoute(substanceName))
                 },
-                navigateToCustomSubstanceChooseRoute = { customSubstanceId ->
-                    navController.navigate(CustomSubstanceChooseRouteRoute(customSubstanceId))
+                navigateToCustomSubstanceChooseRoute = { customSubstanceName ->
+                    navController.navigate(CustomSubstanceChooseRouteRoute(customSubstanceName))
                 },
                 navigateToChooseTime = { substanceName, administrationRoute, dose, units, isEstimate, estimatedDoseStandardDeviation, customUnitId ->
                     navController.navigate(
@@ -63,14 +63,13 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                             estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
                             substanceName = substanceName,
                             customUnitId = customUnitId,
-                            customSubstanceId = null
                         )
                     )
                 },
-                navigateToChooseCustomSubstanceDose = { customSubstanceId, administrationRoute ->
+                navigateToChooseCustomSubstanceDose = { customSubstanceName, administrationRoute ->
                     navController.navigate(
                         ChooseCustomSubstanceDoseRoute(
-                            customSubstanceId = customSubstanceId,
+                            customSubstanceName = customSubstanceName,
                             administrationRoute = administrationRoute
 
                         )
@@ -81,15 +80,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         ChooseDoseRoute(
                             substanceName = substanceName,
                             administrationRoute = administrationRoute
-                        )
-                    )
-                },
-                navigateToCreateCustomUnit = { administrationRoute, substanceName, customSubstanceId ->
-                    navController.navigate(
-                        FinishAddCustomUnitRoute(
-                            administrationRoute = administrationRoute,
-                            substanceName = substanceName,
-                            customSubstanceId = customSubstanceId
                         )
                     )
                 },
@@ -107,8 +97,8 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
         composableWithTransitions<AddCustomSubstanceRouteOnAddIngestionGraph> { backStackEntry ->
             val route = backStackEntry.toRoute<AddCustomSubstanceRouteOnAddIngestionGraph>()
             AddCustomSubstanceAndContinueScreen(
-                navigateToChooseRoa = { customSubstanceId ->
-                    navController.navigate(CustomSubstanceChooseRouteRoute(customSubstanceId)) {
+                navigateToChooseRoa = { customSubstanceName ->
+                    navController.navigate(CustomSubstanceChooseRouteRoute(customSubstanceName)) {
                         popUpTo(AddIngestionSearchRoute)
                     }
                 },
@@ -149,10 +139,18 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                             estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
                             substanceName = substanceName,
                             customUnitId = customUnitId,
-                            customSubstanceId = null
                         )
                     )
-                })
+                },
+                navigateToCreateCustomUnit = { administrationRoute, substanceName ->
+                    navController.navigate(
+                        FinishAddCustomUnitRoute(
+                            administrationRoute = administrationRoute,
+                            substanceName = substanceName
+                        )
+                    )
+                }
+            )
         }
         composableWithTransitions<ChooseRouteOfAddIngestionRoute> { backStackEntry ->
             val route = backStackEntry.toRoute<ChooseRouteOfAddIngestionRoute>()
@@ -176,7 +174,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                 onRouteTap = { administrationRoute ->
                     navController.navigate(
                         ChooseCustomSubstanceDoseRoute(
-                            customSubstanceId = route.customSubstanceId,
+                            customSubstanceName = route.customSubstanceName,
                             administrationRoute = administrationRoute
                         )
                     )
@@ -194,8 +192,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                             isEstimate = isEstimate,
                             dose = dose,
                             estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
-                            substanceName = null,
-                            customSubstanceId = route.customSubstanceId,
+                            substanceName = route.customSubstanceName,
                             customUnitId = null
                         )
                     )
@@ -218,7 +215,6 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                             estimatedDoseStandardDeviation = estimatedDoseStandardDeviation,
                             substanceName = route.substanceName,
                             customUnitId = null,
-                            customSubstanceId = null
                         )
                     )
                 },
@@ -232,8 +228,7 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                     navController.navigate(
                         FinishAddCustomUnitRoute(
                             substanceName = route.substanceName,
-                            administrationRoute = route.administrationRoute,
-                            customSubstanceId = null
+                            administrationRoute = route.administrationRoute
                         )
                     )
                 }
@@ -280,11 +275,11 @@ data class ChooseDoseCustomUnitRoute(val customUnitId: Int)
 data class ChooseRouteOfAddIngestionRoute(val substanceName: String)
 
 @Serializable
-data class CustomSubstanceChooseRouteRoute(val customSubstanceId: Int)
+data class CustomSubstanceChooseRouteRoute(val customSubstanceName: String)
 
 @Serializable
 data class ChooseCustomSubstanceDoseRoute(
-    val customSubstanceId: Int,
+    val customSubstanceName: String,
     val administrationRoute: AdministrationRoute,
 )
 
@@ -301,9 +296,8 @@ data class FinishIngestionRoute(
     val units: String?,
     val dose: Double?,
     val estimatedDoseStandardDeviation: Double?,
-    val substanceName: String?,
+    val substanceName: String, // can be name of pw substance or custom substance
     val customUnitId: Int?,
-    val customSubstanceId: Int?
 )
 
 @Serializable

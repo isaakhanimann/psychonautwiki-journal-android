@@ -155,7 +155,7 @@ class FinishIngestionScreenViewModel @Inject constructor(
 
     init {
         val finishIngestionRoute = state.toRoute<FinishIngestionRoute>()
-        substanceName = finishIngestionRoute.substanceName ?: ""
+        substanceName = finishIngestionRoute.substanceName
         administrationRoute = finishIngestionRoute.administrationRoute
         dose = finishIngestionRoute.dose
         estimatedDoseStandardDeviation = finishIngestionRoute.estimatedDoseStandardDeviation
@@ -168,7 +168,6 @@ class FinishIngestionScreenViewModel @Inject constructor(
             }
         }
         isEstimate = finishIngestionRoute.isEstimate
-        val customSubstanceId = finishIngestionRoute.customSubstanceId
         viewModelScope.launch {
             val lastIngestionTimeOfExperience =
                 userPreferences.lastIngestionTimeOfExperienceFlow.first()
@@ -185,13 +184,6 @@ class FinishIngestionScreenViewModel @Inject constructor(
                 }
             }
             updateExperiencesBasedOnSelectedTime()
-            if (customSubstanceId != null) {
-                val customSubstance =
-                    experienceRepo.getCustomSubstanceFlow(customSubstanceId).firstOrNull()
-                if (customSubstance != null) {
-                    substanceName = customSubstance.name
-                }
-            }
             val allCompanions = experienceRepo.getAllSubstanceCompanionsFlow().first()
             val thisCompanion = allCompanions.firstOrNull { it.substanceName == substanceName }
             substanceCompanion = thisCompanion

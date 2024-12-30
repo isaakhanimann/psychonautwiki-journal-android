@@ -30,7 +30,6 @@ import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.main.navigation.graphs.ChooseCustomSubstanceDoseRoute
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -85,7 +84,7 @@ class CustomSubstanceChooseDoseViewModel @Inject constructor(
         administrationRoute = chooseCustomSubstanceDoseRoute.administrationRoute
         viewModelScope.launch {
             val customSubstance =
-                experienceRepository.getCustomSubstanceFlow(chooseCustomSubstanceDoseRoute.customSubstanceId).firstOrNull()
+                experienceRepository.getCustomSubstance(chooseCustomSubstanceDoseRoute.customSubstanceName)
                     ?: return@launch
             substanceName = customSubstance.name
             units = customSubstance.units

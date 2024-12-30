@@ -66,7 +66,7 @@ import com.isaakhanimann.journal.ui.tabs.search.substancerow.SubstanceRow
 @Composable
 fun AddIngestionSearchScreen(
     navigateToChooseRoute: (substanceName: String) -> Unit,
-    navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
+    navigateToCustomSubstanceChooseRoute: (customSubstanceName: String) -> Unit,
     viewModel: AddIngestionSearchViewModel = hiltViewModel()
 ) {
     AddIngestionSearchScreen(
@@ -84,7 +84,7 @@ fun AddIngestionSearchScreen(
 @Composable
 private fun AddIngestionSearchScreen(
     navigateToChooseRoute: (substanceName: String) -> Unit,
-    navigateToCustomSubstanceChooseRoute: (customSubstanceId: Int) -> Unit,
+    navigateToCustomSubstanceChooseRoute: (customSubstanceName: String) -> Unit,
     searchText: String,
     onChangeSearchText: (searchText: String) -> Unit,
     filteredSubstances: List<SubstanceModel>,
@@ -169,7 +169,7 @@ private fun AddIngestionSearchScreen(
                         hasSaferUse = false,
                         hasInteractions = false
                     ), onTap = {
-                        navigateToCustomSubstanceChooseRoute(customSubstance.id)
+                        navigateToCustomSubstanceChooseRoute(customSubstance.name)
                     })
                     HorizontalDivider()
                 }

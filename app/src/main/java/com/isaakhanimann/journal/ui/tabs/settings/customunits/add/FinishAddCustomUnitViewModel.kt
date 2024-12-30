@@ -33,7 +33,6 @@ import com.isaakhanimann.journal.data.substances.repositories.SubstanceRepositor
 import com.isaakhanimann.journal.ui.main.navigation.graphs.FinishAddCustomUnitRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -85,12 +84,14 @@ class FinishAddCustomUnitViewModel @Inject constructor(
     fun onChangeOfDose(newDose: String) {
         doseText = newDose
     }
+
     val dose: Double? get() = doseText.toDoubleOrNull()
 
     var estimatedDoseDeviationText by mutableStateOf("")
     fun onChangeOfEstimatedDoseDeviation(newEstimatedDoseDeviation: String) {
         estimatedDoseDeviationText = newEstimatedDoseDeviation
     }
+
     private val estimatedDoseDeviation: Double? get() = estimatedDoseDeviationText.toDoubleOrNull()
 
     var isEstimate by mutableStateOf(false)
@@ -112,15 +113,14 @@ class FinishAddCustomUnitViewModel @Inject constructor(
     init {
         originalUnit = roaDose?.units ?: ""
         viewModelScope.launch {
-            if (finishAddCustomUnitRoute.substanceName != null) {
-                substanceName = finishAddCustomUnitRoute.substanceName
-                substance = substanceRepository.getSubstance(finishAddCustomUnitRoute.substanceName)
-                originalUnit = roaDose?.units ?: "mg"
-                isUnitsFieldShown = roaDose?.units?.isBlank() ?: true
-            } else if (finishAddCustomUnitRoute.customSubstanceId != null) {
-                val customSubstance = experienceRepo.getCustomSubstanceFlow(finishAddCustomUnitRoute.customSubstanceId).first()
+            substanceName = finishAddCustomUnitRoute.substanceName
+            substance = substanceRepository.getSubstance(finishAddCustomUnitRoute.substanceName)
+            originalUnit = roaDose?.units ?: "mg"
+            isUnitsFieldShown = roaDose?.units?.isBlank() ?: true
+            if (substance == null || roaDose?.units == null) {
+                val customSubstance =
+                    experienceRepo.getCustomSubstance(finishAddCustomUnitRoute.substanceName)
                 if (customSubstance != null) {
-                    substanceName = customSubstance.name
                     originalUnit = customSubstance.units
                     isUnitsFieldShown = false
                 }

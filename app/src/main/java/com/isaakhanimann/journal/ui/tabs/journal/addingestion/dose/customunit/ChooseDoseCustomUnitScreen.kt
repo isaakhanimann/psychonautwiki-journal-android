@@ -81,6 +81,7 @@ fun ChooseDoseCustomUnitScreen(
         substanceName: String,
         customUnitId: Int?
     ) -> Unit,
+    navigateToCreateCustomUnit: (route: AdministrationRoute, substanceName: String) -> Unit,
     viewModel: ChooseDoseCustomUnitViewModel = hiltViewModel()
 ) {
     viewModel.customUnit?.let { customUnitUnwrapped ->
@@ -110,6 +111,7 @@ fun ChooseDoseCustomUnitScreen(
                     customUnitUnwrapped.id
                 )
             },
+            navigateToCreateCustomUnit = navigateToCreateCustomUnit,
             useUnknownDoseAndNavigate = {
                 navigateToChooseTimeAndMaybeColor(
                     customUnitUnwrapped.administrationRoute,
@@ -158,6 +160,7 @@ fun ChooseDoseCustomUnitScreenPreview(
         isEstimate = false,
         onChangeIsEstimate = {},
         navigateToNext = {},
+        navigateToCreateCustomUnit = { _: AdministrationRoute, _: String -> },
         useUnknownDoseAndNavigate = {},
         currentDoseClass = DoseClass.THRESHOLD,
         customUnitCalculationText = "2 pills x 20 mg = 40 mg",
@@ -180,6 +183,7 @@ fun ChooseDoseCustomUnitScreen(
     isEstimate: Boolean,
     onChangeIsEstimate: (Boolean) -> Unit,
     navigateToNext: () -> Unit,
+    navigateToCreateCustomUnit: (route: AdministrationRoute, substanceName: String) -> Unit,
     useUnknownDoseAndNavigate: () -> Unit,
     currentDoseClass: DoseClass?,
     customUnitCalculationText: String?,
@@ -350,6 +354,14 @@ fun ChooseDoseCustomUnitScreen(
             }
             TextButton(onClick = useUnknownDoseAndNavigate) {
                 Text(text = "Log unknown dose")
+            }
+            TextButton(onClick = {
+                navigateToCreateCustomUnit(
+                    customUnit.administrationRoute,
+                    customUnit.substanceName
+                )
+            }) {
+                Text(text = "Create new unit")
             }
         }
     }

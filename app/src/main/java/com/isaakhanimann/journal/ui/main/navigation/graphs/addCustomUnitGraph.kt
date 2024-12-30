@@ -51,8 +51,7 @@ fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
                     navController.navigate(
                         FinishAddCustomUnitRoute(
                             administrationRoute = administrationRoute,
-                            substanceName = null,
-                            customSubstanceId = route.customSubstanceId,
+                            substanceName = route.customSubstanceName,
                         )
                     )
                 }
@@ -66,7 +65,6 @@ fun NavGraphBuilder.addCustomUnitGraph(navController: NavController) {
                         FinishAddCustomUnitRoute(
                             administrationRoute = administrationRoute,
                             substanceName = route.substanceName,
-                            customSubstanceId = null
                         )
                     )
                 }
@@ -97,6 +95,5 @@ data class ChooseRouteOfAddCustomUnitRoute(val substanceName: String)
 @Serializable
 data class FinishAddCustomUnitRoute(
     val administrationRoute: AdministrationRoute,
-    val substanceName: String?,
-    val customSubstanceId: Int?
+    val substanceName: String,
 )

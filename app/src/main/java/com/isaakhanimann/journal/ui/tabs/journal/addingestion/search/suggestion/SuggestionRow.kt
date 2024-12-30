@@ -50,7 +50,7 @@ fun SuggestionRowPreview(@PreviewParameter(SubstanceSuggestionProvider::class) s
         suggestion = suggestion,
         navigateToDose = { _: String, _: AdministrationRoute -> },
         navigateToCustomUnitChooseDose = {},
-        navigateToCustomDose = { _: Int, _: AdministrationRoute -> },
+        navigateToCustomDose = { _: String, _: AdministrationRoute -> },
         navigateToChooseTime = { _: String, _: AdministrationRoute, _: Double?, _: String?, _: Boolean, _: Double?, _: Int? -> },
     )
 }
@@ -60,7 +60,7 @@ fun SuggestionRow(
     suggestion: Suggestion,
     navigateToDose: (substanceName: String, route: AdministrationRoute) -> Unit,
     navigateToCustomUnitChooseDose: (customUnitId: Int) -> Unit,
-    navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
+    navigateToCustomDose: (customSubstanceName: String, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
 ) {
     when(suggestion) {
@@ -211,7 +211,7 @@ fun CustomUnitSuggestionRow(
 @Composable
 fun CustomSubstanceSuggestionRow(
     customSubstanceSuggestion: Suggestion.CustomSubstanceSuggestion,
-    navigateToCustomDose: (customSubstanceId: Int, route: AdministrationRoute) -> Unit,
+    navigateToCustomDose: (customSubstanceName: String, route: AdministrationRoute) -> Unit,
     navigateToChooseTime: (substanceName: String, route: AdministrationRoute, dose: Double?, units: String?, isEstimate: Boolean, estimatedDoseStandardDeviation: Double?, customUnitId: Int?) -> Unit,
 ) {
     Column(
@@ -266,7 +266,7 @@ fun CustomSubstanceSuggestionRow(
             }
             SuggestionChip(onClick = {
                 navigateToCustomDose(
-                    customSubstanceSuggestion.customSubstance.id,
+                    customSubstanceSuggestion.customSubstance.name,
                     customSubstanceSuggestion.administrationRoute
                 )
             }, label = {
