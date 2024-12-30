@@ -234,9 +234,9 @@ class AddIngestionSearchViewModel @Inject constructor(
         administrationRoute: AdministrationRoute,
         color: AdaptiveColor
     ): Suggestion.PureSubstanceSuggestion? {
-        val ingestionsToConsider = ingestionsForSubstanceAndRoute.asSequence().filter { it.customUnit == null }
+        val ingestionsToConsider = ingestionsForSubstanceAndRoute.filter { it.customUnit == null }
             .map { it.ingestion }
-        if (ingestionsToConsider.count() == 0) {
+        if (ingestionsToConsider.isEmpty()) {
             return null
         }
         val dosesAndUnit = ingestionsToConsider
