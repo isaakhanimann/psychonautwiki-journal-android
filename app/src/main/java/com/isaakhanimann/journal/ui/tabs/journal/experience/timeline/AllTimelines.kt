@@ -457,16 +457,24 @@ fun DrawScope.drawTimeRange(
         val offsetStartX = convolutionResultModel.offsetStartXInSeconds * pixelsPerSec
         val offsetEndX = convolutionResultModel.offsetEndXInSeconds * pixelsPerSec
 
+        val bottom = canvasHeight + strokeWidth / 2
         val path = Path().apply {
-            moveTo(x = comeupStartX, y = horizontalLineY)
+            moveTo(x = startX, y = horizontalLineY)
+            lineTo(x = comeupStartX, y = horizontalLineY)
             lineTo(x = peakStartX, y = top)
             lineTo(x = offsetStartX, y = top)
-            lineTo(x = offsetEndX, y = canvasHeight)
+            lineTo(x = offsetEndX, y = bottom)
         }
         drawPath(
             path = path,
             color = color,
             style = density.normalStroke
+        )
+        path.lineTo(x = startX, y = bottom)
+        path.close()
+        drawPath(
+            path = path,
+            color = color.copy(alpha = shapeAlpha)
         )
     }
 }
