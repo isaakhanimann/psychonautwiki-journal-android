@@ -151,7 +151,7 @@ private fun RegularTimeOrRangeText(
         if (startDay == endDay) {
             startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getShortTimeText()
         } else {
-            startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getShortTimeText()
+            startText + TIME_RANGE_SEPARATOR_TEXT + endTime.getShortTimeWithWeekdayText()
         }
     }
     Text(
