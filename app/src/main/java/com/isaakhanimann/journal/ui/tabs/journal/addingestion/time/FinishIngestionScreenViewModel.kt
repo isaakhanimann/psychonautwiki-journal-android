@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -213,7 +214,7 @@ class FinishIngestionScreenViewModel @Inject constructor(
             updateTitleBasedOnTime(startTime)
         }
         val endTime = localDateTimeEndFlow.first().atZone(ZoneId.systemDefault()).toInstant()
-        if (startTime > endTime) {
+        if (startTime > endTime || Duration.between(startTime, endTime).toHours() > 24) {
             val newEndTime = startTime.plus(30, ChronoUnit.MINUTES)
             localDateTimeEndFlow.emit(newEndTime.getLocalDateTime())
         }
