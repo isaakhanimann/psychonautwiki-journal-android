@@ -63,8 +63,10 @@ class FinishAddCustomUnitViewModel @Inject constructor(
 
     fun onChangeOfUnit(newUnit: String) {
         unit = newUnit
-        if (newUnit != "mg" && newUnit != "g" && newUnit.lowercase() != "ml" && newUnit.lastOrNull() != 's') {
-            unitPlural = newUnit + "s"
+        unitPlural = if (newUnit != "mg" && newUnit != "g" && newUnit.lowercase() != "ml" && newUnit.lastOrNull() != 's') {
+            newUnit + "s"
+        } else {
+            newUnit
         }
     }
 
