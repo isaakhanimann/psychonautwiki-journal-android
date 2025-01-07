@@ -92,8 +92,9 @@ class AllTimelinesModel(
             }
         }.sortedBy { it.rangeInSeconds.first }
         timeRangeDrawables = intermediateRanges.mapIndexed { index, currentRange ->
-            val intersectionCount = intermediateRanges.subList(0, index).count {
-                it.rangeInSeconds.intersect(currentRange.rangeInSeconds).isNotEmpty()
+            val previousRanges = intermediateRanges.subList(0, index)
+            val intersectionCount = previousRanges.count {
+                return@count it.rangeInSeconds.first <= currentRange.rangeInSeconds.last && currentRange.rangeInSeconds.first <= it.rangeInSeconds.last
             }
             TimeRangeDrawable(
                 color = currentRange.color,
