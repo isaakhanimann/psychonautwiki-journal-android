@@ -35,10 +35,8 @@ data class OnsetTimeline(
 ) : TimelineDrawable {
 
     override val nonNormalisedHeight: Float = 0f
-    override fun setOverallHeight(overallHeight: Float) {
-        nonNormalisedOverallHeight = overallHeight
-    }
-    override var nonNormalisedOverallHeight: Float = 1f
+    override var referenceHeight = 1f
+
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds + onset.maxInSeconds
 

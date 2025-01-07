@@ -31,9 +31,7 @@ interface TimelineDrawable {
         density: Density
     )
 
-    fun setOverallHeight(overallHeight: Float)
-
     val nonNormalisedHeight: Float
-    var nonNormalisedOverallHeight: Float
+    var referenceHeight: Float
     val endOfLineRelativeToStartInSeconds: Float
 }

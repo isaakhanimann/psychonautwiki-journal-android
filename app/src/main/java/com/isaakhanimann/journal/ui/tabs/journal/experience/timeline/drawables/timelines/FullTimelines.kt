@@ -36,7 +36,6 @@ data class FullTimelines(
     val offset: FullDurationRange,
     val weightedLines: List<WeightedLine>,
     val startTimeGraph: Instant,
-    val areSubstanceHeightsIndependent: Boolean,
 ) : TimelineDrawable {
 
     data class WeightedLineRelativeToFirst(
@@ -74,6 +73,12 @@ data class FullTimelines(
     )
 
     private val finalPoints: List<FinalPoint>
+
+    override var referenceHeight: Float = 1f
+
+    override val nonNormalisedHeight: Float
+
+    override val endOfLineRelativeToStartInSeconds: Float
 
     init {
         val weightedRelatives = weightedLines.map {
@@ -151,26 +156,8 @@ data class FullTimelines(
         }
         val sortedPoints = pointsWithHeight.sortedBy { it.x }
         this.finalPoints = sortedPoints
-    }
-
-    override var nonNormalisedOverallHeight: Float = 1f
-
-    override fun setOverallHeight(overallHeight: Float) {
-        nonNormalisedOverallHeight = overallHeight
-    }
-
-    override val nonNormalisedHeight: Float =
-        finalPoints.maxOf { it.y }
-
-    override val endOfLineRelativeToStartInSeconds: Float =
-        finalPoints.maxOf { it.x }
-
-    private val finalNonNormalisedMaxHeight: Float get() {
-        return if (areSubstanceHeightsIndependent) {
-            nonNormalisedHeight
-        } else {
-            nonNormalisedOverallHeight
-        }
+        this.nonNormalisedHeight = sortedPoints.maxOf { it.y }
+        this.endOfLineRelativeToStartInSeconds = finalPoints.maxOf { it.x }
     }
 
     override fun drawTimeLine(
@@ -183,7 +170,7 @@ data class FullTimelines(
         val finalPointsNormalised = finalPoints.map {
             FinalPoint(
                 x = it.x,
-                y = it.y / finalNonNormalisedMaxHeight,
+                y = it.y / referenceHeight,
                 isIngestionPoint = it.isIngestionPoint
             )
         }
@@ -227,7 +214,6 @@ data class FullTimelines(
 fun RoaDuration.toFullTimelines(
     weightedLines: List<WeightedLine>,
     startTimeGraph: Instant,
-    areSubstanceHeightsIndependent: Boolean,
 ): FullTimelines? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
@@ -241,7 +227,6 @@ fun RoaDuration.toFullTimelines(
             offset = fullOffset,
             weightedLines = weightedLines,
             startTimeGraph = startTimeGraph,
-            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
         )
     } else {
         null

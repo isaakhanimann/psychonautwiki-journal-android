@@ -33,24 +33,13 @@ data class OnsetTotalTimeline(
     val totalWeight: Float,
     val ingestionTimeRelativeToStartInSeconds: Float,
     override val nonNormalisedHeight: Float,
-    val areSubstanceHeightsIndependent: Boolean,
     val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
 
-    override var nonNormalisedOverallHeight: Float = 1f
-    override fun setOverallHeight(overallHeight: Float) {
-        nonNormalisedOverallHeight = overallHeight
-    }
+    override var referenceHeight = 1f
+
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds + total.maxInSeconds
-
-    private val finalNonNormalisedMaxHeight: Float get() {
-        return if (areSubstanceHeightsIndependent) {
-            nonNormalisedMaxOfRoute
-        } else {
-            nonNormalisedOverallHeight
-        }
-    }
 
     override fun drawTimeLine(
         drawScope: DrawScope,
@@ -59,7 +48,7 @@ data class OnsetTotalTimeline(
         color: Color,
         density: Density
     ) {
-        val normalisedHeight = nonNormalisedHeight / finalNonNormalisedMaxHeight
+        val normalisedHeight = nonNormalisedHeight / referenceHeight
         val heightInPx = normalisedHeight * canvasHeight
         val top = canvasHeight - heightInPx
         val onsetWeight = 0.5f
@@ -115,7 +104,6 @@ fun RoaDuration.toOnsetTotalTimeline(
     totalWeight: Float,
     ingestionTimeRelativeToStartInSeconds: Float,
     nonNormalisedHeight: Float,
-    areSubstanceHeightsIndependent: Boolean,
     nonNormalisedMaxOfRoute: Float,
 ): OnsetTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
@@ -127,7 +115,6 @@ fun RoaDuration.toOnsetTotalTimeline(
             totalWeight = totalWeight,
             ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
             nonNormalisedHeight = nonNormalisedHeight,
-            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
             nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {

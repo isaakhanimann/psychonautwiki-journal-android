@@ -28,9 +28,84 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOn
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
+private val sampleRoaDuration = RoaDuration(
+    onset = DurationRange(
+        min = 20f,
+        max = 40f,
+        units = DurationUnits.MINUTES
+    ),
+    comeup = DurationRange(
+        min = 15f,
+        max = 30f,
+        units = DurationUnits.MINUTES
+    ),
+    peak = DurationRange(
+        min = 1.5f,
+        max = 2.5f,
+        units = DurationUnits.HOURS
+    ),
+    offset = DurationRange(
+        min = 2f,
+        max = 4f,
+        units = DurationUnits.HOURS
+    ),
+    total = DurationRange(
+        min = 3f,
+        max = 5f,
+        units = DurationUnits.HOURS
+    ),
+    afterglow = DurationRange(
+        min = 12f,
+        max = 48f,
+        units = DurationUnits.HOURS
+    )
+)
+
 class TimelinesPreviewProvider :
     PreviewParameterProvider<List<DataForOneEffectLine>> {
     override val values: Sequence<List<DataForOneEffectLine>> = sequenceOf(
+        listOf(
+            DataForOneEffectLine(
+                substanceName = "name15",
+                route = AdministrationRoute.ORAL,
+                roaDuration = sampleRoaDuration,
+                height = 3f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.BLUE,
+                startTime = Instant.now().minus(3, ChronoUnit.HOURS),
+                endTime = null,
+            ),
+            DataForOneEffectLine(
+                substanceName = "name16",
+                route = AdministrationRoute.ORAL,
+                roaDuration = sampleRoaDuration,
+                height = 2f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.GREEN,
+                startTime = Instant.now().minus(80, ChronoUnit.MINUTES),
+                endTime = Instant.now().plus(100, ChronoUnit.MINUTES),
+            ),
+            DataForOneEffectLine(
+                substanceName = "name17",
+                route = AdministrationRoute.ORAL,
+                roaDuration = sampleRoaDuration,
+                height = 5f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.PINK,
+                startTime = Instant.now().minus(40, ChronoUnit.MINUTES),
+                endTime = Instant.now().plus(150, ChronoUnit.MINUTES),
+            ),
+            DataForOneEffectLine(
+                substanceName = "name17",
+                route = AdministrationRoute.ORAL,
+                roaDuration = sampleRoaDuration,
+                height = 1f,
+                horizontalWeight = 0.5f,
+                color = AdaptiveColor.PURPLE,
+                startTime = Instant.now().plus(160, ChronoUnit.MINUTES),
+                endTime = Instant.now().plus(200, ChronoUnit.MINUTES),
+            ),
+        ),
         listOf(
             DataForOneEffectLine(
                 substanceName = "name",
@@ -1011,78 +1086,5 @@ class TimelinesPreviewProvider :
                 endTime = null,
             ),
         ),
-        listOf(
-            DataForOneEffectLine(
-                substanceName = "name15",
-                route = AdministrationRoute.ORAL,
-                roaDuration = RoaDuration(
-                    onset = DurationRange(
-                        min = 20f,
-                        max = 40f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    comeup = DurationRange(
-                        min = 15f,
-                        max = 30f,
-                        units = DurationUnits.MINUTES
-                    ),
-                    peak = DurationRange(
-                        min = 1.5f,
-                        max = 2.5f,
-                        units = DurationUnits.HOURS
-                    ),
-                    offset = DurationRange(
-                        min = 2f,
-                        max = 4f,
-                        units = DurationUnits.HOURS
-                    ),
-                    total = DurationRange(
-                        min = 3f,
-                        max = 5f,
-                        units = DurationUnits.HOURS
-                    ),
-                    afterglow = DurationRange(
-                        min = 12f,
-                        max = 48f,
-                        units = DurationUnits.HOURS
-                    )
-                ),
-                height = 1f,
-                horizontalWeight = 0.5f,
-                color = AdaptiveColor.BLUE,
-                startTime = Instant.now().minus(3, ChronoUnit.HOURS),
-                endTime = null,
-            ),
-            DataForOneEffectLine(
-                substanceName = "name16",
-                route = AdministrationRoute.ORAL,
-                roaDuration = null,
-                height = 1f,
-                horizontalWeight = 0.5f,
-                color = AdaptiveColor.GREEN,
-                startTime = Instant.now().minus(80, ChronoUnit.MINUTES),
-                endTime = Instant.now().plus(100, ChronoUnit.MINUTES),
-            ),
-            DataForOneEffectLine(
-                substanceName = "name17",
-                route = AdministrationRoute.ORAL,
-                roaDuration = null,
-                height = 1f,
-                horizontalWeight = 0.5f,
-                color = AdaptiveColor.PINK,
-                startTime = Instant.now().minus(40, ChronoUnit.MINUTES),
-                endTime = Instant.now().plus(150, ChronoUnit.MINUTES),
-            ),
-            DataForOneEffectLine(
-                substanceName = "name17",
-                route = AdministrationRoute.ORAL,
-                roaDuration = null,
-                height = 1f,
-                horizontalWeight = 0.5f,
-                color = AdaptiveColor.PURPLE,
-                startTime = Instant.now().plus(160, ChronoUnit.MINUTES),
-                endTime = Instant.now().plus(200, ChronoUnit.MINUTES),
-            ),
-        )
     )
 }

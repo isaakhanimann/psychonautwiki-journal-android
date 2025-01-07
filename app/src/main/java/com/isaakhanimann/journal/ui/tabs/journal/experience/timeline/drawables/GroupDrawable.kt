@@ -24,115 +24,153 @@ import androidx.compose.ui.unit.Density
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.WeightedLine
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawTimeRange
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.timelines.*
 import java.time.Duration
 import java.time.Instant
+import kotlin.math.max
 
 class GroupDrawable(
     val startTimeGraph: Instant,
     val color: AdaptiveColor,
     roaDuration: RoaDuration?,
     weightedLines: List<WeightedLine>,
-    areSubstanceHeightsIndependent: Boolean,
+    val areSubstanceHeightsIndependent: Boolean,
 ) : TimelineDrawable {
     private val timelineDrawables: List<TimelineDrawable>
+    private val timeRangeDrawables: List<TimeRangeDrawable>
+    private val nonNormalisedMaxOfRoute: Float
 
-    override var nonNormalisedOverallHeight: Float = 1f
+    override var referenceHeight: Float = 1f
     override val nonNormalisedHeight: Float
 
     init {
-        val nonNormalisedMaxOfRoute = weightedLines.maxOfOrNull { it.height } ?: 1f
-        val fulls = roaDuration?.toFullTimelines(
-            weightedLines = weightedLines,
-            startTimeGraph = startTimeGraph,
-            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
-        )
-        timelineDrawables = if (fulls != null) {
-            listOf(fulls)
-        } else {
-            val onsetComeupPeakTotals = weightedLines.mapNotNull {
-                roaDuration?.toOnsetComeupPeakTotalTimeline(
-                    peakAndTotalWeight = it.horizontalWeight,
-                    ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime),
-                    nonNormalisedHeight = it.height,
-                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
-                    nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
+        val intermediateRanges = weightedLines.mapNotNull {
+            if (it.endTime != null) {
+                val startInSeconds =
+                    Duration.between(startTimeGraph, it.startTime).seconds.toFloat()
+                val endInSeconds = Duration.between(startTimeGraph, it.endTime).seconds.toFloat()
+                return@mapNotNull TimeRangeDrawable.IntermediateRepresentation(
+                    startInSeconds = startInSeconds,
+                    endInSeconds = endInSeconds,
+                    fullTimelineDurations = roaDuration?.toFullTimelineDurations(),
+                    height = it.height
                 )
+            } else {
+                return@mapNotNull null
             }
-            onsetComeupPeakTotals.ifEmpty {
-                val onsetComeupTotals = weightedLines.mapNotNull {
-                    roaDuration?.toOnsetComeupTotalTimeline(
-                        totalWeight = it.horizontalWeight,
-                        ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
-                            it.startTime
-                        ),
+        }.sortedBy { it.startInSeconds }
+        val timeRangeDrawables = intermediateRanges.mapIndexed { index, currentRange ->
+            val intersectionCount = intermediateRanges.subList(0, index).count {
+                it.startInSeconds <= currentRange.endInSeconds && it.endInSeconds >= currentRange.startInSeconds
+            }
+            val ingestionStartInSeconds = currentRange.startInSeconds
+            val ingestionEndInSeconds = currentRange.endInSeconds
+            TimeRangeDrawable(
+                color = color,
+                ingestionStartInSeconds = ingestionStartInSeconds,
+                ingestionEndInSeconds = ingestionEndInSeconds,
+                intersectionCountWithPreviousRanges = intersectionCount,
+                convolutionResultModel = currentRange.fullTimelineDurations?.getConvolutionResultModel(
+                    ingestionStartInSeconds = ingestionStartInSeconds,
+                    ingestionEndInSeconds = ingestionEndInSeconds,
+                    heightOfDoseAtOnePoint = currentRange.height
+                ),
+            )
+        }
+        val rangeHeights = timeRangeDrawables.mapNotNull { it.convolutionResultModel?.height }
+        val weightedLinesForPointIngestions = weightedLines.filter { it.endTime == null }
+        val pointHeights = weightedLinesForPointIngestions.map { it.height }
+        val nonNormalisedMaxOfRoute = (rangeHeights + pointHeights).maxOrNull() ?: 1f
+        this.nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
+        this.timeRangeDrawables = timeRangeDrawables
+
+        if (weightedLinesForPointIngestions.isNotEmpty()) {
+            val fulls = roaDuration?.toFullTimelines(
+                weightedLines = weightedLinesForPointIngestions,
+                startTimeGraph = startTimeGraph,
+            )
+            timelineDrawables = if (fulls != null) {
+                listOf(fulls)
+            } else {
+                val onsetComeupPeakTotals = weightedLinesForPointIngestions.mapNotNull {
+                    roaDuration?.toOnsetComeupPeakTotalTimeline(
+                        peakAndTotalWeight = it.horizontalWeight,
+                        ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime),
                         nonNormalisedHeight = it.height,
-                        areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
                         nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                     )
                 }
-                onsetComeupTotals.ifEmpty {
-                    val onsetTotals = weightedLines.mapNotNull {
-                        roaDuration?.toOnsetTotalTimeline(
+                onsetComeupPeakTotals.ifEmpty {
+                    val onsetComeupTotals = weightedLinesForPointIngestions.mapNotNull {
+                        roaDuration?.toOnsetComeupTotalTimeline(
                             totalWeight = it.horizontalWeight,
                             ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
                                 it.startTime
                             ),
                             nonNormalisedHeight = it.height,
-                            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
                             nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                         )
                     }
-                    onsetTotals.ifEmpty {
-                        val totals = weightedLines.mapNotNull {
-                            roaDuration?.toTotalTimeline(
+                    onsetComeupTotals.ifEmpty {
+                        val onsetTotals = weightedLinesForPointIngestions.mapNotNull {
+                            roaDuration?.toOnsetTotalTimeline(
                                 totalWeight = it.horizontalWeight,
                                 ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
                                     it.startTime
                                 ),
                                 nonNormalisedHeight = it.height,
-                                areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
                                 nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                             )
                         }
-                        totals.ifEmpty {
-                            val onsetComeupPeaks = weightedLines.mapNotNull {
-                                roaDuration?.toOnsetComeupPeakTimeline(
-                                    peakWeight = it.horizontalWeight,
+                        onsetTotals.ifEmpty {
+                            val totals = weightedLinesForPointIngestions.mapNotNull {
+                                roaDuration?.toTotalTimeline(
+                                    totalWeight = it.horizontalWeight,
                                     ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
                                         it.startTime
                                     ),
                                     nonNormalisedHeight = it.height,
-                                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
                                     nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                                 )
                             }
-                            onsetComeupPeaks.ifEmpty {
-                                val onsetComeups = weightedLines.mapNotNull {
-                                    roaDuration?.toOnsetComeupTimeline(
+                            totals.ifEmpty {
+                                val onsetComeupPeaks = weightedLinesForPointIngestions.mapNotNull {
+                                    roaDuration?.toOnsetComeupPeakTimeline(
+                                        peakWeight = it.horizontalWeight,
                                         ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
                                             it.startTime
                                         ),
                                         nonNormalisedHeight = it.height,
-                                        areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
                                         nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                                     )
                                 }
-                                onsetComeups.ifEmpty {
-                                    val onsets = weightedLines.mapNotNull {
-                                        roaDuration?.toOnsetTimeline(
+                                onsetComeupPeaks.ifEmpty {
+                                    val onsetComeups = weightedLinesForPointIngestions.mapNotNull {
+                                        roaDuration?.toOnsetComeupTimeline(
                                             ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
                                                 it.startTime
-                                            )
+                                            ),
+                                            nonNormalisedHeight = it.height,
+                                            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                                         )
                                     }
-                                    onsets.ifEmpty {
-                                        weightedLines.map {
-                                            NoTimeline(
+                                    onsetComeups.ifEmpty {
+                                        val onsets = weightedLinesForPointIngestions.mapNotNull {
+                                            roaDuration?.toOnsetTimeline(
                                                 ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
                                                     it.startTime
                                                 )
                                             )
+                                        }
+                                        onsets.ifEmpty {
+                                            weightedLinesForPointIngestions.map {
+                                                NoTimeline(
+                                                    ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
+                                                        it.startTime
+                                                    )
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -141,13 +179,24 @@ class GroupDrawable(
                     }
                 }
             }
+        } else {
+            timelineDrawables = emptyList()
         }
-        nonNormalisedHeight = timelineDrawables.maxOfOrNull { it.nonNormalisedHeight } ?: 0f
+
+        val finalPointHeights = timelineDrawables.map { it.nonNormalisedHeight }
+        nonNormalisedHeight = (finalPointHeights + rangeHeights).maxOrNull() ?: 1f
     }
 
-    override fun setOverallHeight(overallHeight: Float) {
-        nonNormalisedOverallHeight = overallHeight
-        timelineDrawables.forEach { it.setOverallHeight(overallHeight) }
+    fun normaliseHeight(referenceHeight: Float) {
+        this.referenceHeight = referenceHeight
+
+        val finalNonNormalisedMaxHeight: Float = if (areSubstanceHeightsIndependent) {
+            nonNormalisedMaxOfRoute
+        } else {
+            referenceHeight
+        }
+        timelineDrawables.forEach { it.referenceHeight = finalNonNormalisedMaxHeight }
+        timeRangeDrawables.forEach { it.convolutionResultModel?.normaliseHeight(finalNonNormalisedMaxHeight) }
     }
 
     private fun getDistanceFromStartGraphInSeconds(time: Instant): Float {
@@ -170,8 +219,28 @@ class GroupDrawable(
                 density = density
             )
         }
+        for (rangeDrawable in timeRangeDrawables) {
+            drawScope.drawTimeRange(
+                timeRangeDrawable = rangeDrawable,
+                canvasHeight = canvasHeight,
+                pixelsPerSec = pixelsPerSec,
+                color = color,
+                density = density,
+            )
+        }
     }
 
     override val endOfLineRelativeToStartInSeconds: Float
-        get() = timelineDrawables.maxOfOrNull { it.endOfLineRelativeToStartInSeconds } ?: 0f
+        get() {
+            val maxWidthOfTimeRangeIngestions = timeRangeDrawables.maxOfOrNull {
+                if (it.convolutionResultModel != null) {
+                    it.convolutionResultModel.offsetEndXInSeconds
+                } else {
+                    it.ingestionEndInSeconds
+                }
+            } ?: 0f
+            val maxWidthOfPointIngestions =
+                timelineDrawables.maxOfOrNull { it.endOfLineRelativeToStartInSeconds } ?: 0f
+            return max(maxWidthOfTimeRangeIngestions, maxWidthOfPointIngestions)
+        }
 }

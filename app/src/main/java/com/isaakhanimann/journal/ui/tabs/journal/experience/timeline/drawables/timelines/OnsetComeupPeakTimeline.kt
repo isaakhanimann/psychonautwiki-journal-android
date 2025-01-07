@@ -37,24 +37,13 @@ data class OnsetComeupPeakTimeline(
     val peakWeight: Float,
     val ingestionTimeRelativeToStartInSeconds: Float,
     override val nonNormalisedHeight: Float,
-    val areSubstanceHeightsIndependent: Boolean,
     val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
 
-    override var nonNormalisedOverallHeight: Float = 1f
-    override fun setOverallHeight(overallHeight: Float) {
-        nonNormalisedOverallHeight = overallHeight
-    }
+    override var referenceHeight = 1f
+
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds + onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds
-
-    private val finalNonNormalisedMaxHeight: Float get() {
-        return if (areSubstanceHeightsIndependent) {
-            nonNormalisedMaxOfRoute
-        } else {
-            nonNormalisedOverallHeight
-        }
-    }
 
     override fun drawTimeLine(
         drawScope: DrawScope,
@@ -63,7 +52,7 @@ data class OnsetComeupPeakTimeline(
         color: Color,
         density: Density
     ) {
-        val normalisedHeight = nonNormalisedHeight / finalNonNormalisedMaxHeight
+        val normalisedHeight = nonNormalisedHeight / referenceHeight
         val heightInPx = normalisedHeight * canvasHeight
         val top = canvasHeight - heightInPx
         val weight = 0.5f
@@ -104,7 +93,6 @@ fun RoaDuration.toOnsetComeupPeakTimeline(
     peakWeight: Float,
     ingestionTimeRelativeToStartInSeconds: Float,
     nonNormalisedHeight: Float,
-    areSubstanceHeightsIndependent: Boolean,
     nonNormalisedMaxOfRoute: Float,
 ): OnsetComeupPeakTimeline? {
     val fullOnset = onset?.toFullDurationRange()
@@ -118,7 +106,6 @@ fun RoaDuration.toOnsetComeupPeakTimeline(
             peakWeight = peakWeight,
             ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
             nonNormalisedHeight = nonNormalisedHeight,
-            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
             nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {

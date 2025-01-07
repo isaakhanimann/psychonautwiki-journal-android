@@ -23,7 +23,6 @@ import com.isaakhanimann.journal.data.substances.classes.roa.RoaDuration
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.GroupDrawable
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimeRangeDrawable
 import java.time.Duration
 import java.time.Instant
 import kotlin.time.Duration.Companion.hours
@@ -38,7 +37,6 @@ class AllTimelinesModel(
     val startTime: Instant
     val widthInSeconds: Float
     val groupDrawables: List<GroupDrawable>
-    val timeRangeDrawables: List<TimeRangeDrawable>
     val axisDrawable: AxisDrawable
 
     data class RoaGroup(
@@ -52,17 +50,26 @@ class AllTimelinesModel(
         val ingestionTimes = dataForLines.map { it.startTime }
         val noteTimes = timedNotes.map { it.time }
         val allStartTimeCandidates = ratingTimes + ingestionTimes + noteTimes
-        startTime = allStartTimeCandidates.reduce { acc, date -> if (acc.isBefore(date)) acc else date }
-        val roaGroups = dataForLines.filter { it.endTime == null }.groupBy { it.substanceName }.flatMap { substanceGroup ->
-            val linesPerSubstance = substanceGroup.value
-            return@flatMap linesPerSubstance.groupBy { it.route }.map { routeGroup ->
-                val linesPerRoute = routeGroup.value
-                return@map RoaGroup(
-                    color = linesPerRoute.first().color,
-                    roaDuration = linesPerRoute.first().roaDuration,
-                    weightedLines = linesPerRoute.map { WeightedLine(it.startTime, it.horizontalWeight, it.height) })
+        startTime =
+            allStartTimeCandidates.reduce { acc, date -> if (acc.isBefore(date)) acc else date }
+        val roaGroups = dataForLines.groupBy { it.substanceName }
+            .flatMap { substanceGroup ->
+                val linesPerSubstance = substanceGroup.value
+                return@flatMap linesPerSubstance.groupBy { it.route }.map { routeGroup ->
+                    val linesPerRoute = routeGroup.value
+                    return@map RoaGroup(
+                        color = linesPerRoute.first().color,
+                        roaDuration = linesPerRoute.first().roaDuration,
+                        weightedLines = linesPerRoute.map {
+                            WeightedLine(
+                                startTime = it.startTime,
+                                endTime = it.endTime,
+                                horizontalWeight = it.horizontalWeight,
+                                height = it.height
+                            )
+                        })
+                }
             }
-        }
         val groupDrawables = roaGroups.map { group ->
             GroupDrawable(
                 startTimeGraph = startTime,
@@ -73,42 +80,11 @@ class AllTimelinesModel(
             )
         }
         val overallMaxHeight = groupDrawables.maxOfOrNull { it.nonNormalisedHeight } ?: 1f
-        groupDrawables.forEach { it.setOverallHeight(overallMaxHeight) }
+        groupDrawables.forEach { it.normaliseHeight(overallMaxHeight) }
         this.groupDrawables = groupDrawables
-        val maxWidthOfPointInTimeIngestions: Float = groupDrawables.maxOfOrNull {
+        val maxWidthOfGroups: Float = groupDrawables.maxOfOrNull {
             it.endOfLineRelativeToStartInSeconds
         } ?: 0f
-
-        val intermediateRanges = dataForLines.mapNotNull {
-            if (it.endTime != null) {
-                val startInSeconds = Duration.between(startTime, it.startTime).seconds
-                val endInSeconds = Duration.between(startTime, it.endTime).seconds
-                return@mapNotNull TimeRangeDrawable.IntermediateRepresentation(
-                    color = it.color,
-                    startInSeconds = startInSeconds,
-                    endInSeconds = endInSeconds,
-                )
-            } else {
-                return@mapNotNull null
-            }
-        }.sortedBy { it.startInSeconds }
-        timeRangeDrawables = intermediateRanges.mapIndexed { index, currentRange ->
-            val previousRanges = intermediateRanges.subList(0, index)
-            val intersectionCount = previousRanges.count {
-                return@count it.startInSeconds <= currentRange.endInSeconds && currentRange.startInSeconds <= it.endInSeconds
-            }
-            TimeRangeDrawable(
-                color = currentRange.color,
-                startInSeconds = currentRange.startInSeconds,
-                endInSeconds = currentRange.endInSeconds,
-                intersectionCountWithPreviousRanges = intersectionCount
-            )
-        }
-
-        val maxWidthOfTimeRangeIngestions = timeRangeDrawables.maxOfOrNull {
-            it.endInSeconds.toFloat()
-        } ?: 0f
-
         val latestRating = ratingTimes.maxOrNull()
         val maxWidthRating: Float = if (latestRating != null) {
             Duration.between(startTime, latestRating).seconds.toFloat()
@@ -121,7 +97,12 @@ class AllTimelinesModel(
         } else {
             0f
         }
-        val maxCandidates = listOf(maxWidthOfPointInTimeIngestions, maxWidthOfTimeRangeIngestions, maxWidthRating, maxWidthNote, 2.hours.inWholeSeconds.toFloat())
+        val maxCandidates = listOf(
+            maxWidthOfGroups,
+            maxWidthRating,
+            maxWidthNote,
+            2.hours.inWholeSeconds.toFloat()
+        )
         widthInSeconds = maxCandidates.max() + 10.minutes.inWholeSeconds.toFloat()
         axisDrawable = AxisDrawable(startTime, widthInSeconds)
     }

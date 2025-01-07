@@ -30,10 +30,7 @@ data class NoTimeline(
 ) : TimelineDrawable {
 
     override val nonNormalisedHeight: Float = 1f
-    override fun setOverallHeight(overallHeight: Float) {
-        nonNormalisedOverallHeight = overallHeight
-    }
-    override var nonNormalisedOverallHeight: Float = 1f
+    override var referenceHeight: Float = 1f
 
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds

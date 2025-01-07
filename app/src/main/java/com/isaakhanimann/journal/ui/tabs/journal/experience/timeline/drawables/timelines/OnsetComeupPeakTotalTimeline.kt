@@ -35,24 +35,13 @@ data class OnsetComeupPeakTotalTimeline(
     val peakAndTotalWeight: Float,
     val ingestionTimeRelativeToStartInSeconds: Float,
     override val nonNormalisedHeight: Float,
-    val areSubstanceHeightsIndependent: Boolean,
     val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
 
-    override var nonNormalisedOverallHeight: Float = 1f
-    override fun setOverallHeight(overallHeight: Float) {
-        nonNormalisedOverallHeight = overallHeight
-    }
+    override var referenceHeight = 1f
+
     override val endOfLineRelativeToStartInSeconds: Float =
         ingestionTimeRelativeToStartInSeconds + total.maxInSeconds
-
-    private val finalNonNormalisedMaxHeight: Float get() {
-        return if (areSubstanceHeightsIndependent) {
-            nonNormalisedMaxOfRoute
-        } else {
-            nonNormalisedOverallHeight
-        }
-    }
 
     override fun drawTimeLine(
         drawScope: DrawScope,
@@ -61,7 +50,7 @@ data class OnsetComeupPeakTotalTimeline(
         color: Color,
         density: Density
     ) {
-        val normalisedHeight = nonNormalisedHeight / finalNonNormalisedMaxHeight
+        val normalisedHeight = nonNormalisedHeight / referenceHeight
         val heightInPx = normalisedHeight * canvasHeight
         val top = canvasHeight - heightInPx
         val onsetAndComeupWeight = 0.5f
@@ -117,7 +106,6 @@ fun RoaDuration.toOnsetComeupPeakTotalTimeline(
     peakAndTotalWeight: Float,
     ingestionTimeRelativeToStartInSeconds: Float,
     nonNormalisedHeight: Float,
-    areSubstanceHeightsIndependent: Boolean,
     nonNormalisedMaxOfRoute: Float,
 ): OnsetComeupPeakTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
@@ -133,7 +121,6 @@ fun RoaDuration.toOnsetComeupPeakTotalTimeline(
             peakAndTotalWeight = peakAndTotalWeight,
             ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
             nonNormalisedHeight = nonNormalisedHeight,
-            areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
             nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {
