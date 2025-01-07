@@ -71,11 +71,7 @@ class GroupDrawable(
                 ingestionStartInSeconds = ingestionStartInSeconds,
                 ingestionEndInSeconds = ingestionEndInSeconds,
                 intersectionCountWithPreviousRanges = intersectionCount,
-                convolutionResultModel = currentRange.fullTimelineDurations?.getConvolutionResultModel(
-                    ingestionStartInSeconds = ingestionStartInSeconds,
-                    ingestionEndInSeconds = ingestionEndInSeconds,
-                    heightOfDoseAtOnePoint = currentRange.height
-                ),
+                convolutionResultModel = null,
             )
         }
         val rangeHeights = timeRangeDrawables.mapNotNull { it.convolutionResultModel?.height }
