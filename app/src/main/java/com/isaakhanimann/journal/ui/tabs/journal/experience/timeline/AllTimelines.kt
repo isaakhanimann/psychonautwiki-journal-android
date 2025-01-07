@@ -24,6 +24,7 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -60,7 +62,10 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurati
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimeRangeDrawable
 import com.isaakhanimann.journal.ui.utils.getShortTimeText
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -127,138 +132,151 @@ fun AllTimelines(
     if (dataForEffectLines.isEmpty()) {
         Text(text = "Insufficient data for timeline")
     } else {
-        val model: AllTimelinesModel = remember(dataForEffectLines, dataForRatings) {
-            AllTimelinesModel(
-                dataForLines = dataForEffectLines,
-                dataForRatings = dataForRatings,
-                timedNotes = dataForTimedNotes,
-                areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
-            )
-        }
-        val isDarkTheme = isSystemInDarkTheme()
-        val density = LocalDensity.current
-        val axisLabelSize = MaterialTheme.typography.labelMedium.fontSize
-        val axisLabelTextPaint = remember(density) {
-            Paint().apply {
-                color =
-                    if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
-                textAlign = Paint.Align.CENTER
-                textSize = density.run { axisLabelSize.toPx() }
+        val scope = rememberCoroutineScope()
+        var timelineModel by remember { mutableStateOf<AllTimelinesModel?>(null) }
+
+        LaunchedEffect(dataForEffectLines, dataForRatings) {
+            scope.launch {
+                val computedModel = withContext(Dispatchers.Default) {
+                    AllTimelinesModel(
+                        dataForLines = dataForEffectLines,
+                        dataForRatings = dataForRatings,
+                        timedNotes = dataForTimedNotes,
+                        areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
+                    )
+                }
+                timelineModel = computedModel
             }
         }
-
-        val dragTimeTextSize = MaterialTheme.typography.titleMedium
-        val textMeasurer = rememberTextMeasurer()
-        val ratingSize = MaterialTheme.typography.labelLarge.fontSize
-        val ratingTextPaint = remember(density) {
-            Paint().apply {
-                color =
-                    if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
-                textAlign = Paint.Align.CENTER
-                textSize = density.run { ratingSize.toPx() }
-            }
-        }
-        var currentTime by remember {
-            mutableStateOf(Instant.now())
-        }
-        LaunchedEffect(key1 = currentTime) {
-            val oneSec = 1000L
-            delay(oneSec)
-            currentTime = Instant.now()
-        }
-        var dragPoint by remember { mutableStateOf<Offset?>(null) }
-        val verticalDistanceFromFinger = LocalDensity.current.run { 60.dp.toPx() }
-
-        Canvas(modifier = modifier.pointerInput(Unit) {
-            detectHorizontalDragGestures(
-                onHorizontalDrag = { change, _ ->
-                    change.consume()
-                    dragPoint = change.position
-                },
-                onDragEnd = {
-                    dragPoint = null
-                },
-                onDragCancel = {
-                    dragPoint = null
-                }
-            )
-        }) {
-            val canvasWithLabelsHeight = size.height
-            val labelsHeight = axisLabelSize.toPx()
-            val canvasWidth = size.width
-            val pixelsPerSec = canvasWidth / model.widthInSeconds
-
-            inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight + strokeWidth) {
-                val canvasHeightWithVerticalLine = size.height
-                model.groupDrawables.forEach { group ->
-                    group.drawTimeLine(
-                        drawScope = this,
-                        canvasHeight = canvasHeightWithVerticalLine,
-                        pixelsPerSec = pixelsPerSec,
-                        color = group.color.getComposeColor(isDarkTheme),
-                        density = density
-                    )
-                }
-                dataForRatings.forEach { dataForOneRating ->
-                    drawRating(
-                        startTime = model.startTime,
-                        ratingTime = dataForOneRating.time,
-                        pixelsPerSec = pixelsPerSec,
-                        canvasHeightOuter = canvasHeightWithVerticalLine,
-                        rating = dataForOneRating.option,
-                        textPaint = ratingTextPaint
-                    )
-                }
-                dataForTimedNotes.forEach { dataForOneTimedNote ->
-                    drawTimedNote(
-                        startTime = model.startTime,
-                        noteTime = dataForOneTimedNote.time,
-                        color = dataForOneTimedNote.color,
-                        pixelsPerSec = pixelsPerSec,
-                        canvasHeightOuter = canvasHeightWithVerticalLine,
-                        isDarkTheme = isDarkTheme
-                    )
-                }
-                model.timeRangeDrawables.forEach {
-                    drawTimeRange(
-                        timeRangeDrawable = it,
-                        canvasHeight = canvasHeightWithVerticalLine,
-                        pixelsPerSec = pixelsPerSec,
-                        isDarkTheme = isDarkTheme
-                    )
-                }
-                if (isShowingCurrentTime) {
-                    drawCurrentTime(
-                        startTime = model.startTime,
-                        timelineWidthInSeconds = model.widthInSeconds,
-                        currentTime = currentTime,
-                        pixelsPerSec = pixelsPerSec,
-                        isDarkTheme = isDarkTheme,
-                        canvasHeightOuter = canvasHeightWithVerticalLine,
-                    )
-                }
-                dragPoint?.let {
-                    drawDragPointLineAndTimeLabel(
-                        it,
-                        canvasWidth,
-                        isDarkTheme,
-                        canvasHeightWithVerticalLine,
-                        pixelsPerSec,
-                        model,
-                        verticalDistanceFromFinger,
-                        textMeasurer,
-                        dragTimeTextSize,
-                        timeDisplayOption
-                    )
+        val model = timelineModel
+        if (model != null) {
+            val isDarkTheme = isSystemInDarkTheme()
+            val density = LocalDensity.current
+            val axisLabelSize = MaterialTheme.typography.labelMedium.fontSize
+            val axisLabelTextPaint = remember(density) {
+                Paint().apply {
+                    color =
+                        if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+                    textAlign = Paint.Align.CENTER
+                    textSize = density.run { axisLabelSize.toPx() }
                 }
             }
-            drawAxis(
-                axisDrawable = model.axisDrawable,
-                pixelsPerSec = pixelsPerSec,
-                canvasWidth = canvasWidth,
-                canvasHeight = canvasWithLabelsHeight,
-                textPaint = axisLabelTextPaint
-            )
+
+            val dragTimeTextSize = MaterialTheme.typography.titleMedium
+            val textMeasurer = rememberTextMeasurer()
+            val ratingSize = MaterialTheme.typography.labelLarge.fontSize
+            val ratingTextPaint = remember(density) {
+                Paint().apply {
+                    color =
+                        if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+                    textAlign = Paint.Align.CENTER
+                    textSize = density.run { ratingSize.toPx() }
+                }
+            }
+            var currentTime by remember {
+                mutableStateOf(Instant.now())
+            }
+            LaunchedEffect(key1 = currentTime) {
+                val oneSec = 1000L
+                delay(oneSec)
+                currentTime = Instant.now()
+            }
+            var dragPoint by remember { mutableStateOf<Offset?>(null) }
+            val verticalDistanceFromFinger = LocalDensity.current.run { 60.dp.toPx() }
+
+            Canvas(modifier = modifier.pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onHorizontalDrag = { change, _ ->
+                        change.consume()
+                        dragPoint = change.position
+                    },
+                    onDragEnd = {
+                        dragPoint = null
+                    },
+                    onDragCancel = {
+                        dragPoint = null
+                    }
+                )
+            }) {
+                val canvasWithLabelsHeight = size.height
+                val labelsHeight = axisLabelSize.toPx()
+                val canvasWidth = size.width
+                val pixelsPerSec = canvasWidth / model.widthInSeconds
+
+                inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight + strokeWidth) {
+                    val canvasHeightWithVerticalLine = size.height
+                    model.groupDrawables.forEach { group ->
+                        group.drawTimeLine(
+                            drawScope = this,
+                            canvasHeight = canvasHeightWithVerticalLine,
+                            pixelsPerSec = pixelsPerSec,
+                            color = group.color.getComposeColor(isDarkTheme),
+                            density = density
+                        )
+                    }
+                    dataForRatings.forEach { dataForOneRating ->
+                        drawRating(
+                            startTime = model.startTime,
+                            ratingTime = dataForOneRating.time,
+                            pixelsPerSec = pixelsPerSec,
+                            canvasHeightOuter = canvasHeightWithVerticalLine,
+                            rating = dataForOneRating.option,
+                            textPaint = ratingTextPaint
+                        )
+                    }
+                    dataForTimedNotes.forEach { dataForOneTimedNote ->
+                        drawTimedNote(
+                            startTime = model.startTime,
+                            noteTime = dataForOneTimedNote.time,
+                            color = dataForOneTimedNote.color,
+                            pixelsPerSec = pixelsPerSec,
+                            canvasHeightOuter = canvasHeightWithVerticalLine,
+                            isDarkTheme = isDarkTheme
+                        )
+                    }
+                    model.timeRangeDrawables.forEach {
+                        drawTimeRange(
+                            timeRangeDrawable = it,
+                            canvasHeight = canvasHeightWithVerticalLine,
+                            pixelsPerSec = pixelsPerSec,
+                            isDarkTheme = isDarkTheme
+                        )
+                    }
+                    if (isShowingCurrentTime) {
+                        drawCurrentTime(
+                            startTime = model.startTime,
+                            timelineWidthInSeconds = model.widthInSeconds,
+                            currentTime = currentTime,
+                            pixelsPerSec = pixelsPerSec,
+                            isDarkTheme = isDarkTheme,
+                            canvasHeightOuter = canvasHeightWithVerticalLine,
+                        )
+                    }
+                    dragPoint?.let {
+                        drawDragPointLineAndTimeLabel(
+                            it,
+                            canvasWidth,
+                            isDarkTheme,
+                            canvasHeightWithVerticalLine,
+                            pixelsPerSec,
+                            model,
+                            verticalDistanceFromFinger,
+                            textMeasurer,
+                            dragTimeTextSize,
+                            timeDisplayOption
+                        )
+                    }
+                }
+                drawAxis(
+                    axisDrawable = model.axisDrawable,
+                    pixelsPerSec = pixelsPerSec,
+                    canvasWidth = canvasWidth,
+                    canvasHeight = canvasWithLabelsHeight,
+                    textPaint = axisLabelTextPaint
+                )
+            }
+        } else {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
     }
 }
