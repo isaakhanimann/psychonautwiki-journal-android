@@ -10,6 +10,7 @@ data class TimeRangeDrawable(
 ) {
     data class IntermediateRepresentation(
         val color: AdaptiveColor,
-        val rangeInSeconds: LongRange,
+        val startInSeconds: Long,
+        val endInSeconds: Long,
     )
 }

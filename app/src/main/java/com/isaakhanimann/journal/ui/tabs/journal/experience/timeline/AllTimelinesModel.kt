@@ -85,21 +85,22 @@ class AllTimelinesModel(
                 val endInSeconds = Duration.between(startTime, it.endTime).seconds
                 return@mapNotNull TimeRangeDrawable.IntermediateRepresentation(
                     color = it.color,
-                    rangeInSeconds = startInSeconds..endInSeconds
+                    startInSeconds = startInSeconds,
+                    endInSeconds = endInSeconds,
                 )
             } else {
                 return@mapNotNull null
             }
-        }.sortedBy { it.rangeInSeconds.first }
+        }.sortedBy { it.startInSeconds }
         timeRangeDrawables = intermediateRanges.mapIndexed { index, currentRange ->
             val previousRanges = intermediateRanges.subList(0, index)
             val intersectionCount = previousRanges.count {
-                return@count it.rangeInSeconds.first <= currentRange.rangeInSeconds.last && currentRange.rangeInSeconds.first <= it.rangeInSeconds.last
+                return@count it.startInSeconds <= currentRange.endInSeconds && currentRange.startInSeconds <= it.endInSeconds
             }
             TimeRangeDrawable(
                 color = currentRange.color,
-                startInSeconds = currentRange.rangeInSeconds.first,
-                endInSeconds = currentRange.rangeInSeconds.last,
+                startInSeconds = currentRange.startInSeconds,
+                endInSeconds = currentRange.endInSeconds,
                 intersectionCountWithPreviousRanges = intersectionCount
             )
         }
