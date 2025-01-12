@@ -46,7 +46,7 @@ fun CustomUnitRowAddIngestion(
         horizontalAlignment = Alignment.Start
     ) {
         Text(
-            text = "${customUnit.substanceName} (${customUnit.name})",
+            text = "${customUnit.substanceName} ${customUnit.administrationRoute.displayText}, ${customUnit.name}",
             style = MaterialTheme.typography.titleMedium
         )
         Text(
