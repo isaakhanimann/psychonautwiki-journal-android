@@ -314,44 +314,46 @@ fun ChooseDoseCustomUnitScreen(
                         Text("Estimate", style = MaterialTheme.typography.titleMedium)
                     }
                     AnimatedVisibility(visible = isEstimate) {
-                        OutlinedTextField(
-                            value = estimatedDoseDeviationText,
-                            onValueChange = {
-                                onChangeEstimatedDoseDeviationText(
-                                    it.replace(
-                                        oldChar = ',',
-                                        newChar = '.'
+                        Column {
+                            OutlinedTextField(
+                                value = estimatedDoseDeviationText,
+                                onValueChange = {
+                                    onChangeEstimatedDoseDeviationText(
+                                        it.replace(
+                                            oldChar = ',',
+                                            newChar = '.'
+                                        )
                                     )
-                                )
-                            },
-                            textStyle = textStyle,
-                            label = { Text("Estimated standard deviation", style = textStyle) },
-                            trailingIcon = {
-                                Text(
-                                    text = pluralizableUnit.justUnit(estimatedDoseDeviation ?: 1.0),
-                                    style = textStyle,
-                                    modifier = Modifier.padding(horizontal = horizontalPadding)
-                                )
-                            },
-                            keyboardActions = KeyboardActions(onDone = {
-                                focusManager.clearFocus()
-                            }),
-                            isError = estimatedDoseDeviationText.toDoubleOrNull() == null,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                    val mean = doseText.toDoubleOrNull()
-                    val standardDeviation = estimatedDoseDeviationText.toDoubleOrNull()
-                    val isExplanationShown = isEstimate && mean != null && standardDeviation != null
-                    AnimatedVisibility(isExplanationShown) {
-                        if (isEstimate && mean != null && standardDeviation != null) {
-                            StandardDeviationExplanation(
-                                mean = mean,
-                                standardDeviation = standardDeviation,
-                                unit = pluralizableUnit.justUnit(mean)
+                                },
+                                textStyle = textStyle,
+                                label = { Text("Estimated standard deviation", style = textStyle) },
+                                trailingIcon = {
+                                    Text(
+                                        text = pluralizableUnit.justUnit(estimatedDoseDeviation ?: 1.0),
+                                        style = textStyle,
+                                        modifier = Modifier.padding(horizontal = horizontalPadding)
+                                    )
+                                },
+                                keyboardActions = KeyboardActions(onDone = {
+                                    focusManager.clearFocus()
+                                }),
+                                isError = estimatedDoseDeviationText.toDoubleOrNull() == null,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                singleLine = true,
+                                modifier = Modifier.fillMaxWidth()
                             )
+                            val mean = doseText.toDoubleOrNull()
+                            val standardDeviation = estimatedDoseDeviationText.toDoubleOrNull()
+                            val isExplanationShown = mean != null && standardDeviation != null
+                            AnimatedVisibility(isExplanationShown) {
+                                if (mean != null && standardDeviation != null) {
+                                    StandardDeviationExplanation(
+                                        mean = mean,
+                                        standardDeviation = standardDeviation,
+                                        unit = pluralizableUnit.justUnit(mean)
+                                    )
+                                }
+                            }
                         }
                     }
                 }
