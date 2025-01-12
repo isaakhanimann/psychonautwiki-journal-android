@@ -190,7 +190,7 @@ fun ChooseDoseCustomUnitScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("${customUnit.substanceName} (${customUnit.name})") })
+            TopAppBar(title = { Text(customUnit.name) })
         },
         floatingActionButton = {
             if (isValidDose) {
@@ -232,6 +232,10 @@ fun ChooseDoseCustomUnitScreen(
                         vertical = 10.dp
                     )
                 ) {
+                    Text(
+                        text = "${customUnit.substanceName} ${customUnit.administrationRoute.displayText}",
+                        style = MaterialTheme.typography.titleLarge
+                    )
                     if (!doseRemark.isNullOrBlank()) {
                         Text(text = doseRemark, style = MaterialTheme.typography.bodySmall)
                     }
