@@ -117,6 +117,7 @@ class EditCustomUnitViewModel @Inject constructor(
                 it.name = name
                 it.isEstimate = isEstimate
                 it.originalUnit = originalUnit
+                it.unitPlural = unitPlural
                 it.estimatedDoseStandardDeviation = if (isEstimate) estimatedDoseStandardDeviation else null
                 it.isArchived = isArchived
                 it.unit = unit
