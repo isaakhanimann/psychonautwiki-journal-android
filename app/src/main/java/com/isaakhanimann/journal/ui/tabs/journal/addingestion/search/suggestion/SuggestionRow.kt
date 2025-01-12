@@ -98,7 +98,7 @@ fun PureSubstanceSuggestionRow(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ColorCircle(adaptiveColor = pureSubstanceSuggestion.adaptiveColor)
             Text(
-                text = pureSubstanceSuggestion.substanceName + " " + pureSubstanceSuggestion.administrationRoute.displayText,
+                text = pureSubstanceSuggestion.substanceName + " " + pureSubstanceSuggestion.administrationRoute.displayText.lowercase(),
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -173,7 +173,7 @@ fun CustomUnitSuggestionRow(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ColorCircle(adaptiveColor = customUnitSuggestion.adaptiveColor)
             Text(
-                text = customUnit.substanceName + " " + customUnit.administrationRoute.displayText + ", " + customUnit.name,
+                text = customUnit.substanceName + " " + customUnit.administrationRoute.displayText.lowercase() + ", " + customUnit.name,
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -223,7 +223,7 @@ fun CustomSubstanceSuggestionRow(
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ColorCircle(adaptiveColor = customSubstanceSuggestion.adaptiveColor)
             Text(
-                text = customSubstanceSuggestion.customSubstance.name + " " + customSubstanceSuggestion.administrationRoute.displayText,
+                text = customSubstanceSuggestion.customSubstance.name + " " + customSubstanceSuggestion.administrationRoute.displayText.lowercase(),
                 style = MaterialTheme.typography.titleMedium
             )
         }
