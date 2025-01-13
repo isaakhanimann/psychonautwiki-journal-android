@@ -134,19 +134,19 @@ fun SaferHallucinogensScreen() {
                     VerticalSpace()
                 }
             }
-        }
-        SectionWithTitle("Aborting trips") {
-            Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
-                SectionText(
-                    text = """
+            SectionWithTitle("Aborting trips") {
+                Column(modifier = Modifier.padding(horizontal = horizontalPadding)) {
+                    SectionText(
+                        text = """
                 Hallucinogens have the potential to become overwhelming and push the user into a paranoid or dreadful mood, particularly if they are inexperienced or in an inappropriate set and setting.
                 If one decides to terminate the trip, benzodiazepines and other sedatives such as some antipsychotics can be considered analogous to an "eject button" of a downhill-headed or extensively long trip. These substances tend to be very effective tools in preventing panic attacks, paranoia, and possible traumatic experiences.
                 However, experienced users generally advise trying to wait out difficult parts of a trip if possible. Challenging moments are often temporary and can turn out to be catalysts for the greatest learning experiences.
             """.trimIndent()
-                )
-                VerticalSpace()
+                    )
+                    VerticalSpace()
+                }
             }
+            Spacer(modifier = Modifier.height(10.dp))
         }
-        Spacer(modifier = Modifier.height(10.dp))
     }
 }
