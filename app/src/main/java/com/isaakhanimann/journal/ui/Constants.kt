@@ -25,6 +25,6 @@ const val VOLUMETRIC_DOSE_ARTICLE_URL = "https://psychonautwiki.org/wiki/Volumet
 
 const val VERSION_NAME = "11.4"
 
-const val FULL_STOMACH_DISCLAIMER = "A full stomach delays the onset of oral ingestions by approx. 3 hours."
+const val FULL_STOMACH_DISCLAIMER = "A full stomach may delay the onset of oral ingestions by approx. 3 hours."
 
 const val YOU = "You"
