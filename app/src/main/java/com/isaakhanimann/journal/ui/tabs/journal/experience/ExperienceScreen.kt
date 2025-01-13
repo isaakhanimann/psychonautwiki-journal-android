@@ -164,7 +164,8 @@ fun ExperienceScreen(
         onChangeTimeDisplayOption = viewModel::saveTimeDisplayOption,
         navigateToTimelineScreen = navigateToTimelineScreen,
         areDosageDotsHidden = viewModel.areDosageDotsHiddenFlow.collectAsState().value,
-        areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value
+        areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value,
+        isTimelineHidden = viewModel.isTimelineHiddenFlow.collectAsState().value
     )
 }
 
@@ -197,7 +198,8 @@ fun ExperienceScreenPreview(
             onChangeTimeDisplayOption = {},
             navigateToTimelineScreen = {},
             areDosageDotsHidden = false,
-            areSubstanceHeightsIndependent = false
+            areSubstanceHeightsIndependent = false,
+            isTimelineHidden = false
         )
     }
 }
@@ -224,6 +226,7 @@ fun ExperienceScreen(
     navigateToTimelineScreen: (consumerName: String) -> Unit,
     areDosageDotsHidden: Boolean,
     areSubstanceHeightsIndependent: Boolean,
+    isTimelineHidden: Boolean,
 ) {
     Scaffold(
         topBar = {
@@ -270,7 +273,7 @@ fun ExperienceScreen(
                     }
             val isWorthDrawing =
                 ingestionElements.isNotEmpty() && !(ingestionElements.all { it.roaDuration == null } && dataForRatings.isEmpty() && dataForTimedNotes.isEmpty())
-            if (isWorthDrawing) {
+            if (isWorthDrawing && !isTimelineHidden) {
                 MyTimelineSection(
                     verticalCardPadding = verticalCardPadding,
                     navigateToExplainTimeline = navigateToExplainTimeline,
@@ -335,7 +338,8 @@ fun ExperienceScreen(
                     timeDisplayOption = timeDisplayOption,
                     areDosageDotsHidden = areDosageDotsHidden,
                     navigateToIngestionScreen = navigateToIngestionScreen,
-                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
+                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+                    isTimelineHidden = isTimelineHidden
                 )
             }
             val interactions = oneExperienceScreenModel.interactions
@@ -401,6 +405,7 @@ private fun ConsumerSection(
     areDosageDotsHidden: Boolean,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
     areSubstanceHeightsIndependent: Boolean,
+    isTimelineHidden: Boolean
 ) {
     ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
         Row(
@@ -408,30 +413,34 @@ private fun ConsumerSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             CardTitle(title = consumerWithIngestions.consumerName)
-            IconButton(onClick = { navigateToTimelineScreen(consumerWithIngestions.consumerName) }) {
-                Icon(
-                    Icons.Default.OpenInFull,
-                    contentDescription = "Expand timeline"
-                )
+            if (!isTimelineHidden) {
+                IconButton(onClick = { navigateToTimelineScreen(consumerWithIngestions.consumerName) }) {
+                    Icon(
+                        Icons.Default.OpenInFull,
+                        contentDescription = "Expand timeline"
+                    )
+                }
             }
         }
-        Column(
-            modifier = Modifier
-                .padding(horizontal = horizontalPadding)
-                .padding(bottom = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
-        ) {
-            AllTimelines(
-                dataForEffectLines = consumerWithIngestions.dataForEffectLines,
-                dataForRatings = emptyList(),
-                dataForTimedNotes = emptyList(),
-                timeDisplayOption = timeDisplayOption,
-                isShowingCurrentTime = true,
-                areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+        if (!isTimelineHidden) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
+                    .padding(horizontal = horizontalPadding)
+                    .padding(bottom = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                AllTimelines(
+                    dataForEffectLines = consumerWithIngestions.dataForEffectLines,
+                    dataForRatings = emptyList(),
+                    dataForTimedNotes = emptyList(),
+                    timeDisplayOption = timeDisplayOption,
+                    isShowingCurrentTime = true,
+                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+            }
         }
         HorizontalDivider()
         consumerWithIngestions.ingestionElements.forEachIndexed { index, ingestionElement ->

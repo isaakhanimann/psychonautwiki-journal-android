@@ -100,6 +100,8 @@ fun SettingsPreview() {
         snackbarHostState = remember { SnackbarHostState() },
         areDosageDotsHidden = false,
         saveDosageDotsAreHidden = {},
+        isTimelineHidden = false,
+        saveIsTimelineHidden = {},
         areSubstanceHeightsIndependent = false,
         saveAreSubstanceHeightsIndependent = {},
     )
@@ -126,6 +128,8 @@ fun SettingsScreen(
         snackbarHostState = viewModel.snackbarHostState,
         areDosageDotsHidden = viewModel.areDosageDotsHiddenFlow.collectAsState().value,
         saveDosageDotsAreHidden = viewModel::saveDosageDotsAreHidden,
+        isTimelineHidden = viewModel.isTimelineHiddenFlow.collectAsState().value,
+        saveIsTimelineHidden = viewModel::saveIsTimelineHidden,
         areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value,
         saveAreSubstanceHeightsIndependent = viewModel::saveAreSubstanceHeightsIndependent,
     )
@@ -145,6 +149,8 @@ fun SettingsScreen(
     snackbarHostState: SnackbarHostState,
     areDosageDotsHidden: Boolean,
     saveDosageDotsAreHidden: (Boolean) -> Unit,
+    isTimelineHidden: Boolean,
+    saveIsTimelineHidden: (Boolean) -> Unit,
     areSubstanceHeightsIndependent: Boolean,
     saveAreSubstanceHeightsIndependent: (Boolean) -> Unit,
 ) {
@@ -196,6 +202,20 @@ fun SettingsScreen(
                     Switch(
                         checked = areDosageDotsHidden,
                         onCheckedChange = saveDosageDotsAreHidden
+                    )
+                }
+                HorizontalDivider()
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = horizontalPadding),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Hide timeline")
+                    Switch(
+                        checked = isTimelineHidden,
+                        onCheckedChange = saveIsTimelineHidden
                     )
                 }
                 HorizontalDivider()

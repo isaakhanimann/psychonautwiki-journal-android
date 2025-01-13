@@ -76,6 +76,12 @@ class ExperienceViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000)
     )
 
+    val isTimelineHiddenFlow = userPreferences.isTimelineHiddenFlow.stateIn(
+        initialValue = true,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
     fun saveTimeDisplayOption(savedTimeDisplayOption: SavedTimeDisplayOption) {
         viewModelScope.launch {
             userPreferences.saveTimeDisplayOption(savedTimeDisplayOption)

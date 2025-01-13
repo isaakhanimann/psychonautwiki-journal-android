@@ -49,6 +49,16 @@ class SettingsViewModel @Inject constructor(
         userPreferences.saveAreSubstanceHeightsIndependent(value)
     }
 
+    fun saveIsTimelineHidden(value: Boolean) = viewModelScope.launch {
+        userPreferences.saveIsTimelineHidden(value)
+    }
+
+    val isTimelineHiddenFlow = userPreferences.isTimelineHiddenFlow.stateIn(
+        initialValue = false,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
     val areSubstanceHeightsIndependentFlow = userPreferences.areSubstanceHeightsIndependentFlow.stateIn(
         initialValue = false,
         scope = viewModelScope,
