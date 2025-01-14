@@ -35,7 +35,6 @@ data class TotalTimeline(
     val percentSmoothness: Float = 0.5f,
     val ingestionTimeRelativeToStartInSeconds: Float,
     override val nonNormalisedHeight: Float,
-    val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
 
     override var referenceHeight = 1f
@@ -94,7 +93,6 @@ fun RoaDuration.toTotalTimeline(
     totalWeight: Float,
     ingestionTimeRelativeToStartInSeconds: Float,
     nonNormalisedHeight: Float,
-    nonNormalisedMaxOfRoute: Float,
 ): TotalTimeline? {
     val fullTotal = total?.toFullDurationRange()
     return if (fullTotal != null) {
@@ -103,7 +101,6 @@ fun RoaDuration.toTotalTimeline(
             totalWeight = totalWeight,
             ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
             nonNormalisedHeight = nonNormalisedHeight,
-            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {
         null

@@ -37,7 +37,6 @@ data class OnsetComeupPeakTimeline(
     val peakWeight: Float,
     val ingestionTimeRelativeToStartInSeconds: Float,
     override val nonNormalisedHeight: Float,
-    val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
 
     override var referenceHeight = 1f
@@ -93,7 +92,6 @@ fun RoaDuration.toOnsetComeupPeakTimeline(
     peakWeight: Float,
     ingestionTimeRelativeToStartInSeconds: Float,
     nonNormalisedHeight: Float,
-    nonNormalisedMaxOfRoute: Float,
 ): OnsetComeupPeakTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
@@ -106,7 +104,6 @@ fun RoaDuration.toOnsetComeupPeakTimeline(
             peakWeight = peakWeight,
             ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
             nonNormalisedHeight = nonNormalisedHeight,
-            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {
         null

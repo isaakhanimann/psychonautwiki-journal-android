@@ -33,7 +33,6 @@ data class OnsetTotalTimeline(
     val totalWeight: Float,
     val ingestionTimeRelativeToStartInSeconds: Float,
     override val nonNormalisedHeight: Float,
-    val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
 
     override var referenceHeight = 1f
@@ -104,7 +103,6 @@ fun RoaDuration.toOnsetTotalTimeline(
     totalWeight: Float,
     ingestionTimeRelativeToStartInSeconds: Float,
     nonNormalisedHeight: Float,
-    nonNormalisedMaxOfRoute: Float,
 ): OnsetTotalTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullTotal = total?.toFullDurationRange()
@@ -115,7 +113,6 @@ fun RoaDuration.toOnsetTotalTimeline(
             totalWeight = totalWeight,
             ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
             nonNormalisedHeight = nonNormalisedHeight,
-            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {
         null

@@ -76,9 +76,6 @@ class GroupDrawable(
         }
         val rangeHeights = timeRangeDrawables.mapNotNull { it.convolutionResultModel?.height }
         val weightedLinesForPointIngestions = weightedLines.filter { it.endTime == null }
-        val pointHeights = weightedLinesForPointIngestions.map { it.height }
-        val nonNormalisedMaxOfRoute = (rangeHeights + pointHeights).maxOrNull() ?: 1f
-        this.nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         this.timeRangeDrawables = timeRangeDrawables
 
         if (weightedLinesForPointIngestions.isNotEmpty()) {
@@ -94,7 +91,6 @@ class GroupDrawable(
                         peakAndTotalWeight = it.horizontalWeight,
                         ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime),
                         nonNormalisedHeight = it.height,
-                        nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                     )
                 }
                 onsetComeupPeakTotals.ifEmpty {
@@ -105,7 +101,6 @@ class GroupDrawable(
                                 it.startTime
                             ),
                             nonNormalisedHeight = it.height,
-                            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                         )
                     }
                     onsetComeupTotals.ifEmpty {
@@ -116,7 +111,6 @@ class GroupDrawable(
                                     it.startTime
                                 ),
                                 nonNormalisedHeight = it.height,
-                                nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                             )
                         }
                         onsetTotals.ifEmpty {
@@ -127,7 +121,6 @@ class GroupDrawable(
                                         it.startTime
                                     ),
                                     nonNormalisedHeight = it.height,
-                                    nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                                 )
                             }
                             totals.ifEmpty {
@@ -138,7 +131,6 @@ class GroupDrawable(
                                             it.startTime
                                         ),
                                         nonNormalisedHeight = it.height,
-                                        nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                                     )
                                 }
                                 onsetComeupPeaks.ifEmpty {
@@ -148,7 +140,6 @@ class GroupDrawable(
                                                 it.startTime
                                             ),
                                             nonNormalisedHeight = it.height,
-                                            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
                                         )
                                     }
                                     onsetComeups.ifEmpty {
@@ -178,18 +169,21 @@ class GroupDrawable(
         } else {
             timelineDrawables = emptyList()
         }
+        val pointHeights = timelineDrawables.map { it.nonNormalisedHeight }
+        val nonNormalisedMaxOfRoute = (rangeHeights + pointHeights).maxOrNull() ?: 1f
+        this.nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
 
         val finalPointHeights = timelineDrawables.map { it.nonNormalisedHeight }
         nonNormalisedHeight = (finalPointHeights + rangeHeights).maxOrNull() ?: 1f
     }
 
-    fun normaliseHeight(referenceHeight: Float) {
-        this.referenceHeight = referenceHeight
+    fun normaliseHeight(overallMaxHeight: Float) {
+        this.referenceHeight = overallMaxHeight
 
         val finalNonNormalisedMaxHeight: Float = if (areSubstanceHeightsIndependent) {
             nonNormalisedMaxOfRoute
         } else {
-            referenceHeight
+            overallMaxHeight
         }
         timelineDrawables.forEach { it.referenceHeight = finalNonNormalisedMaxHeight }
         timeRangeDrawables.forEach { it.convolutionResultModel?.normaliseHeight(finalNonNormalisedMaxHeight) }

@@ -35,7 +35,6 @@ data class OnsetComeupTimeline(
     val comeup: FullDurationRange,
     val ingestionTimeRelativeToStartInSeconds: Float,
     override val nonNormalisedHeight: Float,
-    val nonNormalisedMaxOfRoute: Float,
 ) : TimelineDrawable {
 
     override var referenceHeight = 1f
@@ -87,7 +86,6 @@ data class OnsetComeupTimeline(
 fun RoaDuration.toOnsetComeupTimeline(
     ingestionTimeRelativeToStartInSeconds: Float,
     nonNormalisedHeight: Float,
-    nonNormalisedMaxOfRoute: Float,
 ): OnsetComeupTimeline? {
     val fullOnset = onset?.toFullDurationRange()
     val fullComeup = comeup?.toFullDurationRange()
@@ -97,7 +95,6 @@ fun RoaDuration.toOnsetComeupTimeline(
             comeup = fullComeup,
             ingestionTimeRelativeToStartInSeconds = ingestionTimeRelativeToStartInSeconds,
             nonNormalisedHeight = nonNormalisedHeight,
-            nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
         )
     } else {
         null
