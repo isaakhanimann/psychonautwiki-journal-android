@@ -78,18 +78,20 @@ class GroupDrawable(
         val weightedLinesForPointIngestions = weightedLines.filter { it.endTime == null }
         this.timeRangeDrawables = timeRangeDrawables
 
-        if (weightedLinesForPointIngestions.isNotEmpty()) {
+        timelineDrawables = if (weightedLines.isNotEmpty()) {
             val fulls = roaDuration?.toFullTimelines(
-                weightedLines = weightedLinesForPointIngestions,
+                weightedLines = weightedLines,
                 startTimeGraph = startTimeGraph,
             )
-            timelineDrawables = if (fulls != null) {
+            if (fulls != null) {
                 listOf(fulls)
-            } else {
+            } else if (weightedLinesForPointIngestions.isNotEmpty()) {
                 val onsetComeupPeakTotals = weightedLinesForPointIngestions.mapNotNull {
                     roaDuration?.toOnsetComeupPeakTotalTimeline(
                         peakAndTotalWeight = it.horizontalWeight,
-                        ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(it.startTime),
+                        ingestionTimeRelativeToStartInSeconds = getDistanceFromStartGraphInSeconds(
+                            it.startTime
+                        ),
                         nonNormalisedHeight = it.height,
                     )
                 }
@@ -165,9 +167,11 @@ class GroupDrawable(
                         }
                     }
                 }
+            } else {
+                emptyList()
             }
         } else {
-            timelineDrawables = emptyList()
+            emptyList()
         }
         val pointHeights = timelineDrawables.map { it.nonNormalisedHeight }
         val nonNormalisedMaxOfRoute = (rangeHeights + pointHeights).maxOrNull() ?: 1f
@@ -186,7 +190,11 @@ class GroupDrawable(
             overallMaxHeight
         }
         timelineDrawables.forEach { it.referenceHeight = finalNonNormalisedMaxHeight }
-        timeRangeDrawables.forEach { it.convolutionResultModel?.normaliseHeight(finalNonNormalisedMaxHeight) }
+        timeRangeDrawables.forEach {
+            it.convolutionResultModel?.normaliseHeight(
+                finalNonNormalisedMaxHeight
+            )
+        }
     }
 
     private fun getDistanceFromStartGraphInSeconds(time: Instant): Float {

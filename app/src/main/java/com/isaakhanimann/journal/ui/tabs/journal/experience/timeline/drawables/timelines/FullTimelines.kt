@@ -28,6 +28,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
 import java.time.Duration
 import java.time.Instant
+import kotlin.math.min
 
 data class FullTimelines(
     val onset: FullDurationRange,
@@ -81,7 +82,51 @@ data class FullTimelines(
     override val endOfLineRelativeToStartInSeconds: Float
 
     init {
-        val weightedRelatives = weightedLines.map {
+        val timeRangeLineSegments = weightedLines.flatMap {
+            if (it.endTime != null) {
+                val startX =
+                    Duration.between(startTimeGraph, it.startTime).seconds.toFloat()
+                val endX =
+                    Duration.between(startTimeGraph, it.endTime).seconds.toFloat()
+                val onsetInSeconds = onset.interpolateAtValueInSeconds(0.5f)
+                val comeupStartX = startX + onsetInSeconds
+                val comeupInSeconds = comeup.interpolateAtValueInSeconds(0.5f)
+                val peakStartX = comeupStartX + comeupInSeconds
+                val peakInSeconds = peak.interpolateAtValueInSeconds(0.5f)
+                val peakEndX = endX + onsetInSeconds + comeupInSeconds + peakInSeconds
+                val offsetInSeconds = offset.interpolateAtValueInSeconds(0.5f)
+                val offsetEndX = peakEndX + offsetInSeconds
+                val intervalInSeconds = Duration.between(
+                    it.startTime,
+                    it.endTime
+                ).seconds.toFloat()
+                val height = if (intervalInSeconds > 1f) { // prevent division by 0
+                    min(
+                        it.height,
+                        it.height * (((comeupInSeconds + offsetInSeconds) / 2f) + peakInSeconds) / intervalInSeconds
+                    )
+                } else {
+                    it.height
+                }
+                return@flatMap listOf(
+                    LineSegment(
+                        start = Point(x = comeupStartX, 0f),
+                        end = Point(x = peakStartX, height)
+                    ),
+                    LineSegment(
+                        start = Point(x = peakStartX, height),
+                        end = Point(x = peakEndX, height)
+                    ),
+                    LineSegment(
+                        start = Point(x = peakEndX, height),
+                        end = Point(x = offsetEndX, 0f)
+                    ),
+                )
+            } else {
+                return@flatMap emptyList<LineSegment>()
+            }
+        }
+        val weightedRelatives = weightedLines.filter { it.endTime == null }.map {
             WeightedLineRelativeToFirst(
                 startTimeRelativeToGroupInSeconds = Duration.between(
                     startTimeGraph,
@@ -127,7 +172,7 @@ data class FullTimelines(
                 )
             )
             return@flatMap result
-        }
+        } + timeRangeLineSegments
         val linePoints = lineSegments.flatMap { lineSegment ->
             listOf(lineSegment.start.x, lineSegment.end.x)
         }.distinct().map { FinalPoint(x = it, y = 0f) }
@@ -189,7 +234,10 @@ data class FullTimelines(
             color = color,
             style = density.normalStroke
         )
-        path.lineTo(x = finalPointsNormalised.last().x * pixelsPerSec, y = canvasHeight + drawScope.strokeWidth / 2)
+        path.lineTo(
+            x = finalPointsNormalised.last().x * pixelsPerSec,
+            y = canvasHeight + drawScope.strokeWidth / 2
+        )
         path.lineTo(
             x = finalPointsNormalised.first().x * pixelsPerSec,
             y = canvasHeight + drawScope.strokeWidth / 2
@@ -204,7 +252,10 @@ data class FullTimelines(
                 drawScope.drawCircle(
                     color = color,
                     radius = density.ingestionDotRadius,
-                    center = Offset(x = point.x * pixelsPerSec, y = canvasHeight - point.y * canvasHeight)
+                    center = Offset(
+                        x = point.x * pixelsPerSec,
+                        y = canvasHeight - point.y * canvasHeight
+                    )
                 )
             }
         }
