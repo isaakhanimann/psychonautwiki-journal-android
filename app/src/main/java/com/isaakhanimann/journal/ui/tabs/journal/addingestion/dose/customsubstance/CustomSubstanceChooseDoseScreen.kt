@@ -72,11 +72,13 @@ import com.isaakhanimann.journal.ui.theme.horizontalPadding
 @Composable
 fun CustomSubstanceChooseDoseScreen(
     navigateToChooseTimeAndMaybeColor: (units: String?, isEstimate: Boolean, dose: Double?, estimatedDoseStandardDeviation: Double?) -> Unit,
+    navigateToCreateCustomUnit: () -> Unit,
     navigateToSaferSniffingScreen: () -> Unit,
     viewModel: CustomSubstanceChooseDoseViewModel = hiltViewModel()
 ) {
     CustomSubstanceChooseDoseScreen(
         navigateToSaferSniffingScreen = navigateToSaferSniffingScreen,
+        navigateToCreateCustomUnit = navigateToCreateCustomUnit,
         substanceName = viewModel.substanceName,
         administrationRoute = viewModel.administrationRoute,
         doseText = viewModel.doseText,
@@ -119,6 +121,7 @@ fun CustomSubstanceChooseDoseScreen(
 fun CustomChooseDosePreview() {
     CustomSubstanceChooseDoseScreen(
         navigateToSaferSniffingScreen = {},
+        navigateToCreateCustomUnit = {},
         substanceName = "Example Substance",
         administrationRoute = AdministrationRoute.INSUFFLATED,
         doseText = "5",
@@ -143,6 +146,7 @@ fun CustomChooseDosePreview() {
 @Composable
 fun CustomSubstanceChooseDoseScreen(
     navigateToSaferSniffingScreen: () -> Unit,
+    navigateToCreateCustomUnit: () -> Unit,
     substanceName: String,
     administrationRoute: AdministrationRoute,
     doseText: String,
@@ -295,6 +299,9 @@ fun CustomSubstanceChooseDoseScreen(
                                 }
                             }
                         }
+                    }
+                    TextButton(onClick = navigateToCreateCustomUnit) {
+                        Text(text = "Create custom unit")
                     }
                 }
             }

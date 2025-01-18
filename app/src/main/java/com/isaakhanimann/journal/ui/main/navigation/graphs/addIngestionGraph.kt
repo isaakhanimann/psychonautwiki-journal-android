@@ -197,6 +197,14 @@ fun NavGraphBuilder.addIngestionGraph(navController: NavController) {
                         )
                     )
                 },
+                navigateToCreateCustomUnit = {
+                    navController.navigate(
+                        FinishAddCustomUnitRoute(
+                            substanceName = route.customSubstanceName,
+                            administrationRoute = route.administrationRoute
+                        )
+                    )
+                },
                 navigateToSaferSniffingScreen = {
                     navController.navigate(SaferSniffingRouteOnJournalTab)
                 },
