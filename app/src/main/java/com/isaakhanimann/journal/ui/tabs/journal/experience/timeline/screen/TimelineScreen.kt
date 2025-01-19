@@ -25,11 +25,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -43,52 +45,35 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.isaakhanimann.journal.ui.YOU
+import com.isaakhanimann.journal.ui.tabs.journal.experience.TimelineDisplayOption
+import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
-import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
 fun TimelineScreen(
     viewModel: TimelineScreenViewModel = hiltViewModel()
 ) {
-    val timelineScreenModel = TimelineScreenModel(
+    TimelineScreen(
         title = viewModel.consumerName,
-        dataForEffectLines = viewModel.dataForEffectLinesFlow.collectAsState().value,
-        ratings = if (viewModel.consumerName == YOU) viewModel.ratingsFlow.collectAsState().value else emptyList(),
-        timedNotes = if (viewModel.consumerName == YOU) viewModel.timedNotesFlow.collectAsState().value else emptyList(),
+        timelineDisplayOption = viewModel.timelineDisplayOptionFlow.collectAsState().value,
         timeDisplayOption = viewModel.timeDisplayOptionFlow.collectAsState().value,
-        areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value
     )
-    TimelineScreen(timelineScreenModel)
-}
-
-@Preview
-@Composable
-fun TimelineScreenPreview(
-    @PreviewParameter(
-        TimelineScreenModelPreviewProvider::class,
-        limit = 1
-    ) timelineScreenModel: TimelineScreenModel
-) {
-    JournalTheme {
-        TimelineScreen(timelineScreenModel)
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
+fun TimelineScreen(
+     title: String,
+     timelineDisplayOption: TimelineDisplayOption,
+     timeDisplayOption: TimeDisplayOption,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(timelineScreenModel.title) }
+                title = { Text(title) }
             )
         }
     ) { padding ->
@@ -110,31 +95,22 @@ fun TimelineScreen(timelineScreenModel: TimelineScreenModel) {
                     .horizontalScroll(rememberScrollState()),
                 contentAlignment = Alignment.Center
             ) {
-                AllTimelines(
-                    dataForEffectLines = timelineScreenModel.dataForEffectLines,
-                    dataForRatings = timelineScreenModel.ratings.mapNotNull {
-                        val ratingTime = it.time
-                        return@mapNotNull if (ratingTime == null) {
-                            null
-                        } else {
-                            DataForOneRating(
-                                time = ratingTime,
-                                option = it.option
-                            )
-                        }
-                    },
-                    dataForTimedNotes = timelineScreenModel.timedNotes.filter { it.isPartOfTimeline }
-                        .map {
-                            DataForOneTimedNote(time = it.time, color = it.color)
-                        },
-                    timeDisplayOption = timelineScreenModel.timeDisplayOption,
-                    isShowingCurrentTime = true,
-                    areSubstanceHeightsIndependent = timelineScreenModel.areSubstanceHeightsIndependent,
-                    modifier = Modifier
-                        .fillMaxHeight(if (isOrientationPortrait) 0.5f else 0.8f)
-                        .width(canvasWidth.dp)
-                        .padding(horizontal = horizontalPadding)
-                )
+                when (timelineDisplayOption) {
+                    TimelineDisplayOption.Hidden -> {}
+                    TimelineDisplayOption.Loading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    TimelineDisplayOption.NotWorthDrawing -> {}
+                    is TimelineDisplayOption.Shown -> {
+                        AllTimelines(
+                            model = timelineDisplayOption.allTimelinesModel,
+                            timeDisplayOption = timeDisplayOption,
+                            isShowingCurrentTime = true,
+                            modifier = Modifier
+                                .fillMaxHeight(if (isOrientationPortrait) 0.5f else 0.8f)
+                                .width(canvasWidth.dp)
+                                .padding(horizontal = horizontalPadding)
+                        )
+                    }
+                }
             }
             Slider(
                 value = canvasWidth,

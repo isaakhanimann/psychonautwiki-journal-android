@@ -56,6 +56,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
@@ -99,8 +100,6 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.models.ConsumerWithI
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDose
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.OneExperienceScreenModel
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
-import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getDateWithWeekdayText
@@ -128,7 +127,8 @@ fun ExperienceScreen(
     val oneExperienceScreenModel = OneExperienceScreenModel(
         isFavorite = isFavorite,
         title = experience?.title ?: "",
-        firstIngestionTime = ingestionsWithCompanions.minOfOrNull { it.ingestion.time } ?: experience?.sortDate ?: Instant.now(),
+        firstIngestionTime = ingestionsWithCompanions.minOfOrNull { it.ingestion.time }
+            ?: experience?.sortDate ?: Instant.now(),
         notes = experience?.text ?: "",
         locationName = experience?.location?.name ?: "",
         isCurrentExperience = viewModel.isCurrentExperienceFlow.collectAsState().value,
@@ -143,6 +143,7 @@ fun ExperienceScreen(
     )
     ExperienceScreen(
         oneExperienceScreenModel = oneExperienceScreenModel,
+        timelineDisplayOption = viewModel.timelineDisplayOptionFlow.collectAsState().value,
         isOralDisclaimerHidden = viewModel.isOralTimelineDisclaimerHidden.collectAsState().value,
         onChangeIsOralDisclaimerHidden = viewModel::saveOralDisclaimerIsHidden,
         addIngestion = {
@@ -164,7 +165,6 @@ fun ExperienceScreen(
         onChangeTimeDisplayOption = viewModel::saveTimeDisplayOption,
         navigateToTimelineScreen = navigateToTimelineScreen,
         areDosageDotsHidden = viewModel.areDosageDotsHiddenFlow.collectAsState().value,
-        areSubstanceHeightsIndependent = viewModel.areSubstanceHeightsIndependentFlow.collectAsState().value,
         isTimelineHidden = viewModel.isTimelineHiddenFlow.collectAsState().value
     )
 }
@@ -180,6 +180,7 @@ fun ExperienceScreenPreview(
     JournalTheme {
         ExperienceScreen(
             oneExperienceScreenModel = oneExperienceScreenModel,
+            timelineDisplayOption = TimelineDisplayOption.Loading,
             isOralDisclaimerHidden = false,
             onChangeIsOralDisclaimerHidden = {},
             addIngestion = {},
@@ -198,7 +199,6 @@ fun ExperienceScreenPreview(
             onChangeTimeDisplayOption = {},
             navigateToTimelineScreen = {},
             areDosageDotsHidden = false,
-            areSubstanceHeightsIndependent = false,
             isTimelineHidden = false
         )
     }
@@ -207,6 +207,7 @@ fun ExperienceScreenPreview(
 @Composable
 fun ExperienceScreen(
     oneExperienceScreenModel: OneExperienceScreenModel,
+    timelineDisplayOption: TimelineDisplayOption,
     isOralDisclaimerHidden: Boolean,
     onChangeIsOralDisclaimerHidden: (Boolean) -> Unit,
     addIngestion: () -> Unit,
@@ -225,7 +226,6 @@ fun ExperienceScreen(
     onChangeTimeDisplayOption: (SavedTimeDisplayOption) -> Unit,
     navigateToTimelineScreen: (consumerName: String) -> Unit,
     areDosageDotsHidden: Boolean,
-    areSubstanceHeightsIndependent: Boolean,
     isTimelineHidden: Boolean,
 ) {
     Scaffold(
@@ -254,39 +254,16 @@ fun ExperienceScreen(
                 .padding(horizontal = horizontalPadding)
         ) {
             val verticalCardPadding = 4.dp
-            val ingestionElements = oneExperienceScreenModel.ingestionElements
-            val dataForRatings = oneExperienceScreenModel.ratings.mapNotNull {
-                val ratingTime = it.time
-                return@mapNotNull if (ratingTime == null) {
-                    null
-                } else {
-                    DataForOneRating(
-                        time = ratingTime,
-                        option = it.option
-                    )
-                }
-            }
-            val dataForTimedNotes =
-                oneExperienceScreenModel.timedNotesSorted.filter { it.isPartOfTimeline }
-                    .map {
-                        DataForOneTimedNote(time = it.time, color = it.color)
-                    }
-            val isWorthDrawing =
-                ingestionElements.isNotEmpty() && !(ingestionElements.all { it.roaDuration == null } && dataForRatings.isEmpty() && dataForTimedNotes.isEmpty())
-            if (isWorthDrawing && !isTimelineHidden) {
-                MyTimelineSection(
-                    verticalCardPadding = verticalCardPadding,
-                    navigateToExplainTimeline = navigateToExplainTimeline,
-                    navigateToTimelineScreen = navigateToTimelineScreen,
-                    oneExperienceScreenModel = oneExperienceScreenModel,
-                    dataForRatings = dataForRatings,
-                    dataForTimedNotes = dataForTimedNotes,
-                    timeDisplayOption = timeDisplayOption,
-                    isOralDisclaimerHidden = isOralDisclaimerHidden,
-                    onChangeIsOralDisclaimerHidden = onChangeIsOralDisclaimerHidden,
-                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
-                )
-            }
+            MyTimelineSection(
+                timelineDisplayOption = timelineDisplayOption,
+                verticalCardPadding = verticalCardPadding,
+                navigateToExplainTimeline = navigateToExplainTimeline,
+                navigateToTimelineScreen = navigateToTimelineScreen,
+                oneExperienceScreenModel = oneExperienceScreenModel,
+                timeDisplayOption = timeDisplayOption,
+                isOralDisclaimerHidden = isOralDisclaimerHidden,
+                onChangeIsOralDisclaimerHidden = onChangeIsOralDisclaimerHidden,
+            )
             if (oneExperienceScreenModel.ingestionElements.isNotEmpty()) {
                 MyIngestionList(
                     verticalCardPadding = verticalCardPadding,
@@ -338,7 +315,6 @@ fun ExperienceScreen(
                     timeDisplayOption = timeDisplayOption,
                     areDosageDotsHidden = areDosageDotsHidden,
                     navigateToIngestionScreen = navigateToIngestionScreen,
-                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
                     isTimelineHidden = isTimelineHidden
                 )
             }
@@ -404,7 +380,6 @@ private fun ConsumerSection(
     timeDisplayOption: TimeDisplayOption,
     areDosageDotsHidden: Boolean,
     navigateToIngestionScreen: (ingestionId: Int) -> Unit,
-    areSubstanceHeightsIndependent: Boolean,
     isTimelineHidden: Boolean
 ) {
     ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
@@ -422,24 +397,27 @@ private fun ConsumerSection(
                 }
             }
         }
-        if (!isTimelineHidden) {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
-                    .padding(bottom = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                AllTimelines(
-                    dataForEffectLines = consumerWithIngestions.dataForEffectLines,
-                    dataForRatings = emptyList(),
-                    dataForTimedNotes = emptyList(),
-                    timeDisplayOption = timeDisplayOption,
-                    isShowingCurrentTime = true,
-                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
+        when (val timelineDisplayOption = consumerWithIngestions.timelineDisplayOption) {
+            TimelineDisplayOption.Hidden -> {}
+            TimelineDisplayOption.Loading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            TimelineDisplayOption.NotWorthDrawing -> {}
+            is TimelineDisplayOption.Shown -> {
+                val timelineModel = timelineDisplayOption.allTimelinesModel
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                )
+                        .padding(horizontal = horizontalPadding)
+                        .padding(bottom = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    AllTimelines(
+                        model = timelineModel,
+                        timeDisplayOption = timeDisplayOption,
+                        isShowingCurrentTime = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    )
+                }
             }
         }
         HorizontalDivider()
@@ -670,72 +648,76 @@ private fun MyIngestionList(
 
 @Composable
 private fun MyTimelineSection(
+    timelineDisplayOption: TimelineDisplayOption,
     verticalCardPadding: Dp,
     navigateToExplainTimeline: () -> Unit,
     navigateToTimelineScreen: (consumerName: String) -> Unit,
     oneExperienceScreenModel: OneExperienceScreenModel,
-    dataForRatings: List<DataForOneRating>,
-    dataForTimedNotes: List<DataForOneTimedNote>,
     timeDisplayOption: TimeDisplayOption,
     isOralDisclaimerHidden: Boolean,
     onChangeIsOralDisclaimerHidden: (Boolean) -> Unit,
-    areSubstanceHeightsIndependent: Boolean,
 ) {
-    ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            CardTitle(title = "Effect timeline")
-            Row {
-                TextButton(onClick = navigateToExplainTimeline) {
-                    Text(text = "Info")
+    when (timelineDisplayOption) {
+        TimelineDisplayOption.Hidden -> {}
+        TimelineDisplayOption.Loading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        TimelineDisplayOption.NotWorthDrawing -> {}
+        is TimelineDisplayOption.Shown -> {
+            val timelineModel = timelineDisplayOption.allTimelinesModel
+            ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    CardTitle(title = "Effect timeline")
+                    Row {
+                        TextButton(onClick = navigateToExplainTimeline) {
+                            Text(text = "Info")
+                        }
+                        IconButton(onClick = { navigateToTimelineScreen(YOU) }) {
+                            Icon(
+                                Icons.Default.OpenInFull,
+                                contentDescription = "Expand timeline"
+                            )
+                        }
+                    }
                 }
-                IconButton(onClick = { navigateToTimelineScreen(YOU) }) {
-                    Icon(
-                        Icons.Default.OpenInFull,
-                        contentDescription = "Expand timeline"
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = horizontalPadding)
+                        .padding(bottom = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    AllTimelines(
+                        model = timelineModel,
+                        timeDisplayOption = timeDisplayOption,
+                        isShowingCurrentTime = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
                     )
-                }
-            }
-        }
-        Column(
-            modifier = Modifier
-                .padding(horizontal = horizontalPadding)
-                .padding(bottom = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
-        ) {
-            AllTimelines(
-                dataForEffectLines = oneExperienceScreenModel.dataForEffectLines,
-                dataForRatings = dataForRatings,
-                dataForTimedNotes = dataForTimedNotes,
-                timeDisplayOption = timeDisplayOption,
-                isShowingCurrentTime = true,
-                areSubstanceHeightsIndependent = areSubstanceHeightsIndependent,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
-            val hasOralIngestion =
-                oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }
-            if (hasOralIngestion && !isOralDisclaimerHidden) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = FULL_STOMACH_DISCLAIMER,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.weight(1f)
-                    )
-                    IconButton(onClick = { onChangeIsOralDisclaimerHidden(true) }) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Close disclaimer"
-                        )
+                    val hasOralIngestion =
+                        oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }
+                    if (hasOralIngestion && !isOralDisclaimerHidden) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = FULL_STOMACH_DISCLAIMER,
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.weight(1f)
+                            )
+                            IconButton(onClick = { onChangeIsOralDisclaimerHidden(true) }) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Close disclaimer"
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 @Composable
 private fun AddIngestionFAB(

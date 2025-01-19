@@ -41,6 +41,9 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeDos
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.CumulativeRouteAndDose
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.InteractionExplanation
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsStorage
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,11 +73,12 @@ class ExperienceViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val areSubstanceHeightsIndependentFlow = userPreferences.areSubstanceHeightsIndependentFlow.stateIn(
-        initialValue = false,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    private val areSubstanceHeightsIndependentFlow =
+        userPreferences.areSubstanceHeightsIndependentFlow.stateIn(
+            initialValue = false,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     val isTimelineHiddenFlow = userPreferences.isTimelineHiddenFlow.stateIn(
         initialValue = true,
@@ -234,22 +238,46 @@ class ExperienceViewModel @Inject constructor(
             ingestions.filter { it.ingestionWithCompanionAndCustomUnit.ingestion.consumerName == null }
         }
 
-    val consumersWithIngestionsFlow = ingestionsWithAssociatedDataFlow.map { ingestions ->
+    val consumersWithIngestionsFlow = combine(
+        ingestionsWithAssociatedDataFlow,
+        isTimelineHiddenFlow,
+        areSubstanceHeightsIndependentFlow
+    ) { ingestions, isTimelineHidden, areSubstanceHeightsIndependent ->
         val otherIngestions =
             ingestions.filter { it.ingestionWithCompanionAndCustomUnit.ingestion.consumerName != null }
         val groupedByConsumer =
             otherIngestions.groupBy { it.ingestionWithCompanionAndCustomUnit.ingestion.consumerName }
-        return@map groupedByConsumer.mapNotNull { entry ->
+        return@combine groupedByConsumer.mapNotNull { entry ->
             val consumerName = entry.key ?: return@mapNotNull null
             val sortedIngestionsWith =
                 entry.value.sortedBy { it.ingestionWithCompanionAndCustomUnit.ingestion.time }
             val ingestionElements =
                 getIngestionElements(sortedIngestionsWith = sortedIngestionsWith)
-            val substances = ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
-            ConsumerWithIngestions(
+            val substances =
+                ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
+            val dataForEffectLines = getDataForEffectTimelines(ingestionElements, substances)
+            val timelineDisplayOption = if (isTimelineHidden) {
+                TimelineDisplayOption.Hidden
+            } else {
+                val isWorthDrawing =
+                    ingestionElements.isNotEmpty() && !(ingestionElements.all { it.roaDuration == null })
+                if (isWorthDrawing) {
+                    val model = AllTimelinesModel(
+                        dataForLines = dataForEffectLines,
+                        dataForRatings = emptyList(),
+                        timedNotes = emptyList(),
+                        areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
+                    )
+                    TimelineDisplayOption.Shown(model)
+                } else {
+                    TimelineDisplayOption.NotWorthDrawing
+                }
+            }
+            return@mapNotNull ConsumerWithIngestions(
                 consumerName = consumerName,
                 ingestionElements = ingestionElements,
-                dataForEffectLines = getDataForEffectTimelines(ingestionElements, substances)
+                dataForEffectLines = dataForEffectLines,
+                timelineDisplayOption = timelineDisplayOption
             )
         }
     }.stateIn(
@@ -267,7 +295,8 @@ class ExperienceViewModel @Inject constructor(
     )
 
     val dataForEffectTimelinesFlow = ingestionElementsFlow.map { ingestionElements ->
-        val substances = ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
+        val substances =
+            ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
         getDataForEffectTimelines(ingestionElements = ingestionElements, substances = substances)
     }.stateIn(
         initialValue = emptyList(),
@@ -356,6 +385,55 @@ class ExperienceViewModel @Inject constructor(
         }
     }
 
+    val timelineDisplayOptionFlow = combine(
+        dataForEffectTimelinesFlow,
+        isTimelineHiddenFlow,
+        ratingsFlow,
+        timedNotesSortedFlow,
+        ingestionElementsFlow,
+        areSubstanceHeightsIndependentFlow
+    ) { dataForEffectLines, isTimelineHidden, ratings, timedNotesSorted, ingestionElements, areSubstanceHeightsIndependent ->
+        if (isTimelineHidden) {
+            return@combine TimelineDisplayOption.Hidden
+        } else if (dataForEffectLines.isEmpty()) {
+            return@combine TimelineDisplayOption.NotWorthDrawing
+        } else {
+            val dataForRatings = ratings.mapNotNull {
+                val ratingTime = it.time
+                return@mapNotNull if (ratingTime == null) {
+                    null
+                } else {
+                    DataForOneRating(
+                        time = ratingTime,
+                        option = it.option
+                    )
+                }
+            }
+            val dataForTimedNotes =
+                timedNotesSorted.filter { it.isPartOfTimeline }
+                    .map {
+                        DataForOneTimedNote(time = it.time, color = it.color)
+                    }
+            val isWorthDrawing =
+                ingestionElements.isNotEmpty() && !(ingestionElements.all { it.roaDuration == null } && dataForRatings.isEmpty() && dataForTimedNotes.isEmpty())
+            if (isWorthDrawing) {
+                val model = AllTimelinesModel(
+                    dataForLines = dataForEffectLines,
+                    dataForRatings = dataForRatings,
+                    timedNotes = dataForTimedNotes,
+                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
+                )
+                return@combine TimelineDisplayOption.Shown(model)
+            } else {
+                return@combine TimelineDisplayOption.NotWorthDrawing
+            }
+        }
+    }.stateIn(
+        initialValue = TimelineDisplayOption.Loading,
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000)
+    )
+
     companion object {
 
         fun getDataForEffectTimelines(
@@ -434,6 +512,42 @@ class ExperienceViewModel @Inject constructor(
                 }
         }
     }
+}
+
+inline fun <T1, T2, T3, T4, T5, T6, R> combine(
+    flow: Flow<T1>,
+    flow2: Flow<T2>,
+    flow3: Flow<T3>,
+    flow4: Flow<T4>,
+    flow5: Flow<T5>,
+    flow6: Flow<T6>,
+    crossinline transform: suspend (T1, T2, T3, T4, T5, T6) -> R
+): Flow<R> {
+    return combine(
+        flow,
+        flow2,
+        flow3,
+        flow4,
+        flow5,
+        flow6
+    ) { args: Array<*> ->
+        @Suppress("UNCHECKED_CAST")
+        transform(
+            args[0] as T1,
+            args[1] as T2,
+            args[2] as T3,
+            args[3] as T4,
+            args[4] as T5,
+            args[5] as T6,
+        )
+    }
+}
+
+sealed class TimelineDisplayOption {
+    data object Loading : TimelineDisplayOption()
+    data object Hidden : TimelineDisplayOption()
+    data object NotWorthDrawing : TimelineDisplayOption()
+    data class Shown(val allTimelinesModel: AllTimelinesModel) : TimelineDisplayOption()
 }
 
 data class IngestionWithAssociatedData(

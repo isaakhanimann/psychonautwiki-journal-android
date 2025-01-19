@@ -24,15 +24,12 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -64,10 +61,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.getDurati
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.AxisDrawable
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimeRangeDrawable
 import com.isaakhanimann.journal.ui.utils.getShortTimeText
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -82,38 +76,40 @@ fun AllTimelinesPreview(
     ) dataForEffectLines: List<DataForOneEffectLine>
 ) {
     AllTimelines(
-        dataForEffectLines = dataForEffectLines,
-        dataForRatings = listOf(
-            DataForOneRating(
-                time = Instant.now().minus(3, ChronoUnit.HOURS),
-                option = ShulginRatingOption.MINUS
+        model = AllTimelinesModel(
+            dataForLines = dataForEffectLines,
+            dataForRatings = listOf(
+                DataForOneRating(
+                    time = Instant.now().minus(3, ChronoUnit.HOURS),
+                    option = ShulginRatingOption.MINUS
+                ),
+                DataForOneRating(
+                    time = Instant.now().minus(2, ChronoUnit.HOURS),
+                    option = ShulginRatingOption.TWO_PLUS
+                ),
+                DataForOneRating(
+                    time = Instant.now().minus(1, ChronoUnit.HOURS),
+                    option = ShulginRatingOption.THREE_PLUS
+                ),
+                DataForOneRating(
+                    time = Instant.now().plus(2, ChronoUnit.HOURS),
+                    option = ShulginRatingOption.FOUR_PLUS
+                )
             ),
-            DataForOneRating(
-                time = Instant.now().minus(2, ChronoUnit.HOURS),
-                option = ShulginRatingOption.TWO_PLUS
+            timedNotes = listOf(
+                DataForOneTimedNote(
+                    time = Instant.now().minus(30, ChronoUnit.MINUTES),
+                    color = AdaptiveColor.PURPLE
+                ),
+                DataForOneTimedNote(
+                    time = Instant.now().plus(30, ChronoUnit.MINUTES),
+                    color = AdaptiveColor.BLUE
+                ),
             ),
-            DataForOneRating(
-                time = Instant.now().minus(1, ChronoUnit.HOURS),
-                option = ShulginRatingOption.THREE_PLUS
-            ),
-            DataForOneRating(
-                time = Instant.now().plus(2, ChronoUnit.HOURS),
-                option = ShulginRatingOption.FOUR_PLUS
-            )
-        ),
-        dataForTimedNotes = listOf(
-            DataForOneTimedNote(
-                time = Instant.now().minus(30, ChronoUnit.MINUTES),
-                color = AdaptiveColor.PURPLE
-            ),
-            DataForOneTimedNote(
-                time = Instant.now().plus(30, ChronoUnit.MINUTES),
-                color = AdaptiveColor.BLUE
-            ),
+            areSubstanceHeightsIndependent = false
         ),
         isShowingCurrentTime = true,
         timeDisplayOption = TimeDisplayOption.REGULAR,
-        areSubstanceHeightsIndependent = false,
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
@@ -123,155 +119,127 @@ fun AllTimelinesPreview(
 
 @Composable
 fun AllTimelines(
-    dataForEffectLines: List<DataForOneEffectLine>,
-    dataForRatings: List<DataForOneRating>,
-    dataForTimedNotes: List<DataForOneTimedNote>,
+    model: AllTimelinesModel,
     isShowingCurrentTime: Boolean,
     timeDisplayOption: TimeDisplayOption,
-    areSubstanceHeightsIndependent: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    if (dataForEffectLines.isEmpty()) {
-        Text(text = "Insufficient data for timeline")
-    } else {
-        val scope = rememberCoroutineScope()
-        var timelineModel by remember { mutableStateOf<AllTimelinesModel?>(null) }
-
-        LaunchedEffect(dataForEffectLines, dataForRatings) {
-            scope.launch {
-                val computedModel = withContext(Dispatchers.Default) {
-                    AllTimelinesModel(
-                        dataForLines = dataForEffectLines,
-                        dataForRatings = dataForRatings,
-                        timedNotes = dataForTimedNotes,
-                        areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
-                    )
-                }
-                timelineModel = computedModel
-            }
+    val isDarkTheme = isSystemInDarkTheme()
+    val density = LocalDensity.current
+    val axisLabelSize = MaterialTheme.typography.labelMedium.fontSize
+    val axisLabelTextPaint = remember(density) {
+        Paint().apply {
+            color =
+                if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+            textAlign = Paint.Align.CENTER
+            textSize = density.run { axisLabelSize.toPx() }
         }
-        val model = timelineModel
-        if (model != null) {
-            val isDarkTheme = isSystemInDarkTheme()
-            val density = LocalDensity.current
-            val axisLabelSize = MaterialTheme.typography.labelMedium.fontSize
-            val axisLabelTextPaint = remember(density) {
-                Paint().apply {
-                    color =
-                        if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
-                    textAlign = Paint.Align.CENTER
-                    textSize = density.run { axisLabelSize.toPx() }
-                }
-            }
+    }
 
-            val dragTimeTextSize = MaterialTheme.typography.titleMedium
-            val textMeasurer = rememberTextMeasurer()
-            val ratingSize = MaterialTheme.typography.labelLarge.fontSize
-            val ratingTextPaint = remember(density) {
-                Paint().apply {
-                    color =
-                        if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
-                    textAlign = Paint.Align.CENTER
-                    textSize = density.run { ratingSize.toPx() }
-                }
-            }
-            var currentTime by remember {
-                mutableStateOf(Instant.now())
-            }
-            LaunchedEffect(key1 = currentTime) {
-                val oneSec = 1000L
-                delay(oneSec)
-                currentTime = Instant.now()
-            }
-            var dragPoint by remember { mutableStateOf<Offset?>(null) }
-            val verticalDistanceFromFinger = LocalDensity.current.run { 60.dp.toPx() }
+    val dragTimeTextSize = MaterialTheme.typography.titleMedium
+    val textMeasurer = rememberTextMeasurer()
+    val ratingSize = MaterialTheme.typography.labelLarge.fontSize
+    val ratingTextPaint = remember(density) {
+        Paint().apply {
+            color =
+                if (isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+            textAlign = Paint.Align.CENTER
+            textSize = density.run { ratingSize.toPx() }
+        }
+    }
+    var currentTime by remember {
+        mutableStateOf(Instant.now())
+    }
+    LaunchedEffect(key1 = currentTime) {
+        val oneSec = 1000L
+        delay(oneSec)
+        currentTime = Instant.now()
+    }
+    var dragPoint by remember { mutableStateOf<Offset?>(null) }
+    val verticalDistanceFromFinger = LocalDensity.current.run { 60.dp.toPx() }
 
-            Canvas(modifier = modifier.pointerInput(Unit) {
-                detectHorizontalDragGestures(
-                    onHorizontalDrag = { change, _ ->
-                        change.consume()
-                        dragPoint = change.position
-                    },
-                    onDragEnd = {
-                        dragPoint = null
-                    },
-                    onDragCancel = {
-                        dragPoint = null
-                    }
-                )
-            }) {
-                val canvasWithLabelsHeight = size.height
-                val labelsHeight = axisLabelSize.toPx()
-                val canvasWidth = size.width
-                val pixelsPerSec = canvasWidth / model.widthInSeconds
+    Canvas(modifier = modifier.pointerInput(Unit) {
+        detectHorizontalDragGestures(
+            onHorizontalDrag = { change, _ ->
+                change.consume()
+                dragPoint = change.position
+            },
+            onDragEnd = {
+                dragPoint = null
+            },
+            onDragCancel = {
+                dragPoint = null
+            }
+        )
+    }) {
+        val canvasWithLabelsHeight = size.height
+        val labelsHeight = axisLabelSize.toPx()
+        val canvasWidth = size.width
+        val pixelsPerSec = canvasWidth / model.widthInSeconds
 
-                inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight + strokeWidth) {
-                    val canvasHeightWithVerticalLine = size.height
-                    model.groupDrawables.forEach { group ->
-                        group.drawTimeLine(
-                            drawScope = this,
-                            canvasHeight = canvasHeightWithVerticalLine,
-                            pixelsPerSec = pixelsPerSec,
-                            color = group.color.getComposeColor(isDarkTheme),
-                            density = density
-                        )
-                    }
-                    dataForRatings.forEach { dataForOneRating ->
-                        drawRating(
-                            startTime = model.startTime,
-                            ratingTime = dataForOneRating.time,
-                            pixelsPerSec = pixelsPerSec,
-                            canvasHeightOuter = canvasHeightWithVerticalLine,
-                            rating = dataForOneRating.option,
-                            textPaint = ratingTextPaint
-                        )
-                    }
-                    dataForTimedNotes.forEach { dataForOneTimedNote ->
-                        drawTimedNote(
-                            startTime = model.startTime,
-                            noteTime = dataForOneTimedNote.time,
-                            color = dataForOneTimedNote.color,
-                            pixelsPerSec = pixelsPerSec,
-                            canvasHeightOuter = canvasHeightWithVerticalLine,
-                            isDarkTheme = isDarkTheme
-                        )
-                    }
-                    if (isShowingCurrentTime) {
-                        drawCurrentTime(
-                            startTime = model.startTime,
-                            timelineWidthInSeconds = model.widthInSeconds,
-                            currentTime = currentTime,
-                            pixelsPerSec = pixelsPerSec,
-                            isDarkTheme = isDarkTheme,
-                            canvasHeightOuter = canvasHeightWithVerticalLine,
-                        )
-                    }
-                    dragPoint?.let {
-                        drawDragPointLineAndTimeLabel(
-                            it,
-                            canvasWidth,
-                            isDarkTheme,
-                            canvasHeightWithVerticalLine,
-                            pixelsPerSec,
-                            model,
-                            verticalDistanceFromFinger,
-                            textMeasurer,
-                            dragTimeTextSize,
-                            timeDisplayOption
-                        )
-                    }
-                }
-                drawAxis(
-                    axisDrawable = model.axisDrawable,
+        inset(left = 0f, top = 0f, right = 0f, bottom = labelsHeight + strokeWidth) {
+            val canvasHeightWithVerticalLine = size.height
+            model.groupDrawables.forEach { group ->
+                group.drawTimeLine(
+                    drawScope = this,
+                    canvasHeight = canvasHeightWithVerticalLine,
                     pixelsPerSec = pixelsPerSec,
-                    canvasWidth = canvasWidth,
-                    canvasHeight = canvasWithLabelsHeight,
-                    textPaint = axisLabelTextPaint
+                    color = group.color.getComposeColor(isDarkTheme),
+                    density = density
                 )
             }
-        } else {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            model.dataForRatings.forEach { dataForOneRating ->
+                drawRating(
+                    startTime = model.startTime,
+                    ratingTime = dataForOneRating.time,
+                    pixelsPerSec = pixelsPerSec,
+                    canvasHeightOuter = canvasHeightWithVerticalLine,
+                    rating = dataForOneRating.option,
+                    textPaint = ratingTextPaint
+                )
+            }
+            model.timedNotes.forEach { dataForOneTimedNote ->
+                drawTimedNote(
+                    startTime = model.startTime,
+                    noteTime = dataForOneTimedNote.time,
+                    color = dataForOneTimedNote.color,
+                    pixelsPerSec = pixelsPerSec,
+                    canvasHeightOuter = canvasHeightWithVerticalLine,
+                    isDarkTheme = isDarkTheme
+                )
+            }
+            if (isShowingCurrentTime) {
+                drawCurrentTime(
+                    startTime = model.startTime,
+                    timelineWidthInSeconds = model.widthInSeconds,
+                    currentTime = currentTime,
+                    pixelsPerSec = pixelsPerSec,
+                    isDarkTheme = isDarkTheme,
+                    canvasHeightOuter = canvasHeightWithVerticalLine,
+                )
+            }
+            dragPoint?.let {
+                drawDragPointLineAndTimeLabel(
+                    it,
+                    canvasWidth,
+                    isDarkTheme,
+                    canvasHeightWithVerticalLine,
+                    pixelsPerSec,
+                    model,
+                    verticalDistanceFromFinger,
+                    textMeasurer,
+                    dragTimeTextSize,
+                    timeDisplayOption
+                )
+            }
         }
+        drawAxis(
+            axisDrawable = model.axisDrawable,
+            pixelsPerSec = pixelsPerSec,
+            canvasWidth = canvasWidth,
+            canvasHeight = canvasWithLabelsHeight,
+            textPaint = axisLabelTextPaint
+        )
     }
 }
 

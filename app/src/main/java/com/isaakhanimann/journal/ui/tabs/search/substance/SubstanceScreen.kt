@@ -48,6 +48,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -56,10 +57,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -78,7 +75,7 @@ import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.ChasingTheDra
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.OptionalDosageUnitDisclaimer
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.dose.customunit.CustomUnitRoaDoseView
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.TimePickerButton
-import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
+import com.isaakhanimann.journal.ui.tabs.journal.experience.TimelineDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelines
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.ToleranceSection
@@ -88,7 +85,6 @@ import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.theme.verticalPaddingCards
-import com.isaakhanimann.journal.ui.utils.getInstant
 import com.isaakhanimann.journal.ui.utils.getShortTimeText
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -105,6 +101,9 @@ fun SubstanceScreen(
     viewModel: SubstanceViewModel = hiltViewModel()
 ) {
     SubstanceScreen(
+        timelineDisplayOption = viewModel.timelineDisplayOptionFlow.collectAsState().value,
+        ingestionTime = viewModel.ingestionTimeFlow.collectAsState().value,
+        onChangeIngestionTime = viewModel::changeIngestionTime,
         navigateToDosageExplanationScreen = navigateToDosageExplanationScreen,
         navigateToSaferHallucinogensScreen = navigateToSaferHallucinogensScreen,
         navigateToSaferStimulantsScreen = navigateToSaferStimulantsScreen,
@@ -123,6 +122,9 @@ fun SubstanceScreenPreview(
 ) {
     JournalTheme {
         SubstanceScreen(
+            timelineDisplayOption = TimelineDisplayOption.Loading,
+            ingestionTime = LocalDateTime.now(),
+            onChangeIngestionTime = {},
             navigateToDosageExplanationScreen = {},
             navigateToSaferHallucinogensScreen = {},
             navigateToSaferStimulantsScreen = {},
@@ -140,6 +142,9 @@ fun SubstanceScreenPreview(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SubstanceScreen(
+    timelineDisplayOption: TimelineDisplayOption,
+    ingestionTime: LocalDateTime,
+    onChangeIngestionTime: (LocalDateTime) -> Unit,
     navigateToDosageExplanationScreen: () -> Unit,
     navigateToSaferHallucinogensScreen: () -> Unit,
     navigateToSaferStimulantsScreen: () -> Unit,
@@ -348,7 +353,6 @@ fun SubstanceScreen(
             if (roasWithDurationsDefined.isNotEmpty()) {
                 SectionWithTitle(title = "Duration") {
                     Column(Modifier.padding(horizontal = horizontalPadding)) {
-                        var ingestionTime by remember { mutableStateOf(LocalDateTime.now()) }
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
@@ -356,7 +360,7 @@ fun SubstanceScreen(
                             Spacer(modifier = Modifier.width(5.dp))
                             TimePickerButton(
                                 localDateTime = ingestionTime,
-                                onChange = { ingestionTime = it },
+                                onChange = onChangeIngestionTime,
                                 timeString = ingestionTime.getShortTimeText(),
                                 hasOutline = false,
                             )
@@ -366,7 +370,7 @@ fun SubstanceScreen(
                             ).absoluteValue > 5
                             Spacer(modifier = Modifier.width(5.dp))
                             AnimatedVisibility(visible = isTimeALotDifferentToNow) {
-                                IconButton(onClick = { ingestionTime = LocalDateTime.now() }) {
+                                IconButton(onClick = { onChangeIngestionTime(LocalDateTime.now()) }) {
                                     Icon(
                                         imageVector = Icons.Default.Update,
                                         contentDescription = "Reset to now"
@@ -382,33 +386,22 @@ fun SubstanceScreen(
                             }
                         }
                         VerticalSpace()
-                        val firstAverageCommonDose =
-                            roasWithDosesDefined.firstNotNullOfOrNull { it.roaDose?.averageCommonDose } ?: 100.0
-                        val dataForEffectLines = remember(roasWithDurationsDefined, ingestionTime) {
-                            roasWithDurationsDefined.mapIndexed { index, roa ->
-                                DataForOneEffectLine(
-                                    substanceName = "name$index",
-                                    route = roa.route,
-                                    roaDuration = roa.roaDuration,
-                                    height = roa.roaDose?.getStrengthRelativeToCommonDose(firstAverageCommonDose)?.toFloat() ?: 1f,
-                                    horizontalWeight = 0.5f,
-                                    color = roa.route.color,
-                                    startTime = ingestionTime.getInstant(),
-                                    endTime = null,
+                        when (timelineDisplayOption) {
+                            TimelineDisplayOption.Hidden -> {}
+                            TimelineDisplayOption.Loading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                            TimelineDisplayOption.NotWorthDrawing -> {}
+                            is TimelineDisplayOption.Shown -> {
+                                val timelineModel = timelineDisplayOption.allTimelinesModel
+                                AllTimelines(
+                                    model = timelineModel,
+                                    isShowingCurrentTime = false,
+                                    timeDisplayOption = TimeDisplayOption.RELATIVE_TO_NOW,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(200.dp)
                                 )
                             }
                         }
-                        AllTimelines(
-                            dataForEffectLines = dataForEffectLines,
-                            dataForRatings = emptyList(),
-                            dataForTimedNotes = emptyList(),
-                            isShowingCurrentTime = false,
-                            timeDisplayOption = TimeDisplayOption.RELATIVE_TO_NOW,
-                            areSubstanceHeightsIndependent = false,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                        )
                         Spacer(modifier = Modifier.height(8.dp))
                         HorizontalDivider()
                         roasWithDurationsDefined.forEachIndexed { index, roa ->

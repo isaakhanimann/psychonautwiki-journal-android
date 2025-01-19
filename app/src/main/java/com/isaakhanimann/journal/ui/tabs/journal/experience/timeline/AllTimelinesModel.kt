@@ -30,8 +30,8 @@ import kotlin.time.Duration.Companion.minutes
 
 class AllTimelinesModel(
     dataForLines: List<DataForOneEffectLine>,
-    dataForRatings: List<DataForOneRating>,
-    timedNotes: List<DataForOneTimedNote>,
+    val dataForRatings: List<DataForOneRating>,
+    val timedNotes: List<DataForOneTimedNote>,
     areSubstanceHeightsIndependent: Boolean,
 ) {
     val startTime: Instant

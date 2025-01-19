@@ -31,9 +31,13 @@ import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.main.navigation.graphs.TimelineScreenRoute
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.time.hourLimitToSeparateIngestions
 import com.isaakhanimann.journal.ui.tabs.journal.experience.ExperienceViewModel
+import com.isaakhanimann.journal.ui.tabs.journal.experience.TimelineDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.TimeDisplayOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.models.IngestionElement
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneRating
+import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -55,11 +59,12 @@ class TimelineScreenViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val areSubstanceHeightsIndependentFlow = userPreferences.areSubstanceHeightsIndependentFlow.stateIn(
-        initialValue = false,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    private val areSubstanceHeightsIndependentFlow =
+        userPreferences.areSubstanceHeightsIndependentFlow.stateIn(
+            initialValue = false,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     private val timelineRoute = state.toRoute<TimelineScreenRoute>()
     private val experienceID = timelineRoute.experienceId
@@ -77,21 +82,9 @@ class TimelineScreenViewModel @Inject constructor(
                 }
             }
 
-    val ratingsFlow =
-        experienceRepo.getRatingsFlow(experienceID)
-            .stateIn(
-                initialValue = emptyList(),
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
+    private val ratingsFlow = experienceRepo.getRatingsFlow(experienceID)
 
-    val timedNotesFlow =
-        experienceRepo.getTimedNotesFlowSorted(experienceID)
-            .stateIn(
-                initialValue = emptyList(),
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000)
-            )
+    private val timedNotesFlow = experienceRepo.getTimedNotesFlowSorted(experienceID)
 
     private val currentTimeFlow: Flow<Instant> = flow {
         while (true) {
@@ -107,11 +100,7 @@ class TimelineScreenViewModel @Inject constructor(
             val lastIngestionTime = ingestionTimes.maxOrNull() ?: return@combine false
             val limitAgo = currentTime.minus(hourLimitToSeparateIngestions, ChronoUnit.HOURS)
             return@combine limitAgo < lastIngestionTime
-        }.stateIn(
-            initialValue = false,
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000)
-        )
+        }
 
     val timeDisplayOptionFlow =
         userPreferences.savedTimeDisplayOptionFlow.combine(isCurrentExperienceFlow) { savedOption: SavedTimeDisplayOption, isCurrentExperience: Boolean ->
@@ -155,16 +144,62 @@ class TimelineScreenViewModel @Inject constructor(
             }
         }
 
-    val dataForEffectLinesFlow = ingestionsWithAssociatedDataFlow.map { ingestionWithAssociatedData ->
-        val ingestionElements = getIngestionElements(ingestionWithAssociatedData)
-        val substances =
-            ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
-        ExperienceViewModel.getDataForEffectTimelines(
-            ingestionElements = ingestionElements,
-            substances = substances
-        )
+    private val dataForEffectLinesFlow =
+        ingestionsWithAssociatedDataFlow.map { ingestionWithAssociatedData ->
+            val ingestionElements = getIngestionElements(ingestionWithAssociatedData)
+            val substances =
+                ingestionElements.mapNotNull { substanceRepo.getSubstance(it.ingestionWithCompanionAndCustomUnit.ingestion.substanceName) }
+            ExperienceViewModel.getDataForEffectTimelines(
+                ingestionElements = ingestionElements,
+                substances = substances
+            )
+        }
+
+    val timelineDisplayOptionFlow = combine(
+        dataForEffectLinesFlow,
+        ratingsFlow,
+        timedNotesFlow,
+        areSubstanceHeightsIndependentFlow
+    ) { dataForEffectLines, ratings, timedNotesSorted, areSubstanceHeightsIndependent ->
+
+        val newRatings = if (consumerName == YOU) ratings else emptyList()
+        val newTimedNotes = if (consumerName == YOU) timedNotesSorted else emptyList()
+
+        if (dataForEffectLines.isEmpty()) {
+            return@combine TimelineDisplayOption.NotWorthDrawing
+        } else {
+            val dataForRatings = newRatings.mapNotNull {
+                val ratingTime = it.time
+                return@mapNotNull if (ratingTime == null) {
+                    null
+                } else {
+                    DataForOneRating(
+                        time = ratingTime,
+                        option = it.option
+                    )
+                }
+            }
+            val dataForTimedNotes =
+                newTimedNotes.filter { it.isPartOfTimeline }
+                    .map {
+                        DataForOneTimedNote(time = it.time, color = it.color)
+                    }
+            val isWorthDrawing =
+                dataForEffectLines.isNotEmpty() && !(dataForEffectLines.all { it.roaDuration == null } && newRatings.isEmpty() && newTimedNotes.isEmpty())
+            if (isWorthDrawing) {
+                val model = AllTimelinesModel(
+                    dataForLines = dataForEffectLines,
+                    dataForRatings = dataForRatings,
+                    timedNotes = dataForTimedNotes,
+                    areSubstanceHeightsIndependent = areSubstanceHeightsIndependent
+                )
+                return@combine TimelineDisplayOption.Shown(model)
+            } else {
+                return@combine TimelineDisplayOption.NotWorthDrawing
+            }
+        }
     }.stateIn(
-        initialValue = emptyList(),
+        initialValue = TimelineDisplayOption.Loading,
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
     )
