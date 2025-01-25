@@ -96,14 +96,14 @@ data class FullTimelines(
                 val peakEndX = endX + onsetInSeconds + comeupInSeconds + peakInSeconds
                 val offsetInSeconds = offset.interpolateAtValueInSeconds(0.5f)
                 val offsetEndX = peakEndX + offsetInSeconds
-                val intervalInSeconds = Duration.between(
+                val rangeInSeconds = Duration.between(
                     it.startTime,
                     it.endTime
                 ).seconds.toFloat()
-                val height = if (intervalInSeconds > 1f) { // prevent division by 0
+                val height = if (rangeInSeconds > 1f) { // prevent division by 0
                     min(
                         it.height,
-                        it.height * (((comeupInSeconds + offsetInSeconds) / 2f) + peakInSeconds) / intervalInSeconds
+                        it.height * (((comeupInSeconds + offsetInSeconds) / 2f) + peakInSeconds) / rangeInSeconds
                     )
                 } else {
                     it.height
