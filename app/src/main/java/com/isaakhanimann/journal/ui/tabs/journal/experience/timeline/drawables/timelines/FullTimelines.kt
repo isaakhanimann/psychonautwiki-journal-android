@@ -28,6 +28,8 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.*
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.drawables.TimelineDrawable
 import java.time.Duration
 import java.time.Instant
+import kotlin.math.ceil
+import kotlin.math.max
 import kotlin.math.min
 
 data class FullTimelines(
@@ -83,23 +85,41 @@ data class FullTimelines(
 
     init {
         val timeRangeLineSegments = weightedLines.flatMap {
-            if (it.endTime != null) {
-                val startX =
-                    Duration.between(startTimeGraph, it.startTime).seconds.toFloat()
-                val endX =
-                    Duration.between(startTimeGraph, it.endTime).seconds.toFloat()
-                val onsetInSeconds = onset.interpolateAtValueInSeconds(0.5f)
-                val comeupStartX = startX + onsetInSeconds
-                val comeupInSeconds = comeup.interpolateAtValueInSeconds(0.5f)
-                val peakStartX = comeupStartX + comeupInSeconds
-                val peakInSeconds = peak.interpolateAtValueInSeconds(0.5f)
-                val peakEndX = endX + onsetInSeconds + comeupInSeconds + peakInSeconds
-                val offsetInSeconds = offset.interpolateAtValueInSeconds(0.5f)
-                val offsetEndX = peakEndX + offsetInSeconds
-                val rangeInSeconds = Duration.between(
-                    it.startTime,
-                    it.endTime
-                ).seconds.toFloat()
+            if (it.endTime == null) {
+                return@flatMap emptyList<LineSegment>()
+            }
+            val startX =
+                Duration.between(startTimeGraph, it.startTime).seconds.toFloat()
+            val endX =
+                Duration.between(startTimeGraph, it.endTime).seconds.toFloat()
+            val onsetInSeconds = onset.interpolateAtValueInSeconds(0.5f)
+            val comeupStartX = startX + onsetInSeconds
+            val comeupInSeconds = comeup.interpolateAtValueInSeconds(0.5f)
+            val peakStartX = comeupStartX + comeupInSeconds
+            val peakInSeconds = peak.interpolateAtValueInSeconds(0.5f)
+            val peakEndX = endX + onsetInSeconds + comeupInSeconds + peakInSeconds
+            val offsetInSeconds = offset.interpolateAtValueInSeconds(0.5f)
+            val offsetEndX = peakEndX + offsetInSeconds
+            val rangeInSeconds = Duration.between(
+                it.startTime,
+                it.endTime
+            ).seconds.toFloat()
+            val doesPeakFitInRange = peakInSeconds > rangeInSeconds
+            if (doesPeakFitInRange) {
+                // use a few smaller split ingestions
+                if (peakInSeconds < 0.5f) {
+                    return@flatMap emptyList() // prevent division by 0
+                }
+                val numberOfSplitIngestions = max(min(ceil(rangeInSeconds / peakInSeconds).toInt(), 5), 2)
+                val rangeStep = rangeInSeconds/(numberOfSplitIngestions-1)
+                val splitHeight = it.height/numberOfSplitIngestions
+                val segments = (0..<numberOfSplitIngestions).flatMap { index ->
+                    val startXOfSplit = startX + index*rangeStep
+                    getLineSegments(startX = startXOfSplit, height = splitHeight)
+                }
+                return@flatMap segments
+            } else {
+                // approximate line
                 val height = if (rangeInSeconds > 1f) { // prevent division by 0
                     min(
                         it.height,
@@ -122,8 +142,6 @@ data class FullTimelines(
                         end = Point(x = offsetEndX, 0f)
                     ),
                 )
-            } else {
-                return@flatMap emptyList<LineSegment>()
             }
         }
         val weightedRelatives = weightedLines.filter { it.endTime == null }.map {
@@ -203,6 +221,33 @@ data class FullTimelines(
         this.finalPoints = sortedPoints
         this.nonNormalisedHeight = sortedPoints.maxOf { it.y }
         this.endOfLineRelativeToStartInSeconds = finalPoints.maxOf { it.x }
+    }
+
+    private fun getLineSegments(startX: Float, height: Float): List<LineSegment> {
+        val onsetInSeconds = onset.interpolateAtValueInSeconds(0.5f)
+        val comeupInSeconds = comeup.interpolateAtValueInSeconds(0.5f)
+        val peakInSeconds = peak.interpolateAtValueInSeconds(0.5f)
+        val offsetInSeconds = offset.interpolateAtValueInSeconds(0.5f)
+
+        val comeupStartX = startX + onsetInSeconds
+        val peakStartX = comeupStartX + comeupInSeconds
+        val peakEndX = peakStartX + peakInSeconds
+        val offsetEndX = peakEndX + offsetInSeconds
+
+        return listOf(
+            LineSegment(
+                start = Point(x = comeupStartX, 0f),
+                end = Point(x = peakStartX, height)
+            ),
+            LineSegment(
+                start = Point(x = peakStartX, height),
+                end = Point(x = peakEndX, height)
+            ),
+            LineSegment(
+                start = Point(x = peakEndX, height),
+                end = Point(x = offsetEndX, 0f)
+            ),
+        )
     }
 
     override fun drawTimeLine(
