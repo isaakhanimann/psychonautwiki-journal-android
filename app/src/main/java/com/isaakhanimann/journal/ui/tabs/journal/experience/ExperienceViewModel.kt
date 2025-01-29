@@ -280,7 +280,8 @@ class ExperienceViewModel @Inject constructor(
                 timelineDisplayOption = timelineDisplayOption
             )
         }
-    }.stateIn(
+    }.flowOn(Dispatchers.Default)
+        .stateIn(
         initialValue = emptyList(),
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
@@ -428,11 +429,12 @@ class ExperienceViewModel @Inject constructor(
                 return@combine TimelineDisplayOption.NotWorthDrawing
             }
         }
-    }.stateIn(
-        initialValue = TimelineDisplayOption.Loading,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    }.flowOn(Dispatchers.Default)
+        .stateIn(
+            initialValue = TimelineDisplayOption.Loading,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 
     companion object {
 

@@ -30,8 +30,10 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOn
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.AllTimelinesModel
 import com.isaakhanimann.journal.ui.utils.getInstant
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -84,7 +86,8 @@ class SubstanceViewModel @Inject constructor(
                 substanceName = "name$index",
                 route = roa.route,
                 roaDuration = roa.roaDuration,
-                height = roa.roaDose?.getStrengthRelativeToCommonDose(firstAverageCommonDose)?.toFloat() ?: 1f,
+                height = roa.roaDose?.getStrengthRelativeToCommonDose(firstAverageCommonDose)
+                    ?.toFloat() ?: 1f,
                 horizontalWeight = 0.5f,
                 color = roa.route.color,
                 startTime = ingestionTime.getInstant(),
@@ -102,9 +105,10 @@ class SubstanceViewModel @Inject constructor(
             )
             return@map TimelineDisplayOption.Shown(model)
         }
-    }.stateIn(
-        initialValue = TimelineDisplayOption.Loading,
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000)
-    )
+    }.flowOn(Dispatchers.Default)
+        .stateIn(
+            initialValue = TimelineDisplayOption.Loading,
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000)
+        )
 }

@@ -40,11 +40,13 @@ import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneR
 import com.isaakhanimann.journal.ui.tabs.journal.experience.timeline.DataForOneTimedNote
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.time.Instant
@@ -198,7 +200,8 @@ class TimelineScreenViewModel @Inject constructor(
                 return@combine TimelineDisplayOption.NotWorthDrawing
             }
         }
-    }.stateIn(
+    }.flowOn(Dispatchers.Default)
+        .stateIn(
         initialValue = TimelineDisplayOption.Loading,
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000)
