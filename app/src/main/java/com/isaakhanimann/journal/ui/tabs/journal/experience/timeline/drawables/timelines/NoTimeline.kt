@@ -29,7 +29,7 @@ data class NoTimeline(
     val ingestionTimeRelativeToStartInSeconds: Float
 ) : TimelineDrawable {
 
-    override val nonNormalisedHeight: Float = 1f
+    override val nonNormalisedHeight: Float = 0.01f // low number because if this turns out to be max of timeline then it will be used as overall max which will downsize ingestions with timelines
     override var referenceHeight: Float = 1f
 
     override val endOfLineRelativeToStartInSeconds: Float =
