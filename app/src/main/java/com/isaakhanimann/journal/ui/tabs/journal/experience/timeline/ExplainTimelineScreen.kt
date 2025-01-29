@@ -75,7 +75,6 @@ fun ExplainTimelineScreen() {
                         "Taking twice the dose will give twice the effect.",
                         "Duration ranges from PsychonautWiki can be applied for all kinds of dosages.",
                         "Oral ingestions are always on an empty stomach and therefore not delayed (by up to 4 hours).",
-                        "Ingestions over a time range reach the peak, onset + comeup after the time range starts and stay there until onset + comeup + peak after range ends.",
                     )
                 )
             }
@@ -88,7 +87,7 @@ fun ExplainTimelineScreen() {
                         "Different administration routes are always drawn as separate timelines even if they are of the same substance. They also take the full height of the canvas, not the height that is proportional to the dose or effect.",
                         "If any of the 4 durations are missing but the total duration is given, then the first defined durations are drawn and as soon as a missing duration is encountered it uses the total to infer the end of the timeline and draws a dotted line to the end. If the total is not given it just stops drawing the line. So if there is no timeline or part of the timeline is missing that means that the duration is not defined in PsychonautWiki. If you add the missing durations in PsychonautWiki, the full timeline will be shown in the next update.",
                         "The vertical trajectory of dotted lines is unknown. So if you see a dotted line that means it is not known how the effect develops over that timeframe. The only thing that is known is where the line will end.",
-                        "When a time range is given for the ingestion and all durations are defined for the route of administration then a curve is drawn that reaches the peak, onset + comeup after the start and stays at the peak until onset + comeup + peak after the range ends and goes down to baseline within offset. The middle value of the onset, comeup, peak and offset ranges are always used no matter the dose. The height of the timeline is then computed as min(heightIfTakenAtOnce, heightIfTakenAtOnce * (((comeupInSeconds + offsetInSeconds) / 2) + peakInSeconds) / rangeInSeconds). This means that essentially the height is higher the shorter the range of the ingestion. If (comeupInSeconds + offsetInSeconds) / 2) + peakInSeconds is bigger than the range then the height is the same as if it was taken at one point in time but the peak will be longer."
+                        "When a time range is given for the ingestion and all durations are defined for the route of administration then the app assumes the dosage was evenly consumed in that time frame and cumulates the curves of the infinitesimal ingestions using convolution."
                     )
                 )
             }
