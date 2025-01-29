@@ -53,6 +53,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.entities.ShulginRatingOption
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.DataForOneEffectLine
@@ -150,10 +152,15 @@ fun AllTimelines(
     var currentTime by remember {
         mutableStateOf(Instant.now())
     }
-    LaunchedEffect(key1 = currentTime) {
-        val oneSec = 1000L
-        delay(oneSec)
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         currentTime = Instant.now()
+    }
+    LaunchedEffect(Unit) {
+        while (true) {
+            val fiveSeconds = 5000L
+            delay(fiveSeconds)
+            currentTime = Instant.now()
+        }
     }
     var dragPoint by remember { mutableStateOf<Offset?>(null) }
     val verticalDistanceFromFinger = LocalDensity.current.run { 60.dp.toPx() }
