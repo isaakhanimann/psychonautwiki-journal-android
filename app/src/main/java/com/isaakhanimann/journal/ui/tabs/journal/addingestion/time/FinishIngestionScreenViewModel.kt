@@ -175,12 +175,14 @@ class FinishIngestionScreenViewModel @Inject constructor(
             val clonedIngestionTime = userPreferences.clonedIngestionTimeFlow.first()
             if (clonedIngestionTime != null) {
                 localDateTimeStartFlow.emit(clonedIngestionTime.getLocalDateTime())
+                localDateTimeEndFlow.emit(clonedIngestionTime.plus(30, ChronoUnit.MINUTES).getLocalDateTime())
                 updateTitleBasedOnTime(clonedIngestionTime)
             } else if (lastIngestionTimeOfExperience != null) {
                 val wasLastIngestionOfExperienceMoreThan20HoursAgo =
                     lastIngestionTimeOfExperience < Instant.now().minus(20, ChronoUnit.HOURS)
                 if (wasLastIngestionOfExperienceMoreThan20HoursAgo) {
                     localDateTimeStartFlow.emit(lastIngestionTimeOfExperience.getLocalDateTime())
+                    localDateTimeEndFlow.emit(lastIngestionTimeOfExperience.plus(30, ChronoUnit.MINUTES).getLocalDateTime())
                     updateTitleBasedOnTime(lastIngestionTimeOfExperience)
                 }
             }
