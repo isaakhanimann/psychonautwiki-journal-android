@@ -229,11 +229,11 @@ data class FullTimelines(
             endX: Float,
             hMax: Float,
             onset: Float,
-            peak: Float,
             comeup: Float,
+            peak: Float,
             offset: Float,
         ): List<Point> {
-            val numberOfSteps = 20
+            val numberOfSteps = 30
             val startSampleRange = startX + onset
             val endSampleRange = endX + onset + comeup + peak + offset
             val stepSize = (endSampleRange - startSampleRange) / numberOfSteps
@@ -246,8 +246,8 @@ data class FullTimelines(
                     endX = endX,
                     hMax = hMax,
                     onset = onset,
-                    peak = peak,
                     comeup = comeup,
+                    peak = peak,
                     offset = offset
                 )
                 return@map Point(x = x, y = height)
@@ -264,8 +264,8 @@ data class FullTimelines(
             endX: Float,
             hMax: Float,
             onset: Float,
-            peak: Float,
             comeup: Float,
+            peak: Float,
             offset: Float,
         ): Float {
             val term1 = comeup * offset * (
