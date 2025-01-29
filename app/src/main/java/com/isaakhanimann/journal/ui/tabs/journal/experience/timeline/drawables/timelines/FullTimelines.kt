@@ -178,10 +178,17 @@ data class FullTimelines(
             Duration.between(startTimeGraph, weightedLine.startTime).seconds.toFloat()
         val endX =
             Duration.between(startTimeGraph, weightedLine.endTime).seconds.toFloat()
+        val rangeInSeconds = endX - startX
         val onsetInSeconds = onset.interpolateAtValueInSeconds(0.5f)
         val comeupInSeconds = comeup.interpolateAtValueInSeconds(0.5f)
-        val peakInSeconds = peak.interpolateAtValueInSeconds(0.5f)
-        val offsetInSeconds = offset.interpolateAtValueInSeconds(0.5f)
+
+        var horizontalWeightToUse = 0.5f
+        if (rangeInSeconds < peak.minInSeconds) {
+            // if the range is short enough we use the same duration as for point ingestion
+            horizontalWeightToUse = weightedLine.horizontalWeight
+        }
+        val peakInSeconds = peak.interpolateAtValueInSeconds(horizontalWeightToUse)
+        val offsetInSeconds = offset.interpolateAtValueInSeconds(horizontalWeightToUse)
 
         val points = getSamplePoints(
             startX = startX,
