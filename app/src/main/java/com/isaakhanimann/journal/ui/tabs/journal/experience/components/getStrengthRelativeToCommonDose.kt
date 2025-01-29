@@ -28,7 +28,7 @@ fun getStrengthRelativeToCommonDose(
     roaDose: RoaDose?,
 ): Double {
     val allKnownDoses = allIngestions
-        .filter { it.ingestion.substanceName == ingestion.ingestion.substanceName }.mapNotNull {
+        .filter { it.ingestion.substanceName == ingestion.ingestion.substanceName && it.ingestion.administrationRoute == ingestion.ingestion.administrationRoute}.mapNotNull {
             it.pureDose
         }
     val sumDose = allKnownDoses.reduceOrNull { acc, d -> acc + d } ?: 0.0
