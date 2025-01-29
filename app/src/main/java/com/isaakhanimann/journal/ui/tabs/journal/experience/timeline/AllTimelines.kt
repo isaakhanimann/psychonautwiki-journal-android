@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -49,7 +48,6 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -398,7 +396,6 @@ fun DrawScope.drawTimeRange(
     canvasHeight: Float,
     pixelsPerSec: Float,
     color: Color,
-    density: Density,
 ) {
     val startX = timeRangeDrawable.ingestionStartInSeconds * pixelsPerSec
     val endX = timeRangeDrawable.ingestionEndInSeconds * pixelsPerSec
@@ -431,35 +428,6 @@ fun DrawScope.drawTimeRange(
         strokeWidth = verticalLineStrokeWidth,
         cap = StrokeCap.Round
     )
-    val convolutionResultModel = timeRangeDrawable.convolutionResultModel
-    if (convolutionResultModel != null) {
-        val comeupStartX = convolutionResultModel.comeupStartXInSeconds * pixelsPerSec
-        val peakStartX = convolutionResultModel.peakStartXInSeconds * pixelsPerSec
-        val heightInPx = convolutionResultModel.height * canvasHeight
-        val top = canvasHeight - heightInPx
-        val offsetStartX = convolutionResultModel.offsetStartXInSeconds * pixelsPerSec
-        val offsetEndX = convolutionResultModel.offsetEndXInSeconds * pixelsPerSec
-
-        val bottom = canvasHeight + strokeWidth / 2
-        val path = Path().apply {
-            moveTo(x = startX, y = horizontalLineY)
-            lineTo(x = comeupStartX, y = horizontalLineY)
-            lineTo(x = peakStartX, y = top)
-            lineTo(x = offsetStartX, y = top)
-            lineTo(x = offsetEndX, y = bottom)
-        }
-        drawPath(
-            path = path,
-            color = color,
-            style = density.normalStroke
-        )
-        path.lineTo(x = startX, y = bottom)
-        path.close()
-        drawPath(
-            path = path,
-            color = color.copy(alpha = shapeAlpha)
-        )
-    }
 }
 
 fun DrawScope.drawRating(

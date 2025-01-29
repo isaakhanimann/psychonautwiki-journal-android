@@ -71,10 +71,8 @@ class GroupDrawable(
                 ingestionStartInSeconds = ingestionStartInSeconds,
                 ingestionEndInSeconds = ingestionEndInSeconds,
                 intersectionCountWithPreviousRanges = intersectionCount,
-                convolutionResultModel = null,
             )
         }
-        val rangeHeights = timeRangeDrawables.mapNotNull { it.convolutionResultModel?.height }
         val weightedLinesForPointIngestions = weightedLines.filter { it.endTime == null }
         this.timeRangeDrawables = timeRangeDrawables
 
@@ -174,11 +172,11 @@ class GroupDrawable(
             emptyList()
         }
         val pointHeights = timelineDrawables.map { it.nonNormalisedHeight }
-        val nonNormalisedMaxOfRoute = (rangeHeights + pointHeights).maxOrNull() ?: 1f
+        val nonNormalisedMaxOfRoute = pointHeights.maxOrNull() ?: 1f
         this.nonNormalisedMaxOfRoute = nonNormalisedMaxOfRoute
 
         val finalPointHeights = timelineDrawables.map { it.nonNormalisedHeight }
-        nonNormalisedHeight = (finalPointHeights + rangeHeights).maxOrNull() ?: 1f
+        nonNormalisedHeight = finalPointHeights.maxOrNull() ?: 1f
     }
 
     fun normaliseHeight(overallMaxHeight: Float) {
@@ -190,11 +188,6 @@ class GroupDrawable(
             overallMaxHeight
         }
         timelineDrawables.forEach { it.referenceHeight = finalNonNormalisedMaxHeight }
-        timeRangeDrawables.forEach {
-            it.convolutionResultModel?.normaliseHeight(
-                finalNonNormalisedMaxHeight
-            )
-        }
     }
 
     private fun getDistanceFromStartGraphInSeconds(time: Instant): Float {
@@ -223,20 +216,13 @@ class GroupDrawable(
                 canvasHeight = canvasHeight,
                 pixelsPerSec = pixelsPerSec,
                 color = color,
-                density = density,
             )
         }
     }
 
     override val endOfLineRelativeToStartInSeconds: Float
         get() {
-            val maxWidthOfTimeRangeIngestions = timeRangeDrawables.maxOfOrNull {
-                if (it.convolutionResultModel != null) {
-                    it.convolutionResultModel.offsetEndXInSeconds
-                } else {
-                    it.ingestionEndInSeconds
-                }
-            } ?: 0f
+            val maxWidthOfTimeRangeIngestions = timeRangeDrawables.maxOfOrNull { it.ingestionEndInSeconds } ?: 0f
             val maxWidthOfPointIngestions =
                 timelineDrawables.maxOfOrNull { it.endOfLineRelativeToStartInSeconds } ?: 0f
             return max(maxWidthOfTimeRangeIngestions, maxWidthOfPointIngestions)
