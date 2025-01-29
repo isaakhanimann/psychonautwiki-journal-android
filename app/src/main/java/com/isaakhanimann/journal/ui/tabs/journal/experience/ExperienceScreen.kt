@@ -902,6 +902,20 @@ private fun ExperienceTopBar(
                 onDismissRequest = { areAddOptionsExpanded = false }
             ) {
                 DropdownMenuItem(
+                    text = { Text("Add Ingestion") },
+                    onClick = {
+                        addIngestion()
+                        areAddOptionsExpanded = false
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.Add,
+                            contentDescription = "Add Ingestion",
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                    }
+                )
+                DropdownMenuItem(
                     text = { Text("Add timed note") },
                     onClick = {
                         navigateToAddTimedNoteScreen()
@@ -925,20 +939,6 @@ private fun ExperienceTopBar(
                         Icon(
                             Icons.Outlined.ExposurePlus2,
                             contentDescription = "Add Shulgin rating",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text("Add Ingestion") },
-                    onClick = {
-                        addIngestion()
-                        areAddOptionsExpanded = false
-                    },
-                    leadingIcon = {
-                        Icon(
-                            Icons.Outlined.Add,
-                            contentDescription = "Add Ingestion",
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                     }
