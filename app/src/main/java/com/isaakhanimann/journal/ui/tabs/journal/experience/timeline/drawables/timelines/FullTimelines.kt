@@ -88,9 +88,6 @@ data class FullTimelines(
     override val endOfLineRelativeToStartInSeconds: Float
 
     init {
-        val timeRangeLineSegments = weightedLines.flatMap {
-            return@flatMap getLineSegments(weightedLine = it)
-        }
         val weightedRelatives = weightedLines.filter { it.endTime == null }.map {
             WeightedLineRelativeToFirst(
                 startTimeRelativeToGroupInSeconds = Duration.between(
@@ -137,7 +134,7 @@ data class FullTimelines(
                 )
             )
             return@flatMap result
-        } + timeRangeLineSegments
+        }
         val linePoints = lineSegments.flatMap { lineSegment ->
             listOf(lineSegment.start.x, lineSegment.end.x)
         }.distinct().map { FinalPoint(x = it, y = 0f) }
