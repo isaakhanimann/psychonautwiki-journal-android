@@ -268,32 +268,32 @@ data class FullTimelines(
             peak: Float,
             offset: Float,
         ): Float {
-            val term1 = comeup * offset * (
+            val term1 = 2 * comeup * offset * (
                     min(endX, max(startX, -comeup - onset + x)) -
                             min(endX, max(startX, -comeup - onset - peak + x))
                     )
 
-            val term2 = comeup * (
+            val term2 = 2 * comeup * (
                     min(endX, max(startX, -comeup - onset - peak + x)) -
                             min(endX, max(startX, -comeup - offset - onset - peak + x))
                     ) * (comeup + offset + onset + peak - x)
 
-            val term3 = 0.5f * comeup * (
+            val term3 = comeup * (
                     min(endX, max(startX, -comeup - onset - peak + x)).pow(2) -
                             min(endX, max(startX, -comeup - offset - onset - peak + x)).pow(2)
                     )
 
-            val term4 = offset * (onset - x) * (
+            val term4 = 2 * offset * (onset - x) * (
                     -min(endX, max(startX, -onset + x)) +
                             min(endX, max(startX, -comeup - onset + x))
                     )
 
-            val term5 = 0.5f * offset * (
+            val term5 = offset * (
                     -min(endX, max(startX, -onset + x)).pow(2) +
                             min(endX, max(startX, -comeup - onset + x)).pow(2)
                     )
 
-            val numerator = hMax.pow(2) * (term1 + term2 + term3 + term4 + term5)
+            val numerator = 0.5f * hMax * (term1 + term2 + term3 + term4 + term5)
             val denominator = comeup * offset * (endX - startX)
 
             return numerator / denominator
