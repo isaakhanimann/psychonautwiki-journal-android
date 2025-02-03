@@ -233,6 +233,9 @@ data class FullTimelines(
             peak: Float,
             offset: Float,
         ): List<Point> {
+            if (startX > endX) {
+                return emptyList()
+            }
             val numberOfSteps = 30
             val startSampleRange = startX + onset
             val endSampleRange = endX + onset + comeup + peak + offset
