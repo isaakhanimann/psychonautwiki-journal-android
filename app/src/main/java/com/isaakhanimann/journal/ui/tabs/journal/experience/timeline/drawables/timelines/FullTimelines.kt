@@ -166,8 +166,8 @@ data class FullTimelines(
         }
         val sortedPoints = pointsWithHeight.sortedBy { it.x }
         this.finalPoints = sortedPoints
-        this.nonNormalisedHeight = sortedPoints.maxOf { it.y }
-        this.endOfLineRelativeToStartInSeconds = finalPoints.maxOf { it.x }
+        this.nonNormalisedHeight = sortedPoints.maxOfOrNull { it.y } ?: 0.01f
+        this.endOfLineRelativeToStartInSeconds = finalPoints.maxOfOrNull { it.x } ?: (onset.maxInSeconds + comeup.maxInSeconds + peak.maxInSeconds + offset.maxInSeconds)
     }
 
     private fun getLineSegments(weightedLine: WeightedLine): List<LineSegment> {
@@ -317,8 +317,9 @@ data class FullTimelines(
                 isIngestionPoint = it.isIngestionPoint
             )
         }
+        val firstPoint = finalPointsNormalised.firstOrNull() ?: return
+        val lastPoint = finalPointsNormalised.lastOrNull() ?: return
         val path = Path().apply {
-            val firstPoint = finalPointsNormalised.first()
             val rest = finalPointsNormalised.drop(1)
             val firstHeightInPx = firstPoint.y * canvasHeight
             moveTo(x = firstPoint.x * pixelsPerSec, y = canvasHeight - firstHeightInPx)
@@ -333,11 +334,11 @@ data class FullTimelines(
             style = density.normalStroke
         )
         path.lineTo(
-            x = finalPointsNormalised.last().x * pixelsPerSec,
+            x = lastPoint.x * pixelsPerSec,
             y = canvasHeight + drawScope.strokeWidth / 2
         )
         path.lineTo(
-            x = finalPointsNormalised.first().x * pixelsPerSec,
+            x = firstPoint.x * pixelsPerSec,
             y = canvasHeight + drawScope.strokeWidth / 2
         )
         path.close()
