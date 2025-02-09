@@ -21,6 +21,7 @@ package com.isaakhanimann.journal.ui.tabs.journal.addingestion.time
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,8 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -61,10 +64,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -78,6 +82,7 @@ import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.tabs.journal.experience.rating.FloatingDoneButton
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 
@@ -214,6 +219,7 @@ fun FinishIngestionScreen(
         Column(
             modifier = Modifier
                 .padding(padding)
+                .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
             LinearProgressIndicator(
@@ -408,6 +414,7 @@ fun FinishIngestionScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NoteSection(
     previousNotes: List<String>,
@@ -416,6 +423,8 @@ fun NoteSection(
 ) {
     var isShowingSuggestions by remember { mutableStateOf(true) }
     val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
+    val bringIntoViewRequester = BringIntoViewRequester()
     Column {
         OutlinedTextField(
             value = note,
@@ -432,11 +441,16 @@ fun NoteSection(
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .onFocusChanged { focusState ->
-                    if (focusState.isFocused) {
+                .bringIntoViewRequester(bringIntoViewRequester)
+                .onFocusEvent { focusState ->
+                    if (focusState.isFocused && focusState.hasFocus) {
                         isShowingSuggestions = true
+                        coroutineScope.launch {
+                            bringIntoViewRequester.bringIntoView()
+                        }
                     }
                 }
+
         )
         if (previousNotes.isNotEmpty() && isShowingSuggestions) {
             Column {
