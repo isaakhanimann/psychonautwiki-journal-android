@@ -162,6 +162,13 @@ fun DrugTestingScreen() {
                     url = "https://www.drugs-test.nl/en/testlocations/"
                 )
             }
+            CardWithTesting(title = "Norway") {
+                TestingServiceItem(
+                    name = "Rusopplysningen",
+                    city = "Oslo",
+                    url = "https://rusopplysningen.no/analysetjeneste"
+                )
+            }
             CardWithTesting(title = "Slovenia") {
                 TestingServiceItem(
                     name = "DrogArt",
