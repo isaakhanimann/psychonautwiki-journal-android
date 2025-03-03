@@ -178,16 +178,21 @@ fun IngestionRowOnSubstanceCompanionScreen(ingestionAndCustomUnit: IngestionsBur
     ) {
         val text = buildAnnotatedString {
             append(ingestionAndCustomUnit.doseDescription)
+            if (ingestionAndCustomUnit.customUnit != null) {
+                append(" " + ingestionAndCustomUnit.customUnit.name)
+            }
             withStyle(style = SpanStyle(color = if (isSystemInDarkTheme()) Color.Gray else Color.LightGray )) {
+                val routeText =
+                    ingestionAndCustomUnit.ingestion.administrationRoute.displayText.lowercase()
                 if (ingestionAndCustomUnit.customUnit == null) {
-                    append(" " + ingestionAndCustomUnit.ingestion.administrationRoute.displayText.lowercase())
+                    append(" $routeText")
                 }
                 ingestionAndCustomUnit.customUnitDose?.calculatedDoseDescription?.let {
-                    append(" = $it ${ingestionAndCustomUnit.ingestion.administrationRoute.displayText.lowercase()}")
+                    append(" = $it $routeText")
                 }
             }
         }
-        Text(text = text, style = MaterialTheme.typography.titleSmall)
+        Text(text = text, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
         val dateString = ingestionAndCustomUnit.ingestion.time.getShortTimeText()
         Text(text = dateString)
     }
