@@ -99,6 +99,45 @@ class IngestionRowPreviewProvider : PreviewParameterProvider<IngestionElement> {
         IngestionElement(
             ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
                 ingestion = Ingestion(
+                    substanceName = "2C-B",
+                    time = Instant.now(),
+                    endTime = null,
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = 1.5,
+                    isDoseAnEstimate = false,
+                    estimatedDoseStandardDeviation = null,
+                    units = "pill",
+                    experienceId = 0,
+                    notes = null,
+                    stomachFullness = StomachFullness.EMPTY,
+                    consumerName = null,
+                    customUnitId = 5
+                ),
+                substanceCompanion = SubstanceCompanion(
+                    substanceName = "2C-B",
+                    color = AdaptiveColor.GREEN
+                ),
+                customUnit = CustomUnit(
+                    id = 5,
+                    substanceName = "2C-B",
+                    name = "Blue rocket",
+                    administrationRoute = AdministrationRoute.ORAL,
+                    dose = null,
+                    estimatedDoseStandardDeviation = null,
+                    isEstimate = false,
+                    isArchived = false,
+                    unit = "pill",
+                    unitPlural = "pills",
+                    originalUnit = "mg",
+                    note = "this is a note"
+                )
+            ),
+            roaDuration = null,
+            numDots = null
+        ),
+        IngestionElement(
+            ingestionWithCompanionAndCustomUnit = IngestionWithCompanionAndCustomUnit(
+                ingestion = Ingestion(
                     substanceName = "LSD",
                     time = Instant.now(),
                     endTime = null,

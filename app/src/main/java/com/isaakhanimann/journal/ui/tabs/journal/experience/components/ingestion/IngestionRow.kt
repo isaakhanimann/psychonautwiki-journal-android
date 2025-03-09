@@ -93,9 +93,12 @@ fun IngestionRow(
                     withStyle(style = SpanStyle(color = Color.Gray)) {
                         if (customUnit == null) {
                             append(" " + ingestion.administrationRoute.displayText.lowercase())
-                        }
-                        ingestionWithCompanionAndCustomUnit.customUnitDose?.calculatedDoseDescription?.let {
-                            append(" = $it ${ingestion.administrationRoute.displayText.lowercase()}")
+                        } else {
+                            ingestionWithCompanionAndCustomUnit.customUnitDose?.calculatedDoseDescription?.let {
+                                append(" = $it ${ingestion.administrationRoute.displayText.lowercase()}")
+                            } ?: run {
+                                append(" = unknown dose ${ingestion.administrationRoute.displayText.lowercase()}")
+                            }
                         }
                     }
                 }
