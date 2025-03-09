@@ -33,7 +33,9 @@ fun Double.toReadableString(): String {
 }
 
 fun Double.toPreservedString(): String {
-    val numberFormat = NumberFormat.getInstance(Locale.US)
+    val numberFormat = NumberFormat.getInstance(Locale.US).apply {
+        isGroupingUsed = false
+    }
     return numberFormat.format(this)
 }
 
