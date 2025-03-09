@@ -477,7 +477,7 @@ class ExperienceViewModel @Inject constructor(
                         ingestionsOfSameSubstance.groupBy { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute }
                             .mapNotNull { groupedByRoute ->
                                 val groupedIngestions = groupedByRoute.value
-                                if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.ingestion.dose == null }) return@mapNotNull null
+                                if (groupedIngestions.any { it.ingestionWithCompanionAndCustomUnit.pureDose == null }) return@mapNotNull null
                                 val firstIngestion =
                                     groupedIngestions.first().ingestionWithCompanionAndCustomUnit
                                 val units = firstIngestion.originalUnit ?: return@mapNotNull null
