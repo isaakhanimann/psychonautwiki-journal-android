@@ -338,7 +338,7 @@ class ExperienceViewModel @Inject constructor(
     val interactionsFlow =
         sortedIngestionsWithCompanionsFlow.combine(combinationSettingsStorage.enabledInteractionsFlow) { ingestions, enabledInteractions ->
             val interactionsToCheck =
-                ingestions.map { it.ingestion.substanceName }.plus(enabledInteractions).distinct()
+                ingestions.filter { it.ingestion.consumerName == null }.map { it.ingestion.substanceName }.plus(enabledInteractions).distinct()
             return@combine interactionsToCheck.flatMapIndexed { index: Int, interaction: String ->
                 return@flatMapIndexed interactionsToCheck.drop(index + 1).mapNotNull { other ->
                     interactionChecker.getInteractionBetween(
