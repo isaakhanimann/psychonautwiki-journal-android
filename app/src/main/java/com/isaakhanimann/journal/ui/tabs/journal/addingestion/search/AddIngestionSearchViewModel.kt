@@ -203,7 +203,7 @@ class AddIngestionSearchViewModel @Inject constructor(
         ingestionsForSubstanceAndRoute: List<IngestionWithCompanionAndCustomUnit>,
         color: AdaptiveColor
     ): List<Suggestion.CustomUnitSuggestion> {
-        val groupedByUnit = ingestionsForSubstanceAndRoute.filter { it.customUnit != null }
+        val groupedByUnit = ingestionsForSubstanceAndRoute.filter { it.customUnit != null && !(it.customUnit?.isArchived ?: true) }
             .groupBy { it.customUnit }
         return groupedByUnit.mapNotNull { unitGroup ->
             val customUnit = unitGroup.key ?: return@mapNotNull null
