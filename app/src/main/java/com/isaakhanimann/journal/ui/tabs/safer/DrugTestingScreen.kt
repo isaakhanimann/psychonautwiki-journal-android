@@ -121,6 +121,11 @@ fun DrugTestingScreen() {
                     city = "Vancouver",
                     url = "http://www.vch.ca/public-health/harm-reduction/overdose-prevention-response/drug-checking"
                 )
+                TestingServiceItem(
+                    name = "grip",
+                    city = "Montreal",
+                    url = "https://grip-prevention.ca/en/drug-checking/"
+                )
             }
             CardWithTesting(title = "Germany") {
                 TestingServiceItem(
@@ -181,6 +186,11 @@ fun DrugTestingScreen() {
                     name = "Energy Control",
                     city = "Various locations",
                     url = "https://energycontrol.org/servicio-de-analisis/"
+                )
+                TestingServiceItem(
+                    name = "CHEMSAFE",
+                    city = "Various locations",
+                    url = "https://www.chem-safe.org/check-your-chems/"
                 )
                 TestingServiceItem(
                     name = "Kykeon Analytics",
