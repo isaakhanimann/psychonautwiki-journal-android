@@ -6,6 +6,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("androidx.room")
     kotlin("plugin.serialization") version "2.0.20"
+    alias(libs.plugins.autoresconfig)
 }
 
 android {
@@ -47,6 +48,13 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+autoResConfig {
+    generateClass = true
+    generateRes = false
+    generatedClassFullName = "com.isaakhanimann.journal.util.LangList"
+    generatedArrayFirstItem = "SYSTEM"
 }
 
 dependencies {

@@ -82,6 +82,7 @@ import com.isaakhanimann.journal.ui.VERSION_NAME
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
+import com.isaakhanimann.journal.util.LangList
 import kotlinx.coroutines.launch
 import java.time.Instant
 
@@ -194,7 +195,10 @@ fun SettingsScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = horizontalPadding),
+                        .clickable {
+                            saveDosageDotsAreHidden(!areDosageDotsHidden)
+                        }
+                        .padding(horizontal = horizontalPadding, vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -208,7 +212,10 @@ fun SettingsScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = horizontalPadding),
+                        .clickable {
+                            saveIsTimelineHidden(!isTimelineHidden)
+                        }
+                        .padding(horizontal = horizontalPadding, vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -222,7 +229,10 @@ fun SettingsScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = horizontalPadding),
+                        .clickable {
+                            saveAreSubstanceHeightsIndependent(!areSubstanceHeightsIndependent)
+                        }
+                        .padding(horizontal = horizontalPadding, vertical = 3.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

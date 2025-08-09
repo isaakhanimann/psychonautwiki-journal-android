@@ -44,8 +44,8 @@ fun CardWithTitle(
         Column(modifier = Modifier.padding(bottom = 5.dp)) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(vertical = 3.dp, horizontal = horizontalPadding)
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = horizontalPadding)
             )
             Column(
                 Modifier
