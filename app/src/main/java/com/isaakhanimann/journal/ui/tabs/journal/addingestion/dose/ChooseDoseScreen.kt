@@ -66,12 +66,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
 import com.isaakhanimann.journal.data.substances.classes.roa.RoaDose
@@ -238,10 +240,10 @@ fun ChooseDoseScreen(
                     icon = {
                         Icon(
                             Icons.AutoMirrored.Filled.NavigateNext,
-                            contentDescription = "Next"
+                            contentDescription = stringResource(R.string.next)
                         )
                     },
-                    text = { Text("Next") },
+                    text = { Text(stringResource(R.string.next)) },
                 )
             }
         }
@@ -296,11 +298,11 @@ fun ChooseDoseScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Warning,
-                                contentDescription = "Dosage warning"
+                                contentDescription = stringResource(R.string.dosage_warning)
                             )
                             Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
                             Text(
-                                text = "There is no dosage info for this administration route. Research dosages somewhere else.",
+                                text = stringResource(R.string.dosage_warning_description),
                             )
                         }
                     }
@@ -343,7 +345,7 @@ fun ChooseDoseScreen(
                             )
                         },
                         textStyle = textStyle,
-                        label = { Text("Pure Dose", style = textStyle) },
+                        label = { Text(stringResource(R.string.pure_dose), style = textStyle) },
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
@@ -365,7 +367,7 @@ fun ChooseDoseScreen(
                         OutlinedTextField(
                             value = units,
                             onValueChange = onChangeOfUnits,
-                            label = { Text("Units") },
+                            label = { Text(stringResource(R.string.units)) },
                             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                             singleLine = true,
@@ -409,7 +411,7 @@ fun ChooseDoseScreen(
                                     )
                                 },
                                 textStyle = textStyle,
-                                label = { Text("Estimated standard deviation", style = textStyle) },
+                                label = { Text(stringResource(R.string.estimated_standard_deviation), style = textStyle) },
                                 trailingIcon = {
                                     Text(
                                         text = units,
@@ -476,13 +478,13 @@ fun ChooseDoseScreen(
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                     OutlinedButton(onClick = navigateToCreateCustomUnit) {
-                        Text("Create a custom unit")
+                        Text(stringResource(R.string.create_a_custom_unit))
                     }
                 }
             }
             var isShowingUnknownDoseDialog by remember { mutableStateOf(false) }
             TextButton(onClick = { isShowingUnknownDoseDialog = true }) {
-                Text(text = "Log unknown dose")
+                Text(text = stringResource(R.string.log_unknown_dose))
             }
             AnimatedVisibility(visible = isValidDose) {
                 ElevatedCard(
@@ -520,7 +522,7 @@ fun ChooseDoseScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = "Safer sniffing")
+                    Text(text = stringResource(R.string.safer_sniffing))
                 }
             } else if (administrationRoute == AdministrationRoute.RECTAL) {
                 val uriHandler = LocalUriHandler.current
@@ -530,7 +532,7 @@ fun ChooseDoseScreen(
                         contentDescription = "Open link"
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Safer plugging")
+                    Text(stringResource(R.string.safer_plugging))
                 }
             }
             if (roaDose?.shouldUseVolumetricDosing == true) {
@@ -541,7 +543,7 @@ fun ChooseDoseScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = "Volumetric liquid dosing")
+                    Text(text = stringResource(R.string.volumetric_liquid_dosing))
                 }
             }
             if (administrationRoute == AdministrationRoute.SMOKED && substanceName != "Cannabis") {

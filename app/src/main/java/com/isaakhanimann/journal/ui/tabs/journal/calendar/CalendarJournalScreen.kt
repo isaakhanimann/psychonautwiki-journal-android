@@ -53,6 +53,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -101,7 +102,7 @@ fun CalendarJournalScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Journal") },
+                title = { Text(stringResource(com.isaakhanimann.journal.R.string.journal)) },
                 actions = {
                     val coroutineScope = rememberCoroutineScope()
                     TextButton(onClick = {

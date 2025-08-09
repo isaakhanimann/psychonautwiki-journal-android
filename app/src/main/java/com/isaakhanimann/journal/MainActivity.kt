@@ -18,6 +18,7 @@
 
 package com.isaakhanimann.journal
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,13 +30,27 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.isaakhanimann.journal.ui.main.MainScreen
 import com.isaakhanimann.journal.ui.theme.JournalTheme
+import com.isaakhanimann.journal.util.LocaleDelegate
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val localeDelegate by lazy {
+        LocaleDelegate()
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        val configuration = newBase?.resources?.configuration
+        configuration?.let {
+            localeDelegate.updateConfiguration(it)
+            super.attachBaseContext(newBase.createConfigurationContext(it))
+        } ?: super.attachBaseContext(newBase)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+        localeDelegate.onCreate(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -47,6 +62,14 @@ class MainActivity : ComponentActivity() {
                     MainScreen()
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (localeDelegate.isLocaleChanged) {
+            recreate()
         }
     }
 }

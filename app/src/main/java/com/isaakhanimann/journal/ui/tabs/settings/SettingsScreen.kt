@@ -22,6 +22,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,8 +31,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -41,6 +46,7 @@ import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.FileUpload
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Medication
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.QuestionAnswer
@@ -54,6 +60,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -75,16 +82,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.JournalApp
+import com.isaakhanimann.journal.MainActivity
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.ui.VERSION_NAME
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.CardWithTitle
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 import com.isaakhanimann.journal.ui.utils.getStringOfPattern
 import com.isaakhanimann.journal.util.LangList
+import com.isaakhanimann.journal.util.LocaleDelegate
+import com.isaakhanimann.journal.util.LocaleDelegate.Companion.defaultLocale
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.Instant
+import java.util.Locale
+
 
 @Preview
 @Composable
@@ -98,6 +116,8 @@ fun SettingsPreview() {
         navigateToDonate = {},
         importFile = {},
         exportFile = {},
+        language = "SYSTEM",
+        saveLanguage = {},
         snackbarHostState = remember { SnackbarHostState() },
         areDosageDotsHidden = false,
         saveDosageDotsAreHidden = {},
@@ -127,6 +147,8 @@ fun SettingsScreen(
         importFile = viewModel::importFile,
         exportFile = viewModel::exportFile,
         snackbarHostState = viewModel.snackbarHostState,
+        language = viewModel.languageFlow.collectAsState().value,
+        saveLanguage = viewModel::saveLanguage,
         areDosageDotsHidden = viewModel.areDosageDotsHiddenFlow.collectAsState().value,
         saveDosageDotsAreHidden = viewModel::saveDosageDotsAreHidden,
         isTimelineHidden = viewModel.isTimelineHiddenFlow.collectAsState().value,
@@ -148,6 +170,8 @@ fun SettingsScreen(
     importFile: (uri: Uri) -> Unit,
     exportFile: (uri: Uri) -> Unit,
     snackbarHostState: SnackbarHostState,
+    language: String,
+    saveLanguage: (String) -> Unit,
     areDosageDotsHidden: Boolean,
     saveDosageDotsAreHidden: (Boolean) -> Unit,
     isTimelineHidden: Boolean,
@@ -155,10 +179,11 @@ fun SettingsScreen(
     areSubstanceHeightsIndependent: Boolean,
     saveAreSubstanceHeightsIndependent: (Boolean) -> Unit,
 ) {
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings") }
+                title = { Text(stringResource(R.string.settings)) }
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -170,24 +195,36 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            CardWithTitle(title = "UI", innerPaddingHorizontal = 0.dp) {
+            CardWithTitle(title = stringResource(R.string.ui), innerPaddingHorizontal = 0.dp) {
+                LanguagePreference(
+                    currentLanguageTag = language,
+                    onLanguageSelected = { newLanguageTag ->
+                        runBlocking {
+                            saveLanguage(newLanguageTag)
+                        }
+                        applyLanguage(newLanguageTag)
+
+                        (context as? MainActivity)?.recreate()
+                    }
+                )
+                HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.Outlined.Medication,
-                    text = "Custom units"
+                    text = stringResource(R.string.custom_units)
                 ) {
                     navigateToCustomUnits()
                 }
                 HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.Outlined.Palette,
-                    text = "Substance colors"
+                    text = stringResource(R.string.substance_colors)
                 ) {
                     navigateToSubstanceColors()
                 }
                 HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.Outlined.WarningAmber,
-                    text = "Interaction settings"
+                    text = stringResource(R.string.interaction_settings)
                 ) {
                     navigateToComboSettings()
                 }
@@ -202,7 +239,7 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Hide dosage dots")
+                    Text(text = stringResource(R.string.hide_dosage_dots))
                     Switch(
                         checked = areDosageDotsHidden,
                         onCheckedChange = saveDosageDotsAreHidden
@@ -219,7 +256,7 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Hide timeline")
+                    Text(text = stringResource(R.string.hide_timeline))
                     Switch(
                         checked = isTimelineHidden,
                         onCheckedChange = saveIsTimelineHidden
@@ -247,7 +284,7 @@ fun SettingsScreen(
                             }
                             .padding(end = ButtonDefaults.IconSpacing)
                     ) {
-                        Text(text = "Independent substance heights")
+                        Text(text = stringResource(R.string.independent_substance_heights))
                         if (showBottomSheet) {
                             ModalBottomSheet(
                                 onDismissRequest = {
@@ -256,13 +293,7 @@ fun SettingsScreen(
                                 sheetState = sheetState
                             ) {
                                 Text(
-                                    text = """
-                                    Enable this setting if you want the timeline of different substances and routes of administration (roas) to be independent. Then ingestions of different substances and roas will always take the full height of the timeline.
-                                    
-                                    If this setting is disabled then timelines of different substances have a height relative to each other. In that case the average of the common dose is used as the point to compare it to.
-                                    E.g. if the oral average common dose of MDMA is 100mg and the average common dose of insufflated MDMA is 50mg then the timeline for 100mg of oral MDMA is the same height as for 50mg of insufflated MDMA.
-                                    This is also applied across substances. E.g. if the common dose of oral 2C-B is 20mg then the timeline of 40mg oral 2C-B will be twice as high as 100mg of oral MDMA.
-                                """.trimIndent(),
+                                    text = stringResource(R.string.independent_substance_heights_description).trimIndent(),
                                     modifier = Modifier
                                         .padding(horizontal = horizontalPadding)
                                         .padding(bottom = 15.dp)
@@ -278,9 +309,9 @@ fun SettingsScreen(
                     )
                 }
             }
-            CardWithTitle(title = "App data", innerPaddingHorizontal = 0.dp) {
+            CardWithTitle(title = stringResource(R.string.app_data), innerPaddingHorizontal = 0.dp) {
                 var isShowingExportDialog by remember { mutableStateOf(false) }
-                SettingsButton(imageVector = Icons.Outlined.FileUpload, text = "Export File") {
+                SettingsButton(imageVector = Icons.Outlined.FileUpload, text = stringResource(R.string.export_file)) {
                     isShowingExportDialog = true
                 }
                 val jsonMIMEType = "application/json"
@@ -298,10 +329,10 @@ fun SettingsScreen(
                     AlertDialog(
                         onDismissRequest = { isShowingExportDialog = false },
                         title = {
-                            Text(text = "Export?")
+                            Text(text = stringResource(R.string.want_to_export))
                         },
                         text = {
-                            Text("This will export all your data from the app into a file so you can send it to someone or import it again on a new phone")
+                            Text(stringResource(R.string.export_description))
                         },
                         confirmButton = {
                             TextButton(
@@ -314,21 +345,21 @@ fun SettingsScreen(
                                     )
                                 }
                             ) {
-                                Text("Export")
+                                Text(stringResource(R.string.export))
                             }
                         },
                         dismissButton = {
                             TextButton(
                                 onClick = { isShowingExportDialog = false }
                             ) {
-                                Text("Cancel")
+                                Text(stringResource(R.string.cancel))
                             }
                         }
                     )
                 }
                 HorizontalDivider()
                 var isShowingImportDialog by remember { mutableStateOf(false) }
-                SettingsButton(imageVector = Icons.Outlined.FileDownload, text = "Import file") {
+                SettingsButton(imageVector = Icons.Outlined.FileDownload, text = stringResource(R.string.import_file_title)) {
                     isShowingImportDialog = true
                 }
                 val launcherImport =
@@ -341,10 +372,10 @@ fun SettingsScreen(
                     AlertDialog(
                         onDismissRequest = { isShowingImportDialog = false },
                         title = {
-                            Text(text = "Import file?")
+                            Text(text = stringResource(R.string.want_to_import_file))
                         },
                         text = {
-                            Text("Import a file that was exported before. Note that this will delete the data that you already have in the app.")
+                            Text(stringResource(R.string.import_description))
                         },
                         confirmButton = {
                             TextButton(
@@ -353,14 +384,14 @@ fun SettingsScreen(
                                     launcherImport.launch(jsonMIMEType)
                                 }
                             ) {
-                                Text("Import")
+                                Text(stringResource(R.string.import_file))
                             }
                         },
                         dismissButton = {
                             TextButton(
                                 onClick = { isShowingImportDialog = false }
                             ) {
-                                Text("Cancel")
+                                Text(stringResource(R.string.cancel))
                             }
                         }
                     )
@@ -369,7 +400,7 @@ fun SettingsScreen(
                 var isShowingDeleteDialog by remember { mutableStateOf(false) }
                 SettingsButton(
                     imageVector = Icons.Outlined.DeleteForever,
-                    text = "Delete everything"
+                    text = stringResource(R.string.delete_everything)
                 ) {
                     isShowingDeleteDialog = true
                 }
@@ -378,10 +409,10 @@ fun SettingsScreen(
                     AlertDialog(
                         onDismissRequest = { isShowingDeleteDialog = false },
                         title = {
-                            Text(text = "Delete everything?")
+                            Text(text = stringResource(R.string.delete_everything))
                         },
                         text = {
-                            Text("This will delete all your experiences, ingestions and custom substances.")
+                            Text(stringResource(R.string.delete_everything_description))
                         },
                         confirmButton = {
                             TextButton(
@@ -390,34 +421,34 @@ fun SettingsScreen(
                                     deleteEverything()
                                     scope.launch {
                                         snackbarHostState.showSnackbar(
-                                            message = "Deleted everything",
+                                            message = context.getString(R.string.deleted_everything),
                                             duration = SnackbarDuration.Short
                                         )
                                     }
                                 }
                             ) {
-                                Text("Delete")
+                                Text(stringResource(R.string.delete))
                             }
                         },
                         dismissButton = {
                             TextButton(
                                 onClick = { isShowingDeleteDialog = false }
                             ) {
-                                Text("Cancel")
+                                Text(stringResource(R.string.cancel))
                             }
                         }
                     )
                 }
             }
             val uriHandler = LocalUriHandler.current
-            CardWithTitle(title = "Feedback", innerPaddingHorizontal = 0.dp) {
+            CardWithTitle(title = stringResource(R.string.feedback), innerPaddingHorizontal = 0.dp) {
                 SettingsButton(imageVector = Icons.Outlined.QuestionAnswer, text = "FAQ") {
                     navigateToFAQ()
                 }
                 HorizontalDivider()
                 SettingsButton(
                     imageVector = Icons.AutoMirrored.Outlined.ContactSupport,
-                    text = "Question, bug report"
+                    text = stringResource(R.string.question_bug_report)
                 ) {
                     uriHandler.openUri("https://t.me/+ss8uZhBF6g00MTY8")
                 }
@@ -426,8 +457,8 @@ fun SettingsScreen(
                     navigateToDonate()
                 }
             }
-            CardWithTitle(title = "App", innerPaddingHorizontal = 0.dp) {
-                SettingsButton(imageVector = Icons.Outlined.Code, text = "Source Code") {
+            CardWithTitle(title = stringResource(R.string.app), innerPaddingHorizontal = 0.dp) {
+                SettingsButton(imageVector = Icons.Outlined.Code, text = stringResource(R.string.source_code)) {
                     uriHandler.openUri("https://github.com/isaakhanimann/psychonautwiki-journal-android")
                 }
                 HorizontalDivider()
@@ -438,12 +469,12 @@ fun SettingsScreen(
                     type = "text/plain"
                 }
                 val shareIntent = Intent.createChooser(sendIntent, null)
-                SettingsButton(imageVector = Icons.Outlined.Share, text = "Share") {
+                SettingsButton(imageVector = Icons.Outlined.Share, text = stringResource(R.string.share)) {
                     context.startActivity(shareIntent)
                 }
                 HorizontalDivider()
                 Text(
-                    text = "Version $VERSION_NAME",
+                    text = stringResource(R.string.version, VERSION_NAME),
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier
                         .padding(horizontal = 15.dp)
@@ -456,6 +487,97 @@ fun SettingsScreen(
 
 const val SHARE_APP_URL = "https://psychonautwiki.org/wiki/PsychonautWiki_Journal"
 
+@Composable
+private fun getLanguageDisplayName(tag: String): String {
+    return if (tag == "SYSTEM") {
+        stringResource(id = R.string.follow_system)
+    } else {
+        val locale = Locale.forLanguageTag(tag)
+        locale.getDisplayName(locale).replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+    }
+}
+
+@Composable
+fun LanguagePreference(
+    currentLanguageTag: String,
+    onLanguageSelected: (String) -> Unit
+) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { showDialog = true }
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Language,
+            contentDescription = stringResource(R.string.settings_language),
+            modifier = Modifier.padding(end = 16.dp)
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(stringResource(R.string.settings_language), fontSize = 16.sp)
+            Spacer(Modifier.height(2.dp))
+            Text(getLanguageDisplayName(tag = currentLanguageTag), fontSize = 14.sp)
+        }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(stringResource(R.string.settings_language)) },
+            text = {
+                LazyColumn {
+                    items(LangList.LOCALES) { tag ->
+                        val displayName = getLanguageDisplayName(tag)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onLanguageSelected(tag)
+                                    showDialog = false
+                                }
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = currentLanguageTag == tag,
+                                onClick = null
+                            )
+                            Spacer(Modifier.width(16.dp))
+                            Text(displayName)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(stringResource(android.R.string.cancel))
+                }
+            }
+        )
+    }
+}
+
+fun applyLanguage(tag: String) {
+    val localeList = if (tag == "SYSTEM") {
+        LocaleListCompat.getEmptyLocaleList()
+    } else {
+        LocaleListCompat.forLanguageTags(tag)
+    }
+    val app = JournalApp.instance
+    val locale = app.getLocale(tag)
+    val res = app.resources
+    val config = res.configuration
+    config.setLocale(locale)
+    if (locale != null) {
+        defaultLocale = locale
+    }
+    @Suppress("DEPRECATION")
+    res.updateConfiguration(config, res.displayMetrics);
+    AppCompatDelegate.setApplicationLocales(localeList)
+}
 
 @Composable
 fun SettingsButton(imageVector: ImageVector, text: String, onClick: () -> Unit) {

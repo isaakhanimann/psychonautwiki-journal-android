@@ -23,7 +23,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.isaakhanimann.journal.R
 
 @Preview
 @Composable
@@ -42,11 +44,11 @@ fun UnknownDoseDialog(
     AlertDialog(
         onDismissRequest = dismiss,
         title = {
-            Text(text = "Don't know the dose?", style = MaterialTheme.typography.headlineSmall)
+            Text(text = stringResource(R.string.don_t_know_the_dose), style = MaterialTheme.typography.headlineSmall)
         },
         text = {
             Text(
-                "You can log an unknown dose. But note that administering the wrong dosage of a substance can lead to negative experiences such as extreme anxiety, uncomfortable physical side effects, hospitalization, or (in extreme cases) death."
+                stringResource(R.string.dont_know_the_dose_description)
             )
         },
         confirmButton = {
@@ -56,14 +58,14 @@ fun UnknownDoseDialog(
                     useUnknownDoseAndNavigate()
                 }
             ) {
-                Text("Log unknown dose")
+                Text(stringResource(R.string.log_unknown_dose))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = dismiss
             ) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

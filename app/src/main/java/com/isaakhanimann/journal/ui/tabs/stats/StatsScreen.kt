@@ -61,11 +61,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.ui.YOU
 import com.isaakhanimann.journal.ui.tabs.search.substance.roa.toReadableString
 import com.isaakhanimann.journal.ui.theme.JournalTheme
@@ -116,7 +118,9 @@ fun StatsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (statsModel.consumerName == null) "Statistics" else "Statistics for ${statsModel.consumerName}") },
+                title = { Text(if (statsModel.consumerName == null) stringResource(R.string.statistics) else stringResource(
+                    R.string.statistics_for, statsModel.consumerName
+                )) },
                 actions = {
                     if (consumerNamesSorted.isNotEmpty()) {
                         var isConsumerSelectionExpanded by remember { mutableStateOf(false) }
@@ -169,8 +173,8 @@ fun StatsScreen(
     ) { padding ->
         if (!statsModel.areThereAnyIngestions) {
             EmptyScreenDisclaimer(
-                title = "Nothing to show yet",
-                description = "Start logging your ingestions to see an overview of your consumption pattern."
+                title = stringResource(R.string.nothing_to_show_yet),
+                description = stringResource(R.string.stats_empty_description)
             )
         } else {
             Column(modifier = Modifier.padding(padding)) {
@@ -190,12 +194,15 @@ fun StatsScreen(
                     val isDarkTheme = isSystemInDarkTheme()
                     Column {
                         Text(
-                            text = "Experiences since ${statsModel.startDateText}",
+                            text = stringResource(
+                                R.string.experiences_since,
+                                statsModel.startDateText
+                            ),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(start = 10.dp, top = 5.dp)
                         )
                         Text(
-                            text = "Substance counted once per experience",
+                            text = stringResource(R.string.substance_counted_once_per_experience),
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(
                                 start = 10.dp,
@@ -242,7 +249,9 @@ fun StatsScreen(
                                                 style = MaterialTheme.typography.titleMedium
                                             )
                                             val addOn =
-                                                if (subStat.experienceCount == 1) " experience" else " experiences"
+                                                if (subStat.experienceCount == 1) stringResource(
+                                                    R.string.experience_count
+                                                ) else stringResource(R.string.experiences_count)
                                             Text(
                                                 text = subStat.experienceCount.toString() + addOn,
                                             )
@@ -253,13 +262,21 @@ fun StatsScreen(
                                             if (cumulativeDose != null) {
                                                 if (cumulativeDose.isEstimate) {
                                                     if (cumulativeDose.estimatedDoseStandardDeviation != null) {
-                                                        Text(text = "total ${cumulativeDose.dose.toReadableString()}±${cumulativeDose.estimatedDoseStandardDeviation.toReadableString()} ${cumulativeDose.units}")
+                                                        Text(text = stringResource(
+                                                            R.string.total,
+                                                            "${cumulativeDose.dose.toReadableString()}±${cumulativeDose.estimatedDoseStandardDeviation.toReadableString()} ${cumulativeDose.units}"
+                                                        ))
                                                     } else {
-                                                        Text(text = "total ~${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
+                                                        Text(text = stringResource(
+                                                            R.string.total,
+                                                            "~${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}"
+                                                        ))
                                                     }
                                                 } else {
-                                                    Text(text = "total ${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}")
-
+                                                    Text(text = stringResource(
+                                                        R.string.total,
+                                                        "${cumulativeDose.dose.toReadableString()} ${cumulativeDose.units}"
+                                                    ))
                                                 }
                                             } else {
                                                 Text(text = "total dose unknown")
@@ -279,8 +296,11 @@ fun StatsScreen(
                     }
                 } else {
                     EmptyScreenDisclaimer(
-                        title = "No ingestions since ${statsModel.selectedOption.longDisplayText}",
-                        description = "Choose a longer duration range to see statistics."
+                        title = stringResource(
+                            R.string.no_ingestions_since,
+                            statsModel.selectedOption.longDisplayText
+                        ),
+                        description = stringResource(R.string.no_ingestions_description)
                     )
                 }
             }

@@ -18,6 +18,7 @@
 
 package com.isaakhanimann.journal.ui.utils
 
+import com.isaakhanimann.journal.util.LocaleDelegate
 import java.text.DateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -50,7 +51,7 @@ fun Instant.getShortTimeWithWeekdayText(): String {
 }
 
 fun Instant.getShortTimeText(): String {
-    val timeFormat: DateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault())
+    val timeFormat: DateFormat = DateFormat.getTimeInstance(DateFormat.SHORT, LocaleDelegate.defaultLocale)
     val date = Date.from(this)
     return timeFormat.format(date)
 }

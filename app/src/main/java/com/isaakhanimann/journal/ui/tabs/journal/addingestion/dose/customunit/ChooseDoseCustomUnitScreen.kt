@@ -55,11 +55,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomUnit
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.data.substances.classes.roa.DoseClass
@@ -200,10 +202,10 @@ fun ChooseDoseCustomUnitScreen(
                     icon = {
                         Icon(
                             Icons.AutoMirrored.Filled.NavigateNext,
-                            contentDescription = "Next"
+                            contentDescription = stringResource(R.string.next)
                         )
                     },
-                    text = { Text("Next") },
+                    text = { Text(stringResource(R.string.next)) },
                 )
             }
         }
@@ -288,7 +290,7 @@ fun ChooseDoseCustomUnitScreen(
                             )
                         },
                         textStyle = textStyle,
-                        label = { Text("Dose", style = textStyle) },
+                        label = { Text(stringResource(R.string.dose), style = textStyle) },
                         isError = !isValidDose,
                         trailingIcon = {
                             Text(
@@ -311,7 +313,7 @@ fun ChooseDoseCustomUnitScreen(
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         Switch(checked = isEstimate, onCheckedChange = onChangeIsEstimate)
-                        Text("Estimate", style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.estimate), style = MaterialTheme.typography.titleMedium)
                     }
                     AnimatedVisibility(visible = isEstimate) {
                         Column {
@@ -326,7 +328,7 @@ fun ChooseDoseCustomUnitScreen(
                                     )
                                 },
                                 textStyle = textStyle,
-                                label = { Text("Estimated standard deviation", style = textStyle) },
+                                label = { Text(stringResource(R.string.estimated_standard_deviation), style = textStyle) },
                                 trailingIcon = {
                                     Text(
                                         text = pluralizableUnit.justUnit(estimatedDoseDeviation ?: 1.0),
@@ -359,7 +361,7 @@ fun ChooseDoseCustomUnitScreen(
                 }
             }
             TextButton(onClick = useUnknownDoseAndNavigate) {
-                Text(text = "Log unknown dose")
+                Text(text = stringResource(R.string.log_unknown_dose))
             }
             TextButton(onClick = {
                 navigateToCreateCustomUnit(
@@ -367,7 +369,7 @@ fun ChooseDoseCustomUnitScreen(
                     customUnit.substanceName
                 )
             }) {
-                Text(text = "Create new unit")
+                Text(text = stringResource(R.string.create_new_unit))
             }
         }
     }

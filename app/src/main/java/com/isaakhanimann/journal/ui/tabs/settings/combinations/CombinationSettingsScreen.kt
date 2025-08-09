@@ -18,6 +18,7 @@
 
 package com.isaakhanimann.journal.ui.tabs.settings.combinations
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,11 +39,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
 
 @Composable
@@ -87,7 +90,7 @@ fun CombinationSettingsScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Combinations") })
+            TopAppBar(title = { Text(stringResource(R.string.combinations)) })
         }
     ) { padding ->
         Column(
@@ -104,16 +107,20 @@ fun CombinationSettingsScreen(
                     )
                 ) {
                     Text(
-                        text = "Interaction alerts",
+                        text = stringResource(R.string.interaction_alerts),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = "Get warnings about interactions with following substances, even if you haven't logged them.",
+                        text = stringResource(R.string.interaction_alerts_description),
                         style = MaterialTheme.typography.bodySmall
                     )
                     substanceInteractions.forEach { substanceInteraction ->
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth()
+                                .clickable {
+                                    substanceInteraction.toggle()
+                                }
+                                .padding(vertical = 2.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {

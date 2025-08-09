@@ -25,6 +25,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.isaakhanimann.journal.ui.tabs.journal.experience.components.SavedTimeDisplayOption
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences.PreferencesKeys.KEY_LANGUAGE
+import com.isaakhanimann.journal.ui.tabs.settings.combinations.UserPreferences.PreferencesKeys.SYSTEM_DEFAULT
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Instant
@@ -34,6 +36,7 @@ import javax.inject.Singleton
 @Singleton
 class UserPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
     private object PreferencesKeys {
+        val KEY_LANGUAGE = stringPreferencesKey("language")
         val KEY_TIME_DISPLAY_OPTION = stringPreferencesKey("key_time_display_option")
 
         // last ingestion time of experience is used when adding an ingestion from a past experience
@@ -46,6 +49,8 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
         val KEY_HIDE_DOSAGE_DOTS = booleanPreferencesKey("key_hide_dosage_dots")
         val KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT = booleanPreferencesKey("KEY_ARE_SUBSTANCE_HEIGHTS_INDEPENDENT")
         val KEY_IS_TIMELINE_HIDDEN = booleanPreferencesKey("KEY_IS_TIMELINE_HIDDEN")
+
+        const val SYSTEM_DEFAULT = "SYSTEM"
     }
 
     suspend fun saveTimeDisplayOption(value: SavedTimeDisplayOption) {
@@ -133,6 +138,17 @@ class UserPreferences @Inject constructor(private val dataStore: DataStore<Prefe
     suspend fun saveIsTimelineHidden(value: Boolean) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.KEY_IS_TIMELINE_HIDDEN] = value
+        }
+    }
+
+    val languageFlow: Flow<String> = dataStore.data
+        .map { preferences ->
+            preferences[KEY_LANGUAGE] ?: SYSTEM_DEFAULT
+        }
+
+    suspend fun setLanguage(language: String) {
+        dataStore.edit { settings ->
+            settings[KEY_LANGUAGE] = language
         }
     }
 }

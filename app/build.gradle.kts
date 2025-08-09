@@ -95,6 +95,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.compose)
+    implementation(libs.androidx.appcompat)
 
     implementation(libs.androidx.core.splashscreen)
 

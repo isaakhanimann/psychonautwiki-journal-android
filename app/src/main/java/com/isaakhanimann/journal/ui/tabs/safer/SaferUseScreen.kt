@@ -44,9 +44,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.ui.tabs.search.substance.SectionWithTitle
 import com.isaakhanimann.journal.ui.tabs.search.substance.VerticalSpace
 import com.isaakhanimann.journal.ui.theme.horizontalPadding
@@ -80,7 +82,7 @@ fun SaferUseScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Safer use") },
+                title = { Text(stringResource(R.string.safer_use)) },
             )
         },
     ) { padding ->
@@ -89,23 +91,23 @@ fun SaferUseScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(padding)
         ) {
-            SectionWithTitle(title = "1. Research") {
-                SaferText(text = "In advance research the duration, subjective effects and potential adverse effects which the substance or combination of substances are likely to produce.\nRead the info in here and also the PsychonautWiki article. Its best to cross-reference with other sources (Tripsit, Erowid, Wikipedia, Bluelight, Reddit, etc). There is no rush.")
+            SectionWithTitle(title = stringResource(R.string._1_research)) {
+                SaferText(text = stringResource(R.string._1_research_content))
             }
             val uriHandler = LocalUriHandler.current
-            SectionWithTitle(title = "2. Testing") {
-                SaferText(text = "Test your substance with anonymous and free drug testing services. If those are not available in your country, use reagent testing kits. Don‘t trust your dealer to sell reliable product. Its better to have a tested stash instead of relying on a source spontaneously.")
+            SectionWithTitle(title = stringResource(R.string._2_testing)) {
+                SaferText(text = stringResource(R.string._2_testing_content))
                 Button(
                     onClick = navigateToDrugTestingScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Icon(
                         Icons.Outlined.Biotech,
-                        contentDescription = "Open link",
+                        contentDescription = stringResource(R.string.open_link),
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Drug testing services")
+                    Text(stringResource(R.string.drug_testing_services))
                 }
                 Button(
                     onClick = navigateToReagentTestingScreen,
@@ -113,48 +115,48 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Outlined.Science,
-                        contentDescription = "Open link",
+                        contentDescription = stringResource(R.string.open_link),
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Reagent testing")
+                    Text(stringResource(R.string.reagent_testing))
                 }
                 VerticalSpace()
             }
-            SectionWithTitle(title = "3. Dosage") {
-                SaferText(text = "Know your dose, start small and wait. A full stomach can delay the onset of a swallowed ingestion by hours. A dose that's easy for somebody with a tolerance might be too much for you.\n\nInvest in a milligram scale so you can accurately weigh your dosages. Bear in mind that milligram scales under ${'$'}1000 cannot accurately weigh out doses below 50 mg and are highly inaccurate under 10 - 15 mg. If the amounts of the drug are smaller, use volumetric dosing (dissolving in water or alcohol to make it easier to measure).\n\nMany substances do not have linear dose-response curves, meaning that doubling the dose amount will cause a greater than double increase (and rapidly result in overwhelming, unpleasant, and potentially dangerous experiences), therefore doses should only be adjusted upward with slight increases (e.g. 1/4 to 1/2 of the previous dose).")
+            SectionWithTitle(title = stringResource(R.string._3_dosage)) {
+                SaferText(text = stringResource(R.string._3_dosage_content, '$'))
                 Button(
                     onClick = navigateToDosageGuideScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
-                    Text("Dosage guide")
+                    Text(stringResource(R.string.dosage_guide))
                 }
                 Button(
                     onClick = navigateToDosageClassificationScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
-                    Text("Dosage classification")
+                    Text(stringResource(R.string.dosage_classification))
                 }
                 Button(
                     onClick = navigateToVolumetricDosingScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
-                    Text("Volumetric liquid dosing")
+                    Text(stringResource(R.string.volumetric_liquid_dosing))
                 }
                 VerticalSpace()
             }
-            SectionWithTitle(title = "4. Set and setting") {
-                SaferText(text = "Set: Make sure your thoughts, desires, feelings, general mood, and any preconceived notions or expectations about what you are about to experience are conducive to the experience. Make sure your body is well. Better not to take it if you feel sick, injured or generally unhealthy.\n\nSetting: An unfamiliar, uncontrollable or otherwise disagreeable social or physical environment may result in an unpleasant or dangerous experience. Choose an environment that provides a sense of safety, familiarity, control, and comfort. For using hallucinogens (psychedelics, dissociatives and deliriants) refer to the safer hallucinogen guide.")
+            SectionWithTitle(title = stringResource(R.string._4_set_and_setting)) {
+                SaferText(text = stringResource(R.string._4_set_and_setting_content))
                 Button(
                     onClick = navigateToSaferHallucinogensScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
-                    Text("Safer hallucinogen guide")
+                    Text(stringResource(R.string.safer_hallucinogen_guide))
                 }
                 VerticalSpace()
             }
-            SectionWithTitle(title = "5. Combinations") {
-                SaferText(text = "Don’t combine drugs, including Alcohol, without research on the combo. The most common cause of substance-related deaths is the combination of depressants (such as opiates, benzodiazepines, or alcohol) with other depressants.")
+            SectionWithTitle(title = stringResource(R.string._5_combinations)) {
+                SaferText(text = stringResource(R.string._5_combinations_content))
                 Button(
                     onClick = {
                         uriHandler.openUri("https://combi-checker.ch")
@@ -163,11 +165,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Default.OpenInBrowser,
-                        contentDescription = "Open link",
+                        contentDescription = stringResource(R.string.open_link), 
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Swiss combination checker")
+                    Text(stringResource(R.string.swiss_combination_checker))
                 }
                 Button(
                     onClick = {
@@ -177,41 +179,41 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Default.OpenInBrowser,
-                        contentDescription = "Open link",
+                        contentDescription = stringResource(R.string.open_link),
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Tripsit combination checker")
+                    Text(stringResource(R.string.tripsit_combination_checker))
                 }
                 VerticalSpace()
             }
-            SectionWithTitle(title = "6. Administration routes") {
-                SaferText(text = "Don’t share snorting equipment (straws, banknotes, bullets) to avoid blood-borne diseases such as Hepatitis C that can be transmitted through blood amounts so small you can’t notice. Injection is the the most dangerous route of administration and highly advised against. If you are determined to inject, don’t share injection materials and refer to the safer injection guide.")
+            SectionWithTitle(title = stringResource(R.string._6_administration_routes)) {
+                SaferText(text = stringResource(R.string._6_administration_routes_content))
                 Button(
                     onClick = navigateToRouteExplanationScreen,
                     modifier = Modifier.padding(horizontal = horizontalPadding)
                 ) {
                     Icon(
                         Icons.Outlined.Info,
-                        contentDescription = "Info",
+                        contentDescription = stringResource(R.string.info),
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Administration routes info")
+                    Text(stringResource(R.string.administration_routes_info))
                 }
                 VerticalSpace()
             }
-            SectionWithTitle(title = "7. Allergy tests") {
-                SaferText(text = "Simply dose a minuscule amount of the substance (e.g. 1/10 to 1/4 of a regular dose) and wait several hours to verify that you do not exhibit an unusual or idiosyncratic response.")
+            SectionWithTitle(title = stringResource(R.string._7_allergy_tests)) {
+                SaferText(text = stringResource(R.string._7_allergy_tests_content))
             }
-            SectionWithTitle(title = "8. Reflection") {
-                SaferText(text = "Carefully monitor the frequency and intensity of any substance use to ensure it is not sliding into abuse and addiction. In particular, many stimulants, opioids, and depressants are known to be highly addictive.")
+            SectionWithTitle(title = stringResource(R.string._8_reflection)) {
+                SaferText(text = stringResource(R.string._8_reflection_content))
             }
-            SectionWithTitle(title = "9. Safety of others") {
-                SaferText(text = "Don’t drive, operate heavy machinery, or otherwise be directly or indirectly responsible for the safety or care of another person while intoxicated.")
+            SectionWithTitle(title = stringResource(R.string._9_safety_of_others)) {
+                SaferText(text = stringResource(R.string._9_safety_of_others_content))
             }
-            SectionWithTitle(title = "10. Recovery position") {
-                SaferText(text = "If someone is unconscious and breathing place them into Recovery Position to prevent death by the suffocation of vomit after a drug overdose.\nHave the contact details of help services to hand in case of urgent need.")
+            SectionWithTitle(title = stringResource(R.string._10_recovery_position)) {
+                SaferText(text = stringResource(R.string._10_recovery_position_content))
                 Button(
                     onClick = {
                         uriHandler.openUri("https://www.youtube.com/watch?v=dv3agW-DZ5I")
@@ -220,11 +222,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Default.PlayArrow,
-                        contentDescription = "Open link",
+                        contentDescription = stringResource(R.string.open_link), 
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Recovery position video")
+                    Text(stringResource(R.string.recovery_position_video))
                 }
                 VerticalSpace()
             }
@@ -242,11 +244,11 @@ fun SaferUseScreen(
                 ) {
                     Icon(
                         Icons.Outlined.HealthAndSafety,
-                        contentDescription = "Responsible drug use",
+                        contentDescription = stringResource(R.string.responsible_drug_use),
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text("Responsible drug use article")
+                    Text(stringResource(R.string.responsible_drug_use_article))
                     Spacer(modifier = Modifier.weight(1f))
                 }
             }

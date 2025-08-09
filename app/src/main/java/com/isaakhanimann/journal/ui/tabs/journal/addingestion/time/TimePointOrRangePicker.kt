@@ -18,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.ui.utils.getDateWithWeekdayText
 import com.isaakhanimann.journal.ui.utils.getShortTimeText
 import java.time.LocalDateTime
@@ -39,14 +41,14 @@ fun TimePointOrRangePicker(
             onClick = { onChangeTimePickerOption(IngestionTimePickerOption.POINT_IN_TIME) },
             selected = ingestionTimePickerOption == IngestionTimePickerOption.POINT_IN_TIME
         ) {
-            Text("Point in time")
+            Text(stringResource(R.string.point_in_time))
         }
         SegmentedButton(
             shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
             onClick = { onChangeTimePickerOption(IngestionTimePickerOption.TIME_RANGE) },
             selected = ingestionTimePickerOption == IngestionTimePickerOption.TIME_RANGE
         ) {
-            Text("Time range")
+            Text(stringResource(R.string.time_range))
         }
     }
     AnimatedContent(
@@ -72,7 +74,7 @@ fun TimePointOrRangePicker(
                     }) {
                         Icon(
                             Icons.Default.Update,
-                            contentDescription = "Update time to now",
+                            contentDescription = stringResource(R.string.update_time_to_now),
                         )
                     }
                 }
@@ -85,13 +87,13 @@ fun TimePointOrRangePicker(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Start:")
+                        Text(stringResource(R.string.start))
                         IconButton(onClick = {
                             onChangeStartDateOrTime(LocalDateTime.now())
                         }) {
                             Icon(
                                 Icons.Default.Update,
-                                contentDescription = "Update time to now",
+                                contentDescription = stringResource(R.string.update_time_to_now),
                             )
                         }
                     }
@@ -121,7 +123,7 @@ fun TimePointOrRangePicker(
                         }) {
                             Icon(
                                 Icons.Default.Update,
-                                contentDescription = "Update time to now",
+                                contentDescription = stringResource(R.string.update_time_to_now),
                             )
                         }
                     }

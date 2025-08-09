@@ -74,11 +74,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.data.room.experiences.entities.TimedNote
 import com.isaakhanimann.journal.data.substances.AdministrationRoute
 import com.isaakhanimann.journal.ui.FULL_STOMACH_DISCLAIMER
@@ -342,7 +344,7 @@ private fun ExperienceInteractionsSection(
         modifier = Modifier
             .padding(vertical = verticalCardPadding)
     ) {
-        CardTitle(title = "Interactions")
+        CardTitle(title = stringResource(R.string.interactions))
         interactions.forEachIndexed { index, interaction ->
             InteractionRow(interaction = interaction)
             if (index < interactions.size - 1) {
@@ -351,7 +353,7 @@ private fun ExperienceInteractionsSection(
         }
         Spacer(modifier = Modifier.height(5.dp))
         Text(
-            text = "Explanations",
+            text = stringResource(R.string.explanations),
             style = MaterialTheme.typography.labelMedium,
             modifier = Modifier.padding(horizontal = horizontalPadding)
         )
@@ -392,7 +394,7 @@ private fun ConsumerSection(
                 IconButton(onClick = { navigateToTimelineScreen(consumerWithIngestions.consumerName) }) {
                     Icon(
                         Icons.Default.OpenInFull,
-                        contentDescription = "Expand timeline"
+                        contentDescription = stringResource(R.string.expand_timeline)
                     )
                 }
             }
@@ -458,7 +460,7 @@ private fun NotesSection(
         .padding(vertical = verticalCardPadding)
         .fillMaxWidth()
         .clickable { navigateToEditExperienceScreen() }) {
-        CardTitle(title = "Notes")
+        CardTitle(title = stringResource(R.string.notes))
         Column(
             modifier = Modifier
                 .padding(horizontal = horizontalPadding)
@@ -467,7 +469,7 @@ private fun NotesSection(
             Text(text = oneExperienceScreenModel.notes)
             if (oneExperienceScreenModel.locationName.isNotBlank()) {
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Location: ${oneExperienceScreenModel.locationName}")
+                Text(text = stringResource(R.string.location, oneExperienceScreenModel.locationName))
             }
         }
     }
@@ -481,7 +483,7 @@ private fun ShulginRatingsSection(
     timeDisplayOption: TimeDisplayOption
 ) {
     ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-        CardTitle(title = "Shulgin ratings")
+        CardTitle(title = stringResource(R.string.shulgin_ratings))
         HorizontalDivider()
         val ratingsWithTime =
             oneExperienceScreenModel.ratings.mapNotNull { rating ->
@@ -539,7 +541,7 @@ private fun TimedNotesSection(
     firstIngestionTime: Instant,
 ) {
     ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-        CardTitle(title = "Timed notes")
+        CardTitle(title = stringResource(R.string.timed_notes))
         if (timedNotesSorted.isNotEmpty()) {
             HorizontalDivider()
         }
@@ -573,7 +575,7 @@ private fun CumulativeDosesSection(
     areDosageDotsHidden: Boolean
 ) {
     ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-        CardTitle(title = "Your cumulative doses")
+        CardTitle(title = stringResource(R.string.your_cumulative_doses))
         if (cumulativeDoses.isNotEmpty()) {
             HorizontalDivider()
         }
@@ -656,60 +658,58 @@ private fun MyTimelineSection(
     timeDisplayOption: TimeDisplayOption,
     isOralDisclaimerHidden: Boolean,
     onChangeIsOralDisclaimerHidden: (Boolean) -> Unit,
-) {
-    when (timelineDisplayOption) {
-        TimelineDisplayOption.Hidden -> {}
-        TimelineDisplayOption.Loading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-        TimelineDisplayOption.NotWorthDrawing -> {}
-        is TimelineDisplayOption.Shown -> {
-            val timelineModel = timelineDisplayOption.allTimelinesModel
-            ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    CardTitle(title = "Effect timeline")
-                    Row {
-                        TextButton(onClick = navigateToExplainTimeline) {
-                            Text(text = "Info")
-                        }
-                        IconButton(onClick = { navigateToTimelineScreen(YOU) }) {
-                            Icon(
-                                Icons.Default.OpenInFull,
-                                contentDescription = "Expand timeline"
-                            )
-                        }
+) = when (timelineDisplayOption) {
+    TimelineDisplayOption.Hidden -> {}
+    TimelineDisplayOption.Loading -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+    TimelineDisplayOption.NotWorthDrawing -> {}
+    is TimelineDisplayOption.Shown -> {
+        val timelineModel = timelineDisplayOption.allTimelinesModel
+        ElevatedCard(modifier = Modifier.padding(vertical = verticalCardPadding)) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                CardTitle(title = stringResource(R.string.effect_timeline))
+                Row {
+                    TextButton(onClick = navigateToExplainTimeline) {
+                        Text(text = stringResource(R.string.info))
+                    }
+                    IconButton(onClick = { navigateToTimelineScreen(YOU) }) {
+                        Icon(
+                            Icons.Default.OpenInFull,
+                            contentDescription = stringResource(R.string.expand_timeline)
+                        )
                     }
                 }
-                Column(
+            }
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
+                    .padding(bottom = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                AllTimelines(
+                    model = timelineModel,
+                    timeDisplayOption = timeDisplayOption,
+                    isShowingCurrentTime = true,
                     modifier = Modifier
-                        .padding(horizontal = horizontalPadding)
-                        .padding(bottom = 10.dp),
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    AllTimelines(
-                        model = timelineModel,
-                        timeDisplayOption = timeDisplayOption,
-                        isShowingCurrentTime = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                    )
-                    val hasOralIngestion =
-                        oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }
-                    if (hasOralIngestion && !isOralDisclaimerHidden) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = FULL_STOMACH_DISCLAIMER,
-                                style = MaterialTheme.typography.bodySmall,
-                                modifier = Modifier.weight(1f)
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+                val hasOralIngestion =
+                    oneExperienceScreenModel.ingestionElements.any { it.ingestionWithCompanionAndCustomUnit.ingestion.administrationRoute == AdministrationRoute.ORAL }
+                if (hasOralIngestion && !isOralDisclaimerHidden) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = FULL_STOMACH_DISCLAIMER,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.weight(1f)
+                        )
+                        IconButton(onClick = { onChangeIsOralDisclaimerHidden(true) }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = stringResource(R.string.close_disclaimer)
                             )
-                            IconButton(onClick = { onChangeIsOralDisclaimerHidden(true) }) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Close disclaimer"
-                                )
-                            }
                         }
                     }
                 }
@@ -735,10 +735,10 @@ private fun AddIngestionFAB(
             icon = {
                 Icon(
                     Icons.Filled.Add,
-                    contentDescription = "Add"
+                    contentDescription = stringResource(R.string.add)
                 )
             },
-            text = { Text("Ingestion") }
+            text = { Text(stringResource(R.string.ingestion)) }
         )
     }
 }
@@ -762,7 +762,7 @@ private fun ExperienceTopBar(
         actions = {
             var areTimeOptionsExpanded by remember { mutableStateOf(false) }
             IconButton(onClick = { areTimeOptionsExpanded = true }) {
-                Icon(Icons.Outlined.Timer, contentDescription = "Time display option")
+                Icon(Icons.Outlined.Timer, contentDescription = stringResource(R.string.time_display_option))
             }
             DropdownMenu(
                 expanded = areTimeOptionsExpanded,
@@ -779,7 +779,7 @@ private fun ExperienceTopBar(
                             if (option == savedTimeDisplayOption) {
                                 Icon(
                                     Icons.Filled.Check,
-                                    contentDescription = "Check",
+                                    contentDescription = stringResource(R.string.check),
                                     modifier = Modifier.size(ButtonDefaults.IconSize)
                                 )
                             }
@@ -791,7 +791,7 @@ private fun ExperienceTopBar(
             IconButton(onClick = { areEditOptionsExpanded = true }) {
                 Icon(
                     Icons.Default.Edit,
-                    contentDescription = "Edit options",
+                    contentDescription = stringResource(R.string.edit_options),
                 )
             }
             var isShowingDeleteDialog by remember { mutableStateOf(false) }
@@ -799,10 +799,10 @@ private fun ExperienceTopBar(
                 AlertDialog(
                     onDismissRequest = { isShowingDeleteDialog = false },
                     title = {
-                        Text(text = "Delete experience?")
+                        Text(text = stringResource(R.string.delete_experience))
                     },
                     text = {
-                        Text("This will also delete all its ingestions.")
+                        Text(stringResource(R.string.this_will_also_delete_all_its_ingestions))
                     },
                     confirmButton = {
                         TextButton(
@@ -812,14 +812,14 @@ private fun ExperienceTopBar(
                                 navigateBack()
                             }
                         ) {
-                            Text("Delete")
+                            Text(stringResource(R.string.delete))
                         }
                     },
                     dismissButton = {
                         TextButton(
                             onClick = { isShowingDeleteDialog = false }
                         ) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.cancel))
                         }
                     }
                 )
@@ -829,7 +829,7 @@ private fun ExperienceTopBar(
                 onDismissRequest = { areEditOptionsExpanded = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text("Edit title/notes/location") },
+                    text = { Text(stringResource(R.string.edit_title_notes_location)) },
                     onClick = {
                         navigateToEditExperienceScreen()
                         areEditOptionsExpanded = false
@@ -837,7 +837,7 @@ private fun ExperienceTopBar(
                     leadingIcon = {
                         Icon(
                             Icons.Outlined.Edit,
-                            contentDescription = "Edit experience",
+                            contentDescription = stringResource(R.string.edit_experience),
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                     }
@@ -845,7 +845,7 @@ private fun ExperienceTopBar(
                 val isFavorite = oneExperienceScreenModel.isFavorite
                 if (isFavorite) {
                     DropdownMenuItem(
-                        text = { Text("Unmark favorite") },
+                        text = { Text(stringResource(R.string.unmark_favorite)) },
                         onClick = {
                             saveIsFavorite(false)
                             areEditOptionsExpanded = false
@@ -853,14 +853,14 @@ private fun ExperienceTopBar(
                         leadingIcon = {
                             Icon(
                                 Icons.Filled.Star,
-                                contentDescription = "Unmark favorite",
+                                contentDescription = stringResource(R.string.unmark_favorite),
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
                         }
                     )
                 } else {
                     DropdownMenuItem(
-                        text = { Text("Mark favorite") },
+                        text = { Text(stringResource(R.string.mark_favorite)) },
                         onClick = {
                             saveIsFavorite(true)
                             areEditOptionsExpanded = false
@@ -875,7 +875,7 @@ private fun ExperienceTopBar(
                     )
                 }
                 DropdownMenuItem(
-                    text = { Text("Delete experience") },
+                    text = { Text(stringResource(R.string.delete_experience)) },
                     onClick = {
                         isShowingDeleteDialog = true
                         areEditOptionsExpanded = false
@@ -883,7 +883,7 @@ private fun ExperienceTopBar(
                     leadingIcon = {
                         Icon(
                             Icons.Outlined.Delete,
-                            contentDescription = "Delete experience",
+                            contentDescription = stringResource(R.string.delete_experience),
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                     }
@@ -894,7 +894,7 @@ private fun ExperienceTopBar(
             IconButton(onClick = { areAddOptionsExpanded = true }) {
                 Icon(
                     Icons.Outlined.Add,
-                    contentDescription = "Add options",
+                    contentDescription = stringResource(R.string.add_options),
                 )
             }
             DropdownMenu(
@@ -902,7 +902,7 @@ private fun ExperienceTopBar(
                 onDismissRequest = { areAddOptionsExpanded = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text("Add Ingestion") },
+                    text = { Text(stringResource(R.string.add_ingestion)) },
                     onClick = {
                         addIngestion()
                         areAddOptionsExpanded = false
@@ -916,7 +916,7 @@ private fun ExperienceTopBar(
                     }
                 )
                 DropdownMenuItem(
-                    text = { Text("Add timed note") },
+                    text = { Text(stringResource(R.string.add_timed_note)) },
                     onClick = {
                         navigateToAddTimedNoteScreen()
                         areAddOptionsExpanded = false
@@ -924,13 +924,13 @@ private fun ExperienceTopBar(
                     leadingIcon = {
                         Icon(
                             Icons.AutoMirrored.Outlined.NoteAdd,
-                            contentDescription = "Add timed note",
+                            contentDescription = stringResource(R.string.add_timed_note),
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                     }
                 )
                 DropdownMenuItem(
-                    text = { Text("Add Shulgin rating") },
+                    text = { Text(stringResource(R.string.add_shulgin_rating)) },
                     onClick = {
                         navigateToAddRatingScreen()
                         areAddOptionsExpanded = false
@@ -938,7 +938,7 @@ private fun ExperienceTopBar(
                     leadingIcon = {
                         Icon(
                             Icons.Outlined.ExposurePlus2,
-                            contentDescription = "Add Shulgin rating",
+                            contentDescription = stringResource(R.string.add_shulgin_rating),
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                     }
@@ -959,12 +959,12 @@ private fun LastIngestionRelativeToNowText(lastIngestionTime: Instant) {
     }
     val isInPast = lastIngestionTime < now.value
     val relativeTime = if (isInPast) {
-        "Last ingestion was " + getDurationText(
+        stringResource(R.string.last_ingestion_was) + getDurationText(
             fromInstant = lastIngestionTime,
             toInstant = now.value
         ) + " ago"
     } else {
-        "Last ingestion in " + getDurationText(
+        stringResource(R.string.last_ingestion_in) + getDurationText(
             fromInstant = lastIngestionTime,
             toInstant = now.value
         )
@@ -987,12 +987,12 @@ private fun NowRelativeToStartTimeText(startTime: Instant) {
     }
     val isStartInPast = startTime < now.value
     val relativeTime = if (isStartInPast) {
-        "Now " + getDurationText(
+        stringResource(R.string.now) + getDurationText(
             fromInstant = startTime,
             toInstant = now.value
-        ) + " in (since start)"
+        ) + stringResource(R.string.in_since_start)
     } else {
-        "Start is in " + getDurationText(
+        stringResource(R.string.start_is_in) + getDurationText(
             fromInstant = startTime,
             toInstant = now.value
         )

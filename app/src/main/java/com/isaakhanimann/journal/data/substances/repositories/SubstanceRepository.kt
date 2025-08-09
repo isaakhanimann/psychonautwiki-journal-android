@@ -19,6 +19,7 @@
 package com.isaakhanimann.journal.data.substances.repositories
 
 import android.content.Context
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.data.substances.classes.Category
 import com.isaakhanimann.journal.data.substances.classes.Substance
 import com.isaakhanimann.journal.data.substances.classes.SubstanceFile
@@ -42,7 +43,7 @@ class SubstanceRepository @Inject constructor(
     }
 
     private fun getAssetsSubstanceFileContent(): String {
-        return appContext.assets.open("Substances.json").bufferedReader().use { it.readText() }
+        return appContext.resources.openRawResource(R.raw.substances).bufferedReader().use { it.readText() }
     }
 
     override fun getAllSubstances(): List<Substance> {

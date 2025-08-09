@@ -1,0 +1,205 @@
+<!--
+  ~ Copyright (c) 2022-2023. Isaak Hanimann.
+  ~ This file is part of PsychonautWiki Journal.
+  ~
+  ~ PsychonautWiki Journal is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or (at
+  ~ your option) any later version.
+  ~
+  ~ PsychonautWiki Journal is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
+  -->
+
+<resources>
+    <string name="app_name">日志</string>
+    <string name="follow_system">跟随系统</string>
+    <string name="settings_language">语言</string>
+    <string name="stats">统计</string>
+    <string name="journal">日志</string>
+    <string name="drugs">物质</string>
+    <string name="safer">安全须知</string>
+    <string name="settings">设置</string>
+    <string name="statistics">统计数据</string>
+    <string name="statistics_for">%1$s 的统计数据</string>
+    <string name="nothing_to_show_yet">暂无内容</string>
+    <string name="stats_empty_description">开始记录您的摄入，以查看您的使用模式概览。</string>
+    <string name="experiences_since">自 %1$s 以来的体验</string>
+    <string name="substance_counted_once_per_experience">每次体验中，同种物质只计一次</string>
+    <string name="experience_count">" 次体验"</string>
+    <string name="experiences_count">" 次体验"</string>
+    <string name="total">总计 %1$s</string>
+    <string name="no_ingestions_since">自 %1$s 以来无摄入记录</string>
+    <string name="no_ingestions_description">选择更长的时间范围以查看统计数据。</string>
+    <string name="search_experiences">搜索体验</string>
+    <string name="no_results">无结果</string>
+    <string name="no_favorite_experience_titles_match_your_search">没有收藏的体验标题符合您的搜索。</string>
+    <string name="no_experience_titles_match_your_search">没有体验标题符合您的搜索。</string>
+    <string name="no_favorites">没有收藏</string>
+    <string name="no_favorites_description">将体验标记为收藏，以便快速找到它们。</string>
+    <string name="no_experiences_yet">尚无体验记录</string>
+    <string name="add_your_first_ingestion">添加您的第一条摄入记录。</string>
+    <string name="ingestion">摄入</string>
+    <string name="search">搜索</string>
+    <string name="close">关闭</string>
+    <string name="navigate_to_calendar">前往日历</string>
+    <string name="add">添加</string>
+    <string name="scroll_to_top">滚动到顶部</string>
+    <string name="regular_time">常规时间</string>
+    <string name="time_relative_to_now">相对于现在的时间</string>
+    <string name="is_favorite">已收藏</string>
+    <string name="is_not_favorite">未收藏</string>
+    <string name="search_off">关闭搜索</string>
+    <string name="search_substances">搜索物质</string>
+    <string name="quick_logging">快速记录</string>
+    <string name="custom_substances">自定义物质</string>
+    <string name="custom_units">自定义单位</string>
+    <string name="substances">物质</string>
+    <string name="add_custom_substance">添加自定义物质</string>
+    <string name="no_matching_substance_found">未找到匹配的物质</string>
+    <string name="keyboard">键盘</string>
+    <string name="log_unknown_dose">记录未知剂量</string>
+    <string name="create_new_unit">创建新单位</string>
+    <string name="estimated_standard_deviation">估计标准差</string>
+    <string name="estimate">估计</string>
+    <string name="dose">剂量</string>
+    <string name="next">下一步</string>
+    <string name="cancel">取消</string>
+    <string name="safer_sniffing">更安全的鼻吸</string>
+    <string name="safer_plugging">更安全的直肠给药</string>
+    <string name="volumetric_liquid_dosing">液体容量剂量法</string>
+    <string name="create_a_custom_unit">创建自定义单位</string>
+    <string name="units">单位</string>
+    <string name="pure_dose">纯剂量</string>
+    <string name="dosage_warning">剂量警告</string>
+    <string name="dosage_warning_description">该给药途径没有剂量信息。请通过其他渠道研究剂量。</string>
+    <string name="don_t_know_the_dose">不知道剂量？</string>
+    <string name="dont_know_the_dose_description">您可以记录未知剂量。但请注意，使用错误剂量的物质可能导致负面体验，如极度焦虑、不适的身体副作用、住院，或（在极端情况下）死亡。</string>
+    <string name="purity">纯度</string>
+    <string name="purity_invalid">纯度必须在 1% 到 100% 之间</string>
+    <string name="impure_dose">非纯剂量</string>
+    <string name="point_in_time">时间点</string>
+    <string name="time_range">时间范围</string>
+    <string name="update_time_to_now">更新时间至现在</string>
+    <string name="start">开始：</string>
+    <string name="time">时间</string>
+    <string name="experience">体验</string>
+    <string name="new_experience">新体验</string>
+    <string name="new_experience_title">新体验标题</string>
+    <string name="consumed_by">使用者：%1$s</string>
+    <string name="choose_other_consumer">选择其他使用者</string>
+    <string name="consumer">使用者</string>
+    <string name="enter_new_consumer">输入新使用者</string>
+    <string name="new_consumer_name">新使用者名称</string>
+    <string name="ingestion_note">摄入备注</string>
+    <string name="something_color">%1$s 颜色</string>
+    <string name="notes">备注</string>
+    <string name="copy">复制</string>
+    <string name="part_of">%1$s 的一部分</string>
+    <string name="part_of_new_experience">新体验的一部分</string>
+    <string name="interactions">相互作用</string>
+    <string name="explanations">说明</string>
+    <string name="expand_timeline">展开时间轴</string>
+    <string name="location">地点：%1$s</string>
+    <string name="shulgin_ratings">舒尔金评级</string>
+    <string name="timed_notes">计时备注</string>
+    <string name="your_cumulative_doses">您的累积剂量</string>
+    <string name="effect_timeline">效果时间轴</string>
+    <string name="info">信息</string>
+    <string name="close_disclaimer">关闭免责声明</string>
+    <string name="time_display_option">时间显示选项</string>
+    <string name="check">检查</string>
+    <string name="edit_options">编辑选项</string>
+    <string name="delete_experience">删除体验？</string>
+    <string name="this_will_also_delete_all_its_ingestions">此操作将同时删除其所有的摄入记录。</string>
+    <string name="delete">删除</string>
+    <string name="edit_title_notes_location">编辑标题/备注/地点</string>
+    <string name="edit_experience">编辑体验</string>
+    <string name="unmark_favorite">取消收藏</string>
+    <string name="mark_favorite">标记为收藏</string>
+    <string name="add_options">添加选项</string>
+    <string name="add_ingestion">添加摄入记录</string>
+    <string name="add_timed_note">添加计时备注</string>
+    <string name="add_shulgin_rating">添加舒尔金评级</string>
+    <string name="last_ingestion_was">"上次摄入于 "</string>
+    <string name="last_ingestion_in">"上次摄入在 "</string>
+    <string name="start_is_in">"开始于 "</string>
+    <string name="now">"现在 "</string>
+    <string name="in_since_start">" 内 (自开始)"</string>
+    <string name="donate">捐赠</string>
+    <string name="buy_me_a_coffee">请我喝杯咖啡</string>
+    <string name="paypal_donate">通过 Paypal 捐赠</string>
+    <string name="ui">界面</string>
+    <string name="substance_colors">物质颜色</string>
+    <string name="interaction_settings">相互作用设置</string>
+    <string name="hide_dosage_dots">隐藏剂量点</string>
+    <string name="hide_timeline">隐藏时间轴</string>
+    <string name="independent_substance_heights">独立的物质高度</string>
+    <string name="independent_substance_heights_description">"\n                                    启用此设置后，不同物质和给药途径 (roas) 的时间轴将各自独立。届时，不同物质和给药途径的摄入记录将始终占据时间轴的全部高度。\n                                    \n                                    如果禁用此设置，不同物质的时间轴高度将相互关联。在这种情况下，将使用常见剂量的平均值作为比较基准。\n                                    例如，如果口服 MDMA 的常见平均剂量是 100mg，鼻吸 MDMA 的常见平均剂量是 50mg，那么 100mg 口服 MDMA 的时间轴高度将与 50mg 鼻吸 MDMA 的相同。\n                                    这也适用于不同物质之间。例如，如果口服 2C-B 的常见剂量是 20mg，那么 40mg 口服 2C-B 的时间轴高度将是 100mg 口服 MDMA 的两倍。\n                                "</string>
+    <string name="app_data">应用数据</string>
+    <string name="want_to_export">要导出吗？</string>
+    <string name="export_description">这将把您应用中的所有数据导出到一个文件中，您可以将其发送给他人或在新手机上再次导入。</string>
+    <string name="export">导出</string>
+    <string name="want_to_import_file">要导入文件吗？</string>
+    <string name="import_description">导入之前导出的文件。请注意，这将删除您应用中已有的数据。</string>
+    <string name="import_file">导入</string>
+    <string name="delete_everything">删除所有内容</string>
+    <string name="delete_everything_description">这将删除您所有的体验、摄入记录和自定义物质。</string>
+    <string name="deleted_everything">已删除所有内容</string>
+    <string name="feedback">反馈</string>
+    <string name="question_bug_report">问题、Bug报告</string>
+    <string name="app">应用</string>
+    <string name="source_code">源代码</string>
+    <string name="version">版本 %1$s</string>
+    <string name="share">分享</string>
+    <string name="add_custom_unit">添加自定义单位</string>
+    <string name="no_custom_units_yet">尚无自定义单位</string>
+    <string name="no_custom_units_description">添加您的第一个单位</string>
+    <string name="no_custom_units_found">未找到自定义单位</string>
+    <string name="no_custom_units_found_description">没有自定义单位符合您的搜索</string>
+    <string name="interaction_alerts">相互作用警报</string>
+    <string name="interaction_alerts_description">即使您没有记录以下物质，也会收到关于与它们相互作用的警告。</string>
+    <string name="combinations">组合</string>
+    <string name="safer_use">安全使用</string>
+    <string name="_1_research">1. 研究</string>
+    <string name="_1_research_content">事先研究该物质或物质组合可能产生的持续时间、主观效果和潜在不良反应。\n请阅读此处的信息以及 PsychonautWiki 的文章。最好与其他信息来源（如 Tripsit、Erowid、维基百科、Bluelight、Reddit 等）进行交叉参考。不必着急。</string>
+    <string name="_2_testing">2. 测试</string>
+    <string name="_2_testing_content">使用匿名免费的药物测试服务来测试您的物质。如果您所在的国家/地区没有这些服务，请使用试剂测试套装。不要相信您的供应商会出售可靠的产品。最好是拥有经过测试的存货，而不是临时依赖某个来源。</string>
+    <string name="open_link">打开链接</string>
+    <string name="drug_testing_services">药物测试服务</string>
+    <string name="reagent_testing">试剂测试</string>
+    <string name="_3_dosage">3. 剂量</string>
+    <string name="_3_dosage_content">了解您的剂量，从小剂量开始并耐心等待。饱腹状态可能会将口服摄入的起效时间延迟数小时。对于有耐受性的人来说容易的剂量，对您来说可能过量。\n\n投资一个毫克秤，以便精确称量您的剂量。请注意，低于 %1$c1000 的毫克秤无法精确称量 50 毫克以下的剂量，并且在 10-15 毫克以下时非常不准确。如果药物量更小，请使用容量剂量法（将其溶解在水或酒精中以便测量）。\n\n许多物质的剂量-反应曲线并非线性，这意味着剂量加倍会导致效果增加超过两倍（并迅速导致难以承受、不愉快甚至危险的体验），因此应仅小幅增加剂量（例如，上次剂量的 1/4 到 1/2）。</string>
+    <string name="dosage_guide">剂量指南</string>
+    <string name="dosage_classification">剂量分类</string>
+    <string name="_4_set_and_setting">4. 心态与环境 (Set and Setting)</string>
+    <string name="_4_set_and_setting_content">心态 (Set)：确保您的思想、欲望、感受、总体情绪以及对即将发生之事的任何先入之见或期望都有利于这次体验。确保您的身体状况良好。如果您感到不适、受伤或总体不健康，最好不要使用。\n\n环境 (Setting)：一个不熟悉、不可控或令人不快的社交或物理环境可能导致不愉快或危险的体验。选择一个能提供安全感、熟悉感、控制感和舒适感的地方。使用致幻剂（迷幻剂、分离剂和谵妄剂）时，请参考更安全的致幻剂指南。</string>
+    <string name="safer_hallucinogen_guide">更安全的致幻剂指南</string>
+    <string name="_5_combinations">5. 组合</string>
+    <string name="_5_combinations_content">未经研究，不要将药物（包括酒精）混合使用。与物质相关的死亡最常见的原因是将抑制剂（如阿片类、苯二氮䓬类或酒精）与其他抑制剂混合使用。</string>
+    <string name="responsible_drug_use_article">负责任的药物使用文章</string>
+    <string name="responsible_drug_use">负责任的药物使用</string>
+    <string name="recovery_position_video">复苏体位视频</string>
+    <string name="_10_recovery_position">10. 复苏体位</string>
+    <string name="_10_recovery_position_content">如果有人失去意识但仍在呼吸，请将其置于复苏体位，以防止在药物过量后因呕吐物窒息而死亡。\n请随身携带紧急求助服务的联系方式，以备不时之需。</string>
+    <string name="_9_safety_of_others">9. 他人安全</string>
+    <string name="_9_safety_of_others_content">在受影响期间，请勿驾驶、操作重型机械，或以其他方式直接或间接对他人的安全或照护负责。</string>
+    <string name="_8_reflection">8. 反思</string>
+    <string name="_8_reflection_content">仔细监控任何物质使用的频率和强度，以确保其不会滑向滥用和成瘾。特别是，许多兴奋剂、阿片类药物和抑制剂已知具有高度成瘾性。</string>
+    <string name="_7_allergy_tests">7. 过敏测试</string>
+    <string name="_7_allergy_tests_content">仅使用微乎其微的剂量（例如，常规剂量的 1/10 到 1/4），并等待数小时，以确认您不会出现不寻常或特异性反应。</string>
+    <string name="administration_routes_info">给药途径信息</string>
+    <string name="_6_administration_routes">6. 给药途径</string>
+    <string name="_6_administration_routes_content">不要共用鼻吸工具（如吸管、纸币、子弹瓶），以避免通过微量血液传播的血源性疾病，如丙型肝炎。注射是最危险的给药途径，强烈建议不要使用。如果您决意要注射，请勿共用注射材料，并参考更安全的注射指南。</string>
+    <string name="swiss_combination_checker">瑞士药物组合检测器</string>
+    <string name="tripsit_combination_checker">Tripsit 组合检测器</string>
+    <string name="full_stomach_disclaimer">饱腹可能会将口服摄入的起效时间延迟约3小时。</string>
+    <string name="dose_disclaimer">因个人体重、耐受性、新陈代谢及个人敏感度存在差异，请始终从较低剂量开始。</string>
+    <string name="export_file">导出文件</string>
+    <string name="import_file_title">导入文件</string>
+</resources>

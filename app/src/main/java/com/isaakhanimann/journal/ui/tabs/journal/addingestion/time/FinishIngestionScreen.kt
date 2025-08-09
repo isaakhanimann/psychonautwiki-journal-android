@@ -70,12 +70,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.data.room.experiences.entities.AdaptiveColor
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestions
 import com.isaakhanimann.journal.ui.YOU
@@ -233,7 +235,7 @@ fun FinishIngestionScreen(
                     .padding(horizontal = horizontalPadding)
             ) {
                 Spacer(modifier = Modifier.height(3.dp))
-                CardWithTitle(title = "Time") {
+                CardWithTitle(title = stringResource(R.string.time)) {
                     TimePointOrRangePicker(
                         onChangeTimePickerOption = onChangeTimePickerOption,
                         ingestionTimePickerOption = ingestionTimePickerOption,
@@ -243,7 +245,7 @@ fun FinishIngestionScreen(
                         onChangeEndDateOrTime = onChangeEndDateOrTime
                     )
                 }
-                CardWithTitle(title = "Experience", modifier = Modifier.fillMaxWidth()) {
+                CardWithTitle(title = stringResource(R.string.experience), modifier = Modifier.fillMaxWidth()) {
                     var isShowingDropDownMenu by remember { mutableStateOf(false) }
                     Box(
                         modifier = Modifier
@@ -254,7 +256,10 @@ fun FinishIngestionScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             val selectedExperienceTitle = selectedExperience?.experience?.title
-                            Text(text = if (selectedExperienceTitle != null) "Part of $selectedExperienceTitle" else "Part of new experience")
+                            Text(text = if (selectedExperienceTitle != null) stringResource(
+                                R.string.part_of,
+                                selectedExperienceTitle
+                            ) else stringResource(R.string.part_of_new_experience))
                         }
                         DropdownMenu(
                             expanded = isShowingDropDownMenu,
@@ -271,7 +276,7 @@ fun FinishIngestionScreen(
                                 )
                             }
                             DropdownMenuItem(
-                                text = { Text("New experience") },
+                                text = { Text(stringResource(R.string.new_experience)) },
                                 onClick = {
                                     onChangeOfSelectedExperience(null)
                                     isShowingDropDownMenu = false
@@ -284,7 +289,7 @@ fun FinishIngestionScreen(
                             value = enteredTitle,
                             onValueChange = onChangeOfEnteredTitle,
                             singleLine = true,
-                            label = { Text(text = "New experience title") },
+                            label = { Text(text = stringResource(R.string.new_experience_title)) },
                             isError = !isEnteredTitleOk,
                             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             keyboardOptions = KeyboardOptions.Default.copy(
@@ -309,13 +314,15 @@ fun FinishIngestionScreen(
                         )
                     ) {
                         Text(
-                            text = "Consumed by: ${consumerName.ifBlank { YOU }}",
+                            text = stringResource(
+                                R.string.consumed_by,
+                                consumerName.ifBlank { YOU }),
                             style = MaterialTheme.typography.titleMedium
                         )
                         if (consumerNamesSorted.isNotEmpty() || consumerName.isNotBlank()) {
                             var areConsumerNamesExpanded by remember { mutableStateOf(false) }
                             TextButton(onClick = { areConsumerNamesExpanded = true }) {
-                                Text(text = "Choose other consumer")
+                                Text(text = stringResource(R.string.choose_other_consumer))
                             }
                             DropdownMenu(
                                 expanded = areConsumerNamesExpanded,
@@ -330,7 +337,7 @@ fun FinishIngestionScreen(
                                     leadingIcon = {
                                         Icon(
                                             Icons.Default.Person,
-                                            contentDescription = "Consumer"
+                                            contentDescription = stringResource(R.string.consumer)
                                         )
                                     }
                                 )
@@ -344,7 +351,7 @@ fun FinishIngestionScreen(
                                         leadingIcon = {
                                             Icon(
                                                 Icons.Default.Person,
-                                                contentDescription = "Consumer"
+                                                contentDescription = stringResource(R.string.consumer)
                                             )
                                         }
                                     )
@@ -361,7 +368,7 @@ fun FinishIngestionScreen(
                                 onCheckedChange = {
                                     showNewConsumerTextField = !showNewConsumerTextField
                                 })
-                            Text("Enter new consumer")
+                            Text(stringResource(R.string.enter_new_consumer))
                         }
                         AnimatedVisibility(visible = showNewConsumerTextField) {
                             OutlinedTextField(
@@ -370,7 +377,7 @@ fun FinishIngestionScreen(
                                 leadingIcon = {
                                     Icon(
                                         imageVector = Icons.Default.Person,
-                                        contentDescription = "Consumer"
+                                        contentDescription = stringResource(R.string.consumer)
                                     )
                                 },
                                 keyboardActions = KeyboardActions(onDone = {
@@ -380,7 +387,7 @@ fun FinishIngestionScreen(
                                     imeAction = ImeAction.Done,
                                     capitalization = KeyboardCapitalization.Words
                                 ),
-                                placeholder = { Text("New consumer name") },
+                                placeholder = { Text(stringResource(R.string.new_consumer_name)) },
                                 singleLine = true,
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -388,7 +395,7 @@ fun FinishIngestionScreen(
                         }
                     }
                 }
-                CardWithTitle(title = "Ingestion note") {
+                CardWithTitle(title = stringResource(R.string.ingestion_note)) {
                     NoteSection(
                         previousNotes,
                         note,
@@ -397,7 +404,7 @@ fun FinishIngestionScreen(
                 }
                 if (isShowingColorPicker) {
                     CardWithTitle(
-                        title = "$substanceName color",
+                        title = stringResource(R.string.something_color, substanceName),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         ColorPicker(
@@ -429,7 +436,7 @@ fun NoteSection(
         OutlinedTextField(
             value = note,
             onValueChange = onNoteChange,
-            label = { Text(text = "Notes") },
+            label = { Text(text = stringResource(R.string.notes)) },
             keyboardActions = KeyboardActions(onDone = {
                 focusManager.clearFocus()
                 isShowingSuggestions = false
@@ -468,7 +475,7 @@ fun NoteSection(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 Icons.Filled.ContentCopy,
-                                contentDescription = "Copy",
+                                contentDescription = stringResource(R.string.copy),
                                 Modifier.size(15.dp)
                             )
                             Spacer(Modifier.size(ButtonDefaults.IconSpacing))

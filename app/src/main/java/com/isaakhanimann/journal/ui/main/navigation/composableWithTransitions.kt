@@ -84,8 +84,8 @@ inline fun <reified T : Any> NavGraphBuilder.composableWithTransitions(
 
 fun AnimatedContentTransitionScope<NavBackStackEntry>.isChangingTab(): Boolean {
     val initialTopLevel = initialState.destination.hierarchy.firstOrNull { navDestination ->
-        topLevelRoutes.any { navDestination.hasRoute(it.route::class) } }
+        topLevelRoutesData.any { navDestination.hasRoute(it.route::class) } }
     val targetTopLevel = targetState.destination.hierarchy.firstOrNull { navDestination ->
-        topLevelRoutes.any { navDestination.hasRoute(it.route::class) } }
+        topLevelRoutesData.any { navDestination.hasRoute(it.route::class) } }
     return initialTopLevel != targetTopLevel
 }

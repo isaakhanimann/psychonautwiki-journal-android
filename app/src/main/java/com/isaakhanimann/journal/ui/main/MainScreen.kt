@@ -46,6 +46,7 @@ fun MainScreen(
     if (viewModel.isAcceptedFlow.collectAsState().value) {
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val topLevelRoutes = topLevelRoutes
         NavigationSuiteScaffold(
             navigationSuiteItems = {
                 val currentDestination = navBackStackEntry?.destination
@@ -59,7 +60,7 @@ fun MainScreen(
                                 contentDescription = topLevelRoute.name
                             )
                         },
-                        label = { Text(topLevelRoute.name) },
+                        label = { Text(topLevelRoute.name.toString()) },
                         selected = selected,
                         onClick = {
                             if (selected) {

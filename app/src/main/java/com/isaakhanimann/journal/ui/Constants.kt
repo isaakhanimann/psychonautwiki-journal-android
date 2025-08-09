@@ -18,13 +18,18 @@
 
 package com.isaakhanimann.journal.ui
 
-const val DOSE_DISCLAIMER =
-    "Always start with lower doses due to differences between individual body weight, tolerance, metabolism, and personal sensitivity."
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.isaakhanimann.journal.R
+
+val DOSE_DISCLAIMER
+    @Composable get() = stringResource(R.string.dose_disclaimer)
 
 const val VOLUMETRIC_DOSE_ARTICLE_URL = "https://psychonautwiki.org/wiki/Volumetric_liquid_dosing"
 
 const val VERSION_NAME = "11.11"
 
-const val FULL_STOMACH_DISCLAIMER = "A full stomach may delay the onset of oral ingestions by approx. 3 hours."
+val FULL_STOMACH_DISCLAIMER
+    @Composable get() = stringResource(R.string.full_stomach_disclaimer)
 
 const val YOU = "You"

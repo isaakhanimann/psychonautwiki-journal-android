@@ -63,11 +63,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.data.room.experiences.relations.ExperienceWithIngestionsCompanionsAndRatings
 import com.isaakhanimann.journal.ui.tabs.journal.components.ExperienceRow
 import com.isaakhanimann.journal.ui.tabs.stats.EmptyScreenDisclaimer
@@ -149,16 +151,16 @@ fun JournalScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Journal") },
+                title = { Text(stringResource(com.isaakhanimann.journal.R.string.journal)) },
                 actions = {
                     IconToggleButton(
                         checked = isTimeRelativeToNow,
                         onCheckedChange = onChangeIsRelative
                     ) {
                         if (isTimeRelativeToNow) {
-                            Icon(Icons.Filled.Timer, contentDescription = "Regular time")
+                            Icon(Icons.Filled.Timer, contentDescription = stringResource(R.string.regular_time))
                         } else {
-                            Icon(Icons.Outlined.Timer, contentDescription = "Time relative to now")
+                            Icon(Icons.Outlined.Timer, contentDescription = stringResource(R.string.time_relative_to_now))
                         }
                     }
                     IconToggleButton(
@@ -166,9 +168,9 @@ fun JournalScreen(
                         onCheckedChange = onChangeIsFavorite
                     ) {
                         if (isFavoriteEnabled) {
-                            Icon(Icons.Filled.Star, contentDescription = "Is favorite")
+                            Icon(Icons.Filled.Star, contentDescription = stringResource(R.string.is_favorite))
                         } else {
-                            Icon(Icons.Outlined.StarOutline, contentDescription = "Is not favorite")
+                            Icon(Icons.Outlined.StarOutline, contentDescription = stringResource(R.string.is_not_favorite))
                         }
                     }
                     IconToggleButton(
@@ -176,15 +178,15 @@ fun JournalScreen(
                         onCheckedChange = onChangeIsSearchEnabled
                     ) {
                         if (isSearchEnabled) {
-                            Icon(Icons.Outlined.SearchOff, contentDescription = "Search off")
+                            Icon(Icons.Outlined.SearchOff, contentDescription = stringResource(R.string.search_off))
                         } else {
-                            Icon(Icons.Filled.Search, contentDescription = "Search")
+                            Icon(Icons.Filled.Search, contentDescription = stringResource(R.string.search))
                         }
                     }
                     IconButton(onClick = navigateToCalendar) {
                         Icon(
                             Icons.Default.CalendarMonth,
-                            contentDescription = "Navigate to calendar"
+                            contentDescription = stringResource(R.string.navigate_to_calendar)
                         )
                     }
                 }
@@ -197,10 +199,10 @@ fun JournalScreen(
                     icon = {
                         Icon(
                             Icons.Filled.Add,
-                            contentDescription = "Add"
+                            contentDescription = stringResource(R.string.add)
                         )
                     },
-                    text = { Text("Ingestion") },
+                    text = { Text(stringResource(R.string.ingestion)) },
                 )
             }
         },
@@ -225,7 +227,7 @@ fun JournalScreen(
                             leadingIcon = {
                                 Icon(
                                     Icons.Default.Search,
-                                    contentDescription = "Search",
+                                    contentDescription = stringResource(R.string.search),
                                 )
                             },
                             trailingIcon = {
@@ -237,12 +239,12 @@ fun JournalScreen(
                                     ) {
                                         Icon(
                                             Icons.Default.Close,
-                                            contentDescription = "Close",
+                                            contentDescription = stringResource(R.string.close),
                                         )
                                     }
                                 }
                             },
-                            label = { Text(text = "Search experiences") },
+                            label = { Text(text = stringResource(R.string.search_experiences)) },
                             modifier = Modifier.fillMaxWidth(),
                             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             keyboardOptions = KeyboardOptions(
@@ -255,22 +257,22 @@ fun JournalScreen(
                             if (isFavoriteEnabled) {
                                 Column(modifier = Modifier.padding(horizontalPadding)) {
                                     Text(
-                                        text = "No results",
+                                        text = stringResource(R.string.no_results),
                                         style = MaterialTheme.typography.titleMedium
                                     )
                                     Text(
-                                        text = "No favorite experience titles match your search.",
+                                        text = stringResource(R.string.no_favorite_experience_titles_match_your_search),
                                         style = MaterialTheme.typography.bodySmall
                                     )
                                 }
                             } else {
                                 Column(modifier = Modifier.padding(horizontalPadding)) {
                                     Text(
-                                        text = "No results",
+                                        text = stringResource(R.string.no_results),
                                         style = MaterialTheme.typography.titleMedium
                                     )
                                     Text(
-                                        text = "No experience titles match your search.",
+                                        text = stringResource(R.string.no_experience_titles_match_your_search),
                                         style = MaterialTheme.typography.bodySmall
                                     )
                                 }
@@ -314,7 +316,7 @@ fun JournalScreen(
                                     listState.scrollToItem(index = 0)
                                 }
                             }) {
-                            Icon(Icons.Default.ArrowUpward, contentDescription = "Scroll to top")
+                            Icon(Icons.Default.ArrowUpward, contentDescription = stringResource(R.string.scroll_to_top))
                         }
                     }
                 }
@@ -322,13 +324,13 @@ fun JournalScreen(
             if (experiences.isEmpty() && !isSearchEnabled) {
                 if (isFavoriteEnabled) {
                     EmptyScreenDisclaimer(
-                        title = "No favorites",
-                        description = "Mark experiences as favorites to find them quickly."
+                        title = stringResource(R.string.no_favorites),
+                        description = stringResource(R.string.no_favorites_description)
                     )
                 } else {
                     EmptyScreenDisclaimer(
-                        title = "No experiences yet",
-                        description = "Add your first ingestion."
+                        title = stringResource(R.string.no_experiences_yet),
+                        description = stringResource(R.string.add_your_first_ingestion)
                     )
                 }
             }

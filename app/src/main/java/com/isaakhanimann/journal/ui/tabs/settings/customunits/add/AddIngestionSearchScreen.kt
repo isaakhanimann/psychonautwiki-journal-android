@@ -50,11 +50,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.R
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.AddIngestionSearchViewModel
 import com.isaakhanimann.journal.ui.tabs.journal.addingestion.search.SubstanceRowAddIngestion
@@ -97,7 +99,7 @@ private fun AddIngestionSearchScreen(
         floatingActionButton = {
             if (!isFocused) {
                 FloatingActionButton(onClick = { focusRequester.requestFocus() }) {
-                    Icon(Icons.Default.Keyboard, contentDescription = "Keyboard")
+                    Icon(Icons.Default.Keyboard, contentDescription = stringResource(R.string.keyboard))
                 }
             }
         }
@@ -121,7 +123,7 @@ private fun AddIngestionSearchScreen(
                         isFocused = focusState.isFocused
                     }
                     .clearAndSetSemantics { },
-                placeholder = { Text(text = "Search substances") },
+                placeholder = { Text(text = stringResource(R.string.search_substances)) },
                 leadingIcon = {
                     Icon(
                         Icons.Default.Search,
@@ -136,7 +138,7 @@ private fun AddIngestionSearchScreen(
                             }) {
                                 Icon(
                                     Icons.Default.Close,
-                                    contentDescription = "Close",
+                                    contentDescription = stringResource(R.string.close),
                                 )
                             }
                         }
@@ -175,7 +177,7 @@ private fun AddIngestionSearchScreen(
                 }
                 item {
                     if (filteredSubstances.isEmpty() && filteredCustomSubstances.isEmpty()) {
-                        Text("No matching substance found", modifier = Modifier.padding(10.dp))
+                        Text(stringResource(R.string.no_matching_substance_found), modifier = Modifier.padding(10.dp))
                     }
                 }
             }
