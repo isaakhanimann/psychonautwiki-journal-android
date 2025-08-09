@@ -27,6 +27,9 @@ class JournalApp : Application() {
     @Inject
     lateinit var userPreferences: UserPreferences
 
+    @Inject
+    lateinit var substanceRepository: SubstanceRepository
+
     companion object {
         @JvmStatic
         lateinit var instance: JournalApp
@@ -39,7 +42,11 @@ class JournalApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        updateLocale()
+        substanceRepository.refreshSubstance()
+    }
 
+    fun updateLocale() {
         LocaleDelegate.defaultLocale = getLocale() ?: Locale.getDefault()
         val res = resources
         val config = res.configuration
@@ -55,7 +62,7 @@ class JournalApp : Application() {
         return Locale.forLanguageTag(tag)
     }
 
-    private val languageStateFlow by lazy {
+    val languageStateFlow by lazy {
         userPreferences.languageFlow.stateIn(
             scope = applicationScope,
             started = SharingStarted.Eagerly,
