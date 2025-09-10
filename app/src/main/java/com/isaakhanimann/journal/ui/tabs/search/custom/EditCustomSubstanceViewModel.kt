@@ -1,24 +1,7 @@
-/*
- * Copyright (c) 2022. Isaak Hanimann.
- * This file is part of PsychonautWiki Journal.
- *
- * PsychonautWiki Journal is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at
- * your option) any later version.
- *
- * PsychonautWiki Journal is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
- */
-
 package com.isaakhanimann.journal.ui.tabs.search.custom
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
@@ -27,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.isaakhanimann.journal.data.room.experiences.ExperienceRepository
 import com.isaakhanimann.journal.data.room.experiences.entities.CustomSubstance
+import com.isaakhanimann.journal.data.room.experiences.entities.custom.CustomRoaInfo
 import com.isaakhanimann.journal.ui.main.navigation.graphs.EditCustomSubstanceRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
@@ -39,23 +23,25 @@ class EditCustomSubstanceViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    var id = 0
+    private var id: Int = 0
     var name by mutableStateOf("")
     var units by mutableStateOf("")
     var description by mutableStateOf("")
+    val roaInfos = mutableStateListOf<CustomRoaInfo>()
 
     val isValid get() = name.isNotBlank() && units.isNotBlank()
 
     init {
         val editCustomSubstanceRoute = state.toRoute<EditCustomSubstanceRoute>()
         val customSubstanceId = editCustomSubstanceRoute.customSubstanceId
+        id = customSubstanceId
         viewModelScope.launch {
             val customSubstance =
                 experienceRepo.getCustomSubstanceFlow(customSubstanceId).firstOrNull() ?: return@launch
-            id = customSubstanceId
             name = customSubstance.name
             units = customSubstance.units
             description = customSubstance.description
+            roaInfos.addAll(customSubstance.roaInfos)
         }
     }
 
@@ -65,15 +51,30 @@ class EditCustomSubstanceViewModel @Inject constructor(
                 id,
                 name,
                 units,
-                description
+                description,
+                roaInfos.toList()
             )
-            experienceRepo.insert(customSubstance)
+            experienceRepo.update(customSubstance)
         }
     }
 
     fun deleteCustomSubstance() {
         viewModelScope.launch {
-            experienceRepo.delete(CustomSubstance(id, name, units, description))
+            experienceRepo.delete(CustomSubstance(id, name, units, description, roaInfos.toList()))
+        }
+    }
+
+    fun addRoa(roaInfo: CustomRoaInfo) {
+        roaInfos.add(roaInfo)
+    }
+
+    fun removeRoa(roaInfo: CustomRoaInfo) {
+        roaInfos.remove(roaInfo)
+    }
+
+    fun updateRoa(index: Int, roaInfo: CustomRoaInfo) {
+        if (index in 0 until roaInfos.size) {
+            roaInfos[index] = roaInfo
         }
     }
 }

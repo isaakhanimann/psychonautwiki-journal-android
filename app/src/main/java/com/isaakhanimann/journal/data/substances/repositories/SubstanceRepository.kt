@@ -32,7 +32,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SubstanceRepository @Inject constructor(
-    @ApplicationContext private val appContext: Context,
+    @param:ApplicationContext private val appContext: Context,
     private val substanceParser: SubstanceParserInterface,
 ) : SubstanceRepositoryInterface {
 

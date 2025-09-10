@@ -27,7 +27,7 @@ import javax.inject.Singleton
 
 @Singleton
 class FileSystemConnection @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) {
     fun getTextFromUri(uri: Uri): String? {
         try {

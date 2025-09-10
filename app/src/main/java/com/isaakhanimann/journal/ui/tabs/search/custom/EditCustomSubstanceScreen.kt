@@ -1,21 +1,3 @@
-/*
- * Copyright (c) 2022. Isaak Hanimann.
- * This file is part of PsychonautWiki Journal.
- *
- * PsychonautWiki Journal is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at
- * your option) any later version.
- *
- * PsychonautWiki Journal is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
- */
-
 package com.isaakhanimann.journal.ui.tabs.search.custom
 
 import androidx.compose.animation.AnimatedVisibility
@@ -38,7 +20,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.isaakhanimann.journal.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,21 +32,21 @@ fun EditCustomSubstanceScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Edit custom substance") }, actions = {
+            TopAppBar(title = { Text(stringResource(R.string.edit_custom_substance)) }, actions = {
                 var isShowingDeleteDialog by remember { mutableStateOf(false) }
                 IconButton(
                     onClick = { isShowingDeleteDialog = true },
                 ) {
                     Icon(
                         Icons.Default.Delete,
-                        contentDescription = "Delete substance",
+                        contentDescription = stringResource(R.string.delete_substance),
                     )
                 }
                 AnimatedVisibility(visible = isShowingDeleteDialog) {
                     AlertDialog(
                         onDismissRequest = { isShowingDeleteDialog = false },
                         title = {
-                            Text(text = "Delete substance?")
+                            Text(text = stringResource(R.string.confirm_delete_substance))
                         },
                         confirmButton = {
                             TextButton(
@@ -72,14 +56,14 @@ fun EditCustomSubstanceScreen(
                                     navigateBack()
                                 }
                             ) {
-                                Text("Delete")
+                                Text(stringResource(R.string.delete))
                             }
                         },
                         dismissButton = {
                             TextButton(
                                 onClick = { isShowingDeleteDialog = false }
                             ) {
-                                Text("Cancel")
+                                Text(stringResource(R.string.cancel))
                             }
                         }
                     )
@@ -97,10 +81,10 @@ fun EditCustomSubstanceScreen(
                     icon = {
                         Icon(
                             Icons.Filled.Done,
-                            contentDescription = "Done"
+                            contentDescription = stringResource(R.string.done)
                         )
                     },
-                    text = { Text("Done") },
+                    text = { Text(stringResource(R.string.done)) },
                 )
             }
         }
@@ -112,7 +96,11 @@ fun EditCustomSubstanceScreen(
             description = viewModel.description,
             onNameChange = { viewModel.name = it },
             onUnitsChange = { viewModel.units = it },
-            onDescriptionChange = { viewModel.description = it }
+            onDescriptionChange = { viewModel.description = it },
+            roaInfos = viewModel.roaInfos,
+            onAddRoa = viewModel::addRoa,
+            onRemoveRoa = viewModel::removeRoa,
+            onUpdateRoa = viewModel::updateRoa
         )
     }
 }

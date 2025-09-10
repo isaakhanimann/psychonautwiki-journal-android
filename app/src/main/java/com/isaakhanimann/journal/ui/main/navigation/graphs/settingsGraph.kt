@@ -1,21 +1,3 @@
-/*
- * Copyright (c) 2023. Isaak Hanimann.
- * This file is part of PsychonautWiki Journal.
- *
- * PsychonautWiki Journal is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at
- * your option) any later version.
- *
- * PsychonautWiki Journal is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
- */
-
 package com.isaakhanimann.journal.ui.main.navigation.graphs
 
 import androidx.navigation.NavGraphBuilder
@@ -23,11 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
 import com.isaakhanimann.journal.ui.main.navigation.composableWithTransitions
 import com.isaakhanimann.journal.ui.main.navigation.SettingsTopLevelRoute
+import com.isaakhanimann.journal.ui.tabs.search.custom.AddCustomSubstanceScreen
+import com.isaakhanimann.journal.ui.tabs.search.custom.EditCustomSubstanceScreen
 import com.isaakhanimann.journal.ui.tabs.settings.DonateScreen
 import com.isaakhanimann.journal.ui.tabs.settings.FAQScreen
 import com.isaakhanimann.journal.ui.tabs.settings.SettingsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.colors.SubstanceColorsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.combinations.CombinationSettingsScreen
+import com.isaakhanimann.journal.ui.tabs.settings.customsubstances.CustomSubstanceManagementScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.CustomUnitsScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.archive.CustomUnitArchiveScreen
 import com.isaakhanimann.journal.ui.tabs.settings.customunits.edit.EditCustomUnitScreen
@@ -50,6 +35,9 @@ fun NavGraphBuilder.settingsGraph(navController: NavHostController) {
                 },
                 navigateToCustomUnits = {
                     navController.navigate(CustomUnitsRoute)
+                },
+                navigateToCustomSubstances = {
+                    navController.navigate(CustomSubstancesRoute)
                 },
                 navigateToDonate = {
                     navController.navigate(DonateRoute)
@@ -82,6 +70,25 @@ fun NavGraphBuilder.settingsGraph(navController: NavHostController) {
         composableWithTransitions<EditCustomUnitRoute> {
             EditCustomUnitScreen(navigateBack = navController::popBackStack)
         }
+        composableWithTransitions<CustomSubstancesRoute> {
+            CustomSubstanceManagementScreen(
+                navigateBack = { navController.popBackStack() },
+                navigateToAddCustomSubstance = { navController.navigate(AddCustomSubstanceRoute) },
+                navigateToEditCustomSubstance = { id ->
+                    navController.navigate(EditCustomSubstanceRoute(id))
+                }
+            )
+        }
+        composableWithTransitions<AddCustomSubstanceRoute> {
+            AddCustomSubstanceScreen(
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+        composableWithTransitions<EditCustomSubstanceRoute> {
+            EditCustomSubstanceScreen(
+                navigateBack = { navController.popBackStack() }
+            )
+        }
     }
 }
 
@@ -108,3 +115,9 @@ object CustomUnitsRoute
 
 @Serializable
 data class EditCustomUnitRoute(val customUnitId: Int)
+
+@Serializable
+object CustomSubstancesRoute
+
+@Serializable
+object AddCustomSubstanceRoute

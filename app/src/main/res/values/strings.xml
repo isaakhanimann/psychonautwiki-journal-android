@@ -202,4 +202,8 @@
     <string name="dose_disclaimer">Always start with lower doses due to differences between individual body weight, tolerance, metabolism, and personal sensitivity.</string>
     <string name="export_file">Export File</string>
     <string name="import_file_title">Import file</string>
+    <string name="done">Done</string>
+    <string name="confirm_delete_substance">Delete substance?</string>
+    <string name="delete_substance">Delete substance</string>
+    <string name="edit_custom_substance">Edit custom substance</string>
 </resources>

@@ -1,21 +1,3 @@
-/*
- * Copyright (c) 2022-2023. Isaak Hanimann.
- * This file is part of PsychonautWiki Journal.
- *
- * PsychonautWiki Journal is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at
- * your option) any later version.
- *
- * PsychonautWiki Journal is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with PsychonautWiki Journal.  If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
- */
-
 package com.isaakhanimann.journal.data.room.experiences
 
 import androidx.room.Dao
@@ -119,7 +101,7 @@ interface ExperienceDao {
     @Query("SELECT * FROM ingestion WHERE substanceName = :substanceName ORDER BY time DESC LIMIT :limit")
     fun getSortedIngestionsFlow(substanceName: String, limit: Int): Flow<List<Ingestion>>
 
-    @Query("SELECT * FROM customsubstance")
+    @Query("SELECT * FROM customsubstance ORDER BY name ASC")
     fun getCustomSubstancesFlow(): Flow<List<CustomSubstance>>
 
     @Query("SELECT * FROM customsubstance WHERE id = :id")
@@ -458,6 +440,18 @@ interface ExperienceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(customSubstance: CustomSubstance): Long
+
+    @Transaction
+    suspend fun importCustomSubstances(customSubstances: List<CustomSubstance>) {
+        customSubstances.forEach { substance ->
+            val existing = getCustomSubstance(substance.name)
+            if (existing != null) {
+                update(substance.copy(id = existing.id))
+            } else {
+                insert(substance.copy(id = 0))
+            }
+        }
+    }
 
     @Delete
     suspend fun delete(customSubstance: CustomSubstance)

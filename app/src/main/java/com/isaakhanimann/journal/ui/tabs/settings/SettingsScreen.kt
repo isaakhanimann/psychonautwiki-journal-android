@@ -41,6 +41,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ContactSupport
+import androidx.compose.material.icons.outlined.AdUnits
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material.icons.outlined.FileDownload
@@ -113,6 +114,7 @@ fun SettingsPreview() {
         navigateToComboSettings = {},
         navigateToSubstanceColors = {},
         navigateToCustomUnits = {},
+        navigateToCustomSubstances = {},
         navigateToDonate = {},
         importFile = {},
         exportFile = {},
@@ -135,6 +137,7 @@ fun SettingsScreen(
     navigateToComboSettings: () -> Unit,
     navigateToSubstanceColors: () -> Unit,
     navigateToCustomUnits: () -> Unit,
+    navigateToCustomSubstances: () -> Unit,
     navigateToDonate: () -> Unit,
 ) {
     SettingsScreen(
@@ -142,6 +145,7 @@ fun SettingsScreen(
         navigateToComboSettings = navigateToComboSettings,
         navigateToSubstanceColors = navigateToSubstanceColors,
         navigateToCustomUnits = navigateToCustomUnits,
+        navigateToCustomSubstances = navigateToCustomSubstances,
         navigateToDonate = navigateToDonate,
         deleteEverything = viewModel::deleteEverything,
         importFile = viewModel::importFile,
@@ -165,6 +169,7 @@ fun SettingsScreen(
     navigateToComboSettings: () -> Unit,
     navigateToSubstanceColors: () -> Unit,
     navigateToCustomUnits: () -> Unit,
+    navigateToCustomSubstances: () -> Unit,
     navigateToDonate: () -> Unit,
     deleteEverything: () -> Unit,
     importFile: (uri: Uri) -> Unit,
@@ -209,10 +214,17 @@ fun SettingsScreen(
                 )
                 HorizontalDivider()
                 SettingsButton(
-                    imageVector = Icons.Outlined.Medication,
+                    imageVector = Icons.Outlined.AdUnits,
                     text = stringResource(R.string.custom_units)
                 ) {
                     navigateToCustomUnits()
+                }
+                HorizontalDivider()
+                SettingsButton(
+                    imageVector = Icons.Outlined.Medication,
+                    text = stringResource(R.string.custom_substances)
+                ) {
+                    navigateToCustomSubstances()
                 }
                 HorizontalDivider()
                 SettingsButton(
