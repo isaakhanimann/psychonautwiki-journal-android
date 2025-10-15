@@ -27,12 +27,21 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.isaakhanimann.journal.data.room.AppDatabase
+import com.isaakhanimann.journal.data.gamification.GamificationService
+import com.isaakhanimann.journal.data.gamification.GamificationServiceImpl
+import com.isaakhanimann.journal.data.gamification.PersonalizedInsightService
+import com.isaakhanimann.journal.data.gamification.PersonalizedInsightServiceImpl
+import com.isaakhanimann.journal.data.gamification.WeeklyChallengeService
+import com.isaakhanimann.journal.data.gamification.InstantSerializer
+import com.isaakhanimann.journal.data.gamification.WeeklyChallengeServiceImpl
 import com.isaakhanimann.journal.data.room.experiences.ExperienceDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import javax.inject.Singleton
 
 @Module
@@ -62,5 +71,27 @@ object AppModule {
             ),
             produceFile = { appContext.preferencesDataStoreFile("user_preferences") }
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideGamificationService(experienceDao: ExperienceDao): GamificationService = GamificationServiceImpl(experienceDao)
+
+    @Singleton
+    @Provides
+    fun provideWeeklyChallengeService(): WeeklyChallengeService = WeeklyChallengeServiceImpl()
+
+    @Singleton
+    @Provides
+    fun providePersonalizedInsightService(experienceDao: ExperienceDao): PersonalizedInsightService = PersonalizedInsightServiceImpl(experienceDao)
+
+    @Singleton
+    @Provides
+    fun provideJson(): Json {
+        return Json {
+            serializersModule = SerializersModule {
+                contextual(java.time.Instant::class, InstantSerializer)
+            }
+        }
     }
 }

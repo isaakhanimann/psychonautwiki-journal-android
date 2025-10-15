@@ -6,11 +6,13 @@ import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Medication
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.HealthAndSafety
 import androidx.compose.material.icons.outlined.Medication
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
 
@@ -26,6 +28,7 @@ val topLevelRoutes = listOf(
     TopLevelRoute("Journal", JournalTopLevelRoute, Icons.Filled.Book, Icons.Outlined.Book),
     TopLevelRoute("Drugs", DrugsTopLevelRoute, Icons.Filled.Medication, Icons.Outlined.Medication),
     TopLevelRoute("Safer", SaferUseTopLevelRoute, Icons.Filled.HealthAndSafety, Icons.Outlined.HealthAndSafety),
+    TopLevelRoute("Gamification", GamificationTopLevelRoute, Icons.Filled.EmojiEvents, Icons.Outlined.EmojiEvents),
     TopLevelRoute("Settings", SettingsTopLevelRoute, Icons.Filled.Settings, Icons.Outlined.Settings)
 )
 
@@ -40,6 +43,9 @@ object DrugsTopLevelRoute
 
 @Serializable
 object SaferUseTopLevelRoute
+
+@Serializable
+object GamificationTopLevelRoute
 
 @Serializable
 object SettingsTopLevelRoute

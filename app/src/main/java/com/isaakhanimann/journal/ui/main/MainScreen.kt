@@ -32,6 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.isaakhanimann.journal.ui.main.navigation.graphs.journalGraph
+import com.isaakhanimann.journal.ui.main.navigation.graphs.gamificationGraph
 import com.isaakhanimann.journal.ui.main.navigation.graphs.saferGraph
 import com.isaakhanimann.journal.ui.main.navigation.graphs.searchGraph
 import com.isaakhanimann.journal.ui.main.navigation.graphs.settingsGraph
@@ -96,6 +97,7 @@ fun MainScreen(
                 statsGraph(navController)
                 searchGraph(navController)
                 saferGraph(navController)
+                gamificationGraph(navController)
                 settingsGraph(navController)
             }
         }

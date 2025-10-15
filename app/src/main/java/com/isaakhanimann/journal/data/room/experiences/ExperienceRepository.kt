@@ -41,8 +41,19 @@ import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 
+import com.isaakhanimann.journal.data.gamification.GamificationService
+
 @Singleton
-class ExperienceRepository @Inject constructor(private val experienceDao: ExperienceDao) {
+class ExperienceRepository @Inject constructor(
+    private val experienceDao: ExperienceDao,
+    private val gamificationService: GamificationService
+) {
+    suspend fun insert(experience: Experience): Long {
+        val id = experienceDao.insert(experience)
+        gamificationService.addXp(10) // Add 10 XP for each new experience
+        return id
+    }
+
     suspend fun insert(rating: ShulginRating) = experienceDao.insert(rating)
     suspend fun insert(customUnit: CustomUnit) = experienceDao.insert(customUnit).toInt()
     suspend fun insert(timedNote: TimedNote) = experienceDao.insert(timedNote)
