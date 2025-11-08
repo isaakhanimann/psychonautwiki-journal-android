@@ -25,10 +25,6 @@ This app is built natively with [Jetpack Compose](https://developer.android.com/
 
 Or download the latest version from [GitHub releases](https://github.com/isaakhanimann/psychonautwiki-journal-android/releases/latest).
 
-## Contributions
-
-This repo has been deprecated, ongoing development is happening in a private repo. If you want to do a fix or add a small improvement you can still do a PR on this repo, give your consent to include it in the private repo as part of a proprietary license and then your changes can potentially be included in future releases of the app.
-
 ## License
 
     This file is part of PsychonautWiki Journal.
